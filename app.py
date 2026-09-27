@@ -76,6 +76,6 @@ shown = [row for row in FIELDS if row["country"] in selected]
 components.html(map_html(shown), height=620, scrolling=False)
 st.info("DEMO 数据保留公开资料口径；阿联酋新增资产的日期由用户补充表未提供，已标注“未提供（用户补充）”；天然气指标单独标注，不与石油日产量混用。")
 st.dataframe([
-    {"国家": row["country"], "油田": row["name"], "指标": row.get("metric", "日产量/产能"), "数值": row["daily"], "数据日期": row["date"]}
+    {"国家": row["country"], "油气资产": row["name"], "指标": row.get("metric", "日产量/产能"), "数值": row["daily"], "数据日期": row["date"]}
     for row in shown
 ], width="stretch", hide_index=True)
