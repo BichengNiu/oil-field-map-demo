@@ -107,6 +107,13 @@ SOURCES = {
     "DNO Kurdistan 2025": "https://www.dno.no/en/operations/kurdistan-region-of-iraq/",
     "Daleel 2023": "https://daleelpetroleum.com/media/news/2023/daleel-petroleum-a-journey-of-excellence",
     "PDO Sustainability 2024": "https://www.pdo.co.om/en/PDOSERVICES/Sustainability%20Report%202024%20English.pdf",
+    "GEM Darquain": "https://www.gem.wiki/Darquain_Oil_Field_%28Iran%29",
+    "Qatar News Agency A-Structures": "https://qna.org.qa/en/news/news-details?date=23%2F12%2F2022&id=0056-qatarenergy-signs-agreement-with-qpd-to-continue-al-karkara%2C-a-structures-offshore-fields-development-and-production",
+    "Yemen EIA": "https://www.eia.gov/international/content/analysis/countries_long/Yemen/yemen.pdf",
+    "Yemen PEPA Production Plan": "https://pepaye.com/production/plan",
+    "Rudaw Rmeilan Sector One": "https://www.rudaw.net/english/categories/syria/933427",
+    "Egypt EGPC Brownfields 2023": "https://eug.petroleum.gov.eg/dp/jsp/assets/docs/EGPC/2023%20EGPC%20Brownfields%20Overview.pdf",
+    "Eni Egypt Factbook 2013": "https://report.eni.com/factbook-2013/en/business-segments/exploration-production/activity-areas/north-africa.html",
 }
 
 
@@ -226,6 +233,7 @@ ASSETS = [
     record("阿联酋", "Shuweihat", "舒韦哈特", "超酸性气田", 24.20, 52.55, source="ADNOC Ghasha"),
     record("阿联酋", "SARB Deep Gas", "SARB 深层气项目", "天然气项目", 25.19, 53.18, value="200", metric_type="target_capacity", unit="百万标准立方英尺/日", data_date="2026-01-07", source="ADNOC Ghasha", note="天然气项目，不能与原油日产量相加。"),
     record("阿联酋", "Hail (ADOC)", "海尔（ADOC）", "海上油田", 24.37, 53.41, status="2017年投产", source="ADOC Fields", note="ADOC确认Hail与Mubarraz等田的原油混合外运；原列21千桶/日未在该单田来源中核实，撤回。"),
+    record("阿联酋", "Hail (ADNOC Ghasha)", "海尔（ADNOC Ghasha）", "含酸气海上油气田", None, None, status="ADNOC列为Ghasha开发项目组成资产；单田投产状态待核", source="ADNOC Ghasha", note="与上方Hail (ADOC)是不同资产。ADNOC将Hail列入Ghasha项目；项目层级的气量／液体目标不分摊为该田产量，单田坐标和产量未核实。"),
     record("阿联酋", "Mubarraz", "穆巴拉兹", "海上油田", 24.40, 53.52, source="ADNOC Ghasha"),
     record("阿联酋", "Umm Al-Anbar", "乌姆阿尔安巴尔", "海上油田", 24.30, 53.45, source="ADNOC Ghasha"),
     record("阿联酋", "Neewat Al-Ghalan", "尼瓦特阿尔加兰", "海上油田", 24.22, 53.55, source="ADNOC Ghasha"),
@@ -344,6 +352,7 @@ ASSETS = [
     record("伊朗", "Changuleh", "昌古莱", "油田", None, None, status="EIA 2024具名；当期生产状态待核", source="EIA Iran", note="EIA报告表2列名；不把伴生气收集设施容量当作原油产量。"),
     record("伊朗", "Dalpari", "达尔帕里", "油田", None, None, status="EIA 2024具名；当期生产状态待核", source="EIA Iran", note="EIA报告表2列名；逐田原油日产量未核实。"),
     record("伊朗", "South Pars", "南帕尔斯", "海上气／凝析油田", None, None, status="已开发；原油逐田值不适用", source="EIA Iran", note="EIA称为伊朗最大非伴生气田；与卡塔尔North Field同一跨境地质构造的伊朗侧，天然气和凝析油数据不作为原油实产。"),
+    record("伊朗", "Darquain", "达尔昆", "油田", 30.7289, 48.2934, status="GEM列为运营；当前逐田产量未核", source="GEM Darquain", note="坐标为GEM列示WGS84位置；EIA 2024也将Darquain列入NGL 3200伴生气收集项目的供气油田名单。设施处理能力不等于该田原油产量。"),
 
     # Kuwait
     record("科威特", "Burgan", "布尔干", "油田", 29.05, 47.91, source="KOC / KPC"),
@@ -377,6 +386,7 @@ ASSETS = [
     record("卡塔尔", "Bul Hanine", "布尔哈宁", "海上油田", 25.06, 51.14, value="35.1", metric_type="actual_output", unit="千桶/日", data_date="2024年平均", source="QatarEnergy", note="QatarEnergy官方投资者演示文稿列示的2024年平均原油产量；来源直报。"),
     record("卡塔尔", "Al-Murjan", "阿尔穆尔詹", "海上油田", None, None, source="QatarEnergy E&P", note="卡塔尔能源称该田通过Al-Rayyan平台生产；没有单田产量，不把Al-Rayyan平台数值分摊。"),
     record("卡塔尔", "North Field", "北方气田", "气田", 26.62, 51.45, source="QatarEnergy", note="气田，不与原油日产量比较。"),
+    record("卡塔尔", "A-Structures (A-North / A-South)", "A构造（A北／A南）", "海上油田群（两个小油田）", None, None, status="2022年续签五年开发生产协议（至2027年）", source="Qatar News Agency A-Structures", note="QNA称A-North和A-South于1971年发现，A-Structures与Al-Karkara自2006年3月投产；报道的3,350万桶是三田合计累计原油，不能分配给A-Structures。单田产量及坐标未披露。"),
 
     # Oman
     record("阿曼", "Mukhaizna", "穆凯兹奈", "油田", 19.34, 56.47, source="Occidental Oman", note="运营商确认油田运营及累计产量，但未找到可核验的2023年单田8万桶/日实产；撤回该值。"),
@@ -426,6 +436,11 @@ ASSETS = [
     record("也门", "Hawareem", "哈瓦里姆", "油田／32区块", 14.32, 48.96, source="Yemen Ministry of Oil"),
     record("也门", "Alif", "阿利夫", "油田／18区块", 15.35, 45.05, source="Yemen Ministry of Oil"),
     record("也门", "Jannah", "詹纳", "油田／5区块", 15.24, 45.16, source="Yemen Ministry of Oil"),
+    record("也门", "Habban", "哈班", "油田／S2（Uqlah）区块", None, None, status="2018年有原油出口记录；当前生产状态未核", source="Yemen EIA", note="EIA记载OMV在2018年从S2区块Habban田出口原油；PEPA计划提及Habban CPF。历史出口记录不代表当前持续日产量。"),
+    record("也门", "Block 9 (Malik)", "9区块（马利克）", "油气区块", None, None, status="EIA记载Medco于2019年恢复区块作业；当前状态未核", source="Yemen EIA", note="区块级生产恢复信息；不能据此认定区块内每一田当期均在产或将区块产量分配给单田。"),
+    record("也门", "Hiswah (Haswa)", "希斯瓦（Haswa）", "油田／Block 9", None, None, status="PEPA 2012计划列名；现行生产状态未核", source="Yemen PEPA Production Plan", note="PEPA 2012计划提到Hiswah田CPU建设，评估清单又作Haswa；按同一田名变体合并登记。区块重启不等于该田有已核实的单田产量。"),
+    record("也门", "Alroidhat (Al-Rowedhat)", "阿尔罗伊达特", "油田／Block 9", None, None, status="PEPA 2012计划列名；现行生产状态未核", source="Yemen PEPA Production Plan", note="PEPA 2012计划提到Alroidhat输油管线建设，评估清单作AL-rowedhat；保留原拼法变体，未取得单田产量。"),
+    record("也门", "Qarn Qeamah", "卡恩·基阿马", "油田／Block 9", None, None, status="PEPA 2012列为评估对象；商业生产未核", source="Yemen PEPA Production Plan", note="PEPA计划列入Block 9地质评估研究；名称已公开，但这不足以证明当前商业生产或单田产量。"),
 
     # Syria, Israel and Turkey
     record("叙利亚", "Al-Omar", "奥马尔", "油田", 35.07, 40.60, value="15", metric_type="actual_output", unit="千桶/日", data_date="2026-02-22", source="Le Monde Al-Omar 2026", note="记者实地采访运营主任称日产1.5万桶；2026-01-19较早报道约5千桶/日，修复期波动很大。"),
@@ -435,6 +450,12 @@ ASSETS = [
     record("叙利亚", "Al-Taym", "泰姆", "油田", 35.23, 40.26, source="Syria public reporting"),
     record("叙利亚", "Rmeilan", "鲁迈兰", "油田", 37.04, 42.03, source="Syria public reporting"),
     record("叙利亚", "Suwaydiya", "苏韦迪耶", "油田", 37.07, 41.93, source="Syria public reporting"),
+    record("叙利亚", "Qarachok", "卡拉乔克", "油田（Rmeilan Sector One）", None, None, status="2026年Rudaw列为Sector One油田；单田状态待核", source="Rudaw Rmeilan Sector One", note="Rudaw列为鲁迈兰Sector One八个油田之一；报道中的区域日产量与产能是全区合计，不拆给单田。"),
+    record("叙利亚", "Hamza", "哈姆扎", "油田（Rmeilan Sector One）", None, None, status="2026年Rudaw列为Sector One油田；单田状态待核", source="Rudaw Rmeilan Sector One", note="Rudaw列为鲁迈兰Sector One油田；报道中的区域总产能及当期产量不能分配给单田。"),
+    record("叙利亚", "Alyan", "阿利扬", "油田（Rmeilan Sector One）", None, None, status="2026年Rudaw列为Sector One油田；单田状态待核", source="Rudaw Rmeilan Sector One", note="Rudaw列为鲁迈兰Sector One油田；报道中的区域总产能及当期产量不能分配给单田。"),
+    record("叙利亚", "Sazabeh", "萨扎贝", "油田（Rmeilan Sector One）", None, None, status="2026年Rudaw列为Sector One油田；单田状态待核", source="Rudaw Rmeilan Sector One", note="Rudaw列为鲁迈兰Sector One油田；报道中的区域总产能及当期产量不能分配给单田。"),
+    record("叙利亚", "Ode", "奥德", "油田（Rmeilan Sector One）", None, None, status="2026年Rudaw列为Sector One油田；单田状态待核", source="Rudaw Rmeilan Sector One", note="Rudaw列为鲁迈兰Sector One油田；报道中的区域总产能及当期产量不能分配给单田。"),
+    record("叙利亚", "Tigris", "底格里斯", "油田（Rmeilan Sector One）", None, None, status="2026年Rudaw列为Sector One油田；单田状态待核", source="Rudaw Rmeilan Sector One", note="Rudaw列为鲁迈兰Sector One油田；报道中的区域总产能及当期产量不能分配给单田。"),
     record("以色列", "Heletz", "赫莱兹", "油田", 31.57, 34.62, source="Israel Ministry of Energy", note="当前实际产量和停产状态未获可靠公开确认。"),
     record("以色列", "Meged", "梅格德", "油田", 32.28, 35.03, source="Israel Ministry of Energy"),
     record("以色列", "Leviathan", "利维坦", "气田", 32.58, 34.78, source="Israel Ministry of Energy", note="气田。"),
@@ -446,4 +467,16 @@ ASSETS = [
     record("土耳其", "Garzan", "加尔赞", "油田", 37.75, 41.45, source="TPAO"),
     record("土耳其", "Şelmo", "谢尔莫", "油田", 37.77, 41.69, source="TPAO"),
     record("土耳其", "Gabar", "加巴尔", "油田群", 37.40, 42.45, source="TPAO"),
+
+    # Egypt: named assets from a 2013 operator report and EGPC's 2023 brownfields package.
+    record("埃及", "Belayim", "贝莱伊姆", "油田", None, None, value="105", metric_type="actual_output", unit="千桶/日", data_date="2013年", status="2013年运营商报告产量；当前值未核", source="Eni Egypt Factbook 2013", note="Eni报告2013年Belayim约105千桶/日，并列其净额56千桶/日；这是历史数据，不代表当前田级实产。"),
+    record("埃及", "Shukheir Offshore (Shukheir Bay)", "舒凯尔海上（舒凯尔湾）", "油田／EGPC棕地招标资产", None, None, status="EGPC 2023棕地资料列名；当前逐田实产未核", source="Egypt EGPC Brownfields 2023", note="EGPC图示资产面积5平方公里；面积不是储量或产量。"),
+    record("埃及", "Shukheir Offshore (Gamma)", "舒凯尔海上（伽马）", "油田／EGPC棕地招标资产", None, None, status="EGPC 2023棕地资料列名；当前逐田实产未核", source="Egypt EGPC Brownfields 2023", note="EGPC图示资产面积23.7平方公里；面积不是储量或产量。"),
+    record("埃及", "Gazwarina", "加兹瓦里纳", "油田／EGPC棕地招标资产", None, None, status="EGPC 2023棕地资料列名；当前逐田实产未核", source="Egypt EGPC Brownfields 2023", note="EGPC图示资产面积2.5平方公里；面积不是储量或产量。"),
+    record("埃及", "Ras El Ush", "拉斯埃尔乌什", "油田／EGPC棕地招标资产", None, None, status="EGPC 2023棕地资料列名；当前逐田实产未核", source="Egypt EGPC Brownfields 2023", note="EGPC图示资产面积9平方公里；面积不是储量或产量。"),
+    record("埃及", "Zeit Bay", "宰特湾", "油田／EGPC棕地招标资产", None, None, status="EGPC 2023棕地资料列名；当前逐田实产未核", source="Egypt EGPC Brownfields 2023", note="EGPC图示资产面积38平方公里；面积不是储量或产量。"),
+    record("埃及", "Ras Budran", "拉斯布德兰", "油田／EGPC棕地招标资产", None, None, status="EGPC 2023棕地资料列名；当前逐田实产未核", source="Egypt EGPC Brownfields 2023", note="EGPC图示资产面积15平方公里；面积不是储量或产量。"),
+    record("埃及", "East Zeit (E. Zeit)", "东宰特（E. Zeit）", "油田／EGPC棕地招标资产", None, None, status="EGPC 2023棕地资料列名；当前逐田实产未核", source="Egypt EGPC Brownfields 2023", note="EGPC图示资产面积27平方公里；面积不是储量或产量。"),
+    record("埃及", "Ashrafi", "阿什拉菲", "油田／EGPC棕地招标资产", None, None, status="EGPC 2023棕地资料列名；当前逐田实产未核", source="Egypt EGPC Brownfields 2023", note="EGPC图示资产面积35平方公里；面积不是储量或产量。"),
+    record("埃及", "Wadi El Sahl Development Area", "瓦迪埃尔萨赫勒开发区", "油田开发区／EGPC棕地招标资产", None, None, status="EGPC 2023棕地资料列名；田级产量待核", source="Egypt EGPC Brownfields 2023", note="原资料称Development Area并列面积31平方公里，目录按开发区记录，不将其强行当作单一油田；EGPC包件的剩余储量／增产潜力不拆给单个资产。"),
 ]
