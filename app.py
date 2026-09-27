@@ -71,6 +71,7 @@ def _map_html(assets: list[dict[str, object]]) -> str:
     markers = [
         {"lat": asset["lat"], "lon": asset["lon"], "popup": _popup(asset)}
         for asset in assets
+        if asset["lat"] is not None and asset["lon"] is not None
     ]
     marker_json = json.dumps(markers, ensure_ascii=False).replace("</", "<\\/")
     return f"""
@@ -137,7 +138,7 @@ with st.sidebar:
     )
     values_only = st.checkbox("仅显示有公开字段级数值的资产", value=False)
     st.divider()
-    st.caption("坐标为公开资料交叉核对后的近似中心点；弹窗明确标注该精度。")
+    st.caption("有坐标的红点为近似中心点；缺少可核验坐标的资产仍列在下方目录。")
 
 filtered = [
     asset
@@ -157,7 +158,8 @@ col1.metric("已显示资产", f"{len(filtered)}")
 col2.metric("有字段级公开数值", f"{numeric_count}")
 col3.metric("来源直报实产", f"{actual_count}")
 col4.metric("逐田值未公开", f"{unknown_count}")
-st.caption(f"由公开年产量换算的推算日均：{derived_count} 条。")
+unlocated_count = sum(asset["lat"] is None or asset["lon"] is None for asset in filtered)
+st.caption(f"由公开年产量换算的历史推算日均：{derived_count} 条；待核验坐标、仅列目录：{unlocated_count} 条。")
 
 components.html(_map_html(filtered), height=690, scrolling=False)
 
@@ -179,6 +181,7 @@ rows = [
         "状态": asset["status"],
         "坐标精度": asset["coordinate_precision"],
         "来源": asset["source"],
+        "来源链接": asset["source_url"],
         "说明": asset["note"],
     }
     for asset in filtered
@@ -188,5 +191,5 @@ st.dataframe(rows, width="stretch", hide_index=True, height=480)
 
 st.caption(
     "目录范围：公开命名的主要生产、开发或保留油气资产；不宣称覆盖所有历史探井或未商业化发现。"
-    "来源链接见各点弹窗。"
+    "来源链接见点位弹窗及下方目录。"
 )
