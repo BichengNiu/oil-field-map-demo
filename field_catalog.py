@@ -2,7 +2,7 @@
 
 设计原则：一个记录对应一个可公开识别的油田、气田、区块或项目；
 未公开的逐田数值保留为空，不以国家/油田群数据填充。
-坐标为公开地图资料交叉核对后的近似中心点，不能替代运营商海图或井位坐标。
+有坐标记录为公开地图资料的近似中心点；无核验坐标的记录只列目录。
 """
 
 from __future__ import annotations
@@ -118,7 +118,7 @@ ASSETS = [
     record("沙特阿拉伯", "Manifa", "马尼法", "海上油田", 27.62, 49.87, source="Saudi Aramco / EIA"),
     record("沙特阿拉伯", "Marjan", "马尔詹", "海上油田", 27.47, 49.86, value="300", metric_type="incremental_capacity", unit="千桶/日", data_date="2025-12-31", source="Saudi Aramco / EIA", note="新增产能，不是油田总产量。"),
     record("沙特阿拉伯", "Berri", "贝里", "海上油田", 27.83, 49.93, value="250", metric_type="incremental_capacity", unit="千桶/日", data_date="2025-12-31", source="Saudi Aramco / EIA", note="新增产能，不是油田总产量。"),
-    record("沙特阿拉伯", "Zuluf", "祖卢夫", "海上油田", 27.67, 49.12, value="600", metric_type="incremental_capacity", unit="千桶/日", data_date="2026-12-31", source="Saudi Aramco / EIA", note="项目处理能力目标。"),
+    record("沙特阿拉伯", "Zuluf", "祖卢夫", "海上油田", 27.67, 49.12, source="Saudi Aramco / EIA", note="此前600千桶/日是项目规划处理能力，未证实为油田实际日产量，故不填值。"),
     record("沙特阿拉伯", "Qatif", "卡提夫", "油田", 26.55, 50.01, source="Saudi Aramco / EIA"),
     record("沙特阿拉伯", "Abqaiq", "阿布盖格", "油田", 25.94, 49.68, source="Saudi Aramco / EIA"),
     record("沙特阿拉伯", "Khursaniyah", "胡尔萨尼亚", "油田", 27.72, 48.91, source="Saudi Aramco / EIA"),
