@@ -3,12 +3,16 @@
 from __future__ import annotations
 
 import html
+import importlib
 import json
 
 import streamlit as st
 import streamlit.components.v1 as components
 
-from field_catalog import ASSETS
+import field_catalog
+
+# Streamlit 的热重载会重跑此文件；显式重新读取目录模块以同步仓库中的数据修订。
+ASSETS = importlib.reload(field_catalog).ASSETS
 
 
 st.set_page_config(page_title="中东油气田地图 DEMO", page_icon="🛢️", layout="wide")
