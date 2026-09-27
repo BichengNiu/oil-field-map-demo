@@ -1,81 +1,188 @@
+"""中东公开命名油气资产地图 DEMO。"""
+
+from __future__ import annotations
+
 import html
 import json
+
 import streamlit as st
 import streamlit.components.v1 as components
 
-st.set_page_config(page_title="中东油田地图 DEMO", page_icon="🛢️", layout="wide")
+from field_catalog import ASSETS
 
-FIELDS = [
-    {"country": "沙特阿拉伯", "name": "Ghawar（加瓦尔）", "daily": "约 3,800 千桶/日", "date": "2019-12-31", "lat": 25.40, "lon": 49.60},
-    {"country": "沙特阿拉伯", "name": "Marjan（马尔詹）", "daily": "+300 千桶/日（新增产能）", "date": "2025-12-31", "lat": 27.40, "lon": 49.80},
-    {"country": "伊朗", "name": "South Azadegan（南阿扎德甘）", "daily": "150 千桶/日", "date": "2025-01-15", "lat": 30.06, "lon": 48.23},
-    {"country": "伊拉克", "name": "Rumaila（鲁迈拉）", "daily": "1,500 千桶/日（产能）", "date": "2023-08-01", "lat": 30.08, "lon": 47.43},
-    {"country": "伊拉克", "name": "West Qurna-2（西古尔纳2期）", "daily": "460 千桶/日", "date": "2025-12-08", "lat": 30.96, "lon": 47.31},
-    {"country": "阿联酋", "name": "Upper Zakum（上扎库姆）", "daily": "约100万桶/日（≈13.7万吨/日）", "metric": "石油日产能", "date": "未提供（用户补充）", "lat": 25.93, "lon": 53.10},
-    {"country": "阿联酋", "name": "SARB（Satah Al Razboot）/ Umm Lulu", "daily": "设计约10.5万桶/日（≈1.43万吨/日）；SARB/Umm Lulu/Nasr联合新增约27万桶/日", "metric": "石油设计产能/联合新增", "date": "未提供（用户补充）", "lat": 25.30, "lon": 54.18},
-    {"country": "阿联酋", "name": "Bab（Murban Bab）", "daily": "未公开", "metric": "石油日产量", "date": "未提供（用户补充）", "lat": 24.40, "lon": 54.70},
-    {"country": "阿联酋", "name": "Bu Hasa", "daily": "65万桶/日（≈8.9万吨/日）", "metric": "石油日产量/产能", "date": "未提供（用户补充）", "lat": 23.00, "lon": 53.00},
-    {"country": "阿联酋", "name": "South East Asset（Asab/Sahil/Shah/Qusahwira/Mender）", "daily": "Shah约7万桶/日（≈0.96万吨/日）；其余未公开", "metric": "石油日产量", "date": "未提供（用户补充）", "lat": 23.20, "lon": 54.40},
-    {"country": "阿联酋", "name": "North East Bab（NEB：Al Dabbiya / Rumaitha / Shanayel）", "daily": "NEB资产整体产能约11万桶/日（≈1.5万吨/日）", "metric": "石油整体产能", "date": "未提供（用户补充）", "lat": 24.20, "lon": 54.30},
-    {"country": "阿联酋", "name": "Lower Zakum（下扎库姆）", "daily": "约42.5万桶/日（≈5.8万吨/日）", "metric": "石油日产能", "date": "未提供（用户补充）", "lat": 25.73, "lon": 53.20},
-    {"country": "阿联酋", "name": "Umm Shaif（乌姆沙伊夫）", "daily": "约27.5万桶/日（≈3.75万吨/日）", "metric": "石油日产能", "date": "未提供（用户补充）", "lat": 25.50, "lon": 53.40},
-    {"country": "阿联酋", "name": "Nasr（纳斯尔）", "daily": "约6.5万桶/日（≈0.89万吨/日）", "metric": "石油日产能", "date": "未提供（用户补充）", "lat": 25.60, "lon": 53.70},
-    {"country": "阿联酋", "name": "Satah / Umm Al Dalkh", "daily": "未公开", "metric": "石油日产量", "date": "未提供（用户补充）", "lat": 25.10, "lon": 53.50},
-    {"country": "阿联酋", "name": "Abu Al Bukhoosh", "daily": "未公开", "metric": "石油日产量", "date": "未提供（用户补充）", "lat": 25.00, "lon": 53.00},
-    {"country": "阿联酋", "name": "Shah", "daily": "天然气处理约14.5–18.5亿立方英尺/日", "metric": "天然气处理量", "date": "未提供（用户补充）", "lat": 23.10, "lon": 53.90},
-    {"country": "阿联酋", "name": "Bab Gas Cap", "daily": "目标15亿标准立方英尺/日", "metric": "天然气目标产能", "date": "未提供（用户补充）", "lat": 24.40, "lon": 54.70},
-    {"country": "阿联酋", "name": "Ruwais Diyab非常规天然气区块", "daily": "未公开", "metric": "天然气产量/产能", "date": "未提供（用户补充）", "lat": 24.10, "lon": 52.60},
-    {"country": "阿联酋", "name": "Hail / Ghasha / Dalma / Satah", "daily": "目标天然气15亿scf/d + 凝析油及原油超12万桶油当量/日", "metric": "油气综合目标", "date": "未提供（用户补充）", "lat": 25.30, "lon": 52.90},
-    {"country": "阿联酋", "name": "Haliba", "daily": "早期生产阶段峰值约2.1万桶/日（≈0.29万吨/日）", "metric": "石油日产量峰值", "date": "未提供（用户补充）", "lat": 23.00, "lon": 53.80},
-    {"country": "阿联酋", "name": "Bu Haseer（Offshore Concession）", "daily": "目标日产能1.5万桶/日（≈0.20万吨/日）", "metric": "石油目标产能", "date": "未提供（用户补充）", "lat": 24.80, "lon": 52.90},
-    {"country": "阿联酋", "name": "Belbazem区块（Belbazem / Umm Al Salsal / Umm Al Dholou）", "daily": "达产约4.5万桶/日（≈0.61万吨/日）+2700万scf/d伴生气", "metric": "石油产能+伴生气", "date": "未提供（用户补充）", "lat": 24.40, "lon": 53.00},
-    {"country": "阿联酋", "name": "Arzanah（Offshore Concession）", "daily": "未公开", "metric": "石油日产量", "date": "未提供（用户补充）", "lat": 24.20, "lon": 53.30},
-    {"country": "阿联酋", "name": "Nahaidiin / Bin Hadi / Gezira（Land Zone）", "daily": "未公开", "metric": "石油日产量", "date": "未提供（用户补充）", "lat": 24.40, "lon": 54.30},
-    {"country": "阿联酋", "name": "Muhaymat / Sila（Water Zone）", "daily": "未公开", "metric": "石油日产量", "date": "未提供（用户补充）", "lat": 24.20, "lon": 52.90},
-    {"country": "阿联酋", "name": "Mubarraz / Umm Al-Anbar / Neewat Al-Ghalan", "daily": "合计约2.4万桶/日（≈0.33万吨/日）", "metric": "石油合计日产量", "date": "未提供（用户补充）", "lat": 24.20, "lon": 53.40},
-    {"country": "阿联酋", "name": "Hail（ADOC特许权）", "daily": "早期峰值约2.1万桶/日（≈0.29万吨/日）", "metric": "石油日产量峰值", "date": "未提供（用户补充）", "lat": 25.20, "lon": 53.10},
-    {"country": "阿联酋", "name": "Bunduq", "daily": "未公开", "metric": "石油日产量", "date": "未提供（用户补充）", "lat": 24.70, "lon": 52.90},
-    {"country": "阿联酋", "name": "Fateh / South West Fateh / Rashid / Falah / Jalilah", "daily": "Fateh历史峰值约30万桶/日，现已衰减", "metric": "石油历史峰值", "date": "未提供（用户补充）", "lat": 25.30, "lon": 55.10},
-    {"country": "阿联酋", "name": "Margham", "daily": "凝析油约2.5万桶/日（2010年数据）", "metric": "凝析油日产量", "date": "2010（用户补充）", "lat": 25.00, "lon": 55.60},
-    {"country": "科威特", "name": "Greater Burgan（大布尔干）", "daily": "约 1,600 千桶/日", "date": "2022-08-02", "lat": 29.00, "lon": 47.93},
-    {"country": "卡塔尔", "name": "Al Shaheen（阿尔沙欣）", "daily": "300 千桶/日（产能）", "date": "2026-09-01", "lat": 26.10, "lon": 51.22},
-    {"country": "阿曼", "name": "Mukhaizna（穆凯兹奈）", "daily": "约 120 千桶/日", "date": "2025-05-19", "lat": 19.34, "lon": 56.47},
-    {"country": "叙利亚", "name": "Al-Omar（奥马尔）", "daily": "约 5 千桶/日", "date": "2026-05-01", "lat": 35.02, "lon": 40.25},
-    {"country": "以色列", "name": "Heletz（赫莱兹）", "daily": "<0.1 千桶/日 / 已停产", "date": "2025-12-31", "lat": 31.60, "lon": 34.63},
+
+st.set_page_config(page_title="中东油气田地图 DEMO", page_icon="🛢️", layout="wide")
+
+METRIC_LABELS = {
+    "actual_output": "实际产量",
+    "capacity": "产能",
+    "oil_capacity": "原油产能",
+    "target_capacity": "目标产能",
+    "maximum_sustainable_capacity": "最大可持续产能",
+    "historical_capacity": "历史产能",
+    "historical_design_capacity": "历史设计产能",
+    "historical_peak": "历史峰值",
+    "historical_condensate_output": "历史凝析油产量",
+    "incremental_capacity": "新增产能",
+    "undisclosed": "未披露",
+}
+
+
+def display_value(asset: dict[str, object]) -> str:
+    value = asset.get("value")
+    unit = asset.get("unit")
+    if value is None:
+        return "未披露"
+    return f"{value} {unit}" if unit else str(value)
+
+
+def display_date(asset: dict[str, object]) -> str:
+    return str(asset.get("data_date") or "未提供")
+
+
+def _popup(asset: dict[str, object]) -> str:
+    """生成点击红点后展示的中文信息卡。"""
+
+    def esc(value: object) -> str:
+        return html.escape(str(value))
+
+    source_url = esc(asset["source_url"])
+    return (
+        '<div class="popup-card">'
+        f'<div class="field-name">{esc(asset["name"])}（{esc(asset["name_cn"])}）</div>'
+        f'<div class="country">{esc(asset["country"])} · {esc(asset["asset_type"])} </div>'
+        '<div class="row"><span>指标口径</span>'
+        f'<strong>{esc(METRIC_LABELS[str(asset["metric_type"])])}</strong></div>'
+        '<div class="row"><span>数值</span>'
+        f'<strong>{esc(display_value(asset))}</strong></div>'
+        '<div class="row"><span>数据日期</span>'
+        f'<strong>{esc(display_date(asset))}</strong></div>'
+        '<div class="row"><span>坐标精度</span>'
+        f'<strong>{esc(asset["coordinate_precision"])}</strong></div>'
+        f'<div class="status">状态：{esc(asset["status"])}</div>'
+        f'<div class="basis">说明：{esc(asset["note"] or "公开命名资产；逐田数值未公开。")}</div>'
+        f'<a class="source" href="{source_url}" target="_blank" rel="noopener">来源：{esc(asset["source"])}</a>'
+        '</div>'
+    )
+
+
+def _map_html(assets: list[dict[str, object]]) -> str:
+    markers = [
+        {"lat": asset["lat"], "lon": asset["lon"], "popup": _popup(asset)}
+        for asset in assets
+    ]
+    marker_json = json.dumps(markers, ensure_ascii=False).replace("</", "<\\/")
+    return f"""
+    <!doctype html><html lang="zh-CN"><head>
+    <meta charset="utf-8" />
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+    <style>
+      html, body, #map {{ height: 100%; margin: 0; }}
+      #map {{ background: #e8eef4; font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif; }}
+      .leaflet-popup-content-wrapper {{ border-radius: 10px; box-shadow: 0 8px 24px rgba(15, 23, 42, .25); }}
+      .leaflet-popup-content {{ margin: 13px 15px; min-width: 258px; }}
+      .field-name {{ font-weight: 750; color: #0f172a; font-size: 14px; line-height: 1.35; margin-bottom: 3px; }}
+      .country {{ color: #64748b; font-size: 12px; margin-bottom: 10px; }}
+      .row {{ display: flex; justify-content: space-between; gap: 14px; padding: 5px 0; border-top: 1px solid #e2e8f0; font-size: 12px; }}
+      .row span, .basis, .status {{ color: #64748b; }}
+      .row strong {{ color: #991b1b; text-align: right; }}
+      .status, .basis {{ font-size: 11px; margin-top: 8px; line-height: 1.4; }}
+      .source {{ display: block; color: #2563eb; font-size: 11px; margin-top: 8px; text-decoration: none; }}
+      .map-title {{ background: rgba(255,255,255,.95); padding: 10px 12px; border-radius: 8px; box-shadow: 0 2px 10px rgba(15,23,42,.15); color: #0f172a; font-size: 12px; line-height: 1.5; max-width: 280px; }}
+      .map-title b {{ font-size: 14px; }}
+    </style></head><body><div id="map"></div>
+    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+    <script>
+      const map = L.map('map', {{zoomControl: true}}).setView([26.0, 51.5], 4);
+      L.tileLayer('https://{{s}}.basemaps.cartocdn.com/light_all/{{z}}/{{x}}/{{y}}{{r}}.png', {{
+        attribution: '&copy; OpenStreetMap contributors &copy; CARTO', maxZoom: 18
+      }}).addTo(map);
+      const title = L.control({{position: 'topleft'}});
+      title.onAdd = () => {{
+        const el = L.DomUtil.create('div', 'map-title');
+        el.innerHTML = '<b>中东公开命名油气资产</b><br>红点：单一油气田、项目或区块。点击查看口径、日期和来源。';
+        return el;
+      }};
+      title.addTo(map);
+      const assets = {marker_json};
+      assets.forEach((asset) => {{
+        L.circleMarker([asset.lat, asset.lon], {{
+          radius: 5.5, color: '#991b1b', weight: 1.3, fillColor: '#ef4444', fillOpacity: 0.92
+        }}).bindPopup(asset.popup, {{maxWidth: 340}}).addTo(map);
+      }});
+    </script></body></html>
+    """
+
+
+st.title("中东公开命名油气资产地图 · DEMO")
+st.caption(
+    "字段级目录：红点尽量对应单一油田/气田；“未披露”不以国家或油田群数据替代。"
+    "数值严格标明实际产量、产能、目标或历史口径。"
+)
+
+country_options = sorted({str(asset["country"]) for asset in ASSETS})
+type_options = sorted({str(asset["asset_type"]) for asset in ASSETS})
+metric_options = sorted({str(asset["metric_type"]) for asset in ASSETS})
+
+with st.sidebar:
+    st.header("筛选")
+    selected_countries = st.multiselect("国家", country_options, default=country_options)
+    selected_types = st.multiselect("资产类型", type_options, default=type_options)
+    selected_metrics = st.multiselect(
+        "指标口径",
+        metric_options,
+        default=metric_options,
+        format_func=lambda key: METRIC_LABELS[key],
+    )
+    values_only = st.checkbox("仅显示有公开字段级数值的资产", value=False)
+    st.divider()
+    st.caption("坐标为公开资料交叉核对后的近似中心点；弹窗明确标注该精度。")
+
+filtered = [
+    asset
+    for asset in ASSETS
+    if asset["country"] in selected_countries
+    and asset["asset_type"] in selected_types
+    and asset["metric_type"] in selected_metrics
+    and (not values_only or asset["value"] is not None)
 ]
 
+actual_count = sum(asset["metric_type"] == "actual_output" for asset in filtered)
+numeric_count = sum(asset["value"] is not None for asset in filtered)
+unknown_count = sum(asset["value"] is None for asset in filtered)
+col1, col2, col3, col4 = st.columns(4)
+col1.metric("已显示资产", f"{len(filtered)}")
+col2.metric("有字段级公开数值", f"{numeric_count}")
+col3.metric("实际产量口径", f"{actual_count}")
+col4.metric("逐田值未公开", f"{unknown_count}")
 
-def map_html(rows):
-    points = []
-    for row in rows:
-        popup = (
-            "<div style='min-width:210px;font-family:sans-serif'>"
-            f"<b style='font-size:15px'>{html.escape(row['name'])}</b><br>"
-            f"<span style='color:#64748b'>{html.escape(row['country'])}</span><hr>"
-            f"<b>{html.escape(row.get('metric', '日产量/产能'))}：</b>{html.escape(row['daily'])}<br>"
-            f"<b>数据日期：</b>{html.escape(row['date'])}</div>"
-        )
-        points.append({"lat": row["lat"], "lon": row["lon"], "popup": popup})
-    payload = json.dumps(points, ensure_ascii=False)
-    return """<!doctype html><html lang='zh-CN'><head><meta charset='utf-8'>
-<link rel='stylesheet' href='https://unpkg.com/leaflet@1.9.4/dist/leaflet.css'>
-<style>html,body,#map{height:100%;margin:0}#map{background:#e8eef4;font-family:sans-serif}.map-title{background:white;padding:9px 11px;border-radius:8px;box-shadow:0 2px 10px #999;font-size:12px;line-height:1.45}.map-title b{font-size:14px}</style>
-</head><body><div id='map'></div><script src='https://unpkg.com/leaflet@1.9.4/dist/leaflet.js'></script><script>
-const map=L.map('map').setView([26,51.5],4);
-L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png',{attribution:'© OpenStreetMap',maxZoom:18}).addTo(map);
-const title=L.control({position:'topleft'});title.onAdd=()=>{const e=L.DomUtil.create('div','map-title');e.innerHTML='<b>中东油气资产</b><br>点击红点查看指标与日期';return e};title.addTo(map);
-const points=__DATA__;
-points.forEach(p=>L.circleMarker([p.lat,p.lon],{radius:6,color:'#991b1b',weight:1.5,fillColor:'#ef4444',fillOpacity:.95}).bindPopup(p.popup,{maxWidth:290}).addTo(map));
-</script></body></html>""".replace("__DATA__", payload)
+components.html(_map_html(filtered), height=690, scrolling=False)
 
-st.title("中东主要油气田地图 · DEMO")
-st.caption("红点为油田、油田群或天然气资产近似中心点；点击红点查看名称、指标和数据日期。")
-countries = sorted({row["country"] for row in FIELDS})
-selected = st.multiselect("国家筛选", countries, default=countries)
-shown = [row for row in FIELDS if row["country"] in selected]
-components.html(map_html(shown), height=620, scrolling=False)
-st.info("DEMO 数据保留公开资料口径；阿联酋新增资产的日期由用户补充表未提供，已标注“未提供（用户补充）”；天然气指标单独标注，不与石油日产量混用。")
-st.dataframe([
-    {"国家": row["country"], "油气资产": row["name"], "指标": row.get("metric", "日产量/产能"), "数值": row["daily"], "数据日期": row["date"]}
-    for row in shown
-], width="stretch", hide_index=True)
+st.info(
+    "使用说明：不同口径不可直接相加。`实际产量`为特定日期公开快照；`产能`、`目标产能`、"
+    "`新增产能`和`历史峰值`仅用于资产能力监测，不等同于当前日产量。"
+)
+
+rows = [
+    {
+        "国家": asset["country"],
+        "英文名称": asset["name"],
+        "中文名称": asset["name_cn"],
+        "资产类型": asset["asset_type"],
+        "指标口径": METRIC_LABELS[asset["metric_type"]],
+        "数值": display_value(asset),
+        "数据日期": display_date(asset),
+        "状态": asset["status"],
+        "坐标精度": asset["coordinate_precision"],
+        "来源": asset["source"],
+        "说明": asset["note"],
+    }
+    for asset in filtered
+]
+st.subheader("字段级目录")
+st.dataframe(rows, width="stretch", hide_index=True, height=480)
+
+st.caption(
+    "目录范围：公开命名的主要生产、开发或保留油气资产；不宣称覆盖所有历史探井或未商业化发现。"
+    "来源链接见各点弹窗。"
+)
