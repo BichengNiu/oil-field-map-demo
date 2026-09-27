@@ -29,6 +29,7 @@ METRIC_LABELS = {
     "historical_peak": "历史峰值",
     "historical_condensate_output": "历史凝析油产量",
     "incremental_capacity": "新增产能",
+    "planned_incremental_capacity": "规划新增产能",
     "undisclosed": "未披露",
 }
 
