@@ -94,8 +94,8 @@ def _map_html(assets: list[dict[str, object]]) -> str:
     <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
     <script>
       const map = L.map('map', {{zoomControl: true}}).setView([26.0, 51.5], 4);
-      L.tileLayer('https://{{s}}.basemaps.cartocdn.com/light_all/{{z}}/{{x}}/{{y}}{{r}}.png', {{
-        attribution: '&copy; OpenStreetMap contributors &copy; CARTO', maxZoom: 18
+      L.tileLayer('https://tile.openstreetmap.org/{{z}}/{{x}}/{{y}}.png', {{
+        attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors', maxZoom: 18
       }}).addTo(map);
       const title = L.control({{position: 'topleft'}});
       title.onAdd = () => {{
