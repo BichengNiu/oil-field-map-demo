@@ -123,8 +123,8 @@ def _map_html(assets: list[dict[str, object]]) -> str:
 
 st.title("中东公开命名油气资产地图 · DEMO")
 st.caption(
-    "字段级目录：红点尽量对应单一油田/气田；“未披露”不以国家或油田群数据替代。"
-    "数值严格标明实际产量、产能、目标或历史口径。"
+    "公开命名资产目录：包含单一油田、气田及少量区块／项目；坐标为近似点。"
+    "数值严格标明实产、历史推算、产能或目标及对应资产范围；无可靠数值则留空。"
 )
 
 country_options = sorted({str(asset["country"]) for asset in ASSETS})
@@ -141,7 +141,7 @@ with st.sidebar:
         default=metric_options,
         format_func=lambda key: METRIC_LABELS[key],
     )
-    values_only = st.checkbox("仅显示有公开字段级数值的资产", value=False)
+    values_only = st.checkbox("仅显示有公开资产级数值的资产", value=False)
     st.divider()
     st.caption("有坐标的红点为近似中心点；缺少可核验坐标的资产仍列在下方目录。")
 
@@ -160,9 +160,9 @@ numeric_count = sum(asset["value"] is not None for asset in filtered)
 unknown_count = sum(asset["value"] is None for asset in filtered)
 col1, col2, col3, col4 = st.columns(4)
 col1.metric("已显示资产", f"{len(filtered)}")
-col2.metric("有字段级公开数值", f"{numeric_count}")
+col2.metric("有资产级公开数值", f"{numeric_count}")
 col3.metric("来源直报实产", f"{actual_count}")
-col4.metric("逐田值未公开", f"{unknown_count}")
+col4.metric("数值未核实／未公开", f"{unknown_count}")
 unlocated_count = sum(asset["lat"] is None or asset["lon"] is None for asset in filtered)
 st.caption(f"由公开年产量换算的历史推算日均：{derived_count} 条；待核验坐标、仅列目录：{unlocated_count} 条。")
 
@@ -171,7 +171,7 @@ components.html(_map_html(filtered), height=690, scrolling=False)
 st.info(
     "口径说明：不同口径不可直接相加。`来源直报实际产量`按来源公布的观察日或年度平均及日期展示；"
     "`推算日均产量`仅由来源公开的年度总产量除以当年365/366日换算，并在记录中列出公式。"
-    "`产能`、`目标产能`和`历史值`不代表当前实产；无可核验的逐田数值时保留为未披露。"
+    "`产能`、`目标产能`和`历史值`不代表当前实产；区块或项目合计量不分配给组成油田。"
 )
 
 rows = [
@@ -191,7 +191,7 @@ rows = [
     }
     for asset in filtered
 ]
-st.subheader("字段级目录")
+st.subheader("资产目录")
 st.dataframe(rows, width="stretch", hide_index=True, height=480)
 
 st.caption(
