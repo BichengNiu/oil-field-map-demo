@@ -38,7 +38,7 @@ def map_html(rows):
 <style>html,body,#map{height:100%;margin:0}#map{background:#e8eef4;font-family:sans-serif}.map-title{background:white;padding:9px 11px;border-radius:8px;box-shadow:0 2px 10px #999;font-size:12px;line-height:1.45}.map-title b{font-size:14px}</style>
 </head><body><div id='map'></div><script src='https://unpkg.com/leaflet@1.9.4/dist/leaflet.js'></script><script>
 const map=L.map('map').setView([26,51.5],4);
-L.tileLayer('https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png',{attribution:'© OpenStreetMap © CARTO',maxZoom:18}).addTo(map);
+L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png',{attribution:'© OpenStreetMap',maxZoom:18}).addTo(map);
 const title=L.control({position:'topleft'});title.onAdd=()=>{const e=L.DomUtil.create('div','map-title');e.innerHTML='<b>中东主要油田</b><br>点击红点查看日产量与日期';return e};title.addTo(map);
 const points=__DATA__;
 points.forEach(p=>L.circleMarker([p.lat,p.lon],{radius:6,color:'#991b1b',weight:1.5,fillColor:'#ef4444',fillOpacity:.95}).bindPopup(p.popup,{maxWidth:290}).addTo(map));
