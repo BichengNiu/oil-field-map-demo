@@ -76,6 +76,15 @@ SOURCES = {
     "ADOC Fields": "https://www.cts-co.net/adocauh/product/",
     "Aramco FY2025 Results": "https://china.aramco.com/zh-cn/news-media/global-news/2026/aramco-announces-fourth-quarter-and-full-year-2025-results",
     "Aramco 2019 Increments": "https://www.aramco.com/en/news-media/news/2019/aramco-contracts-marjan-berri-oilfields",
+    "Aramco 2019 GMTN": "https://www.aramco.com/-/media/publications/corporate-reports/bonds/2019-gmtn-prospectus.pdf",
+    "Iraq EITI 2019-20": "https://eiti.org/sites/default/files/2023-01/doc-1232-2022_12_15_11_48_01.pdf",
+    "SHANA Hengam 2010": "https://www.shana.ir/news/156860/",
+    "KOC Mutriba": "https://www.kockw.com/sites/EN/EMagazine/Pages/Events/1032.aspx",
+    "OQEP Operations": "https://www.oqep.om/operation",
+    "SNOC Upstream": "https://www.snoc.ae/our-business/upstream/",
+    "SNOC GHG 2021": "https://www.snoc.ae/wp-content/uploads/SNOC-2021-GHG-Report.pdf",
+    "RAKGAS History": "https://www.rakgas.ae/en/who-we-are/our-story",
+    "Bapco Abu Safah": "https://www.bapco.net/en/page/crude-and-petroleum-products",
 }
 
 
@@ -147,6 +156,7 @@ ASSETS = [
     record("沙特阿拉伯", "Abu Hadriya", "阿布哈德里亚", "油田", None, None, source="Aramco 2019 Prospectus", note="阿美储量认证附件列为油田；生产状态及逐田日产量待核。"),
     record("沙特阿拉伯", "Fadhili", "法迪利", "油田", None, None, source="Aramco 2019 Prospectus", note="阿美储量认证附件列为油田；与同名气体处理设施区分，逐田原油日产量待核。"),
     record("沙特阿拉伯", "Harmaliyah", "哈马利亚", "油田", None, None, source="Aramco 2019 Prospectus", note="阿美储量认证附件列为油田；逐田产量未披露。"),
+    record("沙特阿拉伯", "Hawtah", "豪塔", "油田", None, None, source="Aramco 2019 GMTN", note="阿美2019年债券招股书第100页原油基础设施图列名；逐田产量及坐标未核验。"),
 
     # United Arab Emirates — ADNOC Onshore
     record("阿联酋", "Bab", "巴布", "油田", 23.93, 53.79, value="450", metric_type="capacity", unit="千桶/日", data_date="2020-12-31", source="ADNOC Onshore", note="公开产能口径；不是当期实际日产量。"),
@@ -204,6 +214,13 @@ ASSETS = [
     record("阿联酋", "Margham", "马尔格姆", "凝析油气田", 24.98, 55.61, value="25", metric_type="historical_condensate_output", unit="千桶/日", data_date="2010-12-31", source="Dubai Petroleum", note="2010年凝析油，非当前原油日产量。"),
     record("阿联酋", "Bab Gas Cap", "巴布气顶项目", "天然气项目", 23.93, 53.79, value="1,500", metric_type="target_capacity", unit="百万标准立方英尺/日", data_date="2026-01-01", source="ADNOC Onshore", note="天然气项目。"),
     record("阿联酋", "Ruwais Diyab", "鲁韦斯迪亚布", "非常规气特许权", 24.15, 52.70, source="ADNOC Ghasha", note="特许权，不是单一油田。"),
+    record("阿联酋", "Sajaa", "萨贾", "气／凝析油田", None, None, source="SNOC Upstream", note="沙迦SNOC列为既有油气资产；原油逐田日产量未披露。"),
+    record("阿联酋", "Kahaif", "卡海夫", "气／凝析油田", None, None, source="SNOC Upstream", note="沙迦SNOC列为既有油气资产；原油逐田日产量未披露。"),
+    record("阿联酋", "Moveyeid", "穆韦耶德", "气田／储气设施", None, None, status="成熟气田转为储气用途", source="SNOC Upstream", note="SNOC称其已从成熟生产田转型为储气设施；不填当期原油日产量。"),
+    record("阿联酋", "Mahani", "马哈尼", "气／凝析油田", None, None, status="2020年发现；2021年运营中，当期待核", source="SNOC GHG 2021", note="SNOC的2021年温室气体报告列为其四座运营气田之一；不将井测试流量填为全田持续产量。"),
+    record("阿联酋", "Hedebah", "赫德巴", "气／凝析油田", None, None, status="2024年发现；开发中", source="SNOC Upstream", note="SNOC将其列为新发现田；持续逐田产量未披露。"),
+    record("阿联酋", "Saleh", "萨利赫", "海上气田", None, None, status="历史生产；当期状态待核", source="RAKGAS History", note="RAKGAS历史页面记载从哈伊马角近海Saleh田开采和处理，未披露当前逐田流量。"),
+    record("阿联酋", "Umm Al Quwain", "乌姆盖万", "海上气田", None, None, status="历史生产；当期状态待核", source="RAKGAS History", note="RAKGAS历史页面记载2006—2008年处理该田来气；当前生产状态和逐田数值待核。"),
 
     # Iraq
     record("伊拉克", "Rumaila", "鲁迈拉", "油田", 30.08, 47.43, value="1,370", metric_type="actual_output", unit="千桶/日", data_date="2025年平均", source="Rumaila Operating Organisation", note="运营组织直报2025全年日均137万桶；不是当前瞬时日产量。"),
@@ -244,6 +261,9 @@ ASSETS = [
     record("伊拉克", "Ain Zalah", "艾因扎拉", "油田", None, None, source="Iraq EITI 2021", note="EITI 2021表57列为产油田；无近期可核验逐田日产量。"),
     record("伊拉克", "Batmah", "巴特马", "油田", None, None, source="Iraq EITI 2021", note="EITI 2021表57列为产油田；无近期可核验逐田日产量。"),
     record("伊拉克", "Hamrin", "哈姆林", "油田", None, None, source="Iraq EITI 2021", note="EITI 2021表58列为产油田；逐田当期日产量未披露。"),
+    record("伊拉克", "Naft Khana", "纳夫特哈纳", "油田", None, None, status="2019—2020年列为生产田；当期待核", source="Iraq EITI 2019-20", note="EITI生产／非生产油田表将该田列在Middle Oil Company生产栏；无可核验的单田当期日产量。"),
+    record("伊拉克", "Amara", "阿马拉", "油田", None, None, status="2019—2020年列为生产田；当期待核", source="Iraq EITI 2019-20", note="EITI表列入Maysan Oil Company生产栏；不与Maysan多田总量混同。"),
+    record("伊拉克", "Noor", "努尔", "油田", None, None, status="2019—2020年列为生产田；当期待核", source="Iraq EITI 2019-20", note="EITI表列入Maysan Oil Company生产栏；逐田产量未披露。"),
 
     # Iran
     record("伊朗", "Ahvaz", "阿瓦士", "油田", 31.32, 48.68, source="EIA Iran"),
@@ -282,7 +302,7 @@ ASSETS = [
     record("伊朗", "Paranj", "帕兰吉", "油田", 30.95, 49.85, source="GEM Paranj", note="与Parsi同属开发项目；不拆分项目合计产量。"),
     record("伊朗", "Nargesi", "纳尔格西", "油田", 29.4742, 51.2602, source="GEM Nargesi", note="公开资产名录；逐田持续日产量未核验。"),
 
-    record("伊朗", "Hengam", "亨加姆", "海上油田", None, None, source="EIA Iran", note="EIA 2024年伊朗主要油气田图列名；无可核验的当期单田日产量。"),
+    record("伊朗", "Hengam", "亨加姆", "跨境海上油田（伊朗侧）", None, None, value="7", metric_type="actual_output", unit="千桶/日", data_date="2010-08-24", source="SHANA Hengam 2010", note="伊朗石油部新闻报道称该日伊朗侧产量达到7,000桶/日；极旧历史快照，非2026年或伊朗—阿曼全田产量。阿曼侧与West Bukha相关。"),
 
     # Kuwait
     record("科威特", "Burgan", "布尔干", "油田", 29.05, 47.91, source="KOC / KPC"),
@@ -301,6 +321,7 @@ ASSETS = [
     record("科威特", "Khafji", "哈夫吉", "跨境海上油田", 28.52, 48.42, source="KOC / KPC", note="沙特—科威特中立区共享资产。"),
     record("科威特", "Nokhetha", "诺赫萨", "发现海上油田", None, None, status="2024年发现；商业生产未证实", source="KOC Annual Report 2024-25", note="KOC年报的2,800桶/日是Nokhetha-1勘探井测试流量，不能填作全田持续日产量。"),
     record("科威特", "Julaiah", "朱莱亚", "发现海上油田", None, None, status="2025年发现；商业生产未证实", source="KOC Annual Report 2024-25", note="KOC年报仅披露勘探井测试与资源量，未披露全田持续日产量。"),
+    record("科威特", "Mutriba", "穆特里巴", "油田", None, None, status="2025-06-15商业投产", source="KOC Mutriba", note="KOC确认轻质油商业生产；公开报道未给可核验的全田持续日产量，井测试量不作替代。"),
 
     # Qatar
     record("卡塔尔", "Al Shaheen", "阿尔沙欣", "海上油田", 26.51, 51.92, value="280.1", metric_type="actual_output", unit="千桶/日", data_date="2024年平均", source="QatarEnergy", note="QatarEnergy官方投资者演示文稿列示的2024年平均原油产量；来源直报。"),
@@ -339,10 +360,16 @@ ASSETS = [
     record("阿曼", "Safah", "萨法", "油田", None, None, status="运营", source="Occidental Oman", note="Occidental披露Block 9的主要油田；未披露可核验单田日产量。"),
     record("阿曼", "Wadi Latham", "瓦迪拉萨姆", "油田", None, None, status="运营", source="Occidental Oman", note="Occidental披露Block 9的主要油田；未披露可核验单田日产量。"),
     record("阿曼", "Khamilah", "哈米拉", "油田", None, None, status="运营", source="Occidental Oman", note="Occidental披露Block 27油田；未披露可核验单田日产量。"),
+    record("阿曼", "West Bukha", "西布哈", "跨境海上油田", None, None, status="运营", source="OQEP Operations", note="OQEP列为Block 8两座生产田之一；与伊朗Hengam同属跨境地质结构，未将区块合计拆为单田产量。"),
+    record("阿曼", "Bukha", "布哈", "海上气田", None, None, status="运营", source="OQEP Operations", note="OQEP列为Block 8两座生产田之一；不将区块或天然气量充作单田原油日产量。"),
+    record("阿曼", "Sahma", "萨赫马", "油田", None, None, status="公开列为生产田", source="OQEP Operations", note="OQEP Block 48说明列为相邻Block 7生产油田；未披露单田产量。"),
+    record("阿曼", "Abu Butabul", "阿布布塔布尔", "气／凝析油田", None, None, source="OQEP Operations", note="OQEP确认Block 60油气田名称；不把Block 60油当量合计归给该田。"),
+    record("阿曼", "Khazzan", "哈赞", "气田", None, None, source="OQEP Operations", note="OQEP称为Block 61阶段之一；逐田原油日产量不适用。"),
+    record("阿曼", "Ghazeer", "加泽尔", "气田", None, None, source="OQEP Operations", note="OQEP称为Block 61阶段之一；逐田原油日产量不适用。"),
 
     # Bahrain and Yemen
     record("巴林", "Bahrain Field (Awali)", "巴林／阿瓦利油田", "油田", 26.07, 50.55, value="39.5", metric_type="actual_output", unit="千桶/日", data_date="2022年平均", source="UNFCCC Bahrain BTR", note="UNFCCC BTR列示2022年原油与凝析油年均产量39.5千桶/日。"),
-    record("巴林", "Abu Safah", "阿布萨法", "跨境海上油田", 26.02, 50.61, value="≈300", metric_type="actual_output", unit="千桶/日", data_date="BTR1（基准日未注明）", source="UNFCCC Bahrain BTR", note="报告称全油田产量约300千桶/日，未注明观察日期；巴林权益为50%，约150千桶/日为权益份额而非全田产量。"),
+    record("巴林", "Abu Safah", "阿布萨法", "跨境海上油田", 26.02, 50.61, value="300", metric_type="capacity", unit="千桶/日", data_date="网页未注明基准日（2026-09-27核对）", source="Bapco Abu Safah", note="Bapco明确为全油田30万桶/日产能，非实产；巴林与沙特权益各50%，不可按权益数推断实际日产量。"),
     record("也门", "Masila", "马西拉", "油田／14区块", 14.47, 49.54, source="Yemen Ministry of Oil", note="冲突环境下缺少可靠连续逐田日产量。"),
     record("也门", "East Shabwa", "东舍卜瓦", "油田／10区块", 14.55, 47.54, source="Yemen Ministry of Oil"),
     record("也门", "Hawareem", "哈瓦里姆", "油田／32区块", 14.32, 48.96, source="Yemen Ministry of Oil"),
