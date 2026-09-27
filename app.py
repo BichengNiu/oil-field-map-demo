@@ -14,7 +14,8 @@ from field_catalog import ASSETS
 st.set_page_config(page_title="中东油气田地图 DEMO", page_icon="🛢️", layout="wide")
 
 METRIC_LABELS = {
-    "actual_output": "实际产量",
+    "actual_output": "来源直报实际产量",
+    "derived_daily_average": "推算日均产量",
     "capacity": "产能",
     "oil_capacity": "原油产能",
     "target_capacity": "目标产能",
@@ -148,19 +149,22 @@ filtered = [
 ]
 
 actual_count = sum(asset["metric_type"] == "actual_output" for asset in filtered)
+derived_count = sum(asset["metric_type"] == "derived_daily_average" for asset in filtered)
 numeric_count = sum(asset["value"] is not None for asset in filtered)
 unknown_count = sum(asset["value"] is None for asset in filtered)
 col1, col2, col3, col4 = st.columns(4)
 col1.metric("已显示资产", f"{len(filtered)}")
 col2.metric("有字段级公开数值", f"{numeric_count}")
-col3.metric("实际产量口径", f"{actual_count}")
+col3.metric("来源直报实产", f"{actual_count}")
 col4.metric("逐田值未公开", f"{unknown_count}")
+st.caption(f"由公开年产量换算的推算日均：{derived_count} 条。")
 
 components.html(_map_html(filtered), height=690, scrolling=False)
 
 st.info(
-    "使用说明：不同口径不可直接相加。`实际产量`为特定日期公开快照；`产能`、`目标产能`、"
-    "`新增产能`和`历史峰值`仅用于资产能力监测，不等同于当前日产量。"
+    "口径说明：不同口径不可直接相加。`来源直报实际产量`按来源公布的观察日或年度平均及日期展示；"
+    "`推算日均产量`仅由来源公开的年度总产量除以当年365/366日换算，并在记录中列出公式。"
+    "`产能`、`目标产能`和`历史值`不代表当前实产；无可核验的逐田数值时保留为未披露。"
 )
 
 rows = [
