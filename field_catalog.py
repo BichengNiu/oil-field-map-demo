@@ -70,6 +70,12 @@ SOURCES = {
     "GEM Dehloran": "https://www.gem.wiki/Dehloran_Oil_Field_(Iran)",
     "GEM Paranj": "https://www.gem.wiki/Paranj_Oil_Field_(Iran)",
     "GEM Nargesi": "https://www.gem.wiki/Nargesi_Oil_Field_(Iran)",
+    "Aramco 2019 Prospectus": "https://www.aramco.com/-/media/images/investors/saudi-aramco-prospectus-en-051219.pdf",
+    "Iraq EITI 2021": "https://eiti.org/sites/default/files/2024-01/Iraq%202021%20EITI%20Report.pdf",
+    "QatarEnergy E&P": "https://www.qatarenergy.qa/en/Whatwedo/Pages/ExplorationandProduction.aspx",
+    "ADOC Fields": "https://www.cts-co.net/adocauh/product/",
+    "Aramco FY2025 Results": "https://china.aramco.com/zh-cn/news-media/global-news/2026/aramco-announces-fourth-quarter-and-full-year-2025-results",
+    "Aramco 2019 Increments": "https://www.aramco.com/en/news-media/news/2019/aramco-contracts-marjan-berri-oilfields",
 }
 
 
@@ -112,13 +118,13 @@ def record(
 ASSETS = [
     # Saudi Arabia
     record("沙特阿拉伯", "Ghawar", "加瓦尔", "油田", 25.42, 49.57, value="3,800", metric_type="maximum_sustainable_capacity", unit="千桶/日", data_date="2018-12-31", source="Saudi Aramco / EIA", note="最大可持续产能，不是当期实际产量。"),
-    record("沙特阿拉伯", "Safaniya", "萨法尼亚", "海上油田", 28.18, 48.78, source="Saudi Aramco / EIA"),
-    record("沙特阿拉伯", "Khurais", "库赖斯", "油田", 25.03, 48.24, source="Saudi Aramco / EIA"),
+    record("沙特阿拉伯", "Safaniya", "萨法尼亚", "海上油田", 28.18, 48.78, value="1,300", metric_type="maximum_sustainable_capacity", unit="千桶/日", data_date="2018-12-31", source="Aramco 2019 Prospectus", note="阿美招股书截至2018年末最大可持续产能；非实际日产量。"),
+    record("沙特阿拉伯", "Khurais", "库赖斯", "油田／综合体", 25.03, 48.24, value="1,450", metric_type="maximum_sustainable_capacity", unit="千桶/日", data_date="2018-12-31", source="Aramco 2019 Prospectus", note="阿美公布的Khurais综合体最大可持续产能，含Abu Jifan、Mazalij等，不能分配给Khurais单田；非实际产量。"),
     record("沙特阿拉伯", "Shaybah", "谢拜", "油田", 22.48, 53.78, value="1,000", metric_type="capacity", unit="千桶/日", data_date="2016-01-01", source="Saudi Aramco / EIA", note="公开长期产能，非最新实际日产量。"),
     record("沙特阿拉伯", "Manifa", "马尼法", "海上油田", 27.62, 49.87, source="Saudi Aramco / EIA"),
-    record("沙特阿拉伯", "Marjan", "马尔詹", "海上油田", 27.47, 49.86, value="300", metric_type="incremental_capacity", unit="千桶/日", data_date="2025-12-31", source="Saudi Aramco / EIA", note="新增产能，不是油田总产量。"),
-    record("沙特阿拉伯", "Berri", "贝里", "海上油田", 27.83, 49.93, value="250", metric_type="incremental_capacity", unit="千桶/日", data_date="2025-12-31", source="Saudi Aramco / EIA", note="新增产能，不是油田总产量。"),
-    record("沙特阿拉伯", "Zuluf", "祖卢夫", "海上油田", 27.67, 49.12, source="Saudi Aramco / EIA", note="此前600千桶/日是项目规划处理能力，未证实为油田实际日产量，故不填值。"),
+    record("沙特阿拉伯", "Marjan", "马尔詹", "海上油田", 27.47, 49.86, value="300", metric_type="incremental_capacity", unit="千桶/日", data_date="2025年项目投产", source="Aramco FY2025 Results", note="2025年投产项目的新增产能，并非油田总产能或实际日产量。"),
+    record("沙特阿拉伯", "Berri", "贝里", "海上油田", 27.83, 49.93, value="250", metric_type="planned_incremental_capacity", unit="千桶/日", data_date="2019-07-09规划；截至2025年末注水启动", source="Aramco 2019 Increments", note="项目规划新增原油产能；阿美2025全年业绩仅称注水作业已启动，未证实该增量已投产，不能作实际日产量。"),
+    record("沙特阿拉伯", "Zuluf", "祖卢夫", "海上油田", 27.67, 49.12, value="825", metric_type="maximum_sustainable_capacity", unit="千桶/日", data_date="2018-12-31", source="Aramco 2019 Prospectus", note="阿美招股书截至2018年末最大可持续产能；不能与后续项目新增/处理能力混同，非实际日产量。"),
     record("沙特阿拉伯", "Qatif", "卡提夫", "油田", 26.55, 50.01, source="Saudi Aramco / EIA"),
     record("沙特阿拉伯", "Abqaiq", "阿布盖格", "油田", 25.94, 49.68, source="Saudi Aramco / EIA"),
     record("沙特阿拉伯", "Khursaniyah", "胡尔萨尼亚", "油田", 27.72, 48.91, source="Saudi Aramco / EIA"),
@@ -133,6 +139,14 @@ ASSETS = [
     record("沙特阿拉伯", "Qurqas", "古尔加斯", "发现油田", None, None, status="已发现；商业生产未证实", source="Saudi Press Agency 2025", note="官方公布的新发现油田；逐田实产未披露。"),
     record("沙特阿拉伯", "Ladam", "拉达姆", "非常规发现油田", None, None, status="2024年发现；商业生产未证实", source="Saudi Press Agency 2024", note="官方公布的非常规油田；5,100桶/日是Ladam-2井测试流量，不是全田持续日产量。"),
     record("沙特阿拉伯", "Faruq", "法鲁克", "非常规发现油田", None, None, status="2024年发现；商业生产未证实", source="Saudi Press Agency 2024", note="官方公布的非常规油田；4,557桶/日是Faruq-4井测试流量，不是全田持续日产量。"),
+
+    # Aramco prospectus identifies these as separate fields within the Khurais complex; no field-level production split.
+    record("沙特阿拉伯", "Abu Jifan", "阿布吉凡", "油田（Khurais综合体）", None, None, source="Aramco 2019 Prospectus", note="阿美列为Khurais综合体组成油田；综合体1,450千桶/日产能不可拆给单田。"),
+    record("沙特阿拉伯", "Mazalij", "马扎利吉", "油田（Khurais综合体）", None, None, source="Aramco 2019 Prospectus", note="阿美列为Khurais综合体组成油田；单田产量未披露。"),
+    record("沙特阿拉伯", "Qirdi", "吉尔迪", "油田（Khurais综合体）", None, None, source="Aramco 2019 Prospectus", note="阿美储量认证附件列为单独油田；部分综合体描述未列此田，单田产量未披露。"),
+    record("沙特阿拉伯", "Abu Hadriya", "阿布哈德里亚", "油田", None, None, source="Aramco 2019 Prospectus", note="阿美储量认证附件列为油田；生产状态及逐田日产量待核。"),
+    record("沙特阿拉伯", "Fadhili", "法迪利", "油田", None, None, source="Aramco 2019 Prospectus", note="阿美储量认证附件列为油田；与同名气体处理设施区分，逐田原油日产量待核。"),
+    record("沙特阿拉伯", "Harmaliyah", "哈马利亚", "油田", None, None, source="Aramco 2019 Prospectus", note="阿美储量认证附件列为油田；逐田产量未披露。"),
 
     # United Arab Emirates — ADNOC Onshore
     record("阿联酋", "Bab", "巴布", "油田", 23.93, 53.79, value="450", metric_type="capacity", unit="千桶/日", data_date="2020-12-31", source="ADNOC Onshore", note="公开产能口径；不是当期实际日产量。"),
@@ -176,11 +190,11 @@ ASSETS = [
     record("阿联酋", "Dalma", "达尔马", "超酸性气田", 24.78, 52.83, source="ADNOC Ghasha"),
     record("阿联酋", "Shuweihat", "舒韦哈特", "超酸性气田", 24.20, 52.55, source="ADNOC Ghasha"),
     record("阿联酋", "SARB Deep Gas", "SARB 深层气项目", "天然气项目", 25.19, 53.18, value="200", metric_type="target_capacity", unit="百万标准立方英尺/日", data_date="2026-01-07", source="ADNOC Ghasha", note="天然气项目，不能与原油日产量相加。"),
-    record("阿联酋", "Hail (ADOC)", "海尔（ADOC）", "海上油田", 24.37, 53.41, value="21", metric_type="historical_peak", unit="千桶/日", data_date="2018-01-01", source="ADNOC Ghasha", note="同名资产须以运营商和坐标去重；此为历史口径。"),
+    record("阿联酋", "Hail (ADOC)", "海尔（ADOC）", "海上油田", 24.37, 53.41, status="2017年投产", source="ADOC Fields", note="ADOC确认Hail与Mubarraz等田的原油混合外运；原列21千桶/日未在该单田来源中核实，撤回。"),
     record("阿联酋", "Mubarraz", "穆巴拉兹", "海上油田", 24.40, 53.52, source="ADNOC Ghasha"),
     record("阿联酋", "Umm Al-Anbar", "乌姆阿尔安巴尔", "海上油田", 24.30, 53.45, source="ADNOC Ghasha"),
     record("阿联酋", "Neewat Al-Ghalan", "尼瓦特阿尔加兰", "海上油田", 24.22, 53.55, source="ADNOC Ghasha"),
-    record("阿联酋", "Bunduq", "本杜克", "跨境海上油田", 25.22, 52.72, source="ADNOC Offshore"),
+    record("阿联酋", "Bunduq", "本杜克", "跨境海上油田", 25.22, 52.72, value="9.2", metric_type="actual_output", unit="千桶/日", data_date="2024年平均", source="QatarEnergy", note="QatarEnergy投资者材料第13页列El Bunduq全田2024年平均原油产量；跨境资产仅列一次，不是阿联酋权益量。"),
     record("阿联酋", "Haliba", "哈利巴", "油田", 23.00, 53.80, value="40", metric_type="target_capacity", unit="千桶/日", data_date="2019-06-01", source="ADNOC Onshore", note="初期生产约10千桶/日；40为目标产能。"),
     record("阿联酋", "Fateh", "法泰赫", "海上油田", 25.54, 54.29, source="Dubai Petroleum"),
     record("阿联酋", "South-West Fateh", "西南法泰赫", "海上油田", 25.45, 54.19, source="Dubai Petroleum"),
@@ -194,23 +208,23 @@ ASSETS = [
     # Iraq
     record("伊拉克", "Rumaila", "鲁迈拉", "油田", 30.08, 47.43, value="1,370", metric_type="actual_output", unit="千桶/日", data_date="2025年平均", source="Rumaila Operating Organisation", note="运营组织直报2025全年日均137万桶；不是当前瞬时日产量。"),
     record("伊拉克", "West Qurna-1", "西古尔纳一期", "油田", 30.77, 47.25, value="600", metric_type="actual_output", unit="千桶/日", data_date="2025-11-20", source="Iraqi News West Qurna-1", note="报道引用油田管理方称当日产量为600千桶/日；旧750千桶/日记录是产能，2026年实际日产量未核实。"),
-    record("伊拉克", "West Qurna-2", "西古尔纳二期", "油田", 30.96, 47.31, source="EIA Iraq", note="原列2025-12-08的46万桶/日无对应EIA逐田实产证据；当日管线事故停产，故撤回该日期数值。"),
-    record("伊拉克", "Zubair", "祖拜尔", "油田", 30.20, 47.82, source="EIA Iraq"),
-    record("伊拉克", "Majnoon", "马季努恩", "油田", 31.05, 47.72, source="EIA Iraq"),
-    record("伊拉克", "Halfaya", "哈法亚", "油田", 31.58, 47.30, source="EIA Iraq"),
+    record("伊拉克", "West Qurna-2", "西古尔纳二期", "油田", 30.96, 47.31, value="400.1", metric_type="derived_daily_average", unit="千桶/日", data_date="2021年推算日均", source="Iraq EITI 2021", note="EITI 2021 表58（PCLD）年产146,022,515桶÷365日=400.1千桶/日（四舍五入）；历史均值，非当前日产量。"),
+    record("伊拉克", "Zubair", "祖拜尔", "油田", 30.20, 47.82, value="470.6", metric_type="derived_daily_average", unit="千桶/日", data_date="2021年推算日均", source="Iraq EITI 2021", note="EITI 2021 表58（PCLD）年产171,760,022桶÷365日=470.6千桶/日（四舍五入）；历史均值，非当前日产量。"),
+    record("伊拉克", "Majnoon", "马季努恩", "油田", 31.05, 47.72, value="176.0", metric_type="derived_daily_average", unit="千桶/日", data_date="2021年推算日均", source="Iraq EITI 2021", note="EITI 2021 表58（PCLD）年产64,240,000桶÷365日=176.0千桶/日（四舍五入）；历史均值，非当前日产量。"),
+    record("伊拉克", "Halfaya", "哈法亚", "油田", 31.58, 47.30, value="389.6", metric_type="derived_daily_average", unit="千桶/日", data_date="2021年推算日均", source="Iraq EITI 2021", note="EITI 2021 表58（PCLD）年产142,213,694桶÷365日=389.6千桶/日（四舍五入）；历史均值，非当前日产量。"),
     record("伊拉克", "Gharraf", "加拉夫", "油田", 31.45, 46.78, value="130", metric_type="actual_output", unit="千桶/日", data_date="截至2022-04-20的运营资料", source="PETRONAS Gharraf", note="PETRONAS资料称该田平均约13万桶/日；网页给出2022-04-20累计出口基准日，属于历史资料。"),
-    record("伊拉克", "Badra", "巴德拉", "油田", 33.03, 45.03, source="EIA Iraq"),
-    record("伊拉克", "Ahdab", "阿赫达卜", "油田", 32.99, 44.63, source="EIA Iraq"),
-    record("伊拉克", "East Baghdad", "东巴格达", "油田", 33.45, 44.60, source="EIA Iraq"),
-    record("伊拉克", "Nahr Umar", "纳赫尔乌马尔", "油田", 30.40, 47.72, source="EIA Iraq"),
+    record("伊拉克", "Badra", "巴德拉", "油田", 33.03, 45.03, value="41.3", metric_type="derived_daily_average", unit="千桶/日", data_date="2021年推算日均", source="Iraq EITI 2021", note="EITI 2021 表58（PCLD）年产15,083,829桶÷365日=41.3千桶/日（四舍五入）；历史均值，非当前日产量。"),
+    record("伊拉克", "Ahdab", "阿赫达卜", "油田", 32.99, 44.63, value="49.2", metric_type="derived_daily_average", unit="千桶/日", data_date="2021年推算日均", source="Iraq EITI 2021", note="EITI 2021 表58（PCLD）年产17,956,867桶÷365日=49.2千桶/日（四舍五入）；历史均值，非当前日产量。"),
+    record("伊拉克", "East Baghdad", "东巴格达", "油田", 33.45, 44.60, value="27.1", metric_type="derived_daily_average", unit="千桶/日", data_date="2021年推算日均", source="Iraq EITI 2021", note="EITI 2021 表58（PCLD）年产9,900,000桶÷365日=27.1千桶/日（四舍五入）；历史均值，非当前日产量。"),
+    record("伊拉克", "Nahr Umar", "纳赫尔乌马尔", "油田", 30.40, 47.72, value="3.0", metric_type="derived_daily_average", unit="千桶/日", data_date="2021年推算日均", source="Iraq EITI 2021", note="EITI 2021 表58（PCLD）年产1,109,514桶÷365日=3.0千桶/日（四舍五入）；历史均值，非当前日产量。"),
     record("伊拉克", "Artawi", "阿尔塔维", "油田", 30.42, 47.91, source="EIA Iraq"),
-    record("伊拉克", "Nassiriya", "纳西里耶", "油田", 31.12, 46.27, source="EIA Iraq"),
+    record("伊拉克", "Nassiriya", "纳西里耶", "油田", 31.12, 46.27, value="5.8", metric_type="derived_daily_average", unit="千桶/日", data_date="2021年推算日均", source="Iraq EITI 2021", note="EITI 2021 表58（PCLD）年产2,124,402桶÷365日=5.8千桶/日（四舍五入）；历史均值，非当前日产量。"),
     record("伊拉克", "Kirkuk", "基尔库克", "油田", 35.47, 44.39, source="EIA Iraq"),
-    record("伊拉克", "Bai Hassan", "拜哈桑", "油田", 35.61, 44.40, source="EIA Iraq"),
-    record("伊拉克", "Jambur", "詹布尔", "油田", 35.31, 44.48, source="EIA Iraq"),
-    record("伊拉克", "Khabbaz", "哈巴兹", "油田", 35.52, 44.21, source="EIA Iraq"),
+    record("伊拉克", "Bai Hassan", "拜哈桑", "油田", 35.61, 44.40, value="133.3", metric_type="derived_daily_average", unit="千桶/日", data_date="2021年推算日均", source="Iraq EITI 2021", note="EITI 2021 表57（North Oil Company）；年产48,672,087桶÷365日=133.3千桶/日（四舍五入）；历史均值，非当前日产量。"),
+    record("伊拉克", "Jambur", "詹布尔", "油田", 35.31, 44.48, value="38.4", metric_type="derived_daily_average", unit="千桶/日", data_date="2021年推算日均", source="Iraq EITI 2021", note="EITI 2021 表57（North Oil Company）；年产14,008,692桶÷365日=38.4千桶/日（四舍五入）；历史均值，非当前日产量。"),
+    record("伊拉克", "Khabbaz", "哈巴兹", "油田", 35.52, 44.21, value="25.0", metric_type="derived_daily_average", unit="千桶/日", data_date="2021年推算日均", source="Iraq EITI 2021", note="EITI 2021 表57（North Oil Company）；年产9,139,429桶÷365日=25.0千桶/日（四舍五入）；历史均值，非当前日产量。"),
     record("伊拉克", "Qayyarah", "盖亚拉", "油田", 35.80, 43.31, source="EIA Iraq"),
-    record("伊拉克", "Najma", "纳杰马", "油田", 35.91, 43.20, source="EIA Iraq"),
+    record("伊拉克", "Najma", "纳杰马", "油田", 35.91, 43.20, value="10.2", metric_type="derived_daily_average", unit="千桶/日", data_date="2021年推算日均", source="Iraq EITI 2021", note="EITI 2021 表58（PCLD）年产3,720,000桶÷365日=10.2千桶/日（四舍五入）；历史均值，非当前日产量。"),
     record("伊拉克", "Tawke", "陶凯", "油田（库区）", 37.02, 43.27, value="29.095", metric_type="actual_output", unit="千桶/日", data_date="2025年第四季度平均", source="DNO 2025 Results", note="DNO直报全田总产量；不是DNO的75%权益产量。"),
     record("伊拉克", "Peshkabir", "佩什卡比尔", "油田（库区）", 37.13, 43.47, value="48.173", metric_type="actual_output", unit="千桶/日", data_date="2025年第四季度平均", source="DNO 2025 Results", note="DNO直报全田总产量；不是DNO的75%权益产量。"),
     record("伊拉克", "Taq Taq", "塔克塔克", "油田（库区）", 35.91, 44.62, source="EIA Iraq"),
@@ -223,8 +237,13 @@ ASSETS = [
     record("伊拉克", "Bazerkan", "巴泽尔坎", "油田", 31.936, 47.372, metric_type="undisclosed", status="运营", source="GEM Bazerkan", note="GEM列为运营油田，亦称Buzurgan；未找到可核验的单田日产量。"),
     record("伊拉克", "Abu Gharb", "阿布加尔卜", "油田", 32.365, 47.306, status="运营", source="GEM Abu Gharb", note="原列年度数值的原始引文未证实是该年度实际产油总量；撤回据此换算的推算日均。逐田实产待核。"),
     record("伊拉克", "Luhais", "卢海斯", "油田", 29.904, 46.952, status="运营", source="GEM Luhais", note="原列年度数值的原始引文未证实是该年度实际产油总量；撤回据此换算的推算日均。逐田实产待核。"),
-    record("伊拉克", "Subba", "苏巴", "油田", 30.258, 46.829, status="运营", source="GEM Subba", note="原列年度数值的原始引文未证实是该年度实际产油总量；撤回据此换算的推算日均。逐田实产待核。"),
+    record("伊拉克", "Subba", "苏巴", "油田", 30.258, 46.829, status="运营", value="5.8", metric_type="derived_daily_average", unit="千桶/日", data_date="2021年推算日均", source="Iraq EITI 2021", note="EITI 2021 表58（PCLD）年产2,100,000桶÷365日=5.8千桶/日（四舍五入）；历史均值，非当前日产量。"),
     record("伊拉克", "Tuba", "图巴", "油气田", 30.4036, 47.4977, value="36.2", metric_type="derived_daily_average", unit="千桶/日", data_date="2016年推算日均（13.26百万桶÷366日）", status="运营", source="GEM Tuba", note="来源列示2016年原油产量13.26百万桶；13.26百万÷闰年366日=36.2千桶/日。该数是历史推算年均值，不代表当前产量。"),
+
+    record("伊拉克", "Ajil", "阿吉勒", "油田", None, None, source="Iraq EITI 2021", note="EITI 2021表57与表58对该田年产量不一致，暂不换算日产量。"),
+    record("伊拉克", "Ain Zalah", "艾因扎拉", "油田", None, None, source="Iraq EITI 2021", note="EITI 2021表57列为产油田；无近期可核验逐田日产量。"),
+    record("伊拉克", "Batmah", "巴特马", "油田", None, None, source="Iraq EITI 2021", note="EITI 2021表57列为产油田；无近期可核验逐田日产量。"),
+    record("伊拉克", "Hamrin", "哈姆林", "油田", None, None, source="Iraq EITI 2021", note="EITI 2021表58列为产油田；逐田当期日产量未披露。"),
 
     # Iran
     record("伊朗", "Ahvaz", "阿瓦士", "油田", 31.32, 48.68, source="EIA Iran"),
@@ -263,6 +282,8 @@ ASSETS = [
     record("伊朗", "Paranj", "帕兰吉", "油田", 30.95, 49.85, source="GEM Paranj", note="与Parsi同属开发项目；不拆分项目合计产量。"),
     record("伊朗", "Nargesi", "纳尔格西", "油田", 29.4742, 51.2602, source="GEM Nargesi", note="公开资产名录；逐田持续日产量未核验。"),
 
+    record("伊朗", "Hengam", "亨加姆", "海上油田", None, None, source="EIA Iran", note="EIA 2024年伊朗主要油气田图列名；无可核验的当期单田日产量。"),
+
     # Kuwait
     record("科威特", "Burgan", "布尔干", "油田", 29.05, 47.91, source="KOC / KPC"),
     record("科威特", "Magwa", "马格瓦", "油田", 29.17, 47.92, source="KOC / KPC"),
@@ -290,6 +311,7 @@ ASSETS = [
     record("卡塔尔", "Karkara", "卡尔卡拉", "海上油田", 25.46, 51.33, source="QatarEnergy"),
     record("卡塔尔", "Maydan Mahzam", "迈丹马赫赞", "海上油田", 25.20, 51.20, value="16.2", metric_type="actual_output", unit="千桶/日", data_date="2024年平均", source="QatarEnergy", note="QatarEnergy官方投资者演示文稿列示的2024年平均原油产量；来源直报。"),
     record("卡塔尔", "Bul Hanine", "布尔哈宁", "海上油田", 25.06, 51.14, value="35.1", metric_type="actual_output", unit="千桶/日", data_date="2024年平均", source="QatarEnergy", note="QatarEnergy官方投资者演示文稿列示的2024年平均原油产量；来源直报。"),
+    record("卡塔尔", "Al-Murjan", "阿尔穆尔詹", "海上油田", None, None, source="QatarEnergy E&P", note="卡塔尔能源称该田通过Al-Rayyan平台生产；没有单田产量，不把Al-Rayyan平台数值分摊。"),
     record("卡塔尔", "North Field", "北方气田", "气田", 26.62, 51.45, source="QatarEnergy", note="气田，不与原油日产量比较。"),
 
     # Oman
@@ -304,6 +326,8 @@ ASSETS = [
     record("阿曼", "Bahja", "巴赫贾", "油田", 20.96, 56.80, source="PDO"),
     record("阿曼", "Harweel", "哈维尔", "油田群", 18.08, 55.62, source="PDO"),
     record("阿曼", "Amal", "阿迈勒", "油田", 18.48, 55.72, source="PDO"),
+
+    record("阿曼", "Budour Northeast", "布杜尔东北", "发现油田", None, None, status="发现／开发状态待核", source="PDO", note="PDO历史页面确认发现，尚无可核验的持续逐田日产量。"),
 
     record("阿曼", "Yumna", "尤姆纳", "海上油田", 19.9841, 58.546, value="742", metric_type="actual_output", unit="桶/日", data_date="2026年3月平均（31天生产期）", status="生产中", source="Masirah Oil Yumna", note="运营方公告称31天生产期内全田总产量日均742桶；Block 50运营方持有100%权益。"),
     record("阿曼", "Bisat", "比萨特", "油田", 21.178, 55.8542, metric_type="undisclosed", status="运营", source="OQ / GEM Bisat", note="OQ于2023年公告比萨特油田原油处理设施投产；GEM列为运营油田，逐田日产量未披露。坐标为公开地图资料的近似点。"),
