@@ -181,11 +181,27 @@ def _port_popup(port: dict, day: str, barrels_per_tonne: float) -> str:
 
     def amount(key: str, divisor: float = 1) -> str:
         value = port.get(key)
-        return "无数据" if value is None else f"{value / divisor:,.{0 if divisor == 1 else 2}f}"
+        if value is None:
+            return "无数据"
+        if divisor != 1 and 0 < value / divisor < 0.005:
+            return "<0.01"
+        decimals = 2 if key.startswith("avg_") or divisor != 1 else 0
+        return f"{value / divisor:,.{decimals}f}"
 
     oil_equivalent = port.get("handled_tanker")
     barrels = (f"{oil_equivalent * barrels_per_tonne / 10000:,.2f}"
                if oil_equivalent is not None else "无数据")
+    window = port.get("window_days", 7)
+    avg_tanker = port.get("avg_handled_tanker")
+    avg_barrels = (f"{avg_tanker * barrels_per_tonne / 10000:,.2f}"
+                   if avg_tanker is not None else "不完整")
+    warning = ""
+    if port.get("portcalls_tanker", 0) and port.get("handled_tanker") == 0:
+        warning = '<div class="basis">⚠ 当日有油轮挂靠，但源站估算装卸量为 0；不能解读为实际没有装卸。</div>'
+    elif (port.get("avg_calls_tanker") or 0) > 0 and port.get("avg_handled_tanker") == 0:
+        warning = '<div class="basis">⚠ 滚动窗口内有油轮挂靠，但估算货量持续为 0；需核对源站吃水记录。</div>'
+    elif port.get("portcalls_tanker") == 0 and (port.get("tanker_positive_days") or 0) > 0:
+        warning = '<div class="basis">当日未观测到油轮挂靠；所选滚动窗口内有挂靠记录。</div>'
     return (
         '<div class="popup-card">'
         f'<div class="field-name">⚓ {esc(port["name"])}</div>'
@@ -204,6 +220,16 @@ def _port_popup(port: dict, day: str, barrels_per_tonne: float) -> str:
         f'<strong>{amount("import_cargo", 10000)} / {amount("export_cargo", 10000)} 万吨/日</strong></div>'
         '<div class="row"><span>其他货轮装卸合计</span>'
         f'<strong>{amount("handled_cargo", 10000)} 万吨/日</strong></div>'
+        f'<div class="hierarchy-title">过去 {window} 天日均（含所选日）</div>'
+        '<div class="row"><span>有效日期</span>'
+        f'<strong>{port.get("observed_days", 0)}/{window} 天</strong></div>'
+        '<div class="row"><span>油轮挂靠 / 日均货量</span>'
+        f'<strong>{amount("avg_calls_tanker")} 艘次/日 · {amount("avg_handled_tanker", 10000)} 万吨/日</strong></div>'
+        '<div class="row"><span>油轮载货原油当量日均</span>'
+        f'<strong>{avg_barrels} 万桶/日</strong></div>'
+        '<div class="row"><span>其他货轮挂靠 / 日均货量</span>'
+        f'<strong>{amount("avg_calls_cargo")} 艘次/日 · {amount("avg_handled_cargo", 10000)} 万吨/日</strong></div>'
+        f'{warning}'
         '<div class="basis">油轮类别可能含原油、成品油和其他液体货物。桶数仅将油轮估算吨数按'
         f'{barrels_per_tonne:g} 桶/吨换算，不是实测原油吞吐量；装卸合计不等于净贸易量。'
         '未匹配日期的港口显示“无数据”，不记为零。</div>'
@@ -368,6 +394,7 @@ with st.sidebar:
             portwatch.latest_date.clear()
             portwatch.port_catalog.clear()
             portwatch.daily_activity.clear()
+            portwatch.rolling_activity.clear()
             st.rerun()
         selected_day = st.date_input("统计日期（UTC）", value=newest_day,
                                      min_value=date(2019, 1, 1), max_value=newest_day)
@@ -378,13 +405,17 @@ with st.sidebar:
     barrels_per_tonne = st.number_input("原油当量换算：桶/吨", min_value=5.0,
                                         max_value=9.0, value=7.33, step=0.01,
                                         help="仅供对比的假设系数；油轮货物并非全部原油。")
+    rolling_days = st.selectbox("滚动日均窗口", [7, 30], index=0,
+                                help="保留原始单日值，另列过去 7 或 30 个自然日的日均。")
 
 ports = []
 if selected_day is not None and selected_regions:
     try:
         catalog = [p for p in portwatch.port_catalog() if p["region"] in selected_regions]
-        activity = portwatch.daily_activity(selected_day, tuple(p["portid"] for p in catalog))
-        ports = portwatch.decorate(catalog, activity)
+        ids = tuple(p["portid"] for p in catalog)
+        activity = portwatch.daily_activity(selected_day, ids)
+        rolling = portwatch.rolling_activity(selected_day, ids, rolling_days)
+        ports = portwatch.decorate(catalog, activity, rolling)
     except Exception as exc:
         st.warning(f"港口数据加载失败，油气资产图仍可使用：{exc}")
 
@@ -436,14 +467,15 @@ st.subheader("港口日活动")
 st.caption(
     "覆盖上述五个自定义地理框内的全部 PortWatch 港口，范围以港口点位判定；"
     "不包括 PortWatch 未收录的码头。油轮与其他货轮分别列示，装卸合计为双向货量。"
-    "AIS 估算可能受到关闭 AIS、信号干扰及船舶吃水申报误差影响。"
+    "单日的 0 表示该日源站未观测到对应挂靠或估算货量为 0，不代表港口长期停运。"
+    "滚动日均只有在窗口每一天都有源记录时才计算。"
 )
 if ports:
     port_rows = []
     for port in ports:
         def ten_thousand(key):
             value = port.get(key)
-            return None if value is None else round(value / 10000, 3)
+            return None if value is None else round(value / 10000, 6)
 
         tanker_tonnes = port.get("handled_tanker")
         port_rows.append({
@@ -454,20 +486,41 @@ if ports:
             "油轮装货 万吨/日": ten_thousand("export_tanker"),
             "油轮装卸 万吨/日": ten_thousand("handled_tanker"),
             "油轮载货原油当量估算 万桶/日": (
-                round(tanker_tonnes * barrels_per_tonne / 10000, 3)
+                round(tanker_tonnes * barrels_per_tonne / 10000, 6)
                 if tanker_tonnes is not None else None),
+            f"过去{rolling_days}天油轮日均艘次": (
+                round(port["avg_calls_tanker"], 3)
+                if port.get("avg_calls_tanker") is not None else None),
+            f"过去{rolling_days}天油轮日均装卸 万吨/日": ten_thousand("avg_handled_tanker"),
+            f"过去{rolling_days}天油轮原油当量日均 万桶/日": (
+                round(port["avg_handled_tanker"] * barrels_per_tonne / 10000, 6)
+                if port.get("avg_handled_tanker") is not None else None),
+            f"过去{rolling_days}天油轮有挂靠天数": port.get("tanker_positive_days"),
             "其他货轮艘次/日": port.get("portcalls_cargo"),
             "其他货轮卸货 万吨/日": ten_thousand("import_cargo"),
             "其他货轮装货 万吨/日": ten_thousand("export_cargo"),
             "其他货轮装卸 万吨/日": ten_thousand("handled_cargo"),
+            f"过去{rolling_days}天其他货轮日均艘次": (
+                round(port["avg_calls_cargo"], 3)
+                if port.get("avg_calls_cargo") is not None else None),
+            f"过去{rolling_days}天其他货轮日均装卸 万吨/日": ten_thousand("avg_handled_cargo"),
+            f"过去{rolling_days}天其他货轮有挂靠天数": port.get("cargo_positive_days"),
+            f"过去{rolling_days}天有效日期": port.get("observed_days"),
             "数据状态": "有记录" if port["has_data"] else "当日缺报",
+            "油轮数据提示": (
+                "有挂靠但估算货量为0，待核" if port.get("portcalls_tanker", 0) and tanker_tonnes == 0
+                else "窗口有油轮挂靠但日均估算货量为0，待核"
+                if (port.get("avg_calls_tanker") or 0) > 0 and port.get("avg_handled_tanker") == 0
+                else "当日无挂靠，窗口内有挂靠" if port.get("portcalls_tanker") == 0
+                and (port.get("tanker_positive_days") or 0) > 0
+                else ""),
             "纬度": port["lat"], "经度": port["lon"],
             "来源": portwatch.SOURCE,
         })
     c1, c2, c3 = st.columns(3)
     c1.metric("PortWatch 港口", len(ports))
-    c2.metric("当日有记录", sum(p["has_data"] for p in ports))
-    c3.metric("当日缺报", sum(not p["has_data"] for p in ports))
+    c2.metric("当日油轮挂靠为零", sum(p.get("portcalls_tanker") == 0 for p in ports))
+    c3.metric(f"过去{rolling_days}天有油轮挂靠", sum((p.get("tanker_positive_days") or 0) > 0 for p in ports))
     st.dataframe(port_rows, width="stretch", hide_index=True, height=430)
     buffer = io.StringIO()
     writer = csv.DictWriter(buffer, fieldnames=port_rows[0].keys())

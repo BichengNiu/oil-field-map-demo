@@ -7,7 +7,7 @@ Only ports in PortWatch's coverage are included, not every berth or oil terminal
 from __future__ import annotations
 
 import json
-from datetime import date
+from datetime import date, timedelta
 from urllib.parse import urlencode
 from urllib.request import Request, urlopen
 
@@ -111,12 +111,67 @@ def daily_activity(day: date, port_ids: tuple[str, ...]) -> dict[str, dict]:
     return result
 
 
-def decorate(ports: list[dict], activity: dict[str, dict]) -> list[dict]:
+@st.cache_data(ttl=3600, show_spinner=False)
+def rolling_activity(day: date, port_ids: tuple[str, ...], days: int = 7) -> dict[str, dict]:
+    """Return calendar-day averages only when every day has a source record.
+
+    Do not turn missing days into zeros; keep raw zero-valued source records.
+    """
+    if days not in (7, 30):
+        raise ValueError("仅支持 7 天或 30 天窗口")
+    grouped: dict[str, dict[date, dict]] = {port_id: {} for port_id in port_ids}
+    for start in range(0, len(port_ids), 80):
+        ids = port_ids[start:start + 80]
+        if not all(p.startswith("port") and p[4:].isdigit() for p in ids):
+            raise ValueError("无效的 PortWatch 港口编号")
+        quoted = ",".join(f"'{p}'" for p in ids)
+        first = day - timedelta(days=days - 1)
+        where = (f"date >= DATE '{first.isoformat()}' AND date <= DATE '{day.isoformat()}' "
+                 f"AND portid IN ({quoted})")
+        offset = 0
+        while True:
+            page = _query(DAILY, where=where, returnGeometry="false", resultOffset=offset,
+                          resultRecordCount=1000,
+                          outFields="date,portid,portcalls_tanker,portcalls_cargo,"
+                                    "import_tanker,export_tanker,import_cargo,export_cargo")
+            items = page.get("features", [])
+            for item in items:
+                value = item["attributes"]
+                grouped[value["portid"]][date.fromisoformat(value["date"])] = value
+            if len(items) < 1000:
+                break
+            offset += len(items)
+    summary = {}
+    for port_id, by_day in grouped.items():
+        values = list(by_day.values())
+        result = {"observed_days": len(values), "window_days": days,
+                  "tanker_positive_days": sum((v["portcalls_tanker"] or 0) > 0 for v in values),
+                  "cargo_positive_days": sum((v["portcalls_cargo"] or 0) > 0 for v in values),
+                  "tanker_calls_zero_volume_days": sum(
+                      (v["portcalls_tanker"] or 0) > 0
+                      and (v["import_tanker"] or 0) + (v["export_tanker"] or 0) == 0
+                      for v in values)}
+        for kind in ("tanker", "cargo"):
+            fields = (f"portcalls_{kind}", f"import_{kind}", f"export_{kind}")
+            complete = len(values) == days and all(
+                v.get(field) is not None for v in values for field in fields)
+            result[f"avg_calls_{kind}"] = (
+                sum(v[fields[0]] for v in values) / days if complete else None)
+            result[f"avg_handled_{kind}"] = (
+                sum(v[fields[1]] + v[fields[2]] for v in values) / days if complete else None)
+        summary[port_id] = result
+    return summary
+
+
+def decorate(ports: list[dict], activity: dict[str, dict],
+             rolling: dict[str, dict] | None = None) -> list[dict]:
     output = []
     for port in ports:
         row = dict(port)
         values = activity.get(port["portid"])
         row["has_data"] = values is not None
+        if rolling is not None:
+            row.update(rolling.get(port["portid"], {}))
         if values:
             row.update({key: values.get(key) for key in (
                 "portcalls_tanker", "portcalls_cargo", "import_tanker",
