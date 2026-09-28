@@ -726,7 +726,7 @@ _assign_status("伊朗", "Chehsmeh-Khosh", "producing", "2026-07-18", "高", "PE
 _assign_status("伊朗", "Danan", "producing", "2025-03-04", "中", "MAPNA项目公司披露Danan开发项目的新脱盐装置已接入生产并提升处理能力。", "https://www.linkedin.com/posts/mapna-ogdc_%D9%85%D9%BE%D9%86%D8%A7-%D8%B5%D9%86%D8%B9%D8%AA%D9%86%D9%81%D8%AA-%D8%AA%D9%88%D8%B3%D8%B9%D9%87%D9%86%D8%AA%D9%88%DA%AF%D8%A7%D8%B2-activity-7303067532536500224-s-7Y")
 _assign_status("伊朗", "Changuleh", "development", "2026-09-28", "高", "2025年成立的项目公司负责Changuleh全周期开发，目标产能尚不能作为当前产量。", "https://www.linkedin.com/company/mogdc")
 _assign_status("伊朗", "Dalpari", "producing", "2026-07-18", "高", "PEDEC信息将Dalpari与Cheshmeh Khosh、East Paydar列入正在开发生产的项目组合并披露新井投产。", "https://www.iranoilgas.com/trackers/?view=fieldstrackers")
-_assign_status("伊朗", "Paydar", "producing", "2024-10-10", "中", "EIA将Paydar与West Paydar分别列为NGL 3100拟收集伴生气的油田，足以确认它是独立油田及生产体系的伴生气来源；但该资料不提供2026年实时状态或逐田原油产量。", "https://www.eia.gov/international/content/analysis/countries_long/Iran/pdf/Iran%20CAB%202024.pdf")
+_assign_status("伊朗", "Paydar", "unknown", "2024-10-10／再次复核2026-09-28", "中", "EIA将Paydar与West Paydar分别列为NGL 3100拟收集伴生气的油田，确认它是独立资产；但该表描述的是拟建处理项目，不能单独证明Paydar当前正在产油，故保留待核实。", "https://www.eia.gov/international/content/analysis/countries_long/Iran/pdf/Iran%20CAB%202024.pdf")
 
 # 科威特：KOC年报和商业投产公告；新发现不按在产处理。
 _assign_status("科威特", "Burgan | Magwa | Ahmadi | Raudhatain | Sabriya | Bahra | Ratqa | Umm Niqa | South Ratqa | Minagish | Umm Gudair | Abdali | Wafra | Khafji | Mutriba | Kra-al-Maru", "producing", "FY2024/25—2026年最后可核实公开时点", "中", "KOC年报、分区运营资料或商业投产公告支持；2026年出口受扰不等于各田停产。")
