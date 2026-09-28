@@ -1,7 +1,8 @@
 """经过口径审计的中东公开命名油气资产目录（DEMO）。
 
-设计原则：一个记录对应一个可公开识别的油田、气田、区块或项目；
-未公开的逐田数值保留为空，不以国家/油田群数据填充。
+设计原则：一个记录对应一个可公开识别的油田、气田、油田群、区块、特许区或项目；
+每条记录均给出资产层级、上级资产、统计范围、商品和权益口径。
+未公开的逐田数值保留为空，不以国家、区块或油田群数据填充。
 有坐标记录为公开地图资料的近似中心点；无核验坐标的记录只列目录。
 """
 
@@ -114,6 +115,7 @@ SOURCES = {
     "Rudaw Rmeilan Sector One": "https://www.rudaw.net/english/categories/syria/933427",
     "Egypt EGPC Brownfields 2023": "https://eug.petroleum.gov.eg/dp/jsp/assets/docs/EGPC/2023%20EGPC%20Brownfields%20Overview.pdf",
     "Eni Egypt Factbook 2013": "https://report.eni.com/factbook-2013/en/business-segments/exploration-production/activity-areas/north-africa.html",
+    "Yemen PEPA Block 5": "https://www.pepaye.com/page/67",
 }
 
 
@@ -231,6 +233,7 @@ ASSETS = [
     record("阿联酋", "Ghasha", "加沙", "超酸性气田", 24.95, 52.77, source="ADNOC Ghasha"),
     record("阿联酋", "Dalma", "达尔马", "超酸性气田", 24.78, 52.83, source="ADNOC Ghasha"),
     record("阿联酋", "Shuweihat", "舒韦哈特", "超酸性气田", 24.20, 52.55, source="ADNOC Ghasha"),
+    record("阿联酋", "Ghasha Concession", "Ghasha特许区", "海上油气特许区", None, None, value="150", metric_type="target_capacity", unit="千桶/日（原油及凝析油）", data_date="2025-11-24公告；预期口径", status="建设推进中；特许区目标", source="ADNOC Ghasha", note="ADNOC称Ghasha特许区包括Hail、Ghasha、Dalma、SARB和Nasr，预期日产15万桶原油及凝析油；这是特许区目标／预期，不是单田或已核实实产。"),
     record("阿联酋", "SARB Deep Gas", "SARB 深层气项目", "天然气项目", 25.19, 53.18, value="200", metric_type="target_capacity", unit="百万标准立方英尺/日", data_date="2026-01-07", source="ADNOC Ghasha", note="天然气项目，不能与原油日产量相加。"),
     record("阿联酋", "Hail (ADOC)", "海尔（ADOC）", "海上油田", 24.37, 53.41, status="2017年投产", source="ADOC Fields", note="ADOC确认Hail与Mubarraz等田的原油混合外运；原列21千桶/日未在该单田来源中核实，撤回。"),
     record("阿联酋", "Hail (ADNOC Ghasha)", "海尔（ADNOC Ghasha）", "含酸气海上油气田", None, None, status="ADNOC列为Ghasha开发项目组成资产；单田投产状态待核", source="ADNOC Ghasha", note="与上方Hail (ADOC)是不同资产。ADNOC将Hail列入Ghasha项目；项目层级的气量／液体目标不分摊为该田产量，单田坐标和产量未核实。"),
@@ -387,6 +390,8 @@ ASSETS = [
     record("卡塔尔", "Al-Murjan", "阿尔穆尔詹", "海上油田", None, None, source="QatarEnergy E&P", note="卡塔尔能源称该田通过Al-Rayyan平台生产；没有单田产量，不把Al-Rayyan平台数值分摊。"),
     record("卡塔尔", "North Field", "北方气田", "气田", 26.62, 51.45, source="QatarEnergy", note="气田，不与原油日产量比较。"),
     record("卡塔尔", "A-Structures (A-North / A-South)", "A构造（A北／A南）", "海上油田群（两个小油田）", None, None, status="2022年续签五年开发生产协议（至2027年）", source="Qatar News Agency A-Structures", note="QNA称A-North和A-South于1971年发现，A-Structures与Al-Karkara自2006年3月投产；报道的3,350万桶是三田合计累计原油，不能分配给A-Structures。单田产量及坐标未披露。"),
+    record("卡塔尔", "A-North", "A北", "海上油田", None, None, status="A-Structures组成油田；单田状态随油田群协议", source="Qatar News Agency A-Structures", note="QNA明确列为A-Structures两座小油田之一；油田群与Al-Karkara的累计产量不能分配给该田。"),
+    record("卡塔尔", "A-South", "A南", "海上油田", None, None, status="A-Structures组成油田；单田状态随油田群协议", source="Qatar News Agency A-Structures", note="QNA明确列为A-Structures两座小油田之一；油田群与Al-Karkara的累计产量不能分配给该田。"),
 
     # Oman
     record("阿曼", "Mukhaizna", "穆凯兹奈", "油田", 19.34, 56.47, source="Occidental Oman", note="运营商确认油田运营及累计产量，但未找到可核验的2023年单田8万桶/日实产；撤回该值。"),
@@ -408,19 +413,27 @@ ASSETS = [
 
     record("阿曼", "Budour Northeast", "布杜尔东北", "发现油田", None, None, status="发现／开发状态待核", source="PDO", note="PDO历史页面确认发现，尚无可核验的持续逐田日产量。"),
 
+    record("阿曼", "Block 50 (Masirah)", "50区块（马西拉）", "海上油气区块", None, None, status="区块内Yumna田生产中", source="Masirah Oil Yumna", note="区块层级日产量未单独披露；Yumna单田数据不反推为整个区块产量。"),
     record("阿曼", "Yumna", "尤姆纳", "海上油田", 19.9841, 58.546, value="742", metric_type="actual_output", unit="桶/日", data_date="2026年3月平均（31天生产期）", status="生产中", source="Masirah Oil Yumna", note="运营方公告称31天生产期内全田总产量日均742桶；Block 50运营方持有100%权益。"),
     record("阿曼", "Bisat", "比萨特", "油田", 21.178, 55.8542, metric_type="undisclosed", status="运营", source="OQ / GEM Bisat", note="OQ于2023年公告比萨特油田原油处理设施投产；GEM列为运营油田，逐田日产量未披露。坐标为公开地图资料的近似点。"),
+    record("阿曼", "Block 5 (Daleel)", "5区块（Daleel）", "油气区块", None, None, value="50", metric_type="actual_output", unit="千桶/日", data_date="运营商网页未注明观察期（2026-09-28核对）", status="运营", source="Daleel Petroleum", note="运营商称Block 5日均产量已从2002年的约5千桶/日提高至50千桶/日；这是区块多田合计，不能分配给Daleel、Shadi、Bushra、Mazoon、Furat或Thahab。"),
     record("阿曼", "Daleel", "达利勒", "油田", 22.7241, 55.976, status="运营", source="Daleel Petroleum", note="运营商披露Block 5共有五个主要油田；区块约5万桶/日不能分配给单田。"),
     record("阿曼", "Shadi", "沙迪", "油田", None, None, status="运营", source="Daleel Petroleum", note="Block 5油田；仅有区块合计产量，单田和坐标未核验。"),
     record("阿曼", "Bushra", "布什拉", "油田", None, None, status="运营", source="Daleel Petroleum", note="Block 5油田；仅有区块合计产量，单田和坐标未核验。"),
     record("阿曼", "Mazoon", "马祖恩", "油田", None, None, status="运营", source="Daleel Petroleum", note="Block 5油田；仅有区块合计产量，单田和坐标未核验。"),
     record("阿曼", "Furat", "富拉特", "油田", None, None, status="运营", source="Daleel Petroleum", note="Block 5油田；仅有区块合计产量，单田和坐标未核验。"),
     record("阿曼", "Thahab", "扎哈卜", "油田（Block 5）", None, None, status="2023年运营商列为开采田", source="Daleel 2023", note="Daleel称近年开采Thahab；其约5万桶/日为Block 5多田总量，不分摊。"),
+    record("阿曼", "Block 9 (Oman)", "9区块（阿曼）", "油气区块", None, None, status="运营商公开命名区块；区块日产量未核", source="Occidental Oman", note="包含Safah和Wadi Latham等资产；没有用公司或区块组合数据估算单田产量。"),
+    record("阿曼", "Block 27 (Oman)", "27区块（阿曼）", "油气区块", None, None, status="运营商公开命名区块；区块日产量未核", source="Occidental Oman", note="Khamilah所属区块；未披露可核验区块或单田日产量。"),
     record("阿曼", "Safah", "萨法", "油田", None, None, status="运营", source="Occidental Oman", note="Occidental披露Block 9的主要油田；未披露可核验单田日产量。"),
     record("阿曼", "Wadi Latham", "瓦迪拉萨姆", "油田", None, None, status="运营", source="Occidental Oman", note="Occidental披露Block 9的主要油田；未披露可核验单田日产量。"),
     record("阿曼", "Khamilah", "哈米拉", "油田", None, None, status="运营", source="Occidental Oman", note="Occidental披露Block 27油田；未披露可核验单田日产量。"),
     record("阿曼", "Wadi Aswad North", "瓦迪阿斯瓦德北", "发现油田", None, None, status="运营商列为发现；当期生产未核", source="Occidental Oman", note="Occidental列为阿曼北部发现油田；未披露可核验持续逐田日产量。"),
     record("阿曼", "Safah North B", "萨法北B", "发现油田", None, None, status="运营商列为发现；当期生产未核", source="Occidental Oman", note="Occidental列为阿曼北部发现油田；不同于Safah，未披露单田日产量。"),
+    record("阿曼", "Block 8 (Oman)", "8区块（阿曼）", "海上油气区块", None, None, status="运营", source="OQEP Operations", note="包含West Bukha与Bukha；公开区块合计不拆给单田。"),
+    record("阿曼", "Block 7 (Oman)", "7区块（阿曼）", "油气区块", None, None, status="公开资料列名；区块状态待核", source="OQEP Operations", note="Sahma所属区块；未披露可核验区块日产量。"),
+    record("阿曼", "Block 60 (Oman)", "60区块（阿曼）", "油气区块", None, None, status="运营", source="OQEP Operations", note="Abu Butabul所属区块；油当量或区块合计不分配给单田。"),
+    record("阿曼", "Block 61 (Oman)", "61区块（阿曼）", "气区块", None, None, status="运营", source="OQEP Operations", note="包含Khazzan与Ghazeer阶段；天然气或油当量指标不作为原油日产量。"),
     record("阿曼", "West Bukha", "西布哈", "跨境海上油田", None, None, status="运营", source="OQEP Operations", note="OQEP列为Block 8两座生产田之一；与伊朗Hengam同属跨境地质结构，未将区块合计拆为单田产量。"),
     record("阿曼", "Bukha", "布哈", "海上气田", None, None, status="运营", source="OQEP Operations", note="OQEP列为Block 8两座生产田之一；不将区块或天然气量充作单田原油日产量。"),
     record("阿曼", "Sahma", "萨赫马", "油田", None, None, status="公开列为生产田", source="OQEP Operations", note="OQEP Block 48说明列为相邻Block 7生产油田；未披露单田产量。"),
@@ -431,18 +444,23 @@ ASSETS = [
     # Bahrain and Yemen
     record("巴林", "Bahrain Field (Awali)", "巴林／阿瓦利油田", "油田", 26.07, 50.55, value="39.5", metric_type="actual_output", unit="千桶/日", data_date="2022年平均", source="UNFCCC Bahrain BTR", note="UNFCCC BTR列示2022年原油与凝析油年均产量39.5千桶/日。"),
     record("巴林", "Abu Safah", "阿布萨法", "跨境海上油田", 26.02, 50.61, value="300", metric_type="capacity", unit="千桶/日", data_date="网页未注明基准日（2026-09-27核对）", source="Bapco Abu Safah", note="Bapco明确为全油田30万桶/日产能，非实产；巴林与沙特权益各50%，不可按权益数推断实际日产量。"),
-    record("也门", "Masila", "马西拉", "油田／14区块", 14.47, 49.54, source="Yemen Ministry of Oil", note="冲突环境下缺少可靠连续逐田日产量。"),
-    record("也门", "East Shabwa", "东舍卜瓦", "油田／10区块", 14.55, 47.54, source="Yemen Ministry of Oil"),
-    record("也门", "Hawareem", "哈瓦里姆", "油田／32区块", 14.32, 48.96, source="Yemen Ministry of Oil"),
-    record("也门", "Alif", "阿利夫", "油田／18区块", 15.35, 45.05, source="Yemen Ministry of Oil"),
-    record("也门", "Jannah", "詹纳", "油田／5区块", 15.24, 45.16, source="Yemen Ministry of Oil"),
-    record("也门", "Habban", "哈班", "油田／S2（Uqlah）区块", None, None, status="2018年有原油出口记录；当前生产状态未核", source="Yemen EIA", note="EIA记载OMV在2018年从S2区块Habban田出口原油；PEPA计划提及Habban CPF。历史出口记录不代表当前持续日产量。"),
+    record("也门", "Block 14 (Masila)", "14区块（马西拉）", "油气区块", 14.47, 49.54, source="Yemen Ministry of Oil", note="按生产区块记录；冲突环境下缺少可靠连续区块日产量，不能作为单一油田统计。"),
+    record("也门", "Block 10 (East Shabwa)", "10区块（东舍卜瓦）", "油气区块", 14.55, 47.54, source="Yemen Ministry of Oil", note="按生产区块记录；不是单一油田。"),
+    record("也门", "Block 32 (Hawareem)", "32区块（哈瓦里姆）", "油气区块", 14.32, 48.96, source="Yemen Ministry of Oil", note="按生产区块记录；PEPA计划列Tasour与Godah为区块内油田。"),
+    record("也门", "Tasour", "塔苏尔", "油田", None, None, status="PEPA 2012计划列为Block 32油田；当前状态未核", source="Yemen PEPA Production Plan", note="PEPA计划提及该田生产优化；没有可核验单田日产量。"),
+    record("也门", "Godah", "戈达", "油田", None, None, status="PEPA 2012计划列为Block 32油田；当前状态未核", source="Yemen PEPA Production Plan", note="PEPA计划提及该田生产优化；没有可核验单田日产量。"),
+    record("也门", "Block 18 (Marib)", "18区块（马里卜）", "油气区块", None, None, status="EIA记载2018年恢复生产；当前状态未核", source="Yemen EIA", note="区块层级状态；不能下推为区块内每一油田的当期产量。"),
+    record("也门", "Alif", "阿利夫", "油田", 15.35, 45.05, source="Yemen Ministry of Oil", note="Block 18组成油田；区块层级数据不分配给该田。"),
+    record("也门", "Block 5 (Jannah)", "5区块（詹纳）", "油气区块", 15.24, 45.16, value="50", metric_type="actual_output", unit="千桶/日", data_date="截至2007-01的历史平均", status="历史生产区块；当前状态未核", source="Yemen PEPA Block 5", note="PEPA称该区块含5个油田，历史平均产量50千桶/日；这是旧区块合计，不能视为当前产量或分配给区块内单田。"),
+    record("也门", "Block S2 (Uqlah)", "S2区块（乌克拉）", "油气区块", None, None, status="PEPA列为生产计划区块；当前状态未核", source="Yemen PEPA Production Plan", note="Habban所属区块；未取得可靠的当前区块日产量。"),
+    record("也门", "Habban", "哈班", "油田", None, None, status="2018年有原油出口记录；当前生产状态未核", source="Yemen EIA", note="EIA记载OMV在2018年从S2区块Habban田出口原油；PEPA计划提及Habban CPF。历史出口记录不代表当前持续日产量。"),
     record("也门", "Block 9 (Malik)", "9区块（马利克）", "油气区块", None, None, status="EIA记载Medco于2019年恢复区块作业；当前状态未核", source="Yemen EIA", note="区块级生产恢复信息；不能据此认定区块内每一田当期均在产或将区块产量分配给单田。"),
     record("也门", "Hiswah (Haswa)", "希斯瓦（Haswa）", "油田／Block 9", None, None, status="PEPA 2012计划列名；现行生产状态未核", source="Yemen PEPA Production Plan", note="PEPA 2012计划提到Hiswah田CPU建设，评估清单又作Haswa；按同一田名变体合并登记。区块重启不等于该田有已核实的单田产量。"),
     record("也门", "Alroidhat (Al-Rowedhat)", "阿尔罗伊达特", "油田／Block 9", None, None, status="PEPA 2012计划列名；现行生产状态未核", source="Yemen PEPA Production Plan", note="PEPA 2012计划提到Alroidhat输油管线建设，评估清单作AL-rowedhat；保留原拼法变体，未取得单田产量。"),
     record("也门", "Qarn Qeamah", "卡恩·基阿马", "油田／Block 9", None, None, status="PEPA 2012列为评估对象；商业生产未核", source="Yemen PEPA Production Plan", note="PEPA计划列入Block 9地质评估研究；名称已公开，但这不足以证明当前商业生产或单田产量。"),
 
     # Syria, Israel and Turkey
+    record("叙利亚", "Rmeilan Sector One", "鲁迈兰第一作业区", "油田群／作业区", None, None, value="70–80", metric_type="actual_output", unit="千桶/日", data_date="2026-02-11采访时点", status="采访时点生产；之后控制与产量可能变化", source="Rudaw Rmeilan Sector One", note="负责人称Sector One含Rmeilan、Suwaydiya、Qarachok、Hamza、Alyan、Sazabeh、Ode和Tigris八田；70–80千桶/日为作业区合计，不能分配给单田。另称产能110千桶/日。"),
     record("叙利亚", "Al-Omar", "奥马尔", "油田", 35.07, 40.60, value="15", metric_type="actual_output", unit="千桶/日", data_date="2026-02-22", source="Le Monde Al-Omar 2026", note="记者实地采访运营主任称日产1.5万桶；2026-01-19较早报道约5千桶/日，修复期波动很大。"),
     record("叙利亚", "Al-Tanak", "塔纳克", "油田", 35.10, 40.34, source="Syria public reporting"),
     record("叙利亚", "Al-Jafra", "贾夫拉", "油田", 35.05, 40.47, source="Syria public reporting"),
@@ -480,3 +498,150 @@ ASSETS = [
     record("埃及", "Ashrafi", "阿什拉菲", "油田／EGPC棕地招标资产", None, None, status="EGPC 2023棕地资料列名；当前逐田实产未核", source="Egypt EGPC Brownfields 2023", note="EGPC图示资产面积35平方公里；面积不是储量或产量。"),
     record("埃及", "Wadi El Sahl Development Area", "瓦迪埃尔萨赫勒开发区", "油田开发区／EGPC棕地招标资产", None, None, status="EGPC 2023棕地资料列名；田级产量待核", source="Egypt EGPC Brownfields 2023", note="原资料称Development Area并列面积31平方公里，目录按开发区记录，不将其强行当作单一油田；EGPC包件的剩余储量／增产潜力不拆给单个资产。"),
 ]
+
+
+# 分层审计：层级字段独立于资产类型，防止区块／油田群合计与单田重复计算。
+ASSET_LEVEL_LABELS = {
+    "field": "单一油气田",
+    "field_group": "油田群／综合体",
+    "block": "区块",
+    "concession": "特许区",
+    "project": "开发项目",
+    "development_area": "开发区",
+}
+
+COMMODITY_LABELS = {
+    "crude_oil": "原油",
+    "natural_gas": "天然气",
+    "oil_and_gas": "油气／凝析油",
+}
+
+LEVEL_OVERRIDES = {
+    ("沙特阿拉伯", "Khurais"): "field_group",
+    ("阿联酋", "Ghasha Concession"): "concession",
+    ("伊拉克", "Eridu (Block 10)"): "field",
+    ("卡塔尔", "A-Structures (A-North / A-South)"): "field_group",
+    ("阿曼", "Harweel"): "field_group",
+    ("叙利亚", "Rmeilan Sector One"): "field_group",
+    ("土耳其", "Gabar"): "field_group",
+    ("埃及", "Wadi El Sahl Development Area"): "development_area",
+}
+
+PARENT_RELATIONSHIPS = {
+    ("沙特阿拉伯", "Abu Jifan"): "Khurais",
+    ("沙特阿拉伯", "Mazalij"): "Khurais",
+    ("沙特阿拉伯", "Qirdi"): "Khurais",
+    ("阿联酋", "Belbazem"): "Belbazem Offshore Block",
+    ("阿联酋", "Umm Al Salsal"): "Belbazem Offshore Block",
+    ("阿联酋", "Umm Al Dholou"): "Belbazem Offshore Block",
+    ("阿联酋", "Hail (ADNOC Ghasha)"): "Ghasha Concession",
+    ("阿联酋", "Ghasha"): "Ghasha Concession",
+    ("阿联酋", "Dalma"): "Ghasha Concession",
+    ("阿联酋", "Nasr"): "Ghasha Concession",
+    ("阿联酋", "Satah Al Razboot (SARB)"): "Ghasha Concession",
+    ("阿联酋", "SARB Deep Gas"): "Satah Al Razboot (SARB)",
+    ("阿联酋", "Bab Gas Cap"): "Bab",
+    ("伊拉克", "Swara Tika"): "Sarsang",
+    ("伊拉克", "East Swara Tika"): "Sarsang",
+    ("卡塔尔", "A-North"): "A-Structures (A-North / A-South)",
+    ("卡塔尔", "A-South"): "A-Structures (A-North / A-South)",
+    ("阿曼", "Zalzala"): "Harweel",
+    ("阿曼", "Haima West"): "Marmul",
+    ("阿曼", "Al Noor"): "Nimr",
+    ("阿曼", "Nimr-A"): "Nimr",
+    ("阿曼", "Nimr-E"): "Nimr",
+    ("阿曼", "Yumna"): "Block 50 (Masirah)",
+    ("阿曼", "Daleel"): "Block 5 (Daleel)",
+    ("阿曼", "Shadi"): "Block 5 (Daleel)",
+    ("阿曼", "Bushra"): "Block 5 (Daleel)",
+    ("阿曼", "Mazoon"): "Block 5 (Daleel)",
+    ("阿曼", "Furat"): "Block 5 (Daleel)",
+    ("阿曼", "Thahab"): "Block 5 (Daleel)",
+    ("阿曼", "Safah"): "Block 9 (Oman)",
+    ("阿曼", "Wadi Latham"): "Block 9 (Oman)",
+    ("阿曼", "Khamilah"): "Block 27 (Oman)",
+    ("阿曼", "West Bukha"): "Block 8 (Oman)",
+    ("阿曼", "Bukha"): "Block 8 (Oman)",
+    ("阿曼", "Sahma"): "Block 7 (Oman)",
+    ("阿曼", "Abu Butabul"): "Block 60 (Oman)",
+    ("阿曼", "Khazzan"): "Block 61 (Oman)",
+    ("阿曼", "Ghazeer"): "Block 61 (Oman)",
+    ("也门", "Alif"): "Block 18 (Marib)",
+    ("也门", "Habban"): "Block S2 (Uqlah)",
+    ("也门", "Tasour"): "Block 32 (Hawareem)",
+    ("也门", "Godah"): "Block 32 (Hawareem)",
+    ("也门", "Hiswah (Haswa)"): "Block 9 (Malik)",
+    ("也门", "Alroidhat (Al-Rowedhat)"): "Block 9 (Malik)",
+    ("也门", "Qarn Qeamah"): "Block 9 (Malik)",
+    ("叙利亚", "Rmeilan"): "Rmeilan Sector One",
+    ("叙利亚", "Suwaydiya"): "Rmeilan Sector One",
+    ("叙利亚", "Qarachok"): "Rmeilan Sector One",
+    ("叙利亚", "Hamza"): "Rmeilan Sector One",
+    ("叙利亚", "Alyan"): "Rmeilan Sector One",
+    ("叙利亚", "Sazabeh"): "Rmeilan Sector One",
+    ("叙利亚", "Ode"): "Rmeilan Sector One",
+    ("叙利亚", "Tigris"): "Rmeilan Sector One",
+}
+
+OUTPUT_METRIC_TYPES = {
+    "actual_output",
+    "derived_daily_average",
+    "historical_condensate_output",
+    "historical_peak",
+}
+
+
+def infer_asset_level(asset_type: str) -> str:
+    if "开发区" in asset_type:
+        return "development_area"
+    if "特许" in asset_type:
+        return "concession"
+    if "区块" in asset_type and not asset_type.startswith("油田（"):
+        return "block"
+    if "项目" in asset_type:
+        return "project"
+    if "油田群" in asset_type or "综合体" in asset_type or "作业区" in asset_type:
+        return "field_group"
+    return "field"
+
+
+def infer_commodity(asset_type: str) -> str:
+    if "气" in asset_type and ("油" in asset_type or "凝析" in asset_type):
+        return "oil_and_gas"
+    if "气" in asset_type:
+        return "natural_gas"
+    return "crude_oil"
+
+
+for asset in ASSETS:
+    key = (asset["country"], asset["name"])
+    asset_level = LEVEL_OVERRIDES.get(key, infer_asset_level(asset["asset_type"]))
+    commodity = infer_commodity(asset["asset_type"])
+    asset["asset_level"] = asset_level
+    asset["asset_level_label"] = ASSET_LEVEL_LABELS[asset_level]
+    asset["parent_asset"] = PARENT_RELATIONSHIPS.get(key)
+    asset["parent_level"] = None
+    asset["aggregation_scope"] = (
+        "单一资产"
+        if asset_level == "field"
+        else "多资产合计"
+        if asset_level in {"field_group", "block", "concession"}
+        else "项目范围"
+        if asset_level == "project"
+        else "开发区域"
+    )
+    asset["commodity"] = commodity
+    asset["commodity_label"] = COMMODITY_LABELS[commodity]
+    asset["ownership_basis"] = "全资产毛口径（若来源披露数值）"
+    asset["is_daily_output"] = (
+        asset["value"] is not None and asset["metric_type"] in OUTPUT_METRIC_TYPES
+    )
+
+_asset_index = {(asset["country"], asset["name"]): asset for asset in ASSETS}
+for asset in ASSETS:
+    parent_name = asset["parent_asset"]
+    if parent_name:
+        parent = _asset_index.get((asset["country"], parent_name))
+        if parent is None:
+            raise ValueError(f"缺少上级资产记录：{asset['country']} / {asset['name']} -> {parent_name}")
+        asset["parent_level"] = parent["asset_level"]
