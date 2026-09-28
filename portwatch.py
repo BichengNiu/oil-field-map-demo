@@ -18,6 +18,7 @@ ROOT = "https://services9.arcgis.com/weJ1QsnbMYJlCHdG/arcgis/rest/services"
 PORTS = f"{ROOT}/PortWatch_ports_database/FeatureServer/0/query"
 DAILY = f"{ROOT}/Daily_Ports_Data/FeatureServer/0/query"
 SOURCE = "https://portwatch.imf.org/pages/data-and-methodology"
+MODULE_VERSION = 3
 
 
 def _valid_port_ids(ids: tuple[str, ...]) -> bool:

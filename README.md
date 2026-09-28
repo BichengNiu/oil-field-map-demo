@@ -2,6 +2,13 @@
 
 运行：`pip install -r requirements.txt && streamlit run app.py`
 
+## 界面与筛选
+
+- 主页面分为“地图总览、港口活动、油气资产、数据与方法”四个标签页；侧栏筛选框留空即表示全部，避免默认值产生大量标签。
+- 地图默认使用 Esri 英文街道底图，并可切换浅色底图与卫星影像。油气资产在低缩放级别自动聚合；港口点大小按所选窗口内的船舶日均挂靠数缩放，悬停显示名称。
+- 视图可切换为“港口与油气资产、仅港口、仅油气资产”。港口支持水域、名称、国家、日期及 7/30 天窗口筛选；资产支持名称、国家、层级、状态、类型和指标口径筛选。
+- `app.py` 每次运行都显式重载 `portwatch.py`，并检查模块版本，防止 Streamlit 热重载保留旧模块而出现 `rolling_activity` 缺失。
+
 地图保留原油气资产图层，新增波斯湾、阿曼湾、霍尔木兹海峡、苏伊士运河和曼德海峡附近港口图层。港口点位来自 [IMF PortWatch 当前港口数据库](https://services9.arcgis.com/weJ1QsnbMYJlCHdG/arcgis/rest/services/PortWatch_ports_database/FeatureServer/0)，每日船次与装卸货量来自 [PortWatch 每日港口活动](https://services9.arcgis.com/weJ1QsnbMYJlCHdG/arcgis/rest/services/Daily_Ports_Data/FeatureServer/0)。日期可选，默认该数据源的最新可用日期；API 结果缓存一小时，港口目录缓存一天，可在侧栏刷新。
 
 “附近”使用 `portwatch.py` 中公开列出的五个经纬度框，以港口中心点判断。交叠区域按字典顺序分配，每个港口只出现一次。点位使用 IMF 当前维护的 PortWatch 港口数据库（全库 2,065 条记录；数据更新至 2026-09-18），不是旧版 `PortWatch_ports/FeatureServer/1`（1,380 条记录，数据停更于 2023 年）。地图纳入当前源数据库在这些框内的所有唯一港口点；这不代表当地所有实际泊位、油码头或未被 PortWatch 收录的设施，且区域框本身是本项目对“附近”的操作性定义。

@@ -10,17 +10,46 @@ import io
 from datetime import date
 
 import streamlit as st
-import streamlit.components.v1 as components
 
 import field_catalog
 import portwatch
 
 # Streamlit 的热重载会重跑此文件；显式重新读取目录模块以同步仓库中的数据修订。
+importlib.invalidate_caches()
 CATALOG = importlib.reload(field_catalog)
+PORTWATCH = importlib.reload(portwatch)
 ASSETS = CATALOG.ASSETS
 
+if getattr(PORTWATCH, "MODULE_VERSION", 0) < 3 or not hasattr(PORTWATCH, "rolling_activity"):
+    st.error("港口数据模块版本未同步。请在 Streamlit 管理页重启应用后重试。")
+    st.stop()
 
-st.set_page_config(page_title="中东油气田地图 DEMO", page_icon="🛢️", layout="wide")
+
+st.set_page_config(page_title="中东能源保供监测", page_icon="◉", layout="wide",
+                   initial_sidebar_state="expanded")
+
+st.markdown("""
+<style>
+  .stApp { background: #f5f7fb; }
+  .block-container { padding-top: 1.35rem; padding-bottom: 2.5rem; max-width: 1680px; }
+  [data-testid="stSidebar"] { background: #0b1f33; }
+  [data-testid="stSidebar"] * { color: #eef6ff; }
+  [data-testid="stSidebar"] div[data-baseweb="select"] > div,
+  [data-testid="stSidebar"] input { background: #142d46; border-color: #31516e; }
+  [data-testid="stSidebar"] .stCaption { color: #a9bfd2 !important; }
+  [data-testid="stMetric"] { background: white; border: 1px solid #dfe7ef; border-radius: 14px;
+      padding: 13px 16px; box-shadow: 0 3px 12px rgba(25, 49, 74, .05); }
+  [data-testid="stMetricLabel"] { color: #557085; }
+  [data-testid="stMetricValue"] { color: #102a43; }
+  .hero { background: linear-gradient(115deg,#0b2742,#0e5570); border-radius: 18px; padding: 20px 24px;
+      color: white; margin-bottom: 14px; box-shadow: 0 12px 30px rgba(10,42,68,.16); }
+  .hero h1 { margin: 0 0 5px; font-size: 1.65rem; color: white; }
+  .hero p { margin: 0; color: #cfe5ef; font-size: .94rem; }
+  div[data-testid="stTabs"] button { font-weight: 650; }
+  div[data-testid="stDataFrame"] { border: 1px solid #dfe7ef; border-radius: 12px; overflow: hidden; }
+  .stAlert { border-radius: 12px; }
+</style>
+""", unsafe_allow_html=True)
 
 METRIC_LABELS = {
     "actual_output": "来源直报实际产量",
@@ -233,7 +262,7 @@ def _port_popup(port: dict, day: str, barrels_per_tonne: float) -> str:
         '<div class="basis">油轮类别可能含原油、成品油和其他液体货物。桶数仅将油轮估算吨数按'
         f'{barrels_per_tonne:g} 桶/吨换算，不是实测原油吞吐量；装卸合计不等于净贸易量。'
         '未匹配日期的港口显示“无数据”，不记为零。</div>'
-        f'<a class="source" href="{esc(portwatch.SOURCE)}" target="_blank" rel="noopener">IMF PortWatch 数据与方法</a>'
+        f'<a class="source" href="{esc(PORTWATCH.SOURCE)}" target="_blank" rel="noopener">IMF PortWatch 数据与方法</a>'
         '</div>'
     )
 
@@ -245,6 +274,7 @@ def _map_html(assets: list[dict[str, object]], ports: list[dict],
             "lat": asset["lat"],
             "lon": asset["lon"],
             "level": asset["asset_level"],
+            "name": f'{asset["name_cn"]} · {asset["name"]}',
             "popup": _popup(asset),
         }
         for asset in assets
@@ -252,8 +282,10 @@ def _map_html(assets: list[dict[str, object]], ports: list[dict],
     ]
     marker_json = json.dumps(markers, ensure_ascii=False).replace("</", "<\\/")
     port_json = json.dumps([
-        {"lat": port["lat"], "lon": port["lon"], "popup": _port_popup(port, day, barrels_per_tonne),
-         "has_data": port["has_data"]} for port in ports
+        {"lat": port["lat"], "lon": port["lon"], "name": port["name"],
+         "popup": _port_popup(port, day, barrels_per_tonne), "has_data": port["has_data"],
+         "activity": (port.get("avg_calls_tanker") or 0) + (port.get("avg_calls_cargo") or 0)}
+        for port in ports
     ], ensure_ascii=False).replace("</", "<\\/")
     color_json = json.dumps(LEVEL_COLORS, ensure_ascii=False)
     legend_items = "".join(
@@ -267,6 +299,8 @@ def _map_html(assets: list[dict[str, object]], ports: list[dict],
     <!doctype html><html lang="zh-CN"><head>
     <meta charset="utf-8" />
     <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+    <link rel="stylesheet" href="https://unpkg.com/leaflet.markercluster@1.5.3/dist/MarkerCluster.css" />
+    <link rel="stylesheet" href="https://unpkg.com/leaflet.markercluster@1.5.3/dist/MarkerCluster.Default.css" />
     <style>
       html, body, #map {{ height: 100%; margin: 0; }}
       #map {{ background: #e8eef4; font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif; }}
@@ -293,18 +327,29 @@ def _map_html(assets: list[dict[str, object]], ports: list[dict],
       .map-title b, .map-legend b {{ font-size: 13px; }}
       .map-legend span {{ display: block; margin-top: 4px; }}
       .map-legend i {{ display: inline-block; width: 9px; height: 9px; border-radius: 50%; margin-right: 6px; }}
-      .leaflet-control-layers {{ font-size: 12px; }}
+      .leaflet-control-layers {{ font-size: 12px; border: 0; border-radius: 10px; box-shadow: 0 4px 18px rgba(15,23,42,.18); }}
+      .leaflet-control-layers-expanded {{ padding: 9px 12px; }}
+      .leaflet-tooltip {{ border: 0; border-radius: 7px; padding: 5px 8px; box-shadow: 0 3px 12px rgba(15,23,42,.18); font-size: 11px; }}
+      .marker-cluster-small, .marker-cluster-medium, .marker-cluster-large {{ background: rgba(32, 106, 137, .22); }}
+      .marker-cluster-small div, .marker-cluster-medium div, .marker-cluster-large div {{ background: #176b87; color: white; font-weight: 700; }}
     </style></head><body><div id="map"></div>
     <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+    <script src="https://unpkg.com/leaflet.markercluster@1.5.3/dist/leaflet.markercluster.js"></script>
     <script>
       const map = L.map('map', {{zoomControl: true}}).setView([25.5, 48.5], 4);
-      L.tileLayer('https://tile.openstreetmap.org/{{z}}/{{x}}/{{y}}.png', {{
-        attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors', maxZoom: 18
+      const streets = L.tileLayer('https://server.arcgisonline.com/ArcGIS/rest/services/World_Street_Map/MapServer/tile/{{z}}/{{y}}/{{x}}', {{
+        attribution: 'Tiles &copy; Esri', maxZoom: 18
       }}).addTo(map);
+      const light = L.tileLayer('https://server.arcgisonline.com/ArcGIS/rest/services/Canvas/World_Light_Gray_Base/MapServer/tile/{{z}}/{{y}}/{{x}}', {{
+        attribution: 'Tiles &copy; Esri', maxZoom: 16
+      }});
+      const satellite = L.tileLayer('https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{{z}}/{{y}}/{{x}}', {{
+        attribution: 'Tiles &copy; Esri', maxZoom: 18
+      }});
       const title = L.control({{position: 'topleft'}});
       title.onAdd = () => {{
         const el = L.DomUtil.create('div', 'map-title');
-        el.innerHTML = '<b>中东油气资产与港口活动</b><br>圆点为油气资产，方块为港口；右上角可切换图层。';
+        el.innerHTML = '<b>中东能源资产与港口活动</b><br>点击点位查看详情；悬停显示名称。';
         return el;
       }};
       title.addTo(map);
@@ -318,7 +363,8 @@ def _map_html(assets: list[dict[str, object]], ports: list[dict],
       const assets = {marker_json};
       const ports = {port_json};
       const levelColors = {color_json};
-      const assetLayer = L.layerGroup().addTo(map);
+      const assetLayer = L.markerClusterGroup({{showCoverageOnHover: false, maxClusterRadius: 34,
+          disableClusteringAtZoom: 8, spiderfyOnMaxZoom: true}}).addTo(map);
       const portLayer = L.layerGroup().addTo(map);
       assets.forEach((asset) => {{
         const color = levelColors[asset.level] || '#64748b';
@@ -328,28 +374,31 @@ def _map_html(assets: list[dict[str, object]], ports: list[dict],
           weight: 1.4,
           fillColor: color,
           fillOpacity: 0.88
-        }}).bindPopup(asset.popup, {{maxWidth: 390}}).addTo(assetLayer);
+        }}).bindTooltip(asset.name, {{direction: 'top', opacity: .95}})
+          .bindPopup(asset.popup, {{maxWidth: 390}}).addTo(assetLayer);
       }});
       ports.forEach((port) => {{
+        const radius = Math.min(12, 6 + Math.sqrt(Math.max(0, port.activity)) * 1.5);
         L.circleMarker([port.lat, port.lon], {{
-          radius: 7, color: port.has_data ? '#0f766e' : '#64748b', weight: 2,
-          fillColor: port.has_data ? '#14b8a6' : '#cbd5e1', fillOpacity: .95
-        }}).bindPopup(port.popup, {{maxWidth: 410}}).addTo(portLayer);
+          radius: radius, color: port.has_data ? '#064e5f' : '#64748b', weight: 2,
+          fillColor: port.has_data ? '#20b8a5' : '#cbd5e1', fillOpacity: .9
+        }}).bindTooltip(port.name, {{direction: 'top', opacity: .95}})
+          .bindPopup(port.popup, {{maxWidth: 410}}).addTo(portLayer);
       }});
       const allPoints = ports.map((p) => [p.lat, p.lon]).concat(assets.map((a) => [a.lat, a.lon]));
       if (allPoints.length) map.fitBounds(L.latLngBounds(allPoints), {{padding: [36, 36], maxZoom: 5}});
-      L.control.layers(null, {{'油气资产': assetLayer, '港口（青色有数据；灰色缺报）': portLayer}},
-                       {{collapsed: false}}).addTo(map);
+      L.control.layers({{'英文街道图': streets, '浅色底图': light, '卫星影像': satellite}},
+        {{'油气资产': assetLayer, '港口活动（点越大越活跃）': portLayer}}, {{collapsed: false}}).addTo(map);
     </script></body></html>
     """
 
 
-st.title("中东公开命名油气资产地图 · 分层审计版")
-st.caption(
-    "资产分为单一油气田、油田群／综合体、区块、特许区、开发项目和开发区。"
-    "popup按层级展示当前资产与已登记上级的日产量；产能、目标和项目增量单独显示。"
-    "生产状态带截至日期、置信度与证据链接，不能视为实时遥测。"
-)
+st.markdown("""
+<div class="hero">
+  <h1>中东能源保供监测</h1>
+  <p>油气资产、关键港口与每日航运活动｜资产来源审计 + IMF PortWatch 日度数据</p>
+</div>
+""", unsafe_allow_html=True)
 
 country_options = sorted({str(asset["country"]) for asset in ASSETS})
 level_options = list(LEVEL_LABELS)
@@ -358,238 +407,237 @@ metric_options = sorted({str(asset["metric_type"]) for asset in ASSETS})
 status_options = list(STATUS_LABELS)
 
 with st.sidebar:
-    st.header("筛选")
-    selected_countries = st.multiselect("国家", country_options, default=country_options)
-    selected_levels = st.multiselect(
-        "资产层级",
-        level_options,
-        default=level_options,
-        format_func=lambda key: LEVEL_LABELS[key],
-    )
-    selected_types = st.multiselect("资产类型", type_options, default=type_options)
-    selected_statuses = st.multiselect(
-        "生产状态",
-        status_options,
-        default=status_options,
-        format_func=lambda key: STATUS_LABELS[key],
-    )
-    selected_metrics = st.multiselect(
-        "指标口径",
-        metric_options,
-        default=metric_options,
-        format_func=lambda key: METRIC_LABELS[key],
-    )
-    values_only = st.checkbox("仅显示有公开资产级数值的资产", value=False)
-    output_only = st.checkbox("仅显示有日产量的资产", value=False)
-    st.divider()
-    st.caption(
-        "popup中的上级数据不受筛选器隐藏：即使只筛选单田，仍会展示其所属区块／"
-        "油田群／特许区的已披露日量。无坐标资产保留在下方数据表。"
-    )
-    st.divider()
-    st.header("港口活动 · IMF PortWatch")
-    selected_regions = st.multiselect("附近水域", list(portwatch.REGIONS),
-                                      default=list(portwatch.REGIONS))
-    try:
-        newest_day = portwatch.latest_date()
-        if st.button("刷新港口数据缓存"):
-            portwatch.latest_date.clear()
-            portwatch.port_catalog.clear()
-            portwatch.daily_activity.clear()
-            portwatch.rolling_activity.clear()
-            st.rerun()
-        selected_day = st.date_input("统计日期（UTC）", value=newest_day,
-                                     min_value=date(2019, 1, 1), max_value=newest_day)
-        st.caption(f"源站最新可用日期：{newest_day.isoformat()}")
-    except Exception as exc:
-        newest_day = selected_day = None
-        st.warning(f"PortWatch 暂时不可用：{exc}")
-    barrels_per_tonne = st.number_input("原油当量换算：桶/吨", min_value=5.0,
-                                        max_value=9.0, value=7.33, step=0.01,
-                                        help="仅供对比的假设系数；油轮货物并非全部原油。")
-    rolling_days = st.selectbox("滚动日均窗口", [7, 30], index=0,
-                                help="保留原始单日值，另列过去 7 或 30 个自然日的日均。")
+    st.markdown("### 监测视图")
+    map_mode = st.radio("地图内容", ["港口与油气资产", "仅港口", "仅油气资产"],
+                        horizontal=False, label_visibility="collapsed", key="map_mode")
 
-ports = []
-if selected_day is not None and selected_regions:
+    with st.expander("⚓ 港口筛选", expanded=True):
+        selected_regions = st.multiselect(
+            "水域（空选＝全部）", list(PORTWATCH.REGIONS), default=[],
+            placeholder="全部五个水域", key="port_regions")
+        port_search = st.text_input("搜索港口或国家", placeholder="例如 Fujairah / UAE",
+                                    key="port_search").strip().lower()
+        try:
+            newest_day = PORTWATCH.latest_date()
+            selected_day = st.date_input("统计日期（UTC）", value=newest_day,
+                                         min_value=date(2019, 1, 1), max_value=newest_day,
+                                         key="port_day")
+            st.caption(f"源站最新：{newest_day.isoformat()}")
+        except Exception as exc:
+            newest_day = selected_day = None
+            st.warning(f"PortWatch 暂时不可用：{exc}")
+        rolling_label = st.radio("日均窗口", ["过去 7 天", "过去 30 天"],
+                                 horizontal=True, key="rolling_window")
+        rolling_days = 7 if rolling_label == "过去 7 天" else 30
+        barrels_per_tonne = st.number_input(
+            "原油当量（桶/吨）", min_value=5.0, max_value=9.0, value=7.33,
+            step=0.01, help="只用于将油轮货物吨数换算为情景原油当量。",
+            key="barrels_per_tonne")
+
+    with st.expander("◉ 油气资产筛选", expanded=True):
+        asset_search = st.text_input("搜索资产", placeholder="输入中英文名称",
+                                     key="asset_search").strip().lower()
+        selected_countries = st.multiselect("国家（空选＝全部）", country_options, default=[],
+                                            placeholder="全部国家", key="asset_countries")
+        selected_levels = st.multiselect(
+            "资产层级（空选＝全部）", level_options, default=[],
+            format_func=lambda key: LEVEL_LABELS[key], placeholder="全部层级",
+            key="asset_levels")
+        selected_statuses = st.multiselect(
+            "生产状态（空选＝全部）", status_options, default=[],
+            format_func=lambda key: STATUS_LABELS[key], placeholder="全部状态",
+            key="asset_statuses")
+        values_only = st.toggle("只看有公开数值", value=False, key="values_only")
+        output_only = st.toggle("只看有日产量", value=False, key="output_only")
+
+    with st.expander("高级资产口径", expanded=False):
+        selected_types = st.multiselect("资产类型（空选＝全部）", type_options, default=[],
+                                        placeholder="全部类型", key="asset_types")
+        selected_metrics = st.multiselect(
+            "指标口径（空选＝全部）", metric_options, default=[],
+            format_func=lambda key: METRIC_LABELS[key], placeholder="全部口径",
+            key="asset_metrics")
+
+    if st.button("刷新 PortWatch 缓存", width="stretch"):
+        PORTWATCH.latest_date.clear()
+        PORTWATCH.port_catalog.clear()
+        PORTWATCH.daily_activity.clear()
+        PORTWATCH.rolling_activity.clear()
+        st.rerun()
+    st.caption("筛选框留空表示全部。地图右上角可切换底图和数据图层。")
+
+selected_region_set = set(selected_regions or PORTWATCH.REGIONS)
+ports: list[dict] = []
+port_error = None
+if selected_day is not None and map_mode != "仅油气资产":
     try:
-        catalog = [p for p in portwatch.port_catalog() if p["region"] in selected_regions]
+        catalog = [
+            p for p in PORTWATCH.port_catalog()
+            if p["region"] in selected_region_set
+            and (not port_search or port_search in p["name"].lower()
+                 or port_search in p["country"].lower())
+        ]
         ids = tuple(p["portid"] for p in catalog)
-        activity = portwatch.daily_activity(selected_day, ids)
-        rolling = portwatch.rolling_activity(selected_day, ids, rolling_days)
-        ports = portwatch.decorate(catalog, activity, rolling)
+        if ids:
+            activity = PORTWATCH.daily_activity(selected_day, ids)
+            rolling = PORTWATCH.rolling_activity(selected_day, ids, rolling_days)
+            ports = PORTWATCH.decorate(catalog, activity, rolling)
     except Exception as exc:
-        st.warning(f"港口数据加载失败，油气资产图仍可使用：{exc}")
+        port_error = str(exc)
 
 filtered = [
-    asset
-    for asset in ASSETS
-    if asset["country"] in selected_countries
-    and asset["asset_level"] in selected_levels
-    and asset["asset_type"] in selected_types
-    and asset["operating_status"] in selected_statuses
-    and asset["metric_type"] in selected_metrics
+    asset for asset in ASSETS
+    if (not selected_countries or asset["country"] in selected_countries)
+    and (not selected_levels or asset["asset_level"] in selected_levels)
+    and (not selected_types or asset["asset_type"] in selected_types)
+    and (not selected_statuses or asset["operating_status"] in selected_statuses)
+    and (not selected_metrics or asset["metric_type"] in selected_metrics)
     and (not values_only or asset["value"] is not None)
     and (not output_only or asset["is_daily_output"])
+    and (not asset_search or asset_search in str(asset["name"]).lower()
+         or asset_search in str(asset["name_cn"]).lower())
 ]
-
-daily_output_count = sum(bool(asset["is_daily_output"]) for asset in filtered)
-aggregate_output_count = sum(
-    bool(asset["is_daily_output"]) and asset["asset_level"] != "field"
-    for asset in filtered
-)
-other_daily_count = sum(
-    asset["value"] is not None and not asset["is_daily_output"] for asset in filtered
-)
-unknown_count = sum(asset["value"] is None for asset in filtered)
-producing_count = sum(asset["operating_status"] == "producing" for asset in filtered)
-status_pending_count = sum(
-    asset["operating_status"] in {"unknown", "historical_unverified"} for asset in filtered
-)
-col1, col2, col3, col4, col5 = st.columns(5)
-col1.metric("已显示资产", f"{len(filtered)}")
-col2.metric("在产（带时点）", f"{producing_count}")
-col3.metric("状态待核", f"{status_pending_count}")
-col4.metric("有日产量记录", f"{daily_output_count}")
-col5.metric("产能／目标等日量", f"{other_daily_count}")
-
-unlocated_count = sum(
-    asset["lat"] is None or asset["lon"] is None for asset in filtered
-)
-parented_count = sum(bool(asset["parent_asset"]) for asset in filtered)
-st.caption(
-    f"已建立父子关系：{parented_count} 条；日产量未披露：{unknown_count} 条；"
-    f"待核验坐标、仅列数据表：{unlocated_count} 条。"
-)
-
-components.html(_map_html(filtered, ports, selected_day.isoformat() if selected_day else "无数据",
-                          barrels_per_tonne), height=690, scrolling=False)
-
-st.subheader("港口日活动")
-st.caption(
-    "覆盖上述五个自定义地理框内的全部 PortWatch 港口，范围以港口点位判定；"
-    "不包括 PortWatch 未收录的码头。油轮与其他货轮分别列示，装卸合计为双向货量。"
-    "单日的 0 表示该日源站未观测到对应挂靠或估算货量为 0，不代表港口长期停运。"
-    "滚动日均只有在窗口每一天都有源记录时才计算。"
-)
-if ports:
-    port_rows = []
-    for port in ports:
-        def ten_thousand(key):
-            value = port.get(key)
-            return None if value is None else round(value / 10000, 6)
-
-        tanker_tonnes = port.get("handled_tanker")
-        port_rows.append({
-            "水域": port["region"], "国家": port["country"], "港口": port["name"],
-            "PortWatch ID": port["portid"], "日期 UTC": selected_day.isoformat(),
-            "油轮艘次/日": port.get("portcalls_tanker"),
-            "油轮卸货 万吨/日": ten_thousand("import_tanker"),
-            "油轮装货 万吨/日": ten_thousand("export_tanker"),
-            "油轮装卸 万吨/日": ten_thousand("handled_tanker"),
-            "油轮载货原油当量估算 万桶/日": (
-                round(tanker_tonnes * barrels_per_tonne / 10000, 6)
-                if tanker_tonnes is not None else None),
-            f"过去{rolling_days}天油轮日均艘次": (
-                round(port["avg_calls_tanker"], 3)
-                if port.get("avg_calls_tanker") is not None else None),
-            f"过去{rolling_days}天油轮日均装卸 万吨/日": ten_thousand("avg_handled_tanker"),
-            f"过去{rolling_days}天油轮原油当量日均 万桶/日": (
-                round(port["avg_handled_tanker"] * barrels_per_tonne / 10000, 6)
-                if port.get("avg_handled_tanker") is not None else None),
-            f"过去{rolling_days}天油轮有挂靠天数": port.get("tanker_positive_days"),
-            "其他货轮艘次/日": port.get("portcalls_cargo"),
-            "其他货轮卸货 万吨/日": ten_thousand("import_cargo"),
-            "其他货轮装货 万吨/日": ten_thousand("export_cargo"),
-            "其他货轮装卸 万吨/日": ten_thousand("handled_cargo"),
-            f"过去{rolling_days}天其他货轮日均艘次": (
-                round(port["avg_calls_cargo"], 3)
-                if port.get("avg_calls_cargo") is not None else None),
-            f"过去{rolling_days}天其他货轮日均装卸 万吨/日": ten_thousand("avg_handled_cargo"),
-            f"过去{rolling_days}天其他货轮有挂靠天数": port.get("cargo_positive_days"),
-            f"过去{rolling_days}天有效日期": port.get("observed_days"),
-            "数据状态": "有记录" if port["has_data"] else "当日缺报",
-            "油轮数据提示": (
-                "有挂靠但估算货量为0，待核" if port.get("portcalls_tanker", 0) and tanker_tonnes == 0
-                else "窗口有油轮挂靠但日均估算货量为0，待核"
-                if (port.get("avg_calls_tanker") or 0) > 0 and port.get("avg_handled_tanker") == 0
-                else "当日无挂靠，窗口内有挂靠" if port.get("portcalls_tanker") == 0
-                and (port.get("tanker_positive_days") or 0) > 0
-                else ""),
-            "纬度": port["lat"], "经度": port["lon"],
-            "来源": portwatch.SOURCE,
-        })
-    c1, c2, c3 = st.columns(3)
-    c1.metric("PortWatch 港口", len(ports))
-    c2.metric("当日油轮挂靠为零", sum(p.get("portcalls_tanker") == 0 for p in ports))
-    c3.metric(f"过去{rolling_days}天有油轮挂靠", sum((p.get("tanker_positive_days") or 0) > 0 for p in ports))
-    st.dataframe(port_rows, width="stretch", hide_index=True, height=430)
-    buffer = io.StringIO()
-    writer = csv.DictWriter(buffer, fieldnames=port_rows[0].keys())
-    writer.writeheader()
-    writer.writerows(port_rows)
-    st.download_button("下载所选港口 CSV", buffer.getvalue().encode("utf-8-sig"),
-                       file_name=f"portwatch_ports_{selected_day.isoformat()}.csv",
-                       mime="text/csv")
+if map_mode == "仅港口":
+    map_assets = []
 else:
-    st.info("所选范围暂无可显示的港口，或 PortWatch 服务暂时不可用。")
-with st.expander("港口覆盖范围与数据口径"):
-    st.write("“附近”按港口中心坐标落入以下经纬度框判定；交叠位置按表中顺序归属。")
-    st.dataframe([
-        {"水域": name, "南界": bounds[0], "北界": bounds[1],
-         "西界": bounds[2], "东界": bounds[3]}
-        for name, bounds in portwatch.REGIONS.items()
-    ], hide_index=True, width="stretch")
-    st.markdown(
-        f"[IMF PortWatch 方法说明]({portwatch.SOURCE}) · "
-        "[港口点位 API](https://services9.arcgis.com/weJ1QsnbMYJlCHdG/arcgis/rest/services/PortWatch_ports_database/FeatureServer/0) · "
-        "[每日活动 API](https://services9.arcgis.com/weJ1QsnbMYJlCHdG/arcgis/rest/services/Daily_Ports_Data/FeatureServer/0)"
-    )
-    st.write("PortWatch 以 AIS 和船舶吃水变化估算公吨货量；其 tanker 为船型分类，无法仅凭该列识别原油。"
-             "“原油当量万桶”按用户可调系数换算，属于情景估算。真实分油种的港口日桶数需另接港口或商业 AIS 数据。"
-             "货轮 cargo 为集装箱、干散、杂货及滚装等船型合计，不含 tanker。")
+    map_assets = filtered
+map_ports = [] if map_mode == "仅油气资产" else ports
 
-st.info(
-    "防重复规则：单田与上级区块／油田群／特许区的数值不能同时求和。"
-    "日产量仅包括来源直报实际产量、来源年产量换算日均及明确标注的历史产量；"
-    "产能、目标产能、增量产能和天然气项目能力在popup中另列，不计作日产量。"
-    "“在产”表示截至所列证据日期可核实，不代表此刻连续运行。"
-)
+port_rows = []
+for port in ports:
+    def ten_thousand(key: str):
+        value = port.get(key)
+        return None if value is None else round(value / 10000, 6)
 
-rows = [
+    tanker_tonnes = port.get("handled_tanker")
+    port_rows.append({
+        "水域": port["region"], "国家": port["country"], "港口": port["name"],
+        "PortWatch ID": port["portid"], "日期 UTC": selected_day.isoformat(),
+        "油轮艘次/日": port.get("portcalls_tanker"),
+        "油轮卸货 万吨/日": ten_thousand("import_tanker"),
+        "油轮装货 万吨/日": ten_thousand("export_tanker"),
+        "油轮装卸 万吨/日": ten_thousand("handled_tanker"),
+        "油轮原油当量 万桶/日": (
+            round(tanker_tonnes * barrels_per_tonne / 10000, 6)
+            if tanker_tonnes is not None else None),
+        f"{rolling_days}天油轮日均艘次": (
+            round(port["avg_calls_tanker"], 3)
+            if port.get("avg_calls_tanker") is not None else None),
+        f"{rolling_days}天油轮日均装卸 万吨/日": ten_thousand("avg_handled_tanker"),
+        f"{rolling_days}天油轮原油当量日均 万桶/日": (
+            round(port["avg_handled_tanker"] * barrels_per_tonne / 10000, 6)
+            if port.get("avg_handled_tanker") is not None else None),
+        f"{rolling_days}天油轮有挂靠天数": port.get("tanker_positive_days"),
+        "其他货轮艘次/日": port.get("portcalls_cargo"),
+        "其他货轮装卸 万吨/日": ten_thousand("handled_cargo"),
+        f"{rolling_days}天其他货轮日均艘次": (
+            round(port["avg_calls_cargo"], 3)
+            if port.get("avg_calls_cargo") is not None else None),
+        f"{rolling_days}天其他货轮日均装卸 万吨/日": ten_thousand("avg_handled_cargo"),
+        f"{rolling_days}天有效日期": port.get("observed_days"),
+        "数据提示": (
+            "有挂靠但估算货量为0，待核"
+            if port.get("portcalls_tanker", 0) and tanker_tonnes == 0
+            else "窗口有油轮挂靠但日均估算货量为0，待核"
+            if (port.get("avg_calls_tanker") or 0) > 0 and port.get("avg_handled_tanker") == 0
+            else "当日无挂靠，窗口内有挂靠"
+            if port.get("portcalls_tanker") == 0 and (port.get("tanker_positive_days") or 0) > 0
+            else ""),
+        "纬度": port["lat"], "经度": port["lon"], "来源": PORTWATCH.SOURCE,
+    })
+
+asset_rows = [
     {
-        "国家": asset["country"],
-        "资产层级": asset["asset_level_label"],
-        "层级路径": hierarchy_path(asset),
-        "上级资产": asset["parent_asset"] or "—",
-        "英文名称": asset["name"],
-        "中文名称": asset["name_cn"],
-        "资产类型": asset["asset_type"],
-        "商品": asset["commodity_label"],
-        "统计范围": asset["aggregation_scope"],
-        "权益口径": asset["ownership_basis"],
-        "本层级日产量": daily_output_value(asset),
-        "其他日量指标": other_daily_metric(asset),
-        "指标口径": METRIC_LABELS[asset["metric_type"]],
-        "数据日期": display_date(asset),
-        "生产状态": asset["operating_status_label"],
-        "状态截至": asset["operating_status_as_of"],
-        "状态置信度": asset["operating_status_confidence"],
-        "状态审计结果": asset["status_audit_result"],
-        "状态依据": asset["operating_status_basis"],
-        "状态证据链接": asset["operating_status_evidence_url"],
-        "原始状态说明": asset["status"],
-        "坐标精度": asset["coordinate_precision"],
-        "来源": asset["source"],
-        "来源链接": asset["source_url"],
-        "说明": asset["note"],
+        "国家": asset["country"], "资产层级": asset["asset_level_label"],
+        "层级路径": hierarchy_path(asset), "上级资产": asset["parent_asset"] or "—",
+        "英文名称": asset["name"], "中文名称": asset["name_cn"],
+        "资产类型": asset["asset_type"], "商品": asset["commodity_label"],
+        "生产状态": asset["operating_status_label"], "状态截至": asset["operating_status_as_of"],
+        "本层级日产量": daily_output_value(asset), "其他日量指标": other_daily_metric(asset),
+        "指标口径": METRIC_LABELS[asset["metric_type"]], "数据日期": display_date(asset),
+        "统计范围": asset["aggregation_scope"], "状态置信度": asset["operating_status_confidence"],
+        "状态依据": asset["operating_status_basis"], "状态证据链接": asset["operating_status_evidence_url"],
+        "坐标精度": asset["coordinate_precision"], "来源": asset["source"],
+        "来源链接": asset["source_url"], "说明": asset["note"],
     }
     for asset in filtered
 ]
-st.subheader("分层资产数据表")
-st.dataframe(rows, width="stretch", hide_index=True, height=520)
 
-st.caption(
-    "目录范围：公开命名的主要生产、开发或保留油气资产；不宣称覆盖全部历史探井或未商业化发现。"
-    "任何合计分析都应先在层级路径中选择一个互斥层级，避免父子资产重复。"
-)
+tab_map, tab_ports, tab_assets, tab_method = st.tabs(
+    ["地图总览", "港口活动", "油气资产", "数据与方法"])
+
+with tab_map:
+    if port_error:
+        st.error(f"港口数据加载失败：{port_error}")
+    m1, m2, m3, m4 = st.columns(4)
+    m1.metric("地图油气资产", len(map_assets))
+    m2.metric("地图港口", len(map_ports))
+    m3.metric("当日有油轮挂靠", sum((p.get("portcalls_tanker") or 0) > 0 for p in map_ports))
+    m4.metric(f"{rolling_days}天有油轮挂靠", sum((p.get("tanker_positive_days") or 0) > 0 for p in map_ports))
+    st.caption("港口点大小按滚动窗口内油轮与其他货轮的日均挂靠数缩放；油气资产在低缩放级别自动聚合。")
+    st.iframe(
+        _map_html(map_assets, map_ports,
+                  selected_day.isoformat() if selected_day else "无数据",
+                  barrels_per_tonne),
+        height=735,
+    )
+
+with tab_ports:
+    st.subheader("港口日活动")
+    if port_error:
+        st.error(f"港口数据加载失败：{port_error}")
+    elif port_rows:
+        p1, p2, p3, p4 = st.columns(4)
+        p1.metric("筛选后港口", len(port_rows))
+        p2.metric("当日油轮挂靠", sum((p.get("portcalls_tanker") or 0) > 0 for p in ports))
+        p3.metric("当日其他货轮挂靠", sum((p.get("portcalls_cargo") or 0) > 0 for p in ports))
+        p4.metric("需关注记录", sum(bool(row["数据提示"]) for row in port_rows))
+        st.dataframe(port_rows, width="stretch", hide_index=True, height=560,
+                     column_config={"来源": st.column_config.LinkColumn("来源")})
+        buffer = io.StringIO()
+        writer = csv.DictWriter(buffer, fieldnames=port_rows[0].keys())
+        writer.writeheader(); writer.writerows(port_rows)
+        st.download_button("下载当前筛选结果 CSV", buffer.getvalue().encode("utf-8-sig"),
+                           file_name=f"portwatch_ports_{selected_day.isoformat()}.csv",
+                           mime="text/csv", type="primary")
+    else:
+        st.info("当前筛选没有匹配港口。清空水域和搜索框可恢复全部港口。")
+
+with tab_assets:
+    st.subheader("油气资产目录")
+    a1, a2, a3, a4 = st.columns(4)
+    a1.metric("筛选后资产", len(filtered))
+    a2.metric("在产", sum(a["operating_status"] == "producing" for a in filtered))
+    a3.metric("有日产量", sum(bool(a["is_daily_output"]) for a in filtered))
+    a4.metric("状态待核", sum(a["operating_status"] in {"unknown", "historical_unverified"} for a in filtered))
+    st.info("同一资产链上的单田与上级区块、油田群或特许区不能同时求和。")
+    st.dataframe(asset_rows, width="stretch", hide_index=True, height=620,
+                 column_config={
+                     "状态证据链接": st.column_config.LinkColumn("状态证据"),
+                     "来源链接": st.column_config.LinkColumn("目录来源"),
+                 })
+
+with tab_method:
+    st.subheader("范围、口径与数据限制")
+    st.markdown(
+        "**港口覆盖。** 地图读取 IMF 当前维护的 PortWatch 港口点位数据库，"
+        "并按下表五个经纬度框选取港口。交叠区域按表中顺序唯一归属。"
+    )
+    st.dataframe([
+        {"水域": name, "南界": b[0], "北界": b[1], "西界": b[2], "东界": b[3]}
+        for name, b in PORTWATCH.REGIONS.items()
+    ], hide_index=True, width="stretch")
+    st.markdown(
+        f"[IMF PortWatch 方法说明]({PORTWATCH.SOURCE}) · "
+        "[当前港口点位 API](https://services9.arcgis.com/weJ1QsnbMYJlCHdG/arcgis/rest/services/PortWatch_ports_database/FeatureServer/0) · "
+        "[每日活动 API](https://services9.arcgis.com/weJ1QsnbMYJlCHdG/arcgis/rest/services/Daily_Ports_Data/FeatureServer/0)"
+    )
+    st.warning(
+        "PortWatch 以 AIS、船舶载重和吃水变化估算公吨货量。tanker 是船型分类，可能包含原油、"
+        "成品油及其他液体货物。页面的万桶数是情景原油当量，不是分油种的实测港口吞吐量。"
+        "单日零值只表示源表当日为零；有挂靠而估算货量为零的记录会单独标注。"
+    )
+    st.markdown(
+        "**资产覆盖。** 目录收录公开命名的主要生产、开发或保留油气资产；生产状态带证据时点，"
+        "不等于实时遥测。地图 popup 会显示当前资产及已登记上级的分层数值。"
+    )
