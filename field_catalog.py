@@ -645,3 +645,123 @@ for asset in ASSETS:
         if parent is None:
             raise ValueError(f"缺少上级资产记录：{asset['country']} / {asset['name']} -> {parent_name}")
         asset["parent_level"] = parent["asset_level"]
+
+
+# 逐资产生产状态审计（2026-09-28）。
+# 注意：状态是“截至证据日期”的公开资料结论，不是实时遥测；冲突地区尤其可能快速变化。
+OPERATING_STATUS_LABELS = {
+    "producing": "在产",
+    "temporarily_suspended": "暂停生产",
+    "ceased": "停产／终止",
+    "non_producing": "未生产",
+    "development": "开发／建设中",
+    "planned": "规划／评价中",
+    "discovered": "已发现／待商业化",
+    "storage": "转储存用途",
+    "historical_unverified": "历史生产／当前待核",
+    "unknown": "待核实",
+}
+
+_STATUS_AUDIT: dict[tuple[str, str], dict[str, str]] = {}
+
+
+def _assign_status(
+    country: str,
+    names: str,
+    operating_status: str,
+    status_as_of: str,
+    confidence: str,
+    basis: str,
+    evidence_url: str | None = None,
+) -> None:
+    for name in [item.strip() for item in names.split("|") if item.strip()]:
+        key = (country, name)
+        if key not in _asset_index:
+            raise ValueError(f"状态审计引用不存在的资产：{country} / {name}")
+        if key in _STATUS_AUDIT:
+            raise ValueError(f"状态审计重复赋值：{country} / {name}")
+        _STATUS_AUDIT[key] = {
+            "operating_status": operating_status,
+            "operating_status_label": OPERATING_STATUS_LABELS[operating_status],
+            "operating_status_as_of": status_as_of,
+            "operating_status_confidence": confidence,
+            "operating_status_basis": basis,
+            "operating_status_evidence_url": evidence_url or _asset_index[key]["source_url"],
+        }
+
+
+# 沙特阿拉伯：近期官方公司材料可确认主力田持续开发／投产；发现田不把试井流量当商业生产。
+_assign_status("沙特阿拉伯", "Ghawar | Safaniya | Khurais | Shaybah | Manifa | Marjan | Berri | Zuluf | Qatif | Abqaiq | Khursaniyah | Dammam | Jafurah", "producing", "2025-12-31／2026年公开材料", "中", "官方资料确认主力生产资产或近期投产；逐田当日产量并未全部公开。")
+_assign_status("沙特阿拉伯", "Jabu | Sayahid | Ayfan | Nuwayr | Damda | Qurqas | Ladam | Faruq | Sakab | Zumul", "discovered", "2017—2025年发现公告", "高", "官方资料仅确认发现或试井，未确认商业生产。")
+_assign_status("沙特阿拉伯", "Abu Jifan | Mazalij | Qirdi | Abu Hadriya | Fadhili | Harmaliyah | Hawtah", "unknown", "2026-09-28审计", "低", "公开资料确认资产名称，但未取得足以判断当前单田生产状态的近期直接证据。")
+
+# 阿联酋：运营商当前资产页与近年投产公告为主；Ghasha相关开发项目不提前标作在产。
+_assign_status("阿联酋", "Bab | Bu Hasa | Huwaila | Bida Al-Qemzan | Al Dabb'iya | Rumaitha | Shanayel | Asab | Sahil | Shah | Qusahwira | Mender | Upper Zakum | Lower Zakum | Umm Shaif | Satah | Nasr | Umm Al Dalkh | Satah Al Razboot (SARB) | Umm Lulu | Abu Al Bukhoosh | Bu Haseer | Belbazem | Belbazem Offshore Block | Umm Al Salsal | Umm Al Dholou | Arzanah | Nahaidiin | Bin Hadi | Gezira | Muhaymat | Sila | Hail (ADOC) | Mubarraz | Umm Al-Anbar | Neewat Al-Ghalan | Bunduq | Haliba | Fateh | South-West Fateh | Falah | Rashid | Jalilah | Margham | Sajaa | Kahaif | Mahani", "producing", "运营商资料截至2025年／网页审计2026-09-28", "中", "运营商把资产列入当前上游运营或近年已投产；无逐田实时遥测。")
+_assign_status("阿联酋", "Ghasha | Dalma | Shuweihat | Ghasha Concession | SARB Deep Gas | Hail (ADNOC Ghasha) | Bab Gas Cap | Ruwais Diyab | Hedebah", "development", "2025—2026年项目资料", "高", "公开资料将其列为开发、建设或扩建项目；目标产量不等于当前实产。")
+_assign_status("阿联酋", "Moveyeid", "storage", "2026-09-28审计", "高", "SNOC明确其成熟气田已转为储气用途。")
+_assign_status("阿联酋", "Saleh | Umm Al Quwain", "historical_unverified", "历史资料／2026-09-28审计", "低", "公司历史页确认历史气源，但没有当前逐田生产证据。")
+_assign_status("阿联酋", "Jumaylah | Al Nouf", "unknown", "2026-09-28审计", "低", "运营商公开命名，但页面不足以确认当前单田是否生产。")
+
+# 伊拉克：把2025—2026运营商／新闻与EITI参考年分开；历史表不伪装成实时状态。
+_assign_status("伊拉克", "Rumaila | West Qurna-1 | West Qurna-2 | Zubair | Majnoon | Halfaya | Gharraf | Badra | Ahdab | East Baghdad | Nahr Umar | Nassiriya | Kirkuk | Bai Hassan | Jambur | Khabbaz | Qayyarah | Tawke | Peshkabir | Shaikan | Atrush | Sarsang | Swara Tika | East Swara Tika | Khurmala | Faihaa | Fakkah | Bazerkan | Abu Gharb | Luhais | Subba | Tuba | Ajil | Hamrin | Naft Khana | Amara | Noor | Safiya", "producing", "2023—2026年最后可核实公开时点", "中", "运营商、EITI或近期报道列为生产资产；2026年冲突导致的临时减产不据国家合计下推到每个油田。")
+_assign_status("伊拉克", "Taq Taq | Sarta", "ceased", "2023-12-01", "高", "运营商披露停产或PSC终止；未找到后续复产的直接证据。")
+_assign_status("伊拉克", "Artawi | Najma | Baeshiqa | Eridu (Block 10)", "non_producing", "2023—2025年最后可核实公开时点", "高", "EITI或运营商明确列为非生产／仅试井；开发活动不等于商业生产。")
+_assign_status("伊拉克", "Ain Zalah | Batmah", "historical_unverified", "2021年资料／2026-09-28审计", "低", "历史资料确认资产，但未取得近期单田运营状态。")
+
+# 伊朗：来源页可确认运营资产，但2026年战争和出口封锁使“当前运行强度”不确定。
+_assign_status("伊朗", "Ahvaz | Marun | Aghajari | Gachsaran | Reg-e-Safid | South Azadegan | North Azadegan | Yadavaran | North Yaran | South Yaran | Azar | Darkhovin | Hendijan | Doroud | Foroozan | Soroush | Nowruz | Salman | Bibi Hakimeh | Karanj | Abuzar | Mansouri | Sepehr-Jufair | Parsi | Bahregansar | Sirri E | Masjed Soleyman | Pazanan | Kupal | Dehloran | Paranj | Nargesi | South Pars | Darquain", "producing", "2024—2026年最后可核实公开时点", "中", "EIA、SHANA或资产资料列为开发／运营资产；2026年地区冲突下不把出口量变化下推成单田停复产。")
+_assign_status("伊朗", "Hengam", "historical_unverified", "2010-08-24", "低", "SHANA确认历史生产，未取得当前单田直接证据。")
+_assign_status("伊朗", "Band-e-Karkheh | West Paydar | Chehsmeh-Khosh | Danan | Paydar | Changuleh | Dalpari", "unknown", "EIA 2024／2026-09-28审计", "低", "EIA资料确认名称或相关伴生气项目，但不足以确认当前原油生产状态。")
+
+# 科威特：KOC年报和商业投产公告；新发现不按在产处理。
+_assign_status("科威特", "Burgan | Magwa | Ahmadi | Raudhatain | Sabriya | Bahra | Ratqa | Umm Niqa | South Ratqa | Minagish | Umm Gudair | Abdali | Wafra | Khafji | Mutriba | Kra-al-Maru", "producing", "FY2024/25—2026年最后可核实公开时点", "中", "KOC年报、分区运营资料或商业投产公告支持；2026年出口受扰不等于各田停产。")
+_assign_status("科威特", "Nokhetha | Julaiah | Shaham", "discovered", "FY2024/25", "高", "KOC将其列为发现；试井流量不等于持续商业生产。")
+
+# 卡塔尔：2024逐田平均、当前E&P页及延长至2027年的开发生产协议。
+_assign_status("卡塔尔", "Al Shaheen | Dukhan | Al-Rayyan | Al-Khaleej | Idd El-Sharqi | Karkara | Maydan Mahzam | Bul Hanine | Al-Murjan | North Field | A-Structures (A-North / A-South) | A-North | A-South", "producing", "2024年平均／协议期至2027年", "高", "QatarEnergy逐田产量、当前E&P资料或有效开发生产协议支持。")
+
+# 阿曼：运营商2024—2025资料确认绝大多数生产资产；发现田单列。
+_assign_status("阿曼", "Mukhaizna | Yibal | Natih | Fahud | Qarn Alam | Marmul | Nimr | Lekhwair | Bahja | Harweel | Amal | Zalzala | Haima West | Al Noor | Nimr-A | Nimr-E | Block 50 (Masirah) | Yumna | Bisat | Block 5 (Daleel) | Daleel | Shadi | Bushra | Mazoon | Furat | Thahab | Block 9 (Oman) | Block 27 (Oman) | Safah | Wadi Latham | Khamilah | Block 8 (Oman) | Block 7 (Oman) | Block 60 (Oman) | Block 61 (Oman) | West Bukha | Bukha | Sahma | Abu Butabul | Khazzan | Ghazeer", "producing", "2024—2026年最后可核实公开时点", "中", "PDO、OQEP、Oxy、Daleel或Masirah Oil资料列为生产资产／生产区块；区块合计不拆给单田。")
+_assign_status("阿曼", "Budour Northeast | Wadi Aswad North | Safah North B", "discovered", "2024—2026年最后可核实公开时点", "中", "运营商列为发现或待开发，未取得商业生产直接证据。")
+
+# 巴林。
+_assign_status("巴林", "Bahrain Field (Awali) | Abu Safah", "producing", "2025年运营资料／2026-09-28审计", "中", "Bapco当前上游资料和跨境田资料支持生产属性；产能不等于实际日产量。")
+
+# 也门：有历史生产和设施证据，但安全局势下不把旧区块计划写成当前在产。
+_assign_status("也门", "Block 14 (Masila) | Block 10 (East Shabwa) | Block 32 (Hawareem) | Tasour | Godah | Block 18 (Marib) | Alif | Block 5 (Jannah) | Block S2 (Uqlah) | Habban | Block 9 (Malik) | Hiswah (Haswa) | Alroidhat (Al-Rowedhat) | Qarn Qeamah", "historical_unverified", "2007—2019年历史证据／2026-09-28审计", "低", "历史生产、出口或设施资料可核实，但未取得逐田当前生产状态；冲突条件下不作推断。")
+
+# 叙利亚：2026年可确认作业区和Al-Omar；作业区合计不能证明八个组成田逐一在产。
+_assign_status("叙利亚", "Rmeilan Sector One | Al-Omar", "producing", "2026-02-11／2026-02-22", "高", "近期现场采访给出作业区或单田实际产量。")
+_assign_status("叙利亚", "Al-Tanak | Al-Jafra | Al-Ward | Al-Taym", "historical_unverified", "2026年政府接管后／2026-09-28审计", "低", "公开报道确认区域油田被接管，但未取得逐田近期生产状态。")
+_assign_status("叙利亚", "Rmeilan | Suwaydiya | Qarachok | Hamza | Alyan | Sazabeh | Ode | Tigris", "unknown", "2026-02-11", "低", "来源确认其属于Rmeilan Sector One；70—80千桶/日是八田合计，不能据此断定每一田在产。")
+
+# 以色列：2026年停产后复产信息逐田处理；Tanin尚无商业生产证据。
+_assign_status("以色列", "Heletz", "producing", "2022年研究／2026-09-28审计", "中", "公开研究称该田仍被开采，但没有实时产量。")
+_assign_status("以色列", "Meged", "producing", "运营商网页审计2026-09-28", "中", "运营商网页说明自2010年起生产并列累计产量；没有逐日实时值。", "https://www.givot.co.il/en/")
+_assign_status("以色列", "Leviathan | Tamar", "producing", "2026-07-06", "高", "以色列能源部门近期信息确认Tamar供应国内、Leviathan承担出口；Leviathan在4月已从临时停产中复产。", "https://www.reuters.com/world/middle-east/israel-launches-tender-search-more-natural-gas-mediterranean-2026-07-06/")
+_assign_status("以色列", "Karish", "producing", "2026-09-09", "高", "Energean在4月恢复生产，9月半年报称以色列产量已强劲恢复。", "https://www.reuters.com/business/energy/uks-energean-posts-higher-half-year-profit-maintains-output-forecast-after-2026-09-09/")
+_assign_status("以色列", "Tanin", "development", "2026-09-28审计", "中", "资产属于Energean开发组合，但未找到Tanin商业生产的直接证据。", "https://www.reuters.com/business/energy/energean-invest-12-bln-develop-israel-katlan-gas-project-2024-07-23/")
+
+# 土耳其：TPAO公开资产及Gabar增产资料。
+_assign_status("土耳其", "Raman | Batı Raman | Garzan | Şelmo | Gabar", "producing", "2025—2026年最后可核实公开时点", "中", "TPAO／政府资料列为生产资产；未把全国或Gabar油田群合计拆给其他单田。")
+
+# 埃及：棕地包件是资产名录而非当前生产快照。
+_assign_status("埃及", "Belayim", "historical_unverified", "2013年历史产量／2026-09-28审计", "低", "运营商确认2013年生产，但未取得当前单田直接证据。")
+_assign_status("埃及", "Shukheir Offshore (Shukheir Bay) | Shukheir Offshore (Gamma) | Gazwarina | Ras El Ush | Zeit Bay | Ras Budran | East Zeit (E. Zeit) | Ashrafi | Wadi El Sahl Development Area", "unknown", "EGPC 2023棕地资料／2026-09-28审计", "低", "棕地资料确认资产名称和开发属性，但不等于逐田当前生产快照。")
+
+_catalog_keys = set(_asset_index)
+_audited_keys = set(_STATUS_AUDIT)
+if _catalog_keys != _audited_keys:
+    missing = sorted(_catalog_keys - _audited_keys)
+    extra = sorted(_audited_keys - _catalog_keys)
+    raise ValueError(f"状态审计覆盖不完整：missing={missing}; extra={extra}")
+
+for asset in ASSETS:
+    audit = _STATUS_AUDIT[(asset["country"], asset["name"])]
+    asset.update(audit)
+    asset["status_audit_date"] = "2026-09-28"
+    asset["status_audit_result"] = (
+        "已核实（带时点）"
+        if audit["operating_status_confidence"] in {"高", "中"}
+        else "需持续核实"
+    )
