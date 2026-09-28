@@ -30,6 +30,8 @@ def main() -> None:
         flags = []
         if not d:
             flags.append("当日缺报")
+        elif d.get("portname") != port["name"] or d.get("country") != port["country"]:
+            flags.append("点位与日表名称或国家不一致")
         if w["observed_days"] < 7 or m["observed_days"] < 30:
             flags.append("窗口源记录不全")
         if day_tanker == 0 and (w["tanker_positive_days"] or 0) > 0:
@@ -45,6 +47,8 @@ def main() -> None:
         rows.append({
             "水域": port["region"], "国家": port["country"], "港口": port["name"],
             "PortWatch ID": pid, "日期UTC": day.isoformat(),
+            "点位库港名": port["name"], "日活动港名": d.get("portname"),
+            "点位库国家": port["country"], "日活动国家": d.get("country"),
             "当日油轮艘次": day_tanker, "当日油轮卸货吨": d.get("import_tanker"),
             "当日油轮装货吨": d.get("export_tanker"), "当日油轮装卸吨": handled("tanker"),
             "当日其他货轮艘次": d.get("portcalls_cargo"),

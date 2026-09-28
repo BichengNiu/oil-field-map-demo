@@ -336,6 +336,8 @@ def _map_html(assets: list[dict[str, object]], ports: list[dict],
           fillColor: port.has_data ? '#14b8a6' : '#cbd5e1', fillOpacity: .95
         }}).bindPopup(port.popup, {{maxWidth: 410}}).addTo(portLayer);
       }});
+      const allPoints = ports.map((p) => [p.lat, p.lon]).concat(assets.map((a) => [a.lat, a.lon]));
+      if (allPoints.length) map.fitBounds(L.latLngBounds(allPoints), {{padding: [36, 36], maxZoom: 5}});
       L.control.layers(null, {{'油气资产': assetLayer, '港口（青色有数据；灰色缺报）': portLayer}},
                        {{collapsed: false}}).addTo(map);
     </script></body></html>
@@ -540,7 +542,7 @@ with st.expander("港口覆盖范围与数据口径"):
     ], hide_index=True, width="stretch")
     st.markdown(
         f"[IMF PortWatch 方法说明]({portwatch.SOURCE}) · "
-        "[港口点位 API](https://services9.arcgis.com/weJ1QsnbMYJlCHdG/arcgis/rest/services/PortWatch_ports/FeatureServer/1) · "
+        "[港口点位 API](https://services9.arcgis.com/weJ1QsnbMYJlCHdG/arcgis/rest/services/PortWatch_ports_database/FeatureServer/0) · "
         "[每日活动 API](https://services9.arcgis.com/weJ1QsnbMYJlCHdG/arcgis/rest/services/Daily_Ports_Data/FeatureServer/0)"
     )
     st.write("PortWatch 以 AIS 和船舶吃水变化估算公吨货量；其 tanker 为船型分类，无法仅凭该列识别原油。"

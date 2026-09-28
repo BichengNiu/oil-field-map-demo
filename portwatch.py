@@ -7,6 +7,7 @@ Only ports in PortWatch's coverage are included, not every berth or oil terminal
 from __future__ import annotations
 
 import json
+import re
 from datetime import date, timedelta
 from urllib.parse import urlencode
 from urllib.request import Request, urlopen
@@ -14,9 +15,13 @@ from urllib.request import Request, urlopen
 import streamlit as st
 
 ROOT = "https://services9.arcgis.com/weJ1QsnbMYJlCHdG/arcgis/rest/services"
-PORTS = f"{ROOT}/PortWatch_ports/FeatureServer/1/query"
+PORTS = f"{ROOT}/PortWatch_ports_database/FeatureServer/0/query"
 DAILY = f"{ROOT}/Daily_Ports_Data/FeatureServer/0/query"
 SOURCE = "https://portwatch.imf.org/pages/data-and-methodology"
+
+
+def _valid_port_ids(ids: tuple[str, ...]) -> bool:
+    return all(re.fullmatch(r"(?:port|fso)\d+", port_id) for port_id in ids)
 
 # south, north, west, east. Order assigns ports in overlapping boxes only once.
 REGIONS = {
@@ -49,14 +54,15 @@ def region_for(lat: float, lon: float) -> str | None:
 def port_catalog() -> list[dict]:
     # Query only the union of the documented geographic boxes. ArcGIS pages results.
     where = " OR ".join(
-        f"(lat >= {south} AND lat <= {north} AND long >= {west} AND long <= {east})"
+        f"(lat >= {south} AND lat <= {north} AND lon >= {west} AND lon <= {east})"
         for south, north, west, east in REGIONS.values()
     )
     found = []
     offset = 0
     while True:
-        page = _query(PORTS, where=where, outFields="portid,portname,country,lat,long",
-                      returnGeometry="false", resultOffset=offset, resultRecordCount=1000)
+        page = _query(PORTS, where=where, outFields="portid,portname,country,lat,lon",
+                      returnGeometry="false", resultOffset=offset, resultRecordCount=1000,
+                      orderByFields="portid ASC")
         items = page.get("features", [])
         found.extend(item["attributes"] for item in items)
         if len(items) < 1000:
@@ -64,13 +70,13 @@ def port_catalog() -> list[dict]:
         offset += len(items)
     ports = []
     for item in found:
-        if item["lat"] is None or item["long"] is None:
+        if item["lat"] is None or item["lon"] is None:
             continue
-        region = region_for(item["lat"], item["long"])
+        region = region_for(item["lat"], item["lon"])
         if region:
             ports.append({"portid": item["portid"], "name": item["portname"],
                           "country": item["country"], "lat": item["lat"],
-                          "lon": item["long"], "region": region})
+                          "lon": item["lon"], "region": region})
     return sorted(ports, key=lambda p: (p["region"], p["country"], p["name"]))
 
 
@@ -91,19 +97,21 @@ def daily_activity(day: date, port_ids: tuple[str, ...]) -> dict[str, dict]:
     result = {}
     for start in range(0, len(port_ids), 80):
         ids = port_ids[start:start + 80]
-        if not all(p.startswith("port") and p[4:].isdigit() for p in ids):
+        if not _valid_port_ids(ids):
             raise ValueError("无效的 PortWatch 港口编号")
         quoted = ",".join(f"'{p}'" for p in ids)
         where = f"date = DATE '{day.isoformat()}' AND portid IN ({quoted})"
         offset = 0
         while True:
             page = _query(DAILY, where=where, returnGeometry="false", resultOffset=offset,
-                          resultRecordCount=1000,
-                          outFields="date,portid,portcalls_tanker,portcalls_cargo,"
+                          resultRecordCount=1000, orderByFields="portid ASC",
+                          outFields="date,portid,portname,country,ISO3,portcalls_tanker,portcalls_cargo,"
                                     "import_tanker,export_tanker,import_cargo,export_cargo")
             items = page.get("features", [])
             for item in items:
                 values = item["attributes"]
+                if values["portid"] in result:
+                    raise ValueError(f"PortWatch 日活动出现重复港口记录：{values['portid']}")
                 result[values["portid"]] = values
             if len(items) < 1000:
                 break
@@ -122,7 +130,7 @@ def rolling_activity(day: date, port_ids: tuple[str, ...], days: int = 7) -> dic
     grouped: dict[str, dict[date, dict]] = {port_id: {} for port_id in port_ids}
     for start in range(0, len(port_ids), 80):
         ids = port_ids[start:start + 80]
-        if not all(p.startswith("port") and p[4:].isdigit() for p in ids):
+        if not _valid_port_ids(ids):
             raise ValueError("无效的 PortWatch 港口编号")
         quoted = ",".join(f"'{p}'" for p in ids)
         first = day - timedelta(days=days - 1)
@@ -131,8 +139,8 @@ def rolling_activity(day: date, port_ids: tuple[str, ...], days: int = 7) -> dic
         offset = 0
         while True:
             page = _query(DAILY, where=where, returnGeometry="false", resultOffset=offset,
-                          resultRecordCount=1000,
-                          outFields="date,portid,portcalls_tanker,portcalls_cargo,"
+                          resultRecordCount=1000, orderByFields="portid ASC",
+                          outFields="date,portid,portname,country,ISO3,portcalls_tanker,portcalls_cargo,"
                                     "import_tanker,export_tanker,import_cargo,export_cargo")
             items = page.get("features", [])
             for item in items:

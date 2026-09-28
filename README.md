@@ -2,19 +2,20 @@
 
 运行：`pip install -r requirements.txt && streamlit run app.py`
 
-地图保留原油气资产图层，新增波斯湾、阿曼湾、霍尔木兹海峡、苏伊士运河和曼德海峡附近的港口图层。港口点位来自 [IMF PortWatch 港口数据](https://services9.arcgis.com/weJ1QsnbMYJlCHdG/arcgis/rest/services/PortWatch_ports/FeatureServer/1)，每日船次与装卸货量来自 [PortWatch 每日港口活动](https://services9.arcgis.com/weJ1QsnbMYJlCHdG/arcgis/rest/services/Daily_Ports_Data/FeatureServer/0)。日期可选，默认该数据源的最新可用日期；API 结果缓存一小时，港口目录缓存一天，可在侧栏刷新。
+地图保留原油气资产图层，新增波斯湾、阿曼湾、霍尔木兹海峡、苏伊士运河和曼德海峡附近港口图层。港口点位来自 [IMF PortWatch 当前港口数据库](https://services9.arcgis.com/weJ1QsnbMYJlCHdG/arcgis/rest/services/PortWatch_ports_database/FeatureServer/0)，每日船次与装卸货量来自 [PortWatch 每日港口活动](https://services9.arcgis.com/weJ1QsnbMYJlCHdG/arcgis/rest/services/Daily_Ports_Data/FeatureServer/0)。日期可选，默认该数据源的最新可用日期；API 结果缓存一小时，港口目录缓存一天，可在侧栏刷新。
 
-“附近”使用 `portwatch.py` 中公开列出的五个经纬度框，以港口中心点判断。交叠区域按字典顺序分配，每个港口只出现一次。这涵盖**PortWatch 数据库在这些框内收录的全部港口**，不代表海岸线上所有港口、泊位和油码头；范围可直接在 `REGIONS` 中调整。
+“附近”使用 `portwatch.py` 中公开列出的五个经纬度框，以港口中心点判断。交叠区域按字典顺序分配，每个港口只出现一次。点位使用 IMF 当前维护的 PortWatch 港口数据库（全库 2,065 条记录；数据更新至 2026-09-18），不是旧版 `PortWatch_ports/FeatureServer/1`（1,380 条记录，数据停更于 2023 年）。地图纳入当前源数据库在这些框内的所有唯一港口点；这不代表当地所有实际泊位、油码头或未被 PortWatch 收录的设施，且区域框本身是本项目对“附近”的操作性定义。
 
 地图和表格同时保留所选日原值、过去 7 天或 30 天的日均值与有挂靠天数。单日 0 指当日源记录为 0，不等于港口长期零吞吐；缺少源记录则保持空值。使用 `python audit_ports.py` 可以重新逐港生成最新日的 7 天和 30 天核查表。
 
 ### 2026-09-18 逐港复核
 
-[43 港原始日值与 7/30 天核查表](PORT_ACTIVITY_AUDIT_2026-09-18.csv)记录各港 PortWatch ID、油轮和其他货轮船次、原始公吨货量、窗口日均、有挂靠天数和异常提示。
+[逐港原始日值与 7/30 天核查表](PORT_ACTIVITY_AUDIT_2026-09-18.csv)记录各港 PortWatch ID、油轮和其他货轮船次、原始公吨货量、窗口日均、有挂靠天数和异常提示。该表以当前点位数据库重建，共 63 个唯一港口。
 
-- 当日 33 港油轮船次为 0、27 港其他货轮船次为 0；此前六日的总油轮挂靠数分别为 27、14、24、19、15、18 艘次，9 月 18 日为 20 艘次。单日出现大量 0 是稀疏港口活动的常见结果，并非页面单位换算导致。
-- 33 个当日油轮零挂靠港中，15 个在过去 7 日仍有油轮挂靠。过去 30 日有 9 港油轮挂靠始终为零；其中 Al Basrah 与 Mina Al Ahmadi 连其他货轮挂靠也始终为零。这两港的记录应标记为 **PortWatch 源覆盖待核**，绝不能据此认定实际停港。
-- Bandar Abbas 在 30 日有 9 次油轮挂靠，但该源的油轮估算装卸量总计为 0；这说明有船次时货量 0 也未必表示没有实际作业。CSV 对所有类似组合逐港标记。
+- 当前港口目录为 63 个唯一港口；2026-09-18 每日活动接口对 63 个 ID 全部返回记录，未发现 ID 或港名关联不一致。
+- 旧点位层漏列附近港口。新版纳入 Basrah Oil Terminal、Kharg Island、Lavan、Abadan、Bahregan、Mina Al Zour、Das Island、Jebel Dhanna、Jask 等设施。其中 Basrah Oil Terminal 当日记录 1 次油轮挂靠和 199,857 吨油轮装卸估算量；旧目录遗漏了该港。
+- 按新版 63 港重算，9 月 18 日有 52 港油轮挂靠为 0、43 港其他货轮挂靠为 0；过去 7 天有 27 港记录过油轮挂靠，过去 30 天有 40 港记录过油轮挂靠。过去 30 天两类挂靠都为零的 8 港见 CSV 异常提示。这些 0 可能反映 AIS 可见性或源覆盖限制，不能直接解释为实际停港。
+- 有油轮挂靠但油轮估算装卸量为 0 的组合也有 21 港在 30 日窗口中出现；Bandar Abbas 占 8 天。按原始字段展示并加核查标志，不把此类记录当成已核实的零吞吐。
 
 ## 口径
 
