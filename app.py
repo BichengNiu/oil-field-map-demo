@@ -35,6 +35,7 @@ METRIC_LABELS = {
 }
 
 LEVEL_LABELS = CATALOG.ASSET_LEVEL_LABELS
+STATUS_LABELS = CATALOG.OPERATING_STATUS_LABELS
 OUTPUT_METRIC_TYPES = CATALOG.OUTPUT_METRIC_TYPES
 LEVEL_COLORS = {
     "field": "#dc2626",
@@ -136,6 +137,7 @@ def _popup(asset: dict[str, object]) -> str:
         return html.escape(str(value))
 
     source_url = esc(asset["source_url"])
+    status_source_url = esc(asset["operating_status_evidence_url"])
     parent = asset.get("parent_asset") or "无已登记上级"
     return (
         '<div class="popup-card">'
@@ -149,14 +151,22 @@ def _popup(asset: dict[str, object]) -> str:
         f'<strong>{esc(asset["aggregation_scope"])}</strong></div>'
         '<div class="row"><span>商品</span>'
         f'<strong>{esc(asset["commodity_label"])}</strong></div>'
+        '<div class="row"><span>生产状态</span>'
+        f'<strong>{esc(asset["operating_status_label"])}</strong></div>'
+        '<div class="row"><span>状态截至</span>'
+        f'<strong>{esc(asset["operating_status_as_of"])}</strong></div>'
+        '<div class="row"><span>状态置信度</span>'
+        f'<strong>{esc(asset["operating_status_confidence"])}</strong></div>'
         f'<div class="hierarchy-title">分层日产量（当前资产 → 上级）</div>'
         f'{_hierarchy_panel(asset)}'
         '<div class="row"><span>坐标精度</span>'
         f'<strong>{esc(asset["coordinate_precision"])}</strong></div>'
-        f'<div class="status">状态：{esc(asset["status"])}</div>'
+        f'<div class="status">原始状态说明：{esc(asset["status"])}</div>'
+        f'<div class="basis">状态依据：{esc(asset["operating_status_basis"])}</div>'
         f'<div class="basis">权益口径：{esc(asset["ownership_basis"])}</div>'
         f'<div class="basis">说明：{esc(asset["note"] or "公开命名资产；本层级数值未公开。")}</div>'
-        f'<a class="source" href="{source_url}" target="_blank" rel="noopener">来源：{esc(asset["source"])}</a>'
+        f'<a class="source" href="{status_source_url}" target="_blank" rel="noopener">生产状态证据</a>'
+        f'<a class="source" href="{source_url}" target="_blank" rel="noopener">目录来源：{esc(asset["source"])}</a>'
         '</div>'
     )
 
@@ -252,12 +262,14 @@ st.title("中东公开命名油气资产地图 · 分层审计版")
 st.caption(
     "资产分为单一油气田、油田群／综合体、区块、特许区、开发项目和开发区。"
     "popup按层级展示当前资产与已登记上级的日产量；产能、目标和项目增量单独显示。"
+    "生产状态带截至日期、置信度与证据链接，不能视为实时遥测。"
 )
 
 country_options = sorted({str(asset["country"]) for asset in ASSETS})
 level_options = list(LEVEL_LABELS)
 type_options = sorted({str(asset["asset_type"]) for asset in ASSETS})
 metric_options = sorted({str(asset["metric_type"]) for asset in ASSETS})
+status_options = list(STATUS_LABELS)
 
 with st.sidebar:
     st.header("筛选")
@@ -269,6 +281,12 @@ with st.sidebar:
         format_func=lambda key: LEVEL_LABELS[key],
     )
     selected_types = st.multiselect("资产类型", type_options, default=type_options)
+    selected_statuses = st.multiselect(
+        "生产状态",
+        status_options,
+        default=status_options,
+        format_func=lambda key: STATUS_LABELS[key],
+    )
     selected_metrics = st.multiselect(
         "指标口径",
         metric_options,
@@ -289,6 +307,7 @@ filtered = [
     if asset["country"] in selected_countries
     and asset["asset_level"] in selected_levels
     and asset["asset_type"] in selected_types
+    and asset["operating_status"] in selected_statuses
     and asset["metric_type"] in selected_metrics
     and (not values_only or asset["value"] is not None)
     and (not output_only or asset["is_daily_output"])
@@ -303,11 +322,16 @@ other_daily_count = sum(
     asset["value"] is not None and not asset["is_daily_output"] for asset in filtered
 )
 unknown_count = sum(asset["value"] is None for asset in filtered)
-col1, col2, col3, col4 = st.columns(4)
+producing_count = sum(asset["operating_status"] == "producing" for asset in filtered)
+status_pending_count = sum(
+    asset["operating_status"] in {"unknown", "historical_unverified"} for asset in filtered
+)
+col1, col2, col3, col4, col5 = st.columns(5)
 col1.metric("已显示资产", f"{len(filtered)}")
-col2.metric("有日产量记录", f"{daily_output_count}")
-col3.metric("上级合计日产量", f"{aggregate_output_count}")
-col4.metric("产能／目标等日量", f"{other_daily_count}")
+col2.metric("在产（带时点）", f"{producing_count}")
+col3.metric("状态待核", f"{status_pending_count}")
+col4.metric("有日产量记录", f"{daily_output_count}")
+col5.metric("产能／目标等日量", f"{other_daily_count}")
 
 unlocated_count = sum(
     asset["lat"] is None or asset["lon"] is None for asset in filtered
@@ -324,6 +348,7 @@ st.info(
     "防重复规则：单田与上级区块／油田群／特许区的数值不能同时求和。"
     "日产量仅包括来源直报实际产量、来源年产量换算日均及明确标注的历史产量；"
     "产能、目标产能、增量产能和天然气项目能力在popup中另列，不计作日产量。"
+    "“在产”表示截至所列证据日期可核实，不代表此刻连续运行。"
 )
 
 rows = [
@@ -342,7 +367,13 @@ rows = [
         "其他日量指标": other_daily_metric(asset),
         "指标口径": METRIC_LABELS[asset["metric_type"]],
         "数据日期": display_date(asset),
-        "状态": asset["status"],
+        "生产状态": asset["operating_status_label"],
+        "状态截至": asset["operating_status_as_of"],
+        "状态置信度": asset["operating_status_confidence"],
+        "状态审计结果": asset["status_audit_result"],
+        "状态依据": asset["operating_status_basis"],
+        "状态证据链接": asset["operating_status_evidence_url"],
+        "原始状态说明": asset["status"],
         "坐标精度": asset["coordinate_precision"],
         "来源": asset["source"],
         "来源链接": asset["source_url"],
