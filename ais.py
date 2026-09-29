@@ -23,7 +23,7 @@ except ImportError:  # The rest of the application must still work without AIS.
 
 SOURCE = "https://aisstream.io/documentation"
 STREAM_URL = "wss://stream.aisstream.io/v0/stream"
-MODULE_VERSION = 1
+MODULE_VERSION = 2
 
 # south, north, west, east.  Keep aligned with portwatch.REGIONS.
 REGIONS = {
@@ -230,6 +230,30 @@ def normalize_event(event: dict[str, Any], received_at: datetime | None = None) 
     return base
 
 
+def _normalization_rejection_reason(event: dict[str, Any]) -> str:
+    """Return a safe, compact reason for a decoded event that was not accepted."""
+
+    message_type = event.get("MessageType")
+    if message_type not in FILTER_MESSAGE_TYPES:
+        return f"不支持的消息类型：{message_type or '缺失'}"
+    metadata = event.get("MetaData")
+    metadata = metadata if isinstance(metadata, dict) else {}
+    message = event.get("Message")
+    message = message if isinstance(message, dict) else {}
+    payload = message.get(message_type)
+    payload = payload if isinstance(payload, dict) else {}
+    mmsi_value = metadata.get("MMSI", payload.get("UserID"))
+    mmsi = _integer(mmsi_value)
+    if mmsi is None or not 100000000 <= mmsi <= 999999999:
+        return "MMSI缺失或无效"
+    if message_type in POSITION_MESSAGE_TYPES:
+        lat = _number(metadata.get("Latitude", payload.get("Latitude")))
+        lon = _number(metadata.get("Longitude", payload.get("Longitude")))
+        if not _valid_coordinate(lat, lon):
+            return "经纬度缺失或无效"
+    return "消息结构不符合预期"
+
+
 class AISCollector:
     """A reconnecting, thread-safe latest-position collector."""
 
@@ -244,8 +268,18 @@ class AISCollector:
         self._status = "未启动"
         self._last_error: str | None = None
         self._last_message_at: str | None = None
+        self._last_position_message_at: str | None = None
+        self._last_raw_event_at: str | None = None
+        self._last_raw_message_type: str | None = None
+        self._last_rejection_reason: str | None = None
         self._message_count = 0
+        self._raw_event_count = 0
+        self._rejected_event_count = 0
+        self._position_message_count = 0
+        self._static_message_count = 0
         self._connected_at: str | None = None
+        self._subscription_confirmed_at: str | None = None
+        self._compression_enabled: bool | None = None
 
     def start(self) -> "AISCollector":
         if self._thread and self._thread.is_alive():
@@ -297,8 +331,14 @@ class AISCollector:
                             frame = frame.decode("utf-8")
                         event = json.loads(frame)
                         if event.get("MessageType") == "SubscriptionConfirmation":
+                            confirmation = event.get("Message") or {}
+                            compression_enabled = confirmation.get("CompressionEnabled")
+                            if not isinstance(compression_enabled, bool):
+                                compression_enabled = None
                             with self._lock:
                                 self._status = "订阅已确认"
+                                self._subscription_confirmed_at = utc_now().isoformat()
+                                self._compression_enabled = compression_enabled
                             continue
                         if event.get("error"):
                             raise RuntimeError(str(event["error"]))
@@ -314,14 +354,31 @@ class AISCollector:
             self._status = "已停止"
 
     def ingest(self, event: dict[str, Any], received_at: datetime | None = None) -> bool:
-        normalized = normalize_event(event, received_at)
+        received = received_at or utc_now()
+        message_type = str(event.get("MessageType") or "缺失")
+        with self._lock:
+            self._raw_event_count += 1
+            self._last_raw_event_at = received.isoformat()
+            self._last_raw_message_type = message_type
+        try:
+            normalized = normalize_event(event, received)
+        except Exception as exc:
+            with self._lock:
+                self._rejected_event_count += 1
+                self._last_rejection_reason = f"解析异常：{type(exc).__name__}"
+            return False
         if normalized is None:
+            reason = _normalization_rejection_reason(event)
+            with self._lock:
+                self._rejected_event_count += 1
+                self._last_rejection_reason = reason
             return False
         mmsi = normalized["mmsi"]
         with self._lock:
             self._message_count += 1
             self._last_message_at = normalized["received_at"]
             if normalized["kind"] == "static":
+                self._static_message_count += 1
                 previous = self._static.get(mmsi, {})
                 self._static[mmsi] = {
                     **previous,
@@ -329,6 +386,8 @@ class AISCollector:
                        if value is not None},
                 }
             else:
+                self._position_message_count += 1
+                self._last_position_message_at = normalized["received_at"]
                 previous = self._positions.get(mmsi, {})
                 self._positions[mmsi] = {
                     **previous,
@@ -374,7 +433,17 @@ class AISCollector:
                 "status": self._status,
                 "last_error": self._last_error,
                 "last_message_at": self._last_message_at,
+                "last_position_message_at": self._last_position_message_at,
+                "last_raw_event_at": self._last_raw_event_at,
+                "last_raw_message_type": self._last_raw_message_type,
+                "last_rejection_reason": self._last_rejection_reason,
                 "message_count": self._message_count,
+                "raw_event_count": self._raw_event_count,
+                "rejected_event_count": self._rejected_event_count,
+                "position_message_count": self._position_message_count,
+                "static_message_count": self._static_message_count,
                 "connected_at": self._connected_at,
+                "subscription_confirmed_at": self._subscription_confirmed_at,
+                "compression_enabled": self._compression_enabled,
                 "tracked_vessels": len(self._positions),
             }
