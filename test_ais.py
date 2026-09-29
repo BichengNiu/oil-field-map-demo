@@ -57,6 +57,13 @@ class AISParsingTests(unittest.TestCase):
     def test_collector_sends_subscription_and_decodes_binary_frame(self):
         sent = []
         collector = None
+        frames = [
+            json.dumps({
+                "MessageType": "SubscriptionConfirmation",
+                "Message": {"CompressionEnabled": True},
+            }),
+            json.dumps(position_event()).encode("utf-8"),
+        ]
 
         class FakeSocket:
             def __enter__(self):
@@ -69,8 +76,10 @@ class AISParsingTests(unittest.TestCase):
                 sent.append(json.loads(message))
 
             def recv(self, timeout):
-                collector._stop.set()
-                return json.dumps(position_event()).encode("utf-8")
+                frame = frames.pop(0)
+                if not frames:
+                    collector._stop.set()
+                return frame
 
         def connector(*args, **kwargs):
             self.assertEqual(args[0], ais.STREAM_URL)
@@ -81,6 +90,22 @@ class AISParsingTests(unittest.TestCase):
         collector._run()
         self.assertEqual(sent[0]["APIKey"], "server-only-key")
         self.assertEqual(collector.status()["tracked_vessels"], 1)
+        self.assertTrue(collector.status()["compression_enabled"])
+        self.assertEqual(collector.status()["raw_event_count"], 1)
+        self.assertEqual(collector.status()["position_message_count"], 1)
+
+    def test_collector_distinguishes_rejected_events_from_missing_events(self):
+        collector = ais.AISCollector("unused", connector=lambda *a, **k: None)
+        self.assertFalse(collector.ingest(position_event(lat=91), NOW))
+        self.assertTrue(collector.ingest(position_event(), NOW))
+
+        state = collector.status()
+        self.assertEqual(state["raw_event_count"], 2)
+        self.assertEqual(state["rejected_event_count"], 1)
+        self.assertEqual(state["message_count"], 1)
+        self.assertEqual(state["position_message_count"], 1)
+        self.assertEqual(state["last_raw_message_type"], "PositionReport")
+        self.assertEqual(state["last_rejection_reason"], "经纬度缺失或无效")
 
     def test_position_normalization(self):
         row = ais.normalize_event(position_event(), NOW)
