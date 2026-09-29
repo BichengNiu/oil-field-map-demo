@@ -1,6 +1,8 @@
 from datetime import datetime, timedelta, timezone
+from io import BytesIO
 import json
 import unittest
+from unittest.mock import patch
 
 import ais
 
@@ -53,6 +55,52 @@ class AISParsingTests(unittest.TestCase):
         self.assertEqual(request["APIKey"], "secret")
         self.assertIn("PositionReport", request["FilterMessageTypes"])
         self.assertIn("ShipStaticData", request["FilterMessageTypes"])
+
+    def test_openwaters_boxes_fit_free_area_limit_and_cover_five_regions(self):
+        groups = ais.openwaters_bbox_groups()
+        self.assertEqual(len(groups), 2)
+        self.assertEqual(
+            {name for group in ais.OPENWATERS_REGION_GROUPS for name in group},
+            set(ais.REGIONS),
+        )
+        for group in groups:
+            self.assertLessEqual(
+                sum((north - south) * (east - west)
+                    for south, north, west, east in group),
+                100,
+            )
+
+    def test_openwaters_snapshot_merges_vessels_and_keeps_source_credit(self):
+        response = {
+            "type": "FeatureCollection",
+            "features": [{
+                "type": "Feature", "id": 636000111,
+                "geometry": {"type": "Point", "coordinates": [54.4, 24.45]},
+                "properties": {
+                    "mmsi": 636000111, "kind": "vessel", "name": "TEST TANKER",
+                    "type": 80, "sog": 7.1, "cog": 82.0, "heading": 80,
+                    "nav_status": 0, "seen": "2026-09-29T08:00:00Z",
+                    "source": "aishub", "station": "aishub/uae",
+                },
+            }],
+            "attribution": {"aishub": "AISHub (https://www.aishub.net/)"},
+        }
+
+        def fake_urlopen(*args, **kwargs):
+            return BytesIO(json.dumps(response).encode("utf-8"))
+
+        with patch("ais.urlopen", side_effect=fake_urlopen) as mocked:
+            result = ais.openwaters_snapshot(max_age_minutes=30)
+
+        self.assertEqual(mocked.call_count, 2)
+        self.assertEqual(len(result["vessels"]), 1)
+        vessel = result["vessels"][0]
+        self.assertEqual(vessel["mmsi"], "636000111")
+        self.assertEqual(vessel["region"], "波斯湾")
+        self.assertEqual(vessel["category"], "tanker")
+        self.assertEqual(vessel["source"], "aishub")
+        self.assertEqual(vessel["source_attribution"], response["attribution"]["aishub"])
+        self.assertEqual(vessel["source_url"], "https://www.aishub.net/")
 
     def test_collector_sends_subscription_and_decodes_binary_frame(self):
         sent = []
