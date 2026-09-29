@@ -122,6 +122,14 @@ METRIC_LABELS = {
 LEVEL_LABELS = CATALOG.ASSET_LEVEL_LABELS
 STATUS_LABELS = CATALOG.OPERATING_STATUS_LABELS
 OUTPUT_METRIC_TYPES = CATALOG.OUTPUT_METRIC_TYPES
+MAP_MODE_LABELS = {
+    "全部图层": "综合视图",
+    "仅实时AIS船舶": "仅船舶",
+    "仅港口": "仅港口",
+    "仅港口与咽喉点": "港口与咽喉点",
+    "仅咽喉点": "仅咽喉点",
+    "仅油气资产": "仅油气资产",
+}
 LEVEL_COLORS = {
     "field": "#dc2626",
     "field_group": "#ea580c",
@@ -129,6 +137,14 @@ LEVEL_COLORS = {
     "concession": "#7c3aed",
     "project": "#475569",
     "development_area": "#059669",
+}
+PORT_TYPE_COLORS = {
+    "container": "#2563eb",
+    "dry_bulk": "#b45309",
+    "general_cargo": "#64748b",
+    "roro": "#7c3aed",
+    "tanker": "#dc2626",
+    "unknown": "#94a3b8",
 }
 ASSET_INDEX = {(asset["country"], asset["name"]): asset for asset in ASSETS}
 
@@ -443,6 +459,17 @@ def _vessel_popup(vessel: dict[str, object]) -> str:
     )
 
 
+def _dominant_port_type(port: dict) -> str:
+    """Return the vessel type with the largest observed call share."""
+
+    shares = [
+        (port.get(f"share_{kind}"), kind)
+        for kind in PORTWATCH.SHIP_TYPES
+        if port.get(f"share_{kind}") is not None
+    ]
+    return max(shares)[1] if shares else "unknown"
+
+
 def _map_html(assets: list[dict[str, object]], ports: list[dict],
               chokepoints: list[dict], vessels: list[dict], day: str, chokepoint_day: str,
               focus_assets: bool = False, ais_configured: bool = True) -> str:
@@ -464,7 +491,8 @@ def _map_html(assets: list[dict[str, object]], ports: list[dict],
     port_json = json.dumps([
         {"lat": port["lat"], "lon": port["lon"], "name": port["name"],
          "popup": _port_popup(port, day), "has_data": port["has_data"],
-         "activity": port.get("avg_calls") or 0}
+         "activity": port.get("avg_calls") or 0,
+         "dominant_type": _dominant_port_type(port)}
         for port in ports
     ], ensure_ascii=False).replace("</", "<\\/")
     chokepoint_json = json.dumps([
@@ -485,22 +513,26 @@ def _map_html(assets: list[dict[str, object]], ports: list[dict],
         for vessel in vessels
     ], ensure_ascii=False).replace("</", "<\\/")
     color_json = json.dumps(LEVEL_COLORS, ensure_ascii=False)
+    port_color_json = json.dumps(PORT_TYPE_COLORS, ensure_ascii=False)
     legend_json = json.dumps(
-        '<b>油气节点</b>'
-        '<span><i class="legend-solid"></i>实心：实际／推算日量</span>'
-        '<span><i class="legend-hollow"></i>空心：产能／目标</span>'
-        '<span><i class="legend-muted"></i>灰色：未披露数值</span>'
-        '<span><i class="legend-proxy"></i>虚线圈：区域／设施代理点</span>'
-        '<span><i class="legend-large"></i>大点：油田群／区块</span>'
-        + ('<b class="legend-section">实时 AIS</b>'
-           '<span><i class="legend-vessel-tanker"></i>红色：油轮／液货船</span>'
-           '<span><i class="legend-vessel-cargo"></i>蓝色：货船</span>'
-           '<span><i class="legend-vessel-other"></i>灰色：其他／待识别</span>'
-           '<span>▲ 航行中 · ● 低速／停泊</span>' if vessels else ''),
+        '<b>地图符号</b>'
+        '<span><i class="shape-asset"></i>油气资产：菱形</span>'
+        '<span><i class="shape-port"></i>港口：方形</span>'
+        '<span><i class="shape-choke"></i>咽喉点：六边形</span>'
+        + ('<span><i class="shape-vessel"></i>AIS船舶：三角形</span>' if vessels else '')
+        + '<b class="legend-section">颜色与填充</b>'
+        '<span class="legend-note">油气：红单田 · 橙油田群 · 蓝区块 · 紫特许区 · 绿开发区</span>'
+        '<span><i class="legend-solid"></i>实心=产量　<i class="legend-hollow"></i>空心=产能/目标</span>'
+        '<span class="legend-note">港口方块：颜色=主要到港船型；大小=活跃度</span>'
+        + ('<span><i class="legend-red"></i>油轮/液货　<i class="legend-blue"></i>货运/集装箱</span>'
+           '<span><i class="legend-purple"></i>客运/滚装　<i class="legend-amber"></i>作业/散货</span>'
+           if ports or vessels else '')
+        + ('<span class="legend-note">船舶：实心=航行中；空心=低速/停泊</span>'
+           if vessels else ''),
         ensure_ascii=False
     ).replace("</", "<\\/")
     focus_json = json.dumps(focus_assets)
-    ais_overlay = ", '实时 AIS 船舶': vesselLayer" if ais_configured else ""
+    ais_overlay = ", '▲ 实时 AIS 船舶': vesselLayer" if ais_configured else ""
     return f"""
     <!doctype html><html lang="zh-CN"><head>
     <meta charset="utf-8" />
@@ -536,24 +568,28 @@ def _map_html(assets: list[dict[str, object]], ports: list[dict],
       .map-title, .map-legend {{ background: rgba(255,255,255,.95); padding: 9px 11px; border-radius: 8px; box-shadow: 0 2px 10px rgba(15,23,42,.15); color: #0f172a; font-size: 11px; line-height: 1.45; }}
       .map-title {{ max-width: 290px; }}
       .map-title b, .map-legend b {{ font-size: 13px; }}
-      .map-legend span {{ display: block; margin-top: 4px; }}
-      .map-legend i {{ display: inline-block; width: 9px; height: 9px; border-radius: 50%; margin-right: 6px; box-sizing: border-box; }}
-      .map-legend .legend-solid {{ background: #dc2626; border: 1px solid #dc2626; }}
-      .map-legend .legend-hollow {{ background: white; border: 2px solid #2563eb; }}
-      .map-legend .legend-muted {{ background: #94a3b8; border: 1px solid #64748b; }}
-      .map-legend .legend-proxy {{ background: white; border: 2px dashed #475569; }}
-      .map-legend .legend-large {{ width: 12px; height: 12px; background: #ea580c; border: 1px solid #9a3412; }}
+      .map-legend span {{ display: block; margin-top: 4px; white-space: nowrap; }}
+      .map-legend i {{ display: inline-block; width: 10px; height: 10px; margin-right: 6px; box-sizing: border-box; vertical-align: -1px; }}
+      .map-legend .shape-asset {{ background: #ea580c; transform: rotate(45deg) scale(.78); }}
+      .map-legend .shape-port {{ background: #2563eb; border-radius: 2px; }}
+      .map-legend .shape-choke {{ background: #f97316; clip-path: polygon(25% 0,75% 0,100% 50%,75% 100%,25% 100%,0 50%); }}
+      .map-legend .shape-vessel {{ background: #334155; clip-path: polygon(50% 0,100% 100%,50% 78%,0 100%); }}
+      .map-legend .legend-solid {{ background: #dc2626; transform: rotate(45deg) scale(.72); }}
+      .map-legend .legend-hollow {{ background: white; border: 2px solid #2563eb; transform: rotate(45deg) scale(.72); }}
+      .map-legend .legend-red {{ background: #dc2626; border-radius: 50%; }}
+      .map-legend .legend-blue {{ background: #2563eb; border-radius: 50%; }}
+      .map-legend .legend-purple {{ background: #7c3aed; border-radius: 50%; }}
+      .map-legend .legend-amber {{ background: #d97706; border-radius: 50%; }}
+      .map-legend .legend-note {{ color: #475569; font-size: 10px; }}
       .map-legend .legend-section {{ display: block; margin-top: 8px; padding-top: 7px; border-top: 1px solid #cbd5e1; }}
-      .map-legend .legend-vessel-tanker {{ background: #ef4444; border: 1px solid #991b1b; }}
-      .map-legend .legend-vessel-cargo {{ background: #2563eb; border: 1px solid #1e3a8a; }}
-      .map-legend .legend-vessel-other {{ background: #64748b; border: 1px solid #334155; }}
-      .vessel-icon {{ background: transparent; border: 0; }}
-      .vessel-icon svg {{ display: block; filter: drop-shadow(0 1px 1px rgba(15,23,42,.45)); }}
+      .asset-icon, .port-icon, .chokepoint-icon, .vessel-icon, .vessel-cluster {{ background: transparent; border: 0; }}
+      .asset-icon svg, .port-icon svg, .chokepoint-icon svg, .vessel-icon svg, .vessel-cluster svg {{ display: block; filter: drop-shadow(0 1px 1px rgba(15,23,42,.45)); }}
       .leaflet-control-layers {{ font-size: 12px; border: 0; border-radius: 10px; box-shadow: 0 4px 18px rgba(15,23,42,.18); }}
       .leaflet-control-layers-expanded {{ padding: 9px 12px; }}
       .leaflet-tooltip {{ border: 0; border-radius: 7px; padding: 5px 8px; box-shadow: 0 3px 12px rgba(15,23,42,.18); font-size: 11px; }}
-      .marker-cluster-small, .marker-cluster-medium, .marker-cluster-large {{ background: rgba(32, 106, 137, .22); }}
-      .marker-cluster-small div, .marker-cluster-medium div, .marker-cluster-large div {{ background: #176b87; color: white; font-weight: 700; }}
+      .marker-cluster-small, .marker-cluster-medium, .marker-cluster-large {{ background: transparent; }}
+      .marker-cluster-small div, .marker-cluster-medium div, .marker-cluster-large div {{ background: #176b87; color: white; font-weight: 700; border-radius: 7px; transform: rotate(45deg); box-shadow: 0 0 0 5px rgba(32,106,137,.22); }}
+      .marker-cluster-small span, .marker-cluster-medium span, .marker-cluster-large span {{ display: block; transform: rotate(-45deg); }}
     </style></head><body><div id="map"></div>
     <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
     <script src="https://unpkg.com/leaflet.markercluster@1.5.3/dist/leaflet.markercluster.js"></script>
@@ -587,43 +623,71 @@ def _map_html(assets: list[dict[str, object]], ports: list[dict],
       const chokepoints = {chokepoint_json};
       const vessels = {vessel_json};
       const levelColors = {color_json};
+      const portTypeColors = {port_color_json};
       const assetLayer = L.markerClusterGroup({{showCoverageOnHover: false, maxClusterRadius: 34,
           disableClusteringAtZoom: 8, spiderfyOnMaxZoom: true}}).addTo(map);
       const portLayer = L.layerGroup().addTo(map);
       const chokepointLayer = L.layerGroup().addTo(map);
-      const vesselLayer = L.layerGroup().addTo(map);
+      const vesselLayer = L.markerClusterGroup({{
+        showCoverageOnHover: false, maxClusterRadius: 24, disableClusteringAtZoom: 7,
+        spiderfyOnMaxZoom: true,
+        iconCreateFunction: (cluster) => {{
+          const count = cluster.getChildCount();
+          const label = count > 999 ? `${{Math.round(count / 100) / 10}}k` : String(count);
+          return L.divIcon({{
+            className: 'vessel-cluster', iconSize: [38, 34], iconAnchor: [19, 17],
+            html: `<svg width="38" height="34" viewBox="0 0 38 34">
+              <path d="M19 1 L37 32 L19 26 L1 32 Z" fill="#334155" stroke="#ffffff" stroke-width="1.4"/>
+              <text x="19" y="22" text-anchor="middle" fill="#ffffff" font-size="10" font-weight="700">${{label}}</text>
+            </svg>`
+          }});
+        }}
+      }}).addTo(map);
       assets.forEach((asset) => {{
         const baseColor = levelColors[asset.level] || '#64748b';
         const color = asset.metric_class === 'undisclosed' ? '#64748b' : baseColor;
         const isGroup = asset.role === 'strategic_group';
         const fillColor = asset.metric_class === 'capacity' ? '#ffffff' :
           (asset.metric_class === 'undisclosed' ? '#94a3b8' : color);
-        const fillOpacity = asset.metric_class === 'capacity' ? 0.22 :
-          (asset.metric_class === 'undisclosed' ? 0.72 : 0.9);
-        L.circleMarker([asset.lat, asset.lon], {{
-          radius: isGroup ? 8.5 : (asset.level === 'field' ? 5.5 : 7),
-          color: color,
-          weight: asset.metric_class === 'capacity' ? 2.4 : 1.5,
-          dashArray: asset.is_proxy ? '4 3' : null,
-          fillColor: fillColor,
-          fillOpacity: asset.is_proxy ? Math.min(fillOpacity, 0.55) : fillOpacity
-        }}).bindTooltip(asset.name, {{direction: 'top', opacity: .95}})
+        const size = isGroup ? 22 : (asset.level === 'field' ? 15 : 19);
+        const strokeWidth = asset.metric_class === 'capacity' ? 2.4 : 1.5;
+        const dash = asset.is_proxy ? '3 2' : 'none';
+        const opacity = asset.is_proxy ? .62 : .94;
+        const icon = L.divIcon({{
+          className: 'asset-icon', iconSize: [size, size], iconAnchor: [size / 2, size / 2],
+          html: `<svg width="${{size}}" height="${{size}}" viewBox="0 0 ${{size}} ${{size}}">
+            <polygon points="${{size/2}},1 ${{size-1}},${{size/2}} ${{size/2}},${{size-1}} 1,${{size/2}}"
+              fill="${{fillColor}}" fill-opacity="${{opacity}}" stroke="${{color}}"
+              stroke-width="${{strokeWidth}}" stroke-dasharray="${{dash}}"/>
+          </svg>`
+        }});
+        L.marker([asset.lat, asset.lon], {{icon}}).bindTooltip(asset.name, {{direction: 'top', opacity: .95}})
           .bindPopup(asset.popup, {{maxWidth: 390}}).addTo(assetLayer);
       }});
       ports.forEach((port) => {{
-        const radius = Math.min(12, 6 + Math.sqrt(Math.max(0, port.activity)) * 1.5);
-        L.circleMarker([port.lat, port.lon], {{
-          radius: radius, color: port.has_data ? '#064e5f' : '#64748b', weight: 2,
-          fillColor: port.has_data ? '#20b8a5' : '#cbd5e1', fillOpacity: .9
-        }}).bindTooltip(port.name, {{direction: 'top', opacity: .95}})
+        const size = Math.min(24, 12 + Math.sqrt(Math.max(0, port.activity)) * 1.6);
+        const fill = port.has_data ? (portTypeColors[port.dominant_type] || portTypeColors.unknown) : '#cbd5e1';
+        const icon = L.divIcon({{
+          className: 'port-icon', iconSize: [size, size], iconAnchor: [size / 2, size / 2],
+          html: `<svg width="${{size}}" height="${{size}}" viewBox="0 0 ${{size}} ${{size}}">
+            <rect x="1.5" y="1.5" width="${{size-3}}" height="${{size-3}}" rx="2.5"
+              fill="${{fill}}" fill-opacity=".9" stroke="#ffffff" stroke-width="1.5"/>
+          </svg>`
+        }});
+        L.marker([port.lat, port.lon], {{icon}}).bindTooltip(port.name, {{direction: 'top', opacity: .95}})
           .bindPopup(port.popup, {{maxWidth: 410}}).addTo(portLayer);
       }});
       chokepoints.forEach((point) => {{
-        const radius = Math.min(13, 7 + Math.sqrt(Math.max(0, point.traffic)) * .55);
-        L.circleMarker([point.lat, point.lon], {{
-          radius: radius, color: point.has_data ? '#7c2d12' : '#64748b', weight: 2.5,
-          fillColor: point.has_data ? '#f97316' : '#cbd5e1', fillOpacity: .92
-        }}).bindTooltip(point.name, {{direction: 'top', opacity: .95}})
+        const size = Math.min(28, 17 + Math.sqrt(Math.max(0, point.traffic)) * .7);
+        const fill = point.has_data ? '#f97316' : '#cbd5e1';
+        const icon = L.divIcon({{
+          className: 'chokepoint-icon', iconSize: [size, size], iconAnchor: [size / 2, size / 2],
+          html: `<svg width="${{size}}" height="${{size}}" viewBox="0 0 24 24">
+            <polygon points="6,2 18,2 23,12 18,22 6,22 1,12"
+              fill="${{fill}}" fill-opacity=".94" stroke="#7c2d12" stroke-width="2"/>
+          </svg>`
+        }});
+        L.marker([point.lat, point.lon], {{icon}}).bindTooltip(point.name, {{direction: 'top', opacity: .95}})
           .bindPopup(point.popup, {{maxWidth: 410}}).addTo(chokepointLayer);
       }});
       const vesselColors = {{
@@ -633,22 +697,17 @@ def _map_html(assets: list[dict[str, object]], ports: list[dict],
       }};
       vessels.forEach((vessel) => {{
         const color = vesselColors[vessel.category] || vesselColors.unknown;
-        let marker;
-        if (vessel.moving) {{
-          const angle = Number.isFinite(Number(vessel.course)) ? Number(vessel.course) : 0;
-          const icon = L.divIcon({{
-            className: 'vessel-icon', iconSize: [18, 18], iconAnchor: [9, 9],
-            html: `<svg width="18" height="18" viewBox="0 0 18 18" style="transform:rotate(${{angle}}deg)">
-              <path d="M9 1 L16 16 L9 12.8 L2 16 Z" fill="${{color}}" stroke="#ffffff" stroke-width="1.15"/>
-            </svg>`
-          }});
-          marker = L.marker([vessel.lat, vessel.lon], {{icon: icon}});
-        }} else {{
-          marker = L.circleMarker([vessel.lat, vessel.lon], {{
-            radius: 4.2, color: '#ffffff', weight: 1.1,
-            fillColor: color, fillOpacity: .95
-          }});
-        }}
+        const angle = Number.isFinite(Number(vessel.course)) ? Number(vessel.course) : 0;
+        const fill = vessel.moving ? color : '#ffffff';
+        const stroke = vessel.moving ? '#ffffff' : color;
+        const strokeWidth = vessel.moving ? 1.15 : 2.2;
+        const icon = L.divIcon({{
+          className: 'vessel-icon', iconSize: [18, 18], iconAnchor: [9, 9],
+          html: `<svg width="18" height="18" viewBox="0 0 18 18" style="transform:rotate(${{angle}}deg)">
+            <path d="M9 1 L16 16 L9 12.8 L2 16 Z" fill="${{fill}}" stroke="${{stroke}}" stroke-width="${{strokeWidth}}"/>
+          </svg>`
+        }});
+        const marker = L.marker([vessel.lat, vessel.lon], {{icon}});
         marker.bindTooltip(vessel.name, {{direction: 'top', opacity: .95}})
           .bindPopup(vessel.popup, {{maxWidth: 410}}).addTo(vesselLayer);
       }});
@@ -666,8 +725,8 @@ def _map_html(assets: list[dict[str, object]], ports: list[dict],
         map.fitBounds(L.latLngBounds(allPoints), {{padding: [36, 36], maxZoom: 5}});
       }}
       L.control.layers({{'英文街道图': streets, '浅色底图': light, '卫星影像': satellite}},
-        {{'油气资产': assetLayer, '港口指标（点越大越活跃）': portLayer,
-          '咽喉点通行（橙色）': chokepointLayer{ais_overlay}}}, {{collapsed: false}}).addTo(map);
+        {{'◆ 油气资产': assetLayer, '■ 港口（大小=活跃度）': portLayer,
+          '⬡ 咽喉点': chokepointLayer{ais_overlay}}}, {{collapsed: false}}).addTo(map);
     </script></body></html>
     """
 
@@ -689,13 +748,15 @@ ais_collector_instance: AIS.AISCollector | None = None
 
 with st.sidebar:
     st.markdown("### 监测视图")
-    map_mode = st.radio("地图内容", ["全部图层", "仅实时AIS船舶", "仅港口与咽喉点", "仅咽喉点", "仅油气资产"],
-                        horizontal=False, label_visibility="collapsed", key="map_mode")
+    map_mode = st.selectbox(
+        "地图内容", list(MAP_MODE_LABELS),
+        format_func=lambda value: MAP_MODE_LABELS[value], key="map_mode")
+    selected_regions = st.multiselect(
+        "航运水域", list(PORTWATCH.REGIONS), default=[],
+        placeholder="全部五个水域", key="monitor_regions",
+        help="同时筛选港口、咽喉点和AIS船舶。")
 
-    with st.expander("⚓ 港口筛选", expanded=True):
-        selected_regions = st.multiselect(
-            "水域（空选＝全部）", list(PORTWATCH.REGIONS), default=[],
-            placeholder="全部五个水域", key="port_regions")
+    with st.expander("■ 港口与咽喉点", expanded=False):
         port_search = st.text_input("搜索港口或国家", placeholder="例如 Fujairah / UAE",
                                     key="port_search").strip().lower()
         try:
@@ -716,16 +777,21 @@ with st.sidebar:
         except Exception as exc:
             newest_chokepoint_day = None
             st.warning(f"咽喉点数据暂时不可用：{exc}")
+        if st.button("刷新 PortWatch 数据", width="stretch"):
+            PORTWATCH.latest_date.clear()
+            PORTWATCH.port_catalog.clear()
+            PORTWATCH.daily_activity.clear()
+            PORTWATCH.rolling_activity.clear()
+            PORTWATCH.port_risk_capacity.clear()
+            PORTWATCH.latest_chokepoint_date.clear()
+            PORTWATCH.chokepoint_catalog.clear()
+            PORTWATCH.chokepoint_activity.clear()
+            st.rerun()
 
-    with st.expander("▲ 实时 AIS 船舶", expanded=True):
+    with st.expander("▲ AIS 船舶", expanded=True):
         ais_enabled = st.toggle(
             "启用实时船位", value=True,
             key="ais_enabled")
-        if not ais_api_key:
-            st.caption("未配置AISStream密钥；仍会尝试无需密钥的 Open Waters 免费聚合数据源。")
-        selected_ais_regions = st.multiselect(
-            "AIS水域（空选＝全部）", list(AIS.REGIONS), default=[],
-            placeholder="全部五个水域", key="ais_regions")
         selected_ais_categories = st.multiselect(
             "船型（空选＝全部）", list(AIS.VESSEL_TYPE_LABELS), default=[],
             format_func=lambda key: AIS.VESSEL_TYPE_LABELS[key],
@@ -733,32 +799,34 @@ with st.sidebar:
         ais_search = st.text_input(
             "搜索船名、MMSI或IMO", placeholder="例如 EVER GIVEN / 636…",
             key="ais_search").strip().lower()
-        ais_moving_only = st.toggle("只看航行中（≥0.5节）", value=False,
+        ais_moving_only = st.toggle("仅航行中（≥0.5节）", value=False,
                                     key="ais_moving_only")
         ais_max_age = st.select_slider(
             "最大数据年龄", options=[10, 30, 60, 120], value=30,
             format_func=lambda value: f"{value}分钟", key="ais_max_age")
         if ais_enabled:
+            stream_status = "未配置（可选）"
             if ais_api_key:
                 ais_collector_instance = _ais_collector(ais_api_key, AIS.MODULE_VERSION)
                 ais_state = ais_collector_instance.status()
-                st.caption(
-                    f'AISStream：{ais_state["status"]} · '
-                    f'收到 {ais_state.get("raw_event_count", 0):,} 条事件 · '
-                    f'位置报文 {ais_state.get("position_message_count", 0):,} 条'
-                )
-                if ais_state.get("compression_enabled") is True:
-                    st.caption("AISStream WebSocket 压缩：已协商")
-                if ais_state.get("compression_enabled") is False:
-                    st.warning("AISStream 未确认 WebSocket 压缩协商；未压缩连接可能受带宽限制。")
+                stream_status = ais_state["status"]
                 if ais_state.get("last_error"):
                     st.caption(f'最近 AISStream 错误：{ais_state["last_error"]}')
             open_state = _openwaters_snapshot(ais_max_age, AIS.MODULE_VERSION)
-            st.caption(f'Open Waters 免费快照：{len(open_state["vessels"]):,} 艘船位')
+            st.caption(
+                f'数据状态：公开快照 {len(open_state["vessels"]):,} 艘 · '
+                f'AISStream {stream_status}')
             if open_state.get("error"):
                 st.caption(f'Open Waters 错误：{open_state["error"]}')
+        if st.button("刷新 AIS 数据", width="stretch", disabled=not ais_enabled):
+            if ais_collector_instance:
+                ais_collector_instance.stop()
+            if ais_api_key:
+                _ais_collector.clear()
+            _openwaters_snapshot.clear()
+            st.rerun()
 
-    with st.expander("◉ 油气资产筛选", expanded=True):
+    with st.expander("◆ 油气资产", expanded=False):
         asset_view = st.radio(
             "资产视图", ["战略生产节点", "完整资产目录"],
             horizontal=True, key="asset_view")
@@ -778,7 +846,7 @@ with st.sidebar:
         values_only = st.toggle("只看有公开数值", value=False, key="values_only")
         output_only = st.toggle("只看有日产量", value=False, key="output_only")
 
-    with st.expander("高级资产口径", expanded=False):
+    with st.expander("◆ 高级资产口径", expanded=False):
         selected_types = st.multiselect("资产类型（空选＝全部）", type_options, default=[],
                                         placeholder="全部类型", key="asset_types")
         selected_metrics = st.multiselect(
@@ -786,24 +854,7 @@ with st.sidebar:
             format_func=lambda key: METRIC_LABELS[key], placeholder="全部口径",
             key="asset_metrics")
 
-    if st.button("刷新 PortWatch 缓存", width="stretch"):
-        PORTWATCH.latest_date.clear()
-        PORTWATCH.port_catalog.clear()
-        PORTWATCH.daily_activity.clear()
-        PORTWATCH.rolling_activity.clear()
-        PORTWATCH.port_risk_capacity.clear()
-        PORTWATCH.latest_chokepoint_date.clear()
-        PORTWATCH.chokepoint_catalog.clear()
-        PORTWATCH.chokepoint_activity.clear()
-        st.rerun()
-    if ais_enabled and st.button("重新连接 AIS", width="stretch"):
-        if ais_collector_instance:
-            ais_collector_instance.stop()
-        if ais_api_key:
-            _ais_collector.clear()
-        _openwaters_snapshot.clear()
-        st.rerun()
-    st.caption("筛选框留空表示全部。地图右上角可切换底图和数据图层。")
+    st.caption("航运水域同时作用于港口、咽喉点和AIS；其他筛选留空表示全部。")
 
 selected_region_set = set(selected_regions or PORTWATCH.REGIONS)
 ports: list[dict] = []
@@ -830,11 +881,17 @@ chokepoint_error = None
 if newest_chokepoint_day is not None:
     try:
         chokepoint_catalog = PORTWATCH.chokepoint_catalog()
+        selected_region_values = set(selected_regions or PORTWATCH.REGIONS)
+        chokepoint_catalog = [
+            point for point in chokepoint_catalog
+            if point.get("name_cn") in selected_region_values
+        ]
         chokepoint_ids = tuple(point["portid"] for point in chokepoint_catalog)
-        chokepoint_values = PORTWATCH.chokepoint_activity(
-            newest_chokepoint_day, chokepoint_ids)
-        chokepoints = PORTWATCH.decorate_chokepoints(
-            chokepoint_catalog, chokepoint_values)
+        if chokepoint_ids:
+            chokepoint_values = PORTWATCH.chokepoint_activity(
+                newest_chokepoint_day, chokepoint_ids)
+            chokepoints = PORTWATCH.decorate_chokepoints(
+                chokepoint_catalog, chokepoint_values)
     except Exception as exc:
         chokepoint_error = str(exc)
 
@@ -857,7 +914,7 @@ def current_vessels(rows: list[dict] | None = None) -> list[dict]:
     snapshot = current_ais_positions() if rows is None else rows
     return AIS.filter_vessels(
         snapshot,
-        regions=set(selected_ais_regions or AIS.REGIONS),
+        regions=set(selected_regions or AIS.REGIONS),
         categories=set(selected_ais_categories),
         moving_only=ais_moving_only,
         query=ais_search,
@@ -897,7 +954,7 @@ filtered = [
 map_asset_candidates = filtered if map_mode in {"全部图层", "仅油气资产"} else []
 map_assets = [asset for asset in map_asset_candidates if asset["map_drawable"]]
 unlocated_map_assets = [asset for asset in map_asset_candidates if not asset["map_drawable"]]
-map_ports = ports if map_mode in {"全部图层", "仅港口与咽喉点"} else []
+map_ports = ports if map_mode in {"全部图层", "仅港口", "仅港口与咽喉点"} else []
 map_chokepoints = chokepoints if map_mode in {"全部图层", "仅港口与咽喉点", "仅咽喉点"} else []
 
 port_rows = []
@@ -1042,9 +1099,9 @@ def render_map_panel() -> None:
             "上级资产代表点，因此不以猜测位置绘图。可在‘油气资产’表查看坐标证据。"
         )
     st.caption(
-        "油气节点：实心为实际／推算日量，空心为产能／目标，灰色为未披露；"
-        "虚线圈为区域／设施代理点。AIS船舶：三角形为航行中、圆点为低速／停泊，"
-        "方向按航向或对地航迹角绘制。")
+        "形状区分对象：◆油气资产、■港口、⬡咽喉点、▲AIS船舶。"
+        "颜色区分资产层级、港口主要到港船型和AIS船型；船舶实心表示航行中，"
+        "空心表示低速／停泊，方向按航向或对地航迹角绘制。")
     st.iframe(
         _map_html(
             map_assets, map_ports, map_chokepoints, map_vessels,
