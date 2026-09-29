@@ -11,7 +11,6 @@ import json
 import random
 import re
 import threading
-import time
 from concurrent.futures import ThreadPoolExecutor, as_completed
 from copy import deepcopy
 from datetime import datetime, timezone
@@ -289,6 +288,43 @@ def classify_ship_type(ship_type: int | None) -> tuple[str, str]:
     else:
         category = "unknown"
     return category, VESSEL_TYPE_LABELS[category]
+
+
+def merge_vessel_snapshots(
+    *snapshots: list[dict[str, Any]],
+) -> list[dict[str, Any]]:
+    """Merge snapshots by MMSI, preserving the newest report for each vessel."""
+
+    by_mmsi: dict[str, dict[str, Any]] = {}
+    for snapshot in snapshots:
+        for vessel in snapshot:
+            mmsi = str(vessel["mmsi"])
+            previous = by_mmsi.get(mmsi)
+            if previous is None or vessel["received_at"] > previous["received_at"]:
+                by_mmsi[mmsi] = vessel
+    return list(by_mmsi.values())
+
+
+def filter_vessels(
+    vessels: list[dict[str, Any]],
+    *,
+    regions: set[str],
+    categories: set[str],
+    moving_only: bool,
+    query: str,
+) -> list[dict[str, Any]]:
+    """Apply the map's vessel filters to one consistent snapshot."""
+
+    return [
+        vessel for vessel in vessels
+        if vessel.get("region") in regions
+        and (not categories or vessel.get("category") in categories)
+        and (not moving_only or vessel.get("moving"))
+        and (not query
+             or query in str(vessel.get("name") or "").lower()
+             or query in str(vessel.get("mmsi") or "").lower()
+             or query in str(vessel.get("imo") or "").lower())
+    ]
 
 
 def _number(value: Any) -> float | None:
