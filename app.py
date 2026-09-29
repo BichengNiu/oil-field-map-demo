@@ -52,11 +52,38 @@ st.markdown("""
 <style>
   .stApp { background: #f5f7fb; }
   .block-container { padding-top: 1.35rem; padding-bottom: 2.5rem; max-width: 1680px; }
-  [data-testid="stSidebar"] { background: #0b1f33; }
-  [data-testid="stSidebar"] * { color: #eef6ff; }
+  [data-testid="stSidebar"] {
+      background: #f1f5f9;
+      border-right: 1px solid #dbe4ee;
+  }
+  [data-testid="stSidebar"] * { color: #172b4d; }
   [data-testid="stSidebar"] div[data-baseweb="select"] > div,
-  [data-testid="stSidebar"] input { background: #142d46; border-color: #31516e; }
-  [data-testid="stSidebar"] .stCaption { color: #a9bfd2 !important; }
+  [data-testid="stSidebar"] input,
+  [data-testid="stSidebar"] textarea,
+  [data-testid="stSidebar"] [data-testid="stDateInput"] button {
+      background: #ffffff;
+      color: #172b4d;
+      border-color: #cbd5e1;
+  }
+  [data-testid="stSidebar"] input::placeholder,
+  [data-testid="stSidebar"] textarea::placeholder {
+      color: #64748b;
+      opacity: 1;
+  }
+  [data-testid="stSidebar"] [data-baseweb="select"] span,
+  [data-testid="stSidebar"] [data-baseweb="select"] svg {
+      color: #172b4d;
+      fill: #475569;
+  }
+  [data-testid="stSidebar"] [data-baseweb="tag"] {
+      background: #dbeafe;
+      border-color: #bfdbfe;
+  }
+  [data-testid="stSidebar"] .stCaption,
+  [data-testid="stSidebar"] [data-testid="stCaption"] {
+      color: #52667d !important;
+  }
+  [data-testid="stSidebar"] hr { border-color: #dbe4ee; }
   [data-testid="stMetric"] { background: white; border: 1px solid #dfe7ef; border-radius: 14px;
       padding: 13px 16px; box-shadow: 0 3px 12px rgba(25, 49, 74, .05); }
   [data-testid="stMetricLabel"] { color: #557085; }
@@ -410,7 +437,7 @@ def _vessel_popup(vessel: dict[str, object]) -> str:
 
 def _map_html(assets: list[dict[str, object]], ports: list[dict],
               chokepoints: list[dict], vessels: list[dict], day: str, chokepoint_day: str,
-              focus_assets: bool = False) -> str:
+              focus_assets: bool = False, ais_configured: bool = True) -> str:
     markers = [
         {
             "lat": asset["map_lat"],
@@ -465,6 +492,7 @@ def _map_html(assets: list[dict[str, object]], ports: list[dict],
         ensure_ascii=False
     ).replace("</", "<\\/")
     focus_json = json.dumps(focus_assets)
+    ais_overlay = ", '实时 AIS 船舶': vesselLayer" if ais_configured else ""
     return f"""
     <!doctype html><html lang="zh-CN"><head>
     <meta charset="utf-8" />
@@ -631,8 +659,7 @@ def _map_html(assets: list[dict[str, object]], ports: list[dict],
       }}
       L.control.layers({{'英文街道图': streets, '浅色底图': light, '卫星影像': satellite}},
         {{'油气资产': assetLayer, '港口指标（点越大越活跃）': portLayer,
-          '咽喉点通行（橙色）': chokepointLayer,
-          '实时 AIS 船舶': vesselLayer}}, {{collapsed: false}}).addTo(map);
+          '咽喉点通行（橙色）': chokepointLayer{ais_overlay}}}, {{collapsed: false}}).addTo(map);
     </script></body></html>
     """
 
@@ -687,7 +714,11 @@ with st.sidebar:
             "启用实时船位", value=bool(ais_api_key), disabled=not bool(ais_api_key),
             key="ais_enabled")
         if not ais_api_key:
-            st.caption("未配置 AISSTREAM_API_KEY；其他地图图层不受影响。")
+            st.warning(
+                "实时船舶未显示：此部署尚未配置 AISSTREAM_API_KEY。请在 "
+                "Streamlit Cloud → App settings → Secrets 中配置后重启应用。",
+                icon="🔑",
+            )
         selected_ais_regions = st.multiselect(
             "AIS水域（空选＝全部）", list(AIS.REGIONS), default=[],
             placeholder="全部五个水域", key="ais_regions")
@@ -933,8 +964,11 @@ def render_map_panel() -> None:
         st.error(f"港口数据加载失败：{port_error}")
     if chokepoint_error:
         st.error(f"咽喉点数据加载失败：{chokepoint_error}")
-    if map_mode == "仅实时AIS船舶" and not ais_api_key:
-        st.info("尚未配置 AISSTREAM_API_KEY，因此实时船舶图层不可用；其他图层仍可正常使用。")
+    if not ais_api_key:
+        st.warning(
+            "实时 AIS 船舶图层未启用：当前 Streamlit 部署缺少 AISSTREAM_API_KEY。"
+            "添加密钥并重启应用后，地图才会开始接收船位。"
+        )
     elif ais_enabled and ais_collector_instance:
         ais_state = ais_collector_instance.status()
         if ais_state.get("last_error") and not map_vessels:
@@ -964,7 +998,7 @@ def render_map_panel() -> None:
             map_assets, map_ports, map_chokepoints, map_vessels,
             selected_day.isoformat() if selected_day else "无数据",
             newest_chokepoint_day.isoformat() if newest_chokepoint_day else "无数据",
-            focus_assets=bool(asset_search)),
+            focus_assets=bool(asset_search), ais_configured=bool(ais_api_key)),
         height=735,
     )
 
