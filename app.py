@@ -41,7 +41,7 @@ def _ais_api_key() -> str:
 
 
 @st.cache_resource(show_spinner=False)
-def _ais_collector(api_key: str) -> AIS.AISCollector:
+def _ais_collector(api_key: str, collector_version: int) -> AIS.AISCollector:
     return AIS.AISCollector(api_key).start()
 
 
@@ -735,10 +735,19 @@ with st.sidebar:
             "最大数据年龄", options=[10, 30, 60, 120], value=30,
             format_func=lambda value: f"{value}分钟", key="ais_max_age")
         if ais_enabled:
-            ais_collector_instance = _ais_collector(ais_api_key)
+            ais_collector_instance = _ais_collector(ais_api_key, AIS.MODULE_VERSION)
             ais_state = ais_collector_instance.status()
-            state_text = f'连接：{ais_state["status"]} · 已接收 {ais_state["message_count"]:,} 条报文'
+            state_text = (
+                f'连接：{ais_state["status"]} · '
+                f'收到 {ais_state.get("raw_event_count", 0):,} 条AIS事件 · '
+                f'解析有效 {ais_state["message_count"]:,} 条 · '
+                f'位置报文 {ais_state.get("position_message_count", 0):,} 条'
+            )
             st.caption(state_text)
+            if ais_state.get("compression_enabled") is True:
+                st.caption("WebSocket 压缩：已协商")
+            if ais_state.get("compression_enabled") is False:
+                st.warning("AISStream 未确认 WebSocket 压缩协商；未压缩连接可能受带宽限制。")
             if ais_state.get("last_error"):
                 st.caption(f'最近错误：{ais_state["last_error"]}')
 
@@ -960,6 +969,7 @@ def vessel_rows(vessels: list[dict]) -> list[dict]:
 def render_map_panel() -> None:
     filtered_vessels = current_vessels()
     map_vessels = filtered_vessels if map_mode in {"全部图层", "仅实时AIS船舶"} else []
+    ais_state = None
     if port_error:
         st.error(f"港口数据加载失败：{port_error}")
     if chokepoint_error:
@@ -973,15 +983,29 @@ def render_map_panel() -> None:
         ais_state = ais_collector_instance.status()
         if ais_state.get("last_error") and not map_vessels:
             st.warning(f'AIS 暂无可用船位，后台将自动重连：{ais_state["last_error"]}')
-        elif not ais_state.get("last_message_at"):
-            st.info("AIS 已启动，正在等待监测水域内的新广播报文。")
+        elif ais_state.get("raw_event_count", 0) == 0:
+            if ais_state.get("status") == "订阅已确认":
+                st.warning("AISStream 已确认订阅，但尚未向此连接送达任何 AIS 事件。")
+            else:
+                st.info("AIS 已启动，正在等待监测水域内的新广播报文。")
+        elif ais_state.get("position_message_count", 0) == 0:
+            if ais_state.get("rejected_event_count", 0):
+                st.warning(
+                    f'已收到 {ais_state["raw_event_count"]:,} 条AIS事件，'
+                    f'但 {ais_state["rejected_event_count"]:,} 条未通过解析；'
+                    f'最近类型：{ais_state.get("last_raw_message_type") or "未知"}，'
+                    f'原因：{ais_state.get("last_rejection_reason") or "未知"}。'
+                )
+            else:
+                st.info("已收到AIS事件，但还没有收到可绘制的位置报告。")
     m1, m2, m3, m4, m5, m6 = st.columns(6)
     m1.metric("地图战略节点" if asset_view == "战略生产节点" else "地图资产点",
               len(map_assets))
     m2.metric("待定位资产", len(unlocated_map_assets))
     m3.metric("地图港口", len(map_ports))
     m4.metric("地图咽喉点", len(map_chokepoints))
-    m5.metric("实时AIS船舶", len(map_vessels) if ais_api_key else "—")
+    has_position_data = bool(ais_state and ais_state.get("position_message_count", 0))
+    m5.metric("实时AIS船舶", len(map_vessels) if has_position_data else "—")
     m6.metric(f"{rolling_days}天活跃港口",
               sum((p.get("active_days") or 0) > 0 for p in map_ports))
     if unlocated_map_assets:
@@ -1015,20 +1039,39 @@ def render_ais_panel() -> None:
     if not ais_enabled or ais_collector_instance is None:
         st.info("实时船位已关闭，可在左侧‘实时 AIS 船舶’中启用。")
         return
-    state = ais_collector_instance.status()
     vessels = current_vessels()
     rows = vessel_rows(vessels)
+    state = ais_collector_instance.status()
+    has_position_data = bool(state.get("position_message_count", 0))
+    vessel_metric = len(vessels) if has_position_data else "—"
     v1, v2, v3, v4, v5 = st.columns(5)
-    v1.metric("筛选后船舶", len(vessels))
-    v2.metric("航行中", sum(bool(v.get("moving")) for v in vessels))
-    v3.metric("油轮/液货船", sum(v.get("category") == "tanker" for v in vessels))
-    v4.metric("货船", sum(v.get("category") == "cargo" for v in vessels))
-    v5.metric("船型待识别", sum(v.get("category") == "unknown" for v in vessels))
+    v1.metric("筛选后船舶", vessel_metric)
+    v2.metric("航行中", sum(bool(v.get("moving")) for v in vessels) if has_position_data else "—")
+    v3.metric("油轮/液货船", sum(v.get("category") == "tanker" for v in vessels)
+              if has_position_data else "—")
+    v4.metric("货船", sum(v.get("category") == "cargo" for v in vessels)
+              if has_position_data else "—")
+    v5.metric("船型待识别", sum(v.get("category") == "unknown" for v in vessels)
+              if has_position_data else "—")
     st.caption(
-        f'连接状态：{state["status"]} · 累计接收 {state["message_count"]:,} 条报文 · '
-        f'最新报文：{state.get("last_message_at") or "尚未收到"}')
+        f'连接状态：{state["status"]} · AIS事件 {state.get("raw_event_count", 0):,} 条 · '
+        f'解析有效 {state["message_count"]:,} 条（位置 '
+        f'{state.get("position_message_count", 0):,}，静态 '
+        f'{state.get("static_message_count", 0):,}） · '
+        f'最近位置：{state.get("last_position_message_at") or "尚未收到"} · '
+        f'压缩：{"已协商" if state.get("compression_enabled") is True else "未协商" if state.get("compression_enabled") is False else "待确认"}')
+    if state.get("compression_enabled") is False:
+        st.warning(
+            "AISStream 未确认 WebSocket 压缩协商；官方说明未压缩连接可能受带宽限制。"
+        )
     if state.get("last_error"):
         st.warning(f'最近连接错误：{state["last_error"]}；采集器会自动指数退避重连。')
+    if state.get("rejected_event_count", 0):
+        st.caption(
+            f'未解析事件 {state["rejected_event_count"]:,} 条；最近消息类型：'
+            f'{state.get("last_raw_message_type") or "未知"}；'
+            f'最近拒绝原因：{state.get("last_rejection_reason") or "未知"}。'
+        )
     if rows:
         st.dataframe(rows, width="stretch", hide_index=True, height=570,
                      column_config={"来源": st.column_config.LinkColumn("来源")})
@@ -1038,8 +1081,18 @@ def render_ais_panel() -> None:
         st.download_button(
             "下载当前船位快照 CSV", buffer.getvalue().encode("utf-8-sig"),
             file_name="ais_vessel_snapshot.csv", mime="text/csv", type="primary")
-    elif not state.get("last_message_at"):
-        st.info("采集器正在等待新AIS广播；这不是‘当前船舶数为0’的判定。")
+    elif state.get("raw_event_count", 0) == 0:
+        if state.get("status") == "订阅已确认":
+            st.warning(
+                "订阅已确认，但 AISStream 尚未送达任何AIS事件。当前船位不可用，"
+                "不能据此判断监测水域内没有船舶。"
+            )
+        else:
+            st.info("采集器正在等待新AIS广播；当前船位尚不可用。")
+    elif state.get("position_message_count", 0) == 0:
+        st.info("已收到AIS事件，但尚未收到可绘制的位置报告。")
+    elif state.get("tracked_vessels", 0) == 0:
+        st.info("已收到位置报告，但当前数据年龄范围内没有可用的新鲜船位。")
     else:
         st.info("当前船型、水域、搜索和数据年龄筛选没有匹配船舶。")
 
