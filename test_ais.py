@@ -218,6 +218,36 @@ class AISParsingTests(unittest.TestCase):
         self.assertEqual(ais.classify_ship_type(60)[0], "passenger")
         self.assertEqual(ais.classify_ship_type(None)[0], "unknown")
 
+    def test_merge_vessel_snapshots_keeps_newest_report(self):
+        older = {"mmsi": "636000111", "received_at": "2026-09-29T07:59:00+00:00",
+                 "name": "OLDER"}
+        newer = {"mmsi": "636000111", "received_at": "2026-09-29T08:00:00+00:00",
+                 "name": "NEWER"}
+        other = {"mmsi": "636000222", "received_at": "2026-09-29T07:58:00+00:00",
+                 "name": "OTHER"}
+
+        merged = ais.merge_vessel_snapshots([older, other], [newer])
+
+        self.assertEqual([row["name"] for row in merged], ["NEWER", "OTHER"])
+
+    def test_filter_vessels_applies_all_filters_to_same_snapshot(self):
+        vessels = [
+            {"mmsi": "636000111", "imo": 9876543, "name": "TEST TANKER",
+             "region": "波斯湾", "category": "tanker", "moving": True},
+            {"mmsi": "636000222", "imo": 9876000, "name": "TEST CARGO",
+             "region": "波斯湾", "category": "cargo", "moving": False},
+            {"mmsi": "636000333", "imo": 9876111, "name": "OTHER TANKER",
+             "region": "阿曼湾", "category": "tanker", "moving": True},
+        ]
+
+        filtered = ais.filter_vessels(
+            vessels,
+            regions={"波斯湾"}, categories={"tanker"},
+            moving_only=True, query="9876543",
+        )
+
+        self.assertEqual([row["mmsi"] for row in filtered], ["636000111"])
+
 
 if __name__ == "__main__":
     unittest.main()
