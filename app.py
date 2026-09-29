@@ -813,8 +813,15 @@ with st.sidebar:
                 if ais_state.get("last_error"):
                     st.caption(f'最近 AISStream 错误：{ais_state["last_error"]}')
             open_state = _openwaters_snapshot(ais_max_age, AIS.MODULE_VERSION)
+            stream_rows = (
+                ais_collector_instance.snapshot(max_age_minutes=ais_max_age)
+                if ais_collector_instance is not None else []
+            )
+            merged_count = len(AIS.merge_vessel_snapshots(
+                stream_rows, open_state.get("vessels", [])))
             st.caption(
-                f'数据状态：公开快照 {len(open_state["vessels"]):,} 艘 · '
+                f'数据状态：合并后 {merged_count:,} 艘'
+                f'（公开快照 {len(open_state["vessels"]):,}）· '
                 f'AISStream {stream_status}')
             if open_state.get("error"):
                 st.caption(f'Open Waters 错误：{open_state["error"]}')
