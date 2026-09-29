@@ -567,6 +567,7 @@ PARENT_RELATIONSHIPS = {
     ("阿曼", "Bukha"): "Block 8 (Oman)",
     ("阿曼", "Sahma"): "Block 7 (Oman)",
     ("阿曼", "Abu Butabul"): "Block 60 (Oman)",
+    ("阿曼", "Bisat"): "Block 60 (Oman)",
     ("阿曼", "Khazzan"): "Block 61 (Oman)",
     ("阿曼", "Ghazeer"): "Block 61 (Oman)",
     ("也门", "Alif"): "Block 18 (Marib)",
@@ -614,6 +615,222 @@ STRATEGIC_STANDALONE_ASSETS = {
     ("卡塔尔", "North Field"),
     ("以色列", "Leviathan"), ("以色列", "Tamar"), ("以色列", "Karish"),
     ("阿联酋", "Fateh"),
+}
+
+# 地图补点单独记录证据和精度，不改写原始目录来源。优先采用公开WGS84资产点位；
+# 区块只有组成田或设施点时，明确标为近似代表点，不能理解为区块边界中心。
+COORDINATE_OVERRIDES: dict[tuple[str, str], dict[str, Any]] = {
+    ("沙特阿拉伯", "Abu Jifan"): {
+        "lat": 25.0631, "lon": 48.0304, "precision": "Khurais综合体内公开近似点（WGS84）",
+        "source": "Global Energy Monitor — Abu Jifan",
+        "url": "https://www.gem.wiki/Abu_Jifan_Oil_and_Gas_Field_%28Saudi_Arabia%29",
+    },
+    ("沙特阿拉伯", "Mazalij"): {
+        "lat": 25.0631, "lon": 48.0304, "precision": "Khurais综合体内公开近似点（WGS84）",
+        "source": "Global Energy Monitor — Mazalij",
+        "url": "https://www.gem.wiki/Mazalij_Oil_and_Gas_Field_%28Saudi_Arabia%29",
+    },
+    ("沙特阿拉伯", "Abu Hadriya"): {
+        "lat": 27.312, "lon": 49.0051, "precision": "公开资产数据库近似点（WGS84）",
+        "source": "Global Energy Monitor — Abu Hadriya",
+        "url": "https://www.gem.wiki/Abu_Hadriya_Oil_Field_%28Saudi_Arabia%29",
+    },
+    ("沙特阿拉伯", "Fadhili"): {
+        "lat": 26.9807, "lon": 49.1735, "precision": "公开资产数据库精确点位（WGS84）",
+        "source": "Global Energy Monitor — Fadhili",
+        "url": "https://www.gem.wiki/Fadhili_Oil_Field_%28Saudi_Arabia%29",
+    },
+    ("沙特阿拉伯", "Harmaliyah"): {
+        "lat": 24.6291, "lon": 49.4985, "precision": "公开资产数据库近似点（WGS84）",
+        "source": "Global Energy Monitor — Harmaliyah",
+        "url": "https://www.gem.wiki/Harmaliyah_Oil_and_Gas_Field_%28Saudi_Arabia%29",
+    },
+    ("阿联酋", "Hail (ADNOC Ghasha)"): {
+        "lat": 24.368, "lon": 53.413, "precision": "公开资产数据库精确点位（WGS84）",
+        "source": "Global Energy Monitor — Hail",
+        "url": "https://www.gem.wiki/Hail_Oil_Field_%28United_Arab_Emirates%29",
+    },
+    ("阿联酋", "Sajaa"): {
+        "lat": 25.3778, "lon": 55.6826, "precision": "公开资产数据库近似点（WGS84）",
+        "source": "Global Energy Monitor — Sajaa",
+        "url": "https://www.gem.wiki/Sajaa_Oil_and_Gas_Field_%28United_Arab_Emirates%29",
+    },
+    ("阿联酋", "Kahaif"): {
+        "lat": 25.1941, "lon": 55.7993, "precision": "公开资产数据库近似点（WGS84）",
+        "source": "Global Energy Monitor — Kahaif",
+        "url": "https://www.gem.wiki/Kahaif_Oil_and_Gas_Field_%28United_Arab_Emirates%29",
+    },
+    ("阿联酋", "Umm Al Quwain"): {
+        "lat": 25.5639, "lon": 55.4466, "precision": "公开资产数据库近似点（WGS84）",
+        "source": "Global Energy Monitor — Umm Al Qaiwain",
+        "url": "https://www.gem.wiki/Umm_Al_Qaiwain_%28UAQ%29_Gas_Field_%28United_Arab_Emirates%29",
+    },
+    ("伊拉克", "Khurmala"): {
+        "lat": 35.97778, "lon": 43.76306,
+        "precision": "公开地图油田设施点位（OpenStreetMap；近似）",
+        "source": "OpenStreetMap/GeoNames — Khurmala Oilfield",
+        "url": "https://mapcarta.com/30858796",
+    },
+    ("伊拉克", "Naft Khana"): {
+        "lat": 34.1814, "lon": 45.4085, "precision": "跨境油田项目公开近似点（WGS84）",
+        "source": "Global Energy Monitor — Khanah / Naft Khana",
+        "url": "https://www.gem.wiki/Khanah_Oil_Field_%28Iraq%29",
+    },
+    ("伊朗", "Hengam"): {
+        "lat": 26.4214, "lon": 55.9659, "precision": "公开资产数据库精确点位（WGS84）",
+        "source": "Global Energy Monitor — Hengam",
+        "url": "https://www.gem.wiki/Hengam_Oil_and_Gas_Field_%28Iran%29",
+    },
+    ("伊朗", "South Pars"): {
+        "lat": 26.619125, "lon": 52.067964,
+        "precision": "南帕尔斯／北方气田整体公开中心点（WGS84；近似）",
+        "source": "South Pars / North Dome public coordinate",
+        "url": "https://en.wikipedia.org/wiki/South_Pars/North_Dome_Gas-Condensate_field",
+    },
+    ("伊朗", "West Paydar"): {
+        "lat": 32.1693, "lon": 47.5814, "precision": "公开资产数据库精确点位（WGS84）",
+        "source": "Global Energy Monitor — Paydar West",
+        "url": "https://www.gem.wiki/Paydar_West_Oil_and_Gas_Field_%28Iran%29",
+    },
+    ("伊朗", "Chehsmeh-Khosh"): {
+        "lat": 32.2969, "lon": 47.7746, "precision": "公开资产数据库精确点位（WGS84）",
+        "source": "Global Energy Monitor — Cheshmeh-Khosh",
+        "url": "https://www.gem.wiki/Cheshmeh-Khosh_Oil_Field_%28Iran%29",
+    },
+    ("伊朗", "Danan"): {
+        "lat": 32.614, "lon": 47.5312, "precision": "公开资产数据库精确点位（WGS84）",
+        "source": "Global Energy Monitor — Danan",
+        "url": "https://www.gem.wiki/Danan_Oil_Field_%28Iran%29",
+    },
+    ("伊朗", "Changuleh"): {
+        "lat": 32.98, "lon": 46.47, "precision": "公开资产数据库近似点（WGS84）",
+        "source": "Global Energy Monitor — Changuleh",
+        "url": "https://www.gem.wiki/Changuleh_Oil_Field_%28Iran%29",
+    },
+    ("伊朗", "Dalpari"): {
+        "lat": 32.5293, "lon": 47.8673, "precision": "公开资产数据库精确点位（WGS84）",
+        "source": "Global Energy Monitor — Dalpari",
+        "url": "https://www.gem.wiki/Dalpari_Oil_Field_%28Iran%29",
+    },
+    ("卡塔尔", "A-Structures (A-North / A-South)"): {
+        "lat": 25.0811, "lon": 52.4847,
+        "precision": "Al-Karkara／A-Structures项目公开近似点（WGS84）",
+        "source": "MarineLink — Al-Karkara/A-Structure",
+        "url": "https://ports.marinelink.com/oilrigs/rig/alkarkaraastructure",
+    },
+    ("阿曼", "Block 9 (Oman)"): {
+        "lat": 23.1614, "lon": 55.4485,
+        "precision": "Safah／Wadi Latham组成田公开近似点（WGS84）",
+        "source": "Global Energy Monitor — Safah/Wadi Latham",
+        "url": "https://www.gem.wiki/Safah/Wadi_Latham_Oil_and_Gas_Field_%28Oman%29",
+    },
+    ("阿曼", "Safah"): {
+        "lat": 23.1614, "lon": 55.4485,
+        "precision": "Safah／Wadi Latham联合公开近似点（WGS84）",
+        "source": "Global Energy Monitor — Safah/Wadi Latham",
+        "url": "https://www.gem.wiki/Safah/Wadi_Latham_Oil_and_Gas_Field_%28Oman%29",
+    },
+    ("阿曼", "Wadi Latham"): {
+        "lat": 23.1614, "lon": 55.4485,
+        "precision": "Safah／Wadi Latham联合公开近似点（WGS84）",
+        "source": "Global Energy Monitor — Safah/Wadi Latham",
+        "url": "https://www.gem.wiki/Safah/Wadi_Latham_Oil_and_Gas_Field_%28Oman%29",
+    },
+    ("阿曼", "Block 27 (Oman)"): {
+        "lat": 22.7117, "lon": 56.5162, "precision": "Khamilah组成田公开近似点（WGS84）",
+        "source": "Global Energy Monitor — Khamilah",
+        "url": "https://www.gem.wiki/Khamilah_Oil_Field_%28Oman%29",
+    },
+    ("阿曼", "Khamilah"): {
+        "lat": 22.7117, "lon": 56.5162, "precision": "公开资产数据库近似点（WGS84）",
+        "source": "Global Energy Monitor — Khamilah",
+        "url": "https://www.gem.wiki/Khamilah_Oil_Field_%28Oman%29",
+    },
+    ("阿曼", "Block 8 (Oman)"): {
+        "lat": 26.4214, "lon": 55.9659,
+        "precision": "跨境West Bukha／Hengam油田代表点（WGS84；近似）",
+        "source": "Global Energy Monitor — Hengam / West Bukha cross-border field",
+        "url": "https://www.gem.wiki/Hengam_Oil_and_Gas_Field_%28Iran%29",
+    },
+    ("阿曼", "West Bukha"): {
+        "lat": 26.4214, "lon": 55.9659,
+        "precision": "跨境West Bukha／Hengam油田代表点（WGS84；近似）",
+        "source": "Global Energy Monitor — Hengam / West Bukha cross-border field",
+        "url": "https://www.gem.wiki/Hengam_Oil_and_Gas_Field_%28Iran%29",
+    },
+    ("阿曼", "Block 7 (Oman)"): {
+        "lat": 20.40786, "lon": 56.24374,
+        "precision": "Sahma组成油田公开点位（WGS84；区块代表点）",
+        "source": "OpenStreetMap/GeoNames — As Sahmah", "url": "https://mapcarta.com/36266762",
+    },
+    ("阿曼", "Sahma"): {
+        "lat": 20.40786, "lon": 56.24374, "precision": "公开地名数据库油田点位（WGS84）",
+        "source": "OpenStreetMap/GeoNames — As Sahmah", "url": "https://mapcarta.com/36266762",
+    },
+    ("阿曼", "Block 60 (Oman)"): {
+        "lat": 21.178, "lon": 55.8542,
+        "precision": "Bisat／Abu Butabul区块公开近似点（WGS84）",
+        "source": "Global Energy Monitor — Bisat / Abu Butabul",
+        "url": "https://www.gem.wiki/Bisat_Oil_Field_%28Oman%29",
+    },
+    ("阿曼", "Abu Butabul"): {
+        "lat": 21.178, "lon": 55.8542, "precision": "Block 60公开近似点（WGS84）",
+        "source": "Global Energy Monitor — Abu Butabul",
+        "url": "https://www.gem.wiki/Abu_Butabul_Oil_and_Gas_Field_%28Oman%29",
+    },
+    ("阿曼", "Block 61 (Oman)"): {
+        "lat": 21.705, "lon": 56.4643,
+        "precision": "Khazzan／Ghazeer项目公开近似点（WGS84）",
+        "source": "Global Energy Monitor — Khazzan/Ghazeer",
+        "url": "https://www.gem.wiki/Khazzan_Oil_and_Gas_Complex_%28Oman%29",
+    },
+    ("阿曼", "Khazzan"): {
+        "lat": 21.705, "lon": 56.4643,
+        "precision": "Khazzan／Ghazeer项目公开近似点（WGS84）",
+        "source": "Global Energy Monitor — Khazzan Phase 1",
+        "url": "https://www.gem.wiki/Khazzan_Phase_1_Oil_and_Gas_Field_%28Oman%29",
+    },
+    ("阿曼", "Ghazeer"): {
+        "lat": 21.705, "lon": 56.4643,
+        "precision": "Khazzan／Ghazeer项目公开近似点（WGS84）",
+        "source": "Global Energy Monitor — Ghazeer",
+        "url": "https://www.gem.wiki/Ghazeer_%28Khazzan_Phase_2%29_Oil_and_Gas_Field_%28Oman%29",
+    },
+    ("也门", "Block S2 (Uqlah)"): {
+        "lat": 15.3053, "lon": 46.77715,
+        "precision": "Habban组成油田设施公开点位（OpenStreetMap；近似）",
+        "source": "OpenStreetMap — Habban field facilities",
+        "url": "https://mapcarta.com/W498389053",
+    },
+    ("也门", "Habban"): {
+        "lat": 15.3053, "lon": 46.77715,
+        "precision": "公开油田设施点位（OpenStreetMap；近似）",
+        "source": "OpenStreetMap — Habban field facilities",
+        "url": "https://mapcarta.com/W498389053",
+    },
+    ("也门", "Hiswah (Haswa)"): {
+        "lat": 15.70337, "lon": 47.96781,
+        "precision": "公开油田设施点位（OpenStreetMap；近似）",
+        "source": "OpenStreetMap — Hiswah field facilities",
+        "url": "https://mapcarta.com/W498389042",
+    },
+    ("也门", "Alroidhat (Al-Rowedhat)"): {
+        "lat": 15.58213, "lon": 48.09317,
+        "precision": "公开油田设施点位（OpenStreetMap；近似）",
+        "source": "OpenStreetMap — Al Rhoidat field facilities",
+        "url": "https://mapcarta.com/W498389044",
+    },
+    ("埃及", "Belayim"): {
+        "lat": 28.6197, "lon": 33.2076, "precision": "公开资产数据库精确点位（WGS84）",
+        "source": "Global Energy Monitor — Belayim Marine",
+        "url": "https://www.gem.wiki/Belayim_Marine_Oil_and_Gas_Field_%28Egypt%29",
+    },
+    ("埃及", "Wadi El Sahl Development Area"): {
+        "lat": 27.17584, "lon": 33.77484,
+        "precision": "开发区同名地理要素近似点（WGS84；非边界中心）",
+        "source": "GeoNames/OpenStreetMap — Wadi Faliq as Sahl",
+        "url": "https://mapcarta.com/13059698",
+    },
 }
 
 OUTPUT_METRIC_TYPES = {
@@ -681,7 +898,7 @@ for asset in ASSETS:
 
 
 # 战略生产节点：有直接披露指标的上级资产负责汇总，组成资产保留在目录中但默认不重复上图。
-# 上级缺坐标时，只允许使用已有组成资产坐标的均值，并显式标记为推算中心点。
+# 上级缺坐标时，可使用已有组成资产地图坐标的均值，并显式标记为推算中心点。
 _children: dict[tuple[str, str], list[dict[str, Any]]] = {}
 for asset in ASSETS:
     if asset["parent_asset"]:
@@ -695,21 +912,62 @@ for asset in ASSETS:
     asset["constituent_assets"] = [child["name"] for child in direct_children] + named_children
     asset["constituent_count"] = len(asset["constituent_assets"])
     asset["aggregate_children_on_map"] = bool(direct_children) and asset["value"] is not None
-    asset["map_lat"] = asset["lat"]
-    asset["map_lon"] = asset["lon"]
-    asset["map_coordinate_precision"] = asset["coordinate_precision"]
-    if (asset["aggregate_children_on_map"]
-            and (asset["map_lat"] is None or asset["map_lon"] is None)):
+    coordinate = COORDINATE_OVERRIDES.get(key)
+    asset["map_lat"] = coordinate["lat"] if coordinate else asset["lat"]
+    asset["map_lon"] = coordinate["lon"] if coordinate else asset["lon"]
+    asset["map_coordinate_precision"] = (
+        coordinate["precision"] if coordinate else asset["coordinate_precision"]
+    )
+    if coordinate:
+        asset["coordinate_source"] = coordinate["source"]
+        asset["coordinate_source_url"] = coordinate["url"]
+    elif asset["map_lat"] is not None and asset["map_lon"] is not None:
+        asset["coordinate_source"] = "原目录坐标记录"
+        asset["coordinate_source_url"] = asset["source_url"]
+    else:
+        asset["coordinate_source"] = "暂无可核验坐标"
+        asset["coordinate_source_url"] = None
+
+for asset in ASSETS:
+    key = (asset["country"], asset["name"])
+    direct_children = _children.get(key, [])
+    if direct_children and (asset["map_lat"] is None or asset["map_lon"] is None):
         located_children = [
             child for child in direct_children
-            if child["lat"] is not None and child["lon"] is not None
+            if child["map_lat"] is not None and child["map_lon"] is not None
         ]
         if located_children:
-            asset["map_lat"] = sum(child["lat"] for child in located_children) / len(located_children)
-            asset["map_lon"] = sum(child["lon"] for child in located_children) / len(located_children)
+            asset["map_lat"] = sum(child["map_lat"] for child in located_children) / len(located_children)
+            asset["map_lon"] = sum(child["map_lon"] for child in located_children) / len(located_children)
             asset["map_coordinate_precision"] = (
                 f"组成资产近似中心（{len(located_children)}/{len(direct_children)}个有坐标）"
             )
+            asset["coordinate_source"] = "组成资产地图坐标的几何中心"
+            asset["coordinate_source_url"] = None
+
+# 完整目录中的组成单田若仍无独立点位，可退回到最近一个有坐标的上级资产代表点。
+# 这只解决地图可见性，并不声称子资产与上级资产中心重合；popup 必须保留“近似”标记。
+for asset in ASSETS:
+    if asset["map_lat"] is not None and asset["map_lon"] is not None:
+        continue
+    parent_name = asset["parent_asset"]
+    seen = {(asset["country"], asset["name"])}
+    while parent_name:
+        parent_key = (asset["country"], parent_name)
+        if parent_key in seen:
+            break
+        seen.add(parent_key)
+        parent = _asset_index[parent_key]
+        if parent["map_lat"] is not None and parent["map_lon"] is not None:
+            asset["map_lat"] = parent["map_lat"]
+            asset["map_lon"] = parent["map_lon"]
+            asset["map_coordinate_precision"] = (
+                f"上级资产代表点（{parent['name']}；近似，非本资产中心）"
+            )
+            asset["coordinate_source"] = f"上级资产 {parent['name']} 的地图坐标"
+            asset["coordinate_source_url"] = parent["coordinate_source_url"]
+            break
+        parent_name = parent["parent_asset"]
 
 for asset in ASSETS:
     strategic_parent = None

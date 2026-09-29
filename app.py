@@ -191,6 +191,13 @@ def _popup(asset: dict[str, object]) -> str:
 
     source_url = esc(asset["source_url"])
     status_source_url = esc(asset["operating_status_evidence_url"])
+    coordinate_source_url = asset.get("coordinate_source_url")
+    coordinate_source_html = (
+        f'<a class="source" href="{esc(coordinate_source_url)}" target="_blank" rel="noopener">'
+        f'坐标来源：{esc(asset["coordinate_source"])}</a>'
+        if coordinate_source_url
+        else f'<div class="basis">坐标来源：{esc(asset["coordinate_source"])}</div>'
+    )
     parent = asset.get("parent_asset") or "无已登记上级"
     constituents = "、".join(asset.get("constituent_assets") or []) or "—"
     return (
@@ -221,6 +228,7 @@ def _popup(asset: dict[str, object]) -> str:
         f'{_hierarchy_panel(asset)}'
         '<div class="row"><span>坐标精度</span>'
         f'<strong>{esc(asset["map_coordinate_precision"])}</strong></div>'
+        f'{coordinate_source_html}'
         f'<div class="status">原始状态说明：{esc(asset["status"])}</div>'
         f'<div class="basis">状态依据：{esc(asset["operating_status_basis"])}</div>'
         f'<div class="basis">权益口径：{esc(asset["ownership_basis"])}</div>'
@@ -714,6 +722,8 @@ asset_rows = [
         "统计范围": asset["aggregation_scope"], "状态置信度": asset["operating_status_confidence"],
         "状态依据": asset["operating_status_basis"], "状态证据链接": asset["operating_status_evidence_url"],
         "地图坐标精度": asset["map_coordinate_precision"],
+        "坐标来源": asset["coordinate_source"],
+        "坐标来源链接": asset["coordinate_source_url"],
         "默认战略节点": "是" if asset["strategic_default"] else "否",
         "来源": asset["source"],
         "来源链接": asset["source_url"], "说明": asset["note"],
@@ -732,11 +742,17 @@ with tab_map:
     m1, m2, m3, m4, m5 = st.columns(5)
     m1.metric("地图战略节点" if asset_view == "战略生产节点" else "地图资产点",
               len(map_assets))
-    m2.metric("待定位资产", len(unlocated_map_assets))
+    m2.metric("当前视图待定位", len(unlocated_map_assets))
     m3.metric("地图港口", len(map_ports))
     m4.metric("地图咽喉点", len(map_chokepoints))
     m5.metric(f"{rolling_days}天活跃港口",
               sum((p.get("active_days") or 0) > 0 for p in map_ports))
+    if unlocated_map_assets:
+        st.info(
+            f"当前筛选有 {len(unlocated_map_assets)} 项仅列目录：既无可核验独立坐标，也无可用的"
+            "上级资产代表点，因此不以猜测位置绘图。可在“油气资产”表查看“地图坐标精度”和"
+            "“坐标来源”。"
+        )
     st.caption(
         "油气节点：实心为实际／推算日量，空心为产能／目标，灰色为未披露；"
         "大点表示油田群／区块。青色港口与橙色咽喉点按活动规模缩放。")
@@ -786,6 +802,7 @@ with tab_assets:
     st.dataframe(asset_rows, width="stretch", hide_index=True, height=620,
                  column_config={
                      "状态证据链接": st.column_config.LinkColumn("状态证据"),
+                     "坐标来源链接": st.column_config.LinkColumn("坐标来源"),
                      "来源链接": st.column_config.LinkColumn("目录来源"),
                  })
 
@@ -838,6 +855,12 @@ with tab_method:
         "上级油田群、区块或特许区有"
         "直接披露值时，地图使用上级值并隐藏组成资产，避免双重计算；上级缺坐标时可使用已定位组成"
         "资产的几何中心，并在popup中明确标注。没有可靠数值的小型单田仍可在“完整资产目录”中查询。"
+    )
+    st.markdown(
+        "**坐标质量。** 地图优先使用资产级公开WGS84点位；区块缺少直接点位时，可使用组成油田"
+        "或公开设施的代表点／几何中心；组成单田仍缺点位时，可使用最近上级资产代表点。此类坐标"
+        "明确标为“近似”，只用于地图定位，不代表区块边界、储层范围或精确井位。坐标证据链接可在"
+        "popup和资产表中追溯。"
     )
     st.markdown(
         "**产量与产能。** 实心点只表示来源直报实际产量、历史推算日均或已注明的历史产量；"
