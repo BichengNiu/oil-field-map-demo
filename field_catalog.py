@@ -183,7 +183,7 @@ ASSETS = [
     # Aramco prospectus identifies these as separate fields within the Khurais complex; no field-level production split.
     record("沙特阿拉伯", "Abu Jifan", "阿布吉凡", "油田（Khurais综合体）", None, None, source="Aramco 2019 Prospectus", note="阿美列为Khurais综合体组成油田；综合体1,450千桶/日产能不可拆给单田。"),
     record("沙特阿拉伯", "Mazalij", "马扎利吉", "油田（Khurais综合体）", None, None, source="Aramco 2019 Prospectus", note="阿美列为Khurais综合体组成油田；单田产量未披露。"),
-    record("沙特阿拉伯", "Qirdi", "吉尔迪", "油田（Khurais综合体）", None, None, source="Aramco 2019 Prospectus", note="阿美储量认证附件列为单独油田；部分综合体描述未列此田，单田产量未披露。"),
+    record("沙特阿拉伯", "Qirdi", "吉尔迪", "油田", None, None, source="Aramco 2019 Prospectus", note="阿美储量认证附件将其列为单独油田；主体章节对Khurais综合体的定义只列Khurais、Abu Jifan和Mazalij，因此本目录不把Qirdi并入Khurais汇总。单田产量未披露。"),
     record("沙特阿拉伯", "Abu Hadriya", "阿布哈德里亚", "油田", None, None, source="Aramco 2019 Prospectus", note="阿美储量认证附件列为油田；生产状态及逐田日产量待核。"),
     record("沙特阿拉伯", "Fadhili", "法迪利", "油田", None, None, source="Aramco 2019 Prospectus", note="阿美储量认证附件列为油田；与同名气体处理设施区分，逐田原油日产量待核。"),
     record("沙特阿拉伯", "Harmaliyah", "哈马利亚", "油田", None, None, source="Aramco 2019 Prospectus", note="阿美储量认证附件列为油田；逐田产量未披露。"),
@@ -517,7 +517,11 @@ COMMODITY_LABELS = {
 }
 
 LEVEL_OVERRIDES = {
+    ("沙特阿拉伯", "Ghawar"): "field_group",
     ("沙特阿拉伯", "Khurais"): "field_group",
+    ("沙特阿拉伯", "Abu Jifan"): "field",
+    ("沙特阿拉伯", "Mazalij"): "field",
+    ("沙特阿拉伯", "Qirdi"): "field",
     ("阿联酋", "Ghasha Concession"): "concession",
     ("伊拉克", "Eridu (Block 10)"): "field",
     ("卡塔尔", "A-Structures (A-North / A-South)"): "field_group",
@@ -530,7 +534,6 @@ LEVEL_OVERRIDES = {
 PARENT_RELATIONSHIPS = {
     ("沙特阿拉伯", "Abu Jifan"): "Khurais",
     ("沙特阿拉伯", "Mazalij"): "Khurais",
-    ("沙特阿拉伯", "Qirdi"): "Khurais",
     ("阿联酋", "Belbazem"): "Belbazem Offshore Block",
     ("阿联酋", "Umm Al Salsal"): "Belbazem Offshore Block",
     ("阿联酋", "Umm Al Dholou"): "Belbazem Offshore Block",
@@ -581,6 +584,36 @@ PARENT_RELATIONSHIPS = {
     ("叙利亚", "Sazabeh"): "Rmeilan Sector One",
     ("叙利亚", "Ode"): "Rmeilan Sector One",
     ("叙利亚", "Tigris"): "Rmeilan Sector One",
+}
+
+# 官方资料直接给出组成区域、但目录不需要为每个细分区另建地图节点的情形。
+NAMED_CONSTITUENTS = {
+    ("沙特阿拉伯", "Ghawar"): (
+        "Fazran", "Ain Dar", "Shedgum", "Uthmaniyah", "Hawiyah", "Haradh",
+    ),
+}
+
+# 没有公开田级数值、但对区域供给具有代表性的独立资产。它们保留在默认战略视图，
+# 其余无指标的小型单田仍可在“完整资产目录”中查询。
+STRATEGIC_STANDALONE_ASSETS = {
+    ("沙特阿拉伯", name) for name in ("Qatif", "Abqaiq", "Khursaniyah", "Jafurah")
+} | {
+    ("伊拉克", name) for name in ("Kirkuk", "Qayyarah")
+} | {
+    ("伊朗", name) for name in (
+        "Ahvaz", "Marun", "Aghajari", "Gachsaran", "Reg-e-Safid",
+        "South Azadegan", "Yadavaran", "South Pars",
+    )
+} | {
+    ("科威特", name) for name in (
+        "Burgan", "Raudhatain", "Sabriya", "Minagish", "Umm Gudair", "Wafra", "Khafji",
+    )
+} | {
+    ("阿曼", name) for name in ("Mukhaizna", "Yibal", "Fahud", "Qarn Alam", "Marmul")
+} | {
+    ("卡塔尔", "North Field"),
+    ("以色列", "Leviathan"), ("以色列", "Tamar"), ("以色列", "Karish"),
+    ("阿联酋", "Fateh"),
 }
 
 OUTPUT_METRIC_TYPES = {
@@ -645,6 +678,73 @@ for asset in ASSETS:
         if parent is None:
             raise ValueError(f"缺少上级资产记录：{asset['country']} / {asset['name']} -> {parent_name}")
         asset["parent_level"] = parent["asset_level"]
+
+
+# 战略生产节点：有直接披露指标的上级资产负责汇总，组成资产保留在目录中但默认不重复上图。
+# 上级缺坐标时，只允许使用已有组成资产坐标的均值，并显式标记为推算中心点。
+_children: dict[tuple[str, str], list[dict[str, Any]]] = {}
+for asset in ASSETS:
+    if asset["parent_asset"]:
+        parent_key = (asset["country"], asset["parent_asset"])
+        _children.setdefault(parent_key, []).append(asset)
+
+for asset in ASSETS:
+    key = (asset["country"], asset["name"])
+    direct_children = _children.get(key, [])
+    named_children = list(NAMED_CONSTITUENTS.get(key, ()))
+    asset["constituent_assets"] = [child["name"] for child in direct_children] + named_children
+    asset["constituent_count"] = len(asset["constituent_assets"])
+    asset["aggregate_children_on_map"] = bool(direct_children) and asset["value"] is not None
+    asset["map_lat"] = asset["lat"]
+    asset["map_lon"] = asset["lon"]
+    asset["map_coordinate_precision"] = asset["coordinate_precision"]
+    if (asset["aggregate_children_on_map"]
+            and (asset["map_lat"] is None or asset["map_lon"] is None)):
+        located_children = [
+            child for child in direct_children
+            if child["lat"] is not None and child["lon"] is not None
+        ]
+        if located_children:
+            asset["map_lat"] = sum(child["lat"] for child in located_children) / len(located_children)
+            asset["map_lon"] = sum(child["lon"] for child in located_children) / len(located_children)
+            asset["map_coordinate_precision"] = (
+                f"组成资产近似中心（{len(located_children)}/{len(direct_children)}个有坐标）"
+            )
+
+for asset in ASSETS:
+    strategic_parent = None
+    seen = {(asset["country"], asset["name"])}
+    parent_name = asset["parent_asset"]
+    while parent_name:
+        parent_key = (asset["country"], parent_name)
+        if parent_key in seen:
+            raise ValueError(f"资产层级出现循环：{asset['country']} / {asset['name']}")
+        seen.add(parent_key)
+        parent = _asset_index[parent_key]
+        if parent["aggregate_children_on_map"] and parent["map_lat"] is not None:
+            strategic_parent = parent
+            break
+        parent_name = parent["parent_asset"]
+
+    asset["map_default"] = strategic_parent is None
+    asset["strategic_parent"] = strategic_parent["name"] if strategic_parent else None
+    asset["map_drawable"] = asset["map_lat"] is not None and asset["map_lon"] is not None
+    if strategic_parent:
+        asset["map_role"] = "component"
+        asset["map_role_label"] = f"组成资产（默认并入{strategic_parent['name']}）"
+        asset["rollup_policy"] = "上级直接披露值优先；本资产不重复计入地图汇总"
+    elif asset["constituent_count"]:
+        asset["map_role"] = "strategic_group"
+        asset["map_role_label"] = "战略生产节点（油田群／区块）"
+        asset["rollup_policy"] = (
+            "采用本层级直接披露值；组成资产不相加"
+            if asset["value"] is not None
+            else "本层级未披露数值；不自动汇总不同日期或口径的组成资产"
+        )
+    else:
+        asset["map_role"] = "strategic_standalone"
+        asset["map_role_label"] = "战略生产节点（独立资产）"
+        asset["rollup_policy"] = "独立资产；仅使用本资产直接披露值"
 
 
 # 逐资产生产状态审计（2026-09-28）。
@@ -797,3 +897,26 @@ for asset in ASSETS:
         if audit["operating_status_confidence"] == "中"
         else "需持续核实"
     )
+
+
+# 默认地图只保留可用于区域供给研判的层级：有直接数值的资产、油田群／区块等上级节点，
+# 以及少量已明确列出的主力独立田。完整目录仍保留全部记录；停产、仅发现及储存资产不进入
+# 默认战略视图。这里不要求有坐标，以便界面同时如实报告“战略节点但待定位”的数量。
+_STRATEGIC_STATUSES = {
+    "producing", "temporarily_suspended", "development",
+    "historical_unverified", "unknown",
+}
+for asset in ASSETS:
+    key = (asset["country"], asset["name"])
+    asset["strategic_default"] = bool(
+        asset["map_default"]
+        and asset["operating_status"] in _STRATEGIC_STATUSES
+        and (
+            asset["value"] is not None
+            or asset["asset_level"] != "field"
+            or key in STRATEGIC_STANDALONE_ASSETS
+        )
+    )
+    if asset["map_role"] == "strategic_standalone" and not asset["strategic_default"]:
+        asset["map_role"] = "catalog_detail"
+        asset["map_role_label"] = "完整目录资产（默认不展示）"

@@ -88,6 +88,14 @@ def display_value(asset: dict[str, object]) -> str:
     unit = asset.get("unit")
     if value is None:
         return "未披露"
+    if unit and str(unit).startswith("千桶/日"):
+        try:
+            ten_thousand_barrels = float(str(value).replace(",", "")) / 10
+            formatted = f"{ten_thousand_barrels:,.2f}".rstrip("0").rstrip(".")
+            suffix = str(unit)[len("千桶/日"):]
+            return f"{formatted} 万桶/日{suffix}"
+        except ValueError:
+            pass
     return f"{value} {unit}" if unit else str(value)
 
 
@@ -106,6 +114,16 @@ def other_daily_metric(asset: dict[str, object]) -> str:
         return "—"
     metric_label = METRIC_LABELS[str(asset["metric_type"])]
     return f"{metric_label}：{display_value(asset)}"
+
+
+def metric_class(asset: dict[str, object]) -> str:
+    """地图视觉口径：实产/推算用实心，产能/目标用空心，未披露用灰色。"""
+
+    if asset.get("value") is None:
+        return "undisclosed"
+    if asset.get("metric_type") in OUTPUT_METRIC_TYPES:
+        return "output"
+    return "capacity"
 
 
 def hierarchy_chain(asset: dict[str, object]) -> list[dict[str, object]]:
@@ -174,14 +192,21 @@ def _popup(asset: dict[str, object]) -> str:
     source_url = esc(asset["source_url"])
     status_source_url = esc(asset["operating_status_evidence_url"])
     parent = asset.get("parent_asset") or "无已登记上级"
+    constituents = "、".join(asset.get("constituent_assets") or []) or "—"
     return (
         '<div class="popup-card">'
         f'<div class="field-name">{esc(asset["name"])}（{esc(asset["name_cn"])}）</div>'
         f'<div class="country">{esc(asset["country"])} · {esc(asset["asset_type"])}</div>'
         '<div class="row"><span>资产层级</span>'
         f'<strong>{esc(asset["asset_level_label"])}</strong></div>'
+        '<div class="row"><span>地图角色</span>'
+        f'<strong>{esc(asset["map_role_label"])}</strong></div>'
         '<div class="row"><span>上级资产</span>'
         f'<strong>{esc(parent)}</strong></div>'
+        '<div class="row"><span>组成资产</span>'
+        f'<strong>{esc(constituents)}</strong></div>'
+        '<div class="row"><span>汇总规则</span>'
+        f'<strong>{esc(asset["rollup_policy"])}</strong></div>'
         '<div class="row"><span>统计范围</span>'
         f'<strong>{esc(asset["aggregation_scope"])}</strong></div>'
         '<div class="row"><span>商品</span>'
@@ -195,7 +220,7 @@ def _popup(asset: dict[str, object]) -> str:
         f'<div class="hierarchy-title">分层日产量（当前资产 → 上级）</div>'
         f'{_hierarchy_panel(asset)}'
         '<div class="row"><span>坐标精度</span>'
-        f'<strong>{esc(asset["coordinate_precision"])}</strong></div>'
+        f'<strong>{esc(asset["map_coordinate_precision"])}</strong></div>'
         f'<div class="status">原始状态说明：{esc(asset["status"])}</div>'
         f'<div class="basis">状态依据：{esc(asset["operating_status_basis"])}</div>'
         f'<div class="basis">权益口径：{esc(asset["ownership_basis"])}</div>'
@@ -316,17 +341,20 @@ def _chokepoint_popup(point: dict, day: str) -> str:
 
 
 def _map_html(assets: list[dict[str, object]], ports: list[dict],
-              chokepoints: list[dict], day: str, chokepoint_day: str) -> str:
+              chokepoints: list[dict], day: str, chokepoint_day: str,
+              focus_assets: bool = False) -> str:
     markers = [
         {
-            "lat": asset["lat"],
-            "lon": asset["lon"],
+            "lat": asset["map_lat"],
+            "lon": asset["map_lon"],
             "level": asset["asset_level"],
+            "role": asset["map_role"],
+            "metric_class": metric_class(asset),
             "name": f'{asset["name_cn"]} · {asset["name"]}',
             "popup": _popup(asset),
         }
         for asset in assets
-        if asset["lat"] is not None and asset["lon"] is not None
+        if asset["map_drawable"]
     ]
     marker_json = json.dumps(markers, ensure_ascii=False).replace("</", "<\\/")
     port_json = json.dumps([
@@ -342,13 +370,15 @@ def _map_html(assets: list[dict[str, object]], ports: list[dict],
         for point in chokepoints
     ], ensure_ascii=False).replace("</", "<\\/")
     color_json = json.dumps(LEVEL_COLORS, ensure_ascii=False)
-    legend_items = "".join(
-        f'<span><i style="background:{LEVEL_COLORS[level]}"></i>{label}</span>'
-        for level, label in LEVEL_LABELS.items()
-    )
     legend_json = json.dumps(
-        "<b>资产层级</b>" + legend_items, ensure_ascii=False
+        '<b>油气节点</b>'
+        '<span><i class="legend-solid"></i>实心：实际／推算日量</span>'
+        '<span><i class="legend-hollow"></i>空心：产能／目标</span>'
+        '<span><i class="legend-muted"></i>灰色：未披露数值</span>'
+        '<span><i class="legend-large"></i>大点：油田群／区块</span>',
+        ensure_ascii=False
     ).replace("</", "<\\/")
+    focus_json = json.dumps(focus_assets)
     return f"""
     <!doctype html><html lang="zh-CN"><head>
     <meta charset="utf-8" />
@@ -385,7 +415,11 @@ def _map_html(assets: list[dict[str, object]], ports: list[dict],
       .map-title {{ max-width: 290px; }}
       .map-title b, .map-legend b {{ font-size: 13px; }}
       .map-legend span {{ display: block; margin-top: 4px; }}
-      .map-legend i {{ display: inline-block; width: 9px; height: 9px; border-radius: 50%; margin-right: 6px; }}
+      .map-legend i {{ display: inline-block; width: 9px; height: 9px; border-radius: 50%; margin-right: 6px; box-sizing: border-box; }}
+      .map-legend .legend-solid {{ background: #dc2626; border: 1px solid #dc2626; }}
+      .map-legend .legend-hollow {{ background: white; border: 2px solid #2563eb; }}
+      .map-legend .legend-muted {{ background: #94a3b8; border: 1px solid #64748b; }}
+      .map-legend .legend-large {{ width: 12px; height: 12px; background: #ea580c; border: 1px solid #9a3412; }}
       .leaflet-control-layers {{ font-size: 12px; border: 0; border-radius: 10px; box-shadow: 0 4px 18px rgba(15,23,42,.18); }}
       .leaflet-control-layers-expanded {{ padding: 9px 12px; }}
       .leaflet-tooltip {{ border: 0; border-radius: 7px; padding: 5px 8px; box-shadow: 0 3px 12px rgba(15,23,42,.18); font-size: 11px; }}
@@ -408,7 +442,7 @@ def _map_html(assets: list[dict[str, object]], ports: list[dict],
       const title = L.control({{position: 'topleft'}});
       title.onAdd = () => {{
         const el = L.DomUtil.create('div', 'map-title');
-        el.innerHTML = '<b>中东能源资产、港口与咽喉点</b><br>橙色为咽喉点；青色为港口；点击查看详情。';
+        el.innerHTML = '<b>中东战略生产节点、港口与咽喉点</b><br>点击节点查看层级、数值口径与汇总规则。';
         return el;
       }};
       title.addTo(map);
@@ -428,13 +462,19 @@ def _map_html(assets: list[dict[str, object]], ports: list[dict],
       const portLayer = L.layerGroup().addTo(map);
       const chokepointLayer = L.layerGroup().addTo(map);
       assets.forEach((asset) => {{
-        const color = levelColors[asset.level] || '#64748b';
+        const baseColor = levelColors[asset.level] || '#64748b';
+        const color = asset.metric_class === 'undisclosed' ? '#64748b' : baseColor;
+        const isGroup = asset.role === 'strategic_group';
+        const fillColor = asset.metric_class === 'capacity' ? '#ffffff' :
+          (asset.metric_class === 'undisclosed' ? '#94a3b8' : color);
+        const fillOpacity = asset.metric_class === 'capacity' ? 0.22 :
+          (asset.metric_class === 'undisclosed' ? 0.72 : 0.9);
         L.circleMarker([asset.lat, asset.lon], {{
-          radius: asset.level === 'field' ? 5.5 : 7,
+          radius: isGroup ? 8.5 : (asset.level === 'field' ? 5.5 : 7),
           color: color,
-          weight: 1.4,
-          fillColor: color,
-          fillOpacity: 0.88
+          weight: asset.metric_class === 'capacity' ? 2.4 : 1.5,
+          fillColor: fillColor,
+          fillOpacity: fillOpacity
         }}).bindTooltip(asset.name, {{direction: 'top', opacity: .95}})
           .bindPopup(asset.popup, {{maxWidth: 390}}).addTo(assetLayer);
       }});
@@ -457,7 +497,15 @@ def _map_html(assets: list[dict[str, object]], ports: list[dict],
       const allPoints = ports.map((p) => [p.lat, p.lon])
         .concat(chokepoints.map((p) => [p.lat, p.lon]))
         .concat(assets.map((a) => [a.lat, a.lon]));
-      if (allPoints.length) map.fitBounds(L.latLngBounds(allPoints), {{padding: [36, 36], maxZoom: 5}});
+      const focusAssets = {focus_json};
+      if (focusAssets && assets.length === 1) {{
+        map.setView([assets[0].lat, assets[0].lon], 8);
+      }} else if (focusAssets && assets.length > 1) {{
+        map.fitBounds(L.latLngBounds(assets.map((a) => [a.lat, a.lon])),
+          {{padding: [42, 42], maxZoom: 7}});
+      }} else if (allPoints.length) {{
+        map.fitBounds(L.latLngBounds(allPoints), {{padding: [36, 36], maxZoom: 5}});
+      }}
       L.control.layers({{'英文街道图': streets, '浅色底图': light, '卫星影像': satellite}},
         {{'油气资产': assetLayer, '港口指标（点越大越活跃）': portLayer,
           '咽喉点通行（橙色）': chokepointLayer}}, {{collapsed: false}}).addTo(map);
@@ -468,7 +516,7 @@ def _map_html(assets: list[dict[str, object]], ports: list[dict],
 st.markdown("""
 <div class="hero">
   <h1>中东能源保供监测</h1>
-  <p>油气资产、港口活动指标与关键咽喉点通行｜IMF PortWatch 日度数据</p>
+  <p>战略生产节点、港口活动指标与关键咽喉点通行｜油田群优先、口径不重复</p>
 </div>
 """, unsafe_allow_html=True)
 
@@ -509,6 +557,10 @@ with st.sidebar:
             st.warning(f"咽喉点数据暂时不可用：{exc}")
 
     with st.expander("◉ 油气资产筛选", expanded=True):
+        asset_view = st.radio(
+            "资产视图", ["战略生产节点", "完整资产目录"],
+            horizontal=True, key="asset_view")
+        st.caption("战略视图按油田群／区块优先，避免组成资产与上级重复展示。")
         asset_search = st.text_input("搜索资产", placeholder="输入中英文名称",
                                      key="asset_search").strip().lower()
         selected_countries = st.multiselect("国家（空选＝全部）", country_options, default=[],
@@ -577,7 +629,7 @@ if newest_chokepoint_day is not None:
     except Exception as exc:
         chokepoint_error = str(exc)
 
-filtered = [
+filtered_all = [
     asset for asset in ASSETS
     if (not selected_countries or asset["country"] in selected_countries)
     and (not selected_levels or asset["asset_level"] in selected_levels)
@@ -589,7 +641,13 @@ filtered = [
     and (not asset_search or asset_search in str(asset["name"]).lower()
          or asset_search in str(asset["name_cn"]).lower())
 ]
-map_assets = filtered if map_mode in {"全部图层", "仅油气资产"} else []
+filtered = [
+    asset for asset in filtered_all
+    if asset_view == "完整资产目录" or asset["strategic_default"] or bool(asset_search)
+]
+map_asset_candidates = filtered if map_mode in {"全部图层", "仅油气资产"} else []
+map_assets = [asset for asset in map_asset_candidates if asset["map_drawable"]]
+unlocated_map_assets = [asset for asset in map_asset_candidates if not asset["map_drawable"]]
 map_ports = ports if map_mode in {"全部图层", "仅港口与咽喉点"} else []
 map_chokepoints = chokepoints if map_mode != "仅油气资产" else []
 
@@ -644,7 +702,10 @@ for port in ports:
 asset_rows = [
     {
         "国家": asset["country"], "资产层级": asset["asset_level_label"],
+        "地图角色": asset["map_role_label"],
         "层级路径": hierarchy_path(asset), "上级资产": asset["parent_asset"] or "—",
+        "组成资产": "、".join(asset["constituent_assets"]) or "—",
+        "汇总规则": asset["rollup_policy"],
         "英文名称": asset["name"], "中文名称": asset["name_cn"],
         "资产类型": asset["asset_type"], "商品": asset["commodity_label"],
         "生产状态": asset["operating_status_label"], "状态截至": asset["operating_status_as_of"],
@@ -652,7 +713,9 @@ asset_rows = [
         "指标口径": METRIC_LABELS[asset["metric_type"]], "数据日期": display_date(asset),
         "统计范围": asset["aggregation_scope"], "状态置信度": asset["operating_status_confidence"],
         "状态依据": asset["operating_status_basis"], "状态证据链接": asset["operating_status_evidence_url"],
-        "坐标精度": asset["coordinate_precision"], "来源": asset["source"],
+        "地图坐标精度": asset["map_coordinate_precision"],
+        "默认战略节点": "是" if asset["strategic_default"] else "否",
+        "来源": asset["source"],
         "来源链接": asset["source_url"], "说明": asset["note"],
     }
     for asset in filtered
@@ -666,18 +729,23 @@ with tab_map:
         st.error(f"港口数据加载失败：{port_error}")
     if chokepoint_error:
         st.error(f"咽喉点数据加载失败：{chokepoint_error}")
-    m1, m2, m3, m4 = st.columns(4)
-    m1.metric("地图油气资产", len(map_assets))
-    m2.metric("地图港口", len(map_ports))
-    m3.metric("地图咽喉点", len(map_chokepoints))
-    m4.metric(f"{rolling_days}天活跃港口",
+    m1, m2, m3, m4, m5 = st.columns(5)
+    m1.metric("地图战略节点" if asset_view == "战略生产节点" else "地图资产点",
+              len(map_assets))
+    m2.metric("待定位资产", len(unlocated_map_assets))
+    m3.metric("地图港口", len(map_ports))
+    m4.metric("地图咽喉点", len(map_chokepoints))
+    m5.metric(f"{rolling_days}天活跃港口",
               sum((p.get("active_days") or 0) > 0 for p in map_ports))
-    st.caption("青色港口点按所选窗口日均有效进港艘次缩放；橙色咽喉点按最新日通过船舶数缩放。")
+    st.caption(
+        "油气节点：实心为实际／推算日量，空心为产能／目标，灰色为未披露；"
+        "大点表示油田群／区块。青色港口与橙色咽喉点按活动规模缩放。")
     st.iframe(
         _map_html(
             map_assets, map_ports, map_chokepoints,
             selected_day.isoformat() if selected_day else "无数据",
-            newest_chokepoint_day.isoformat() if newest_chokepoint_day else "无数据"),
+            newest_chokepoint_day.isoformat() if newest_chokepoint_day else "无数据",
+            focus_assets=bool(asset_search)),
         height=735,
     )
 
@@ -705,13 +773,16 @@ with tab_ports:
         st.info("当前筛选没有匹配港口。清空水域和搜索框可恢复全部港口。")
 
 with tab_assets:
-    st.subheader("油气资产目录")
-    a1, a2, a3, a4 = st.columns(4)
-    a1.metric("筛选后资产", len(filtered))
-    a2.metric("在产", sum(a["operating_status"] == "producing" for a in filtered))
+    st.subheader(f"油气资产目录 · {asset_view}")
+    a1, a2, a3, a4, a5 = st.columns(5)
+    a1.metric("当前视图", len(filtered))
+    a2.metric("可绘制", sum(bool(a["map_drawable"]) for a in filtered))
     a3.metric("有日产量", sum(bool(a["is_daily_output"]) for a in filtered))
-    a4.metric("状态待核", sum(a["operating_status"] in {"unknown", "historical_unverified"} for a in filtered))
-    st.info("同一资产链上的单田与上级区块、油田群或特许区不能同时求和。")
+    a4.metric("产能／目标", sum(a["value"] is not None and not a["is_daily_output"] for a in filtered))
+    a5.metric("底层目录", len(ASSETS))
+    st.info(
+        "上级节点有直接披露值时优先采用该值，组成资产不重复计入；"
+        "不同日期、商品或口径的子项不会自动相加。搜索可临时显示完整目录中的匹配资产。")
     st.dataframe(asset_rows, width="stretch", hide_index=True, height=620,
                  column_config={
                      "状态证据链接": st.column_config.LinkColumn("状态证据"),
@@ -761,6 +832,16 @@ with tab_method:
         "避免把更新节奏不同的两张表强行对齐。"
     )
     st.markdown(
-        "**资产覆盖。** 目录收录公开命名的主要生产、开发或保留油气资产；生产状态带证据时点，"
-        "不等于实时遥测。地图 popup 会显示当前资产及已登记上级的分层数值。"
+        f"**资产覆盖与战略层级。** 底层目录保留全部{len(ASSETS)}项公开命名的生产、开发、发现或历史资产；"
+        f"默认地图仅显示{sum(a['strategic_default'] for a in ASSETS)}个战略生产节点，其中"
+        f"{sum(a['strategic_default'] and a['map_drawable'] for a in ASSETS)}个具备可绘制坐标。"
+        "上级油田群、区块或特许区有"
+        "直接披露值时，地图使用上级值并隐藏组成资产，避免双重计算；上级缺坐标时可使用已定位组成"
+        "资产的几何中心，并在popup中明确标注。没有可靠数值的小型单田仍可在“完整资产目录”中查询。"
+    )
+    st.markdown(
+        "**产量与产能。** 实心点只表示来源直报实际产量、历史推算日均或已注明的历史产量；"
+        "空心点表示产能、目标或规划增量；灰色点表示本层级未披露数值。不同日期、商品和权益口径"
+        "不得相加。来源为千桶/日的油品数值在界面统一换算为万桶/日；生产状态带证据时点，"
+        "不等于实时遥测。"
     )
