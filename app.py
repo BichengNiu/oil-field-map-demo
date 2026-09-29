@@ -844,35 +844,39 @@ def current_ais_positions() -> list[dict]:
 
     if not ais_enabled:
         return []
-    rows: dict[str, dict] = {}
+    stream_rows = []
     if ais_collector_instance is not None:
-        for vessel in ais_collector_instance.snapshot(max_age_minutes=ais_max_age):
-            rows[str(vessel["mmsi"])] = vessel
+        stream_rows = ais_collector_instance.snapshot(max_age_minutes=ais_max_age)
     open_state = _openwaters_snapshot(ais_max_age, AIS.MODULE_VERSION)
-    for vessel in open_state.get("vessels", []):
-        mmsi = str(vessel["mmsi"])
-        previous = rows.get(mmsi)
-        if previous is None or vessel["received_at"] > previous["received_at"]:
-            rows[mmsi] = vessel
-    return list(rows.values())
+    return AIS.merge_vessel_snapshots(stream_rows, open_state.get("vessels", []))
 
 
-def current_vessels() -> list[dict]:
+def current_vessels(rows: list[dict] | None = None) -> list[dict]:
     """Return one consistent, filtered snapshot; missing AIS is unavailable, not zero."""
 
-    rows = current_ais_positions()
-    selected_region_values = set(selected_ais_regions or AIS.REGIONS)
-    return [
-        vessel for vessel in rows
-        if vessel.get("region") in selected_region_values
-        and (not selected_ais_categories
-             or vessel.get("category") in selected_ais_categories)
-        and (not ais_moving_only or vessel.get("moving"))
-        and (not ais_search
-             or ais_search in str(vessel.get("name") or "").lower()
-             or ais_search in str(vessel.get("mmsi") or "").lower()
-             or ais_search in str(vessel.get("imo") or "").lower())
-    ]
+    snapshot = current_ais_positions() if rows is None else rows
+    return AIS.filter_vessels(
+        snapshot,
+        regions=set(selected_ais_regions or AIS.REGIONS),
+        categories=set(selected_ais_categories),
+        moving_only=ais_moving_only,
+        query=ais_search,
+    )
+
+
+def current_ais_status() -> dict:
+    """Return the collector status with one stable shape when it is optional."""
+
+    if ais_collector_instance is not None:
+        return ais_collector_instance.status()
+    return {
+        "status": "未配置（可选）", "last_error": None,
+        "last_message_at": None, "last_position_message_at": None,
+        "raw_event_count": 0, "rejected_event_count": 0,
+        "message_count": 0, "position_message_count": 0,
+        "static_message_count": 0, "tracked_vessels": 0,
+        "compression_enabled": None,
+    }
 
 filtered_all = [
     asset for asset in ASSETS
@@ -994,12 +998,9 @@ def vessel_rows(vessels: list[dict]) -> list[dict]:
 @st.fragment(run_every=15 if ais_enabled else None)
 def render_map_panel() -> None:
     all_positions = current_ais_positions()
-    filtered_vessels = current_vessels()
+    filtered_vessels = current_vessels(all_positions)
     map_vessels = filtered_vessels if map_mode in {"全部图层", "仅实时AIS船舶"} else []
-    stream_state = ais_collector_instance.status() if ais_collector_instance else {
-        "status": "未配置（可选）", "raw_event_count": 0,
-        "position_message_count": 0, "last_error": None,
-    }
+    stream_state = current_ais_status()
     open_state = _openwaters_snapshot(ais_max_age, AIS.MODULE_VERSION)
     if port_error:
         st.error(f"港口数据加载失败：{port_error}")
@@ -1060,17 +1061,10 @@ def render_ais_panel() -> None:
     if not ais_enabled:
         st.info("实时船位已关闭，可在左侧‘实时 AIS 船舶’中启用。")
         return
-    vessels = current_vessels()
-    rows = vessel_rows(vessels)
     all_positions = current_ais_positions()
-    state = ais_collector_instance.status() if ais_collector_instance else {
-        "status": "未配置（可选）", "last_error": None,
-        "last_message_at": None, "last_position_message_at": None,
-        "raw_event_count": 0, "rejected_event_count": 0,
-        "message_count": 0, "position_message_count": 0,
-        "static_message_count": 0, "tracked_vessels": 0,
-        "compression_enabled": None,
-    }
+    vessels = current_vessels(all_positions)
+    rows = vessel_rows(vessels)
+    state = current_ais_status()
     open_state = _openwaters_snapshot(ais_max_age, AIS.MODULE_VERSION)
     has_position_data = bool(all_positions)
     vessel_metric = len(vessels) if has_position_data else "—"
