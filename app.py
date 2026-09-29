@@ -1059,7 +1059,6 @@ def vessel_rows(vessels: list[dict]) -> list[dict]:
     } for vessel in vessels]
 
 
-@st.fragment(run_every=15 if ais_enabled else None)
 def render_map_panel() -> None:
     all_positions = current_ais_positions()
     filtered_vessels = current_vessels(all_positions)
@@ -1151,7 +1150,9 @@ def render_ais_panel() -> None:
         )
     else:
         st.caption("AISStream 密钥未配置（可选）；当前使用无需密钥的 Open Waters 免费聚合快照。")
-    st.caption(f'Open Waters 快照：{len(open_state["vessels"]):,} 艘船位 · 刷新间隔约15秒')
+    st.caption(
+        f'Open Waters 快照：{len(open_state["vessels"]):,} 艘船位'
+        ' · 点击侧栏“刷新 AIS 数据”获取新快照')
     if open_state.get("attribution"):
         credits = list(dict.fromkeys(open_state["attribution"].values()))
         st.caption("数据来源署名：" + " · ".join(credits))
@@ -1290,7 +1291,8 @@ with tab_method:
     st.markdown(
         f"**实时AIS船位。** 免费快照来自[Open Waters开放AIS网络]({AIS.OPENWATERS_SOURCE})，"
         f"可选[AISStream WebSocket API]({AIS.SOURCE})在服务器端接收五个监测水域的船级广播；"
-        "快照约每15秒刷新，浏览器只接收标准化的每船最新位置，不接收API Key。"
+        "页面不会定时刷新；点击侧栏“刷新 AIS 数据”时读取最新船位快照。"
+        "浏览器只接收标准化的每船最新位置，不接收API Key。"
         "多源位置按MMSI合并，航行阈值为0.5节，超过所选最大数据年龄的船位会被删除；"
         "上游来源署名随船舶表及弹窗显示。"
     )
