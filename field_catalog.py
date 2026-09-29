@@ -183,7 +183,7 @@ ASSETS = [
     # Aramco prospectus identifies these as separate fields within the Khurais complex; no field-level production split.
     record("沙特阿拉伯", "Abu Jifan", "阿布吉凡", "油田（Khurais综合体）", None, None, source="Aramco 2019 Prospectus", note="阿美列为Khurais综合体组成油田；综合体1,450千桶/日产能不可拆给单田。"),
     record("沙特阿拉伯", "Mazalij", "马扎利吉", "油田（Khurais综合体）", None, None, source="Aramco 2019 Prospectus", note="阿美列为Khurais综合体组成油田；单田产量未披露。"),
-    record("沙特阿拉伯", "Qirdi", "吉尔迪", "油田", None, None, source="Aramco 2019 Prospectus", note="阿美储量认证附件将其列为单独油田；主体章节对Khurais综合体的定义只列Khurais、Abu Jifan和Mazalij，因此本目录不把Qirdi并入Khurais汇总。单田产量未披露。"),
+    record("沙特阿拉伯", "Qirdi", "吉尔迪", "油田", None, None, source="Aramco 2019 Prospectus", note="阿美招股书将Qirdi与Khurais、Abu Jifan、Mazalij共同列为Khurais综合体的四个油田；单田产量未披露。"),
     record("沙特阿拉伯", "Abu Hadriya", "阿布哈德里亚", "油田", None, None, source="Aramco 2019 Prospectus", note="阿美储量认证附件列为油田；生产状态及逐田日产量待核。"),
     record("沙特阿拉伯", "Fadhili", "法迪利", "油田", None, None, source="Aramco 2019 Prospectus", note="阿美储量认证附件列为油田；与同名气体处理设施区分，逐田原油日产量待核。"),
     record("沙特阿拉伯", "Harmaliyah", "哈马利亚", "油田", None, None, source="Aramco 2019 Prospectus", note="阿美储量认证附件列为油田；逐田产量未披露。"),
@@ -534,6 +534,7 @@ LEVEL_OVERRIDES = {
 PARENT_RELATIONSHIPS = {
     ("沙特阿拉伯", "Abu Jifan"): "Khurais",
     ("沙特阿拉伯", "Mazalij"): "Khurais",
+    ("沙特阿拉伯", "Qirdi"): "Khurais",
     ("阿联酋", "Belbazem"): "Belbazem Offshore Block",
     ("阿联酋", "Umm Al Salsal"): "Belbazem Offshore Block",
     ("阿联酋", "Umm Al Dholou"): "Belbazem Offshore Block",
@@ -645,6 +646,54 @@ COORDINATE_OVERRIDES: dict[tuple[str, str], dict[str, Any]] = {
         "source": "Global Energy Monitor — Harmaliyah",
         "url": "https://www.gem.wiki/Harmaliyah_Oil_and_Gas_Field_%28Saudi_Arabia%29",
     },
+    ("沙特阿拉伯", "Hawtah"): {
+        "lat": 22.9678, "lon": 46.8995,
+        "precision": "Hawtah油田机场设施代表点（近似，非油田中心）",
+        "source": "OpenStreetMap/GeoNames — Hawtah Airport",
+        "url": "https://mapcarta.com/36033010", "proxy": True,
+    },
+    ("沙特阿拉伯", "Sakab"): {
+        "lat": 23.92, "lon": 49.08,
+        "precision": "Haradh油田区域代表点（Sakab位于其东南；非井位）",
+        "source": "Saudi Aramco discovery release / Haradh public coordinate",
+        "url": "https://www.aramco.com/en/news-media/news/2020/saudi-aramco-announces-new-oil-and-gas-discoveries", "proxy": True,
+    },
+    ("沙特阿拉伯", "Zumul"): {
+        "lat": 22.48, "lon": 53.78,
+        "precision": "鲁卜哈利新发现区域代表点（借用Shaybah区域；非井位）",
+        "source": "Saudi Aramco discovery release / Shaybah regional anchor",
+        "url": "https://www.aramco.com/en/news-media/news/2020/saudi-aramco-announces-new-oil-and-gas-discoveries", "proxy": True,
+    },
+    **{
+        ("沙特阿拉伯", name): {
+            "lat": 25.43, "lon": 48.82,
+            "precision": "沙特东部省新发现区域代表点（非油田中心或井位）",
+            "source": "Saudi Press Agency announcement — Eastern Region (reported by Reuters)",
+            "url": "https://www.reuters.com/business/energy/saudi-arabia-discovers-14-oil-natural-gas-fields-state-news-agency-says-2025-04-09/",
+            "proxy": True,
+        }
+        for name in ("Jabu", "Sayahid", "Ayfan")
+    },
+    **{
+        ("沙特阿拉伯", name): {
+            "lat": 25.43, "lon": 48.82,
+            "precision": "沙特东部省新发现区域代表点（非油田中心或井位）",
+            "source": "Saudi Press Agency announcement — Eastern Province (reported by Reuters)",
+            "url": "https://www.reuters.com/world/middle-east/saudi-energy-minister-announces-discovery-multiple-oil-gas-fields-2024-07-01/",
+            "proxy": True,
+        }
+        for name in ("Ladam", "Faruq")
+    },
+    **{
+        ("沙特阿拉伯", name): {
+            "lat": 22.48, "lon": 53.78,
+            "precision": "鲁卜哈利新发现区域代表点（非油田中心或井位）",
+            "source": "Saudi Press Agency announcement — Empty Quarter (reported by Reuters)",
+            "url": "https://www.reuters.com/business/energy/saudi-arabia-discovers-14-oil-natural-gas-fields-state-news-agency-says-2025-04-09/",
+            "proxy": True,
+        }
+        for name in ("Nuwayr", "Damda", "Qurqas")
+    },
     ("阿联酋", "Hail (ADNOC Ghasha)"): {
         "lat": 24.368, "lon": 53.413, "precision": "公开资产数据库精确点位（WGS84）",
         "source": "Global Energy Monitor — Hail",
@@ -665,6 +714,30 @@ COORDINATE_OVERRIDES: dict[tuple[str, str], dict[str, Any]] = {
         "source": "Global Energy Monitor — Umm Al Qaiwain",
         "url": "https://www.gem.wiki/Umm_Al_Qaiwain_%28UAQ%29_Gas_Field_%28United_Arab_Emirates%29",
     },
+    ("阿联酋", "Moveyeid"): {
+        "lat": 25.3778, "lon": 55.6826,
+        "precision": "Sajaa—Moveyeid—Kahaif资产群代表点（非Moveyeid井位）",
+        "source": "SNOC asset grouping / Sajaa public coordinate",
+        "url": "https://www.snoc.ae/operations/", "proxy": True,
+    },
+    ("阿联酋", "Mahani"): {
+        "lat": 25.15, "lon": 55.78,
+        "precision": "Area B公开位置图估读（近似，非井位）",
+        "source": "ENI / GEO ExPro — Mahani-1 location map",
+        "url": "https://geoexpro.com/uae-sharjah-gas-discovery/", "proxy": True,
+    },
+    ("阿联酋", "Hedebah"): {
+        "lat": 25.442, "lon": 55.754,
+        "precision": "按Sajaa处理厂东北约10公里推算（区域代表点）",
+        "source": "SNOC Hedebah project description / Sajaa public coordinate",
+        "url": "https://www.snoc.ae/operations/", "proxy": True,
+    },
+    ("阿联酋", "Saleh"): {
+        "lat": 26.14, "lon": 55.71,
+        "precision": "Saleh—Ras al-Khaimah输气管线海上起点（近似）",
+        "source": "Global Energy Monitor — Saleh–Ras al-Khaimah gas pipeline",
+        "url": "https://www.gem.wiki/Saleh%E2%80%93Ras_al-Khaimah_gas_pipeline", "proxy": True,
+    },
     ("伊拉克", "Khurmala"): {
         "lat": 35.97778, "lon": 43.76306,
         "precision": "公开地图油田设施点位（OpenStreetMap；近似）",
@@ -675,6 +748,55 @@ COORDINATE_OVERRIDES: dict[tuple[str, str], dict[str, Any]] = {
         "lat": 34.1814, "lon": 45.4085, "precision": "跨境油田项目公开近似点（WGS84）",
         "source": "Global Energy Monitor — Khanah / Naft Khana",
         "url": "https://www.gem.wiki/Khanah_Oil_Field_%28Iraq%29",
+    },
+    ("伊拉克", "Sarta"): {
+        "lat": 36.377, "lon": 44.0002, "precision": "公开资产数据库近似点（WGS84）",
+        "source": "Global Energy Monitor — Sarta",
+        "url": "https://www.gem.wiki/Sarta_Oil_and_Gas_Field_%28Iraq%29",
+    },
+    ("伊拉克", "Baeshiqa"): {
+        "lat": 36.45046, "lon": 43.34977,
+        "precision": "Baeshiqa许可证区同名城镇代表点（非油田中心）",
+        "source": "DNO license description / GeoNames — Bashiqa",
+        "url": "https://www.dno.no/en/operations/kurdistan-region-of-iraq/", "proxy": True,
+    },
+    ("伊拉克", "Eridu (Block 10)"): {
+        "lat": 30.73, "lon": 45.99, "precision": "公开资产数据库近似点（WGS84）",
+        "source": "Global Energy Monitor — Eridu",
+        "url": "https://www.gem.wiki/Eridu_Oil_Field_%28Iraq%29",
+    },
+    ("伊拉克", "Ajil"): {
+        "lat": 35.019, "lon": 43.744, "precision": "公开资产数据库精确点位（WGS84）",
+        "source": "Global Energy Monitor — Ajeel",
+        "url": "https://www.gem.wiki/Ajeel_Oil_and_Gas_Field_%28Iraq%29",
+    },
+    ("伊拉克", "Ain Zalah"): {
+        "lat": 36.71667, "lon": 42.6, "precision": "公开地名数据库油田点位（WGS84）",
+        "source": "GeoNames/Mapcarta — Ain Zalah Oil Field", "url": "https://mapcarta.com/12542254",
+    },
+    ("伊拉克", "Batmah"): {
+        "lat": 36.66667, "lon": 42.78333, "precision": "公开地名数据库油田点位（WGS84）",
+        "source": "GeoNames/Mapcarta — Butmah Oil Field", "url": "https://mapcarta.com/12540670",
+    },
+    ("伊拉克", "Hamrin"): {
+        "lat": 34.93545, "lon": 43.84327, "precision": "公开地名数据库油田点位（WGS84）",
+        "source": "GeoNames/Mapcarta — Hamrin Oil Field", "url": "https://mapcarta.com/26089772",
+    },
+    ("伊拉克", "Amara"): {
+        "lat": 31.7468, "lon": 47.0614, "precision": "公开资产数据库近似点（WGS84）",
+        "source": "Global Energy Monitor — Amara",
+        "url": "https://www.gem.wiki/Amara_Oil_and_Gas_Field_%28Iraq%29",
+    },
+    ("伊拉克", "Noor"): {
+        "lat": 31.796, "lon": 47.287, "precision": "公开资产数据库精确点位（WGS84）",
+        "source": "Global Energy Monitor — Noor",
+        "url": "https://www.gem.wiki/Noor_Oil_and_Gas_Field_%28Iraq%29",
+    },
+    ("伊拉克", "Safiya"): {
+        "lat": 36.9216, "lon": 42.24094,
+        "precision": "同名油田设施公开点（近似，非油田中心）",
+        "source": "OpenStreetMap/Mapcarta — Safiya oil-field facility",
+        "url": "https://mapcarta.com/N8571647117", "proxy": True,
     },
     ("伊朗", "Hengam"): {
         "lat": 26.4214, "lon": 55.9659, "precision": "公开资产数据库精确点位（WGS84）",
@@ -711,6 +833,57 @@ COORDINATE_OVERRIDES: dict[tuple[str, str], dict[str, Any]] = {
         "lat": 32.5293, "lon": 47.8673, "precision": "公开资产数据库精确点位（WGS84）",
         "source": "Global Energy Monitor — Dalpari",
         "url": "https://www.gem.wiki/Dalpari_Oil_Field_%28Iran%29",
+    },
+    ("伊朗", "Band-e-Karkheh"): {
+        "lat": 31.44, "lon": 48.52,
+        "precision": "公开区域图估读／Ahvaz西北约20公里（近似）",
+        "source": "IranOilGas field map / published location description",
+        "url": "https://www.iranoilgas.com/fields/details.aspx?id=1063", "proxy": True,
+    },
+    ("伊朗", "Paydar"): {
+        "lat": 32.02, "lon": 47.72,
+        "precision": "East Paydar公开区域图估读（近似，非井位）",
+        "source": "IranOilGas — East Paydar field map",
+        "url": "https://www.iranoilgas.com/fields/details.aspx?id=1089", "proxy": True,
+    },
+    ("科威特", "Nokhetha"): {
+        "lat": 29.4162, "lon": 48.7026, "precision": "公开资产数据库近似点（WGS84）",
+        "source": "Global Energy Monitor — Nokhetha",
+        "url": "https://www.gem.wiki/Nokhetha_Oil_and_Gas_Field_%28Kuwait%29",
+    },
+    ("科威特", "Julaiah"): {
+        "lat": 28.824, "lon": 48.6894, "precision": "公开资产数据库近似点（WGS84）",
+        "source": "Global Energy Monitor — Julaiah",
+        "url": "https://www.gem.wiki/Julaiah_Oil_and_Gas_Field_%28Kuwait%29",
+    },
+    ("科威特", "Mutriba"): {
+        "lat": 29.763444, "lon": 47.224222,
+        "precision": "官方地震勘探区中心坐标（WGS84；区域代表点）",
+        "source": "Kuwait official seismic-survey tender coordinate",
+        "url": "https://www.kockw.com/sites/EN/Pages/Profile/WhatWeDo/OilFields.aspx", "proxy": True,
+    },
+    ("科威特", "Shaham"): {
+        "lat": 29.916667, "lon": 47.666667,
+        "precision": "北科威特同名地理要素代表点（非油田中心）",
+        "source": "GeoNames — Shaib Abu-Shaham / field-region description",
+        "url": "https://www.geonames.org/387923/shaib-abu-shaham.html", "proxy": True,
+    },
+    ("科威特", "Kra-al-Maru"): {
+        "lat": 29.435833, "lon": 47.327778,
+        "precision": "西科威特同名地理要素代表点（近似）",
+        "source": "GeoNames / MEES field-region description",
+        "url": "https://www.geonames.org/285913/kra-al-maru.html", "proxy": True,
+    },
+    ("卡塔尔", "Al-Rayyan"): {
+        "lat": 26.6591, "lon": 51.5725, "precision": "公开资产数据库精确点位（WGS84）",
+        "source": "Global Energy Monitor — Al Rayyan",
+        "url": "https://www.gem.wiki/Al_Rayyan_Oil_and_Gas_Field_%28Qatar%29",
+    },
+    ("卡塔尔", "Al-Murjan"): {
+        "lat": 26.6591, "lon": 51.5725,
+        "precision": "Al-Rayyan生产平台代表点（Al-Murjan经该平台生产）",
+        "source": "QatarEnergy project description / Global Energy Monitor — Al Rayyan",
+        "url": "https://www.qatarenergy.qa/en/WhatWeDo/Pages/ExplorationandProduction.aspx", "proxy": True,
     },
     ("卡塔尔", "A-Structures (A-North / A-South)"): {
         "lat": 25.0811, "lon": 52.4847,
@@ -796,6 +969,24 @@ COORDINATE_OVERRIDES: dict[tuple[str, str], dict[str, Any]] = {
         "source": "Global Energy Monitor — Ghazeer",
         "url": "https://www.gem.wiki/Ghazeer_%28Khazzan_Phase_2%29_Oil_and_Gas_Field_%28Oman%29",
     },
+    ("阿曼", "Budour Northeast"): {
+        "lat": 18.31856, "lon": 55.10261,
+        "precision": "Birba作业区公开油田点（Budour Northeast区域代表点）",
+        "source": "PDO discovery description / GeoNames — Birba Oil Field",
+        "url": "https://mapcarta.com/35907568", "proxy": True,
+    },
+    ("阿曼", "Wadi Aswad North"): {
+        "lat": 21.93501, "lon": 55.74842,
+        "precision": "Wadi Aswad同名地理区域代表点（非发现井坐标）",
+        "source": "GeoNames/Mapcarta — Wadi Aswad",
+        "url": "https://mapcarta.com/12444616", "proxy": True,
+    },
+    ("阿曼", "Safah North B"): {
+        "lat": 23.196323, "lon": 55.471184,
+        "precision": "Safah油田公开点（北部发现区域代表点；非井位）",
+        "source": "GeoNames — Safah Oil Field / Occidental discovery announcement",
+        "url": "https://www.geonames.org/11864188/safah-oil-field.html", "proxy": True,
+    },
     ("也门", "Block S2 (Uqlah)"): {
         "lat": 15.3053, "lon": 46.77715,
         "precision": "Habban组成油田设施公开点位（OpenStreetMap；近似）",
@@ -830,6 +1021,52 @@ COORDINATE_OVERRIDES: dict[tuple[str, str], dict[str, Any]] = {
         "precision": "开发区同名地理要素近似点（WGS84；非边界中心）",
         "source": "GeoNames/OpenStreetMap — Wadi Faliq as Sahl",
         "url": "https://mapcarta.com/13059698",
+    },
+    ("埃及", "Shukheir Offshore (Shukheir Bay)"): {
+        "lat": 28.12, "lon": 33.31,
+        "precision": "埃及官方特许权地图估读（Shukheir代表点）",
+        "source": "Egypt Upstream Gateway — Egypt Concession Map (Sep 2026)",
+        "url": "https://eug.petroleum.gov.eg/dp/pages/customcode/MDS_iTabs/information-img/Egypt_Concession_Map.pdf", "proxy": True,
+    },
+    ("埃及", "Shukheir Offshore (Gamma)"): {
+        "lat": 28.12, "lon": 33.31,
+        "precision": "埃及官方特许权地图估读（Shukheir特许区代表点）",
+        "source": "Egypt Upstream Gateway — Egypt Concession Map (Sep 2026)",
+        "url": "https://eug.petroleum.gov.eg/dp/pages/customcode/MDS_iTabs/information-img/Egypt_Concession_Map.pdf", "proxy": True,
+    },
+    ("埃及", "Gazwarina"): {
+        "lat": 27.63, "lon": 33.64,
+        "precision": "埃及官方特许权地图估读（近似）",
+        "source": "Egypt Upstream Gateway — Egypt Concession Map (Sep 2026)",
+        "url": "https://eug.petroleum.gov.eg/dp/pages/customcode/MDS_iTabs/information-img/Egypt_Concession_Map.pdf", "proxy": True,
+    },
+    ("埃及", "Ras El Ush"): {
+        "lat": 27.866667, "lon": 33.516667,
+        "precision": "公开地学论文所列Ras El Ush井区坐标（近似）",
+        "source": "Published Ras El Ush field study",
+        "url": "https://www.researchgate.net/publication/342262683", "proxy": True,
+    },
+    ("埃及", "Zeit Bay"): {
+        "lat": 27.7182, "lon": 33.2409, "precision": "公开资产数据库精确点位（WGS84）",
+        "source": "Global Energy Monitor — Zeit Bay",
+        "url": "https://www.gem.wiki/Zeit_Bay_Oil_and_Gas_Field_%28Egypt%29",
+    },
+    ("埃及", "Ras Budran"): {
+        "lat": 28.934, "lon": 33.2409, "precision": "公开资产数据库精确点位（WGS84）",
+        "source": "Global Energy Monitor — Ras Budran",
+        "url": "https://www.gem.wiki/Ras_Budran_Oil_and_Gas_Field_%28Egypt%29",
+    },
+    ("埃及", "East Zeit (E. Zeit)"): {
+        "lat": 27.84, "lon": 33.62,
+        "precision": "埃及官方特许权地图估读（近似）",
+        "source": "Egypt Upstream Gateway — Egypt Concession Map (Sep 2026)",
+        "url": "https://eug.petroleum.gov.eg/dp/pages/customcode/MDS_iTabs/information-img/Egypt_Concession_Map.pdf", "proxy": True,
+    },
+    ("埃及", "Ashrafi"): {
+        "lat": 27.78, "lon": 33.59,
+        "precision": "埃及官方特许权地图估读（近似）",
+        "source": "Egypt Upstream Gateway — Egypt Concession Map (Sep 2026)",
+        "url": "https://eug.petroleum.gov.eg/dp/pages/customcode/MDS_iTabs/information-img/Egypt_Concession_Map.pdf", "proxy": True,
     },
 }
 
@@ -918,6 +1155,7 @@ for asset in ASSETS:
     asset["map_coordinate_precision"] = (
         coordinate["precision"] if coordinate else asset["coordinate_precision"]
     )
+    asset["map_is_proxy"] = bool(coordinate.get("proxy", False)) if coordinate else False
     if coordinate:
         asset["coordinate_source"] = coordinate["source"]
         asset["coordinate_source_url"] = coordinate["url"]
@@ -944,6 +1182,7 @@ for asset in ASSETS:
             )
             asset["coordinate_source"] = "组成资产地图坐标的几何中心"
             asset["coordinate_source_url"] = None
+            asset["map_is_proxy"] = True
 
 # 完整目录中的组成单田若仍无独立点位，可退回到最近一个有坐标的上级资产代表点。
 # 这只解决地图可见性，并不声称子资产与上级资产中心重合；popup 必须保留“近似”标记。
@@ -966,6 +1205,7 @@ for asset in ASSETS:
             )
             asset["coordinate_source"] = f"上级资产 {parent['name']} 的地图坐标"
             asset["coordinate_source_url"] = parent["coordinate_source_url"]
+            asset["map_is_proxy"] = True
             break
         parent_name = parent["parent_asset"]
 

@@ -228,6 +228,8 @@ def _popup(asset: dict[str, object]) -> str:
         f'{_hierarchy_panel(asset)}'
         '<div class="row"><span>坐标精度</span>'
         f'<strong>{esc(asset["map_coordinate_precision"])}</strong></div>'
+        '<div class="row"><span>定位属性</span>'
+        f'<strong>{"区域/设施代理点" if asset.get("map_is_proxy") else "资产点位"}</strong></div>'
         f'{coordinate_source_html}'
         f'<div class="status">原始状态说明：{esc(asset["status"])}</div>'
         f'<div class="basis">状态依据：{esc(asset["operating_status_basis"])}</div>'
@@ -357,6 +359,7 @@ def _map_html(assets: list[dict[str, object]], ports: list[dict],
             "lon": asset["map_lon"],
             "level": asset["asset_level"],
             "role": asset["map_role"],
+            "is_proxy": asset.get("map_is_proxy", False),
             "metric_class": metric_class(asset),
             "name": f'{asset["name_cn"]} · {asset["name"]}',
             "popup": _popup(asset),
@@ -383,6 +386,7 @@ def _map_html(assets: list[dict[str, object]], ports: list[dict],
         '<span><i class="legend-solid"></i>实心：实际／推算日量</span>'
         '<span><i class="legend-hollow"></i>空心：产能／目标</span>'
         '<span><i class="legend-muted"></i>灰色：未披露数值</span>'
+        '<span><i class="legend-proxy"></i>虚线圈：区域／设施代理点</span>'
         '<span><i class="legend-large"></i>大点：油田群／区块</span>',
         ensure_ascii=False
     ).replace("</", "<\\/")
@@ -427,6 +431,7 @@ def _map_html(assets: list[dict[str, object]], ports: list[dict],
       .map-legend .legend-solid {{ background: #dc2626; border: 1px solid #dc2626; }}
       .map-legend .legend-hollow {{ background: white; border: 2px solid #2563eb; }}
       .map-legend .legend-muted {{ background: #94a3b8; border: 1px solid #64748b; }}
+      .map-legend .legend-proxy {{ background: white; border: 2px dashed #475569; }}
       .map-legend .legend-large {{ width: 12px; height: 12px; background: #ea580c; border: 1px solid #9a3412; }}
       .leaflet-control-layers {{ font-size: 12px; border: 0; border-radius: 10px; box-shadow: 0 4px 18px rgba(15,23,42,.18); }}
       .leaflet-control-layers-expanded {{ padding: 9px 12px; }}
@@ -481,8 +486,9 @@ def _map_html(assets: list[dict[str, object]], ports: list[dict],
           radius: isGroup ? 8.5 : (asset.level === 'field' ? 5.5 : 7),
           color: color,
           weight: asset.metric_class === 'capacity' ? 2.4 : 1.5,
+          dashArray: asset.is_proxy ? '4 3' : null,
           fillColor: fillColor,
-          fillOpacity: fillOpacity
+          fillOpacity: asset.is_proxy ? Math.min(fillOpacity, 0.55) : fillOpacity
         }}).bindTooltip(asset.name, {{direction: 'top', opacity: .95}})
           .bindPopup(asset.popup, {{maxWidth: 390}}).addTo(assetLayer);
       }});
@@ -722,6 +728,7 @@ asset_rows = [
         "统计范围": asset["aggregation_scope"], "状态置信度": asset["operating_status_confidence"],
         "状态依据": asset["operating_status_basis"], "状态证据链接": asset["operating_status_evidence_url"],
         "地图坐标精度": asset["map_coordinate_precision"],
+        "定位属性": "区域/设施代理点" if asset.get("map_is_proxy") else "资产点位",
         "坐标来源": asset["coordinate_source"],
         "坐标来源链接": asset["coordinate_source_url"],
         "默认战略节点": "是" if asset["strategic_default"] else "否",
@@ -755,7 +762,8 @@ with tab_map:
         )
     st.caption(
         "油气节点：实心为实际／推算日量，空心为产能／目标，灰色为未披露；"
-        "大点表示油田群／区块。青色港口与橙色咽喉点按活动规模缩放。")
+        "虚线圈为区域／设施代理点，大点表示油田群／区块。"
+        "青色港口与橙色咽喉点按活动规模缩放。")
     st.iframe(
         _map_html(
             map_assets, map_ports, map_chokepoints,
