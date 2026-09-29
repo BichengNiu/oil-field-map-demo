@@ -1118,7 +1118,6 @@ def render_map_panel() -> None:
     )
 
 
-@st.fragment(run_every=15 if ais_enabled else None)
 def render_ais_panel() -> None:
     st.subheader("实时 AIS 船舶")
     if not ais_enabled:
