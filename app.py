@@ -20,7 +20,9 @@ CATALOG = importlib.reload(field_catalog)
 PORTWATCH = importlib.reload(portwatch)
 ASSETS = CATALOG.ASSETS
 
-if getattr(PORTWATCH, "MODULE_VERSION", 0) < 3 or not hasattr(PORTWATCH, "rolling_activity"):
+if (getattr(PORTWATCH, "MODULE_VERSION", 0) < 4
+        or not hasattr(PORTWATCH, "chokepoint_activity")
+        or not hasattr(PORTWATCH, "port_risk_capacity")):
     st.error("港口数据模块版本未同步。请在 Streamlit 管理页重启应用后重试。")
     st.stop()
 
@@ -204,71 +206,117 @@ def _popup(asset: dict[str, object]) -> str:
     )
 
 
-def _port_popup(port: dict, day: str, barrels_per_tonne: float) -> str:
+def _port_popup(port: dict, day: str) -> str:
     def esc(value: object) -> str:
         return html.escape(str(value))
 
-    def amount(key: str, divisor: float = 1) -> str:
+    def amount(key: str, divisor: float = 1, decimals: int = 1) -> str:
         value = port.get(key)
         if value is None:
-            return "无数据"
-        if divisor != 1 and 0 < value / divisor < 0.005:
-            return "<0.01"
-        decimals = 2 if key.startswith("avg_") or divisor != 1 else 0
+            return "—"
+        if divisor != 1 and 0 < abs(value / divisor) < 0.05:
+            return "<0.1"
         return f"{value / divisor:,.{decimals}f}"
 
-    oil_equivalent = port.get("handled_tanker")
-    barrels = (f"{oil_equivalent * barrels_per_tonne / 10000:,.2f}"
-               if oil_equivalent is not None else "无数据")
     window = port.get("window_days", 7)
-    avg_tanker = port.get("avg_handled_tanker")
-    avg_barrels = (f"{avg_tanker * barrels_per_tonne / 10000:,.2f}"
-                   if avg_tanker is not None else "不完整")
-    warning = ""
-    if port.get("portcalls_tanker", 0) and port.get("handled_tanker") == 0:
-        warning = '<div class="basis">⚠ 当日有油轮挂靠，但源站估算装卸量为 0；不能解读为实际没有装卸。</div>'
-    elif (port.get("avg_calls_tanker") or 0) > 0 and port.get("avg_handled_tanker") == 0:
-        warning = '<div class="basis">⚠ 滚动窗口内有油轮挂靠，但估算货量持续为 0；需核对源站吃水记录。</div>'
-    elif port.get("portcalls_tanker") == 0 and (port.get("tanker_positive_days") or 0) > 0:
-        warning = '<div class="basis">当日未观测到油轮挂靠；所选滚动窗口内有挂靠记录。</div>'
+    activity = port.get("activity_index")
+    activity_text = f"{activity:,.0f}" if activity is not None else "—"
+    balance = port.get("trade_balance_index")
+    if balance is None:
+        balance_text = "—"
+    elif balance > 5:
+        balance_text = f"{balance:+.1f} · 出口偏向"
+    elif balance < -5:
+        balance_text = f"{balance:+.1f} · 进口偏向"
+    else:
+        balance_text = f"{balance:+.1f} · 大致平衡"
+    ship_labels = {
+        "container": "集装箱船", "dry_bulk": "干散货船",
+        "general_cargo": "普通货船", "roro": "滚装船", "tanker": "油轮/液货船",
+    }
+    ship_colors = {
+        "container": "#2563eb", "dry_bulk": "#b45309", "general_cargo": "#64748b",
+        "roro": "#7c3aed", "tanker": "#0f766e",
+    }
+    structure = []
+    for kind, label in ship_labels.items():
+        share = port.get(f"share_{kind}")
+        calls = port.get(f"window_calls_{kind}")
+        width = max(0, min(100, share or 0))
+        share_text = f"{share:.1f}%" if share is not None else "—"
+        calls_text = f"{calls:,.0f}" if calls is not None else "—"
+        structure.append(
+            '<div class="mix-row">'
+            f'<span>{label}</span><div class="mix-track"><i style="width:{width:.1f}%;background:{ship_colors[kind]}"></i></div>'
+            f'<b>{share_text} · {calls_text}艘次</b></div>'
+        )
     return (
         '<div class="popup-card">'
         f'<div class="field-name">⚓ {esc(port["name"])}</div>'
         f'<div class="country">{esc(port["country"])} · {esc(port["region"])} · {esc(day)}</div>'
-        '<div class="row"><span>油轮到港</span>'
-        f'<strong>{amount("portcalls_tanker")} 艘次/日</strong></div>'
-        '<div class="row"><span>油轮卸货 / 装货</span>'
-        f'<strong>{amount("import_tanker", 10000)} / {amount("export_tanker", 10000)} 万吨/日</strong></div>'
-        '<div class="row"><span>油轮装卸合计</span>'
-        f'<strong>{amount("handled_tanker", 10000)} 万吨/日</strong></div>'
-        '<div class="row"><span>油轮载货原油当量估算</span>'
-        f'<strong>{barrels} 万桶/日</strong></div>'
-        '<div class="row"><span>其他货轮到港</span>'
-        f'<strong>{amount("portcalls_cargo")} 艘次/日</strong></div>'
-        '<div class="row"><span>其他货轮卸货 / 装货</span>'
-        f'<strong>{amount("import_cargo", 10000)} / {amount("export_cargo", 10000)} 万吨/日</strong></div>'
-        '<div class="row"><span>其他货轮装卸合计</span>'
-        f'<strong>{amount("handled_cargo", 10000)} 万吨/日</strong></div>'
-        f'<div class="hierarchy-title">过去 {window} 天日均（含所选日）</div>'
-        '<div class="row"><span>有效日期</span>'
-        f'<strong>{port.get("observed_days", 0)}/{window} 天</strong></div>'
-        '<div class="row"><span>油轮挂靠 / 日均货量</span>'
-        f'<strong>{amount("avg_calls_tanker")} 艘次/日 · {amount("avg_handled_tanker", 10000)} 万吨/日</strong></div>'
-        '<div class="row"><span>油轮载货原油当量日均</span>'
-        f'<strong>{avg_barrels} 万桶/日</strong></div>'
-        '<div class="row"><span>其他货轮挂靠 / 日均货量</span>'
-        f'<strong>{amount("avg_calls_cargo")} 艘次/日 · {amount("avg_handled_cargo", 10000)} 万吨/日</strong></div>'
-        f'{warning}'
-        '<div class="basis">油轮类别可能含原油、成品油和其他液体货物。桶数仅将油轮估算吨数按'
-        f'{barrels_per_tonne:g} 桶/吨换算，不是实测原油吞吐量；装卸合计不等于净贸易量。'
-        '未匹配日期的港口显示“无数据”，不记为零。</div>'
+        '<div class="row"><span>当日有效进港</span>'
+        f'<strong>{amount("portcalls", decimals=0)} 艘次</strong></div>'
+        '<div class="row"><span>当日估算装卸</span>'
+        f'<strong>{amount("handled", 10000)} 万吨</strong></div>'
+        f'<div class="hierarchy-title">过去 {window} 天港口指标</div>'
+        '<div class="row"><span>港口活动指数</span>'
+        f'<strong>{activity_text}（前一窗口=100）</strong></div>'
+        '<div class="row"><span>活跃天数率</span>'
+        f'<strong>{amount("active_day_rate")}%</strong></div>'
+        '<div class="row"><span>日均进港 / 日均装卸</span>'
+        f'<strong>{amount("avg_calls")} 艘次 · {amount("avg_handled", 10000)} 万吨</strong></div>'
+        '<div class="row"><span>单船平均货量</span>'
+        f'<strong>{amount("average_cargo_per_call", 10000, 2)} 万吨/艘次</strong></div>'
+        '<div class="row"><span>进出口平衡指数</span>'
+        f'<strong>{balance_text}</strong></div>'
+        '<div class="row"><span>风险运力（出港网络）</span>'
+        f'<strong>{amount("risk_capacity", 10000)} 万吨/日</strong></div>'
+        '<div class="hierarchy-title">船型结构</div>'
+        f'{"".join(structure)}'
+        '<div class="basis">活动指数比较相邻等长窗口；100表示持平。平衡指数范围−100至+100，'
+        '负值偏进口、正值偏出口。风险运力来自2019—2024港口航线网络，是历史冲击暴露估算。'
+        '“—”表示窗口不完整、基期为0或源数据不足，不按零处理。</div>'
+        f'<a class="source" href="{esc(PORTWATCH.SOURCE)}" target="_blank" rel="noopener">IMF PortWatch 数据与方法</a>'
+        '</div>'
+    )
+
+
+def _chokepoint_popup(point: dict, day: str) -> str:
+    def esc(value: object) -> str:
+        return html.escape(str(value))
+
+    def value(key: str, divisor: float = 1, decimals: int = 0) -> str:
+        raw = point.get(key)
+        return "—" if raw is None else f"{raw / divisor:,.{decimals}f}"
+
+    categories = (
+        ("container", "集装箱船"), ("dry_bulk", "干散货船"),
+        ("general_cargo", "普通货船"), ("roro", "滚装船"), ("tanker", "油轮/液货船"),
+    )
+    rows = "".join(
+        '<div class="row"><span>' + label + '</span>'
+        f'<strong>{value(f"n_{kind}")} 艘 · {value(f"capacity_{kind}", 10000, 1)} 万吨</strong></div>'
+        for kind, label in categories
+    )
+    return (
+        '<div class="popup-card">'
+        f'<div class="field-name">◆ {esc(point.get("name_cn", point["portname"]))}</div>'
+        f'<div class="country">{esc(point.get("fullname") or point["portname"])} · {esc(day)} UTC</div>'
+        '<div class="row"><span>当日通过船舶</span>'
+        f'<strong>{value("n_total")} 艘</strong></div>'
+        '<div class="row"><span>估算承载货量</span>'
+        f'<strong>{value("capacity", 10000, 1)} 万吨</strong></div>'
+        '<div class="hierarchy-title">船型分解 · 艘数 / 估算货量</div>'
+        f'{rows}'
+        '<div class="basis">PortWatch按船舶穿越咽喉点边界计数；跨越多日的同一次通行只计一次，'
+        '48小时内同船再次出现不重复计数。货量由AIS、吃水与载重能力估算。</div>'
         f'<a class="source" href="{esc(PORTWATCH.SOURCE)}" target="_blank" rel="noopener">IMF PortWatch 数据与方法</a>'
         '</div>'
     )
 
 
 def _map_html(assets: list[dict[str, object]], ports: list[dict],
-              day: str, barrels_per_tonne: float) -> str:
+              chokepoints: list[dict], day: str, chokepoint_day: str) -> str:
     markers = [
         {
             "lat": asset["lat"],
@@ -283,9 +331,15 @@ def _map_html(assets: list[dict[str, object]], ports: list[dict],
     marker_json = json.dumps(markers, ensure_ascii=False).replace("</", "<\\/")
     port_json = json.dumps([
         {"lat": port["lat"], "lon": port["lon"], "name": port["name"],
-         "popup": _port_popup(port, day, barrels_per_tonne), "has_data": port["has_data"],
-         "activity": (port.get("avg_calls_tanker") or 0) + (port.get("avg_calls_cargo") or 0)}
+         "popup": _port_popup(port, day), "has_data": port["has_data"],
+         "activity": port.get("avg_calls") or 0}
         for port in ports
+    ], ensure_ascii=False).replace("</", "<\\/")
+    chokepoint_json = json.dumps([
+        {"lat": point["lat"], "lon": point["lon"], "name": point.get("name_cn", point["portname"]),
+         "popup": _chokepoint_popup(point, chokepoint_day),
+         "has_data": point.get("has_data", False), "traffic": point.get("n_total") or 0}
+        for point in chokepoints
     ], ensure_ascii=False).replace("</", "<\\/")
     color_json = json.dumps(LEVEL_COLORS, ensure_ascii=False)
     legend_items = "".join(
@@ -320,6 +374,11 @@ def _map_html(assets: list[dict[str, object]], ports: list[dict],
       .output-line strong {{ color: #991b1b; font-size: 13px; }}
       .metric-detail, .other-metric {{ font-size: 10px; margin-top: 2px; line-height: 1.35; }}
       .other-metric {{ color: #92400e; }}
+      .mix-row {{ display: grid; grid-template-columns: 72px 1fr 92px; gap: 7px; align-items: center; margin-top: 6px; font-size: 10px; }}
+      .mix-row span {{ color: #475569; }}
+      .mix-row b {{ color: #334155; text-align: right; font-weight: 600; }}
+      .mix-track {{ height: 6px; border-radius: 999px; background: #e2e8f0; overflow: hidden; }}
+      .mix-track i {{ display: block; height: 100%; border-radius: 999px; }}
       .status, .basis {{ font-size: 11px; margin-top: 8px; line-height: 1.4; }}
       .source {{ display: block; color: #2563eb; font-size: 11px; margin-top: 8px; text-decoration: none; }}
       .map-title, .map-legend {{ background: rgba(255,255,255,.95); padding: 9px 11px; border-radius: 8px; box-shadow: 0 2px 10px rgba(15,23,42,.15); color: #0f172a; font-size: 11px; line-height: 1.45; }}
@@ -349,7 +408,7 @@ def _map_html(assets: list[dict[str, object]], ports: list[dict],
       const title = L.control({{position: 'topleft'}});
       title.onAdd = () => {{
         const el = L.DomUtil.create('div', 'map-title');
-        el.innerHTML = '<b>中东能源资产与港口活动</b><br>点击点位查看详情；悬停显示名称。';
+        el.innerHTML = '<b>中东能源资产、港口与咽喉点</b><br>橙色为咽喉点；青色为港口；点击查看详情。';
         return el;
       }};
       title.addTo(map);
@@ -362,10 +421,12 @@ def _map_html(assets: list[dict[str, object]], ports: list[dict],
       legend.addTo(map);
       const assets = {marker_json};
       const ports = {port_json};
+      const chokepoints = {chokepoint_json};
       const levelColors = {color_json};
       const assetLayer = L.markerClusterGroup({{showCoverageOnHover: false, maxClusterRadius: 34,
           disableClusteringAtZoom: 8, spiderfyOnMaxZoom: true}}).addTo(map);
       const portLayer = L.layerGroup().addTo(map);
+      const chokepointLayer = L.layerGroup().addTo(map);
       assets.forEach((asset) => {{
         const color = levelColors[asset.level] || '#64748b';
         L.circleMarker([asset.lat, asset.lon], {{
@@ -385,10 +446,21 @@ def _map_html(assets: list[dict[str, object]], ports: list[dict],
         }}).bindTooltip(port.name, {{direction: 'top', opacity: .95}})
           .bindPopup(port.popup, {{maxWidth: 410}}).addTo(portLayer);
       }});
-      const allPoints = ports.map((p) => [p.lat, p.lon]).concat(assets.map((a) => [a.lat, a.lon]));
+      chokepoints.forEach((point) => {{
+        const radius = Math.min(13, 7 + Math.sqrt(Math.max(0, point.traffic)) * .55);
+        L.circleMarker([point.lat, point.lon], {{
+          radius: radius, color: point.has_data ? '#7c2d12' : '#64748b', weight: 2.5,
+          fillColor: point.has_data ? '#f97316' : '#cbd5e1', fillOpacity: .92
+        }}).bindTooltip(point.name, {{direction: 'top', opacity: .95}})
+          .bindPopup(point.popup, {{maxWidth: 410}}).addTo(chokepointLayer);
+      }});
+      const allPoints = ports.map((p) => [p.lat, p.lon])
+        .concat(chokepoints.map((p) => [p.lat, p.lon]))
+        .concat(assets.map((a) => [a.lat, a.lon]));
       if (allPoints.length) map.fitBounds(L.latLngBounds(allPoints), {{padding: [36, 36], maxZoom: 5}});
       L.control.layers({{'英文街道图': streets, '浅色底图': light, '卫星影像': satellite}},
-        {{'油气资产': assetLayer, '港口活动（点越大越活跃）': portLayer}}, {{collapsed: false}}).addTo(map);
+        {{'油气资产': assetLayer, '港口指标（点越大越活跃）': portLayer,
+          '咽喉点通行（橙色）': chokepointLayer}}, {{collapsed: false}}).addTo(map);
     </script></body></html>
     """
 
@@ -396,7 +468,7 @@ def _map_html(assets: list[dict[str, object]], ports: list[dict],
 st.markdown("""
 <div class="hero">
   <h1>中东能源保供监测</h1>
-  <p>油气资产、关键港口与每日航运活动｜资产来源审计 + IMF PortWatch 日度数据</p>
+  <p>油气资产、港口活动指标与关键咽喉点通行｜IMF PortWatch 日度数据</p>
 </div>
 """, unsafe_allow_html=True)
 
@@ -408,7 +480,7 @@ status_options = list(STATUS_LABELS)
 
 with st.sidebar:
     st.markdown("### 监测视图")
-    map_mode = st.radio("地图内容", ["港口与油气资产", "仅港口", "仅油气资产"],
+    map_mode = st.radio("地图内容", ["全部图层", "仅港口与咽喉点", "仅咽喉点", "仅油气资产"],
                         horizontal=False, label_visibility="collapsed", key="map_mode")
 
     with st.expander("⚓ 港口筛选", expanded=True):
@@ -429,10 +501,12 @@ with st.sidebar:
         rolling_label = st.radio("日均窗口", ["过去 7 天", "过去 30 天"],
                                  horizontal=True, key="rolling_window")
         rolling_days = 7 if rolling_label == "过去 7 天" else 30
-        barrels_per_tonne = st.number_input(
-            "原油当量（桶/吨）", min_value=5.0, max_value=9.0, value=7.33,
-            step=0.01, help="只用于将油轮货物吨数换算为情景原油当量。",
-            key="barrels_per_tonne")
+        try:
+            newest_chokepoint_day = PORTWATCH.latest_chokepoint_date()
+            st.caption(f"咽喉点最新：{newest_chokepoint_day.isoformat()} UTC")
+        except Exception as exc:
+            newest_chokepoint_day = None
+            st.warning(f"咽喉点数据暂时不可用：{exc}")
 
     with st.expander("◉ 油气资产筛选", expanded=True):
         asset_search = st.text_input("搜索资产", placeholder="输入中英文名称",
@@ -463,13 +537,17 @@ with st.sidebar:
         PORTWATCH.port_catalog.clear()
         PORTWATCH.daily_activity.clear()
         PORTWATCH.rolling_activity.clear()
+        PORTWATCH.port_risk_capacity.clear()
+        PORTWATCH.latest_chokepoint_date.clear()
+        PORTWATCH.chokepoint_catalog.clear()
+        PORTWATCH.chokepoint_activity.clear()
         st.rerun()
     st.caption("筛选框留空表示全部。地图右上角可切换底图和数据图层。")
 
 selected_region_set = set(selected_regions or PORTWATCH.REGIONS)
 ports: list[dict] = []
 port_error = None
-if selected_day is not None and map_mode != "仅油气资产":
+if selected_day is not None:
     try:
         catalog = [
             p for p in PORTWATCH.port_catalog()
@@ -481,9 +559,23 @@ if selected_day is not None and map_mode != "仅油气资产":
         if ids:
             activity = PORTWATCH.daily_activity(selected_day, ids)
             rolling = PORTWATCH.rolling_activity(selected_day, ids, rolling_days)
-            ports = PORTWATCH.decorate(catalog, activity, rolling)
+            risk_capacity = PORTWATCH.port_risk_capacity(ids)
+            ports = PORTWATCH.decorate(catalog, activity, rolling, risk_capacity)
     except Exception as exc:
         port_error = str(exc)
+
+chokepoints: list[dict] = []
+chokepoint_error = None
+if newest_chokepoint_day is not None:
+    try:
+        chokepoint_catalog = PORTWATCH.chokepoint_catalog()
+        chokepoint_ids = tuple(point["portid"] for point in chokepoint_catalog)
+        chokepoint_values = PORTWATCH.chokepoint_activity(
+            newest_chokepoint_day, chokepoint_ids)
+        chokepoints = PORTWATCH.decorate_chokepoints(
+            chokepoint_catalog, chokepoint_values)
+    except Exception as exc:
+        chokepoint_error = str(exc)
 
 filtered = [
     asset for asset in ASSETS
@@ -497,11 +589,9 @@ filtered = [
     and (not asset_search or asset_search in str(asset["name"]).lower()
          or asset_search in str(asset["name_cn"]).lower())
 ]
-if map_mode == "仅港口":
-    map_assets = []
-else:
-    map_assets = filtered
-map_ports = [] if map_mode == "仅油气资产" else ports
+map_assets = filtered if map_mode in {"全部图层", "仅油气资产"} else []
+map_ports = ports if map_mode in {"全部图层", "仅港口与咽喉点"} else []
+map_chokepoints = chokepoints if map_mode != "仅油气资产" else []
 
 port_rows = []
 for port in ports:
@@ -509,40 +599,45 @@ for port in ports:
         value = port.get(key)
         return None if value is None else round(value / 10000, 6)
 
-    tanker_tonnes = port.get("handled_tanker")
+    notes = []
+    if not port.get("has_data"):
+        notes.append("所选日缺少源记录")
+    if port.get("observed_days") != rolling_days:
+        notes.append("当前窗口不完整")
+    if port.get("previous_observed_days") != rolling_days:
+        notes.append("比较窗口不完整")
+    if port.get("activity_index") is None:
+        notes.append("活动指数不可算（基期为0或数据不完整）")
+    if port.get("portcalls") == 0 and (port.get("active_days") or 0) > 0:
+        notes.append("当日为0但窗口内有进港")
     port_rows.append({
         "水域": port["region"], "国家": port["country"], "港口": port["name"],
         "PortWatch ID": port["portid"], "日期 UTC": selected_day.isoformat(),
-        "油轮艘次/日": port.get("portcalls_tanker"),
-        "油轮卸货 万吨/日": ten_thousand("import_tanker"),
-        "油轮装货 万吨/日": ten_thousand("export_tanker"),
-        "油轮装卸 万吨/日": ten_thousand("handled_tanker"),
-        "油轮原油当量 万桶/日": (
-            round(tanker_tonnes * barrels_per_tonne / 10000, 6)
-            if tanker_tonnes is not None else None),
-        f"{rolling_days}天油轮日均艘次": (
-            round(port["avg_calls_tanker"], 3)
-            if port.get("avg_calls_tanker") is not None else None),
-        f"{rolling_days}天油轮日均装卸 万吨/日": ten_thousand("avg_handled_tanker"),
-        f"{rolling_days}天油轮原油当量日均 万桶/日": (
-            round(port["avg_handled_tanker"] * barrels_per_tonne / 10000, 6)
-            if port.get("avg_handled_tanker") is not None else None),
-        f"{rolling_days}天油轮有挂靠天数": port.get("tanker_positive_days"),
-        "其他货轮艘次/日": port.get("portcalls_cargo"),
-        "其他货轮装卸 万吨/日": ten_thousand("handled_cargo"),
-        f"{rolling_days}天其他货轮日均艘次": (
-            round(port["avg_calls_cargo"], 3)
-            if port.get("avg_calls_cargo") is not None else None),
-        f"{rolling_days}天其他货轮日均装卸 万吨/日": ten_thousand("avg_handled_cargo"),
+        "当日有效进港 艘次": port.get("portcalls"),
+        "港口活动指数": (round(port["activity_index"], 1)
+                         if port.get("activity_index") is not None else None),
+        f"{rolling_days}天活跃天数率 %": (
+            round(port["active_day_rate"], 1)
+            if port.get("active_day_rate") is not None else None),
+        f"{rolling_days}天日均进港 艘次": (
+            round(port["avg_calls"], 3) if port.get("avg_calls") is not None else None),
+        f"{rolling_days}天日均装卸 万吨": ten_thousand("avg_handled"),
+        "单船平均货量 万吨/艘次": ten_thousand("average_cargo_per_call"),
+        "进出口平衡指数": (round(port["trade_balance_index"], 1)
+                          if port.get("trade_balance_index") is not None else None),
+        "风险运力 万吨/日": ten_thousand("risk_capacity"),
+        "集装箱船占比 %": (round(port["share_container"], 1)
+                          if port.get("share_container") is not None else None),
+        "干散货船占比 %": (round(port["share_dry_bulk"], 1)
+                          if port.get("share_dry_bulk") is not None else None),
+        "普通货船占比 %": (round(port["share_general_cargo"], 1)
+                          if port.get("share_general_cargo") is not None else None),
+        "滚装船占比 %": (round(port["share_roro"], 1)
+                        if port.get("share_roro") is not None else None),
+        "油轮/液货船占比 %": (round(port["share_tanker"], 1)
+                            if port.get("share_tanker") is not None else None),
         f"{rolling_days}天有效日期": port.get("observed_days"),
-        "数据提示": (
-            "有挂靠但估算货量为0，待核"
-            if port.get("portcalls_tanker", 0) and tanker_tonnes == 0
-            else "窗口有油轮挂靠但日均估算货量为0，待核"
-            if (port.get("avg_calls_tanker") or 0) > 0 and port.get("avg_handled_tanker") == 0
-            else "当日无挂靠，窗口内有挂靠"
-            if port.get("portcalls_tanker") == 0 and (port.get("tanker_positive_days") or 0) > 0
-            else ""),
+        "数据提示": "；".join(notes),
         "纬度": port["lat"], "经度": port["lon"], "来源": PORTWATCH.SOURCE,
     })
 
@@ -569,16 +664,20 @@ tab_map, tab_ports, tab_assets, tab_method = st.tabs(
 with tab_map:
     if port_error:
         st.error(f"港口数据加载失败：{port_error}")
+    if chokepoint_error:
+        st.error(f"咽喉点数据加载失败：{chokepoint_error}")
     m1, m2, m3, m4 = st.columns(4)
     m1.metric("地图油气资产", len(map_assets))
     m2.metric("地图港口", len(map_ports))
-    m3.metric("当日有油轮挂靠", sum((p.get("portcalls_tanker") or 0) > 0 for p in map_ports))
-    m4.metric(f"{rolling_days}天有油轮挂靠", sum((p.get("tanker_positive_days") or 0) > 0 for p in map_ports))
-    st.caption("港口点大小按滚动窗口内油轮与其他货轮的日均挂靠数缩放；油气资产在低缩放级别自动聚合。")
+    m3.metric("地图咽喉点", len(map_chokepoints))
+    m4.metric(f"{rolling_days}天活跃港口",
+              sum((p.get("active_days") or 0) > 0 for p in map_ports))
+    st.caption("青色港口点按所选窗口日均有效进港艘次缩放；橙色咽喉点按最新日通过船舶数缩放。")
     st.iframe(
-        _map_html(map_assets, map_ports,
-                  selected_day.isoformat() if selected_day else "无数据",
-                  barrels_per_tonne),
+        _map_html(
+            map_assets, map_ports, map_chokepoints,
+            selected_day.isoformat() if selected_day else "无数据",
+            newest_chokepoint_day.isoformat() if newest_chokepoint_day else "无数据"),
         height=735,
     )
 
@@ -589,9 +688,11 @@ with tab_ports:
     elif port_rows:
         p1, p2, p3, p4 = st.columns(4)
         p1.metric("筛选后港口", len(port_rows))
-        p2.metric("当日油轮挂靠", sum((p.get("portcalls_tanker") or 0) > 0 for p in ports))
-        p3.metric("当日其他货轮挂靠", sum((p.get("portcalls_cargo") or 0) > 0 for p in ports))
-        p4.metric("需关注记录", sum(bool(row["数据提示"]) for row in port_rows))
+        p2.metric("当日有进港", sum((p.get("portcalls") or 0) > 0 for p in ports))
+        p3.metric(f"{rolling_days}天持续活跃",
+                  sum((p.get("active_day_rate") or 0) >= 50 for p in ports))
+        p4.metric("风险运力合计",
+                  f'{sum(p.get("risk_capacity") or 0 for p in ports) / 10000:,.1f} 万吨/日')
         st.dataframe(port_rows, width="stretch", hide_index=True, height=560,
                      column_config={"来源": st.column_config.LinkColumn("来源")})
         buffer = io.StringIO()
@@ -630,12 +731,34 @@ with tab_method:
     st.markdown(
         f"[IMF PortWatch 方法说明]({PORTWATCH.SOURCE}) · "
         "[当前港口点位 API](https://services9.arcgis.com/weJ1QsnbMYJlCHdG/arcgis/rest/services/PortWatch_ports_database/FeatureServer/0) · "
-        "[每日活动 API](https://services9.arcgis.com/weJ1QsnbMYJlCHdG/arcgis/rest/services/Daily_Ports_Data/FeatureServer/0)"
+        "[每日港口活动 API](https://services9.arcgis.com/weJ1QsnbMYJlCHdG/arcgis/rest/services/Daily_Ports_Data/FeatureServer/0) · "
+        "[每日咽喉点 API](https://services9.arcgis.com/weJ1QsnbMYJlCHdG/arcgis/rest/services/Daily_Chokepoints_Data/FeatureServer/0) · "
+        "[风险运力网络 API](https://services9.arcgis.com/weJ1QsnbMYJlCHdG/arcgis/rest/services/spillovers_port_level_impact/FeatureServer/0)"
     )
+    st.markdown("**港口派生指标。** 所有窗口指标使用同一7日或30日完整日历窗口；缺报不补零。")
+    st.dataframe([
+        {"指标": "港口活动指数", "计算": "当前窗口日均有效进港艘次 ÷ 前一等长窗口日均值 × 100",
+         "解释": "100持平；高于100表示进港活动增加"},
+        {"指标": "船型结构", "计算": "窗口内各船型进港艘次 ÷ 全部进港艘次",
+         "解释": "集装箱、干散货、普通货物、滚装、油轮/液货船"},
+        {"指标": "活跃天数率", "计算": "窗口内有效进港艘次大于0的天数 ÷ 窗口天数",
+         "解释": "反映港口活动连续性"},
+        {"指标": "单船平均货量", "计算": "窗口内估算进口量与出口量之和 ÷ 有效进港艘次",
+         "解释": "单位万吨/艘次；属于AIS载荷估算"},
+        {"指标": "进出口平衡指数", "计算": "(出口量−进口量) ÷ (出口量+进口量) × 100",
+         "解释": "−100进口导向；+100出口导向"},
+        {"指标": "风险运力", "计算": "该港所有出港航线 daily_capacity_at_risk 之和",
+         "解释": "2019—2024历史航线网络冲击暴露，非实时值"},
+    ], hide_index=True, width="stretch")
     st.warning(
-        "PortWatch 以 AIS、船舶载重和吃水变化估算公吨货量。tanker 是船型分类，可能包含原油、"
-        "成品油及其他液体货物。页面的万桶数是情景原油当量，不是分油种的实测港口吞吐量。"
-        "单日零值只表示源表当日为零；有挂靠而估算货量为零的记录会单独标注。"
+        "PortWatch 的portcalls是进入港界并通过贸易挂靠筛选的有效进港艘次，不是在港船舶存量。"
+        "货量根据AIS、载重和吃水估算。单日0只表示源表当日为0；窗口不完整或比较基期为0时，"
+        "派生指标保持为空，不以0替代。tanker可能包含原油、成品油及其他液体货物。"
+    )
+    st.markdown(
+        "**咽喉点。** 地图橙色图层固定显示苏伊士运河、曼德海峡和霍尔木兹海峡的最新可用日数据。"
+        "popup列示总通过船数、估算承载货量及五类船型分解；咽喉点日期与港口日期分别读取，"
+        "避免把更新节奏不同的两张表强行对齐。"
     )
     st.markdown(
         "**资产覆盖。** 目录收录公开命名的主要生产、开发或保留油气资产；生产状态带证据时点，"
