@@ -7,16 +7,19 @@ import importlib
 import json
 import csv
 import io
+import os
 from datetime import date
 
 import streamlit as st
 
 import field_catalog
+import ais
 import portwatch
 
 # Streamlit 的热重载会重跑此文件；显式重新读取目录模块以同步仓库中的数据修订。
 importlib.invalidate_caches()
 CATALOG = importlib.reload(field_catalog)
+AIS = importlib.reload(ais)
 PORTWATCH = importlib.reload(portwatch)
 ASSETS = CATALOG.ASSETS
 
@@ -25,6 +28,21 @@ if (getattr(PORTWATCH, "MODULE_VERSION", 0) < 4
         or not hasattr(PORTWATCH, "port_risk_capacity")):
     st.error("港口数据模块版本未同步。请在 Streamlit 管理页重启应用后重试。")
     st.stop()
+
+
+def _ais_api_key() -> str:
+    """Read the key server-side without requiring or exposing it in the UI."""
+
+    try:
+        secret = st.secrets.get("AISSTREAM_API_KEY")
+    except Exception:
+        secret = None
+    return str(secret or os.environ.get("AISSTREAM_API_KEY") or "").strip()
+
+
+@st.cache_resource(show_spinner=False)
+def _ais_collector(api_key: str) -> AIS.AISCollector:
+    return AIS.AISCollector(api_key).start()
 
 
 st.set_page_config(page_title="中东能源保供监测", page_icon="◉", layout="wide",
@@ -350,8 +368,48 @@ def _chokepoint_popup(point: dict, day: str) -> str:
     )
 
 
+def _vessel_popup(vessel: dict[str, object]) -> str:
+    def esc(value: object) -> str:
+        return html.escape(str(value))
+
+    def shown(key: str, suffix: str = "") -> str:
+        value = vessel.get(key)
+        return "—" if value in (None, "") else f"{esc(value)}{suffix}"
+
+    name = vessel.get("name") or f'MMSI {vessel["mmsi"]}'
+    age = vessel.get("age_minutes")
+    age_text = "—" if age is None else f"{float(age):.1f} 分钟"
+    speed = vessel.get("sog")
+    speed_text = "—" if speed is None else f"{float(speed):.1f} 节"
+    course = vessel.get("course")
+    course_text = "—" if course is None else f"{float(course):.1f}°"
+    return (
+        '<div class="popup-card">'
+        f'<div class="field-name">{esc(name)}</div>'
+        f'<div class="country">实时 AIS · {esc(vessel.get("region") or "监测水域")}</div>'
+        '<div class="row"><span>船型</span>'
+        f'<strong>{shown("category_label")}</strong></div>'
+        '<div class="row"><span>MMSI / IMO</span>'
+        f'<strong>{shown("mmsi")} / {shown("imo")}</strong></div>'
+        '<div class="row"><span>航速 / 航向</span>'
+        f'<strong>{speed_text} / {course_text}</strong></div>'
+        '<div class="row"><span>航行状态</span>'
+        f'<strong>{shown("navigation_status")}</strong></div>'
+        '<div class="row"><span>呼号 / 目的地</span>'
+        f'<strong>{shown("call_sign")} / {shown("destination")}</strong></div>'
+        '<div class="row"><span>接收时间 UTC</span>'
+        f'<strong>{shown("received_at")}</strong></div>'
+        '<div class="row"><span>数据年龄</span>'
+        f'<strong>{age_text}</strong></div>'
+        '<div class="basis">AIS船型为船载设备广播的基础分类；货船不能据此可靠细分为集装箱船或散货船。'
+        '点位可能因岸基/卫星覆盖、设备关闭、延迟或错误广播而缺失。</div>'
+        f'<a class="source" href="{AIS.SOURCE}" target="_blank" rel="noopener">AISStream 数据接口说明</a>'
+        '</div>'
+    )
+
+
 def _map_html(assets: list[dict[str, object]], ports: list[dict],
-              chokepoints: list[dict], day: str, chokepoint_day: str,
+              chokepoints: list[dict], vessels: list[dict], day: str, chokepoint_day: str,
               focus_assets: bool = False) -> str:
     markers = [
         {
@@ -380,6 +438,17 @@ def _map_html(assets: list[dict[str, object]], ports: list[dict],
          "has_data": point.get("has_data", False), "traffic": point.get("n_total") or 0}
         for point in chokepoints
     ], ensure_ascii=False).replace("</", "<\\/")
+    vessel_json = json.dumps([
+        {
+            "lat": vessel["lat"], "lon": vessel["lon"],
+            "name": html.escape(str(vessel.get("name") or f'MMSI {vessel["mmsi"]}')),
+            "category": vessel.get("category", "unknown"),
+            "moving": vessel.get("moving", False),
+            "course": vessel.get("course") or 0,
+            "popup": _vessel_popup(vessel),
+        }
+        for vessel in vessels
+    ], ensure_ascii=False).replace("</", "<\\/")
     color_json = json.dumps(LEVEL_COLORS, ensure_ascii=False)
     legend_json = json.dumps(
         '<b>油气节点</b>'
@@ -387,7 +456,12 @@ def _map_html(assets: list[dict[str, object]], ports: list[dict],
         '<span><i class="legend-hollow"></i>空心：产能／目标</span>'
         '<span><i class="legend-muted"></i>灰色：未披露数值</span>'
         '<span><i class="legend-proxy"></i>虚线圈：区域／设施代理点</span>'
-        '<span><i class="legend-large"></i>大点：油田群／区块</span>',
+        '<span><i class="legend-large"></i>大点：油田群／区块</span>'
+        + ('<b class="legend-section">实时 AIS</b>'
+           '<span><i class="legend-vessel-tanker"></i>红色：油轮／液货船</span>'
+           '<span><i class="legend-vessel-cargo"></i>蓝色：货船</span>'
+           '<span><i class="legend-vessel-other"></i>灰色：其他／待识别</span>'
+           '<span>▲ 航行中 · ● 低速／停泊</span>' if vessels else ''),
         ensure_ascii=False
     ).replace("</", "<\\/")
     focus_json = json.dumps(focus_assets)
@@ -433,6 +507,12 @@ def _map_html(assets: list[dict[str, object]], ports: list[dict],
       .map-legend .legend-muted {{ background: #94a3b8; border: 1px solid #64748b; }}
       .map-legend .legend-proxy {{ background: white; border: 2px dashed #475569; }}
       .map-legend .legend-large {{ width: 12px; height: 12px; background: #ea580c; border: 1px solid #9a3412; }}
+      .map-legend .legend-section {{ display: block; margin-top: 8px; padding-top: 7px; border-top: 1px solid #cbd5e1; }}
+      .map-legend .legend-vessel-tanker {{ background: #ef4444; border: 1px solid #991b1b; }}
+      .map-legend .legend-vessel-cargo {{ background: #2563eb; border: 1px solid #1e3a8a; }}
+      .map-legend .legend-vessel-other {{ background: #64748b; border: 1px solid #334155; }}
+      .vessel-icon {{ background: transparent; border: 0; }}
+      .vessel-icon svg {{ display: block; filter: drop-shadow(0 1px 1px rgba(15,23,42,.45)); }}
       .leaflet-control-layers {{ font-size: 12px; border: 0; border-radius: 10px; box-shadow: 0 4px 18px rgba(15,23,42,.18); }}
       .leaflet-control-layers-expanded {{ padding: 9px 12px; }}
       .leaflet-tooltip {{ border: 0; border-radius: 7px; padding: 5px 8px; box-shadow: 0 3px 12px rgba(15,23,42,.18); font-size: 11px; }}
@@ -455,7 +535,7 @@ def _map_html(assets: list[dict[str, object]], ports: list[dict],
       const title = L.control({{position: 'topleft'}});
       title.onAdd = () => {{
         const el = L.DomUtil.create('div', 'map-title');
-        el.innerHTML = '<b>中东战略生产节点、港口与咽喉点</b><br>点击节点查看层级、数值口径与汇总规则。';
+        el.innerHTML = '<b>中东能源资产、港口、咽喉点与船舶</b><br>点击节点查看来源、时间和统计口径。';
         return el;
       }};
       title.addTo(map);
@@ -469,11 +549,13 @@ def _map_html(assets: list[dict[str, object]], ports: list[dict],
       const assets = {marker_json};
       const ports = {port_json};
       const chokepoints = {chokepoint_json};
+      const vessels = {vessel_json};
       const levelColors = {color_json};
       const assetLayer = L.markerClusterGroup({{showCoverageOnHover: false, maxClusterRadius: 34,
           disableClusteringAtZoom: 8, spiderfyOnMaxZoom: true}}).addTo(map);
       const portLayer = L.layerGroup().addTo(map);
       const chokepointLayer = L.layerGroup().addTo(map);
+      const vesselLayer = L.layerGroup().addTo(map);
       assets.forEach((asset) => {{
         const baseColor = levelColors[asset.level] || '#64748b';
         const color = asset.metric_class === 'undisclosed' ? '#64748b' : baseColor;
@@ -508,9 +590,36 @@ def _map_html(assets: list[dict[str, object]], ports: list[dict],
         }}).bindTooltip(point.name, {{direction: 'top', opacity: .95}})
           .bindPopup(point.popup, {{maxWidth: 410}}).addTo(chokepointLayer);
       }});
+      const vesselColors = {{
+        tanker: '#ef4444', cargo: '#2563eb', passenger: '#7c3aed',
+        fishing: '#16a34a', tug: '#d97706', pleasure: '#0891b2',
+        other: '#64748b', unknown: '#94a3b8'
+      }};
+      vessels.forEach((vessel) => {{
+        const color = vesselColors[vessel.category] || vesselColors.unknown;
+        let marker;
+        if (vessel.moving) {{
+          const angle = Number.isFinite(Number(vessel.course)) ? Number(vessel.course) : 0;
+          const icon = L.divIcon({{
+            className: 'vessel-icon', iconSize: [18, 18], iconAnchor: [9, 9],
+            html: `<svg width="18" height="18" viewBox="0 0 18 18" style="transform:rotate(${{angle}}deg)">
+              <path d="M9 1 L16 16 L9 12.8 L2 16 Z" fill="${{color}}" stroke="#ffffff" stroke-width="1.15"/>
+            </svg>`
+          }});
+          marker = L.marker([vessel.lat, vessel.lon], {{icon: icon}});
+        }} else {{
+          marker = L.circleMarker([vessel.lat, vessel.lon], {{
+            radius: 4.2, color: '#ffffff', weight: 1.1,
+            fillColor: color, fillOpacity: .95
+          }});
+        }}
+        marker.bindTooltip(vessel.name, {{direction: 'top', opacity: .95}})
+          .bindPopup(vessel.popup, {{maxWidth: 410}}).addTo(vesselLayer);
+      }});
       const allPoints = ports.map((p) => [p.lat, p.lon])
         .concat(chokepoints.map((p) => [p.lat, p.lon]))
-        .concat(assets.map((a) => [a.lat, a.lon]));
+        .concat(assets.map((a) => [a.lat, a.lon]))
+        .concat(vessels.map((v) => [v.lat, v.lon]));
       const focusAssets = {focus_json};
       if (focusAssets && assets.length === 1) {{
         map.setView([assets[0].lat, assets[0].lon], 8);
@@ -522,7 +631,8 @@ def _map_html(assets: list[dict[str, object]], ports: list[dict],
       }}
       L.control.layers({{'英文街道图': streets, '浅色底图': light, '卫星影像': satellite}},
         {{'油气资产': assetLayer, '港口指标（点越大越活跃）': portLayer,
-          '咽喉点通行（橙色）': chokepointLayer}}, {{collapsed: false}}).addTo(map);
+          '咽喉点通行（橙色）': chokepointLayer,
+          '实时 AIS 船舶': vesselLayer}}, {{collapsed: false}}).addTo(map);
     </script></body></html>
     """
 
@@ -530,7 +640,7 @@ def _map_html(assets: list[dict[str, object]], ports: list[dict],
 st.markdown("""
 <div class="hero">
   <h1>中东能源保供监测</h1>
-  <p>战略生产节点、港口活动指标与关键咽喉点通行｜油田群优先、口径不重复</p>
+  <p>战略生产节点、港口活动、关键咽喉点与实时AIS船位｜来源分层、口径不重复</p>
 </div>
 """, unsafe_allow_html=True)
 
@@ -539,10 +649,12 @@ level_options = list(LEVEL_LABELS)
 type_options = sorted({str(asset["asset_type"]) for asset in ASSETS})
 metric_options = sorted({str(asset["metric_type"]) for asset in ASSETS})
 status_options = list(STATUS_LABELS)
+ais_api_key = _ais_api_key()
+ais_collector_instance: AIS.AISCollector | None = None
 
 with st.sidebar:
     st.markdown("### 监测视图")
-    map_mode = st.radio("地图内容", ["全部图层", "仅港口与咽喉点", "仅咽喉点", "仅油气资产"],
+    map_mode = st.radio("地图内容", ["全部图层", "仅实时AIS船舶", "仅港口与咽喉点", "仅咽喉点", "仅油气资产"],
                         horizontal=False, label_visibility="collapsed", key="map_mode")
 
     with st.expander("⚓ 港口筛选", expanded=True):
@@ -569,6 +681,35 @@ with st.sidebar:
         except Exception as exc:
             newest_chokepoint_day = None
             st.warning(f"咽喉点数据暂时不可用：{exc}")
+
+    with st.expander("▲ 实时 AIS 船舶", expanded=True):
+        ais_enabled = st.toggle(
+            "启用实时船位", value=bool(ais_api_key), disabled=not bool(ais_api_key),
+            key="ais_enabled")
+        if not ais_api_key:
+            st.caption("未配置 AISSTREAM_API_KEY；其他地图图层不受影响。")
+        selected_ais_regions = st.multiselect(
+            "AIS水域（空选＝全部）", list(AIS.REGIONS), default=[],
+            placeholder="全部五个水域", key="ais_regions")
+        selected_ais_categories = st.multiselect(
+            "船型（空选＝全部）", list(AIS.VESSEL_TYPE_LABELS), default=[],
+            format_func=lambda key: AIS.VESSEL_TYPE_LABELS[key],
+            placeholder="全部船型", key="ais_categories")
+        ais_search = st.text_input(
+            "搜索船名、MMSI或IMO", placeholder="例如 EVER GIVEN / 636…",
+            key="ais_search").strip().lower()
+        ais_moving_only = st.toggle("只看航行中（≥0.5节）", value=False,
+                                    key="ais_moving_only")
+        ais_max_age = st.select_slider(
+            "最大数据年龄", options=[10, 30, 60, 120], value=30,
+            format_func=lambda value: f"{value}分钟", key="ais_max_age")
+        if ais_enabled:
+            ais_collector_instance = _ais_collector(ais_api_key)
+            ais_state = ais_collector_instance.status()
+            state_text = f'连接：{ais_state["status"]} · 已接收 {ais_state["message_count"]:,} 条报文'
+            st.caption(state_text)
+            if ais_state.get("last_error"):
+                st.caption(f'最近错误：{ais_state["last_error"]}')
 
     with st.expander("◉ 油气资产筛选", expanded=True):
         asset_view = st.radio(
@@ -608,6 +749,11 @@ with st.sidebar:
         PORTWATCH.chokepoint_catalog.clear()
         PORTWATCH.chokepoint_activity.clear()
         st.rerun()
+    if ais_enabled and st.button("重新连接 AIS", width="stretch"):
+        if ais_collector_instance:
+            ais_collector_instance.stop()
+        _ais_collector.clear()
+        st.rerun()
     st.caption("筛选框留空表示全部。地图右上角可切换底图和数据图层。")
 
 selected_region_set = set(selected_regions or PORTWATCH.REGIONS)
@@ -643,6 +789,26 @@ if newest_chokepoint_day is not None:
     except Exception as exc:
         chokepoint_error = str(exc)
 
+
+def current_vessels() -> list[dict]:
+    """Return one consistent, filtered snapshot; missing AIS is unavailable, not zero."""
+
+    if not ais_enabled or ais_collector_instance is None:
+        return []
+    selected_region_values = set(selected_ais_regions or AIS.REGIONS)
+    rows = ais_collector_instance.snapshot(max_age_minutes=ais_max_age)
+    return [
+        vessel for vessel in rows
+        if vessel.get("region") in selected_region_values
+        and (not selected_ais_categories
+             or vessel.get("category") in selected_ais_categories)
+        and (not ais_moving_only or vessel.get("moving"))
+        and (not ais_search
+             or ais_search in str(vessel.get("name") or "").lower()
+             or ais_search in str(vessel.get("mmsi") or "").lower()
+             or ais_search in str(vessel.get("imo") or "").lower())
+    ]
+
 filtered_all = [
     asset for asset in ASSETS
     if (not selected_countries or asset["country"] in selected_countries)
@@ -663,7 +829,7 @@ map_asset_candidates = filtered if map_mode in {"全部图层", "仅油气资产
 map_assets = [asset for asset in map_asset_candidates if asset["map_drawable"]]
 unlocated_map_assets = [asset for asset in map_asset_candidates if not asset["map_drawable"]]
 map_ports = ports if map_mode in {"全部图层", "仅港口与咽喉点"} else []
-map_chokepoints = chokepoints if map_mode != "仅油气资产" else []
+map_chokepoints = chokepoints if map_mode in {"全部图层", "仅港口与咽喉点", "仅咽喉点"} else []
 
 port_rows = []
 for port in ports:
@@ -738,40 +904,117 @@ asset_rows = [
     for asset in filtered
 ]
 
-tab_map, tab_ports, tab_assets, tab_method = st.tabs(
-    ["地图总览", "港口活动", "油气资产", "数据与方法"])
 
-with tab_map:
+def vessel_rows(vessels: list[dict]) -> list[dict]:
+    return [{
+        "水域": vessel.get("region"),
+        "船名": vessel.get("name") or "—",
+        "船型": vessel.get("category_label"),
+        "MMSI": vessel.get("mmsi"),
+        "IMO": vessel.get("imo"),
+        "航行状态": vessel.get("navigation_status"),
+        "航速 节": (round(vessel["sog"], 1) if vessel.get("sog") is not None else None),
+        "航向 °": (round(vessel["course"], 1)
+                   if vessel.get("course") is not None else None),
+        "目的地": vessel.get("destination"),
+        "吃水 米": vessel.get("draught"),
+        "接收时间 UTC": vessel.get("received_at"),
+        "数据年龄 分钟": round(vessel.get("age_minutes", 0), 1),
+        "纬度": vessel.get("lat"), "经度": vessel.get("lon"),
+        "来源": AIS.SOURCE,
+    } for vessel in vessels]
+
+
+@st.fragment(run_every=15 if ais_enabled else None)
+def render_map_panel() -> None:
+    filtered_vessels = current_vessels()
+    map_vessels = filtered_vessels if map_mode in {"全部图层", "仅实时AIS船舶"} else []
     if port_error:
         st.error(f"港口数据加载失败：{port_error}")
     if chokepoint_error:
         st.error(f"咽喉点数据加载失败：{chokepoint_error}")
-    m1, m2, m3, m4, m5 = st.columns(5)
+    if map_mode == "仅实时AIS船舶" and not ais_api_key:
+        st.info("尚未配置 AISSTREAM_API_KEY，因此实时船舶图层不可用；其他图层仍可正常使用。")
+    elif ais_enabled and ais_collector_instance:
+        ais_state = ais_collector_instance.status()
+        if ais_state.get("last_error") and not map_vessels:
+            st.warning(f'AIS 暂无可用船位，后台将自动重连：{ais_state["last_error"]}')
+        elif not ais_state.get("last_message_at"):
+            st.info("AIS 已启动，正在等待监测水域内的新广播报文。")
+    m1, m2, m3, m4, m5, m6 = st.columns(6)
     m1.metric("地图战略节点" if asset_view == "战略生产节点" else "地图资产点",
               len(map_assets))
-    m2.metric("当前视图待定位", len(unlocated_map_assets))
+    m2.metric("待定位资产", len(unlocated_map_assets))
     m3.metric("地图港口", len(map_ports))
     m4.metric("地图咽喉点", len(map_chokepoints))
-    m5.metric(f"{rolling_days}天活跃港口",
+    m5.metric("实时AIS船舶", len(map_vessels) if ais_api_key else "—")
+    m6.metric(f"{rolling_days}天活跃港口",
               sum((p.get("active_days") or 0) > 0 for p in map_ports))
     if unlocated_map_assets:
         st.info(
             f"当前筛选有 {len(unlocated_map_assets)} 项仅列目录：既无可核验独立坐标，也无可用的"
-            "上级资产代表点，因此不以猜测位置绘图。可在“油气资产”表查看“地图坐标精度”和"
-            "“坐标来源”。"
+            "上级资产代表点，因此不以猜测位置绘图。可在‘油气资产’表查看坐标证据。"
         )
     st.caption(
         "油气节点：实心为实际／推算日量，空心为产能／目标，灰色为未披露；"
-        "虚线圈为区域／设施代理点，大点表示油田群／区块。"
-        "青色港口与橙色咽喉点按活动规模缩放。")
+        "虚线圈为区域／设施代理点。AIS船舶：三角形为航行中、圆点为低速／停泊，"
+        "方向按航向或对地航迹角绘制。")
     st.iframe(
         _map_html(
-            map_assets, map_ports, map_chokepoints,
+            map_assets, map_ports, map_chokepoints, map_vessels,
             selected_day.isoformat() if selected_day else "无数据",
             newest_chokepoint_day.isoformat() if newest_chokepoint_day else "无数据",
             focus_assets=bool(asset_search)),
         height=735,
     )
+
+
+@st.fragment(run_every=15 if ais_enabled else None)
+def render_ais_panel() -> None:
+    st.subheader("实时 AIS 船舶")
+    if not ais_api_key:
+        st.info(
+            "实时AIS尚未启用。请在 Streamlit Secrets 或服务器环境变量中配置 "
+            "AISSTREAM_API_KEY；密钥不会发送到浏览器或写入导出文件。"
+        )
+        return
+    if not ais_enabled or ais_collector_instance is None:
+        st.info("实时船位已关闭，可在左侧‘实时 AIS 船舶’中启用。")
+        return
+    state = ais_collector_instance.status()
+    vessels = current_vessels()
+    rows = vessel_rows(vessels)
+    v1, v2, v3, v4, v5 = st.columns(5)
+    v1.metric("筛选后船舶", len(vessels))
+    v2.metric("航行中", sum(bool(v.get("moving")) for v in vessels))
+    v3.metric("油轮/液货船", sum(v.get("category") == "tanker" for v in vessels))
+    v4.metric("货船", sum(v.get("category") == "cargo" for v in vessels))
+    v5.metric("船型待识别", sum(v.get("category") == "unknown" for v in vessels))
+    st.caption(
+        f'连接状态：{state["status"]} · 累计接收 {state["message_count"]:,} 条报文 · '
+        f'最新报文：{state.get("last_message_at") or "尚未收到"}')
+    if state.get("last_error"):
+        st.warning(f'最近连接错误：{state["last_error"]}；采集器会自动指数退避重连。')
+    if rows:
+        st.dataframe(rows, width="stretch", hide_index=True, height=570,
+                     column_config={"来源": st.column_config.LinkColumn("来源")})
+        buffer = io.StringIO()
+        writer = csv.DictWriter(buffer, fieldnames=rows[0].keys())
+        writer.writeheader(); writer.writerows(rows)
+        st.download_button(
+            "下载当前船位快照 CSV", buffer.getvalue().encode("utf-8-sig"),
+            file_name="ais_vessel_snapshot.csv", mime="text/csv", type="primary")
+    elif not state.get("last_message_at"):
+        st.info("采集器正在等待新AIS广播；这不是‘当前船舶数为0’的判定。")
+    else:
+        st.info("当前船型、水域、搜索和数据年龄筛选没有匹配船舶。")
+
+
+tab_map, tab_ports, tab_vessels, tab_assets, tab_method = st.tabs(
+    ["地图总览", "港口活动", "AIS船舶", "油气资产", "数据与方法"])
+
+with tab_map:
+    render_map_panel()
 
 with tab_ports:
     st.subheader("港口日活动")
@@ -795,6 +1038,9 @@ with tab_ports:
                            mime="text/csv", type="primary")
     else:
         st.info("当前筛选没有匹配港口。清空水域和搜索框可恢复全部港口。")
+
+with tab_vessels:
+    render_ais_panel()
 
 with tab_assets:
     st.subheader(f"油气资产目录 · {asset_view}")
@@ -850,6 +1096,17 @@ with tab_method:
         "PortWatch 的portcalls是进入港界并通过贸易挂靠筛选的有效进港艘次，不是在港船舶存量。"
         "货量根据AIS、载重和吃水估算。单日0只表示源表当日为0；窗口不完整或比较基期为0时，"
         "派生指标保持为空，不以0替代。tanker可能包含原油、成品油及其他液体货物。"
+    )
+    st.markdown(
+        f"**实时AIS船位。** 可选图层通过[AISStream WebSocket API]({AIS.SOURCE})在服务器端订阅"
+        "五个监测水域的船级广播；浏览器只接收经过筛选的每船最新快照，不接收API Key。"
+        "动态位置与静态船舶资料按MMSI合并，航行阈值为0.5节，超过所选最大数据年龄的船位会被删除。"
+    )
+    st.warning(
+        "AIS基础船型只能可靠区分油轮／液货船、货船、客船等大类，不能直接识别集装箱船、"
+        "干散货船、原油油轮或成品油轮。AIS是事件驱动广播，覆盖中断、设备关闭、错误MMSI、"
+        "延迟或位置欺骗都会造成缺失；未收到报文不等于水域内船舶数为0。实时船位不能替代"
+        "PortWatch经港界和贸易规则处理后的日度挂靠指标。"
     )
     st.markdown(
         "**咽喉点。** 地图橙色图层固定显示苏伊士运河、曼德海峡和霍尔木兹海峡的最新可用日数据。"
