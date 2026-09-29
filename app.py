@@ -45,6 +45,11 @@ def _ais_collector(api_key: str, collector_version: int) -> AIS.AISCollector:
     return AIS.AISCollector(api_key).start()
 
 
+@st.cache_data(ttl=15, show_spinner=False)
+def _openwaters_snapshot(max_age_minutes: int, collector_version: int) -> dict:
+    return AIS.openwaters_snapshot(max_age_minutes=max_age_minutes)
+
+
 st.set_page_config(page_title="中东能源保供监测", page_icon="◉", layout="wide",
                    initial_sidebar_state="expanded")
 
@@ -424,13 +429,16 @@ def _vessel_popup(vessel: dict[str, object]) -> str:
         f'<strong>{shown("navigation_status")}</strong></div>'
         '<div class="row"><span>呼号 / 目的地</span>'
         f'<strong>{shown("call_sign")} / {shown("destination")}</strong></div>'
-        '<div class="row"><span>接收时间 UTC</span>'
+        '<div class="row"><span>AIS报告时间 UTC</span>'
         f'<strong>{shown("received_at")}</strong></div>'
         '<div class="row"><span>数据年龄</span>'
         f'<strong>{age_text}</strong></div>'
+        '<div class="row"><span>数据源</span>'
+        f'<strong>{shown("data_source")}</strong></div>'
         '<div class="basis">AIS船型为船载设备广播的基础分类；货船不能据此可靠细分为集装箱船或散货船。'
         '点位可能因岸基/卫星覆盖、设备关闭、延迟或错误广播而缺失。</div>'
-        f'<a class="source" href="{AIS.SOURCE}" target="_blank" rel="noopener">AISStream 数据接口说明</a>'
+        f'<a class="source" href="{esc(vessel.get("source_url") or AIS.SOURCE)}" target="_blank" rel="noopener">'
+        f'{esc(vessel.get("source_attribution") or vessel.get("data_source") or "AIS数据来源")}</a>'
         '</div>'
     )
 
@@ -711,14 +719,10 @@ with st.sidebar:
 
     with st.expander("▲ 实时 AIS 船舶", expanded=True):
         ais_enabled = st.toggle(
-            "启用实时船位", value=bool(ais_api_key), disabled=not bool(ais_api_key),
+            "启用实时船位", value=True,
             key="ais_enabled")
         if not ais_api_key:
-            st.warning(
-                "实时船舶未显示：此部署尚未配置 AISSTREAM_API_KEY。请在 "
-                "Streamlit Cloud → App settings → Secrets 中配置后重启应用。",
-                icon="🔑",
-            )
+            st.caption("未配置AISStream密钥；仍会尝试无需密钥的 Open Waters 免费聚合数据源。")
         selected_ais_regions = st.multiselect(
             "AIS水域（空选＝全部）", list(AIS.REGIONS), default=[],
             placeholder="全部五个水域", key="ais_regions")
@@ -735,21 +739,24 @@ with st.sidebar:
             "最大数据年龄", options=[10, 30, 60, 120], value=30,
             format_func=lambda value: f"{value}分钟", key="ais_max_age")
         if ais_enabled:
-            ais_collector_instance = _ais_collector(ais_api_key, AIS.MODULE_VERSION)
-            ais_state = ais_collector_instance.status()
-            state_text = (
-                f'连接：{ais_state["status"]} · '
-                f'收到 {ais_state.get("raw_event_count", 0):,} 条AIS事件 · '
-                f'解析有效 {ais_state["message_count"]:,} 条 · '
-                f'位置报文 {ais_state.get("position_message_count", 0):,} 条'
-            )
-            st.caption(state_text)
-            if ais_state.get("compression_enabled") is True:
-                st.caption("WebSocket 压缩：已协商")
-            if ais_state.get("compression_enabled") is False:
-                st.warning("AISStream 未确认 WebSocket 压缩协商；未压缩连接可能受带宽限制。")
-            if ais_state.get("last_error"):
-                st.caption(f'最近错误：{ais_state["last_error"]}')
+            if ais_api_key:
+                ais_collector_instance = _ais_collector(ais_api_key, AIS.MODULE_VERSION)
+                ais_state = ais_collector_instance.status()
+                st.caption(
+                    f'AISStream：{ais_state["status"]} · '
+                    f'收到 {ais_state.get("raw_event_count", 0):,} 条事件 · '
+                    f'位置报文 {ais_state.get("position_message_count", 0):,} 条'
+                )
+                if ais_state.get("compression_enabled") is True:
+                    st.caption("AISStream WebSocket 压缩：已协商")
+                if ais_state.get("compression_enabled") is False:
+                    st.warning("AISStream 未确认 WebSocket 压缩协商；未压缩连接可能受带宽限制。")
+                if ais_state.get("last_error"):
+                    st.caption(f'最近 AISStream 错误：{ais_state["last_error"]}')
+            open_state = _openwaters_snapshot(ais_max_age, AIS.MODULE_VERSION)
+            st.caption(f'Open Waters 免费快照：{len(open_state["vessels"]):,} 艘船位')
+            if open_state.get("error"):
+                st.caption(f'Open Waters 错误：{open_state["error"]}')
 
     with st.expander("◉ 油气资产筛选", expanded=True):
         asset_view = st.radio(
@@ -792,7 +799,9 @@ with st.sidebar:
     if ais_enabled and st.button("重新连接 AIS", width="stretch"):
         if ais_collector_instance:
             ais_collector_instance.stop()
-        _ais_collector.clear()
+        if ais_api_key:
+            _ais_collector.clear()
+        _openwaters_snapshot.clear()
         st.rerun()
     st.caption("筛选框留空表示全部。地图右上角可切换底图和数据图层。")
 
@@ -830,13 +839,29 @@ if newest_chokepoint_day is not None:
         chokepoint_error = str(exc)
 
 
+def current_ais_positions() -> list[dict]:
+    """Merge the direct AISStream feed and the public Open Waters snapshot."""
+
+    if not ais_enabled:
+        return []
+    rows: dict[str, dict] = {}
+    if ais_collector_instance is not None:
+        for vessel in ais_collector_instance.snapshot(max_age_minutes=ais_max_age):
+            rows[str(vessel["mmsi"])] = vessel
+    open_state = _openwaters_snapshot(ais_max_age, AIS.MODULE_VERSION)
+    for vessel in open_state.get("vessels", []):
+        mmsi = str(vessel["mmsi"])
+        previous = rows.get(mmsi)
+        if previous is None or vessel["received_at"] > previous["received_at"]:
+            rows[mmsi] = vessel
+    return list(rows.values())
+
+
 def current_vessels() -> list[dict]:
     """Return one consistent, filtered snapshot; missing AIS is unavailable, not zero."""
 
-    if not ais_enabled or ais_collector_instance is None:
-        return []
+    rows = current_ais_positions()
     selected_region_values = set(selected_ais_regions or AIS.REGIONS)
-    rows = ais_collector_instance.snapshot(max_age_minutes=ais_max_age)
     return [
         vessel for vessel in rows
         if vessel.get("region") in selected_region_values
@@ -958,53 +983,55 @@ def vessel_rows(vessels: list[dict]) -> list[dict]:
                    if vessel.get("course") is not None else None),
         "目的地": vessel.get("destination"),
         "吃水 米": vessel.get("draught"),
-        "接收时间 UTC": vessel.get("received_at"),
+        "AIS报告时间 UTC": vessel.get("received_at"),
         "数据年龄 分钟": round(vessel.get("age_minutes", 0), 1),
         "纬度": vessel.get("lat"), "经度": vessel.get("lon"),
-        "来源": AIS.SOURCE,
+        "数据源": vessel.get("data_source"),
+        "来源": vessel.get("source_url") or AIS.SOURCE,
     } for vessel in vessels]
 
 
 @st.fragment(run_every=15 if ais_enabled else None)
 def render_map_panel() -> None:
+    all_positions = current_ais_positions()
     filtered_vessels = current_vessels()
     map_vessels = filtered_vessels if map_mode in {"全部图层", "仅实时AIS船舶"} else []
-    ais_state = None
+    stream_state = ais_collector_instance.status() if ais_collector_instance else {
+        "status": "未配置（可选）", "raw_event_count": 0,
+        "position_message_count": 0, "last_error": None,
+    }
+    open_state = _openwaters_snapshot(ais_max_age, AIS.MODULE_VERSION)
     if port_error:
         st.error(f"港口数据加载失败：{port_error}")
     if chokepoint_error:
         st.error(f"咽喉点数据加载失败：{chokepoint_error}")
-    if not ais_api_key:
-        st.warning(
-            "实时 AIS 船舶图层未启用：当前 Streamlit 部署缺少 AISSTREAM_API_KEY。"
-            "添加密钥并重启应用后，地图才会开始接收船位。"
-        )
-    elif ais_enabled and ais_collector_instance:
-        ais_state = ais_collector_instance.status()
-        if ais_state.get("last_error") and not map_vessels:
-            st.warning(f'AIS 暂无可用船位，后台将自动重连：{ais_state["last_error"]}')
-        elif ais_state.get("raw_event_count", 0) == 0:
-            if ais_state.get("status") == "订阅已确认":
-                st.warning("AISStream 已确认订阅，但尚未向此连接送达任何 AIS 事件。")
-            else:
-                st.info("AIS 已启动，正在等待监测水域内的新广播报文。")
-        elif ais_state.get("position_message_count", 0) == 0:
-            if ais_state.get("rejected_event_count", 0):
+    if not ais_enabled:
+        st.info("实时AIS图层已关闭。")
+    else:
+        if stream_state.get("last_error") and not all_positions:
+            st.warning(f'AISStream 暂无可用船位，后台将自动重连：{stream_state["last_error"]}')
+        if open_state.get("error"):
+            st.warning(f'Open Waters 免费数据暂不可用：{open_state["error"]}')
+        if open_state.get("truncated"):
+            st.caption("Open Waters 返回结果达到该区域查询上限，较早船位可能未包含。")
+        if not all_positions and not open_state.get("error"):
+            if stream_state.get("status") == "订阅已确认" and stream_state.get("raw_event_count", 0) == 0:
                 st.warning(
-                    f'已收到 {ais_state["raw_event_count"]:,} 条AIS事件，'
-                    f'但 {ais_state["rejected_event_count"]:,} 条未通过解析；'
-                    f'最近类型：{ais_state.get("last_raw_message_type") or "未知"}，'
-                    f'原因：{ais_state.get("last_rejection_reason") or "未知"}。'
+                    "AISStream 已确认订阅但未送达事件；Open Waters 当前快照也没有船位。"
+                    "这不代表监测水域内没有船舶。"
                 )
             else:
-                st.info("已收到AIS事件，但还没有收到可绘制的位置报告。")
+                st.info("两处数据源尚未返回当前可用船位；不能据此判断水域内没有船舶。")
+        if open_state.get("attribution"):
+            credits = list(dict.fromkeys(open_state["attribution"].values()))
+            st.caption("Open Waters 来源署名：" + " · ".join(credits))
     m1, m2, m3, m4, m5, m6 = st.columns(6)
     m1.metric("地图战略节点" if asset_view == "战略生产节点" else "地图资产点",
               len(map_assets))
     m2.metric("待定位资产", len(unlocated_map_assets))
     m3.metric("地图港口", len(map_ports))
     m4.metric("地图咽喉点", len(map_chokepoints))
-    has_position_data = bool(ais_state and ais_state.get("position_message_count", 0))
+    has_position_data = bool(all_positions)
     m5.metric("实时AIS船舶", len(map_vessels) if has_position_data else "—")
     m6.metric(f"{rolling_days}天活跃港口",
               sum((p.get("active_days") or 0) > 0 for p in map_ports))
@@ -1022,7 +1049,7 @@ def render_map_panel() -> None:
             map_assets, map_ports, map_chokepoints, map_vessels,
             selected_day.isoformat() if selected_day else "无数据",
             newest_chokepoint_day.isoformat() if newest_chokepoint_day else "无数据",
-            focus_assets=bool(asset_search), ais_configured=bool(ais_api_key)),
+            focus_assets=bool(asset_search), ais_configured=bool(ais_enabled)),
         height=735,
     )
 
@@ -1030,19 +1057,22 @@ def render_map_panel() -> None:
 @st.fragment(run_every=15 if ais_enabled else None)
 def render_ais_panel() -> None:
     st.subheader("实时 AIS 船舶")
-    if not ais_api_key:
-        st.info(
-            "实时AIS尚未启用。请在 Streamlit Secrets 或服务器环境变量中配置 "
-            "AISSTREAM_API_KEY；密钥不会发送到浏览器或写入导出文件。"
-        )
-        return
-    if not ais_enabled or ais_collector_instance is None:
+    if not ais_enabled:
         st.info("实时船位已关闭，可在左侧‘实时 AIS 船舶’中启用。")
         return
     vessels = current_vessels()
     rows = vessel_rows(vessels)
-    state = ais_collector_instance.status()
-    has_position_data = bool(state.get("position_message_count", 0))
+    all_positions = current_ais_positions()
+    state = ais_collector_instance.status() if ais_collector_instance else {
+        "status": "未配置（可选）", "last_error": None,
+        "last_message_at": None, "last_position_message_at": None,
+        "raw_event_count": 0, "rejected_event_count": 0,
+        "message_count": 0, "position_message_count": 0,
+        "static_message_count": 0, "tracked_vessels": 0,
+        "compression_enabled": None,
+    }
+    open_state = _openwaters_snapshot(ais_max_age, AIS.MODULE_VERSION)
+    has_position_data = bool(all_positions)
     vessel_metric = len(vessels) if has_position_data else "—"
     v1, v2, v3, v4, v5 = st.columns(5)
     v1.metric("筛选后船舶", vessel_metric)
@@ -1053,17 +1083,26 @@ def render_ais_panel() -> None:
               if has_position_data else "—")
     v5.metric("船型待识别", sum(v.get("category") == "unknown" for v in vessels)
               if has_position_data else "—")
-    st.caption(
-        f'连接状态：{state["status"]} · AIS事件 {state.get("raw_event_count", 0):,} 条 · '
-        f'解析有效 {state["message_count"]:,} 条（位置 '
-        f'{state.get("position_message_count", 0):,}，静态 '
-        f'{state.get("static_message_count", 0):,}） · '
-        f'最近位置：{state.get("last_position_message_at") or "尚未收到"} · '
-        f'压缩：{"已协商" if state.get("compression_enabled") is True else "未协商" if state.get("compression_enabled") is False else "待确认"}')
-    if state.get("compression_enabled") is False:
-        st.warning(
-            "AISStream 未确认 WebSocket 压缩协商；官方说明未压缩连接可能受带宽限制。"
+    if ais_collector_instance:
+        st.caption(
+            f'AISStream：{state["status"]} · 收到 {state.get("raw_event_count", 0):,} 条事件 · '
+            f'解析有效 {state.get("message_count", 0):,} 条（位置 '
+            f'{state.get("position_message_count", 0):,}，静态 '
+            f'{state.get("static_message_count", 0):,}） · '
+            f'压缩：{"已协商" if state.get("compression_enabled") is True else "未协商" if state.get("compression_enabled") is False else "待确认"}'
         )
+    else:
+        st.caption("AISStream 密钥未配置（可选）；当前使用无需密钥的 Open Waters 免费聚合快照。")
+    st.caption(f'Open Waters 快照：{len(open_state["vessels"]):,} 艘船位 · 刷新间隔约15秒')
+    if open_state.get("attribution"):
+        credits = list(dict.fromkeys(open_state["attribution"].values()))
+        st.caption("数据来源署名：" + " · ".join(credits))
+    if open_state.get("truncated"):
+        st.warning("Open Waters 返回结果达到该区域查询上限，较早船位可能未包含。")
+    if open_state.get("error"):
+        st.warning(f'Open Waters 快照错误：{open_state["error"]}')
+    if state.get("compression_enabled") is False:
+        st.warning("AISStream 未确认 WebSocket 压缩协商；未压缩连接可能受带宽限制。")
     if state.get("last_error"):
         st.warning(f'最近连接错误：{state["last_error"]}；采集器会自动指数退避重连。')
     if state.get("rejected_event_count", 0):
@@ -1081,14 +1120,20 @@ def render_ais_panel() -> None:
         st.download_button(
             "下载当前船位快照 CSV", buffer.getvalue().encode("utf-8-sig"),
             file_name="ais_vessel_snapshot.csv", mime="text/csv", type="primary")
-    elif state.get("raw_event_count", 0) == 0:
-        if state.get("status") == "订阅已确认":
+    elif not all_positions:
+        if (state.get("status") == "订阅已确认"
+                and state.get("raw_event_count", 0) == 0
+                and not open_state.get("error")):
             st.warning(
-                "订阅已确认，但 AISStream 尚未送达任何AIS事件。当前船位不可用，"
-                "不能据此判断监测水域内没有船舶。"
+                "AISStream 已确认订阅但尚未送达事件，Open Waters 当前快照也没有返回船位。"
+                "当前船位不可用，不能据此判断监测水域内没有船舶。"
             )
+        elif open_state.get("error"):
+            st.warning("免费公共快照暂时不可用；可稍后刷新。没有报文不等于水域内没有船舶。")
         else:
-            st.info("采集器正在等待新AIS广播；当前船位尚不可用。")
+            st.info("正在等待监测水域内的新 AIS 报文；当前船位尚不可用。")
+    elif has_position_data:
+        st.info("当前船型、水域、搜索和数据年龄筛选没有匹配船舶。")
     elif state.get("position_message_count", 0) == 0:
         st.info("已收到AIS事件，但尚未收到可绘制的位置报告。")
     elif state.get("tracked_vessels", 0) == 0:
@@ -1185,9 +1230,11 @@ with tab_method:
         "派生指标保持为空，不以0替代。tanker可能包含原油、成品油及其他液体货物。"
     )
     st.markdown(
-        f"**实时AIS船位。** 可选图层通过[AISStream WebSocket API]({AIS.SOURCE})在服务器端订阅"
-        "五个监测水域的船级广播；浏览器只接收经过筛选的每船最新快照，不接收API Key。"
-        "动态位置与静态船舶资料按MMSI合并，航行阈值为0.5节，超过所选最大数据年龄的船位会被删除。"
+        f"**实时AIS船位。** 免费快照来自[Open Waters开放AIS网络]({AIS.OPENWATERS_SOURCE})，"
+        f"可选[AISStream WebSocket API]({AIS.SOURCE})在服务器端接收五个监测水域的船级广播；"
+        "快照约每15秒刷新，浏览器只接收标准化的每船最新位置，不接收API Key。"
+        "多源位置按MMSI合并，航行阈值为0.5节，超过所选最大数据年龄的船位会被删除；"
+        "上游来源署名随船舶表及弹窗显示。"
     )
     st.warning(
         "AIS基础船型只能可靠区分油轮／液货船、货船、客船等大类，不能直接识别集装箱船、"
