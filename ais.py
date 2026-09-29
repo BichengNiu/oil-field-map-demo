@@ -9,11 +9,15 @@ from __future__ import annotations
 
 import json
 import random
+import re
 import threading
 import time
+from concurrent.futures import ThreadPoolExecutor, as_completed
 from copy import deepcopy
 from datetime import datetime, timezone
 from typing import Any, Callable
+from urllib.parse import urlencode
+from urllib.request import Request, urlopen
 
 try:
     from websockets.sync.client import connect as websocket_connect
@@ -23,7 +27,9 @@ except ImportError:  # The rest of the application must still work without AIS.
 
 SOURCE = "https://aisstream.io/documentation"
 STREAM_URL = "wss://stream.aisstream.io/v0/stream"
-MODULE_VERSION = 2
+OPENWATERS_SOURCE = "https://openwaters.io/ais/"
+OPENWATERS_API = "https://ais.openwaters.io/v1/vessels"
+MODULE_VERSION = 3
 
 # south, north, west, east.  Keep aligned with portwatch.REGIONS.
 REGIONS = {
@@ -33,6 +39,13 @@ REGIONS = {
     "苏伊士运河": (29.4, 31.6, 31.7, 33.5),
     "曼德海峡": (11.0, 15.4, 42.0, 45.7),
 }
+
+# Open Waters' anonymous API allows 100 square degrees per request. Keep the
+# complete five-region coverage in two requests while respecting that limit.
+OPENWATERS_REGION_GROUPS = (
+    ("波斯湾", "霍尔木兹海峡", "苏伊士运河"),
+    ("阿曼湾", "曼德海峡"),
+)
 
 POSITION_MESSAGE_TYPES = (
     "PositionReport",
@@ -78,6 +91,167 @@ def region_for(lat: float, lon: float) -> str | None:
         if south <= lat <= north and west <= lon <= east:
             return name
     return None
+
+
+def openwaters_bbox_groups() -> tuple[tuple[tuple[float, float, float, float], ...], ...]:
+    """Return south/north/west/east boxes grouped below Open Waters' free cap."""
+
+    return tuple(
+        tuple(REGIONS[name] for name in group)
+        for group in OPENWATERS_REGION_GROUPS
+    )
+
+
+def _parse_utc(value: Any) -> datetime | None:
+    if not value:
+        return None
+    try:
+        parsed = datetime.fromisoformat(str(value).replace("Z", "+00:00"))
+    except (TypeError, ValueError):
+        return None
+    if parsed.tzinfo is None:
+        return parsed.replace(tzinfo=timezone.utc)
+    return parsed.astimezone(timezone.utc)
+
+
+def openwaters_feature_to_vessel(
+    feature: dict[str, Any], attribution: dict[str, Any] | None = None,
+    received_at: datetime | None = None,
+) -> dict[str, Any] | None:
+    """Normalize an Open Waters GeoJSON vessel feature for the map."""
+
+    properties = feature.get("properties") or {}
+    geometry = feature.get("geometry") or {}
+    coordinates = geometry.get("coordinates") or []
+    if properties.get("kind", "vessel") != "vessel" or len(coordinates) < 2:
+        return None
+    lon = _number(coordinates[0])
+    lat = _number(coordinates[1])
+    if not _valid_coordinate(lat, lon):
+        return None
+    assert lat is not None and lon is not None
+    region = region_for(lat, lon)
+    if region is None:
+        return None
+
+    mmsi = _integer(properties.get("mmsi", feature.get("id")))
+    if mmsi is None or not 100000000 <= mmsi <= 999999999:
+        return None
+    seen = _parse_utc(properties.get("seen")) or received_at or utc_now()
+    sog = _number(properties.get("sog"))
+    cog = _number(properties.get("cog"))
+    heading = _number(properties.get("heading"))
+    if sog is not None and not 0 <= sog < 102.3:
+        sog = None
+    if cog is not None and not 0 <= cog < 360:
+        cog = None
+    if heading is not None and not 0 <= heading < 360:
+        heading = None
+    ship_type = _integer(properties.get("type"))
+    category, category_label = classify_ship_type(ship_type)
+    nav_code = _integer(properties.get("nav_status"))
+    source = _clean_text(properties.get("source")) or "Open Waters"
+    station = _clean_text(properties.get("station"))
+    attribution_text = (attribution or {}).get(source)
+    source_url_match = re.search(r"https?://[^\s)]+", str(attribution_text or ""))
+    source_url = source_url_match.group(0).rstrip(".,") if source_url_match else OPENWATERS_SOURCE
+    age_minutes = max(0.0, (utc_now() - seen).total_seconds() / 60)
+    return {
+        "mmsi": str(mmsi),
+        "received_at": seen.isoformat(),
+        "message_type": _clean_text(properties.get("msg_type")) or "PositionReport",
+        "kind": "position",
+        "name": _clean_text(properties.get("name")),
+        "lat": lat,
+        "lon": lon,
+        "region": region,
+        "sog": sog,
+        "cog": cog,
+        "heading": heading,
+        "course": heading if heading is not None else cog,
+        "navigation_status_code": nav_code,
+        "navigation_status": NAVIGATION_STATUS_LABELS.get(nav_code, "未报告"),
+        "ship_type_code": ship_type,
+        "category": category if ship_type is not None else "unknown",
+        "category_label": category_label if ship_type is not None else VESSEL_TYPE_LABELS["unknown"],
+        "imo": _integer(properties.get("imo")),
+        "call_sign": _clean_text(properties.get("callsign", properties.get("call_sign"))),
+        "destination": _clean_text(properties.get("dest", properties.get("destination"))),
+        "draught": _number(properties.get("draught")),
+        "moving": (sog or 0) >= 0.5,
+        "age_minutes": age_minutes,
+        "data_source": f"Open Waters · {source}",
+        "source": source,
+        "station": station,
+        "source_url": source_url,
+        "source_attribution": _clean_text(attribution_text),
+    }
+
+
+def _fetch_openwaters_group(
+    boxes: tuple[tuple[float, float, float, float], ...], max_age_minutes: int,
+) -> dict[str, Any]:
+    params = [("bbox", f"{south},{west},{north},{east}")
+              for south, north, west, east in boxes]
+    params.append(("max_age", f"{max_age_minutes}m"))
+    request = Request(
+        f"{OPENWATERS_API}?{urlencode(params)}",
+        headers={"User-Agent": "oil-field-map-demo/1.0", "Accept": "application/geo+json, application/json"},
+    )
+    with urlopen(request, timeout=8) as response:
+        result = json.load(response)
+    if not isinstance(result, dict) or result.get("type") != "FeatureCollection":
+        raise ValueError("Open Waters返回了无法识别的船位快照")
+    if result.get("error"):
+        raise ValueError(f"Open Waters API：{result['error']}")
+    return result
+
+
+def openwaters_snapshot(max_age_minutes: int = 30) -> dict[str, Any]:
+    """Fetch a free, two-request Open Waters snapshot for all monitored areas."""
+
+    groups = openwaters_bbox_groups()
+    results: list[dict[str, Any]] = []
+    errors: list[str] = []
+    with ThreadPoolExecutor(max_workers=len(groups)) as pool:
+        futures = [pool.submit(_fetch_openwaters_group, group, max_age_minutes)
+                   for group in groups]
+        for future in as_completed(futures):
+            try:
+                results.append(future.result())
+            except Exception as exc:
+                errors.append(f"{type(exc).__name__}: {exc}")
+
+    attribution: dict[str, str] = {}
+    by_mmsi: dict[str, dict[str, Any]] = {}
+    truncated = False
+    for result in results:
+        source_attribution = result.get("attribution") or {}
+        if isinstance(source_attribution, dict):
+            attribution.update({str(key): str(value)
+                                for key, value in source_attribution.items()})
+        truncated = truncated or bool(result.get("truncated"))
+        for feature in result.get("features") or []:
+            if not isinstance(feature, dict):
+                continue
+            vessel = openwaters_feature_to_vessel(feature, attribution)
+            if vessel is None:
+                continue
+            previous = by_mmsi.get(vessel["mmsi"])
+            if previous is None or vessel["received_at"] > previous["received_at"]:
+                by_mmsi[vessel["mmsi"]] = vessel
+
+    # Resolve attribution after combining both area responses, since one source
+    # may appear only in the second response.
+    for vessel in by_mmsi.values():
+        vessel["source_attribution"] = attribution.get(vessel["source"])
+    return {
+        "vessels": sorted(by_mmsi.values(), key=lambda row: row["received_at"], reverse=True),
+        "attribution": attribution,
+        "truncated": truncated,
+        "fetched_at": utc_now().isoformat(),
+        "error": "; ".join(errors) if errors else None,
+    }
 
 
 def subscription(api_key: str) -> dict[str, Any]:
@@ -373,6 +547,10 @@ class AISCollector:
                 self._rejected_event_count += 1
                 self._last_rejection_reason = reason
             return False
+        normalized["data_source"] = "AISStream"
+        normalized["source"] = "AISStream"
+        normalized["source_url"] = SOURCE
+        normalized["source_attribution"] = "AISStream"
         mmsi = normalized["mmsi"]
         with self._lock:
             self._message_count += 1
