@@ -122,13 +122,11 @@ METRIC_LABELS = {
 LEVEL_LABELS = CATALOG.ASSET_LEVEL_LABELS
 STATUS_LABELS = CATALOG.OPERATING_STATUS_LABELS
 OUTPUT_METRIC_TYPES = CATALOG.OUTPUT_METRIC_TYPES
-MAP_MODE_LABELS = {
-    "全部图层": "综合视图",
-    "仅实时AIS船舶": "仅船舶",
-    "仅港口": "仅港口",
-    "仅港口与咽喉点": "港口与咽喉点",
-    "仅咽喉点": "仅咽喉点",
-    "仅油气资产": "仅油气资产",
+MAP_LAYER_LABELS = {
+    "vessels": "船舶",
+    "ports": "港口",
+    "assets": "油气资产",
+    "chokepoints": "咽喉点",
 }
 LEVEL_COLORS = {
     "field": "#dc2626",
@@ -748,9 +746,11 @@ ais_collector_instance: AIS.AISCollector | None = None
 
 with st.sidebar:
     st.markdown("### 监测视图")
-    map_mode = st.selectbox(
-        "地图内容", list(MAP_MODE_LABELS),
-        format_func=lambda value: MAP_MODE_LABELS[value], key="map_mode")
+    selected_map_layers = st.multiselect(
+        "地图内容", list(MAP_LAYER_LABELS), default=[],
+        format_func=lambda value: MAP_LAYER_LABELS[value], key="map_layers",
+        placeholder="全部图层",
+        help="默认显示全部；选择一个或多个图层后按所选内容筛选。")
     selected_regions = st.multiselect(
         "航运水域", list(PORTWATCH.REGIONS), default=[],
         placeholder="全部五个水域", key="monitor_regions",
@@ -958,11 +958,16 @@ filtered = [
     asset for asset in filtered_all
     if asset_view == "完整资产目录" or asset["strategic_default"] or bool(asset_search)
 ]
-map_asset_candidates = filtered if map_mode in {"全部图层", "仅油气资产"} else []
+visible_map_layers = set(selected_map_layers) or set(MAP_LAYER_LABELS)
+map_asset_candidates = filtered if "assets" in visible_map_layers else []
 map_assets = [asset for asset in map_asset_candidates if asset["map_drawable"]]
 unlocated_map_assets = [asset for asset in map_asset_candidates if not asset["map_drawable"]]
-map_ports = ports if map_mode in {"全部图层", "仅港口", "仅港口与咽喉点"} else []
-map_chokepoints = chokepoints if map_mode in {"全部图层", "仅港口与咽喉点", "仅咽喉点"} else []
+map_ports = ports if "ports" in visible_map_layers else []
+map_chokepoints = (
+    chokepoints
+    if "chokepoints" in visible_map_layers
+    else []
+)
 
 port_rows = []
 for port in ports:
@@ -1062,7 +1067,11 @@ def vessel_rows(vessels: list[dict]) -> list[dict]:
 def render_map_panel() -> None:
     all_positions = current_ais_positions()
     filtered_vessels = current_vessels(all_positions)
-    map_vessels = filtered_vessels if map_mode in {"全部图层", "仅实时AIS船舶"} else []
+    map_vessels = (
+        filtered_vessels
+        if "vessels" in visible_map_layers
+        else []
+    )
     stream_state = current_ais_status()
     open_state = _openwaters_snapshot(ais_max_age, AIS.MODULE_VERSION)
     if port_error:
