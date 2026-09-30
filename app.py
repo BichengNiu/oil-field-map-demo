@@ -1,4 +1,4 @@
-"""中东公开命名油气资产分层地图 DEMO。"""
+"""中东公开命名油气分层地图 DEMO。"""
 
 from __future__ import annotations
 
@@ -125,7 +125,7 @@ OUTPUT_METRIC_TYPES = CATALOG.OUTPUT_METRIC_TYPES
 MAP_LAYER_LABELS = {
     "vessels": "船舶",
     "ports": "港口",
-    "assets": "油气资产",
+    "assets": "油气",
     "chokepoints": "咽喉点",
 }
 LEVEL_COLORS = {
@@ -133,7 +133,7 @@ LEVEL_COLORS = {
     "field_group": "#ea580c",
     "block": "#2563eb",
     "concession": "#7c3aed",
-    "project": "#475569",
+    "project": "#0891b2",
     "development_area": "#059669",
 }
 PORT_TYPE_COLORS = {
@@ -468,26 +468,6 @@ def _dominant_port_type(port: dict) -> str:
     return max(shares)[1] if shares else "unknown"
 
 
-PORT_COUNTRY_ALIASES = {
-    "united arab emirates": {"uae", "are", "阿联酋"},
-}
-
-
-def _matches_port_search(port: dict, query: str) -> bool:
-    """Match a port name or country, including familiar country abbreviations."""
-
-    if not query:
-        return True
-    query = query.casefold()
-    name = str(port.get("name") or "").casefold()
-    country = str(port.get("country") or "").casefold()
-    country_words = [word for word in country.replace("-", " ").split() if word]
-    country_initials = "".join(word[0] for word in country_words)
-    aliases = PORT_COUNTRY_ALIASES.get(country, set())
-    return (query in name or query in country or query == country_initials
-            or any(query in alias.casefold() for alias in aliases))
-
-
 def _map_html(assets: list[dict[str, object]], ports: list[dict],
               chokepoints: list[dict], vessels: list[dict], day: str, chokepoint_day: str,
               focus_assets: bool = False, ais_configured: bool = True,
@@ -541,7 +521,7 @@ def _map_html(assets: list[dict[str, object]], ports: list[dict],
     port_color_json = json.dumps(PORT_TYPE_COLORS, ensure_ascii=False)
     legend_lines = ["<b>地图符号</b>"]
     if show_assets:
-        legend_lines.append('<span><i class="shape-asset"></i>油气资产：菱形</span>')
+        legend_lines.append('<span><i class="shape-asset"></i>油气：菱形</span>')
     if show_ports:
         legend_lines.append('<span><i class="shape-port"></i>港口：方形</span>')
     if show_chokepoints:
@@ -552,8 +532,13 @@ def _map_html(assets: list[dict[str, object]], ports: list[dict],
         legend_lines.append('<b class="legend-section">颜色与填充</b>')
     if show_assets:
         legend_lines.extend([
-            '<span class="legend-note">油气：红单田 · 橙油田群 · 蓝区块 · 紫特许区 · 绿开发区</span>',
+            '<span class="legend-note">油气颜色（层级）</span>',
+            '<span><i class="legend-level legend-field"></i>单田　<i class="legend-level legend-group"></i>油田群　<i class="legend-level legend-block"></i>区块</span>',
+            '<span><i class="legend-level legend-concession"></i>特许区　<i class="legend-level legend-development"></i>开发区　<i class="legend-level legend-project"></i>项目</span>',
+            '<span class="legend-note">油气填充、边框与大小</span>',
             '<span><i class="legend-solid"></i>实心=产量　<i class="legend-hollow"></i>空心=产能/目标</span>',
+            '<span><i class="legend-undisclosed"></i>灰色=数值未披露　<i class="legend-proxy"></i>虚线边=近似坐标</span>',
+            '<span><i class="legend-strategic"></i>大菱形=战略油田群/节点</span>',
         ])
     if show_ports:
         legend_lines.extend([
@@ -610,8 +595,18 @@ def _map_html(assets: list[dict[str, object]], ports: list[dict],
       .map-legend .shape-port {{ background: #2563eb; border-radius: 2px; }}
       .map-legend .shape-choke {{ background: #f97316; clip-path: polygon(25% 0,75% 0,100% 50%,75% 100%,25% 100%,0 50%); }}
       .map-legend .shape-vessel {{ background: #334155; clip-path: polygon(50% 0,100% 100%,50% 78%,0 100%); }}
+      .map-legend .legend-level {{ transform: rotate(45deg) scale(.72); }}
+      .map-legend .legend-field {{ background: #dc2626; }}
+      .map-legend .legend-group {{ background: #ea580c; }}
+      .map-legend .legend-block {{ background: #2563eb; }}
+      .map-legend .legend-concession {{ background: #7c3aed; }}
+      .map-legend .legend-development {{ background: #059669; }}
+      .map-legend .legend-project {{ background: #0891b2; }}
       .map-legend .legend-solid {{ background: #dc2626; transform: rotate(45deg) scale(.72); }}
       .map-legend .legend-hollow {{ background: white; border: 2px solid #2563eb; transform: rotate(45deg) scale(.72); }}
+      .map-legend .legend-undisclosed {{ background: #94a3b8; border: 1px solid #475569; transform: rotate(45deg) scale(.72); }}
+      .map-legend .legend-proxy {{ background: white; border: 2px dashed #7c3aed; transform: rotate(45deg) scale(.72); }}
+      .map-legend .legend-strategic {{ width: 13px; height: 13px; background: #ea580c; transform: rotate(45deg) scale(.78); }}
       .map-legend .legend-red {{ background: #dc2626; border-radius: 50%; }}
       .map-legend .legend-blue {{ background: #2563eb; border-radius: 50%; }}
       .map-legend .legend-purple {{ background: #7c3aed; border-radius: 50%; }}
@@ -670,7 +665,7 @@ def _map_html(assets: list[dict[str, object]], ports: list[dict],
       }}).addTo(map);
       assets.forEach((asset) => {{
         const baseColor = levelColors[asset.level] || '#64748b';
-        const color = asset.metric_class === 'undisclosed' ? '#64748b' : baseColor;
+        const color = baseColor;
         const isGroup = asset.role === 'strategic_group';
         const fillColor = asset.metric_class === 'capacity' ? '#ffffff' :
           (asset.metric_class === 'undisclosed' ? '#94a3b8' : color);
@@ -785,11 +780,57 @@ with st.sidebar:
         "航运水域", list(PORTWATCH.REGIONS), default=["霍尔木兹海峡"],
         placeholder="全部五个水域", key="monitor_regions",
         help="同时筛选港口、咽喉点和船舶，并自动调整地图视野。")
+    active_regions = tuple(selected_regions or PORTWATCH.REGIONS)
+    selected_region_set = set(active_regions)
+    selected_region_bounds = [PORTWATCH.REGIONS[region] for region in active_regions]
+    try:
+        region_port_catalog = [
+            port for port in PORTWATCH.port_catalog()
+            if port["region"] in selected_region_set
+        ]
+        port_catalog_error = None
+    except Exception as exc:
+        region_port_catalog = []
+        port_catalog_error = str(exc)
 
     with st.expander("港口与咽喉点", expanded=False):
-        port_search = st.text_input("搜索港口或国家", placeholder="例如 Fujairah / UAE",
-                                    help="在已选航运水域内按港口名、国家全称、简称或中文名筛选。",
-                                    key="port_search").strip().casefold()
+        port_country_options = sorted({port["country"] for port in region_port_catalog})
+        if "port_countries" in st.session_state:
+            st.session_state["port_countries"] = [
+                country for country in st.session_state["port_countries"]
+                if country in port_country_options
+            ]
+        selected_port_countries = st.multiselect(
+            "国家（可多选）", port_country_options, default=[],
+            placeholder="全部国家", key="port_countries",
+            help="国家列表随航运水域联动；空选表示当前水域内全部国家。",
+            select_all=False)
+        country_port_catalog = [
+            port for port in region_port_catalog
+            if port["country"] in selected_port_countries
+        ]
+        port_labels = {
+            port["portid"]: f'{port["name"]} · {port["country"]}'
+            for port in country_port_catalog
+        }
+        port_id_options = [
+            port["portid"] for port in sorted(
+                country_port_catalog, key=lambda port: (port["country"], port["name"]))
+        ]
+        if "port_ids" in st.session_state:
+            st.session_state["port_ids"] = [
+                port_id for port_id in st.session_state["port_ids"]
+                if port_id in port_labels
+            ]
+        selected_port_ids = st.multiselect(
+            "港口（可多选）", port_id_options, default=[],
+            format_func=lambda port_id: port_labels.get(port_id, port_id),
+            placeholder=("请先选择国家" if not selected_port_countries else "所选国家的全部港口"),
+            key="port_ids", disabled=not selected_port_countries,
+            help="先选择一个或多个国家；港口空选时显示所选国家的全部港口。",
+            select_all=False)
+        if port_catalog_error:
+            st.warning(f"港口目录暂时不可用：{port_catalog_error}")
         try:
             newest_day = PORTWATCH.latest_date()
             selected_day = st.date_input("统计日期（UTC）", value=newest_day,
@@ -864,7 +905,7 @@ with st.sidebar:
             _openwaters_snapshot.clear()
             st.rerun()
 
-    with st.expander("油气资产", expanded=False):
+    with st.expander("油气", expanded=False):
         asset_view = st.radio(
             "资产视图", ["战略生产节点", "完整资产目录"],
             horizontal=True, key="asset_view")
@@ -893,17 +934,15 @@ with st.sidebar:
 
     st.caption("航运水域同时作用于港口、咽喉点和船舶；其他筛选留空表示全部。")
 
-active_regions = tuple(selected_regions or PORTWATCH.REGIONS)
-selected_region_set = set(active_regions)
-selected_region_bounds = [PORTWATCH.REGIONS[region] for region in active_regions]
 ports: list[dict] = []
-port_error = None
-if selected_day is not None:
+port_error = port_catalog_error
+if selected_day is not None and not port_error:
     try:
         catalog = [
-            p for p in PORTWATCH.port_catalog()
-            if p["region"] in selected_region_set
-            and _matches_port_search(p, port_search)
+            port for port in region_port_catalog
+            if (not selected_port_countries
+                or port["country"] in selected_port_countries)
+            and (not selected_port_ids or port["portid"] in selected_port_ids)
         ]
         ids = tuple(p["portid"] for p in catalog)
         if ids:
@@ -1126,7 +1165,7 @@ def render_map_panel() -> None:
     if unlocated_map_assets:
         st.info(
             f"当前筛选有 {len(unlocated_map_assets)} 项仅列目录：既无可核验独立坐标，也无可用的"
-            "上级资产代表点，因此不以猜测位置绘图。可在‘油气资产’表查看坐标证据。"
+            "上级资产代表点，因此不以猜测位置绘图。可在‘油气’表查看坐标证据。"
         )
     st.iframe(
         _map_html(
@@ -1201,7 +1240,7 @@ def render_ais_panel() -> None:
 
 
 tab_map, tab_ports, tab_vessels, tab_assets, tab_method = st.tabs(
-    ["地图总览", "港口活动", "船舶", "油气资产", "数据与方法"])
+    ["地图总览", "港口活动", "船舶", "油气", "数据与方法"])
 
 with tab_map:
     render_map_panel()
@@ -1233,7 +1272,7 @@ with tab_vessels:
     render_ais_panel()
 
 with tab_assets:
-    st.subheader(f"油气资产目录 · {asset_view}")
+    st.subheader(f"油气目录 · {asset_view}")
     a1, a2, a3, a4, a5 = st.columns(5)
     a1.metric("当前视图", len(filtered))
     a2.metric("可绘制", sum(bool(a["map_drawable"]) for a in filtered))
