@@ -1076,8 +1076,6 @@ def render_map_panel() -> None:
             st.warning(f'AISStream 暂无可用船位，后台将自动重连：{stream_state["last_error"]}')
         if open_state.get("error"):
             st.warning(f'Open Waters 免费数据暂不可用：{open_state["error"]}')
-        if open_state.get("truncated"):
-            st.caption("Open Waters 返回结果达到该区域查询上限，较早船位可能未包含。")
         if not all_positions and not open_state.get("error"):
             if stream_state.get("status") == "订阅已确认" and stream_state.get("raw_event_count", 0) == 0:
                 st.warning(
@@ -1086,9 +1084,6 @@ def render_map_panel() -> None:
                 )
             else:
                 st.info("两处数据源尚未返回当前可用船位；不能据此判断水域内没有船舶。")
-        if open_state.get("attribution"):
-            credits = list(dict.fromkeys(open_state["attribution"].values()))
-            st.caption("Open Waters 来源署名：" + " · ".join(credits))
     m1, m2, m3, m4, m5, m6 = st.columns(6)
     m1.metric("地图战略节点" if asset_view == "战略生产节点" else "地图资产点",
               len(map_assets))
@@ -1104,10 +1099,6 @@ def render_map_panel() -> None:
             f"当前筛选有 {len(unlocated_map_assets)} 项仅列目录：既无可核验独立坐标，也无可用的"
             "上级资产代表点，因此不以猜测位置绘图。可在‘油气资产’表查看坐标证据。"
         )
-    st.caption(
-        "形状区分对象：◆油气资产、■港口、⬡咽喉点、▲AIS船舶。"
-        "颜色区分资产层级、港口主要到港船型和AIS船型；船舶实心表示航行中，"
-        "空心表示低速／停泊，方向按航向或对地航迹角绘制。")
     st.iframe(
         _map_html(
             map_assets, map_ports, map_chokepoints, map_vessels,
@@ -1139,22 +1130,6 @@ def render_ais_panel() -> None:
               if has_position_data else "—")
     v5.metric("船型待识别", sum(v.get("category") == "unknown" for v in vessels)
               if has_position_data else "—")
-    if ais_collector_instance:
-        st.caption(
-            f'AISStream：{state["status"]} · 收到 {state.get("raw_event_count", 0):,} 条事件 · '
-            f'解析有效 {state.get("message_count", 0):,} 条（位置 '
-            f'{state.get("position_message_count", 0):,}，静态 '
-            f'{state.get("static_message_count", 0):,}） · '
-            f'压缩：{"已协商" if state.get("compression_enabled") is True else "未协商" if state.get("compression_enabled") is False else "待确认"}'
-        )
-    else:
-        st.caption("AISStream 密钥未配置（可选）；当前使用无需密钥的 Open Waters 免费聚合快照。")
-    st.caption(
-        f'Open Waters 快照：{len(open_state["vessels"]):,} 艘船位'
-        ' · 点击侧栏“刷新 AIS 数据”获取新快照')
-    if open_state.get("attribution"):
-        credits = list(dict.fromkeys(open_state["attribution"].values()))
-        st.caption("数据来源署名：" + " · ".join(credits))
     if open_state.get("truncated"):
         st.warning("Open Waters 返回结果达到该区域查询上限，较早船位可能未包含。")
     if open_state.get("error"):
@@ -1163,12 +1138,6 @@ def render_ais_panel() -> None:
         st.warning("AISStream 未确认 WebSocket 压缩协商；未压缩连接可能受带宽限制。")
     if state.get("last_error"):
         st.warning(f'最近连接错误：{state["last_error"]}；采集器会自动指数退避重连。')
-    if state.get("rejected_event_count", 0):
-        st.caption(
-            f'未解析事件 {state["rejected_event_count"]:,} 条；最近消息类型：'
-            f'{state.get("last_raw_message_type") or "未知"}；'
-            f'最近拒绝原因：{state.get("last_rejection_reason") or "未知"}。'
-        )
     if rows:
         st.dataframe(rows, width="stretch", hide_index=True, height=570,
                      column_config={"来源": st.column_config.LinkColumn("来源")})
