@@ -128,22 +128,6 @@ MAP_LAYER_LABELS = {
     "assets": "油气",
     "chokepoints": "咽喉点",
 }
-LEVEL_COLORS = {
-    "field": "#dc2626",
-    "field_group": "#ea580c",
-    "block": "#2563eb",
-    "concession": "#7c3aed",
-    "project": "#0891b2",
-    "development_area": "#059669",
-}
-PORT_TYPE_COLORS = {
-    "container": "#2563eb",
-    "dry_bulk": "#b45309",
-    "general_cargo": "#64748b",
-    "roro": "#7c3aed",
-    "tanker": "#dc2626",
-    "unknown": "#94a3b8",
-}
 ASSET_INDEX = {(asset["country"], asset["name"]): asset for asset in ASSETS}
 
 
@@ -178,16 +162,6 @@ def other_daily_metric(asset: dict[str, object]) -> str:
         return "—"
     metric_label = METRIC_LABELS[str(asset["metric_type"])]
     return f"{metric_label}：{display_value(asset)}"
-
-
-def metric_class(asset: dict[str, object]) -> str:
-    """地图视觉口径：实产/推算用实心，产能/目标用空心，未披露用灰色。"""
-
-    if asset.get("value") is None:
-        return "undisclosed"
-    if asset.get("metric_type") in OUTPUT_METRIC_TYPES:
-        return "output"
-    return "capacity"
 
 
 def hierarchy_chain(asset: dict[str, object]) -> list[dict[str, object]]:
@@ -457,17 +431,6 @@ def _vessel_popup(vessel: dict[str, object]) -> str:
     )
 
 
-def _dominant_port_type(port: dict) -> str:
-    """Return the vessel type with the largest observed call share."""
-
-    shares = [
-        (port.get(f"share_{kind}"), kind)
-        for kind in PORTWATCH.SHIP_TYPES
-        if port.get(f"share_{kind}") is not None
-    ]
-    return max(shares)[1] if shares else "unknown"
-
-
 def _map_html(assets: list[dict[str, object]], ports: list[dict],
               chokepoints: list[dict], vessels: list[dict], day: str, chokepoint_day: str,
               focus_assets: bool = False, ais_configured: bool = True,
@@ -482,10 +445,7 @@ def _map_html(assets: list[dict[str, object]], ports: list[dict],
         {
             "lat": asset["map_lat"],
             "lon": asset["map_lon"],
-            "level": asset["asset_level"],
-            "role": asset["map_role"],
             "is_proxy": asset.get("map_is_proxy", False),
-            "metric_class": metric_class(asset),
             "name": f'{asset["name_cn"]} · {asset["name"]}',
             "popup": _popup(asset),
         }
@@ -495,15 +455,12 @@ def _map_html(assets: list[dict[str, object]], ports: list[dict],
     marker_json = json.dumps(markers, ensure_ascii=False).replace("</", "<\\/")
     port_json = json.dumps([
         {"lat": port["lat"], "lon": port["lon"], "name": port["name"],
-         "popup": _port_popup(port, day), "has_data": port["has_data"],
-         "activity": port.get("avg_calls") or 0,
-         "dominant_type": _dominant_port_type(port)}
+         "popup": _port_popup(port, day)}
         for port in ports
     ], ensure_ascii=False).replace("</", "<\\/")
     chokepoint_json = json.dumps([
         {"lat": point["lat"], "lon": point["lon"], "name": point.get("name_cn", point["portname"]),
-         "popup": _chokepoint_popup(point, chokepoint_day),
-         "has_data": point.get("has_data", False), "traffic": point.get("n_total") or 0}
+         "popup": _chokepoint_popup(point, chokepoint_day)}
         for point in chokepoints
     ], ensure_ascii=False).replace("</", "<\\/")
     vessel_json = json.dumps([
@@ -511,14 +468,11 @@ def _map_html(assets: list[dict[str, object]], ports: list[dict],
             "lat": vessel["lat"], "lon": vessel["lon"],
             "name": html.escape(str(vessel.get("name") or f'MMSI {vessel["mmsi"]}')),
             "category": vessel.get("category", "unknown"),
-            "moving": vessel.get("moving", False),
             "course": vessel.get("course") or 0,
             "popup": _vessel_popup(vessel),
         }
         for vessel in vessels
     ], ensure_ascii=False).replace("</", "<\\/")
-    color_json = json.dumps(LEVEL_COLORS, ensure_ascii=False)
-    port_color_json = json.dumps(PORT_TYPE_COLORS, ensure_ascii=False)
     legend_lines = ["<b>地图符号</b>"]
     if show_assets:
         legend_lines.append('<span><i class="shape-asset"></i>油气：菱形</span>')
@@ -528,29 +482,12 @@ def _map_html(assets: list[dict[str, object]], ports: list[dict],
         legend_lines.append('<span><i class="shape-choke"></i>咽喉点：六边形</span>')
     if show_vessels:
         legend_lines.append('<span><i class="shape-vessel"></i>船舶：三角形</span>')
-    if show_assets or show_ports or show_vessels:
-        legend_lines.append('<b class="legend-section">颜色与填充</b>')
     if show_assets:
-        legend_lines.extend([
-            '<span class="legend-note">油气颜色（层级）</span>',
-            '<span><i class="legend-level legend-field"></i>单田　<i class="legend-level legend-group"></i>油田群　<i class="legend-level legend-block"></i>区块</span>',
-            '<span><i class="legend-level legend-concession"></i>特许区　<i class="legend-level legend-development"></i>开发区　<i class="legend-level legend-project"></i>项目</span>',
-            '<span class="legend-note">油气填充、边框与大小</span>',
-            '<span><i class="legend-solid"></i>实心=产量　<i class="legend-hollow"></i>空心=产能/目标</span>',
-            '<span><i class="legend-undisclosed"></i>灰色=数值未披露　<i class="legend-proxy"></i>虚线边=近似坐标</span>',
-            '<span><i class="legend-strategic"></i>大菱形=战略油田群/节点</span>',
-        ])
-    if show_ports:
-        legend_lines.extend([
-            '<span class="legend-note">港口：颜色=主要到港船型；大小=活跃度</span>',
-            '<span><i class="legend-red"></i>油轮/液货船　<i class="legend-blue"></i>集装箱船</span>',
-            '<span><i class="legend-amber"></i>干散货船　<i class="legend-gray"></i>普通货船　<i class="legend-purple"></i>滚装船</span>',
-        ])
+        legend_lines.append('<span><i class="legend-proxy"></i>油气虚线边：近似坐标</span>')
     if show_vessels:
         legend_lines.extend([
-            '<span class="legend-note">船舶：颜色=船型；实心=航行中；空心=低速/停泊</span>',
-            '<span><i class="legend-red"></i>油轮/液货船　<i class="legend-blue"></i>货船　<i class="legend-purple"></i>客船</span>',
-            '<span><i class="legend-green"></i>渔船　<i class="legend-amber"></i>拖轮/作业船　<i class="legend-cyan"></i>游艇</span>',
+            '<span><i class="shape-vessel vessel-tanker"></i>油轮/液货船　<i class="shape-vessel vessel-cargo"></i>货船</span>',
+            '<span><i class="shape-vessel"></i>其他船舶/船型未知</span>',
         ])
     legend_json = json.dumps("".join(legend_lines), ensure_ascii=False).replace("</", "<\\/")
     focus_json = json.dumps(focus_assets)
@@ -593,34 +530,16 @@ def _map_html(assets: list[dict[str, object]], ports: list[dict],
       .map-legend i {{ display: inline-block; width: 10px; height: 10px; margin-right: 6px; box-sizing: border-box; vertical-align: -1px; }}
       .map-legend .shape-asset {{ background: #ea580c; transform: rotate(45deg) scale(.78); }}
       .map-legend .shape-port {{ background: #2563eb; border-radius: 2px; }}
-      .map-legend .shape-choke {{ background: #f97316; clip-path: polygon(25% 0,75% 0,100% 50%,75% 100%,25% 100%,0 50%); }}
-      .map-legend .shape-vessel {{ background: #334155; clip-path: polygon(50% 0,100% 100%,50% 78%,0 100%); }}
-      .map-legend .legend-level {{ transform: rotate(45deg) scale(.72); }}
-      .map-legend .legend-field {{ background: #dc2626; }}
-      .map-legend .legend-group {{ background: #ea580c; }}
-      .map-legend .legend-block {{ background: #2563eb; }}
-      .map-legend .legend-concession {{ background: #7c3aed; }}
-      .map-legend .legend-development {{ background: #059669; }}
-      .map-legend .legend-project {{ background: #0891b2; }}
-      .map-legend .legend-solid {{ background: #dc2626; transform: rotate(45deg) scale(.72); }}
-      .map-legend .legend-hollow {{ background: white; border: 2px solid #2563eb; transform: rotate(45deg) scale(.72); }}
-      .map-legend .legend-undisclosed {{ background: #94a3b8; border: 1px solid #475569; transform: rotate(45deg) scale(.72); }}
-      .map-legend .legend-proxy {{ background: white; border: 2px dashed #7c3aed; transform: rotate(45deg) scale(.72); }}
-      .map-legend .legend-strategic {{ width: 13px; height: 13px; background: #ea580c; transform: rotate(45deg) scale(.78); }}
-      .map-legend .legend-red {{ background: #dc2626; border-radius: 50%; }}
-      .map-legend .legend-blue {{ background: #2563eb; border-radius: 50%; }}
-      .map-legend .legend-purple {{ background: #7c3aed; border-radius: 50%; }}
-      .map-legend .legend-amber {{ background: #d97706; border-radius: 50%; }}
-      .map-legend .legend-gray {{ background: #64748b; border-radius: 50%; }}
-      .map-legend .legend-green {{ background: #16a34a; border-radius: 50%; }}
-      .map-legend .legend-cyan {{ background: #0891b2; border-radius: 50%; }}
-      .map-legend .legend-note {{ color: #475569; font-size: 10px; }}
-      .map-legend .legend-section {{ display: block; margin-top: 8px; padding-top: 7px; border-top: 1px solid #cbd5e1; }}
+      .map-legend .shape-choke {{ background: #7c3aed; clip-path: polygon(25% 0,75% 0,100% 50%,75% 100%,25% 100%,0 50%); }}
+      .map-legend .shape-vessel {{ background: #64748b; clip-path: polygon(50% 0,100% 100%,50% 78%,0 100%); }}
+      .map-legend .vessel-tanker {{ background: #ef4444; }}
+      .map-legend .vessel-cargo {{ background: #2563eb; }}
+      .map-legend .legend-proxy {{ background: #ea580c; border: 2px dashed #7c2d12; transform: rotate(45deg) scale(.78); }}
       .asset-icon, .port-icon, .chokepoint-icon, .vessel-icon, .vessel-cluster {{ background: transparent; border: 0; }}
       .asset-icon svg, .port-icon svg, .chokepoint-icon svg, .vessel-icon svg, .vessel-cluster svg {{ display: block; filter: drop-shadow(0 1px 1px rgba(15,23,42,.45)); }}
       .leaflet-tooltip {{ border: 0; border-radius: 7px; padding: 5px 8px; box-shadow: 0 3px 12px rgba(15,23,42,.18); font-size: 11px; }}
       .marker-cluster-small, .marker-cluster-medium, .marker-cluster-large {{ background: transparent; }}
-      .marker-cluster-small div, .marker-cluster-medium div, .marker-cluster-large div {{ background: #176b87; color: white; font-weight: 700; border-radius: 7px; transform: rotate(45deg); box-shadow: 0 0 0 5px rgba(32,106,137,.22); }}
+      .marker-cluster-small div, .marker-cluster-medium div, .marker-cluster-large div {{ background: #ea580c; color: white; font-weight: 700; border-radius: 7px; transform: rotate(45deg); box-shadow: 0 0 0 5px rgba(234,88,12,.22); }}
       .marker-cluster-small span, .marker-cluster-medium span, .marker-cluster-large span {{ display: block; transform: rotate(-45deg); }}
     </style></head><body><div id="map"></div>
     <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
@@ -641,8 +560,6 @@ def _map_html(assets: list[dict[str, object]], ports: list[dict],
       const ports = {port_json};
       const chokepoints = {chokepoint_json};
       const vessels = {vessel_json};
-      const levelColors = {color_json};
-      const portTypeColors = {port_color_json};
       const regionBounds = {region_bounds_json};
       const assetLayer = L.markerClusterGroup({{showCoverageOnHover: false, maxClusterRadius: 34,
           disableClusteringAtZoom: 8, spiderfyOnMaxZoom: true}}).addTo(map);
@@ -664,67 +581,53 @@ def _map_html(assets: list[dict[str, object]], ports: list[dict],
         }}
       }}).addTo(map);
       assets.forEach((asset) => {{
-        const baseColor = levelColors[asset.level] || '#64748b';
-        const color = baseColor;
-        const isGroup = asset.role === 'strategic_group';
-        const fillColor = asset.metric_class === 'capacity' ? '#ffffff' :
-          (asset.metric_class === 'undisclosed' ? '#94a3b8' : color);
-        const size = isGroup ? 22 : (asset.level === 'field' ? 15 : 19);
-        const strokeWidth = asset.metric_class === 'capacity' ? 2.4 : 1.5;
+        const size = 18;
         const dash = asset.is_proxy ? '3 2' : 'none';
-        const opacity = asset.is_proxy ? .62 : .94;
         const icon = L.divIcon({{
           className: 'asset-icon', iconSize: [size, size], iconAnchor: [size / 2, size / 2],
           html: `<svg width="${{size}}" height="${{size}}" viewBox="0 0 ${{size}} ${{size}}">
             <polygon points="${{size/2}},1 ${{size-1}},${{size/2}} ${{size/2}},${{size-1}} 1,${{size/2}}"
-              fill="${{fillColor}}" fill-opacity="${{opacity}}" stroke="${{color}}"
-              stroke-width="${{strokeWidth}}" stroke-dasharray="${{dash}}"/>
+              fill="#ea580c" fill-opacity=".94" stroke="#7c2d12"
+              stroke-width="1.5" stroke-dasharray="${{dash}}"/>
           </svg>`
         }});
         L.marker([asset.lat, asset.lon], {{icon}}).bindTooltip(asset.name, {{direction: 'top', opacity: .95}})
           .bindPopup(asset.popup, {{maxWidth: 390}}).addTo(assetLayer);
       }});
       ports.forEach((port) => {{
-        const size = Math.min(24, 12 + Math.sqrt(Math.max(0, port.activity)) * 1.6);
-        const fill = port.has_data ? (portTypeColors[port.dominant_type] || portTypeColors.unknown) : '#cbd5e1';
+        const size = 16;
         const icon = L.divIcon({{
           className: 'port-icon', iconSize: [size, size], iconAnchor: [size / 2, size / 2],
           html: `<svg width="${{size}}" height="${{size}}" viewBox="0 0 ${{size}} ${{size}}">
             <rect x="1.5" y="1.5" width="${{size-3}}" height="${{size-3}}" rx="2.5"
-              fill="${{fill}}" fill-opacity=".9" stroke="#ffffff" stroke-width="1.5"/>
+              fill="#2563eb" fill-opacity=".9" stroke="#ffffff" stroke-width="1.5"/>
           </svg>`
         }});
         L.marker([port.lat, port.lon], {{icon}}).bindTooltip(port.name, {{direction: 'top', opacity: .95}})
           .bindPopup(port.popup, {{maxWidth: 410}}).addTo(portLayer);
       }});
       chokepoints.forEach((point) => {{
-        const size = Math.min(28, 17 + Math.sqrt(Math.max(0, point.traffic)) * .7);
-        const fill = point.has_data ? '#f97316' : '#cbd5e1';
+        const size = 22;
         const icon = L.divIcon({{
           className: 'chokepoint-icon', iconSize: [size, size], iconAnchor: [size / 2, size / 2],
           html: `<svg width="${{size}}" height="${{size}}" viewBox="0 0 24 24">
             <polygon points="6,2 18,2 23,12 18,22 6,22 1,12"
-              fill="${{fill}}" fill-opacity=".94" stroke="#7c2d12" stroke-width="2"/>
+              fill="#7c3aed" fill-opacity=".94" stroke="#ffffff" stroke-width="1.5"/>
           </svg>`
         }});
         L.marker([point.lat, point.lon], {{icon}}).bindTooltip(point.name, {{direction: 'top', opacity: .95}})
           .bindPopup(point.popup, {{maxWidth: 410}}).addTo(chokepointLayer);
       }});
       const vesselColors = {{
-        tanker: '#ef4444', cargo: '#2563eb', passenger: '#7c3aed',
-        fishing: '#16a34a', tug: '#d97706', pleasure: '#0891b2',
-        other: '#64748b', unknown: '#94a3b8'
+        tanker: '#ef4444', cargo: '#2563eb', other: '#64748b'
       }};
       vessels.forEach((vessel) => {{
-        const color = vesselColors[vessel.category] || vesselColors.unknown;
+        const color = vesselColors[vessel.category] || vesselColors.other;
         const angle = Number.isFinite(Number(vessel.course)) ? Number(vessel.course) : 0;
-        const fill = vessel.moving ? color : '#ffffff';
-        const stroke = vessel.moving ? '#ffffff' : color;
-        const strokeWidth = vessel.moving ? 1.15 : 2.2;
         const icon = L.divIcon({{
           className: 'vessel-icon', iconSize: [18, 18], iconAnchor: [9, 9],
           html: `<svg width="18" height="18" viewBox="0 0 18 18" style="transform:rotate(${{angle}}deg)">
-            <path d="M9 1 L16 16 L9 12.8 L2 16 Z" fill="${{fill}}" stroke="${{stroke}}" stroke-width="${{strokeWidth}}"/>
+            <path d="M9 1 L16 16 L9 12.8 L2 16 Z" fill="${{color}}" stroke="#ffffff" stroke-width="1.15"/>
           </svg>`
         }});
         const marker = L.marker([vessel.lat, vessel.lon], {{icon}});
@@ -1341,7 +1244,7 @@ with tab_method:
         "PortWatch经港界和贸易规则处理后的日度挂靠指标。"
     )
     st.markdown(
-        "**咽喉点。** 地图橙色图层固定显示苏伊士运河、曼德海峡和霍尔木兹海峡的最新可用日数据。"
+        "**咽喉点。** 地图紫色六边形显示所选水域内咽喉点的最新可用日数据。"
         "popup列示总通过船数、估算承载货量及五类船型分解；咽喉点日期与港口日期分别读取，"
         "避免把更新节奏不同的两张表强行对齐。"
     )
@@ -1360,8 +1263,8 @@ with tab_method:
         "popup和资产表中追溯。"
     )
     st.markdown(
-        "**产量与产能。** 实心点只表示来源直报实际产量、历史推算日均或已注明的历史产量；"
-        "空心点表示产能、目标或规划增量；灰色点表示本层级未披露数值。不同日期、商品和权益口径"
+        "**产量与产能。** 油气统一使用橙色实心菱形；指标性质、数据日期和披露情况在弹窗及表格中列明。"
+        "实际产量、历史产量、产能、目标和规划增量分别标注；未披露数值不视为零。不同日期、商品和权益口径"
         "不得相加。来源为千桶/日的油品数值在界面统一换算为万桶/日；生产状态带证据时点，"
         "不等于实时遥测。"
     )
