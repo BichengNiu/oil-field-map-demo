@@ -1,7 +1,7 @@
 """IMF PortWatch port and chokepoint indicators for the map.
 
 The region boxes are an explicit, editable definition of "near" the five waters.
-Only ports in PortWatch's coverage are included, not every berth or oil terminal.
+The catalog also includes source-backed supplementary ports with unknown activity.
 """
 
 from __future__ import annotations
@@ -13,6 +13,7 @@ from urllib.parse import urlencode
 from urllib.request import Request, urlopen
 
 import streamlit as st
+import port_inventory
 
 ROOT = "https://services9.arcgis.com/weJ1QsnbMYJlCHdG/arcgis/rest/services"
 PORTS = f"{ROOT}/PortWatch_ports_database/FeatureServer/0/query"
@@ -21,7 +22,7 @@ CHOKEPOINTS = f"{ROOT}/PortWatch_chokepoints_database/FeatureServer/0/query"
 CHOKEPOINT_DAILY = f"{ROOT}/Daily_Chokepoints_Data/FeatureServer/0/query"
 SPILLOVERS = f"{ROOT}/spillovers_port_level_impact/FeatureServer/0/query"
 SOURCE = "https://portwatch.imf.org/pages/data-and-methodology"
-MODULE_VERSION = 4
+MODULE_VERSION = 5
 
 SHIP_TYPES = ("container", "dry_bulk", "general_cargo", "roro", "tanker")
 FOCUS_CHOKEPOINT_IDS = ("chokepoint1", "chokepoint4", "chokepoint6")
@@ -34,6 +35,14 @@ CHOKEPOINT_LABELS = {
 
 def _valid_port_ids(ids: tuple[str, ...]) -> bool:
     return all(re.fullmatch(r"(?:port|fso)\d+", port_id) for port_id in ids)
+
+
+def _activity_ids(ids: tuple[str, ...]) -> tuple[str, ...]:
+    unknown = [pid for pid in ids if not _valid_port_ids((pid,))
+               and pid not in port_inventory.SUPPLEMENTAL_IDS]
+    if unknown:
+        raise ValueError("无效或未登记的港口编号")
+    return tuple(pid for pid in ids if _valid_port_ids((pid,)))
 
 
 def _valid_chokepoint_ids(ids: tuple[str, ...]) -> bool:
@@ -84,6 +93,8 @@ def port_catalog() -> list[dict]:
         if len(items) < 1000:
             break
         offset += len(items)
+    if len({item["portid"] for item in found}) != len(found):
+        raise ValueError("PortWatch点位库出现重复编号")
     ports = []
     for item in found:
         if item["lat"] is None or item["lon"] is None:
@@ -93,7 +104,7 @@ def port_catalog() -> list[dict]:
             ports.append({"portid": item["portid"], "name": item["portname"],
                           "country": item["country"], "lat": item["lat"],
                           "lon": item["lon"], "region": region})
-    return sorted(ports, key=lambda p: (p["region"], p["country"], p["name"]))
+    return port_inventory.enrich(ports)
 
 
 @st.cache_data(ttl=3600, show_spinner=False)
@@ -111,6 +122,7 @@ def latest_date() -> date:
 def daily_activity(day: date, port_ids: tuple[str, ...]) -> dict[str, dict]:
     # DateOnly SQL literal; never interpolate user text into the where clause.
     result = {}
+    port_ids = _activity_ids(port_ids)
     for start in range(0, len(port_ids), 80):
         ids = port_ids[start:start + 80]
         if not _valid_port_ids(ids):
@@ -150,6 +162,7 @@ def rolling_activity(day: date, port_ids: tuple[str, ...], days: int = 7) -> dic
     if days not in (7, 30):
         raise ValueError("仅支持 7 天或 30 天窗口")
     grouped: dict[str, dict[date, dict]] = {port_id: {} for port_id in port_ids}
+    port_ids = _activity_ids(port_ids)
     current_first = day - timedelta(days=days - 1)
     previous_first = day - timedelta(days=2 * days - 1)
     previous_last = current_first - timedelta(days=1)
@@ -163,7 +176,7 @@ def rolling_activity(day: date, port_ids: tuple[str, ...], days: int = 7) -> dic
         offset = 0
         while True:
             page = _query(DAILY, where=where, returnGeometry="false", resultOffset=offset,
-                          resultRecordCount=1000, orderByFields="portid ASC",
+                          resultRecordCount=1000, orderByFields="portid ASC,date ASC",
                           outFields="date,portid,portname,country,ISO3,portcalls,"
                                     "portcalls_container,portcalls_dry_bulk,"
                                     "portcalls_general_cargo,portcalls_roro,portcalls_tanker,"
@@ -175,7 +188,12 @@ def rolling_activity(day: date, port_ids: tuple[str, ...], days: int = 7) -> dic
             items = page.get("features", [])
             for item in items:
                 value = item["attributes"]
-                grouped[value["portid"]][date.fromisoformat(value["date"])] = value
+                value_day = date.fromisoformat(value["date"])
+                if value["portid"] not in grouped or not previous_first <= value_day <= day:
+                    raise ValueError("PortWatch返回窗口之外或未请求的记录")
+                if value_day in grouped[value["portid"]]:
+                    raise ValueError(f"PortWatch重复港口/日期：{value['portid']}/{value_day}")
+                grouped[value["portid"]][value_day] = value
             if len(items) < 1000:
                 break
             offset += len(items)
@@ -187,41 +205,40 @@ def rolling_activity(day: date, port_ids: tuple[str, ...], days: int = 7) -> dic
                     if previous_first <= value_day <= previous_last]
         current_complete = len(values) == days
         previous_complete = len(previous) == days
+        calls_complete = current_complete and all(v.get("portcalls") is not None for v in values)
+        def positive_days(field):
+            return (sum(v[field] > 0 for v in values)
+                    if current_complete and all(v.get(field) is not None for v in values) else None)
         result = {"observed_days": len(values), "previous_observed_days": len(previous),
-                  "window_days": days,
-                  "active_days": sum((v["portcalls"] or 0) > 0 for v in values),
-                  "tanker_positive_days": sum((v["portcalls_tanker"] or 0) > 0 for v in values),
-                  "cargo_positive_days": sum((v["portcalls_cargo"] or 0) > 0 for v in values),
-                  "tanker_calls_zero_volume_days": sum(
-                      (v["portcalls_tanker"] or 0) > 0
-                      and (v["import_tanker"] or 0) + (v["export_tanker"] or 0) == 0
-                      for v in values)}
+                  "window_days": days, "active_days": positive_days("portcalls"),
+                  "tanker_positive_days": positive_days("portcalls_tanker"),
+                  "cargo_positive_days": positive_days("portcalls_cargo"),
+                  "tanker_calls_zero_volume_days": (sum(
+                      v["portcalls_tanker"] > 0 and v["import_tanker"] + v["export_tanker"] == 0
+                      for v in values) if current_complete and all(v.get(f) is not None
+                      for v in values for f in ("portcalls_tanker", "import_tanker", "export_tanker")) else None)}
         for kind in (*SHIP_TYPES, "cargo"):
-            fields = (f"portcalls_{kind}", f"import_{kind}", f"export_{kind}")
-            complete = current_complete and all(
-                v.get(field) is not None for v in values for field in fields)
-            result[f"avg_calls_{kind}"] = (
-                sum(v[fields[0]] for v in values) / days if complete else None)
-            result[f"avg_handled_{kind}"] = (
-                sum(v[fields[1]] + v[fields[2]] for v in values) / days if complete else None)
-            result[f"window_calls_{kind}"] = (
-                sum(v[fields[0]] for v in values) if complete else None)
+            call_field, import_field, export_field = (f"portcalls_{kind}", f"import_{kind}", f"export_{kind}")
+            calls_ok = current_complete and all(v.get(call_field) is not None for v in values)
+            volume_ok = current_complete and all(v.get(f) is not None
+                                                 for v in values for f in (import_field, export_field))
+            result[f"avg_calls_{kind}"] = sum(v[call_field] for v in values) / days if calls_ok else None
+            result[f"avg_handled_{kind}"] = (sum(v[import_field] + v[export_field] for v in values) / days
+                                            if volume_ok else None)
+            result[f"window_calls_{kind}"] = sum(v[call_field] for v in values) if calls_ok else None
 
-        required = ("portcalls", "import", "export")
-        complete = current_complete and all(
-            value.get(field) is not None for value in values for field in required)
         previous_ok = previous_complete and all(
             value.get("portcalls") is not None for value in previous)
-        total_calls = sum(value["portcalls"] for value in values) if complete else None
-        total_import = sum(value["import"] for value in values) if complete else None
-        total_export = sum(value["export"] for value in values) if complete else None
+        total_calls = sum(value["portcalls"] for value in values) if calls_complete else None
+        total_import = sum(value["import"] for value in values) if current_complete and all(v.get("import") is not None for v in values) else None
+        total_export = sum(value["export"] for value in values) if current_complete and all(v.get("export") is not None for v in values) else None
         previous_calls = (sum(value["portcalls"] for value in previous)
                           if previous_ok else None)
         result["avg_calls"] = total_calls / days if total_calls is not None else None
         result["avg_handled"] = ((total_import + total_export) / days
                                  if total_import is not None and total_export is not None else None)
         result["active_day_rate"] = (result["active_days"] / days * 100
-                                     if complete else None)
+                                     if calls_complete else None)
         result["average_cargo_per_call"] = (
             (total_import + total_export) / total_calls
             if total_calls and total_import is not None and total_export is not None else None)
@@ -247,6 +264,7 @@ def rolling_activity(day: date, port_ids: tuple[str, ...], days: int = 7) -> dic
 def port_risk_capacity(port_ids: tuple[str, ...]) -> dict[str, float | None]:
     """Aggregate historical daily at-risk capacity over each port's outbound routes."""
     totals: dict[str, float | None] = {port_id: None for port_id in port_ids}
+    port_ids = _activity_ids(port_ids)
     statistic = json.dumps([{
         "statisticType": "sum", "onStatisticField": "daily_capacity_at_risk",
         "outStatisticFieldName": "risk_capacity",
