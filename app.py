@@ -468,6 +468,26 @@ def _dominant_port_type(port: dict) -> str:
     return max(shares)[1] if shares else "unknown"
 
 
+PORT_COUNTRY_ALIASES = {
+    "united arab emirates": {"uae", "are", "阿联酋"},
+}
+
+
+def _matches_port_search(port: dict, query: str) -> bool:
+    """Match a port name or country, including familiar country abbreviations."""
+
+    if not query:
+        return True
+    query = query.casefold()
+    name = str(port.get("name") or "").casefold()
+    country = str(port.get("country") or "").casefold()
+    country_words = [word for word in country.replace("-", " ").split() if word]
+    country_initials = "".join(word[0] for word in country_words)
+    aliases = PORT_COUNTRY_ALIASES.get(country, set())
+    return (query in name or query in country or query == country_initials
+            or any(query in alias.casefold() for alias in aliases))
+
+
 def _map_html(assets: list[dict[str, object]], ports: list[dict],
               chokepoints: list[dict], vessels: list[dict], day: str, chokepoint_day: str,
               focus_assets: bool = False, ais_configured: bool = True,
@@ -528,21 +548,25 @@ def _map_html(assets: list[dict[str, object]], ports: list[dict],
         legend_lines.append('<span><i class="shape-choke"></i>咽喉点：六边形</span>')
     if show_vessels:
         legend_lines.append('<span><i class="shape-vessel"></i>船舶：三角形</span>')
-    legend_lines.append('<b class="legend-section">颜色与填充</b>')
+    if show_assets or show_ports or show_vessels:
+        legend_lines.append('<b class="legend-section">颜色与填充</b>')
     if show_assets:
         legend_lines.extend([
             '<span class="legend-note">油气：红单田 · 橙油田群 · 蓝区块 · 紫特许区 · 绿开发区</span>',
             '<span><i class="legend-solid"></i>实心=产量　<i class="legend-hollow"></i>空心=产能/目标</span>',
         ])
     if show_ports:
-        legend_lines.append('<span class="legend-note">港口方块：颜色=主要到港船型；大小=活跃度</span>')
-    if show_ports or show_vessels:
         legend_lines.extend([
-            '<span><i class="legend-red"></i>油轮/液货　<i class="legend-blue"></i>货运/集装箱</span>',
-            '<span><i class="legend-purple"></i>客运/滚装　<i class="legend-amber"></i>作业/散货</span>',
+            '<span class="legend-note">港口：颜色=主要到港船型；大小=活跃度</span>',
+            '<span><i class="legend-red"></i>油轮/液货船　<i class="legend-blue"></i>集装箱船</span>',
+            '<span><i class="legend-amber"></i>干散货船　<i class="legend-gray"></i>普通货船　<i class="legend-purple"></i>滚装船</span>',
         ])
     if show_vessels:
-        legend_lines.append('<span class="legend-note">船舶：实心=航行中；空心=低速/停泊</span>')
+        legend_lines.extend([
+            '<span class="legend-note">船舶：颜色=船型；实心=航行中；空心=低速/停泊</span>',
+            '<span><i class="legend-red"></i>油轮/液货船　<i class="legend-blue"></i>货船　<i class="legend-purple"></i>客船</span>',
+            '<span><i class="legend-green"></i>渔船　<i class="legend-amber"></i>拖轮/作业船　<i class="legend-cyan"></i>游艇</span>',
+        ])
     legend_json = json.dumps("".join(legend_lines), ensure_ascii=False).replace("</", "<\\/")
     focus_json = json.dumps(focus_assets)
     region_bounds_json = json.dumps(region_bounds or [])
@@ -592,6 +616,9 @@ def _map_html(assets: list[dict[str, object]], ports: list[dict],
       .map-legend .legend-blue {{ background: #2563eb; border-radius: 50%; }}
       .map-legend .legend-purple {{ background: #7c3aed; border-radius: 50%; }}
       .map-legend .legend-amber {{ background: #d97706; border-radius: 50%; }}
+      .map-legend .legend-gray {{ background: #64748b; border-radius: 50%; }}
+      .map-legend .legend-green {{ background: #16a34a; border-radius: 50%; }}
+      .map-legend .legend-cyan {{ background: #0891b2; border-radius: 50%; }}
       .map-legend .legend-note {{ color: #475569; font-size: 10px; }}
       .map-legend .legend-section {{ display: block; margin-top: 8px; padding-top: 7px; border-top: 1px solid #cbd5e1; }}
       .asset-icon, .port-icon, .chokepoint-icon, .vessel-icon, .vessel-cluster {{ background: transparent; border: 0; }}
@@ -761,7 +788,8 @@ with st.sidebar:
 
     with st.expander("港口与咽喉点", expanded=False):
         port_search = st.text_input("搜索港口或国家", placeholder="例如 Fujairah / UAE",
-                                    key="port_search").strip().lower()
+                                    help="在已选航运水域内按港口名、国家全称、简称或中文名筛选。",
+                                    key="port_search").strip().casefold()
         try:
             newest_day = PORTWATCH.latest_date()
             selected_day = st.date_input("统计日期（UTC）", value=newest_day,
@@ -875,8 +903,7 @@ if selected_day is not None:
         catalog = [
             p for p in PORTWATCH.port_catalog()
             if p["region"] in selected_region_set
-            and (not port_search or port_search in p["name"].lower()
-                 or port_search in p["country"].lower())
+            and _matches_port_search(p, port_search)
         ]
         ids = tuple(p["portid"] for p in catalog)
         if ids:
@@ -1096,16 +1123,6 @@ def render_map_panel() -> None:
                 )
             else:
                 st.info("两处数据源尚未返回当前可用船位；不能据此判断水域内没有船舶。")
-    m1, m2, m3, m4, m5, m6 = st.columns(6)
-    m1.metric("地图战略节点" if asset_view == "战略生产节点" else "地图资产点",
-              len(map_assets))
-    m2.metric("待定位资产", len(unlocated_map_assets))
-    m3.metric("地图港口", len(map_ports))
-    m4.metric("地图咽喉点", len(map_chokepoints))
-    has_position_data = bool(all_positions)
-    m5.metric("船舶", len(map_vessels) if has_position_data else "—")
-    m6.metric(f"{rolling_days}天活跃港口",
-              sum((p.get("active_days") or 0) > 0 for p in map_ports))
     if unlocated_map_assets:
         st.info(
             f"当前筛选有 {len(unlocated_map_assets)} 项仅列目录：既无可核验独立坐标，也无可用的"
