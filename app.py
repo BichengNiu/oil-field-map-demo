@@ -750,7 +750,8 @@ with st.sidebar:
         "地图内容", list(MAP_LAYER_LABELS), default=[],
         format_func=lambda value: MAP_LAYER_LABELS[value], key="map_layers",
         placeholder="全部图层",
-        help="默认显示全部；选择一个或多个图层后按所选内容筛选。")
+        help="默认显示全部；选择一个或多个图层后按所选内容筛选。",
+        select_all=False)
     selected_regions = st.multiselect(
         "航运水域", list(PORTWATCH.REGIONS), default=[],
         placeholder="全部五个水域", key="monitor_regions",
