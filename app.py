@@ -470,7 +470,13 @@ def _dominant_port_type(port: dict) -> str:
 
 def _map_html(assets: list[dict[str, object]], ports: list[dict],
               chokepoints: list[dict], vessels: list[dict], day: str, chokepoint_day: str,
-              focus_assets: bool = False, ais_configured: bool = True) -> str:
+              focus_assets: bool = False, ais_configured: bool = True,
+              visible_layers: set[str] | None = None) -> str:
+    visible_layers = set(MAP_LAYER_LABELS) if visible_layers is None else visible_layers
+    show_assets = "assets" in visible_layers
+    show_ports = "ports" in visible_layers
+    show_chokepoints = "chokepoints" in visible_layers
+    show_vessels = "vessels" in visible_layers and ais_configured
     markers = [
         {
             "lat": asset["map_lat"],
@@ -512,25 +518,34 @@ def _map_html(assets: list[dict[str, object]], ports: list[dict],
     ], ensure_ascii=False).replace("</", "<\\/")
     color_json = json.dumps(LEVEL_COLORS, ensure_ascii=False)
     port_color_json = json.dumps(PORT_TYPE_COLORS, ensure_ascii=False)
-    legend_json = json.dumps(
-        '<b>地图符号</b>'
-        '<span><i class="shape-asset"></i>油气资产：菱形</span>'
-        '<span><i class="shape-port"></i>港口：方形</span>'
-        '<span><i class="shape-choke"></i>咽喉点：六边形</span>'
-        + ('<span><i class="shape-vessel"></i>AIS船舶：三角形</span>' if vessels else '')
-        + '<b class="legend-section">颜色与填充</b>'
-        '<span class="legend-note">油气：红单田 · 橙油田群 · 蓝区块 · 紫特许区 · 绿开发区</span>'
-        '<span><i class="legend-solid"></i>实心=产量　<i class="legend-hollow"></i>空心=产能/目标</span>'
-        '<span class="legend-note">港口方块：颜色=主要到港船型；大小=活跃度</span>'
-        + ('<span><i class="legend-red"></i>油轮/液货　<i class="legend-blue"></i>货运/集装箱</span>'
-           '<span><i class="legend-purple"></i>客运/滚装　<i class="legend-amber"></i>作业/散货</span>'
-           if ports or vessels else '')
-        + ('<span class="legend-note">船舶：实心=航行中；空心=低速/停泊</span>'
-           if vessels else ''),
-        ensure_ascii=False
-    ).replace("</", "<\\/")
+    legend_lines = ["<b>地图符号</b>"]
+    if show_assets:
+        legend_lines.append('<span><i class="shape-asset"></i>油气资产：菱形</span>')
+    if show_ports:
+        legend_lines.append('<span><i class="shape-port"></i>港口：方形</span>')
+    if show_chokepoints:
+        legend_lines.append('<span><i class="shape-choke"></i>咽喉点：六边形</span>')
+    if show_vessels:
+        legend_lines.append('<span><i class="shape-vessel"></i>AIS船舶：三角形</span>')
+    legend_lines.append('<b class="legend-section">颜色与填充</b>')
+    if show_assets:
+        legend_lines.extend([
+            '<span class="legend-note">油气：红单田 · 橙油田群 · 蓝区块 · 紫特许区 · 绿开发区</span>',
+            '<span><i class="legend-solid"></i>实心=产量　<i class="legend-hollow"></i>空心=产能/目标</span>',
+        ])
+    if show_ports:
+        legend_lines.append('<span class="legend-note">港口方块：颜色=主要到港船型；大小=活跃度</span>')
+    if show_ports or show_vessels:
+        legend_lines.extend([
+            '<span><i class="legend-red"></i>油轮/液货　<i class="legend-blue"></i>货运/集装箱</span>',
+            '<span><i class="legend-purple"></i>客运/滚装　<i class="legend-amber"></i>作业/散货</span>',
+        ])
+    if show_vessels:
+        legend_lines.append('<span class="legend-note">船舶：实心=航行中；空心=低速/停泊</span>')
+    legend_json = json.dumps("".join(legend_lines), ensure_ascii=False).replace("</", "<\\/")
     focus_json = json.dumps(focus_assets)
     ais_overlay = ", '▲ 实时 AIS 船舶': vesselLayer" if ais_configured else ""
+    visible_layers_json = json.dumps(sorted(visible_layers), ensure_ascii=False)
     return f"""
     <!doctype html><html lang="zh-CN"><head>
     <meta charset="utf-8" />
@@ -622,6 +637,7 @@ def _map_html(assets: list[dict[str, object]], ports: list[dict],
       const vessels = {vessel_json};
       const levelColors = {color_json};
       const portTypeColors = {port_color_json};
+      const visibleLayers = {visible_layers_json};
       const assetLayer = L.markerClusterGroup({{showCoverageOnHover: false, maxClusterRadius: 34,
           disableClusteringAtZoom: 8, spiderfyOnMaxZoom: true}}).addTo(map);
       const portLayer = L.layerGroup().addTo(map);
@@ -722,9 +738,14 @@ def _map_html(assets: list[dict[str, object]], ports: list[dict],
       }} else if (allPoints.length) {{
         map.fitBounds(L.latLngBounds(allPoints), {{padding: [36, 36], maxZoom: 5}});
       }}
+      const overlays = {{}};
+      if (visibleLayers.includes('assets')) overlays['◆ 油气资产'] = assetLayer;
+      if (visibleLayers.includes('ports')) overlays['■ 港口（大小=活跃度）'] = portLayer;
+      if (visibleLayers.includes('chokepoints')) overlays['⬡ 咽喉点'] = chokepointLayer;
+      if (visibleLayers.includes('vessels') && {json.dumps(ais_configured)})
+        overlays['▲ 实时 AIS 船舶'] = vesselLayer;
       L.control.layers({{'英文街道图': streets, '浅色底图': light, '卫星影像': satellite}},
-        {{'◆ 油气资产': assetLayer, '■ 港口（大小=活跃度）': portLayer,
-          '⬡ 咽喉点': chokepointLayer{ais_overlay}}}, {{collapsed: false}}).addTo(map);
+        overlays, {{collapsed: false}}).addTo(map);
     </script></body></html>
     """
 
@@ -1114,7 +1135,8 @@ def render_map_panel() -> None:
             map_assets, map_ports, map_chokepoints, map_vessels,
             selected_day.isoformat() if selected_day else "无数据",
             newest_chokepoint_day.isoformat() if newest_chokepoint_day else "无数据",
-            focus_assets=bool(asset_search), ais_configured=bool(ais_enabled)),
+            focus_assets=bool(asset_search), ais_configured=bool(ais_enabled),
+            visible_layers=visible_map_layers),
         height=735,
     )
 
