@@ -33,6 +33,14 @@ CHOKEPOINT_LABELS = {
 }
 
 
+def clear_live_cache() -> None:
+    """Recheck upstream on a new page session or an explicit refresh."""
+    for reader in (port_catalog, latest_date, daily_activity, rolling_activity,
+                   port_risk_capacity, chokepoint_catalog,
+                   latest_chokepoint_date, chokepoint_activity):
+        reader.clear()
+
+
 def _valid_port_ids(ids: tuple[str, ...]) -> bool:
     return all(re.fullmatch(r"(?:port|fso)\d+", port_id) for port_id in ids)
 

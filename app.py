@@ -8,7 +8,7 @@ import json
 import csv
 import io
 import os
-from datetime import date
+from datetime import date, datetime, timedelta, timezone
 
 import streamlit as st
 
@@ -19,6 +19,7 @@ import audited_measurements
 import supplemental_assets
 import reconciled_assets
 import port_inventory
+import map_tools
 
 # Streamlit 的热重载会重跑此文件；显式重新读取目录模块以同步仓库中的数据修订。
 importlib.invalidate_caches()
@@ -56,6 +57,10 @@ def _ais_collector(api_key: str, collector_version: int) -> AIS.AISCollector:
 @st.cache_data(ttl=15, show_spinner=False)
 def _openwaters_snapshot(max_age_minutes: int, collector_version: int) -> dict:
     return AIS.openwaters_snapshot(max_age_minutes=max_age_minutes)
+
+
+def _show_history() -> None:
+    st.session_state["map_time_mode"] = "历史回看"
 
 
 st.set_page_config(page_title="中东能源保供监测", page_icon="◉", layout="wide",
@@ -477,11 +482,13 @@ def _map_html(assets: list[dict[str, object]], ports: list[dict],
     marker_json = json.dumps(markers, ensure_ascii=False).replace("</", "<\\/")
     port_json = json.dumps([
         {"lat": port["lat"], "lon": port["lon"], "name": port["name"],
+         "calls": port.get("portcalls"),
          "popup": _port_popup(port, day)}
         for port in ports
     ], ensure_ascii=False).replace("</", "<\\/")
     chokepoint_json = json.dumps([
         {"lat": point["lat"], "lon": point["lon"], "name": point.get("name_cn", point["portname"]),
+         "calls": point.get("n_total"),
          "popup": _chokepoint_popup(point, chokepoint_day)}
         for point in chokepoints
     ], ensure_ascii=False).replace("</", "<\\/")
@@ -496,24 +503,35 @@ def _map_html(assets: list[dict[str, object]], ports: list[dict],
         for vessel in vessels
     ], ensure_ascii=False).replace("</", "<\\/")
     legend_lines = ["<b>地图符号</b>"]
+    def legend_icon(shape: str, color: str, proxy: bool = False) -> str:
+        paths = {"asset": "M6 1 L11 6 L6 11 L1 6 Z",
+                 "port": "M2 2 H10 V10 H2 Z",
+                 "choke": "M3 1 H9 L12 6 L9 11 H3 L0 6 Z",
+                 "vessel": "M6 0 L12 12 L6 9 L0 12 Z"}
+        stroke = 'stroke="#7c2d12" stroke-dasharray="2 2"' if proxy else ''
+        return f'<svg viewBox="0 0 12 12"><path d="{paths[shape]}" fill="{color}" {stroke}/></svg>'
+
     if show_assets:
-        legend_lines.append('<span><i class="shape-asset"></i>油气：菱形</span>')
+        legend_lines.append(f'<span>{legend_icon("asset", "#ea580c")}油气：菱形</span>')
     if show_ports:
-        legend_lines.append('<span><i class="shape-port"></i>港口：方形</span>')
+        legend_lines.append(f'<span>{legend_icon("port", "#2563eb")}港口：方形</span>')
     if show_chokepoints:
-        legend_lines.append('<span><i class="shape-choke"></i>咽喉点：六边形</span>')
+        legend_lines.append(f'<span>{legend_icon("choke", "#7c3aed")}咽喉点：六边形</span>')
     if show_vessels:
-        legend_lines.append('<span><i class="shape-vessel"></i>船舶：三角形</span>')
+        legend_lines.append(f'<span>{legend_icon("vessel", "#64748b")}船舶：三角形</span>')
     if show_assets:
-        legend_lines.append('<span><i class="legend-proxy"></i>油气虚线边：近似坐标</span>')
+        legend_lines.append(f'<span>{legend_icon("asset", "#ea580c", proxy=True)}油气虚线边：近似坐标</span>')
     if show_vessels:
         legend_lines.extend([
-            '<span><i class="shape-vessel vessel-tanker"></i>油轮/液货船　<i class="shape-vessel vessel-cargo"></i>货船</span>',
-            '<span><i class="shape-vessel"></i>其他船舶/船型未知</span>',
+            f'<span>{legend_icon("vessel", "#ef4444")}油轮/液货船　{legend_icon("vessel", "#2563eb")}货船</span>',
+            f'<span>{legend_icon("vessel", "#64748b")}其他船舶/船型未知</span>',
         ])
     legend_json = json.dumps("".join(legend_lines), ensure_ascii=False).replace("</", "<\\/")
     focus_json = json.dumps(focus_assets)
     region_bounds_json = json.dumps(region_bounds or [])
+    date_label = html.escape(f"港口 {day} UTC · 咽喉点 {chokepoint_day} UTC")
+    date_label_json = json.dumps(date_label, ensure_ascii=False)
+    screenshot_date_json = json.dumps(day if day != "无数据" else chokepoint_day)
     return f"""
     <!doctype html><html lang="zh-CN"><head>
     <meta charset="utf-8" />
@@ -549,28 +567,36 @@ def _map_html(assets: list[dict[str, object]], ports: list[dict],
       .map-legend {{ background: rgba(255,255,255,.95); padding: 9px 11px; border-radius: 8px; box-shadow: 0 2px 10px rgba(15,23,42,.15); color: #0f172a; font-size: 11px; line-height: 1.45; }}
       .map-legend b {{ font-size: 13px; }}
       .map-legend span {{ display: block; margin-top: 4px; white-space: nowrap; }}
-      .map-legend i {{ display: inline-block; width: 10px; height: 10px; margin-right: 6px; box-sizing: border-box; vertical-align: -1px; }}
-      .map-legend .shape-asset {{ background: #ea580c; transform: rotate(45deg) scale(.78); }}
-      .map-legend .shape-port {{ background: #2563eb; border-radius: 2px; }}
-      .map-legend .shape-choke {{ background: #7c3aed; clip-path: polygon(25% 0,75% 0,100% 50%,75% 100%,25% 100%,0 50%); }}
-      .map-legend .shape-vessel {{ background: #64748b; clip-path: polygon(50% 0,100% 100%,50% 78%,0 100%); }}
-      .map-legend .vessel-tanker {{ background: #ef4444; }}
-      .map-legend .vessel-cargo {{ background: #2563eb; }}
-      .map-legend .legend-proxy {{ background: #ea580c; border: 2px dashed #7c2d12; transform: rotate(45deg) scale(.78); }}
+      .map-legend svg {{ display: inline-block; width: 10px; height: 10px; margin-right: 6px; vertical-align: -1px; }}
       .asset-icon, .port-icon, .chokepoint-icon, .vessel-icon, .vessel-cluster {{ background: transparent; border: 0; }}
       .asset-icon svg, .port-icon svg, .chokepoint-icon svg, .vessel-icon svg, .vessel-cluster svg {{ display: block; filter: drop-shadow(0 1px 1px rgba(15,23,42,.45)); }}
       .leaflet-tooltip {{ border: 0; border-radius: 7px; padding: 5px 8px; box-shadow: 0 3px 12px rgba(15,23,42,.18); font-size: 11px; }}
       .marker-cluster-small, .marker-cluster-medium, .marker-cluster-large {{ background: transparent; }}
       .marker-cluster-small div, .marker-cluster-medium div, .marker-cluster-large div {{ background: #ea580c; color: white; font-weight: 700; border-radius: 7px; transform: rotate(45deg); box-shadow: 0 0 0 5px rgba(234,88,12,.22); }}
       .marker-cluster-small span, .marker-cluster-medium span, .marker-cluster-large span {{ display: block; transform: rotate(-45deg); }}
+      .map-tools, .map-date {{ background: rgba(255,255,255,.96); border-radius: 8px; padding: 8px 10px; color: #172b4d; box-shadow: 0 2px 10px #0f172a26; }}
+      .map-tools button {{ background: #0e5570; color: white; border: 0; border-radius: 5px; padding: 8px 12px; cursor: pointer; font-size: 13px; }}
+      .map-tools button:disabled {{ opacity: .6; cursor: wait; }}
+      .map-tools span {{ display: block; max-width: 230px; font-size: 11px; margin-top: 4px; }}
+      .map-tools span:empty {{ display: none; }}
+      .map-date {{ font-size: 12px; max-width: 430px; }}
     </style></head><body><div id="map"></div>
     <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
     <script src="https://unpkg.com/leaflet.markercluster@1.5.3/dist/leaflet.markercluster.js"></script>
+    <script src="https://unpkg.com/html2canvas@1.4.1/dist/html2canvas.min.js"></script>
     <script>
       const map = L.map('map', {{zoomControl: true}}).setView([25.5, 48.5], 4);
       L.tileLayer('https://server.arcgisonline.com/ArcGIS/rest/services/World_Street_Map/MapServer/tile/{{z}}/{{y}}/{{x}}', {{
-        attribution: 'Tiles &copy; Esri', maxZoom: 18
+        attribution: 'Tiles &copy; Esri', maxZoom: 18, crossOrigin: true
       }}).addTo(map);
+      const dateControl = L.control({{position: 'bottomleft'}});
+      dateControl.onAdd = () => {{
+        const el = L.DomUtil.create('div', 'map-date');
+        el.textContent = {date_label_json};
+        return el;
+      }};
+      dateControl.addTo(map);
+      const screenshotDate = {screenshot_date_json};
       const legend = L.control({{position: 'bottomright'}});
       legend.onAdd = () => {{
         const el = L.DomUtil.create('div', 'map-legend');
@@ -625,7 +651,9 @@ def _map_html(assets: list[dict[str, object]], ports: list[dict],
               fill="#2563eb" fill-opacity=".9" stroke="#ffffff" stroke-width="1.5"/>
           </svg>`
         }});
-        L.marker([port.lat, port.lon], {{icon}}).bindTooltip(port.name, {{direction: 'top', opacity: .95}})
+        const label = document.createElement('div');
+        label.textContent = `${{port.name}} · ${{port.calls == null ? '无日度记录' : port.calls + ' 艘次进港'}}`;
+        L.marker([port.lat, port.lon], {{icon}}).bindTooltip(label, {{direction: 'top', opacity: .95}})
           .bindPopup(port.popup, {{maxWidth: 410}}).addTo(portLayer);
       }});
       chokepoints.forEach((point) => {{
@@ -637,7 +665,9 @@ def _map_html(assets: list[dict[str, object]], ports: list[dict],
               fill="#7c3aed" fill-opacity=".94" stroke="#ffffff" stroke-width="1.5"/>
           </svg>`
         }});
-        L.marker([point.lat, point.lon], {{icon}}).bindTooltip(point.name, {{direction: 'top', opacity: .95}})
+        const label = document.createElement('div');
+        label.textContent = `${{point.name}} · ${{point.calls == null ? '无日度记录' : point.calls + ' 艘通过'}}`;
+        L.marker([point.lat, point.lon], {{icon}}).bindTooltip(label, {{direction: 'top', opacity: .95, permanent: true}})
           .bindPopup(point.popup, {{maxWidth: 410}}).addTo(chokepointLayer);
       }});
       const vesselColors = {{
@@ -674,6 +704,19 @@ def _map_html(assets: list[dict[str, object]], ports: list[dict],
       }} else if (allPoints.length) {{
         map.fitBounds(L.latLngBounds(allPoints), {{padding: [36, 36], maxZoom: 5}});
       }}
+      // Keep the user's viewport while the time slider changes the data.
+      const viewKey = 'energy-map-view:' + JSON.stringify([regionBounds, focusAssets,
+        focusAssets ? assets.map(a => a.name) : []]);
+      try {{
+        const saved = JSON.parse(sessionStorage.getItem(viewKey));
+        if (saved) map.setView(saved.center, saved.zoom);
+      }} catch (error) {{ /* Storage can be disabled by the embedding browser. */ }}
+      map.on('moveend', () => {{
+        try {{ sessionStorage.setItem(viewKey, JSON.stringify({{
+          center: [map.getCenter().lat, map.getCenter().lng], zoom: map.getZoom()
+        }})); }} catch (error) {{ }}
+      }});
+      {map_tools.SCREENSHOT_SCRIPT}
     </script></body></html>
     """
 
@@ -681,9 +724,19 @@ def _map_html(assets: list[dict[str, object]], ports: list[dict],
 st.markdown("""
 <div class="hero">
   <h1>中东能源保供监测</h1>
-  <p>战略生产节点、港口活动、关键咽喉点与船舶位置｜来源分层、口径不重复</p>
 </div>
 """, unsafe_allow_html=True)
+
+# A page reload creates a new Streamlit session. Recheck sources before drawing
+# the map, but retain caches when the same session changes filters or dates.
+opening_page = not st.session_state.get("sources_checked")
+load_status = st.status("正在更新数据…" if opening_page else "正在读取所选日期数据…",
+                        expanded=False)
+if opening_page:
+    PORTWATCH.clear_live_cache()
+    _openwaters_snapshot.clear()
+    st.session_state["sources_checked"] = True
+    st.session_state["source_check_utc"] = datetime.now(timezone.utc).strftime("%Y-%m-%d %H:%M:%S")
 
 country_options = sorted({str(asset["country"]) for asset in ASSETS})
 level_options = list(LEVEL_LABELS)
@@ -756,33 +809,28 @@ with st.sidebar:
             select_all=False)
         if port_catalog_error:
             st.warning(f"港口目录暂时不可用：{port_catalog_error}")
+        port_date_error = None
         try:
             newest_day = PORTWATCH.latest_date()
-            selected_day = st.date_input("统计日期（UTC）", value=newest_day,
-                                         min_value=date(2019, 1, 1), max_value=newest_day,
-                                         key="port_day")
+            selected_day = newest_day
             st.caption(f"源站最新：{newest_day.isoformat()}")
         except Exception as exc:
             newest_day = selected_day = None
+            port_date_error = str(exc)
             st.warning(f"PortWatch 暂时不可用：{exc}")
         rolling_label = st.radio("日均窗口", ["过去 7 天", "过去 30 天"],
                                  horizontal=True, key="rolling_window")
         rolling_days = 7 if rolling_label == "过去 7 天" else 30
+        chokepoint_date_error = None
         try:
             newest_chokepoint_day = PORTWATCH.latest_chokepoint_date()
             st.caption(f"咽喉点最新：{newest_chokepoint_day.isoformat()} UTC")
         except Exception as exc:
             newest_chokepoint_day = None
+            chokepoint_date_error = str(exc)
             st.warning(f"咽喉点数据暂时不可用：{exc}")
         if st.button("刷新 PortWatch 数据", width="stretch"):
-            PORTWATCH.latest_date.clear()
-            PORTWATCH.port_catalog.clear()
-            PORTWATCH.daily_activity.clear()
-            PORTWATCH.rolling_activity.clear()
-            PORTWATCH.port_risk_capacity.clear()
-            PORTWATCH.latest_chokepoint_date.clear()
-            PORTWATCH.chokepoint_catalog.clear()
-            PORTWATCH.chokepoint_activity.clear()
+            st.session_state["sources_checked"] = False
             st.rerun()
 
     with st.expander("船舶", expanded=True):
@@ -801,6 +849,7 @@ with st.sidebar:
         ais_max_age = st.select_slider(
             "最大数据年龄", options=[10, 30, 60, 120], value=30,
             format_func=lambda value: f"{value}分钟", key="ais_max_age")
+        open_state = {"vessels": [], "error": None}
         if ais_enabled:
             stream_status = "未配置（可选）"
             if ais_api_key:
@@ -859,6 +908,36 @@ with st.sidebar:
 
     st.caption("航运水域同时作用于港口、咽喉点和船舶；其他筛选留空表示全部。")
 
+tab_map, tab_ports, tab_vessels, tab_assets, tab_method = st.tabs(
+    ["地图", "港口", "船舶", "油气", "数据与方法"])
+with tab_map:
+    time_mode = st.radio("地图时间", ["最新", "历史回看"], horizontal=True, key="map_time_mode")
+    available_days = [d for d in (newest_day, newest_chokepoint_day) if d is not None]
+    history_day = None
+    if available_days:
+        last_day = max(available_days)
+        first_day = date(2019, 1, 1)
+        if time_mode == "最新" or "map_history_day" not in st.session_state:
+            st.session_state["map_history_day"] = last_day
+        else:
+            st.session_state["map_history_day"] = min(last_day, max(first_day, st.session_state["map_history_day"]))
+        history_day = st.slider(
+            "通行时间轴（UTC，按日）", min_value=first_day, max_value=last_day,
+            step=timedelta(days=1), format="YYYY-MM-DD",
+            key="map_history_day", on_change=_show_history,
+            help="拖动即进入历史回看，港口及咽喉点一起切换到选中日期。缺报保持未知；选择最新可返回当前数据。")
+    else:
+        st.warning("源站未返回可用日期，暂不能读取时间轴。")
+    historical_map = time_mode == "历史回看"
+    if historical_map and history_day is not None:
+        selected_day = history_day
+    selected_chokepoint_day = history_day if historical_map else newest_chokepoint_day
+    if historical_map:
+        st.caption("历史回看：港口与咽喉点使用同一日的日度记录；船舶实时图层暂停显示，油气资料保留各自披露日期。")
+    else:
+        st.caption("最新模式：港口与咽喉点各用源站最新可用日；船位按各自 AIS 报告时间显示。")
+    st.caption(f"最近向源站检查：{st.session_state['source_check_utc']} UTC")
+
 ports: list[dict] = []
 port_error = port_catalog_error
 if selected_day is not None and not port_error:
@@ -880,7 +959,7 @@ if selected_day is not None and not port_error:
 
 chokepoints: list[dict] = []
 chokepoint_error = None
-if newest_chokepoint_day is not None:
+if selected_chokepoint_day is not None:
     try:
         chokepoint_catalog = PORTWATCH.chokepoint_catalog()
         chokepoint_catalog = [
@@ -890,7 +969,7 @@ if newest_chokepoint_day is not None:
         chokepoint_ids = tuple(point["portid"] for point in chokepoint_catalog)
         if chokepoint_ids:
             chokepoint_values = PORTWATCH.chokepoint_activity(
-                newest_chokepoint_day, chokepoint_ids)
+                selected_chokepoint_day, chokepoint_ids)
             chokepoints = PORTWATCH.decorate_chokepoints(
                 chokepoint_catalog, chokepoint_values)
     except Exception as exc:
@@ -905,7 +984,6 @@ def current_ais_positions() -> list[dict]:
     stream_rows = []
     if ais_collector_instance is not None:
         stream_rows = ais_collector_instance.snapshot(max_age_minutes=ais_max_age)
-    open_state = _openwaters_snapshot(ais_max_age, AIS.MODULE_VERSION)
     return AIS.merge_vessel_snapshots(stream_rows, open_state.get("vessels", []))
 
 
@@ -1068,18 +1146,28 @@ def render_map_panel() -> None:
     filtered_vessels = current_vessels(all_positions)
     map_vessels = (
         filtered_vessels
-        if "vessels" in visible_map_layers
+        if "vessels" in visible_map_layers and not historical_map
         else []
     )
     stream_state = current_ais_status()
-    open_state = _openwaters_snapshot(ais_max_age, AIS.MODULE_VERSION)
     if port_error:
         st.error(f"港口数据加载失败：{port_error}")
     if chokepoint_error:
         st.error(f"咽喉点数据加载失败：{chokepoint_error}")
-    if not ais_enabled:
+    if historical_map:
+        if chokepoints and "chokepoints" in visible_map_layers:
+            summary_columns = st.columns(len(chokepoints))
+            for column, point in zip(summary_columns, chokepoints):
+                count = point.get("n_total")
+                column.metric(point.get("name_cn", point["portname"]),
+                              f"{count:,} 艘" if count is not None else "无记录")
+        if selected_day and newest_day and selected_day > newest_day:
+            st.info("所选日期的港口记录尚未发布；可拖动至港口源站最新日或更早日期。")
+        if selected_chokepoint_day and newest_chokepoint_day and selected_chokepoint_day > newest_chokepoint_day:
+            st.info("所选日期的咽喉点记录尚未发布。")
+    elif not ais_enabled:
         st.info("船舶图层已关闭。")
-    else:
+    elif "vessels" in visible_map_layers:
         if stream_state.get("last_error") and not all_positions:
             st.warning(f'AISStream 暂无可用船位，后台将自动重连：{stream_state["last_error"]}')
         if open_state.get("error"):
@@ -1101,8 +1189,8 @@ def render_map_panel() -> None:
         _map_html(
             map_assets, map_ports, map_chokepoints, map_vessels,
             selected_day.isoformat() if selected_day else "无数据",
-            newest_chokepoint_day.isoformat() if newest_chokepoint_day else "无数据",
-            focus_assets=bool(asset_search), ais_configured=bool(ais_enabled),
+            selected_chokepoint_day.isoformat() if selected_chokepoint_day else "无数据",
+            focus_assets=bool(asset_search), ais_configured=bool(ais_enabled and not historical_map),
             visible_layers=visible_map_layers,
             region_bounds=selected_region_bounds),
         height=735,
@@ -1118,7 +1206,6 @@ def render_ais_panel() -> None:
     vessels = current_vessels(all_positions)
     rows = vessel_rows(vessels)
     state = current_ais_status()
-    open_state = _openwaters_snapshot(ais_max_age, AIS.MODULE_VERSION)
     has_position_data = bool(all_positions)
     vessel_metric = len(vessels) if has_position_data else "—"
     v1, v2, v3, v4, v5 = st.columns(5)
@@ -1169,8 +1256,10 @@ def render_ais_panel() -> None:
         st.info("当前船型、水域、搜索和数据年龄筛选没有匹配船舶。")
 
 
-tab_map, tab_ports, tab_vessels, tab_assets, tab_method = st.tabs(
-    ["地图总览", "港口活动", "船舶", "油气", "数据与方法"])
+load_errors = [error for error in (port_error, chokepoint_error, port_date_error, chokepoint_date_error,
+               open_state.get("error") if ais_enabled else None) if error]
+load_status.update(label="数据读取完成；部分来源暂不可用" if load_errors else "数据已更新",
+                   state="error" if load_errors else "complete", expanded=False)
 
 with tab_map:
     render_map_panel()
@@ -1221,6 +1310,16 @@ with tab_assets:
 
 with tab_method:
     st.subheader("范围、口径与数据限制")
+    st.markdown("**更新方式。** 每次重新打开页面先向源站检查并读取动态数据，再绘制地图；同一会话切换筛选时使用短期缓存。源站没有发布新记录时，观测日期不会改变；请求失败明确显示不可用。")
+    st.dataframe([
+        {"数据": "港口 / 咽喉点日度记录", "当前更新": "打开页面自动检查 API；窗口指标随记录重算", "进一步自动化": "已接入；源站发布时间决定最新观测日"},
+        {"数据": "实时船位", "当前更新": "打开页面获取 Open Waters 快照；可选 AISStream 后台持续接收", "进一步自动化": "AISStream 需配置服务端密钥；页面另有手动刷新"},
+        {"数据": "港口 / 咽喉点官方目录", "当前更新": "打开页面重读 PortWatch API", "进一步自动化": "已接入；补充 WPI / 运营商名录仍需版本核验"},
+        {"数据": "港口风险运力", "当前更新": "打开页面重读源 API", "进一步自动化": "源为历史航线模型；重新抓取不代表实时风险"},
+        {"数据": "油气产量、产能、状态和坐标", "当前更新": "经核验的静态公开披露记录", "进一步自动化": "接运营商 / 监管机构 API 或公告抓取，校验资产、日期、单位、产量 / 产能后更新"},
+        {"数据": "历史船位", "当前更新": "当前地图未接入历史水域快照", "进一步自动化": "持续归档 AIS，或接有历史授权的服务；Open Waters 单船近 48 小时轨迹不等于完整水域历史"},
+    ], hide_index=True, width="stretch")
+    st.markdown("**时间轴与截图。** 历史回看按 UTC 日切换港口及咽喉点；缺报显示无记录，实时船位暂停显示。油气记录不是历史重放，保留披露日期。地图右上角保存 PNG，包含当前视野、图例、日期、打开的弹窗及底图署名。")
     st.markdown(
         "**港口覆盖。** 地图读取 IMF 当前维护的 PortWatch 港口点位数据库，"
         "并按下表五个经纬度框选取港口。交叠区域按表中顺序唯一归属。"
@@ -1259,7 +1358,7 @@ with tab_method:
     st.markdown(
         f"**船舶数据。** 免费快照来自[Open Waters开放AIS网络]({AIS.OPENWATERS_SOURCE})，"
         f"可选[AISStream WebSocket API]({AIS.SOURCE})在服务器端接收五个监测水域的船级广播；"
-        "页面不会定时刷新；点击侧栏“刷新船舶数据”时读取最新船位快照。"
+        "打开页面自动读取最新船位快照；停留期间可点击侧栏“刷新船舶数据”。"
         "浏览器只接收标准化的每船最新位置，不接收API Key。"
         "多源位置按MMSI合并，航行阈值为0.5节，超过所选最大数据年龄的船位会被删除；"
         "上游来源署名随船舶表及弹窗显示。"
@@ -1271,9 +1370,9 @@ with tab_method:
         "PortWatch经港界和贸易规则处理后的日度挂靠指标。"
     )
     st.markdown(
-        "**咽喉点。** 地图紫色六边形显示所选水域内咽喉点的最新可用日数据。"
-        "popup列示总通过船数、估算承载货量及五类船型分解；咽喉点日期与港口日期分别读取，"
-        "避免把更新节奏不同的两张表强行对齐。"
+        "**咽喉点。** 地图紫色六边形显示所选水域内咽喉点的日度记录。"
+        "popup列示总通过船数、估算承载货量及五类船型分解；最新模式分别读取港口与咽喉点的最新日，"
+        "历史模式按同一选定日查询，缺报不补零。"
     )
     st.markdown(
         f"**资产覆盖与战略层级（公开目录，非全量保证）。** 底层目录保留全部{len(ASSETS)}项公开命名的生产、开发、发现或历史资产；"
