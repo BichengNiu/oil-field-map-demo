@@ -1,5 +1,7 @@
 """Every checkpoint clue receives a disposition; no silent loss of old work."""
 import csv
+import argparse
+from datetime import date
 from pathlib import Path
 
 from field_catalog import ASSETS
@@ -7,6 +9,9 @@ from reconciled_assets import MERGES, GEM_ROWS, pending
 
 
 def main():
+    parser = argparse.ArgumentParser()
+    parser.add_argument("--review-date", type=date.fromisoformat, default=date(2026, 10, 1))
+    review_date = parser.parse_args().review_date.isoformat()
     root = Path(__file__).parent
     with (root / "ASSET_DATA_AUDIT_CHECKPOINT_2026-09-30.csv").open(encoding="utf-8-sig") as stream:
         old = list(csv.DictReader(stream))
@@ -23,7 +28,7 @@ def main():
                       else "组合名单已分别保留成员；组合位置/数值不拆给成员")
         elif matched:
             state = "纳入当前目录；现时产量/状态以新审计为准"
-            reason = "本轮回查公开名录名称" if key in probes else "已列资产或运营商原公告确认；旧值不自动沿用"
+            reason = "已列资产或新增原文确认；新来源、资产层级与数据期见当前逐行审计；旧值不自动沿用"
         else:
             state = "待核线索；未纳入确认目录"
             reason = "原页及定向检索多次未取得确认内容；不据快照复制坐标/指标"
@@ -33,8 +38,8 @@ def main():
                        "旧值仅供追溯": row["值"], "现值": " | ".join(str(a["value"]) for a in matched),
                        "现值口径": " | ".join(a["metric_type"] for a in matched),
                        "回查名录成功": probes.get(key, {}).get("catalog_name_confirmed", "不适用")})
-    for filename, rows in (("ASSET_CHECKPOINT_RECONCILIATION_2026-09-30.csv", output),
-                           ("PENDING_ASSET_CLUES_2026-09-30.csv", pending())):
+    for filename, rows in ((f"ASSET_CHECKPOINT_RECONCILIATION_{review_date}.csv", output),
+                           (f"PENDING_ASSET_CLUES_{review_date}.csv", pending())):
         with (root / filename).open("w", encoding="utf-8-sig", newline="") as stream:
             writer = csv.DictWriter(stream, fieldnames=rows[0].keys(), lineterminator="\n")
             writer.writeheader()

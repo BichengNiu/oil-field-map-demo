@@ -169,7 +169,9 @@ def register_statuses(assign):
 
 
 def pending():
+    from continuation_assets import RESOLVED, PENDING
     return [{"国家": row["country"], "名称线索": row["name"], "原页": row["url"],
-             "核验结果": "保留历史快照线索；多次原页访问/检索仍未读到可确认名称的内容，未加入确认目录；不填产量/坐标"}
+             "核验结果": PENDING.get((row["country"], row["name"]), "保留历史快照线索；未读到可确认范围的内容，未加入确认目录；不填产量/坐标")}
             for row in GEM_ROWS if not row["catalog_name_confirmed"]
-            and (row["country"], row["name"]) not in MERGES]
+            and (row["country"], row["name"]) not in MERGES
+            and (row["country"], row["name"]) not in RESOLVED]

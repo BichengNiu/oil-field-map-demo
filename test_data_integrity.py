@@ -14,6 +14,7 @@ import field_catalog
 import portwatch
 import port_inventory
 import reconciled_assets
+import continuation_assets
 from audited_measurements import daily_thousand_barrels
 
 
@@ -28,18 +29,75 @@ class CatalogIntegrity(unittest.TestCase):
             elif row["catalog_name_confirmed"]:
                 asset = index[key]
                 self.assertIsNone(asset["value"])
-                self.assertEqual(asset["operating_status"], "historical_unverified")
+                if key in continuation_assets.REVISED:
+                    self.assertEqual(asset["operating_status"], "planned")
+                    self.assertEqual(asset["asset_level"], "project")
+                else:
+                    self.assertEqual(asset["operating_status"], "historical_unverified")
                 if row["coordinates"]:
                     self.assertEqual(asset["map_lat"], row["coordinates"]["lat"])
                     self.assertEqual(asset["coordinate_source_url"], row["url"])
             else:
-                self.assertNotIn(key, index)
+                if key in continuation_assets.RESOLVED:
+                    self.assertIn(key, index)
+                    self.assertEqual(index[key]["data_audit_date"], "2026-10-01")
+                    self.assertTrue(index[key]["catalog_evidence_url"].startswith("https://"))
+                    self.assertNotEqual(index[key]["catalog_evidence_url"], row["url"])
+                else:
+                    self.assertNotIn(key, index)
         for name in ("Qatargas 2", "Dolphin", "RasGas 3"):
             self.assertEqual(index[("卡塔尔", name)]["asset_level"], "project")
             self.assertEqual(index[("卡塔尔", name)]["parent_asset"], "North Field")
-        with Path("ASSET_CHECKPOINT_RECONCILIATION_2026-09-30.csv").open(encoding="utf-8-sig") as stream:
+        with Path("ASSET_CHECKPOINT_RECONCILIATION_2026-10-01.csv").open(encoding="utf-8-sig") as stream:
             unresolved = {(r["国家"], r["快照名称"]) for r in csv.DictReader(stream) if not r["当前对应"]}
         self.assertEqual(unresolved, {(r["国家"], r["名称线索"]) for r in reconciled_assets.pending()})
+        with Path("ASSET_CHECKPOINT_RECONCILIATION_2026-09-30.csv").open(encoding="utf-8-sig") as stream:
+            old_unresolved = {(r["国家"], r["快照名称"]) for r in csv.DictReader(stream) if not r["当前对应"]}
+        self.assertEqual(old_unresolved, unresolved | continuation_assets.RESOLVED)
+
+    def test_sales_and_plans_never_become_daily_production(self):
+        index = {(a["country"], a["name"]): a for a in field_catalog.ASSETS}
+        leviathan = index[("以色列", "Leviathan")]
+        self.assertEqual(leviathan["metric_type"], "capacity")
+        self.assertFalse(leviathan["is_daily_output"])
+        self.assertEqual([(m["commodity"], m["value"], m["metric_type"]) for m in leviathan["additional_measurements"]],
+                         [("natural_gas", "约4.57", "sales_volume"), ("condensate", "约304", "sales_volume")])
+        self.assertNotIn("sales_volume", field_catalog.OUTPUT_METRIC_TYPES)
+        for name in ("Kish", "North Pars", "Farzad A", "Farzad B", "Khartang", "Gardan", "Eram"):
+            a = index[("伊朗", name)]
+            self.assertEqual(a["metric_type"], "target_capacity")
+            self.assertEqual(a["unit"], "十亿立方英尺/年")
+            self.assertIn("2024", a["data_date"])
+            self.assertFalse(a["is_daily_output"])
+
+    def test_confirmed_prospects_concessions_and_groups_keep_their_scope(self):
+        index = {(a["country"], a["name"]): a for a in field_catalog.ASSETS}
+        for country, name in (("阿曼", "Fahd"), ("以色列", "Royee")):
+            a = index[(country, name)]
+            self.assertEqual(a["asset_level"], "project")
+            self.assertEqual(a["operating_status"], "planned")
+            self.assertIsNone(a["value"])
+            self.assertFalse(a["strategic_default"])
+        self.assertEqual(index[("阿曼", "Fahd South")]["asset_level"], "project")
+        self.assertNotEqual(index[("阿曼", "Fahd South")]["name"], index[("阿曼", "Fahd")]["name"])
+        for name in ("East Bahariya", "East Beni Suef", "West Kalabsha", "Herunefer", "Siwa"):
+            self.assertEqual(index[("埃及", name)]["asset_level"], "concession")
+            self.assertIsNone(index[("埃及", name)]["value"])
+        for name in ("Ahmer", "Ratka", "Maleh", "Fadeh"):
+            self.assertIsNone(index[("叙利亚", name)]["value"])
+        self.assertEqual(index[("科威特", "Jazza")]["operating_status"], "discovered")
+
+    def test_new_reference_points_and_concession_proxies_are_distinct(self):
+        index = {(a["country"], a["name"]): a for a in field_catalog.ASSETS}
+        for name in ("Sitra", "East Beni Suef", "Siwa", "Herunefer", "West Kalabsha"):
+            a = index[("埃及", name)]
+            self.assertTrue(a["map_is_proxy"])
+            self.assertIn("EPSG:4229", a["map_coordinate_precision"])
+            self.assertIn("petroleum.gov.eg", a["coordinate_source_url"])
+        self.assertIn("Oil_and_Gas_Field", index[("埃及", "Baltim South West")]["coordinate_source_url"])
+        # GEM repeats a location for Khor Mor and Chemchemal. Do not silently
+        # assign the Chemchemal point to this separate producing field.
+        self.assertFalse(index[("伊拉克", "Khor Mor")]["map_drawable"])
 
     def test_estimates_retain_period_commodity_and_original_inputs(self):
         index = {(a["country"], a["name"]): a for a in field_catalog.ASSETS}
@@ -78,6 +136,8 @@ class CatalogIntegrity(unittest.TestCase):
             self.assertTrue(row["source_url"].startswith("https://"))
             self.assertTrue(row["freshness_note"])
             self.assertEqual(row["value"] is None, row["metric_type"] == "undisclosed")
+            for measurement in row["additional_measurements"]:
+                self.assertIn(measurement["commodity"], field_catalog.COMMODITY_LABELS)
             seen = set()
             current = row
             while current.get("parent_asset"):

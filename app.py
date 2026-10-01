@@ -114,6 +114,7 @@ st.markdown("""
 METRIC_LABELS = {
     "estimated_daily_average": "估算期间日均（公布总量×份额）",
     "actual_output": "来源直报实际产量",
+    "sales_volume": "期间销售量（非产量）",
     "actual_output_boe": "来源实绩（油当量；非原油桶）",
     "derived_daily_average": "历史推算日均产量",
     "capacity": "产能",

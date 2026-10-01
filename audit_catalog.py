@@ -5,12 +5,17 @@ Source access results are a dated optional snapshot, not a live availability pro
 """
 import csv
 import json
+import argparse
+from datetime import date
 from pathlib import Path
 
 from field_catalog import ASSETS
 
 
 def main():
+    parser = argparse.ArgumentParser()
+    parser.add_argument("--review-date", type=date.fromisoformat, default=date(2026, 10, 1))
+    review_date = parser.parse_args().review_date.isoformat()
     health_file = Path(__file__).with_name("SOURCE_ACCESS_2026-09-30.csv")
     health = {}
     if health_file.exists():
@@ -54,7 +59,7 @@ def main():
             "来源HTTP自动探测": source.get("http_status", "未探测"),
             "复核日": asset["data_audit_date"], "未解决事项": "；".join(issues), "说明": asset["note"],
         })
-    output = Path("ASSET_DATA_AUDIT_2026-09-30.csv")
+    output = Path(f"ASSET_DATA_AUDIT_{review_date}.csv")
     with output.open("w", encoding="utf-8-sig", newline="") as stream:
         writer = csv.DictWriter(stream, fieldnames=rows[0].keys(), lineterminator="\n")
         writer.writeheader()

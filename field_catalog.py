@@ -502,10 +502,13 @@ ASSETS = [
 # 本轮原始报告复核；补充目录与数字在元数据生成之前应用。
 import supplemental_assets as SUPPLEMENT
 import reconciled_assets as RECONCILED
+import continuation_assets as CONTINUATION
 from audited_measurements import apply_annual_volumes, additional_measurements
 ASSETS.extend(SUPPLEMENT.additions(record))
 ASSETS.extend(RECONCILED.additions(record))
 RECONCILED.apply_existing(ASSETS)
+ASSETS.extend(CONTINUATION.additions(record))
+CONTINUATION.apply_measurements(ASSETS)
 apply_annual_volumes(ASSETS)
 for asset in ASSETS:
     if asset["country"] == "伊朗" and asset["name"] == "Darkhovin":
@@ -558,6 +561,7 @@ ASSET_LEVEL_LABELS = {
 COMMODITY_LABELS = {
     "crude_oil": "原油",
     "natural_gas": "天然气",
+    "condensate": "凝析油",
     "oil_and_gas": "油气／凝析油",
 }
 
@@ -1135,6 +1139,8 @@ OUTPUT_METRIC_TYPES = {
 
 PARENT_RELATIONSHIPS.update(RECONCILED.PARENTS)
 COORDINATE_OVERRIDES.update(RECONCILED.coordinates())
+COORDINATE_OVERRIDES.update(CONTINUATION.coordinates())
+LEVEL_OVERRIDES.update(CONTINUATION.levels())
 LEVEL_OVERRIDES.update({key: "project" for key in RECONCILED.PROJECTS})
 LEVEL_OVERRIDES.update({key: "development_area" for key in RECONCILED.AREAS})
 
@@ -1444,12 +1450,14 @@ _assign_status("埃及", "Wadi El Sahl Development Area", "development", "2025-1
 
 SUPPLEMENT.register_statuses(_assign_status)
 RECONCILED.register_statuses(_assign_status)
+CONTINUATION.register_statuses(_assign_status)
 # 纠正旧状态，明确每个证据时点；覆盖更新而不是重复登记。
 def _revise_status(country, names, state, as_of, confidence, basis, url):
     for name in names.split(" | "):
         _STATUS_AUDIT.pop((country, name))
     _assign_status(country, names, state, as_of, confidence, basis, url)
 
+CONTINUATION.revise_statuses(_revise_status)
 _revise_status("阿联酋", "Hedebah", "producing", "2025-11-04", "高",
                "SNOC披露首井已在发现后十个月投产；第二井当时计划接入，不填产量。",
                "https://www.snoc.ae/news/snoc-strengthens-sharjahs-energy-security-with-second-well-success-in-hedebah-field/")
@@ -1525,3 +1533,4 @@ for asset in ASSETS:
                               "数值仅对应数据日期；复核日不是观测日，不能视作2026-09-30实绩")
 
 additional_measurements(ASSETS)
+CONTINUATION.finish_review(ASSETS)

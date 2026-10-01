@@ -10,13 +10,17 @@ import gzip
 import hashlib
 import json
 import math
-from datetime import timedelta
+import argparse
+from datetime import timedelta, date
 from pathlib import Path
 
 import portwatch
 
 
 def main() -> None:
+    parser = argparse.ArgumentParser()
+    parser.add_argument("--review-date", type=date.fromisoformat, default=date(2026, 10, 1))
+    review_date = parser.parse_args().review_date.isoformat()
     # Capture the actual source rows used in this run, even when run repeatedly.
     for func in (portwatch.port_catalog, portwatch.latest_date, portwatch.daily_activity,
                  portwatch.rolling_activity, portwatch.chokepoint_activity,
@@ -156,7 +160,8 @@ def main() -> None:
     choke_day = portwatch.latest_chokepoint_date()
     chokes = portwatch.chokepoint_activity(choke_day, portwatch.FOCUS_CHOKEPOINT_IDS)
     assert set(chokes) == set(portwatch.FOCUS_CHOKEPOINT_IDS)
-    Path("PORT_AUDIT_SUMMARY_2026-09-30.json").write_text(json.dumps({
+    Path(f"PORT_AUDIT_SUMMARY_{review_date}.json").write_text(json.dumps({
+        "review_date": review_date,
         "port_date": day.isoformat(), "chokepoint_date": choke_day.isoformat(),
         "world_portwatch_rows": len(global_rows), "regional_portwatch_rows": len(regional),
         "combined_catalog_rows": len(ports), "raw_daily_rows": len(raw),

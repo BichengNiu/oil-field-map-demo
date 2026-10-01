@@ -1,0 +1,873 @@
+{
+  "review_date": "2026-10-01",
+  "policy": "逐项审核决定清单；不是抓取结果自动导入。没有本层级数值不填0、储量、试井、公司总量或拆分组合量。",
+  "additions": [
+    {
+      "country": "埃及",
+      "name": "Sitra",
+      "asset_type": "油气田",
+      "asset_level": "field",
+      "source": "Shell Egypt company history",
+      "source_url": "https://www.shell.eg/en_eg/about-us/who-we-are.html",
+      "as_of": "1979发现；官网历史回顾",
+      "note": "Shell历史页确认Sitra发现；BAPETCo合计110千桶/日不分配本田。定位仅用同名开发特许区代理点。",
+      "state": "unknown",
+      "confidence": "低",
+      "status_basis": "Shell历史页确认Sitra发现；BAPETCo合计110千桶/日不分配本田。定位仅用同名开发特许区代理点。",
+      "status_url": "https://www.shell.eg/en_eg/about-us/who-we-are.html"
+    },
+    {
+      "country": "埃及",
+      "name": "East Beni Suef",
+      "asset_type": "油气开发特许区",
+      "asset_level": "concession",
+      "source": "Egypt Upstream Gateway government map",
+      "source_url": "https://eug.petroleum.gov.eg/dp/jsp/new_live/InteractiveMap/devGeoJson4-5-2025.geojson",
+      "as_of": "地图文件名2025-05-04；复核2026-10-01",
+      "note": "政府图层确认为开发特许区，不能据此视作一个独立生产田；没有独立商业产量。地图日期取自文件名，逐要素观察期未提供。",
+      "state": "unknown",
+      "confidence": "中",
+      "status_basis": "政府图层确认为开发特许区，不能据此视作一个独立生产田；没有独立商业产量。地图日期取自文件名，逐要素观察期未提供。",
+      "status_url": "https://eug.petroleum.gov.eg/dp/jsp/new_live/InteractiveMap/devGeoJson4-5-2025.geojson"
+    },
+    {
+      "country": "埃及",
+      "name": "West Kalabsha",
+      "asset_type": "油气开发特许区",
+      "asset_level": "concession",
+      "source": "Egypt Upstream Gateway government map",
+      "source_url": "https://eug.petroleum.gov.eg/dp/jsp/new_live/InteractiveMap/devGeoJson4-5-2025.geojson",
+      "as_of": "地图文件名2025-05-04；复核2026-10-01",
+      "note": "政府图层确认为开发特许区，不能据此视作一个独立生产田；没有独立商业产量。地图日期取自文件名，逐要素观察期未提供。",
+      "state": "unknown",
+      "confidence": "中",
+      "status_basis": "政府图层确认为开发特许区，不能据此视作一个独立生产田；没有独立商业产量。地图日期取自文件名，逐要素观察期未提供。",
+      "status_url": "https://eug.petroleum.gov.eg/dp/jsp/new_live/InteractiveMap/devGeoJson4-5-2025.geojson"
+    },
+    {
+      "country": "埃及",
+      "name": "Herunefer",
+      "asset_type": "油气开发特许区",
+      "asset_level": "concession",
+      "source": "Egypt Upstream Gateway government map",
+      "source_url": "https://eug.petroleum.gov.eg/dp/jsp/new_live/InteractiveMap/devGeoJson4-5-2025.geojson",
+      "as_of": "地图文件名2025-05-04；复核2026-10-01",
+      "note": "政府图层确认为开发特许区，不能据此视作一个独立生产田；没有独立商业产量。地图日期取自文件名，逐要素观察期未提供。",
+      "state": "unknown",
+      "confidence": "中",
+      "status_basis": "政府图层确认为开发特许区，不能据此视作一个独立生产田；没有独立商业产量。地图日期取自文件名，逐要素观察期未提供。",
+      "status_url": "https://eug.petroleum.gov.eg/dp/jsp/new_live/InteractiveMap/devGeoJson4-5-2025.geojson"
+    },
+    {
+      "country": "埃及",
+      "name": "Siwa",
+      "asset_type": "油气开发特许区",
+      "asset_level": "concession",
+      "source": "Egypt Upstream Gateway government map",
+      "source_url": "https://eug.petroleum.gov.eg/dp/jsp/new_live/InteractiveMap/devGeoJson4-5-2025.geojson",
+      "as_of": "地图文件名2025-05-04；复核2026-10-01",
+      "note": "政府图层确认为开发特许区，不能据此视作一个独立生产田；没有独立商业产量。地图日期取自文件名，逐要素观察期未提供。",
+      "state": "unknown",
+      "confidence": "中",
+      "status_basis": "政府图层确认为开发特许区，不能据此视作一个独立生产田；没有独立商业产量。地图日期取自文件名，逐要素观察期未提供。",
+      "status_url": "https://eug.petroleum.gov.eg/dp/jsp/new_live/InteractiveMap/devGeoJson4-5-2025.geojson"
+    },
+    {
+      "country": "埃及",
+      "name": "East Bahariya",
+      "asset_type": "油气勘探特许区",
+      "asset_level": "concession",
+      "source": "Egypt Upstream Gateway government map",
+      "source_url": "https://eug.petroleum.gov.eg/dp/jsp/new_live/InteractiveMap/explGeoJson4-5-2025.geojson",
+      "as_of": "地图文件名2025-05-04；复核2026-10-01",
+      "note": "图层名称为WD Merged (East Bahariya)，保留特许区层级；不把East Bahariya-32子开发租约边界当整体位置或套用其井流量。",
+      "state": "unknown",
+      "confidence": "中",
+      "status_basis": "图层名称为WD Merged (East Bahariya)，保留特许区层级；不把East Bahariya-32子开发租约边界当整体位置或套用其井流量。",
+      "status_url": "https://eug.petroleum.gov.eg/dp/jsp/new_live/InteractiveMap/explGeoJson4-5-2025.geojson"
+    },
+    {
+      "country": "埃及",
+      "name": "Satis West",
+      "asset_type": "气勘探项目",
+      "asset_level": "project",
+      "source": "bp regional president interview",
+      "source_url": "https://staging.theenergyyear.com/articles/in-egypt-bp-sees-a-gas-future-in-the-nile-delta/",
+      "as_of": "历史访谈；未取得可靠发布日和当前进度",
+      "note": "bp区域总裁访谈确认与Eni的Satis West勘探项目；不与Satis发现自动合并，未取得该项目商业产量。",
+      "state": "planned",
+      "confidence": "中",
+      "status_basis": "bp区域总裁访谈确认与Eni的Satis West勘探项目；不与Satis发现自动合并，未取得该项目商业产量。",
+      "status_url": "https://staging.theenergyyear.com/articles/in-egypt-bp-sees-a-gas-future-in-the-nile-delta/"
+    },
+    {
+      "country": "伊朗",
+      "name": "Sulabedar",
+      "asset_type": "油田",
+      "asset_level": "field",
+      "source": "AAPG 2006 NIOC-authored technical abstract",
+      "source_url": "https://www.searchanddiscovery.com/documents/2006/06088houston_abs/abstracts/keyvani02.htm",
+      "as_of": "2006技术摘要",
+      "note": "NIOC作者的储层研究明确列出Sulabedar；只确认历史名称，不据构造/储层描述推算日产量。",
+      "state": "unknown",
+      "confidence": "低",
+      "status_basis": "NIOC作者的储层研究明确列出Sulabedar；只确认历史名称，不据构造/储层描述推算日产量。",
+      "status_url": "https://www.searchanddiscovery.com/documents/2006/06088houston_abs/abstracts/keyvani02.htm"
+    },
+    {
+      "country": "伊朗",
+      "name": "Toos",
+      "asset_type": "气田",
+      "asset_level": "field",
+      "source": "Saipem Toos development MoU 2016",
+      "source_url": "https://www.saipem.com/en/media/press-releases/2016-04-12/saipem-signs-mou-toos-gas-field-project-iran",
+      "as_of": "2016-04-12 MoU",
+      "note": "承包商原公告确认名称与开发方案；4百万m³/日是当年规划生产能力。2026启用报道未披露该田实测流量，不能代填。",
+      "state": "unknown",
+      "confidence": "中",
+      "status_basis": "承包商原公告确认名称与开发方案；4百万m³/日是当年规划生产能力。2026启用报道未披露该田实测流量，不能代填。",
+      "status_url": "https://www.saipem.com/en/media/press-releases/2016-04-12/saipem-signs-mou-toos-gas-field-project-iran"
+    },
+    {
+      "country": "伊朗",
+      "name": "Khayyam",
+      "asset_type": "气田",
+      "asset_level": "field",
+      "source": "Original basin-modeling research",
+      "source_url": "https://www.sciencedirect.com/science/article/abs/pii/S0920410520306628",
+      "as_of": "2020论文；出版商检索正文",
+      "note": "盆地模型研究明确Khayyam Field及井名；地质模型的生气/运移不等于商业产气，未填日产量或位置。",
+      "state": "unknown",
+      "confidence": "低",
+      "status_basis": "盆地模型研究明确Khayyam Field及井名；地质模型的生气/运移不等于商业产气，未填日产量或位置。",
+      "status_url": "https://www.sciencedirect.com/science/article/abs/pii/S0920410520306628"
+    },
+    {
+      "country": "叙利亚",
+      "name": "Ahmer",
+      "asset_type": "油田",
+      "asset_level": "field",
+      "source": "Almohamad and Dittmann 2016 Table 1",
+      "source_url": "https://www.mdpi.com/2076-0760/5/2/20",
+      "as_of": "2015夏季资料；2016论文",
+      "note": "论文表1列出该田，但生产量为多田组合；只核名称，不分摊组合产量。证据由出版商索引表读到，直接全文访问失败；现时生产和独立坐标待核。",
+      "state": "unknown",
+      "confidence": "低",
+      "status_basis": "论文表1列出该田，但生产量为多田组合；只核名称，不分摊组合产量。证据由出版商索引表读到，直接全文访问失败；现时生产和独立坐标待核。",
+      "status_url": "https://www.mdpi.com/2076-0760/5/2/20"
+    },
+    {
+      "country": "叙利亚",
+      "name": "Ratka",
+      "asset_type": "油田",
+      "asset_level": "field",
+      "source": "Almohamad and Dittmann 2016 Table 1",
+      "source_url": "https://www.mdpi.com/2076-0760/5/2/20",
+      "as_of": "2015夏季资料；2016论文",
+      "note": "论文表1列出该田，但生产量为多田组合；只核名称，不分摊组合产量。证据由出版商索引表读到，直接全文访问失败；现时生产和独立坐标待核。",
+      "state": "unknown",
+      "confidence": "低",
+      "status_basis": "论文表1列出该田，但生产量为多田组合；只核名称，不分摊组合产量。证据由出版商索引表读到，直接全文访问失败；现时生产和独立坐标待核。",
+      "status_url": "https://www.mdpi.com/2076-0760/5/2/20"
+    },
+    {
+      "country": "叙利亚",
+      "name": "Maleh",
+      "asset_type": "油田",
+      "asset_level": "field",
+      "source": "Almohamad and Dittmann 2016 Table 1",
+      "source_url": "https://www.mdpi.com/2076-0760/5/2/20",
+      "as_of": "2015夏季资料；2016论文",
+      "note": "论文表1列出该田，但生产量为多田组合；只核名称，不分摊组合产量。证据由出版商索引表读到，直接全文访问失败；现时生产和独立坐标待核。",
+      "state": "unknown",
+      "confidence": "低",
+      "status_basis": "论文表1列出该田，但生产量为多田组合；只核名称，不分摊组合产量。证据由出版商索引表读到，直接全文访问失败；现时生产和独立坐标待核。",
+      "status_url": "https://www.mdpi.com/2076-0760/5/2/20"
+    },
+    {
+      "country": "叙利亚",
+      "name": "Fadeh",
+      "asset_type": "油田",
+      "asset_level": "field",
+      "source": "Almohamad and Dittmann 2016 Table 1",
+      "source_url": "https://www.mdpi.com/2076-0760/5/2/20",
+      "as_of": "2015夏季资料；2016论文",
+      "note": "论文表1列出该田，但生产量为多田组合；只核名称，不分摊组合产量。证据由出版商索引表读到，直接全文访问失败；现时生产和独立坐标待核。",
+      "state": "unknown",
+      "confidence": "低",
+      "status_basis": "论文表1列出该田，但生产量为多田组合；只核名称，不分摊组合产量。证据由出版商索引表读到，直接全文访问失败；现时生产和独立坐标待核。",
+      "status_url": "https://www.mdpi.com/2076-0760/5/2/20"
+    },
+    {
+      "country": "以色列",
+      "name": "Royee",
+      "asset_type": "气勘探项目",
+      "asset_level": "project",
+      "source": "Ratio TASE filing with NSAI report",
+      "source_url": "https://mayafiles.tase.co.il/rpdf/1100001-1101000/P1100367-00.pdf",
+      "as_of": "2017-05-26资源评估",
+      "note": "交易所原申报第9页明确Royee为未发现的prospect；无风险前景资源不是储量或产量，不列为已发现商业气田。",
+      "state": "planned",
+      "confidence": "高",
+      "status_basis": "交易所原申报第9页明确Royee为未发现的prospect；无风险前景资源不是储量或产量，不列为已发现商业气田。",
+      "status_url": "https://mayafiles.tase.co.il/rpdf/1100001-1101000/P1100367-00.pdf"
+    },
+    {
+      "country": "阿曼",
+      "name": "Fahd",
+      "asset_type": "油勘探项目",
+      "asset_level": "project",
+      "source": "Tethys Oil prospective resources announcement",
+      "source_url": "https://www.tethysoil.com/en/prospective-resources-in-fahd-area-block-58/",
+      "as_of": "2023-02-07",
+      "note": "Tethys原公告将Fahd、Fahd South及Fahd South-West列为三个不同勘探目标；前景资源不是发现储量或产量。",
+      "state": "planned",
+      "confidence": "高",
+      "status_basis": "Tethys原公告将Fahd、Fahd South及Fahd South-West列为三个不同勘探目标；前景资源不是发现储量或产量。",
+      "status_url": "https://www.tethysoil.com/en/prospective-resources-in-fahd-area-block-58/"
+    },
+    {
+      "country": "科威特",
+      "name": "Jazza",
+      "asset_type": "气田",
+      "asset_level": "field",
+      "source": "Kuwait Government Online discovery announcement",
+      "source_url": "https://e.gov.kw/sites/kgoenglish/Pages/ApplicationPages/NewsDetail.aspx?nid=34675812",
+      "as_of": "2025-10-13",
+      "note": "政府原公告确认Al-Jazza海上天然气发现；试井流量不当商业产量，无独立位置证据。",
+      "state": "discovered",
+      "confidence": "高",
+      "status_basis": "政府原公告确认Al-Jazza海上天然气发现；试井流量不当商业产量，无独立位置证据。",
+      "status_url": "https://e.gov.kw/sites/kgoenglish/Pages/ApplicationPages/NewsDetail.aspx?nid=34675812"
+    },
+    {
+      "country": "伊朗",
+      "name": "Ferdowsi",
+      "asset_type": "油气田",
+      "asset_level": "field",
+      "source": "US Congressional Research Service RS20871 (2019-09-10 original report mirror)",
+      "source_url": "https://www.everycrsreport.com/files/2019-09-10_RS20871_881f4870768e444d3494ae34cef43faf8cb3614a.html",
+      "as_of": "2007/2008合同；2019-09-10 CRS历史报告",
+      "note": "美国CRS原报告历史合同表确认Ferdowsi名称，原文镜像已读取；同列Golshan组合项目目标不拆给本田，未取得现时商业产量或独立坐标。官方Congress PDF检索表也列同名，但全文访问受限。",
+      "state": "unknown",
+      "confidence": "低",
+      "status_basis": "历史合同记录证明名称，不证明当前生产；不把合同组合目标视作田级实绩",
+      "status_url": "https://www.everycrsreport.com/files/2019-09-10_RS20871_881f4870768e444d3494ae34cef43faf8cb3614a.html"
+    }
+  ],
+  "measurements": [
+    {
+      "country": "伊朗",
+      "name": "Toos",
+      "value": "约4",
+      "unit": "百万立方米/日",
+      "metric_type": "historical_design_capacity",
+      "data_date": "2016-04-12开发方案",
+      "source": "Saipem Toos development MoU 2016",
+      "source_url": "https://www.saipem.com/en/media/press-releases/2016-04-12/saipem-signs-mou-toos-gas-field-project-iran",
+      "note": "原公告开发方案能力，非投产实绩；60十亿m³原地气量不进入产量字段。",
+      "numeric_audit": "承包商原文已核；历史开发能力，非当前实际产量"
+    },
+    {
+      "country": "埃及",
+      "name": "Nooros",
+      "value": "32",
+      "unit": "百万立方米/日",
+      "metric_type": "historical_peak",
+      "data_date": "2018-03-15公告时历史纪录",
+      "source": "Eni Nooros record-production announcement",
+      "source_url": "https://www.eni.com/en-IT/media/press-release/2018/03/eni-strengthens-record-production-from-nooros-field-offshore-egypt.html",
+      "note": "Eni原文直报纪录水平；34为后续预期，不填作实现值。不代表全年均值或2026流量。",
+      "numeric_audit": "运营商原公告直报已实现纪录；非当前实绩"
+    },
+    {
+      "country": "埃及",
+      "name": "Baltim South West",
+      "value": "100",
+      "unit": "百万标准立方英尺/日",
+      "metric_type": "actual_output",
+      "data_date": "2019-09-17首井投产初期水平",
+      "source": "Eni Baltim South West start-up announcement",
+      "source_url": "https://www.eni.com/en-IT/media/press-release/2019/09/eni-starts-production-of-baltim-south-west-field-offshore-egypt.html",
+      "note": "首井接入时整个已投产部分的初期流量；500是未来开发目标，不填作实现值。非年均或2026流量。",
+      "numeric_audit": "运营商原公告初期实绩；不移植后续目标"
+    },
+    {
+      "country": "埃及",
+      "name": "Zohr",
+      "value": ">2,700",
+      "unit": "百万标准立方英尺/日",
+      "metric_type": "actual_output",
+      "data_date": "2019-08-21公告时产量水平",
+      "source": "Eni Zohr production announcement",
+      "source_url": "https://www.eni.com/en-IT/media/press-release/2019/08/eni-zohr-gas-production-reaches-27-bcfd.html",
+      "note": "原文已超过2.7 Bcf/d，转为>2700 MMscf/d；3.2为年末潜力，不填作实产。该日期水平并非独立证明生命周期最高峰。",
+      "numeric_audit": "运营商原文下限已核；历史已达水平，非年均或当前实绩"
+    },
+    {
+      "country": "埃及",
+      "name": "Raven",
+      "value": "约600",
+      "unit": "百万标准立方英尺/日",
+      "metric_type": "actual_output",
+      "data_date": "2021-04-26初期毛产量水平",
+      "source": "Wintershall Dea Raven start-up announcement",
+      "source_url": "https://wintershalldea.de/en/newsroom/gas-production-west-nile-deltas-raven-field",
+      "note": "合作方直报约600 MMscf/d毛产量；900及凝析油30千桶/日为未来峰值预期，均未当实产。",
+      "numeric_audit": "合作方原文已核；历史毛产量水平，非权益份额或当前值"
+    },
+    {
+      "country": "以色列",
+      "name": "Leviathan",
+      "value": "约1,530",
+      "unit": "百万标准立方英尺/日",
+      "metric_type": "capacity",
+      "data_date": "2026-08-12报表批准日；2026年3月管线完工后",
+      "source": "NewMed H1 2026 consolidated interim report",
+      "source_url": "https://newmedenergy.com/wp-content/uploads/2026/08/FS330062026ACCESSIBLE.pdf",
+      "note": "PDF第56页最大生产能力约1530 MMscf/d；能力不等于日产实绩。第23页上半年售气4.57 BCM和售凝析油304千桶作为销售量单列。",
+      "numeric_audit": "原半年报产能附注已核；不得用销售量反推气田实测产量"
+    },
+    {
+      "country": "伊朗",
+      "name": "Farzad A",
+      "value": "365",
+      "unit": "十亿立方英尺/年",
+      "metric_type": "target_capacity",
+      "data_date": "2024年10月EIA历史规划表；非全年产量",
+      "source": "US EIA Iran CAB October 2024",
+      "source_url": "https://www.eia.gov/international/content/analysis/countries_long/Iran/pdf/Iran%20CAB%202024.pdf",
+      "note": "EIA PDF第10页规划能力表；原表分别365，非组合730平均拆分。保留原年能力单位，不除以365伪装日均实产；当前项目进度另待核。",
+      "numeric_audit": "政府原报告计划表已核；历史规划能力，不能证明投产或实际产量"
+    },
+    {
+      "country": "伊朗",
+      "name": "Farzad B",
+      "value": "365",
+      "unit": "十亿立方英尺/年",
+      "metric_type": "target_capacity",
+      "data_date": "2024年10月EIA历史规划表；非全年产量",
+      "source": "US EIA Iran CAB October 2024",
+      "source_url": "https://www.eia.gov/international/content/analysis/countries_long/Iran/pdf/Iran%20CAB%202024.pdf",
+      "note": "EIA PDF第10页规划能力表；原表分别365，非组合730平均拆分。保留原年能力单位，不除以365伪装日均实产；当前项目进度另待核。",
+      "numeric_audit": "政府原报告计划表已核；历史规划能力，不能证明投产或实际产量"
+    },
+    {
+      "country": "伊朗",
+      "name": "Kish",
+      "value": "1,095",
+      "unit": "十亿立方英尺/年",
+      "metric_type": "target_capacity",
+      "data_date": "2024年10月EIA历史规划表；非全年产量",
+      "source": "US EIA Iran CAB October 2024",
+      "source_url": "https://www.eia.gov/international/content/analysis/countries_long/Iran/pdf/Iran%20CAB%202024.pdf",
+      "note": "EIA PDF第10页规划能力表；三期整体；首期365，整体不套给首期。保留原年能力单位，不除以365伪装日均实产；当前项目进度另待核。",
+      "numeric_audit": "政府原报告计划表已核；历史规划能力，不能证明投产或实际产量"
+    },
+    {
+      "country": "伊朗",
+      "name": "North Pars",
+      "value": "1,460",
+      "unit": "十亿立方英尺/年",
+      "metric_type": "target_capacity",
+      "data_date": "2024年10月EIA历史规划表；非全年产量",
+      "source": "US EIA Iran CAB October 2024",
+      "source_url": "https://www.eia.gov/international/content/analysis/countries_long/Iran/pdf/Iran%20CAB%202024.pdf",
+      "note": "EIA PDF第10页规划能力表；四期整体；截至2024年中无进展。保留原年能力单位，不除以365伪装日均实产；当前项目进度另待核。",
+      "numeric_audit": "政府原报告计划表已核；历史规划能力，不能证明投产或实际产量"
+    },
+    {
+      "country": "伊朗",
+      "name": "Khartang",
+      "value": "256",
+      "unit": "十亿立方英尺/年",
+      "metric_type": "target_capacity",
+      "data_date": "2024年10月EIA历史规划表；非全年产量",
+      "source": "US EIA Iran CAB October 2024",
+      "source_url": "https://www.eia.gov/international/content/analysis/countries_long/Iran/pdf/Iran%20CAB%202024.pdf",
+      "note": "EIA PDF第10页规划能力表；原表计划最早2026，未核实现。保留原年能力单位，不除以365伪装日均实产；当前项目进度另待核。",
+      "numeric_audit": "政府原报告计划表已核；历史规划能力，不能证明投产或实际产量"
+    },
+    {
+      "country": "伊朗",
+      "name": "Gardan",
+      "value": "102",
+      "unit": "十亿立方英尺/年",
+      "metric_type": "target_capacity",
+      "data_date": "2024年10月EIA历史规划表；非全年产量",
+      "source": "US EIA Iran CAB October 2024",
+      "source_url": "https://www.eia.gov/international/content/analysis/countries_long/Iran/pdf/Iran%20CAB%202024.pdf",
+      "note": "EIA PDF第10页规划能力表；原表计划最早2029，非现时预测。保留原年能力单位，不除以365伪装日均实产；当前项目进度另待核。",
+      "numeric_audit": "政府原报告计划表已核；历史规划能力，不能证明投产或实际产量"
+    },
+    {
+      "country": "伊朗",
+      "name": "Eram",
+      "value": "365",
+      "unit": "十亿立方英尺/年",
+      "metric_type": "target_capacity",
+      "data_date": "2024年10月EIA历史规划表；非全年产量",
+      "source": "US EIA Iran CAB October 2024",
+      "source_url": "https://www.eia.gov/international/content/analysis/countries_long/Iran/pdf/Iran%20CAB%202024.pdf",
+      "note": "EIA PDF第10页规划能力表；原表计划最早2030，非现时预测。保留原年能力单位，不除以365伪装日均实产；当前项目进度另待核。",
+      "numeric_audit": "政府原报告计划表已核；历史规划能力，不能证明投产或实际产量"
+    }
+  ],
+  "coordinates": [
+    {
+      "country": "埃及",
+      "name": "Zohr",
+      "lat": 32.364,
+      "lon": 32.864,
+      "precision": "GEM exact；源公开参考点，非独立测绘",
+      "source": "GEM public location table re-read 2026-10-01",
+      "url": "https://www.gem.wiki/Zohr_Gas_Field_(Egypt)",
+      "proxy": false
+    },
+    {
+      "country": "埃及",
+      "name": "Nooros",
+      "lat": 31.709,
+      "lon": 30.985,
+      "precision": "GEM exact；源公开参考点，非独立测绘",
+      "source": "GEM public location table re-read 2026-10-01",
+      "url": "https://www.gem.wiki/Nooros_Gas_Field_(Egypt)",
+      "proxy": false
+    },
+    {
+      "country": "埃及",
+      "name": "Baltim South West",
+      "lat": 32.102,
+      "lon": 31.05,
+      "precision": "GEM exact；源公开参考点，非独立测绘",
+      "source": "GEM public location table re-read 2026-10-01",
+      "url": "https://www.gem.wiki/Baltim_South_West_Oil_and_Gas_Field_(Egypt)",
+      "proxy": false
+    },
+    {
+      "country": "土耳其",
+      "name": "Sakarya",
+      "lat": 42.7511,
+      "lon": 31.2635,
+      "precision": "GEM exact；源公开参考点，非独立测绘",
+      "source": "GEM public location table re-read 2026-10-01",
+      "url": "https://www.gem.wiki/Sakarya_Gas_Field_(T%C3%BCrkiye)",
+      "proxy": false
+    },
+    {
+      "country": "伊拉克",
+      "name": "Chemchemal",
+      "lat": 35.75,
+      "lon": 44.851,
+      "precision": "GEM exact；源公开参考点，非独立测绘",
+      "source": "GEM public location table re-read 2026-10-01",
+      "url": "https://www.gem.wiki/Chemchemal_Oil_and_Gas_Field_(Iraq)",
+      "proxy": false
+    },
+    {
+      "country": "埃及",
+      "name": "Sitra",
+      "lat": 29.75,
+      "lon": 27.85,
+      "precision": "同名开发特许区包围框中点代理；EPSG:4229原始经纬度近似，未做WGS84基准转换",
+      "source": "Egypt government concession polygon; coarse display proxy",
+      "url": "https://eug.petroleum.gov.eg/dp/jsp/new_live/InteractiveMap/devGeoJson4-5-2025.geojson",
+      "proxy": true
+    },
+    {
+      "country": "埃及",
+      "name": "East Beni Suef",
+      "lat": 29.15,
+      "lon": 30.883,
+      "precision": "同名开发特许区包围框中点代理；EPSG:4229原始经纬度近似，未做WGS84基准转换",
+      "source": "Egypt government concession polygon; coarse display proxy",
+      "url": "https://eug.petroleum.gov.eg/dp/jsp/new_live/InteractiveMap/devGeoJson4-5-2025.geojson",
+      "proxy": true
+    },
+    {
+      "country": "埃及",
+      "name": "Siwa",
+      "lat": 30.292,
+      "lon": 25.9,
+      "precision": "同名开发特许区包围框中点代理；EPSG:4229原始经纬度近似，未做WGS84基准转换",
+      "source": "Egypt government concession polygon; coarse display proxy",
+      "url": "https://eug.petroleum.gov.eg/dp/jsp/new_live/InteractiveMap/devGeoJson4-5-2025.geojson",
+      "proxy": true
+    },
+    {
+      "country": "埃及",
+      "name": "Herunefer",
+      "lat": 30.817,
+      "lon": 27.275,
+      "precision": "同名开发特许区包围框中点代理；EPSG:4229原始经纬度近似，未做WGS84基准转换",
+      "source": "Egypt government concession polygon; coarse display proxy",
+      "url": "https://eug.petroleum.gov.eg/dp/jsp/new_live/InteractiveMap/devGeoJson4-5-2025.geojson",
+      "proxy": true
+    },
+    {
+      "country": "埃及",
+      "name": "West Kalabsha",
+      "lat": 30.4,
+      "lon": 25.775,
+      "precision": "同名开发特许区包围框中点代理；EPSG:4229原始经纬度近似，未做WGS84基准转换",
+      "source": "Egypt government concession polygon; coarse display proxy",
+      "url": "https://eug.petroleum.gov.eg/dp/jsp/new_live/InteractiveMap/devGeoJson4-5-2025.geojson",
+      "proxy": true
+    },
+    {
+      "country": "伊朗",
+      "name": "Day",
+      "lat": 28.29,
+      "lon": 52.5,
+      "precision": "GEM approximate；09-30保存的同田别名参考点，非独立测绘",
+      "source": "Preserved GEM table; verified one-to-one name mapping",
+      "url": "https://www.gem.wiki/Dey_Gas_Field_(Iran)",
+      "proxy": false
+    },
+    {
+      "country": "伊拉克",
+      "name": "Mansuriya",
+      "lat": 34.109,
+      "lon": 44.978,
+      "precision": "GEM exact；09-30保存的同田别名参考点，非独立测绘",
+      "source": "Preserved GEM table; verified one-to-one name mapping",
+      "url": "https://www.gem.wiki/Mansuriyah_Oil_and_Gas_Field_(Iraq)",
+      "proxy": false
+    },
+    {
+      "country": "伊拉克",
+      "name": "Marjan (Iraq)",
+      "lat": 32.393,
+      "lon": 43.693,
+      "precision": "GEM exact；09-30保存的同田别名参考点，非独立测绘",
+      "source": "Preserved GEM table; verified one-to-one name mapping",
+      "url": "https://www.gem.wiki/Merjan_Oil_Field_(Iraq)",
+      "proxy": false
+    }
+  ],
+  "additional_measurements": [
+    {
+      "country": "以色列",
+      "name": "Leviathan",
+      "commodity": "natural_gas",
+      "value": "约4.57",
+      "unit": "十亿立方米",
+      "metric_type": "sales_volume",
+      "data_date": "2026上半年；100%气田口径",
+      "basis": "原半年报PDF第23页直报销售量；不是产量、不是NewMed权益量，未除以181天当日产量",
+      "source_url": "https://newmedenergy.com/wp-content/uploads/2026/08/FS330062026ACCESSIBLE.pdf"
+    },
+    {
+      "country": "以色列",
+      "name": "Leviathan",
+      "commodity": "condensate",
+      "value": "约304",
+      "unit": "千桶",
+      "metric_type": "sales_volume",
+      "data_date": "2026上半年；100%气田口径",
+      "basis": "原半年报PDF第23页直报销售量；不是产量、不是NewMed权益量，未除以181天当日产量",
+      "source_url": "https://newmedenergy.com/wp-content/uploads/2026/08/FS330062026ACCESSIBLE.pdf"
+    }
+  ],
+  "geometry_evidence": [
+    {
+      "asset": "Sitra",
+      "url": "https://eug.petroleum.gov.eg/dp/jsp/new_live/InteractiveMap/devGeoJson4-5-2025.geojson",
+      "crs": {
+        "type": "name",
+        "properties": {
+          "name": "urn:ogc:def:crs:EPSG::4229"
+        }
+      },
+      "source_file_sha256": "608a5c18390f7409adad8684358345a195449fa13db6875de3cc8e5bbf7022e8",
+      "feature": {
+        "type": "Feature",
+        "properties": {
+          "CONCESSION": "SITRA",
+          "CONCESSI_1": "Development",
+          "OPERATOR": "Cheiron",
+          "SHAREHOLDE": "Cheiron : 50%, Capricorn : 50%"
+        },
+        "geometry": {
+          "type": "Polygon",
+          "coordinates": [
+            [
+              [
+                28.0,
+                29.8,
+                0.0
+              ],
+              [
+                28.0,
+                29.7,
+                0.0
+              ],
+              [
+                27.7,
+                29.7,
+                0.0
+              ],
+              [
+                27.7,
+                29.8,
+                0.0
+              ],
+              [
+                28.0,
+                29.8,
+                0.0
+              ]
+            ]
+          ]
+        }
+      },
+      "method": "经纬度包围框中点，四舍五入至0.001°；只供区域代理展示，不证明单田位置或田界"
+    },
+    {
+      "asset": "East Beni Suef",
+      "url": "https://eug.petroleum.gov.eg/dp/jsp/new_live/InteractiveMap/devGeoJson4-5-2025.geojson",
+      "crs": {
+        "type": "name",
+        "properties": {
+          "name": "urn:ogc:def:crs:EPSG::4229"
+        }
+      },
+      "source_file_sha256": "608a5c18390f7409adad8684358345a195449fa13db6875de3cc8e5bbf7022e8",
+      "feature": {
+        "type": "Feature",
+        "properties": {
+          "CONCESSION": "East Beni Suef",
+          "CONCESSI_1": "Development",
+          "OPERATOR": "Apache",
+          "SHAREHOLDE": "Apache : 100%"
+        },
+        "geometry": {
+          "type": "Polygon",
+          "coordinates": [
+            [
+              [
+                30.85,
+                29.166667,
+                0.0
+              ],
+              [
+                30.916667,
+                29.166667,
+                0.0
+              ],
+              [
+                30.916667,
+                29.15,
+                0.0
+              ],
+              [
+                30.9,
+                29.15,
+                0.0
+              ],
+              [
+                30.9,
+                29.133333,
+                0.0
+              ],
+              [
+                30.866667,
+                29.133333,
+                0.0
+              ],
+              [
+                30.866667,
+                29.15,
+                0.0
+              ],
+              [
+                30.85,
+                29.15,
+                0.0
+              ],
+              [
+                30.85,
+                29.166667,
+                0.0
+              ]
+            ]
+          ]
+        }
+      },
+      "method": "经纬度包围框中点，四舍五入至0.001°；只供区域代理展示，不证明单田位置或田界"
+    },
+    {
+      "asset": "Siwa",
+      "url": "https://eug.petroleum.gov.eg/dp/jsp/new_live/InteractiveMap/devGeoJson4-5-2025.geojson",
+      "crs": {
+        "type": "name",
+        "properties": {
+          "name": "urn:ogc:def:crs:EPSG::4229"
+        }
+      },
+      "source_file_sha256": "608a5c18390f7409adad8684358345a195449fa13db6875de3cc8e5bbf7022e8",
+      "feature": {
+        "type": "Feature",
+        "properties": {
+          "CONCESSION": "Siwa",
+          "CONCESSI_1": "Development",
+          "OPERATOR": "Apache",
+          "SHAREHOLDE": "Apache : 50%, Tharwa : 50%"
+        },
+        "geometry": {
+          "type": "Polygon",
+          "coordinates": [
+            [
+              [
+                25.85,
+                30.3,
+                0.0
+              ],
+              [
+                25.95,
+                30.3,
+                0.0
+              ],
+              [
+                25.95,
+                30.283333,
+                0.0
+              ],
+              [
+                25.85,
+                30.283333,
+                0.0
+              ],
+              [
+                25.85,
+                30.3,
+                0.0
+              ]
+            ]
+          ]
+        }
+      },
+      "method": "经纬度包围框中点，四舍五入至0.001°；只供区域代理展示，不证明单田位置或田界"
+    },
+    {
+      "asset": "Herunefer",
+      "url": "https://eug.petroleum.gov.eg/dp/jsp/new_live/InteractiveMap/devGeoJson4-5-2025.geojson",
+      "crs": {
+        "type": "name",
+        "properties": {
+          "name": "urn:ogc:def:crs:EPSG::4229"
+        }
+      },
+      "source_file_sha256": "608a5c18390f7409adad8684358345a195449fa13db6875de3cc8e5bbf7022e8",
+      "feature": {
+        "type": "Feature",
+        "properties": {
+          "CONCESSION": "Herunefer",
+          "CONCESSI_1": "Development",
+          "OPERATOR": "Apache",
+          "SHAREHOLDE": "Apache : 100%"
+        },
+        "geometry": {
+          "type": "Polygon",
+          "coordinates": [
+            [
+              [
+                27.3,
+                30.833333,
+                0.0
+              ],
+              [
+                27.3,
+                30.8,
+                0.0
+              ],
+              [
+                27.25,
+                30.8,
+                0.0
+              ],
+              [
+                27.25,
+                30.833333,
+                0.0
+              ],
+              [
+                27.3,
+                30.833333,
+                0.0
+              ]
+            ]
+          ]
+        }
+      },
+      "method": "经纬度包围框中点，四舍五入至0.001°；只供区域代理展示，不证明单田位置或田界"
+    },
+    {
+      "asset": "West Kalabsha",
+      "url": "https://eug.petroleum.gov.eg/dp/jsp/new_live/InteractiveMap/devGeoJson4-5-2025.geojson",
+      "crs": {
+        "type": "name",
+        "properties": {
+          "name": "urn:ogc:def:crs:EPSG::4229"
+        }
+      },
+      "source_file_sha256": "608a5c18390f7409adad8684358345a195449fa13db6875de3cc8e5bbf7022e8",
+      "feature": {
+        "type": "Feature",
+        "properties": {
+          "CONCESSION": "W. Kalabsha",
+          "CONCESSI_1": "Development",
+          "OPERATOR": "Apache",
+          "SHAREHOLDE": "Apache : 100%"
+        },
+        "geometry": {
+          "type": "Polygon",
+          "coordinates": [
+            [
+              [
+                25.75,
+                30.416667,
+                0.0
+              ],
+              [
+                25.8,
+                30.416667,
+                0.0
+              ],
+              [
+                25.8,
+                30.383333,
+                0.0
+              ],
+              [
+                25.75,
+                30.383333,
+                0.0
+              ],
+              [
+                25.75,
+                30.416667,
+                0.0
+              ]
+            ]
+          ]
+        }
+      },
+      "method": "经纬度包围框中点，四舍五入至0.001°；只供区域代理展示，不证明单田位置或田界"
+    }
+  ],
+  "scope_revisions": [
+    {
+      "country": "阿曼",
+      "name": "Fahd South",
+      "asset_type": "油勘探项目",
+      "asset_level": "project",
+      "state": "planned",
+      "as_of": "2023-02-07勘探目标公告；2024年Q3仍在测试评价",
+      "confidence": "高",
+      "source": "Tethys Oil original prospective resources announcement",
+      "source_url": "https://www.tethysoil.com/en/prospective-resources-in-fahd-area-block-58/",
+      "note": "运营商明确Fahd South为独立prospect，与Fahd不同；2024年Q3 Kunooz-1测试未构成商业生产证据。纠正目录旧单田/历史生产分类，不填前景资源、公司总量或试井流量。"
+    }
+  ]
+}
