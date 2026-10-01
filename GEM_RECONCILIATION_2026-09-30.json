@@ -1,0 +1,3420 @@
+[
+  {
+    "country": "卡塔尔",
+    "name": "Qatargas 2",
+    "url": "https://www.gem.wiki/Qatargas_2_Gas_Field_(Qatar)",
+    "catalog_name_confirmed": true,
+    "coordinates": {
+      "lat": 26.3028,
+      "lon": 51.9223,
+      "accuracy": "exact"
+    },
+    "lookup": "page",
+    "catalog_note": "",
+    "checked_at": "2026-09-30 UTC"
+  },
+  {
+    "country": "卡塔尔",
+    "name": "Dolphin",
+    "url": "https://www.gem.wiki/Dolphin_Oil_and_Gas_Field_(Qatar)",
+    "catalog_name_confirmed": true,
+    "coordinates": {
+      "lat": 26.1938,
+      "lon": 52.0041,
+      "accuracy": "exact"
+    },
+    "lookup": "page",
+    "catalog_note": "",
+    "checked_at": "2026-09-30 UTC"
+  },
+  {
+    "country": "埃及",
+    "name": "Morgan",
+    "url": "https://www.gem.wiki/Morgan_Oil_and_Gas_Field_(Egypt)",
+    "catalog_name_confirmed": true,
+    "coordinates": {
+      "lat": 28.214,
+      "lon": 33.447,
+      "accuracy": "exact"
+    },
+    "lookup": "page",
+    "catalog_note": "",
+    "checked_at": "2026-09-30 UTC"
+  },
+  {
+    "country": "伊朗",
+    "name": "Kangan",
+    "url": "https://www.gem.wiki/Kangan_Gas_Field_(Iran)",
+    "catalog_name_confirmed": true,
+    "coordinates": {
+      "lat": 27.9656,
+      "lon": 52.0119,
+      "accuracy": "exact"
+    },
+    "lookup": "page",
+    "catalog_note": "",
+    "checked_at": "2026-09-30 UTC"
+  },
+  {
+    "country": "卡塔尔",
+    "name": "Al-Khaleej Gas Project 2 Gas Phase",
+    "url": "https://www.gem.wiki/Al-Khaleej_Gas_Project_2_Gas_Phase_(Qatar)",
+    "catalog_name_confirmed": true,
+    "coordinates": {
+      "lat": 26.5712,
+      "lon": 51.8521,
+      "accuracy": "approximate"
+    },
+    "lookup": "page",
+    "catalog_note": "",
+    "checked_at": "2026-09-30 UTC"
+  },
+  {
+    "country": "卡塔尔",
+    "name": "Qatargas 4",
+    "url": "https://www.gem.wiki/Qatargas_4_Gas_Field_(Qatar)",
+    "catalog_name_confirmed": true,
+    "coordinates": {
+      "lat": 26.5712,
+      "lon": 51.8521,
+      "accuracy": "approximate"
+    },
+    "lookup": "page",
+    "catalog_note": "",
+    "checked_at": "2026-09-30 UTC"
+  },
+  {
+    "country": "卡塔尔",
+    "name": "Qatargas 3",
+    "url": "https://www.gem.wiki/Qatargas_3_Gas_Field_(Qatar)",
+    "catalog_name_confirmed": true,
+    "coordinates": {
+      "lat": 26.5712,
+      "lon": 51.8521,
+      "accuracy": "approximate"
+    },
+    "lookup": "page",
+    "catalog_note": "",
+    "checked_at": "2026-09-30 UTC"
+  },
+  {
+    "country": "伊朗",
+    "name": "Tabnak",
+    "url": "https://www.gem.wiki/Tabnak_Oil_and_Gas_Field_(Iran)",
+    "catalog_name_confirmed": true,
+    "coordinates": {
+      "lat": 27.3044,
+      "lon": 53.0917,
+      "accuracy": "exact"
+    },
+    "lookup": "page",
+    "catalog_note": "",
+    "checked_at": "2026-09-30 UTC"
+  },
+  {
+    "country": "埃及",
+    "name": "Rosetta",
+    "url": "https://www.gem.wiki/Rosetta_Oil_and_Gas_Field_(Egypt)",
+    "catalog_name_confirmed": true,
+    "coordinates": {
+      "lat": 32.2485,
+      "lon": 30.5914,
+      "accuracy": "approximate"
+    },
+    "lookup": "page",
+    "catalog_note": "",
+    "checked_at": "2026-09-30 UTC"
+  },
+  {
+    "country": "卡塔尔",
+    "name": "RasGas Alpha",
+    "url": "https://www.gem.wiki/RasGas_Alpha_Oil_and_Gas_Field_(Qatar)",
+    "catalog_name_confirmed": true,
+    "coordinates": {
+      "lat": 26.5712,
+      "lon": 51.8521,
+      "accuracy": "approximate"
+    },
+    "lookup": "page",
+    "catalog_note": "",
+    "checked_at": "2026-09-30 UTC"
+  },
+  {
+    "country": "伊朗",
+    "name": "Aghar",
+    "url": "https://www.gem.wiki/Aghar_Gas_Field_(Iran)",
+    "catalog_name_confirmed": true,
+    "coordinates": {
+      "lat": 28.5949,
+      "lon": 52.7953,
+      "accuracy": "exact"
+    },
+    "lookup": "page",
+    "catalog_note": "",
+    "checked_at": "2026-09-30 UTC"
+  },
+  {
+    "country": "巴林",
+    "name": "Khuff",
+    "url": "https://www.gem.wiki/Khuff_Gas_Field_(Bahrain)",
+    "catalog_name_confirmed": true,
+    "coordinates": {
+      "lat": 26.038,
+      "lon": 50.539,
+      "accuracy": "exact"
+    },
+    "lookup": "page",
+    "catalog_note": "",
+    "checked_at": "2026-09-30 UTC"
+  },
+  {
+    "country": "埃及",
+    "name": "Ramadan",
+    "url": "https://www.gem.wiki/Ramadan_Oil_and_Gas_Field_(Egypt)",
+    "catalog_name_confirmed": true,
+    "coordinates": {
+      "lat": 28.588,
+      "lon": 33.167,
+      "accuracy": "exact"
+    },
+    "lookup": "page",
+    "catalog_note": "",
+    "checked_at": "2026-09-30 UTC"
+  },
+  {
+    "country": "埃及",
+    "name": "Taurus and Libra",
+    "url": "https://www.gem.wiki/Taurus_and_Libra_Oil_and_Gas_Field_(Egypt)",
+    "catalog_name_confirmed": true,
+    "coordinates": null,
+    "lookup": "page",
+    "catalog_note": "",
+    "checked_at": "2026-09-30 UTC"
+  },
+  {
+    "country": "埃及",
+    "name": "Qasr",
+    "url": "https://www.gem.wiki/Qasr_Oil_and_Gas_Field_(Egypt)",
+    "catalog_name_confirmed": true,
+    "coordinates": {
+      "lat": 30.5667,
+      "lon": 26.6,
+      "accuracy": "exact"
+    },
+    "lookup": "page",
+    "catalog_note": "",
+    "checked_at": "2026-09-30 UTC"
+  },
+  {
+    "country": "阿曼",
+    "name": "Safah/Wadi Latham",
+    "url": "https://www.gem.wiki/Safah/Wadi_Latham_Oil_and_Gas_Field_(Oman)",
+    "catalog_name_confirmed": true,
+    "coordinates": {
+      "lat": 23.1614,
+      "lon": 55.4485,
+      "accuracy": "approximate"
+    },
+    "lookup": "page",
+    "catalog_note": "",
+    "checked_at": "2026-09-30 UTC"
+  },
+  {
+    "country": "伊朗",
+    "name": "Khangiran",
+    "url": "https://www.gem.wiki/Khangiran_Gas_Field_(Iran)",
+    "catalog_name_confirmed": true,
+    "coordinates": {
+      "lat": 36.5667,
+      "lon": 60.7667,
+      "accuracy": "exact"
+    },
+    "lookup": "page",
+    "catalog_note": "",
+    "checked_at": "2026-09-30 UTC"
+  },
+  {
+    "country": "阿曼",
+    "name": "Ghazeer (Khazzan Phase 2)",
+    "url": "https://www.gem.wiki/Ghazeer_(Khazzan_Phase_2)_Oil_and_Gas_Field_(Oman)",
+    "catalog_name_confirmed": true,
+    "coordinates": {
+      "lat": 21.705,
+      "lon": 56.4643,
+      "accuracy": "approximate"
+    },
+    "lookup": "page",
+    "catalog_note": "",
+    "checked_at": "2026-09-30 UTC"
+  },
+  {
+    "country": "阿曼",
+    "name": "Mabrouk Northeast",
+    "url": "https://www.gem.wiki/Mabrouk_Northeast_Oil_and_Gas_Field_(Oman)",
+    "catalog_name_confirmed": true,
+    "coordinates": {
+      "lat": 20.3293,
+      "lon": 56.0697,
+      "accuracy": "approximate"
+    },
+    "lookup": "page",
+    "catalog_note": "",
+    "checked_at": "2026-09-30 UTC"
+  },
+  {
+    "country": "阿曼",
+    "name": "Bahja (North and South)",
+    "url": "https://www.gem.wiki/Bahja_(North_and_South)_Oil_and_Gas_Field_(Oman)",
+    "catalog_name_confirmed": true,
+    "coordinates": {
+      "lat": 19.9236,
+      "lon": 56.1126,
+      "accuracy": "exact"
+    },
+    "lookup": "page",
+    "catalog_note": "",
+    "checked_at": "2026-09-30 UTC"
+  },
+  {
+    "country": "埃及",
+    "name": "October",
+    "url": "https://www.gem.wiki/October_Oil_and_Gas_Field_(Egypt)",
+    "catalog_name_confirmed": true,
+    "coordinates": {
+      "lat": 28.816,
+      "lon": 33.06,
+      "accuracy": "exact"
+    },
+    "lookup": "page",
+    "catalog_note": "",
+    "checked_at": "2026-09-30 UTC"
+  },
+  {
+    "country": "伊朗",
+    "name": "Homa",
+    "url": "https://www.gem.wiki/Homa_Gas_Field_(Iran)",
+    "catalog_name_confirmed": true,
+    "coordinates": {
+      "lat": 27.8533,
+      "lon": 52.8006,
+      "accuracy": "exact"
+    },
+    "lookup": "page",
+    "catalog_note": "",
+    "checked_at": "2026-09-30 UTC"
+  },
+  {
+    "country": "伊朗",
+    "name": "Ramshir",
+    "url": "https://www.gem.wiki/Ramshir_Oil_Field_(Iran)",
+    "catalog_name_confirmed": true,
+    "coordinates": {
+      "lat": 30.6993,
+      "lon": 49.5373,
+      "accuracy": "exact"
+    },
+    "lookup": "page",
+    "catalog_note": "Ramshir Oil Field is an operating oil field in Iran.\nThis page was last edited on 29 September 2026, at 19:05.",
+    "checked_at": "2026-09-30 UTC"
+  },
+  {
+    "country": "伊朗",
+    "name": "Shadegan",
+    "url": "https://www.gem.wiki/Shadegan_Oil_Field_(Iran)",
+    "catalog_name_confirmed": true,
+    "coordinates": {
+      "lat": 30.9062,
+      "lon": 49.2515,
+      "accuracy": "exact"
+    },
+    "lookup": "page",
+    "catalog_note": "",
+    "checked_at": "2026-09-30 UTC"
+  },
+  {
+    "country": "卡塔尔",
+    "name": "Al-Khaleej Gas Project 1 Gas Phase",
+    "url": "https://www.gem.wiki/Al-Khaleej_Gas_Project_1_Gas_Phase_(Qatar)",
+    "catalog_name_confirmed": true,
+    "coordinates": {
+      "lat": 26.5712,
+      "lon": 51.8521,
+      "accuracy": "approximate"
+    },
+    "lookup": "page",
+    "catalog_note": "",
+    "checked_at": "2026-09-30 UTC"
+  },
+  {
+    "country": "卡塔尔",
+    "name": "Idd El Shargi North Dome (ISND)",
+    "url": "https://www.gem.wiki/Idd_El_Shargi_North_Dome_(ISND)_Oil_and_Gas_Field_(Qatar)",
+    "catalog_name_confirmed": true,
+    "coordinates": {
+      "lat": 25.4679,
+      "lon": 52.3739,
+      "accuracy": "exact"
+    },
+    "lookup": "page",
+    "catalog_note": "",
+    "checked_at": "2026-09-30 UTC"
+  },
+  {
+    "country": "伊朗",
+    "name": "Varavi",
+    "url": "https://www.gem.wiki/Varavi_Gas_Field_(Iran)",
+    "catalog_name_confirmed": true,
+    "coordinates": {
+      "lat": 27.5111,
+      "lon": 53.0494,
+      "accuracy": "exact"
+    },
+    "lookup": "page",
+    "catalog_note": "",
+    "checked_at": "2026-09-30 UTC"
+  },
+  {
+    "country": "埃及",
+    "name": "Abu El Gharadig",
+    "url": "https://www.gem.wiki/Abu_El_Gharadig_Oil_and_Gas_Field_(Egypt)",
+    "catalog_name_confirmed": true,
+    "coordinates": {
+      "lat": 29.6723,
+      "lon": 28.5337,
+      "accuracy": "exact"
+    },
+    "lookup": "page",
+    "catalog_note": "",
+    "checked_at": "2026-09-30 UTC"
+  },
+  {
+    "country": "伊拉克",
+    "name": "Safwan",
+    "url": "https://www.gem.wiki/Safwan_Oil_Field_(Iraq)",
+    "catalog_name_confirmed": true,
+    "coordinates": {
+      "lat": 30.124,
+      "lon": 47.7264,
+      "accuracy": "approximate"
+    },
+    "lookup": "page",
+    "catalog_note": "",
+    "checked_at": "2026-09-30 UTC"
+  },
+  {
+    "country": "埃及",
+    "name": "Atoll",
+    "url": "https://www.gem.wiki/Atoll_Oil_and_Gas_Field_(Egypt)",
+    "catalog_name_confirmed": true,
+    "coordinates": {
+      "lat": 32.2257,
+      "lon": 31.8863,
+      "accuracy": "exact"
+    },
+    "lookup": "page",
+    "catalog_note": "",
+    "checked_at": "2026-09-30 UTC"
+  },
+  {
+    "country": "阿曼",
+    "name": "Kauther/Fakhr",
+    "url": "https://www.gem.wiki/Kauther/Fakhr_Oil_and_Gas_Field_(Oman)",
+    "catalog_name_confirmed": true,
+    "coordinates": {
+      "lat": 21.986,
+      "lon": 57.3599,
+      "accuracy": "approximate"
+    },
+    "lookup": "page",
+    "catalog_note": "",
+    "checked_at": "2026-09-30 UTC"
+  },
+  {
+    "country": "伊朗",
+    "name": "Abteymour",
+    "url": "https://www.gem.wiki/Abteymour_Oil_Field_(Iran)",
+    "catalog_name_confirmed": true,
+    "coordinates": {
+      "lat": 31.1738,
+      "lon": 48.5263,
+      "accuracy": "exact"
+    },
+    "lookup": "page",
+    "catalog_note": "Abteymour Oil Field is an operating oil field in Iran.\nAbteymour Oil Field is also sometimes referred to as Ab-E-Teimur, Ab-Teymour.\nThis page was last edited on 30 September 2026, at 03:10.",
+    "checked_at": "2026-09-30 UTC"
+  },
+  {
+    "country": "沙特阿拉伯",
+    "name": "South Ghawar",
+    "url": "https://www.gem.wiki/South_Ghawar_Gas_Field_(Saudi_Arabia)",
+    "catalog_name_confirmed": true,
+    "coordinates": {
+      "lat": 23.1897,
+      "lon": 48.5299,
+      "accuracy": "approximate"
+    },
+    "lookup": "page",
+    "catalog_note": "",
+    "checked_at": "2026-09-30 UTC"
+  },
+  {
+    "country": "伊朗",
+    "name": "Balal",
+    "url": "https://www.gem.wiki/Balal_Oil_and_Gas_Field_(Iran)",
+    "catalog_name_confirmed": true,
+    "coordinates": {
+      "lat": 26.3028,
+      "lon": 52.5359,
+      "accuracy": "exact"
+    },
+    "lookup": "page",
+    "catalog_note": "",
+    "checked_at": "2026-09-30 UTC"
+  },
+  {
+    "country": "伊朗",
+    "name": "Lab-E-Safid",
+    "url": "https://www.gem.wiki/Lab-E-Safid_Oil_Field_(Iran)",
+    "catalog_name_confirmed": true,
+    "coordinates": {
+      "lat": 32.6787,
+      "lon": 48.7195,
+      "accuracy": "exact"
+    },
+    "lookup": "page",
+    "catalog_note": "Lab-E-Safid Oil Field is an operating oil field in Iran.\nThis page was last edited on 29 September 2026, at 20:22.",
+    "checked_at": "2026-09-30 UTC"
+  },
+  {
+    "country": "埃及",
+    "name": "Burullus",
+    "url": "https://www.gem.wiki/Burullus_Gas_Field_(Egypt)",
+    "catalog_name_confirmed": true,
+    "coordinates": {
+      "lat": 31.4652,
+      "lon": 30.2598,
+      "accuracy": "approximate"
+    },
+    "lookup": "page",
+    "catalog_note": "",
+    "checked_at": "2026-09-30 UTC"
+  },
+  {
+    "country": "埃及",
+    "name": "Belayim Land",
+    "url": "https://www.gem.wiki/Belayim_Land_Oil_and_Gas_Field_(Egypt)",
+    "catalog_name_confirmed": true,
+    "coordinates": {
+      "lat": 28.634,
+      "lon": 33.256,
+      "accuracy": "exact"
+    },
+    "lookup": "page",
+    "catalog_note": "",
+    "checked_at": "2026-09-30 UTC"
+  },
+  {
+    "country": "科威特",
+    "name": "Ratqa/Lower Fars",
+    "url": "https://www.gem.wiki/Ratqa/Lower_Fars_Oil_Field_(Kuwait)",
+    "catalog_name_confirmed": true,
+    "coordinates": {
+      "lat": 29.8895,
+      "lon": 47.4224,
+      "accuracy": "exact"
+    },
+    "lookup": "page",
+    "catalog_note": "",
+    "checked_at": "2026-09-30 UTC"
+  },
+  {
+    "country": "土耳其",
+    "name": "Sehit Esma Cevik",
+    "url": "https://www.gem.wiki/Sehit_Esma_Cevik_Oil_Field_(Türkiye)",
+    "catalog_name_confirmed": true,
+    "coordinates": {
+      "lat": 37.4375,
+      "lon": 42.129,
+      "accuracy": "exact"
+    },
+    "lookup": "page",
+    "catalog_note": "",
+    "checked_at": "2026-09-30 UTC"
+  },
+  {
+    "country": "伊朗",
+    "name": "Tang-E-Bijar",
+    "url": "https://www.gem.wiki/Tang-E-Bijar_Gas_Field_(Iran)",
+    "catalog_name_confirmed": true,
+    "coordinates": {
+      "lat": 33.6402,
+      "lon": 45.9723,
+      "accuracy": "exact"
+    },
+    "lookup": "page",
+    "catalog_note": "",
+    "checked_at": "2026-09-30 UTC"
+  },
+  {
+    "country": "沙特阿拉伯",
+    "name": "North Arabia",
+    "url": "https://www.gem.wiki/North_Arabia_Gas_Field_(Saudi_Arabia)",
+    "catalog_name_confirmed": true,
+    "coordinates": {
+      "lat": 30.7872,
+      "lon": 41.095,
+      "accuracy": "approximate"
+    },
+    "lookup": "page",
+    "catalog_note": "",
+    "checked_at": "2026-09-30 UTC"
+  },
+  {
+    "country": "伊朗",
+    "name": "Sirri C",
+    "url": "https://www.gem.wiki/Sirri_C_Oil_Field_(Iran)",
+    "catalog_name_confirmed": true,
+    "coordinates": {
+      "lat": 25.7463,
+      "lon": 54.2086,
+      "accuracy": "exact"
+    },
+    "lookup": "page",
+    "catalog_note": "",
+    "checked_at": "2026-09-30 UTC"
+  },
+  {
+    "country": "伊朗",
+    "name": "Qaleh Nar",
+    "url": "https://www.gem.wiki/Qaleh_Nar_Oil_and_Gas_Field_(Iran)",
+    "catalog_name_confirmed": true,
+    "coordinates": {
+      "lat": 32.7076,
+      "lon": 48.3675,
+      "accuracy": "exact"
+    },
+    "lookup": "search_excerpt",
+    "catalog_note": "Qaleh Nar Oil and Gas Field is an operating oil and gas field in Iran.\nQaleh Nar Oil and Gas Field is also sometimes referred to as Ghaleh Nar.",
+    "checked_at": "2026-09-30 UTC"
+  },
+  {
+    "country": "阿曼",
+    "name": "Farha South",
+    "url": "https://www.gem.wiki/Farha_South_Oil_Field_(Oman)",
+    "catalog_name_confirmed": true,
+    "coordinates": {
+      "lat": 21.5511,
+      "lon": 58.0304,
+      "accuracy": "approximate"
+    },
+    "lookup": "page",
+    "catalog_note": "",
+    "checked_at": "2026-09-30 UTC"
+  },
+  {
+    "country": "埃及",
+    "name": "Al Karam",
+    "url": "https://www.gem.wiki/Al_Karam_Oil_and_Gas_Field_(Egypt)",
+    "catalog_name_confirmed": true,
+    "coordinates": {
+      "lat": 29.7724,
+      "lon": 28.1791,
+      "accuracy": "exact"
+    },
+    "lookup": "page",
+    "catalog_note": "",
+    "checked_at": "2026-09-30 UTC"
+  },
+  {
+    "country": "埃及",
+    "name": "Karama",
+    "url": "https://www.gem.wiki/Karama_Oil_Field_(Egypt)",
+    "catalog_name_confirmed": true,
+    "coordinates": {
+      "lat": 29.5365,
+      "lon": 29.4821,
+      "accuracy": "exact"
+    },
+    "lookup": "page",
+    "catalog_note": "",
+    "checked_at": "2026-09-30 UTC"
+  },
+  {
+    "country": "叙利亚",
+    "name": "Khurbet East",
+    "url": "https://www.gem.wiki/Khurbet_East_Oil_Field_(Syria)",
+    "catalog_name_confirmed": true,
+    "coordinates": {
+      "lat": 36.9204,
+      "lon": 41.8825,
+      "accuracy": "exact"
+    },
+    "lookup": "page",
+    "catalog_note": "",
+    "checked_at": "2026-09-30 UTC"
+  },
+  {
+    "country": "埃及",
+    "name": "Abu Qir",
+    "url": "https://www.gem.wiki/Abu_Qir_Gas_Field_(Egypt)",
+    "catalog_name_confirmed": true,
+    "coordinates": null,
+    "lookup": "page",
+    "catalog_note": "",
+    "checked_at": "2026-09-30 UTC"
+  },
+  {
+    "country": "伊朗",
+    "name": "Reshadat",
+    "url": "https://www.gem.wiki/Reshadat_Oil_Field_(Iran)",
+    "catalog_name_confirmed": true,
+    "coordinates": {
+      "lat": 26,
+      "lon": 53,
+      "accuracy": "exact"
+    },
+    "lookup": "page",
+    "catalog_note": "",
+    "checked_at": "2026-09-30 UTC"
+  },
+  {
+    "country": "埃及",
+    "name": "Bashrush",
+    "url": "https://www.gem.wiki/Bashrush_Gas_Field_(Egypt)",
+    "catalog_name_confirmed": true,
+    "coordinates": {
+      "lat": 31.7596,
+      "lon": 31.1505,
+      "accuracy": "approximate"
+    },
+    "lookup": "page",
+    "catalog_note": "Bashrush Gas Field (بشروش) is an operating gas field in Egypt.\nBashrush Gas Field is also sometimes referred to as North El Hammad.\nThis page was last edited on 29 September 2026, at 18:51.",
+    "checked_at": "2026-09-30 UTC"
+  },
+  {
+    "country": "伊朗",
+    "name": "Zeloi",
+    "url": "https://www.gem.wiki/Zeloi_Oil_and_Gas_Field_(Iran)",
+    "catalog_name_confirmed": true,
+    "coordinates": {
+      "lat": 32.1379,
+      "lon": 49.0424,
+      "accuracy": "exact"
+    },
+    "lookup": "page",
+    "catalog_note": "Zeloi Oil and Gas Field is an operating oil and gas field in Iran.\nThis page was last edited on 2 March 2026, at 17:41.",
+    "checked_at": "2026-09-30 UTC"
+  },
+  {
+    "country": "伊朗",
+    "name": "Dey",
+    "url": "https://www.gem.wiki/Dey_Gas_Field_(Iran)",
+    "catalog_name_confirmed": true,
+    "coordinates": {
+      "lat": 28.29,
+      "lon": 52.5,
+      "accuracy": "approximate"
+    },
+    "lookup": "search_excerpt",
+    "catalog_note": "Dey Gas Field is an operating gas field in Iran.\nDey Gas Field is also sometimes referred to as Day.",
+    "checked_at": "2026-09-30 UTC"
+  },
+  {
+    "country": "埃及",
+    "name": "Obaiyed",
+    "url": "https://www.gem.wiki/Obaiyed_Oil_and_Gas_Field_(Egypt)",
+    "catalog_name_confirmed": true,
+    "coordinates": {
+      "lat": 31.249,
+      "lon": 26.568,
+      "accuracy": "exact"
+    },
+    "lookup": "search_excerpt",
+    "catalog_note": "Obaiyed Oil and Gas Field is an operating oil and gas field in Egypt.\nObaiyed Oil and Gas Field is also sometimes referred to as Obayied.",
+    "checked_at": "2026-09-30 UTC"
+  },
+  {
+    "country": "沙特阿拉伯",
+    "name": "Midyan",
+    "url": "https://www.gem.wiki/Midyan_Oil_and_Gas_Field_(Saudi_Arabia)",
+    "catalog_name_confirmed": true,
+    "coordinates": {
+      "lat": 28.1693,
+      "lon": 34.8673,
+      "accuracy": "exact"
+    },
+    "lookup": "page",
+    "catalog_note": "Midyan Oil and Gas Field (مدين) is an operating oil and gas field in Saudi Arabia.\nThis page was last edited on 30 September 2026, at 03:04.",
+    "checked_at": "2026-09-30 UTC"
+  },
+  {
+    "country": "阿联酋",
+    "name": "Nosrat",
+    "url": "https://www.gem.wiki/Nosrat_Oil_Field_(United_Arab_Emirates,_Iran)",
+    "catalog_name_confirmed": true,
+    "coordinates": {
+      "lat": 25.7087,
+      "lon": 54.4871,
+      "accuracy": "approximate"
+    },
+    "lookup": "search_excerpt",
+    "catalog_note": "Nosrat Oil Field is an operating oil field in United Arab Emirates.\nNosrat Oil Field is a part of the Nusrat-Farzam Project.",
+    "checked_at": "2026-09-30 UTC"
+  },
+  {
+    "country": "伊朗",
+    "name": "Resalat",
+    "url": "https://www.gem.wiki/Resalat_Oil_Field_(Iran)",
+    "catalog_name_confirmed": true,
+    "coordinates": null,
+    "lookup": "page",
+    "catalog_note": "Resalat Oil Field is also sometimes referred to as Rakhsh.",
+    "checked_at": "2026-09-30 UTC"
+  },
+  {
+    "country": "伊朗",
+    "name": "Binak",
+    "url": "https://www.gem.wiki/Binak_Oil_and_Gas_Field_(Iran)",
+    "catalog_name_confirmed": true,
+    "coordinates": {
+      "lat": 29.7618,
+      "lon": 50.3789,
+      "accuracy": "exact"
+    },
+    "lookup": "page",
+    "catalog_note": "This page was last edited on 29 September 2026, at 10:54.",
+    "checked_at": "2026-09-30 UTC"
+  },
+  {
+    "country": "伊朗",
+    "name": "Sarvestan",
+    "url": "https://www.gem.wiki/Sarvestan_Oil_and_Gas_Field_(Iran)",
+    "catalog_name_confirmed": true,
+    "coordinates": {
+      "lat": 29.128,
+      "lon": 53.224,
+      "accuracy": "exact"
+    },
+    "lookup": "page",
+    "catalog_note": "",
+    "checked_at": "2026-09-30 UTC"
+  },
+  {
+    "country": "伊朗",
+    "name": "Gulkhari",
+    "url": "https://www.gem.wiki/Gulkhari_Oil_Field_(Iran)",
+    "catalog_name_confirmed": true,
+    "coordinates": {
+      "lat": 29.6905,
+      "lon": 50.7468,
+      "accuracy": "exact"
+    },
+    "lookup": "page",
+    "catalog_note": "Gulkhari Oil Field is an operating oil field in Iran.\nGulkhari Oil Field is also sometimes referred to as Golkhari.\nThis page was last edited on 29 September 2026, at 19:05.",
+    "checked_at": "2026-09-30 UTC"
+  },
+  {
+    "country": "伊朗",
+    "name": "Saadat Abad",
+    "url": "https://www.gem.wiki/Saadat_Abad_Oil_Field_(Iran)",
+    "catalog_name_confirmed": true,
+    "coordinates": {
+      "lat": 29.2666,
+      "lon": 53.1235,
+      "accuracy": "exact"
+    },
+    "lookup": "page",
+    "catalog_note": "Saadat Abad Oil Field is an operating oil field in Iran.\nThis page was last edited on 29 September 2026, at 19:05.",
+    "checked_at": "2026-09-30 UTC"
+  },
+  {
+    "country": "埃及",
+    "name": "Bed-3",
+    "url": "https://www.gem.wiki/Bed-3_Oil_and_Gas_Field_(Egypt)",
+    "catalog_name_confirmed": true,
+    "coordinates": {
+      "lat": 29.76,
+      "lon": 27.878,
+      "accuracy": "exact"
+    },
+    "lookup": "search_excerpt",
+    "catalog_note": "Bed-3 Oil and Gas Field is an operating oil and gas field in Egypt.\nAlong with Bed-1 Oil and Gas Concession (Egypt) and Bed-2 Oil and Gas Field (Egypt), Bed-3 Oil and Gas Field is a part of the Badr El Din Project.\nBed-3 Oil and Gas Field is also sometimes referred to as Badr El Din 3.",
+    "checked_at": "2026-09-30 UTC"
+  },
+  {
+    "country": "阿曼",
+    "name": "Hawqa",
+    "url": "https://www.gem.wiki/Hawqa_Oil_and_Gas_Field_(Oman)",
+    "catalog_name_confirmed": true,
+    "coordinates": {
+      "lat": 20.1953,
+      "lon": 55.7296,
+      "accuracy": "exact"
+    },
+    "lookup": "page",
+    "catalog_note": "",
+    "checked_at": "2026-09-30 UTC"
+  },
+  {
+    "country": "埃及",
+    "name": "Temsah",
+    "url": "https://www.gem.wiki/Temsah_Oil_and_Gas_Field_(Egypt)",
+    "catalog_name_confirmed": true,
+    "coordinates": {
+      "lat": 31.618,
+      "lon": 32.382,
+      "accuracy": "exact"
+    },
+    "lookup": "page",
+    "catalog_note": "",
+    "checked_at": "2026-09-30 UTC"
+  },
+  {
+    "country": "科威特",
+    "name": "Dharif",
+    "url": "https://www.gem.wiki/Dharif_Oil_Field_(Kuwait)",
+    "catalog_name_confirmed": true,
+    "coordinates": {
+      "lat": 29.206,
+      "lon": 47.7624,
+      "accuracy": "exact"
+    },
+    "lookup": "page",
+    "catalog_note": "Dharif Oil Field is an operating oil field in Kuwait.\nThis page was last edited on 2 March 2026, at 17:13.",
+    "checked_at": "2026-09-30 UTC"
+  },
+  {
+    "country": "埃及",
+    "name": "Sitra",
+    "url": "https://www.gem.wiki/Sitra_Oil_and_Gas_Field_(Egypt)",
+    "catalog_name_confirmed": false,
+    "coordinates": null,
+    "lookup": "page",
+    "catalog_note": "",
+    "checked_at": "2026-09-30 UTC"
+  },
+  {
+    "country": "伊拉克",
+    "name": "Simrit",
+    "url": "https://www.gem.wiki/Simrit_Oil_and_Gas_Field_(Iraq)",
+    "catalog_name_confirmed": true,
+    "coordinates": {
+      "lat": 36.6987,
+      "lon": 43.3396,
+      "accuracy": "approximate"
+    },
+    "lookup": "page",
+    "catalog_note": "",
+    "checked_at": "2026-09-30 UTC"
+  },
+  {
+    "country": "埃及",
+    "name": "Ha'py",
+    "url": "https://www.gem.wiki/Ha'py_Oil_and_Gas_Field_(Egypt)",
+    "catalog_name_confirmed": true,
+    "coordinates": {
+      "lat": 31.575,
+      "lon": 31.997,
+      "accuracy": "exact"
+    },
+    "lookup": "page",
+    "catalog_note": "",
+    "checked_at": "2026-09-30 UTC"
+  },
+  {
+    "country": "叙利亚",
+    "name": "Gbeibe",
+    "url": "https://www.gem.wiki/Gbeibe_Oil_Field_(Syria)",
+    "catalog_name_confirmed": true,
+    "coordinates": {
+      "lat": 36.1228,
+      "lon": 41.0452,
+      "accuracy": "exact"
+    },
+    "lookup": "page",
+    "catalog_note": "",
+    "checked_at": "2026-09-30 UTC"
+  },
+  {
+    "country": "埃及",
+    "name": "Ras Fanar",
+    "url": "https://www.gem.wiki/Ras_Fanar_Oil_and_Gas_Field_(Egypt)",
+    "catalog_name_confirmed": true,
+    "coordinates": {
+      "lat": 28.4065,
+      "lon": 33.0801,
+      "accuracy": "exact"
+    },
+    "lookup": "page",
+    "catalog_note": "",
+    "checked_at": "2026-09-30 UTC"
+  },
+  {
+    "country": "埃及",
+    "name": "South West Melehia",
+    "url": "https://www.gem.wiki/South_West_Melehia_Oil_Field_(Egypt)",
+    "catalog_name_confirmed": true,
+    "coordinates": {
+      "lat": 30.4327,
+      "lon": 27.2188,
+      "accuracy": "approximate"
+    },
+    "lookup": "page",
+    "catalog_note": "",
+    "checked_at": "2026-09-30 UTC"
+  },
+  {
+    "country": "伊朗",
+    "name": "Sarkhun",
+    "url": "https://www.gem.wiki/Sarkhun_Gas_Field_(Iran)",
+    "catalog_name_confirmed": true,
+    "coordinates": {
+      "lat": 27.3326,
+      "lon": 56.3947,
+      "accuracy": "exact"
+    },
+    "lookup": "page",
+    "catalog_note": "",
+    "checked_at": "2026-09-30 UTC"
+  },
+  {
+    "country": "阿曼",
+    "name": "Tayseer",
+    "url": "https://www.gem.wiki/Tayseer_Oil_and_Gas_Field_(Oman)",
+    "catalog_name_confirmed": true,
+    "coordinates": {
+      "lat": 20.3293,
+      "lon": 56.0697,
+      "accuracy": "approximate"
+    },
+    "lookup": "page",
+    "catalog_note": "",
+    "checked_at": "2026-09-30 UTC"
+  },
+  {
+    "country": "土耳其",
+    "name": "Sehit Aybuke Yalcin",
+    "url": "https://www.gem.wiki/Sehit_Aybuke_Yalcin_Oil_Field_(Türkiye)",
+    "catalog_name_confirmed": true,
+    "coordinates": {
+      "lat": 37.5152,
+      "lon": 42.1668,
+      "accuracy": "exact"
+    },
+    "lookup": "page",
+    "catalog_note": "",
+    "checked_at": "2026-09-30 UTC"
+  },
+  {
+    "country": "伊朗",
+    "name": "Khesht",
+    "url": "https://www.gem.wiki/Khesht_Oil_Field_(Iran)",
+    "catalog_name_confirmed": true,
+    "coordinates": {
+      "lat": 29.4327,
+      "lon": 51.4879,
+      "accuracy": "exact"
+    },
+    "lookup": "page",
+    "catalog_note": "",
+    "checked_at": "2026-09-30 UTC"
+  },
+  {
+    "country": "伊朗",
+    "name": "Chillingar",
+    "url": "https://www.gem.wiki/Chillingar_Oil_Field_(Iran)",
+    "catalog_name_confirmed": true,
+    "coordinates": {
+      "lat": 30.0256,
+      "lon": 50.9532,
+      "accuracy": "exact"
+    },
+    "lookup": "page",
+    "catalog_note": "",
+    "checked_at": "2026-09-30 UTC"
+  },
+  {
+    "country": "埃及",
+    "name": "Berenice",
+    "url": "https://www.gem.wiki/Berenice_Oil_Field_(Egypt)",
+    "catalog_name_confirmed": true,
+    "coordinates": null,
+    "lookup": "page",
+    "catalog_note": "",
+    "checked_at": "2026-09-30 UTC"
+  },
+  {
+    "country": "埃及",
+    "name": "Amal Redevelop (A and B)",
+    "url": "https://www.gem.wiki/Amal_Redevelop_(A_and_B)_Oil_and_Gas_Field_(Egypt)",
+    "catalog_name_confirmed": true,
+    "coordinates": {
+      "lat": 28.0728,
+      "lon": 33.5694,
+      "accuracy": "exact"
+    },
+    "lookup": "page",
+    "catalog_note": "",
+    "checked_at": "2026-09-30 UTC"
+  },
+  {
+    "country": "卡塔尔",
+    "name": "Idd El Shargi South Dome (ISSD)",
+    "url": "https://www.gem.wiki/Idd_El_Shargi_South_Dome_(ISSD)_Oil_and_Gas_Field_(Qatar)",
+    "catalog_name_confirmed": true,
+    "coordinates": {
+      "lat": 25.3376,
+      "lon": 52.3637,
+      "accuracy": "exact"
+    },
+    "lookup": "page",
+    "catalog_note": "",
+    "checked_at": "2026-09-30 UTC"
+  },
+  {
+    "country": "埃及",
+    "name": "Zaafarana",
+    "url": "https://www.gem.wiki/Zaafarana_Oil_Field_(Egypt)",
+    "catalog_name_confirmed": true,
+    "coordinates": null,
+    "lookup": "page",
+    "catalog_note": "",
+    "checked_at": "2026-09-30 UTC"
+  },
+  {
+    "country": "埃及",
+    "name": "Alamein",
+    "url": "https://www.gem.wiki/Alamein_Oil_Field_(Egypt)",
+    "catalog_name_confirmed": true,
+    "coordinates": null,
+    "lookup": "page",
+    "catalog_note": "",
+    "checked_at": "2026-09-30 UTC"
+  },
+  {
+    "country": "科威特",
+    "name": "South Umm-Gudair",
+    "url": "https://www.gem.wiki/South_Umm-Gudair_Oil_and_Gas_Field_(Kuwait,_Saudi_Arabia)",
+    "catalog_name_confirmed": true,
+    "coordinates": {
+      "lat": 28.4473,
+      "lon": 47.8621,
+      "accuracy": "approximate"
+    },
+    "lookup": "page",
+    "catalog_note": "",
+    "checked_at": "2026-09-30 UTC"
+  },
+  {
+    "country": "埃及",
+    "name": "Melehia West Deep",
+    "url": "https://www.gem.wiki/Melehia_West_Deep_Oil_and_Gas_Field_(Egypt)",
+    "catalog_name_confirmed": true,
+    "coordinates": {
+      "lat": 30.7596,
+      "lon": 27.0501,
+      "accuracy": "exact"
+    },
+    "lookup": "page",
+    "catalog_note": "",
+    "checked_at": "2026-09-30 UTC"
+  },
+  {
+    "country": "阿曼",
+    "name": "Simsim",
+    "url": "https://www.gem.wiki/Simsim_Oil_and_Gas_Field_(Oman)",
+    "catalog_name_confirmed": true,
+    "coordinates": {
+      "lat": 20.3293,
+      "lon": 56.0697,
+      "accuracy": "approximate"
+    },
+    "lookup": "page",
+    "catalog_note": "Simsim Oil and Gas Field (سمسم) is an operating oil and gas field in Oman.\nThis page was last edited on 2 March 2026, at 17:33.",
+    "checked_at": "2026-09-30 UTC"
+  },
+  {
+    "country": "伊朗",
+    "name": "Mansurabad",
+    "url": "https://www.gem.wiki/Mansurabad_Oil_and_Gas_Field_(Iran)",
+    "catalog_name_confirmed": true,
+    "coordinates": {
+      "lat": 30.66,
+      "lon": 50.33,
+      "accuracy": "approximate"
+    },
+    "lookup": "page",
+    "catalog_note": "Mansurabad Oil and Gas Field is an operating oil and gas field in Iran.\nMansurabad Oil and Gas Field is also sometimes referred to as Mansour Abad.\nThis page was last edited on 2 March 2026, at 17:24.",
+    "checked_at": "2026-09-30 UTC"
+  },
+  {
+    "country": "埃及",
+    "name": "Abu Rudies-Sidri",
+    "url": "https://www.gem.wiki/Abu_Rudies-Sidri_Oil_Field_(Egypt)",
+    "catalog_name_confirmed": true,
+    "coordinates": {
+      "lat": 28.864,
+      "lon": 33.1671,
+      "accuracy": "exact"
+    },
+    "lookup": "page",
+    "catalog_note": "",
+    "checked_at": "2026-09-30 UTC"
+  },
+  {
+    "country": "伊拉克",
+    "name": "Sarqala",
+    "url": "https://www.gem.wiki/Sarqala_Oil_Field_(Iraq)",
+    "catalog_name_confirmed": true,
+    "coordinates": {
+      "lat": 34.7161,
+      "lon": 43.8105,
+      "accuracy": "approximate"
+    },
+    "lookup": "page",
+    "catalog_note": "",
+    "checked_at": "2026-09-30 UTC"
+  },
+  {
+    "country": "埃及",
+    "name": "Geisum",
+    "url": "https://www.gem.wiki/Geisum_Oil_Field_(Egypt)",
+    "catalog_name_confirmed": true,
+    "coordinates": {
+      "lat": 27.524,
+      "lon": 33.796,
+      "accuracy": "exact"
+    },
+    "lookup": "page",
+    "catalog_note": "",
+    "checked_at": "2026-09-30 UTC"
+  },
+  {
+    "country": "埃及",
+    "name": "Ptah",
+    "url": "https://www.gem.wiki/Ptah_Oil_Field_(Egypt)",
+    "catalog_name_confirmed": true,
+    "coordinates": null,
+    "lookup": "page",
+    "catalog_note": "",
+    "checked_at": "2026-09-30 UTC"
+  },
+  {
+    "country": "伊朗",
+    "name": "Siah Makan",
+    "url": "https://www.gem.wiki/Siah_Makan_Oil_and_Gas_Field_(Iran)",
+    "catalog_name_confirmed": true,
+    "coordinates": {
+      "lat": 30.1,
+      "lon": 50.38,
+      "accuracy": "approximate"
+    },
+    "lookup": "page",
+    "catalog_note": "Siah Makan Oil and Gas Field is an operating oil and gas field in Iran.\nSiah Makan Oil and Gas Field is also sometimes referred to as Siahmakan.\nThis page was last edited on 2 March 2026, at 17:33.",
+    "checked_at": "2026-09-30 UTC"
+  },
+  {
+    "country": "埃及",
+    "name": "Wakar",
+    "url": "https://www.gem.wiki/Wakar_Oil_and_Gas_Field_(Egypt)",
+    "catalog_name_confirmed": true,
+    "coordinates": {
+      "lat": 31.74,
+      "lon": 32.399,
+      "accuracy": "exact"
+    },
+    "lookup": "page",
+    "catalog_note": "",
+    "checked_at": "2026-09-30 UTC"
+  },
+  {
+    "country": "伊拉克",
+    "name": "Banan",
+    "url": "https://www.gem.wiki/Banan_Oil_Field_(Iraq)",
+    "catalog_name_confirmed": true,
+    "coordinates": null,
+    "lookup": "page",
+    "catalog_note": "",
+    "checked_at": "2026-09-30 UTC"
+  },
+  {
+    "country": "伊拉克",
+    "name": "Demir Dagh",
+    "url": "https://www.gem.wiki/Demir_Dagh_Oil_Field_(Iraq)",
+    "catalog_name_confirmed": true,
+    "coordinates": {
+      "lat": 36.2202,
+      "lon": 43.716,
+      "accuracy": "approximate"
+    },
+    "lookup": "search_excerpt",
+    "catalog_note": "Demir Dagh Oil Field is an operating oil field in Iraq.",
+    "checked_at": "2026-09-30 UTC"
+  },
+  {
+    "country": "叙利亚",
+    "name": "Al Jubaissah",
+    "url": "https://www.gem.wiki/Al_Jubaissah_Oil_Field_(Syria)",
+    "catalog_name_confirmed": true,
+    "coordinates": {
+      "lat": 36.0439,
+      "lon": 40.6943,
+      "accuracy": "approximate"
+    },
+    "lookup": "page",
+    "catalog_note": "This page was last edited on 29 September 2026, at 15:57.",
+    "checked_at": "2026-09-30 UTC"
+  },
+  {
+    "country": "伊朗",
+    "name": "Ramin",
+    "url": "https://www.gem.wiki/Ramin_Oil_and_Gas_Field_(Iran)",
+    "catalog_name_confirmed": true,
+    "coordinates": {
+      "lat": 31.62,
+      "lon": 48.93,
+      "accuracy": "approximate"
+    },
+    "lookup": "page",
+    "catalog_note": "Ramin Oil and Gas Field is an operating oil and gas field in Iran.\nThis page was last edited on 29 September 2026, at 17:30.",
+    "checked_at": "2026-09-30 UTC"
+  },
+  {
+    "country": "叙利亚",
+    "name": "Margada",
+    "url": "https://www.gem.wiki/Margada_Oil_Field_(Syria)",
+    "catalog_name_confirmed": true,
+    "coordinates": {
+      "lat": 36.4959,
+      "lon": 40.8322,
+      "accuracy": "approximate"
+    },
+    "lookup": "search_excerpt",
+    "catalog_note": "Margada Oil Field is an operating oil field in Syria.",
+    "checked_at": "2026-09-30 UTC"
+  },
+  {
+    "country": "伊朗",
+    "name": "Naft Shahr",
+    "url": "https://www.gem.wiki/Naft_Shahr_Oil_Field_(Iran)",
+    "catalog_name_confirmed": true,
+    "coordinates": {
+      "lat": 34.0455,
+      "lon": 45.4724,
+      "accuracy": "exact"
+    },
+    "lookup": "page",
+    "catalog_note": "",
+    "checked_at": "2026-09-30 UTC"
+  },
+  {
+    "country": "伊朗",
+    "name": "Maleh Kuh",
+    "url": "https://www.gem.wiki/Maleh_Kuh_Oil_and_Gas_Field_(Iran)",
+    "catalog_name_confirmed": true,
+    "coordinates": null,
+    "lookup": "page",
+    "catalog_note": "",
+    "checked_at": "2026-09-30 UTC"
+  },
+  {
+    "country": "卡塔尔",
+    "name": "Al-Karkara/A-Structure",
+    "url": "https://www.gem.wiki/Al-Karkara/A-Structure_Oil_and_Gas_Field_(Qatar)",
+    "catalog_name_confirmed": true,
+    "coordinates": {
+      "lat": 25.0811,
+      "lon": 52.4847,
+      "accuracy": "approximate"
+    },
+    "lookup": "page",
+    "catalog_note": "",
+    "checked_at": "2026-09-30 UTC"
+  },
+  {
+    "country": "埃及",
+    "name": "Abu Madi",
+    "url": "https://www.gem.wiki/Abu_Madi_Gas_Field_(Egypt)",
+    "catalog_name_confirmed": true,
+    "coordinates": {
+      "lat": 31.3612,
+      "lon": 31.1783,
+      "accuracy": "approximate"
+    },
+    "lookup": "page",
+    "catalog_note": "",
+    "checked_at": "2026-09-30 UTC"
+  },
+  {
+    "country": "叙利亚",
+    "name": "Jazal-Heil",
+    "url": "https://www.gem.wiki/Jazal-Heil_Oil_Field_(Syria)",
+    "catalog_name_confirmed": true,
+    "coordinates": {
+      "lat": 34.3405,
+      "lon": 38.3349,
+      "accuracy": "approximate"
+    },
+    "lookup": "page",
+    "catalog_note": "This page was last edited on 14 September 2026, at 15:59.",
+    "checked_at": "2026-09-30 UTC"
+  },
+  {
+    "country": "埃及",
+    "name": "Baltim East",
+    "url": "https://www.gem.wiki/Baltim_East_Oil_Field_(Egypt)",
+    "catalog_name_confirmed": true,
+    "coordinates": {
+      "lat": 32.03,
+      "lon": 31.163,
+      "accuracy": "approximate"
+    },
+    "lookup": "search_excerpt",
+    "catalog_note": "Baltim East Oil Field (بلطيم) is an operating oil field in Egypt.",
+    "checked_at": "2026-09-30 UTC"
+  },
+  {
+    "country": "叙利亚",
+    "name": "Tishreen",
+    "url": "https://www.gem.wiki/Tishreen_Oil_Field_(Syria)",
+    "catalog_name_confirmed": true,
+    "coordinates": {
+      "lat": 36.4376,
+      "lon": 40.8497,
+      "accuracy": "exact"
+    },
+    "lookup": "page",
+    "catalog_note": "Tishreen Oil Field is an operating oil field in Syria.\nThis page was last edited on 14 September 2026, at 12:10.",
+    "checked_at": "2026-09-30 UTC"
+  },
+  {
+    "country": "伊朗",
+    "name": "Sohrab",
+    "url": "https://www.gem.wiki/Sohrab_Oil_Field_(Iran)",
+    "catalog_name_confirmed": true,
+    "coordinates": {
+      "lat": 32.017,
+      "lon": 47.7821,
+      "accuracy": "approximate"
+    },
+    "lookup": "page",
+    "catalog_note": "",
+    "checked_at": "2026-09-30 UTC"
+  },
+  {
+    "country": "埃及",
+    "name": "Assil",
+    "url": "https://www.gem.wiki/Assil_Oil_and_Gas_Field_(Egypt)",
+    "catalog_name_confirmed": true,
+    "coordinates": null,
+    "lookup": "search_excerpt",
+    "catalog_note": "Assil Oil and Gas Field is an operating oil and gas field in Egypt.\nAlong with Al Karam Oil and Gas Field (Egypt), Bahga Oil and Gas Field (Egypt), Barq Oil and Gas Field (Egypt), and Magd Oil and Gas Field (Egypt), Assil Oil and Gas Field is a part of the Alam El Shawish West (AESW) Project.",
+    "checked_at": "2026-09-30 UTC"
+  },
+  {
+    "country": "埃及",
+    "name": "Bahga",
+    "url": "https://www.gem.wiki/Bahga_Oil_and_Gas_Field_(Egypt)",
+    "catalog_name_confirmed": true,
+    "coordinates": {
+      "lat": 29.2713,
+      "lon": 28.3712,
+      "accuracy": "exact"
+    },
+    "lookup": "page",
+    "catalog_note": "This page was last edited on 14 September 2026, at 11:12.",
+    "checked_at": "2026-09-30 UTC"
+  },
+  {
+    "country": "埃及",
+    "name": "Baltim North",
+    "url": "https://www.gem.wiki/Baltim_North_Oil_Field_(Egypt)",
+    "catalog_name_confirmed": true,
+    "coordinates": null,
+    "lookup": "page",
+    "catalog_note": "Baltim North Oil Field is an operating oil field in Egypt.",
+    "checked_at": "2026-09-30 UTC"
+  },
+  {
+    "country": "叙利亚",
+    "name": "Gouna",
+    "url": "https://www.gem.wiki/Gouna_Oil_Field_(Syria)",
+    "catalog_name_confirmed": true,
+    "coordinates": {
+      "lat": 36.4959,
+      "lon": 40.8322,
+      "accuracy": "approximate"
+    },
+    "lookup": "search_excerpt",
+    "catalog_note": "Gouna Oil Field is an operating oil field in Syria.",
+    "checked_at": "2026-09-30 UTC"
+  },
+  {
+    "country": "伊朗",
+    "name": "Sulabedar",
+    "url": "https://www.gem.wiki/Sulabedar_Oil_Field_(Iran)",
+    "catalog_name_confirmed": false,
+    "coordinates": null,
+    "lookup": "page",
+    "catalog_note": "",
+    "checked_at": "2026-09-30 UTC"
+  },
+  {
+    "country": "阿联酋",
+    "name": "Zora",
+    "url": "https://www.gem.wiki/Zora_Gas_Field_(United_Arab_Emirates)",
+    "catalog_name_confirmed": true,
+    "coordinates": null,
+    "lookup": "page",
+    "catalog_note": "Zora Gas Field is a mothballed gas field in United Arab Emirates.\nThis page was last edited on 30 September 2026, at 12:14.",
+    "checked_at": "2026-09-30 UTC"
+  },
+  {
+    "country": "埃及",
+    "name": "Magd",
+    "url": "https://www.gem.wiki/Magd_Oil_and_Gas_Field_(Egypt)",
+    "catalog_name_confirmed": true,
+    "coordinates": null,
+    "lookup": "page",
+    "catalog_note": "",
+    "checked_at": "2026-09-30 UTC"
+  },
+  {
+    "country": "埃及",
+    "name": "Barq",
+    "url": "https://www.gem.wiki/Barq_Oil_and_Gas_Field_(Egypt)",
+    "catalog_name_confirmed": true,
+    "coordinates": {
+      "lat": 29.3042,
+      "lon": 28.4136,
+      "accuracy": "exact"
+    },
+    "lookup": "page",
+    "catalog_note": "",
+    "checked_at": "2026-09-30 UTC"
+  },
+  {
+    "country": "埃及",
+    "name": "East Bahariya",
+    "url": "https://www.gem.wiki/East_Bahariya_Oil_and_Gas_Field_(Egypt)",
+    "catalog_name_confirmed": false,
+    "coordinates": null,
+    "lookup": "page",
+    "catalog_note": "",
+    "checked_at": "2026-09-30 UTC"
+  },
+  {
+    "country": "土耳其",
+    "name": "Çaycuma",
+    "url": "https://www.gem.wiki/Çaycuma_Gas_Field_(Türkiye)",
+    "catalog_name_confirmed": true,
+    "coordinates": null,
+    "lookup": "page",
+    "catalog_note": "Çaycuma Gas Field is a discovered gas field in Türkiye.",
+    "checked_at": "2026-09-30 UTC"
+  },
+  {
+    "country": "叙利亚",
+    "name": "Tayyani",
+    "url": "https://www.gem.wiki/Tayyani_Oil_Field_(Syria)",
+    "catalog_name_confirmed": true,
+    "coordinates": {
+      "lat": 35.1366,
+      "lon": 40.3434,
+      "accuracy": "approximate"
+    },
+    "lookup": "page",
+    "catalog_note": "Tayyani Oil Field is an operating oil field in Syria.\nThis page was last edited on 2 March 2026, at 17:36.",
+    "checked_at": "2026-09-30 UTC"
+  },
+  {
+    "country": "埃及",
+    "name": "East Beni Suef",
+    "url": "https://www.gem.wiki/East_Beni_Suef_Oil_and_Gas_Field_(Egypt)",
+    "catalog_name_confirmed": false,
+    "coordinates": null,
+    "lookup": "page",
+    "catalog_note": "",
+    "checked_at": "2026-09-30 UTC"
+  },
+  {
+    "country": "阿曼",
+    "name": "Ulfa",
+    "url": "https://www.gem.wiki/Ulfa_Oil_Field_(Oman)",
+    "catalog_name_confirmed": true,
+    "coordinates": {
+      "lat": 20.3835,
+      "lon": 57.4264,
+      "accuracy": "approximate"
+    },
+    "lookup": "page",
+    "catalog_note": "",
+    "checked_at": "2026-09-30 UTC"
+  },
+  {
+    "country": "埃及",
+    "name": "Denise",
+    "url": "https://www.gem.wiki/Denise_Gas_Field_(Egypt)",
+    "catalog_name_confirmed": true,
+    "coordinates": {
+      "lat": 31.717,
+      "lon": 32.284,
+      "accuracy": "exact"
+    },
+    "lookup": "page",
+    "catalog_note": "",
+    "checked_at": "2026-09-30 UTC"
+  },
+  {
+    "country": "叙利亚",
+    "name": "Deilla",
+    "url": "https://www.gem.wiki/Deilla_Oil_Field_(Syria)",
+    "catalog_name_confirmed": true,
+    "coordinates": {
+      "lat": 36.0494,
+      "lon": 38.9487,
+      "accuracy": "approximate"
+    },
+    "lookup": "search_excerpt",
+    "catalog_note": "Deilla Oil Field is an operating oil field in Syria.",
+    "checked_at": "2026-09-30 UTC"
+  },
+  {
+    "country": "伊朗",
+    "name": "Towsan",
+    "url": "https://www.gem.wiki/Towsan_Oil_Field_(Iran)",
+    "catalog_name_confirmed": true,
+    "coordinates": null,
+    "lookup": "page",
+    "catalog_note": "Towsan Oil Field is also sometimes referred to as Tosan.",
+    "checked_at": "2026-09-30 UTC"
+  },
+  {
+    "country": "伊拉克",
+    "name": "Topkhana",
+    "url": "https://www.gem.wiki/Topkhana_Oil_and_Gas_Field_(Iraq)",
+    "catalog_name_confirmed": true,
+    "coordinates": {
+      "lat": 35.1974,
+      "lon": 45.3054,
+      "accuracy": "approximate"
+    },
+    "lookup": "page",
+    "catalog_note": "",
+    "checked_at": "2026-09-30 UTC"
+  },
+  {
+    "country": "伊朗",
+    "name": "Toos",
+    "url": "https://www.gem.wiki/Toos_Gas_Field_(Iran)",
+    "catalog_name_confirmed": false,
+    "coordinates": null,
+    "lookup": "page",
+    "catalog_note": "",
+    "checked_at": "2026-09-30 UTC"
+  },
+  {
+    "country": "以色列",
+    "name": "Dalit",
+    "url": "https://www.gem.wiki/Dalit_Gas_Field_(Israel)",
+    "catalog_name_confirmed": true,
+    "coordinates": {
+      "lat": 32.6623,
+      "lon": 34.2196,
+      "accuracy": "exact"
+    },
+    "lookup": "page",
+    "catalog_note": "",
+    "checked_at": "2026-09-30 UTC"
+  },
+  {
+    "country": "伊朗",
+    "name": "Dalan",
+    "url": "https://www.gem.wiki/Dalan_Oil_and_Gas_Field_(Iran)",
+    "catalog_name_confirmed": true,
+    "coordinates": null,
+    "lookup": "search_excerpt",
+    "catalog_note": "Dalan Oil and Gas Field is an operating oil and gas field in Iran.",
+    "checked_at": "2026-09-30 UTC"
+  },
+  {
+    "country": "埃及",
+    "name": "Tut",
+    "url": "https://www.gem.wiki/Tut_Oil_and_Gas_Field_(Egypt)",
+    "catalog_name_confirmed": true,
+    "coordinates": {
+      "lat": 30.755,
+      "lon": 26.975,
+      "accuracy": "exact"
+    },
+    "lookup": "page",
+    "catalog_note": "",
+    "checked_at": "2026-09-30 UTC"
+  },
+  {
+    "country": "伊拉克",
+    "name": "Tel Gazal",
+    "url": "https://www.gem.wiki/Tel_Gazal_Gas_Field_(Iraq)",
+    "catalog_name_confirmed": true,
+    "coordinates": null,
+    "lookup": "page",
+    "catalog_note": "",
+    "checked_at": "2026-09-30 UTC"
+  },
+  {
+    "country": "科威特",
+    "name": "Dorra",
+    "url": "https://www.gem.wiki/Dorra_Oil_and_Gas_Field_(Kuwait)",
+    "catalog_name_confirmed": true,
+    "coordinates": {
+      "lat": 28.9686,
+      "lon": 49.1122,
+      "accuracy": "exact"
+    },
+    "lookup": "page",
+    "catalog_note": "",
+    "checked_at": "2026-09-30 UTC"
+  },
+  {
+    "country": "叙利亚",
+    "name": "Al Khairat",
+    "url": "https://www.gem.wiki/Al_Khairat_Oil_and_Gas_Field_(Syria)",
+    "catalog_name_confirmed": true,
+    "coordinates": {
+      "lat": 36.9444,
+      "lon": 41.9288,
+      "accuracy": "exact"
+    },
+    "lookup": "page",
+    "catalog_note": "",
+    "checked_at": "2026-09-30 UTC"
+  },
+  {
+    "country": "埃及",
+    "name": "Amal C",
+    "url": "https://www.gem.wiki/Amal_C_Oil_and_Gas_Field_(Egypt)",
+    "catalog_name_confirmed": true,
+    "coordinates": {
+      "lat": 28.0728,
+      "lon": 33.5694,
+      "accuracy": "exact"
+    },
+    "lookup": "page",
+    "catalog_note": "Amal C Oil and Gas Field is a oil and gas field in Egypt.\nThis page was last edited on 27 February 2026, at 21:07.",
+    "checked_at": "2026-09-30 UTC"
+  },
+  {
+    "country": "埃及",
+    "name": "Amal",
+    "url": "https://www.gem.wiki/Amal_Oil_Field_(Egypt)",
+    "catalog_name_confirmed": true,
+    "coordinates": null,
+    "lookup": "page",
+    "catalog_note": "",
+    "checked_at": "2026-09-30 UTC"
+  },
+  {
+    "country": "阿曼",
+    "name": "Amal West",
+    "url": "https://www.gem.wiki/Amal_West_Oil_Field_(Oman)",
+    "catalog_name_confirmed": true,
+    "coordinates": {
+      "lat": 20.3293,
+      "lon": 56.0697,
+      "accuracy": "approximate"
+    },
+    "lookup": "page",
+    "catalog_note": "",
+    "checked_at": "2026-09-30 UTC"
+  },
+  {
+    "country": "阿联酋",
+    "name": "XF-002",
+    "url": "https://www.gem.wiki/XF-002_Oil_and_Gas_Field_(United_Arab_Emirates)",
+    "catalog_name_confirmed": true,
+    "coordinates": {
+      "lat": 24.609,
+      "lon": 54.0093,
+      "accuracy": "approximate"
+    },
+    "lookup": "page",
+    "catalog_note": "",
+    "checked_at": "2026-09-30 UTC"
+  },
+  {
+    "country": "叙利亚",
+    "name": "Akash",
+    "url": "https://www.gem.wiki/Akash_Oil_Field_(Syria)",
+    "catalog_name_confirmed": true,
+    "coordinates": {
+      "lat": 34.4025,
+      "lon": 40.737,
+      "accuracy": "exact"
+    },
+    "lookup": "page",
+    "catalog_note": "Akash Oil Field is an operating oil field in Syria.\nThis page was last edited on 30 September 2026, at 08:33.",
+    "checked_at": "2026-09-30 UTC"
+  },
+  {
+    "country": "叙利亚",
+    "name": "Ahmer",
+    "url": "https://www.gem.wiki/Ahmer_Oil_Field_(Syria)",
+    "catalog_name_confirmed": false,
+    "coordinates": null,
+    "lookup": "page",
+    "catalog_note": "",
+    "checked_at": "2026-09-30 UTC"
+  },
+  {
+    "country": "阿曼",
+    "name": "Amin",
+    "url": "https://www.gem.wiki/Amin_Oil_Field_(Oman)",
+    "catalog_name_confirmed": true,
+    "coordinates": {
+      "lat": 18.4363,
+      "lon": 55.74,
+      "accuracy": "exact"
+    },
+    "lookup": "page",
+    "catalog_note": "",
+    "checked_at": "2026-09-30 UTC"
+  },
+  {
+    "country": "以色列",
+    "name": "Athena",
+    "url": "https://www.gem.wiki/Athena_Gas_Field_(Israel)",
+    "catalog_name_confirmed": true,
+    "coordinates": {
+      "lat": 33.192,
+      "lon": 34.1926,
+      "accuracy": "approximate"
+    },
+    "lookup": "page",
+    "catalog_note": "",
+    "checked_at": "2026-09-30 UTC"
+  },
+  {
+    "country": "叙利亚",
+    "name": "Azraq",
+    "url": "https://www.gem.wiki/Azraq_Oil_Field_(Syria)",
+    "catalog_name_confirmed": true,
+    "coordinates": {
+      "lat": 35.0586,
+      "lon": 40.8559,
+      "accuracy": "exact"
+    },
+    "lookup": "page",
+    "catalog_note": "Azraq Oil Field is an operating oil field in Syria.\nThis page was last edited on 14 September 2026, at 18:05.",
+    "checked_at": "2026-09-30 UTC"
+  },
+  {
+    "country": "阿联酋",
+    "name": "Aqam",
+    "url": "https://www.gem.wiki/Aqam_Oil_and_Gas_Field_(United_Arab_Emirates)",
+    "catalog_name_confirmed": true,
+    "coordinates": {
+      "lat": 25.0032,
+      "lon": 55.461,
+      "accuracy": "approximate"
+    },
+    "lookup": "page",
+    "catalog_note": "",
+    "checked_at": "2026-09-30 UTC"
+  },
+  {
+    "country": "叙利亚",
+    "name": "Zumlat al-Maharr",
+    "url": "https://www.gem.wiki/Zumlat_al-Maharr_Gas_Field_(Syria)",
+    "catalog_name_confirmed": true,
+    "coordinates": {
+      "lat": 34.5482,
+      "lon": 38.2758,
+      "accuracy": "approximate"
+    },
+    "lookup": "page",
+    "catalog_note": "This page was last edited on 2 March 2026, at 17:41.",
+    "checked_at": "2026-09-30 UTC"
+  },
+  {
+    "country": "以色列",
+    "name": "Zeus",
+    "url": "https://www.gem.wiki/Zeus_Gas_Field_(Israel)",
+    "catalog_name_confirmed": true,
+    "coordinates": {
+      "lat": 33.192,
+      "lon": 34.1159,
+      "accuracy": "approximate"
+    },
+    "lookup": "page",
+    "catalog_note": "",
+    "checked_at": "2026-09-30 UTC"
+  },
+  {
+    "country": "伊朗",
+    "name": "Aban",
+    "url": "https://www.gem.wiki/Aban_Oil_Field_(Iran)",
+    "catalog_name_confirmed": true,
+    "coordinates": {
+      "lat": 32.6871,
+      "lon": 47.2725,
+      "accuracy": "approximate"
+    },
+    "lookup": "page",
+    "catalog_note": "Aban Oil Field is an operating oil field in Iran.\nThis page was last edited on 30 September 2026, at 10:55.",
+    "checked_at": "2026-09-30 UTC"
+  },
+  {
+    "country": "埃及",
+    "name": "Yazzi",
+    "url": "https://www.gem.wiki/Yazzi_Oil_and_Gas_Field_(Egypt)",
+    "catalog_name_confirmed": true,
+    "coordinates": null,
+    "lookup": "page",
+    "catalog_note": "",
+    "checked_at": "2026-09-30 UTC"
+  },
+  {
+    "country": "科威特",
+    "name": "Abduliyah",
+    "url": "https://www.gem.wiki/Abduliyah_Oil_and_Gas_Field_(Kuwait)",
+    "catalog_name_confirmed": true,
+    "coordinates": {
+      "lat": 29.0834,
+      "lon": 47.6854,
+      "accuracy": "exact"
+    },
+    "lookup": "page",
+    "catalog_note": "",
+    "checked_at": "2026-09-30 UTC"
+  },
+  {
+    "country": "埃及",
+    "name": "West Kalabsha",
+    "url": "https://www.gem.wiki/West_Kalabsha_Oil_and_Gas_Field_(Egypt)",
+    "catalog_name_confirmed": false,
+    "coordinates": null,
+    "lookup": "page",
+    "catalog_note": "",
+    "checked_at": "2026-09-30 UTC"
+  },
+  {
+    "country": "埃及",
+    "name": "Badri",
+    "url": "https://www.gem.wiki/Badri_Oil_and_Gas_Field_(Egypt)",
+    "catalog_name_confirmed": true,
+    "coordinates": {
+      "lat": 28.285,
+      "lon": 33.37,
+      "accuracy": "exact"
+    },
+    "lookup": "page",
+    "catalog_note": "",
+    "checked_at": "2026-09-30 UTC"
+  },
+  {
+    "country": "埃及",
+    "name": "Bakr",
+    "url": "https://www.gem.wiki/Bakr_Oil_and_Gas_Field_(Egypt)",
+    "catalog_name_confirmed": true,
+    "coordinates": {
+      "lat": 28.506,
+      "lon": 32.89,
+      "accuracy": "exact"
+    },
+    "lookup": "page",
+    "catalog_note": "",
+    "checked_at": "2026-09-30 UTC"
+  },
+  {
+    "country": "伊朗",
+    "name": "Balaroud",
+    "url": "https://www.gem.wiki/Balaroud_Oil_and_Gas_Field_(Iran)",
+    "catalog_name_confirmed": true,
+    "coordinates": {
+      "lat": 32.7514,
+      "lon": 48.4208,
+      "accuracy": "exact"
+    },
+    "lookup": "search_excerpt",
+    "catalog_note": "Balaroud Oil and Gas Field (بالارود) is an in-development oil and gas field in Iran.",
+    "checked_at": "2026-09-30 UTC"
+  },
+  {
+    "country": "叙利亚",
+    "name": "Wahab",
+    "url": "https://www.gem.wiki/Wahab_Oil_Field_(Syria)",
+    "catalog_name_confirmed": true,
+    "coordinates": {
+      "lat": 36.0494,
+      "lon": 38.9487,
+      "accuracy": "approximate"
+    },
+    "lookup": "page",
+    "catalog_note": "Wahab Oil Field is an operating oil field in Syria.\nThis page was last edited on 2 March 2026, at 17:39.",
+    "checked_at": "2026-09-30 UTC"
+  },
+  {
+    "country": "埃及",
+    "name": "Bed-2",
+    "url": "https://www.gem.wiki/Bed-2_Oil_and_Gas_Field_(Egypt)",
+    "catalog_name_confirmed": true,
+    "coordinates": {
+      "lat": 30.26,
+      "lon": 26.66,
+      "accuracy": "approximate"
+    },
+    "lookup": "page",
+    "catalog_note": "",
+    "checked_at": "2026-09-30 UTC"
+  },
+  {
+    "country": "埃及",
+    "name": "Belayim Marine",
+    "url": "https://www.gem.wiki/Belayim_Marine_Oil_and_Gas_Field_(Egypt)",
+    "catalog_name_confirmed": true,
+    "coordinates": {
+      "lat": 28.6197,
+      "lon": 33.2076,
+      "accuracy": "exact"
+    },
+    "lookup": "page",
+    "catalog_note": "",
+    "checked_at": "2026-09-30 UTC"
+  },
+  {
+    "country": "埃及",
+    "name": "WDDM Phase 11 Gas Phase",
+    "url": "https://www.gem.wiki/WDDM_Phase_11_Gas_Phase_(Egypt)",
+    "catalog_name_confirmed": true,
+    "coordinates": {
+      "lat": 31.9725,
+      "lon": 30.347,
+      "accuracy": "approximate"
+    },
+    "lookup": "page",
+    "catalog_note": "This page was last edited on 27 September 2026, at 08:40.",
+    "checked_at": "2026-09-30 UTC"
+  },
+  {
+    "country": "阿联酋",
+    "name": "Ras Al Sadr",
+    "url": "https://www.gem.wiki/Ras_Al_Sadr_Gas_Field_(United_Arab_Emirates)",
+    "catalog_name_confirmed": true,
+    "coordinates": {
+      "lat": 24.6941,
+      "lon": 54.6912,
+      "accuracy": "approximate"
+    },
+    "lookup": "page",
+    "catalog_note": "This page was last edited on 15 September 2026, at 05:29.",
+    "checked_at": "2026-09-30 UTC"
+  },
+  {
+    "country": "阿曼",
+    "name": "Mabrouk Southwest",
+    "url": "https://www.gem.wiki/Mabrouk_Southwest_Oil_and_Gas_Field_(Oman)",
+    "catalog_name_confirmed": true,
+    "coordinates": {
+      "lat": 20.3293,
+      "lon": 56.0697,
+      "accuracy": "approximate"
+    },
+    "lookup": "page",
+    "catalog_note": "",
+    "checked_at": "2026-09-30 UTC"
+  },
+  {
+    "country": "科威特",
+    "name": "Raudhatain East",
+    "url": "https://www.gem.wiki/Raudhatain_East_Oil_and_Gas_Field_(Kuwait)",
+    "catalog_name_confirmed": true,
+    "coordinates": {
+      "lat": 29.935,
+      "lon": 47.7544,
+      "accuracy": "approximate"
+    },
+    "lookup": "page",
+    "catalog_note": "Raudhatain East Oil and Gas Field (روضتين) is an operating oil and gas field in Kuwait.\nThis page was last edited on 29 September 2026, at 16:25.",
+    "checked_at": "2026-09-30 UTC"
+  },
+  {
+    "country": "伊朗",
+    "name": "Madar",
+    "url": "https://www.gem.wiki/Madar_Gas_Field_(Iran)",
+    "catalog_name_confirmed": true,
+    "coordinates": {
+      "lat": 27.34,
+      "lon": 52.68,
+      "accuracy": "approximate"
+    },
+    "lookup": "page",
+    "catalog_note": "Madar Gas Field is an in-development gas field in Iran.\nThis page was last edited on 29 September 2026, at 12:36.",
+    "checked_at": "2026-09-30 UTC"
+  },
+  {
+    "country": "叙利亚",
+    "name": "Ratka",
+    "url": "https://www.gem.wiki/Ratka_Oil_Field_(Syria)",
+    "catalog_name_confirmed": false,
+    "coordinates": null,
+    "lookup": "page",
+    "catalog_note": "",
+    "checked_at": "2026-09-30 UTC"
+  },
+  {
+    "country": "卡塔尔",
+    "name": "RasGas 3",
+    "url": "https://www.gem.wiki/RasGas_3_Oil_and_Gas_Field_(Qatar)",
+    "catalog_name_confirmed": true,
+    "coordinates": {
+      "lat": 26.5712,
+      "lon": 51.8521,
+      "accuracy": "approximate"
+    },
+    "lookup": "page",
+    "catalog_note": "This page was last edited on 10 September 2026, at 10:58.",
+    "checked_at": "2026-09-30 UTC"
+  },
+  {
+    "country": "卡塔尔",
+    "name": "RasGas 2",
+    "url": "https://www.gem.wiki/RasGas_2_Gas_Field_(Qatar)",
+    "catalog_name_confirmed": true,
+    "coordinates": {
+      "lat": 26.5712,
+      "lon": 51.8521,
+      "accuracy": "approximate"
+    },
+    "lookup": "page",
+    "catalog_note": "",
+    "checked_at": "2026-09-30 UTC"
+  },
+  {
+    "country": "阿曼",
+    "name": "Makarem",
+    "url": "https://www.gem.wiki/Makarem_Oil_and_Gas_Field_(Oman)",
+    "catalog_name_confirmed": true,
+    "coordinates": {
+      "lat": 21.705,
+      "lon": 56.4643,
+      "accuracy": "approximate"
+    },
+    "lookup": "search_excerpt",
+    "catalog_note": "Makarem Oil and Gas Field (مكارم) is an operating oil and gas field in Oman.\nAlong with Ghazeer (Khazzan Phase 2) Oil and Gas Field (Oman) and Khazzan Phase 1 Oil and Gas Field (Oman), Makarem Oil and Gas Field is a part of the Khazzan Oil and Gas Project (Oman).",
+    "checked_at": "2026-09-30 UTC"
+  },
+  {
+    "country": "沙特阿拉伯",
+    "name": "Maharah",
+    "url": "https://www.gem.wiki/Maharah_Oil_Field_(Saudi_Arabia)",
+    "catalog_name_confirmed": true,
+    "coordinates": {
+      "lat": 28.3083,
+      "lon": 49.4833,
+      "accuracy": "exact"
+    },
+    "lookup": "page",
+    "catalog_note": "",
+    "checked_at": "2026-09-30 UTC"
+  },
+  {
+    "country": "阿曼",
+    "name": "Mabrouk Deep",
+    "url": "https://www.gem.wiki/Mabrouk_Deep_Oil_and_Gas_Field_(Oman)",
+    "catalog_name_confirmed": true,
+    "coordinates": {
+      "lat": 20.3293,
+      "lon": 56.0697,
+      "accuracy": "approximate"
+    },
+    "lookup": "page",
+    "catalog_note": "",
+    "checked_at": "2026-09-30 UTC"
+  },
+  {
+    "country": "科威特",
+    "name": "Lulu",
+    "url": "https://www.gem.wiki/Lulu_Oil_and_Gas_Field_(Kuwait,_Saudi_Arabia,_Iran)",
+    "catalog_name_confirmed": true,
+    "coordinates": {
+      "lat": 28.7747,
+      "lon": 49.508,
+      "accuracy": "exact"
+    },
+    "lookup": "page",
+    "catalog_note": "",
+    "checked_at": "2026-09-30 UTC"
+  },
+  {
+    "country": "埃及",
+    "name": "Python",
+    "url": "https://www.gem.wiki/Python_Oil_and_Gas_Field_(Egypt)",
+    "catalog_name_confirmed": true,
+    "coordinates": {
+      "lat": 31.6052,
+      "lon": 30.0423,
+      "accuracy": "exact"
+    },
+    "lookup": "page",
+    "catalog_note": "",
+    "checked_at": "2026-09-30 UTC"
+  },
+  {
+    "country": "科威特",
+    "name": "Marrat",
+    "url": "https://www.gem.wiki/Marrat_Oil_and_Gas_Field_(Kuwait)",
+    "catalog_name_confirmed": true,
+    "coordinates": {
+      "lat": 29.0054,
+      "lon": 47.9611,
+      "accuracy": "approximate"
+    },
+    "lookup": "search_excerpt",
+    "catalog_note": "Marrat Oil and Gas Field is an operating oil and gas field in Kuwait.\nAlong with Ahmadi Oil and Gas Field (Kuwait), Burgan Oil and Gas Field (Kuwait), Magwa Oil and Gas Field (Kuwait), and Minagish Oil and Gas Field (Kuwait), Marrat Oil and Gas Field is a part of the Greater Burgan Oil and Gas Project (Kuwait).",
+    "checked_at": "2026-09-30 UTC"
+  },
+  {
+    "country": "以色列",
+    "name": "Mari-B",
+    "url": "https://www.gem.wiki/Mari-B_Oil_and_Gas_Field_(Israel)",
+    "catalog_name_confirmed": true,
+    "coordinates": {
+      "lat": 31.7348,
+      "lon": 34.3123,
+      "accuracy": "exact"
+    },
+    "lookup": "search_excerpt",
+    "catalog_note": "Mari-B Oil and Gas Field is a decommissioning oil and gas field in Israel.\nAlong with Noa Gas Field (Israel), Mari-B Oil and Gas Field is a part of the Yam Tethys Gas Project (Israel).",
+    "checked_at": "2026-09-30 UTC"
+  },
+  {
+    "country": "埃及",
+    "name": "Qarun",
+    "url": "https://www.gem.wiki/Qarun_Oil_and_Gas_Field_(Egypt)",
+    "catalog_name_confirmed": true,
+    "coordinates": {
+      "lat": 29.5163,
+      "lon": 30.8578,
+      "accuracy": "approximate"
+    },
+    "lookup": "page",
+    "catalog_note": "",
+    "checked_at": "2026-09-30 UTC"
+  },
+  {
+    "country": "卡塔尔",
+    "name": "Qatargas 1",
+    "url": "https://www.gem.wiki/Qatargas_1_Gas_Field_(Qatar)",
+    "catalog_name_confirmed": true,
+    "coordinates": {
+      "lat": 26.5712,
+      "lon": 51.8521,
+      "accuracy": "approximate"
+    },
+    "lookup": "page",
+    "catalog_note": "",
+    "checked_at": "2026-09-30 UTC"
+  },
+  {
+    "country": "叙利亚",
+    "name": "Maleh",
+    "url": "https://www.gem.wiki/Maleh_Oil_Field_(Syria)",
+    "catalog_name_confirmed": false,
+    "coordinates": null,
+    "lookup": "page",
+    "catalog_note": "",
+    "checked_at": "2026-09-30 UTC"
+  },
+  {
+    "country": "阿联酋",
+    "name": "Qusahwira (Phase 2)",
+    "url": "https://www.gem.wiki/Qusahwira_(Phase_2)_Oil_Field_(United_Arab_Emirates)",
+    "catalog_name_confirmed": true,
+    "coordinates": {
+      "lat": 22.8022,
+      "lon": 54.7279,
+      "accuracy": "exact"
+    },
+    "lookup": "page",
+    "catalog_note": "",
+    "checked_at": "2026-09-30 UTC"
+  },
+  {
+    "country": "阿联酋",
+    "name": "Qusahwira (Phase 1)",
+    "url": "https://www.gem.wiki/Qusahwira_(Phase_1)_Oil_Field_(United_Arab_Emirates)",
+    "catalog_name_confirmed": true,
+    "coordinates": {
+      "lat": 22.8022,
+      "lon": 54.7279,
+      "accuracy": "exact"
+    },
+    "lookup": "page",
+    "catalog_note": "",
+    "checked_at": "2026-09-30 UTC"
+  },
+  {
+    "country": "伊拉克",
+    "name": "Mansuriyah",
+    "url": "https://www.gem.wiki/Mansuriyah_Oil_and_Gas_Field_(Iraq)",
+    "catalog_name_confirmed": true,
+    "coordinates": {
+      "lat": 34.109,
+      "lon": 44.978,
+      "accuracy": "exact"
+    },
+    "lookup": "page",
+    "catalog_note": "",
+    "checked_at": "2026-09-30 UTC"
+  },
+  {
+    "country": "阿曼",
+    "name": "Maradi Huraymah/Fushaigah",
+    "url": "https://www.gem.wiki/Maradi_Huraymah/Fushaigah_Oil_and_Gas_Field_(Oman)",
+    "catalog_name_confirmed": true,
+    "coordinates": {
+      "lat": 22.3151,
+      "lon": 57.3014,
+      "accuracy": "approximate"
+    },
+    "lookup": "page",
+    "catalog_note": "",
+    "checked_at": "2026-09-30 UTC"
+  },
+  {
+    "country": "埃及",
+    "name": "Saffron",
+    "url": "https://www.gem.wiki/Saffron_Oil_and_Gas_Field_(Egypt)",
+    "catalog_name_confirmed": true,
+    "coordinates": {
+      "lat": 31.935,
+      "lon": 30.375,
+      "accuracy": "exact"
+    },
+    "lookup": "page",
+    "catalog_note": "Saffron Oil and Gas Field is an operating oil and gas field in Egypt.\nThis page was last edited on 30 September 2026, at 16:30.",
+    "checked_at": "2026-09-30 UTC"
+  },
+  {
+    "country": "阿曼",
+    "name": "Sadad North",
+    "url": "https://www.gem.wiki/Sadad_North_Oil_Field_(Oman)",
+    "catalog_name_confirmed": true,
+    "coordinates": {
+      "lat": 20.3293,
+      "lon": 56.0697,
+      "accuracy": "approximate"
+    },
+    "lookup": "page",
+    "catalog_note": "",
+    "checked_at": "2026-09-30 UTC"
+  },
+  {
+    "country": "伊朗",
+    "name": "Rudak Milatun",
+    "url": "https://www.gem.wiki/Rudak_Milatun_Oil_and_Gas_Field_(Iran)",
+    "catalog_name_confirmed": true,
+    "coordinates": {
+      "lat": 29.7204,
+      "lon": 51.3079,
+      "accuracy": "exact"
+    },
+    "lookup": "search_excerpt",
+    "catalog_note": "Rudak Milatun Oil and Gas Field is an operating oil and gas field in Iran.",
+    "checked_at": "2026-09-30 UTC"
+  },
+  {
+    "country": "伊朗",
+    "name": "Lali",
+    "url": "https://www.gem.wiki/Lali_Oil_Field_(Iran)",
+    "catalog_name_confirmed": true,
+    "coordinates": {
+      "lat": 32.288,
+      "lon": 49.0344,
+      "accuracy": "exact"
+    },
+    "lookup": "search_excerpt",
+    "catalog_note": "Lali Oil Field is an operating oil field in Iran.",
+    "checked_at": "2026-09-30 UTC"
+  },
+  {
+    "country": "阿曼",
+    "name": "Runib",
+    "url": "https://www.gem.wiki/Runib_Oil_Field_(Oman)",
+    "catalog_name_confirmed": true,
+    "coordinates": null,
+    "lookup": "page",
+    "catalog_note": "",
+    "checked_at": "2026-09-30 UTC"
+  },
+  {
+    "country": "阿曼",
+    "name": "Saih Rawl",
+    "url": "https://www.gem.wiki/Saih_Rawl_Oil_and_Gas_Field_(Oman)",
+    "catalog_name_confirmed": true,
+    "coordinates": {
+      "lat": 20.3293,
+      "lon": 56.0697,
+      "accuracy": "approximate"
+    },
+    "lookup": "page",
+    "catalog_note": "",
+    "checked_at": "2026-09-30 UTC"
+  },
+  {
+    "country": "伊拉克",
+    "name": "Salman",
+    "url": "https://www.gem.wiki/Salman_Oil_and_Gas_Field_(Iraq)",
+    "catalog_name_confirmed": true,
+    "coordinates": {
+      "lat": 30.6058,
+      "lon": 44.1856,
+      "accuracy": "approximate"
+    },
+    "lookup": "page",
+    "catalog_note": "",
+    "checked_at": "2026-09-30 UTC"
+  },
+  {
+    "country": "阿曼",
+    "name": "Sakhiya",
+    "url": "https://www.gem.wiki/Sakhiya_Oil_Field_(Oman)",
+    "catalog_name_confirmed": true,
+    "coordinates": {
+      "lat": 20.3293,
+      "lon": 56.0697,
+      "accuracy": "approximate"
+    },
+    "lookup": "page",
+    "catalog_note": "Sakhiya Oil Field (سخية) is an operating oil field in Oman.",
+    "checked_at": "2026-09-30 UTC"
+  },
+  {
+    "country": "阿曼",
+    "name": "Rima",
+    "url": "https://www.gem.wiki/Rima_Oil_Field_(Oman)",
+    "catalog_name_confirmed": true,
+    "coordinates": {
+      "lat": 20.3293,
+      "lon": 56.0697,
+      "accuracy": "approximate"
+    },
+    "lookup": "page",
+    "catalog_note": "",
+    "checked_at": "2026-09-30 UTC"
+  },
+  {
+    "country": "以色列",
+    "name": "Royee",
+    "url": "https://www.gem.wiki/Royee_Oil_and_Gas_Field_(Israel)",
+    "catalog_name_confirmed": false,
+    "coordinates": null,
+    "lookup": "page",
+    "catalog_note": "",
+    "checked_at": "2026-09-30 UTC"
+  },
+  {
+    "country": "沙特阿拉伯",
+    "name": "Nuayyim",
+    "url": "https://www.gem.wiki/Nuayyim_Oil_and_Gas_Field_(Saudi_Arabia)",
+    "catalog_name_confirmed": true,
+    "coordinates": {
+      "lat": 22.7878,
+      "lon": 47.3678,
+      "accuracy": "exact"
+    },
+    "lookup": "page",
+    "catalog_note": "",
+    "checked_at": "2026-09-30 UTC"
+  },
+  {
+    "country": "埃及",
+    "name": "Nour",
+    "url": "https://www.gem.wiki/Nour_Gas_Field_(Egypt)",
+    "catalog_name_confirmed": true,
+    "coordinates": {
+      "lat": 31.6242,
+      "lon": 32.7504,
+      "accuracy": "approximate"
+    },
+    "lookup": "page",
+    "catalog_note": "",
+    "checked_at": "2026-09-30 UTC"
+  },
+  {
+    "country": "以色列",
+    "name": "Noa",
+    "url": "https://www.gem.wiki/Noa_Gas_Field_(Israel)",
+    "catalog_name_confirmed": true,
+    "coordinates": {
+      "lat": 31.8087,
+      "lon": 34.1688,
+      "accuracy": "exact"
+    },
+    "lookup": "search_excerpt",
+    "catalog_note": "Noa Gas Field (נועה) is a mothballed gas field in Israel.\nAlong with Mari-B Oil and Gas Field (Israel), Noa Gas Field is a part of the Yam Tethys Gas Project (Israel).",
+    "checked_at": "2026-09-30 UTC"
+  },
+  {
+    "country": "埃及",
+    "name": "Nooros East",
+    "url": "https://www.gem.wiki/Nooros_East_Oil_and_Gas_Field_(Egypt)",
+    "catalog_name_confirmed": true,
+    "coordinates": {
+      "lat": 31.709,
+      "lon": 30.985,
+      "accuracy": "approximate"
+    },
+    "lookup": "search_excerpt",
+    "catalog_note": "Nooros East Oil and Gas Field is an operating oil and gas field in Egypt.\nAlong with Nidoco NW Gas Field (Egypt) and Nooros Gas Field (Egypt), Nooros East Oil and Gas Field is a part of the Great Nooros Area Gas Project (Egypt).\nNooros East Oil and Gas Field is also sometimes referred to as Nidoco North.\nThis page was last edited on 2 March 2026, at 17:27.",
+    "checked_at": "2026-09-30 UTC"
+  },
+  {
+    "country": "埃及",
+    "name": "North Abu Qir PIII",
+    "url": "https://www.gem.wiki/North_Abu_Qir_PIII_Oil_and_Gas_Field_(Egypt)",
+    "catalog_name_confirmed": true,
+    "coordinates": {
+      "lat": 31.4783,
+      "lon": 30.1893,
+      "accuracy": "approximate"
+    },
+    "lookup": "page",
+    "catalog_note": "",
+    "checked_at": "2026-09-30 UTC"
+  },
+  {
+    "country": "埃及",
+    "name": "North Safa",
+    "url": "https://www.gem.wiki/North_Safa_Oil_and_Gas_Field_(Egypt)",
+    "catalog_name_confirmed": true,
+    "coordinates": {
+      "lat": 28.3596,
+      "lon": 33.2946,
+      "accuracy": "approximate"
+    },
+    "lookup": "page",
+    "catalog_note": "",
+    "checked_at": "2026-09-30 UTC"
+  },
+  {
+    "country": "土耳其",
+    "name": "North Sakarya",
+    "url": "https://www.gem.wiki/North_Sakarya_Gas_Field_(Türkiye)",
+    "catalog_name_confirmed": true,
+    "coordinates": {
+      "lat": 43.0329,
+      "lon": 31.681,
+      "accuracy": "exact"
+    },
+    "lookup": "page",
+    "catalog_note": "",
+    "checked_at": "2026-09-30 UTC"
+  },
+  {
+    "country": "科威特",
+    "name": "North Wafra",
+    "url": "https://www.gem.wiki/North_Wafra_Oil_and_Gas_Field_(Kuwait,_Saudi_Arabia)",
+    "catalog_name_confirmed": true,
+    "coordinates": {
+      "lat": 28.4473,
+      "lon": 47.8621,
+      "accuracy": "approximate"
+    },
+    "lookup": "page",
+    "catalog_note": "",
+    "checked_at": "2026-09-30 UTC"
+  },
+  {
+    "country": "埃及",
+    "name": "Nidoco NW",
+    "url": "https://www.gem.wiki/Nidoco_NW_Gas_Field_(Egypt)",
+    "catalog_name_confirmed": true,
+    "coordinates": {
+      "lat": 31.6386,
+      "lon": 31.2372,
+      "accuracy": "approximate"
+    },
+    "lookup": "page",
+    "catalog_note": "",
+    "checked_at": "2026-09-30 UTC"
+  },
+  {
+    "country": "伊朗",
+    "name": "Pol Dokhtar",
+    "url": "https://www.gem.wiki/Pol_Dokhtar_Oil_and_Gas_Field_(Iran)",
+    "catalog_name_confirmed": true,
+    "coordinates": null,
+    "lookup": "search_excerpt",
+    "catalog_note": "Pol Dokhtar Oil and Gas Field is a oil and gas field in Iran.",
+    "checked_at": "2026-09-30 UTC"
+  },
+  {
+    "country": "伊拉克",
+    "name": "Merjan",
+    "url": "https://www.gem.wiki/Merjan_Oil_Field_(Iraq)",
+    "catalog_name_confirmed": true,
+    "coordinates": {
+      "lat": 32.393,
+      "lon": 43.693,
+      "accuracy": "exact"
+    },
+    "lookup": "page",
+    "catalog_note": "",
+    "checked_at": "2026-09-30 UTC"
+  },
+  {
+    "country": "埃及",
+    "name": "Mina West",
+    "url": "https://www.gem.wiki/Mina_West_Gas_Field_(Egypt)",
+    "catalog_name_confirmed": true,
+    "coordinates": {
+      "lat": 32.2826,
+      "lon": 30.7772,
+      "accuracy": "approximate"
+    },
+    "lookup": "page",
+    "catalog_note": "This page was last edited on 2 March 2026, at 17:26.",
+    "checked_at": "2026-09-30 UTC"
+  },
+  {
+    "country": "阿联酋",
+    "name": "Mubarak",
+    "url": "https://www.gem.wiki/Mubarak_Oil_and_Gas_Field_(United_Arab_Emirates)",
+    "catalog_name_confirmed": true,
+    "coordinates": {
+      "lat": 25.842,
+      "lon": 55.2623,
+      "accuracy": "exact"
+    },
+    "lookup": "page",
+    "catalog_note": "",
+    "checked_at": "2026-09-30 UTC"
+  },
+  {
+    "country": "伊朗",
+    "name": "Nar",
+    "url": "https://www.gem.wiki/Nar_Gas_Field_(Iran)",
+    "catalog_name_confirmed": true,
+    "coordinates": {
+      "lat": 27.9235,
+      "lon": 52.2501,
+      "accuracy": "exact"
+    },
+    "lookup": "search_excerpt",
+    "catalog_note": "Nar Gas Field is an operating gas field in Iran.",
+    "checked_at": "2026-09-30 UTC"
+  },
+  {
+    "country": "埃及",
+    "name": "Narges",
+    "url": "https://www.gem.wiki/Narges_Gas_Field_(Egypt)",
+    "catalog_name_confirmed": true,
+    "coordinates": {
+      "lat": 31.68,
+      "lon": 33.27,
+      "accuracy": "approximate"
+    },
+    "lookup": "page",
+    "catalog_note": "",
+    "checked_at": "2026-09-30 UTC"
+  },
+  {
+    "country": "伊拉克",
+    "name": "Nau Doman",
+    "url": "https://www.gem.wiki/Nau_Doman_Oil_and_Gas_Field_(Iraq)",
+    "catalog_name_confirmed": true,
+    "coordinates": null,
+    "lookup": "page",
+    "catalog_note": "",
+    "checked_at": "2026-09-30 UTC"
+  },
+  {
+    "country": "伊朗",
+    "name": "Naft Safid",
+    "url": "https://www.gem.wiki/Naft_Safid_Oil_Field_(Iran)",
+    "catalog_name_confirmed": true,
+    "coordinates": {
+      "lat": 31.6999,
+      "lon": 49.2197,
+      "accuracy": "exact"
+    },
+    "lookup": "search_excerpt",
+    "catalog_note": "Naft Safid Oil Field is an operating oil field in Iran.\nNaft Safid Oil Field is also sometimes referred to as Neft-e-Safid.",
+    "checked_at": "2026-09-30 UTC"
+  },
+  {
+    "country": "伊朗",
+    "name": "Namavaran",
+    "url": "https://www.gem.wiki/Namavaran_Oil_Field_(Iran)",
+    "catalog_name_confirmed": true,
+    "coordinates": null,
+    "lookup": "page",
+    "catalog_note": "This page was last edited on 2 March 2026, at 17:27.",
+    "checked_at": "2026-09-30 UTC"
+  },
+  {
+    "country": "伊拉克",
+    "name": "Kurdamir",
+    "url": "https://www.gem.wiki/Kurdamir_Gas_Field_(Iraq)",
+    "catalog_name_confirmed": true,
+    "coordinates": {
+      "lat": 36.0831,
+      "lon": 44.6297,
+      "accuracy": "approximate"
+    },
+    "lookup": "page",
+    "catalog_note": "",
+    "checked_at": "2026-09-30 UTC"
+  },
+  {
+    "country": "叙利亚",
+    "name": "Habbari",
+    "url": "https://www.gem.wiki/Habbari_Oil_Field_(Syria)",
+    "catalog_name_confirmed": true,
+    "coordinates": null,
+    "lookup": "page",
+    "catalog_note": "Habbari Oil Field is an operating oil field in Syria.",
+    "checked_at": "2026-09-30 UTC"
+  },
+  {
+    "country": "阿联酋",
+    "name": "Habshan",
+    "url": "https://www.gem.wiki/Habshan_Oil_and_Gas_Field_(United_Arab_Emirates)",
+    "catalog_name_confirmed": true,
+    "coordinates": {
+      "lat": 23.7981,
+      "lon": 53.4534,
+      "accuracy": "approximate"
+    },
+    "lookup": "page",
+    "catalog_note": "",
+    "checked_at": "2026-09-30 UTC"
+  },
+  {
+    "country": "沙特阿拉伯",
+    "name": "Haradh",
+    "url": "https://www.gem.wiki/Haradh_Gas_Field_(Saudi_Arabia)",
+    "catalog_name_confirmed": true,
+    "coordinates": {
+      "lat": 24.1358,
+      "lon": 49.0782,
+      "accuracy": "approximate"
+    },
+    "lookup": "page",
+    "catalog_note": "",
+    "checked_at": "2026-09-30 UTC"
+  },
+  {
+    "country": "埃及",
+    "name": "GNN",
+    "url": "https://www.gem.wiki/GNN_Oil_and_Gas_Field_(Egypt)",
+    "catalog_name_confirmed": true,
+    "coordinates": null,
+    "lookup": "page",
+    "catalog_note": "",
+    "checked_at": "2026-09-30 UTC"
+  },
+  {
+    "country": "土耳其",
+    "name": "Goktepe",
+    "url": "https://www.gem.wiki/Goktepe_Gas_Field_(Türkiye)",
+    "catalog_name_confirmed": true,
+    "coordinates": {
+      "lat": 42.4123,
+      "lon": 32.003,
+      "accuracy": "approximate"
+    },
+    "lookup": "page",
+    "catalog_note": "",
+    "checked_at": "2026-09-30 UTC"
+  },
+  {
+    "country": "伊朗",
+    "name": "Golshan",
+    "url": "https://www.gem.wiki/Golshan_Gas_Field_(Iran)",
+    "catalog_name_confirmed": true,
+    "coordinates": {
+      "lat": 27.33,
+      "lon": 51.31,
+      "accuracy": "exact"
+    },
+    "lookup": "page",
+    "catalog_note": "",
+    "checked_at": "2026-09-30 UTC"
+  },
+  {
+    "country": "埃及",
+    "name": "Hilal",
+    "url": "https://www.gem.wiki/Hilal_Oil_and_Gas_Field_(Egypt)",
+    "catalog_name_confirmed": true,
+    "coordinates": null,
+    "lookup": "page",
+    "catalog_note": "",
+    "checked_at": "2026-09-30 UTC"
+  },
+  {
+    "country": "科威特",
+    "name": "Homah",
+    "url": "https://www.gem.wiki/Homah_Oil_and_Gas_Field_(Kuwait)",
+    "catalog_name_confirmed": true,
+    "coordinates": {
+      "lat": 29.8114,
+      "lon": 47.3111,
+      "accuracy": "approximate"
+    },
+    "lookup": "page",
+    "catalog_note": "",
+    "checked_at": "2026-09-30 UTC"
+  },
+  {
+    "country": "埃及",
+    "name": "Harmattan",
+    "url": "https://www.gem.wiki/Harmattan_Gas_Field_(Egypt)",
+    "catalog_name_confirmed": true,
+    "coordinates": {
+      "lat": 31.5285,
+      "lon": 31.8142,
+      "accuracy": "approximate"
+    },
+    "lookup": "page",
+    "catalog_note": "",
+    "checked_at": "2026-09-30 UTC"
+  },
+  {
+    "country": "科威特",
+    "name": "Humma",
+    "url": "https://www.gem.wiki/Humma_Oil_and_Gas_Field_(Kuwait,_Saudi_Arabia)",
+    "catalog_name_confirmed": true,
+    "coordinates": {
+      "lat": 28.2898,
+      "lon": 47.9248,
+      "accuracy": "exact"
+    },
+    "lookup": "page",
+    "catalog_note": "",
+    "checked_at": "2026-09-30 UTC"
+  },
+  {
+    "country": "埃及",
+    "name": "Herunefer",
+    "url": "https://www.gem.wiki/Herunefer_Oil_and_Gas_Field_(Egypt)",
+    "catalog_name_confirmed": false,
+    "coordinates": null,
+    "lookup": "page",
+    "catalog_note": "",
+    "checked_at": "2026-09-30 UTC"
+  },
+  {
+    "country": "沙特阿拉伯",
+    "name": "Hasbah",
+    "url": "https://www.gem.wiki/Hasbah_Oil_and_Gas_Field_(Saudi_Arabia)",
+    "catalog_name_confirmed": true,
+    "coordinates": {
+      "lat": 28.1477,
+      "lon": 49.9194,
+      "accuracy": "exact"
+    },
+    "lookup": "page",
+    "catalog_note": "This page was last edited on 27 September 2026, at 12:24.",
+    "checked_at": "2026-09-30 UTC"
+  },
+  {
+    "country": "埃及",
+    "name": "South Sidri",
+    "url": "https://www.gem.wiki/South_Sidri_Oil_Field_(Egypt)",
+    "catalog_name_confirmed": true,
+    "coordinates": null,
+    "lookup": "page",
+    "catalog_note": "South Sidri Oil Field is an operating oil field in Egypt.\nSouth Sidri Oil Field is also sometimes referred to as Sidri South.",
+    "checked_at": "2026-09-30 UTC"
+  },
+  {
+    "country": "沙特阿拉伯",
+    "name": "Hawiyah",
+    "url": "https://www.gem.wiki/Hawiyah_Gas_Field_(Saudi_Arabia)",
+    "catalog_name_confirmed": true,
+    "coordinates": {
+      "lat": 24.8016,
+      "lon": 49.386,
+      "accuracy": "approximate"
+    },
+    "lookup": "page",
+    "catalog_note": "Hawiyah Gas Field (حوية) is an operating gas field in Saudi Arabia.\nThis page was last edited on 28 September 2026, at 09:11.",
+    "checked_at": "2026-09-30 UTC"
+  },
+  {
+    "country": "以色列",
+    "name": "Hermes",
+    "url": "https://www.gem.wiki/Hermes_Gas_Field_(Israel)",
+    "catalog_name_confirmed": true,
+    "coordinates": null,
+    "lookup": "page",
+    "catalog_note": "Hermes Gas Field is a discovered gas field in Israel.\nThis page was last edited on 22 February 2025, at 00:38.",
+    "checked_at": "2026-09-30 UTC"
+  },
+  {
+    "country": "科威特",
+    "name": "South Magwa",
+    "url": "https://www.gem.wiki/South_Magwa_Oil_Field_(Kuwait)",
+    "catalog_name_confirmed": true,
+    "coordinates": null,
+    "lookup": "page",
+    "catalog_note": "South Magwa Oil Field is a oil field in Kuwait.",
+    "checked_at": "2026-09-30 UTC"
+  },
+  {
+    "country": "伊朗",
+    "name": "Esfandiar",
+    "url": "https://www.gem.wiki/Esfandiar_Oil_Field_(Iran)",
+    "catalog_name_confirmed": true,
+    "coordinates": {
+      "lat": 28.86,
+      "lon": 49.6,
+      "accuracy": "approximate"
+    },
+    "lookup": "search_excerpt",
+    "catalog_note": "Esfandiar Oil Field is an in-development oil field in Iran.",
+    "checked_at": "2026-09-30 UTC"
+  },
+  {
+    "country": "叙利亚",
+    "name": "Fadeh",
+    "url": "https://www.gem.wiki/Fadeh_Oil_Field_(Syria)",
+    "catalog_name_confirmed": false,
+    "coordinates": null,
+    "lookup": "page",
+    "catalog_note": "",
+    "checked_at": "2026-09-30 UTC"
+  },
+  {
+    "country": "阿曼",
+    "name": "Fahd",
+    "url": "https://www.gem.wiki/Fahd_Oil_Field_(Oman)",
+    "catalog_name_confirmed": false,
+    "coordinates": null,
+    "lookup": "page",
+    "catalog_note": "",
+    "checked_at": "2026-09-30 UTC"
+  },
+  {
+    "country": "阿曼",
+    "name": "Fahd South",
+    "url": "https://www.gem.wiki/Fahd_South_Oil_Field_(Oman)",
+    "catalog_name_confirmed": true,
+    "coordinates": null,
+    "lookup": "search_excerpt",
+    "catalog_note": "Fahd South Oil Field (فهد) is a discovered oil field in Oman.",
+    "checked_at": "2026-09-30 UTC"
+  },
+  {
+    "country": "阿曼",
+    "name": "Fahd Southwest",
+    "url": "https://www.gem.wiki/Fahd_Southwest_Oil_Field_(Oman)",
+    "catalog_name_confirmed": true,
+    "coordinates": {
+      "lat": 21.178,
+      "lon": 55.8542,
+      "accuracy": "approximate"
+    },
+    "lookup": "search_excerpt",
+    "catalog_note": "Fahd Southwest Oil Field (فهد) is a discovered oil field in Oman.",
+    "checked_at": "2026-09-30 UTC"
+  },
+  {
+    "country": "伊拉克",
+    "name": "Eridu",
+    "url": "https://www.gem.wiki/Eridu_Oil_Field_(Iraq)",
+    "catalog_name_confirmed": true,
+    "coordinates": {
+      "lat": 30.73,
+      "lon": 45.99,
+      "accuracy": "approximate"
+    },
+    "lookup": "page",
+    "catalog_note": "Eridu Oil Field is an in-development oil field in Iraq.\nThis page was last edited on 2 March 2026, at 17:15.",
+    "checked_at": "2026-09-30 UTC"
+  },
+  {
+    "country": "埃及",
+    "name": "El King",
+    "url": "https://www.gem.wiki/El_King_Oil_and_Gas_Field_(Egypt)",
+    "catalog_name_confirmed": true,
+    "coordinates": {
+      "lat": 31.9027,
+      "lon": 29.5983,
+      "accuracy": "approximate"
+    },
+    "lookup": "search_excerpt",
+    "catalog_note": "El King Oil and Gas Field is a discovered oil and gas field in Egypt.",
+    "checked_at": "2026-09-30 UTC"
+  },
+  {
+    "country": "以色列",
+    "name": "Tamar Southwest",
+    "url": "https://www.gem.wiki/Tamar_Southwest_Oil_and_Gas_Field_(Israel)",
+    "catalog_name_confirmed": true,
+    "coordinates": {
+      "lat": 32.92,
+      "lon": 33.92,
+      "accuracy": "exact"
+    },
+    "lookup": "search_excerpt",
+    "catalog_note": "Tamar Southwest Oil and Gas Field is an in-development oil and gas field in Israel.\nAlong with Tamar expansion Oil and Gas Phase (Israel) and Tamar Oil and Gas Field (Israel), Tamar Southwest Oil and Gas Field is a part of the Tamar Project.",
+    "checked_at": "2026-09-30 UTC"
+  },
+  {
+    "country": "埃及",
+    "name": "El Qar",
+    "url": "https://www.gem.wiki/El_Qar_Oil_and_Gas_Field_(Egypt)",
+    "catalog_name_confirmed": true,
+    "coordinates": {
+      "lat": 31.5513,
+      "lon": 31.2696,
+      "accuracy": "approximate"
+    },
+    "lookup": "search_excerpt",
+    "catalog_note": "El Qar Oil and Gas Field is an operating oil and gas field in Egypt.",
+    "checked_at": "2026-09-30 UTC"
+  },
+  {
+    "country": "阿曼",
+    "name": "Ghaba North",
+    "url": "https://www.gem.wiki/Ghaba_North_Oil_Field_(Oman)",
+    "catalog_name_confirmed": true,
+    "coordinates": {
+      "lat": 21.3087,
+      "lon": 57.0945,
+      "accuracy": "approximate"
+    },
+    "lookup": "page",
+    "catalog_note": "Ghaba North Oil Field is an operating oil field in Oman.\nThis page was last edited on 2 March 2026, at 17:16.",
+    "checked_at": "2026-09-30 UTC"
+  },
+  {
+    "country": "阿曼",
+    "name": "Ghafeer",
+    "url": "https://www.gem.wiki/Ghafeer_Oil_and_Gas_Field_(Oman)",
+    "catalog_name_confirmed": true,
+    "coordinates": {
+      "lat": 21.8916,
+      "lon": 56.1569,
+      "accuracy": "approximate"
+    },
+    "lookup": "page",
+    "catalog_note": "Ghafeer Oil and Gas Field (غفير) is an operating oil and gas field in Oman.\nThis page was last edited on 2 March 2026, at 17:16.",
+    "checked_at": "2026-09-30 UTC"
+  },
+  {
+    "country": "伊朗",
+    "name": "Ferdowsi",
+    "url": "https://www.gem.wiki/Ferdowsi_Oil_and_Gas_Field_(Iran)",
+    "catalog_name_confirmed": false,
+    "coordinates": null,
+    "lookup": "page",
+    "catalog_note": "",
+    "checked_at": "2026-09-30 UTC"
+  },
+  {
+    "country": "埃及",
+    "name": "Khalda",
+    "url": "https://www.gem.wiki/Khalda_Oil_and_Gas_Field_(Egypt)",
+    "catalog_name_confirmed": true,
+    "coordinates": {
+      "lat": 30.654,
+      "lon": 26.958,
+      "accuracy": "exact"
+    },
+    "lookup": "page",
+    "catalog_note": "Khalda Oil and Gas Field is an operating oil and gas field in Egypt.\nThis page was last edited on 29 September 2026, at 06:42.",
+    "checked_at": "2026-09-30 UTC"
+  },
+  {
+    "country": "巴林",
+    "name": "Khaleej Al-Bahrain",
+    "url": "https://www.gem.wiki/Khaleej_Al-Bahrain_Oil_and_Gas_Field_(Bahrain)",
+    "catalog_name_confirmed": true,
+    "coordinates": {
+      "lat": 26.0451,
+      "lon": 50.3568,
+      "accuracy": "approximate"
+    },
+    "lookup": "search_excerpt",
+    "catalog_note": "Khaleej Al-Bahrain Oil and Gas Field (خليج البحرين) is a discovered oil and gas field in Bahrain.",
+    "checked_at": "2026-09-30 UTC"
+  },
+  {
+    "country": "伊拉克",
+    "name": "Khanah",
+    "url": "https://www.gem.wiki/Khanah_Oil_Field_(Iraq)",
+    "catalog_name_confirmed": true,
+    "coordinates": {
+      "lat": 34.1814,
+      "lon": 45.4085,
+      "accuracy": "approximate"
+    },
+    "lookup": "page",
+    "catalog_note": "",
+    "checked_at": "2026-09-30 UTC"
+  },
+  {
+    "country": "埃及",
+    "name": "Scarab",
+    "url": "https://www.gem.wiki/Scarab_Oil_and_Gas_Field_(Egypt)",
+    "catalog_name_confirmed": true,
+    "coordinates": {
+      "lat": 31.935,
+      "lon": 30.375,
+      "accuracy": "exact"
+    },
+    "lookup": "page",
+    "catalog_note": "Scarab Oil and Gas Field is an operating oil and gas field in Egypt.\nThis page was last edited on 30 September 2026, at 15:36.",
+    "checked_at": "2026-09-30 UTC"
+  },
+  {
+    "country": "科威特",
+    "name": "Khashman",
+    "url": "https://www.gem.wiki/Khashman_Oil_and_Gas_Field_(Kuwait)",
+    "catalog_name_confirmed": true,
+    "coordinates": {
+      "lat": 29.2312,
+      "lon": 47.8809,
+      "accuracy": "exact"
+    },
+    "lookup": "page",
+    "catalog_note": "This page was last edited on 24 September 2026, at 23:08.",
+    "checked_at": "2026-09-30 UTC"
+  },
+  {
+    "country": "伊朗",
+    "name": "Khayyam",
+    "url": "https://www.gem.wiki/Khayyam_Gas_Field_(Iran)",
+    "catalog_name_confirmed": false,
+    "coordinates": null,
+    "lookup": "page",
+    "catalog_note": "",
+    "checked_at": "2026-09-30 UTC"
+  },
+  {
+    "country": "埃及",
+    "name": "Satis West",
+    "url": "https://www.gem.wiki/Satis_West_Gas_Field_(Egypt)",
+    "catalog_name_confirmed": false,
+    "coordinates": null,
+    "lookup": "page",
+    "catalog_note": "",
+    "checked_at": "2026-09-30 UTC"
+  },
+  {
+    "country": "以色列",
+    "name": "Karish North",
+    "url": "https://www.gem.wiki/Karish_North_Oil_and_Gas_Field_(Israel)",
+    "catalog_name_confirmed": true,
+    "coordinates": {
+      "lat": 33.2588,
+      "lon": 34.3397,
+      "accuracy": "exact"
+    },
+    "lookup": "page",
+    "catalog_note": "",
+    "checked_at": "2026-09-30 UTC"
+  },
+  {
+    "country": "以色列",
+    "name": "Katlan",
+    "url": "https://www.gem.wiki/Katlan_Gas_Field_(Israel)",
+    "catalog_name_confirmed": true,
+    "coordinates": {
+      "lat": 33.2283,
+      "lon": 34.289,
+      "accuracy": "approximate"
+    },
+    "lookup": "page",
+    "catalog_note": "",
+    "checked_at": "2026-09-30 UTC"
+  },
+  {
+    "country": "伊朗",
+    "name": "Kuh-e-Mond",
+    "url": "https://www.gem.wiki/Kuh-e-Mond_Oil_Field_(Iran)",
+    "catalog_name_confirmed": true,
+    "coordinates": null,
+    "lookup": "search_excerpt",
+    "catalog_note": "Kuh-e-Mond Oil Field is a discovered oil field in Iran.",
+    "checked_at": "2026-09-30 UTC"
+  },
+  {
+    "country": "伊朗",
+    "name": "Sarkhan",
+    "url": "https://www.gem.wiki/Sarkhan_Oil_and_Gas_Field_(Iran)",
+    "catalog_name_confirmed": true,
+    "coordinates": {
+      "lat": 33.3069,
+      "lon": 47.8196,
+      "accuracy": "exact"
+    },
+    "lookup": "search_excerpt",
+    "catalog_note": "Sarkhan Oil and Gas Field is an operating oil and gas field in Iran.\nSarkhan Oil and Gas Field is also sometimes referred to as Sarkan.",
+    "checked_at": "2026-09-30 UTC"
+  },
+  {
+    "country": "伊朗",
+    "name": "Kilur Karim",
+    "url": "https://www.gem.wiki/Kilur_Karim_Oil_Field_(Iran)",
+    "catalog_name_confirmed": true,
+    "coordinates": {
+      "lat": 29.9339,
+      "lon": 50.6727,
+      "accuracy": "exact"
+    },
+    "lookup": "page",
+    "catalog_note": "",
+    "checked_at": "2026-09-30 UTC"
+  },
+  {
+    "country": "埃及",
+    "name": "Saqqara",
+    "url": "https://www.gem.wiki/Saqqara_Oil_and_Gas_Field_(Egypt)",
+    "catalog_name_confirmed": true,
+    "coordinates": {
+      "lat": 28.2259,
+      "lon": 33.3556,
+      "accuracy": "exact"
+    },
+    "lookup": "page",
+    "catalog_note": "",
+    "checked_at": "2026-09-30 UTC"
+  },
+  {
+    "country": "埃及",
+    "name": "Sapphire",
+    "url": "https://www.gem.wiki/Sapphire_Gas_Field_(Egypt)",
+    "catalog_name_confirmed": true,
+    "coordinates": {
+      "lat": 32.0226,
+      "lon": 30.3649,
+      "accuracy": "approximate"
+    },
+    "lookup": "search_excerpt",
+    "catalog_note": "Sapphire Gas Field is an operating gas field in Egypt.\nAlong with 16 other assets (listed on West Delta Deep Marine Oil and Gas Project (Egypt)), Sapphire Gas Field is a part of the West Delta Deep Marine Oil and Gas Project (Egypt).\nThis page was last edited on 2 March 2026, at 17:32.",
+    "checked_at": "2026-09-30 UTC"
+  },
+  {
+    "country": "沙特阿拉伯",
+    "name": "Karan",
+    "url": "https://www.gem.wiki/Karan_Gas_Field_(Saudi_Arabia)",
+    "catalog_name_confirmed": true,
+    "coordinates": {
+      "lat": 27.7233,
+      "lon": 49.8257,
+      "accuracy": "approximate"
+    },
+    "lookup": "page",
+    "catalog_note": "",
+    "checked_at": "2026-09-30 UTC"
+  },
+  {
+    "country": "埃及",
+    "name": "Simian",
+    "url": "https://www.gem.wiki/Simian_Oil_and_Gas_Field_(Egypt)",
+    "catalog_name_confirmed": true,
+    "coordinates": null,
+    "lookup": "page",
+    "catalog_note": "",
+    "checked_at": "2026-09-30 UTC"
+  },
+  {
+    "country": "叙利亚",
+    "name": "Sijan",
+    "url": "https://www.gem.wiki/Sijan_Oil_Field_(Syria)",
+    "catalog_name_confirmed": true,
+    "coordinates": {
+      "lat": 35.2178,
+      "lon": 40.7466,
+      "accuracy": "exact"
+    },
+    "lookup": "page",
+    "catalog_note": "Sijan Oil Field is an operating oil field in Syria.\nThis page was last edited on 2 March 2026, at 17:33.",
+    "checked_at": "2026-09-30 UTC"
+  },
+  {
+    "country": "沙特阿拉伯",
+    "name": "Jalamid",
+    "url": "https://www.gem.wiki/Jalamid_Gas_Field_(Saudi_Arabia)",
+    "catalog_name_confirmed": true,
+    "coordinates": {
+      "lat": 31.3912,
+      "lon": 40.0981,
+      "accuracy": "approximate"
+    },
+    "lookup": "page",
+    "catalog_note": "",
+    "checked_at": "2026-09-30 UTC"
+  },
+  {
+    "country": "科威特",
+    "name": "Jazza",
+    "url": "https://www.gem.wiki/Jazza_Oil_and_Gas_Field_(Kuwait)",
+    "catalog_name_confirmed": false,
+    "coordinates": null,
+    "lookup": "page",
+    "catalog_note": "",
+    "checked_at": "2026-09-30 UTC"
+  },
+  {
+    "country": "阿联酋",
+    "name": "Jebel Ali",
+    "url": "https://www.gem.wiki/Jebel_Ali_Gas_Field_(United_Arab_Emirates)",
+    "catalog_name_confirmed": true,
+    "coordinates": {
+      "lat": 24.7116,
+      "lon": 55.1113,
+      "accuracy": "approximate"
+    },
+    "lookup": "search_excerpt",
+    "catalog_note": "Jebel Ali Gas Field (جبل علي) is a discovered gas field in United Arab Emirates.",
+    "checked_at": "2026-09-30 UTC"
+  },
+  {
+    "country": "埃及",
+    "name": "JG-NEAG",
+    "url": "https://www.gem.wiki/JG-NEAG_Oil_and_Gas_Field_(Egypt)",
+    "catalog_name_confirmed": true,
+    "coordinates": null,
+    "lookup": "page",
+    "catalog_note": "This page was last edited on 22 February 2025, at 00:47.",
+    "checked_at": "2026-09-30 UTC"
+  },
+  {
+    "country": "埃及",
+    "name": "Siwa",
+    "url": "https://www.gem.wiki/Siwa_Oil_and_Gas_Field_(Egypt)",
+    "catalog_name_confirmed": false,
+    "coordinates": null,
+    "lookup": "page",
+    "catalog_note": "",
+    "checked_at": "2026-09-30 UTC"
+  },
+  {
+    "country": "伊朗",
+    "name": "Sirri D",
+    "url": "https://www.gem.wiki/Sirri_D_Oil_Field_(Iran)",
+    "catalog_name_confirmed": true,
+    "coordinates": {
+      "lat": 25.7463,
+      "lon": 54.2086,
+      "accuracy": "approximate"
+    },
+    "lookup": "search_excerpt",
+    "catalog_note": "Sirri D Oil Field is an operating oil field in Iran.\nSirri D Oil Field is also sometimes referred to as Dena.",
+    "checked_at": "2026-09-30 UTC"
+  },
+  {
+    "country": "伊朗",
+    "name": "Sirri A",
+    "url": "https://www.gem.wiki/Sirri_A_Oil_Field_(Iran)",
+    "catalog_name_confirmed": true,
+    "coordinates": {
+      "lat": 25.7463,
+      "lon": 54.2086,
+      "accuracy": "approximate"
+    },
+    "lookup": "page",
+    "catalog_note": "This page was last edited on 2 March 2026, at 17:34.",
+    "checked_at": "2026-09-30 UTC"
+  },
+  {
+    "country": "伊朗",
+    "name": "Shahini",
+    "url": "https://www.gem.wiki/Shahini_Gas_Field_(Iran)",
+    "catalog_name_confirmed": true,
+    "coordinates": {
+      "lat": 27.3381,
+      "lon": 53.1783,
+      "accuracy": "approximate"
+    },
+    "lookup": "page",
+    "catalog_note": "Shahini Gas Field is a discovered gas field in Iran.\nShahini Gas Field is also sometimes referred to as Lemerd, Lamerd.\nThis page was last edited on 2 March 2026, at 17:33.",
+    "checked_at": "2026-09-30 UTC"
+  },
+  {
+    "country": "埃及",
+    "name": "Kanayes",
+    "url": "https://www.gem.wiki/Kanayes_Oil_and_Gas_Field_(Egypt)",
+    "catalog_name_confirmed": false,
+    "coordinates": null,
+    "lookup": "page",
+    "catalog_note": "",
+    "checked_at": "2026-09-30 UTC"
+  },
+  {
+    "country": "埃及",
+    "name": "Shams",
+    "url": "https://www.gem.wiki/Shams_Oil_and_Gas_Field_(Egypt)",
+    "catalog_name_confirmed": true,
+    "coordinates": {
+      "lat": 30.8262,
+      "lon": 26.9078,
+      "accuracy": "exact"
+    },
+    "lookup": "page",
+    "catalog_note": "Shams Oil and Gas Field is an operating oil and gas field in Egypt.\nThis page was last edited on 30 September 2026, at 11:40.",
+    "checked_at": "2026-09-30 UTC"
+  },
+  {
+    "country": "埃及",
+    "name": "Shoab Ali",
+    "url": "https://www.gem.wiki/Shoab_Ali_Oil_Field_(Egypt)",
+    "catalog_name_confirmed": true,
+    "coordinates": {
+      "lat": 27.8469,
+      "lon": 33.8638,
+      "accuracy": "approximate"
+    },
+    "lookup": "page",
+    "catalog_note": "Shoab Ali Oil Field is an operating oil field in Egypt.\nThis page was last edited on 17 September 2026, at 06:47.",
+    "checked_at": "2026-09-30 UTC"
+  },
+  {
+    "country": "埃及",
+    "name": "July",
+    "url": "https://www.gem.wiki/July_Oil_and_Gas_Field_(Egypt)",
+    "catalog_name_confirmed": true,
+    "coordinates": {
+      "lat": 28.2282,
+      "lon": 33.2409,
+      "accuracy": "exact"
+    },
+    "lookup": "page",
+    "catalog_note": "",
+    "checked_at": "2026-09-30 UTC"
+  },
+  {
+    "country": "以色列",
+    "name": "Shimson",
+    "url": "https://www.gem.wiki/Shimson_Gas_Field_(Israel)",
+    "catalog_name_confirmed": true,
+    "coordinates": {
+      "lat": 32.1001,
+      "lon": 33.7391,
+      "accuracy": "exact"
+    },
+    "lookup": "page",
+    "catalog_note": "",
+    "checked_at": "2026-09-30 UTC"
+  },
+  {
+    "country": "伊朗",
+    "name": "Shanul",
+    "url": "https://www.gem.wiki/Shanul_Oil_and_Gas_Field_(Iran)",
+    "catalog_name_confirmed": true,
+    "coordinates": {
+      "lat": 27.6941,
+      "lon": 53.1817,
+      "accuracy": "exact"
+    },
+    "lookup": "search_excerpt",
+    "catalog_note": "Shanul Oil and Gas Field is an operating oil and gas field in Iran.\nShanul Oil and Gas Field is also sometimes referred to as Shanol.",
+    "checked_at": "2026-09-30 UTC"
+  }
+]

@@ -1,0 +1,5386 @@
+[
+  {
+    "country": "沙特阿拉伯",
+    "name": "Abqaiq",
+    "url": "https://www.gem.wiki/Abqaiq_Oil_Field_(Saudi Arabia)",
+    "checked_at": "2026-10-01",
+    "http_status": 200,
+    "final_url": "https://www.gem.wiki/Abqaiq_Oil_Field_(Saudi_Arabia)",
+    "sha256": "a7e5f0d7224514d7a13368218b05032a5864e0a3c4a4702b25057a572aeee0b2",
+    "title": "Abqaiq Oil Field (Saudi Arabia)",
+    "tables": [
+      [
+        [
+          "Unit name",
+          "Status",
+          "Operator",
+          "Owner",
+          "Discovery year",
+          "FID year",
+          "Production start year",
+          "Production type"
+        ],
+        [
+          "Abqaiq",
+          "operating",
+          "Saudi Arabian Oil",
+          "Saudi Arabian Oil Co [100%]",
+          "1940",
+          "–",
+          "1946",
+          "–"
+        ]
+      ],
+      [
+        [
+          "Fuel description",
+          "Reserves classification",
+          "Quantity",
+          "Units",
+          "Data year",
+          "Source"
+        ],
+        [
+          "oil",
+          "2P reserves",
+          "5500.0",
+          "million bbl",
+          "2004",
+          "​"
+        ],
+        [
+          "oil",
+          "EUR",
+          "18500.0",
+          "million bbl",
+          "2004",
+          "​"
+        ],
+        [
+          "oil",
+          "EUR",
+          "16300.0",
+          "million bbl",
+          "2018",
+          "​"
+        ]
+      ],
+      [
+        [
+          "Category",
+          "Fuel description",
+          "Quantity",
+          "Units",
+          "Data year",
+          "Source"
+        ],
+        [
+          "production",
+          "oil",
+          "146.0",
+          "million bbl/y",
+          "2007",
+          "​"
+        ]
+      ],
+      [
+        [
+          "Location",
+          "Onshore/Offshore",
+          "Coordinates ( WGS 84 )"
+        ],
+        [
+          "onshore, Saudi Arabia",
+          "onshore",
+          "26.1687, 49.7841 (exact)"
+        ]
+      ]
+    ],
+    "url_role": "候选目录URL（可能由名称构造）；不是新确认的引用来源",
+    "fact_verification": "只探测页面；HTTP成功不等于数值核验，失败不代表资产不存在"
+  },
+  {
+    "country": "沙特阿拉伯",
+    "name": "Jafurah",
+    "url": "https://www.gem.wiki/Jafurah_Gas_Field_(Saudi Arabia)",
+    "checked_at": "2026-10-01",
+    "error": "HTTP Error 404: Not Found",
+    "url_role": "候选目录URL（可能由名称构造）；不是新确认的引用来源",
+    "fact_verification": "只探测页面；HTTP成功不等于数值核验，失败不代表资产不存在"
+  },
+  {
+    "country": "沙特阿拉伯",
+    "name": "Jabu",
+    "url": "https://www.gem.wiki/Jabu_Oil_Field_(Saudi Arabia)",
+    "checked_at": "2026-10-01",
+    "error": "HTTP Error 404: Not Found",
+    "url_role": "候选目录URL（可能由名称构造）；不是新确认的引用来源",
+    "fact_verification": "只探测页面；HTTP成功不等于数值核验，失败不代表资产不存在"
+  },
+  {
+    "country": "沙特阿拉伯",
+    "name": "Khursaniyah",
+    "url": "https://www.gem.wiki/Khursaniyah_Oil_Field_(Saudi Arabia)",
+    "checked_at": "2026-10-01",
+    "http_status": 200,
+    "final_url": "https://www.gem.wiki/Khursaniyah_Oil_Field_(Saudi_Arabia)",
+    "sha256": "23822bcb63752c29a52e0823837fae9d068e0b842da35b6be402329b716bc87e",
+    "title": "Khursaniyah Oil Field (Saudi Arabia)",
+    "tables": [
+      [
+        [
+          "Unit name",
+          "Status",
+          "Operator",
+          "Owner",
+          "Discovery year",
+          "FID year",
+          "Production start year",
+          "Production type"
+        ],
+        [
+          "Khursaniyah",
+          "operating",
+          "Saudi Arabian Oil",
+          "Saudi Arabian Oil Co [100%]",
+          "1956",
+          "–",
+          "1960",
+          "conventional"
+        ]
+      ],
+      [
+        [
+          "Fuel description",
+          "Reserves classification",
+          "Quantity",
+          "Units",
+          "Data year",
+          "Source"
+        ],
+        [
+          "oil",
+          "2P reserves",
+          "3300.0",
+          "million bbl",
+          "2004",
+          "​"
+        ],
+        [
+          "oil",
+          "EUR",
+          "4300.0",
+          "million bbl",
+          "2004",
+          "​"
+        ]
+      ],
+      [
+        [
+          "Category",
+          "Fuel description",
+          "Quantity",
+          "Units",
+          "Data year",
+          "Source"
+        ],
+        [
+          "production design capacity",
+          "oil",
+          "182.5",
+          "million bbl/y",
+          "2017",
+          "​"
+        ]
+      ],
+      [
+        [
+          "Location",
+          "Onshore/Offshore",
+          "Coordinates ( WGS 84 )"
+        ],
+        [
+          "onshore, Saudi Arabia",
+          "onshore",
+          "27.0287, 48.5437 (exact)"
+        ]
+      ]
+    ],
+    "url_role": "候选目录URL（可能由名称构造）；不是新确认的引用来源",
+    "fact_verification": "只探测页面；HTTP成功不等于数值核验，失败不代表资产不存在"
+  },
+  {
+    "country": "沙特阿拉伯",
+    "name": "Sayahid",
+    "url": "https://www.gem.wiki/Sayahid_Oil_Field_(Saudi Arabia)",
+    "checked_at": "2026-10-01",
+    "error": "HTTP Error 404: Not Found",
+    "url_role": "候选目录URL（可能由名称构造）；不是新确认的引用来源",
+    "fact_verification": "只探测页面；HTTP成功不等于数值核验，失败不代表资产不存在"
+  },
+  {
+    "country": "沙特阿拉伯",
+    "name": "Qatif",
+    "url": "https://www.gem.wiki/Qatif_Oil_Field_(Saudi Arabia)",
+    "checked_at": "2026-10-01",
+    "http_status": 200,
+    "final_url": "https://www.gem.wiki/Qatif_Oil_Field_(Saudi_Arabia)",
+    "sha256": "9870354454e4793569ebf22261a43a4c1482d1a0bc1c8dfe89110344c0ed103c",
+    "title": "Qatif Oil Field (Saudi Arabia)",
+    "tables": [
+      [
+        [
+          "Unit name",
+          "Status",
+          "Operator",
+          "Owner",
+          "Discovery year",
+          "FID year",
+          "Production start year",
+          "Production type"
+        ],
+        [
+          "Qatif",
+          "operating",
+          "Saudi Arabian Oil",
+          "Saudi Arabian Oil Co [100%]",
+          "1945",
+          "–",
+          "1946",
+          "conventional"
+        ]
+      ],
+      [
+        [
+          "Fuel description",
+          "Reserves classification",
+          "Quantity",
+          "Units",
+          "Data year",
+          "Source"
+        ],
+        [
+          "oil",
+          "2P reserves",
+          "9200.0",
+          "million bbl",
+          "2004",
+          "​"
+        ],
+        [
+          "oil",
+          "EUR",
+          "10000.0",
+          "million bbl",
+          "2004",
+          "​"
+        ]
+      ],
+      [
+        [
+          "Category",
+          "Fuel description",
+          "Quantity",
+          "Units",
+          "Data year",
+          "Source"
+        ],
+        [
+          "production",
+          "oil",
+          "182.5",
+          "million bbl/y",
+          "2007",
+          "​"
+        ]
+      ],
+      [
+        [
+          "Location",
+          "Onshore/Offshore",
+          "Coordinates ( WGS 84 )"
+        ],
+        [
+          "onshore, Saudi Arabia",
+          "onshore",
+          "26.7077, 49.9393 (exact)"
+        ]
+      ]
+    ],
+    "url_role": "候选目录URL（可能由名称构造）；不是新确认的引用来源",
+    "fact_verification": "只探测页面；HTTP成功不等于数值核验，失败不代表资产不存在"
+  },
+  {
+    "country": "沙特阿拉伯",
+    "name": "Ayfan",
+    "url": "https://www.gem.wiki/Ayfan_Oil_Field_(Saudi Arabia)",
+    "checked_at": "2026-10-01",
+    "error": "HTTP Error 404: Not Found",
+    "url_role": "候选目录URL（可能由名称构造）；不是新确认的引用来源",
+    "fact_verification": "只探测页面；HTTP成功不等于数值核验，失败不代表资产不存在"
+  },
+  {
+    "country": "沙特阿拉伯",
+    "name": "Nuwayr",
+    "url": "https://www.gem.wiki/Nuwayr_Oil_Field_(Saudi Arabia)",
+    "checked_at": "2026-10-01",
+    "error": "HTTP Error 404: Not Found",
+    "url_role": "候选目录URL（可能由名称构造）；不是新确认的引用来源",
+    "fact_verification": "只探测页面；HTTP成功不等于数值核验，失败不代表资产不存在"
+  },
+  {
+    "country": "沙特阿拉伯",
+    "name": "Qurqas",
+    "url": "https://www.gem.wiki/Qurqas_Oil_Field_(Saudi Arabia)",
+    "checked_at": "2026-10-01",
+    "error": "HTTP Error 404: Not Found",
+    "url_role": "候选目录URL（可能由名称构造）；不是新确认的引用来源",
+    "fact_verification": "只探测页面；HTTP成功不等于数值核验，失败不代表资产不存在"
+  },
+  {
+    "country": "沙特阿拉伯",
+    "name": "Ladam",
+    "url": "https://www.gem.wiki/Ladam_Oil_Field_(Saudi Arabia)",
+    "checked_at": "2026-10-01",
+    "error": "HTTP Error 404: Not Found",
+    "url_role": "候选目录URL（可能由名称构造）；不是新确认的引用来源",
+    "fact_verification": "只探测页面；HTTP成功不等于数值核验，失败不代表资产不存在"
+  },
+  {
+    "country": "沙特阿拉伯",
+    "name": "Damda",
+    "url": "https://www.gem.wiki/Damda_Oil_Field_(Saudi Arabia)",
+    "checked_at": "2026-10-01",
+    "error": "HTTP Error 404: Not Found",
+    "url_role": "候选目录URL（可能由名称构造）；不是新确认的引用来源",
+    "fact_verification": "只探测页面；HTTP成功不等于数值核验，失败不代表资产不存在"
+  },
+  {
+    "country": "沙特阿拉伯",
+    "name": "Faruq",
+    "url": "https://www.gem.wiki/Faruq_Oil_Field_(Saudi Arabia)",
+    "checked_at": "2026-10-01",
+    "error": "HTTP Error 404: Not Found",
+    "url_role": "候选目录URL（可能由名称构造）；不是新确认的引用来源",
+    "fact_verification": "只探测页面；HTTP成功不等于数值核验，失败不代表资产不存在"
+  },
+  {
+    "country": "沙特阿拉伯",
+    "name": "Fadhili",
+    "url": "https://www.gem.wiki/Fadhili_Oil_Field_(Saudi Arabia)",
+    "checked_at": "2026-10-01",
+    "http_status": 200,
+    "final_url": "https://www.gem.wiki/Fadhili_Oil_Field_(Saudi_Arabia)",
+    "sha256": "e571529660300945d76005dcd8157f69cbff531d4ae1bc7e250fd127e92fe182",
+    "title": "Fadhili Oil Field (Saudi Arabia)",
+    "tables": [
+      [
+        [
+          "Unit name",
+          "Status",
+          "Operator",
+          "Owner",
+          "Discovery year",
+          "FID year",
+          "Production start year",
+          "Production type"
+        ],
+        [
+          "Fadhili",
+          "operating",
+          "Saudi Arabian Oil",
+          "Saudi Arabian Oil Co [100%]",
+          "1949",
+          "–",
+          "1964",
+          "conventional"
+        ]
+      ],
+      [
+        [
+          "Fuel description",
+          "Reserves classification",
+          "Quantity",
+          "Units",
+          "Data year",
+          "Source"
+        ],
+        [
+          "oil",
+          "oil in place",
+          "1000.0",
+          "million bbl",
+          "1986",
+          "​"
+        ]
+      ],
+      [
+        [
+          "Location",
+          "Onshore/Offshore",
+          "Coordinates ( WGS 84 )"
+        ],
+        [
+          "onshore, Saudi Arabia",
+          "onshore",
+          "26.9807, 49.1735 (exact)"
+        ]
+      ]
+    ],
+    "url_role": "候选目录URL（可能由名称构造）；不是新确认的引用来源",
+    "fact_verification": "只探测页面；HTTP成功不等于数值核验，失败不代表资产不存在"
+  },
+  {
+    "country": "沙特阿拉伯",
+    "name": "Qirdi",
+    "url": "https://www.gem.wiki/Qirdi_Oil_Field_(Saudi Arabia)",
+    "checked_at": "2026-10-01",
+    "error": "HTTP Error 404: Not Found",
+    "url_role": "候选目录URL（可能由名称构造）；不是新确认的引用来源",
+    "fact_verification": "只探测页面；HTTP成功不等于数值核验，失败不代表资产不存在"
+  },
+  {
+    "country": "沙特阿拉伯",
+    "name": "Abu Jifan",
+    "url": "https://www.gem.wiki/Abu_Jifan_Oil_Field_(Saudi Arabia)",
+    "checked_at": "2026-10-01",
+    "error": "HTTP Error 404: Not Found",
+    "url_role": "候选目录URL（可能由名称构造）；不是新确认的引用来源",
+    "fact_verification": "只探测页面；HTTP成功不等于数值核验，失败不代表资产不存在"
+  },
+  {
+    "country": "沙特阿拉伯",
+    "name": "Abu Hadriya",
+    "url": "https://www.gem.wiki/Abu_Hadriya_Oil_Field_(Saudi Arabia)",
+    "checked_at": "2026-10-01",
+    "http_status": 200,
+    "final_url": "https://www.gem.wiki/Abu_Hadriya_Oil_Field_(Saudi_Arabia)",
+    "sha256": "8aa73045fea5ec2842033f2f3eaaed7236f14b0e7afd1a19ff0c949686000aaf",
+    "title": "Abu Hadriya Oil Field (Saudi Arabia)",
+    "tables": [
+      [
+        [
+          "Unit name",
+          "Status",
+          "Operator",
+          "Owner",
+          "Discovery year",
+          "FID year",
+          "Production start year",
+          "Production type"
+        ],
+        [
+          "Abu Hadriya",
+          "operating",
+          "Saudi Arabian Oil",
+          "Saudi Arabian Oil Co [100%]",
+          "1940",
+          "–",
+          "1963",
+          "conventional"
+        ]
+      ],
+      [
+        [
+          "Fuel description",
+          "Reserves classification",
+          "Quantity",
+          "Units",
+          "Data year",
+          "Source"
+        ],
+        [
+          "oil",
+          "oil in place",
+          "1840.0",
+          "million bbl",
+          "1986",
+          "​"
+        ]
+      ],
+      [
+        [
+          "Location",
+          "Onshore/Offshore",
+          "Coordinates ( WGS 84 )"
+        ],
+        [
+          "onshore, Saudi Arabia",
+          "onshore",
+          "27.312, 49.0051 (approximate)"
+        ]
+      ]
+    ],
+    "url_role": "候选目录URL（可能由名称构造）；不是新确认的引用来源",
+    "fact_verification": "只探测页面；HTTP成功不等于数值核验，失败不代表资产不存在"
+  },
+  {
+    "country": "沙特阿拉伯",
+    "name": "Harmaliyah",
+    "url": "https://www.gem.wiki/Harmaliyah_Oil_Field_(Saudi Arabia)",
+    "checked_at": "2026-10-01",
+    "error": "HTTP Error 404: Not Found",
+    "url_role": "候选目录URL（可能由名称构造）；不是新确认的引用来源",
+    "fact_verification": "只探测页面；HTTP成功不等于数值核验，失败不代表资产不存在"
+  },
+  {
+    "country": "沙特阿拉伯",
+    "name": "Mazalij",
+    "url": "https://www.gem.wiki/Mazalij_Oil_Field_(Saudi Arabia)",
+    "checked_at": "2026-10-01",
+    "error": "HTTP Error 404: Not Found",
+    "url_role": "候选目录URL（可能由名称构造）；不是新确认的引用来源",
+    "fact_verification": "只探测页面；HTTP成功不等于数值核验，失败不代表资产不存在"
+  },
+  {
+    "country": "沙特阿拉伯",
+    "name": "Zumul",
+    "url": "https://www.gem.wiki/Zumul_Oil_Field_(Saudi Arabia)",
+    "checked_at": "2026-10-01",
+    "error": "HTTP Error 403: Forbidden",
+    "url_role": "候选目录URL（可能由名称构造）；不是新确认的引用来源",
+    "fact_verification": "只探测页面；HTTP成功不等于数值核验，失败不代表资产不存在"
+  },
+  {
+    "country": "沙特阿拉伯",
+    "name": "Hawtah",
+    "url": "https://www.gem.wiki/Hawtah_Oil_Field_(Saudi Arabia)",
+    "checked_at": "2026-10-01",
+    "error": "HTTP Error 403: Forbidden",
+    "url_role": "候选目录URL（可能由名称构造）；不是新确认的引用来源",
+    "fact_verification": "只探测页面；HTTP成功不等于数值核验，失败不代表资产不存在"
+  },
+  {
+    "country": "阿联酋",
+    "name": "Bida Al-Qemzan",
+    "url": "https://www.gem.wiki/Bida_Al-Qemzan_Oil_Field_(UAE)",
+    "checked_at": "2026-10-01",
+    "error": "HTTP Error 403: Forbidden",
+    "url_role": "候选目录URL（可能由名称构造）；不是新确认的引用来源",
+    "fact_verification": "只探测页面；HTTP成功不等于数值核验，失败不代表资产不存在"
+  },
+  {
+    "country": "阿联酋",
+    "name": "Huwaila",
+    "url": "https://www.gem.wiki/Huwaila_Oil_Field_(UAE)",
+    "checked_at": "2026-10-01",
+    "error": "HTTP Error 403: Forbidden",
+    "url_role": "候选目录URL（可能由名称构造）；不是新确认的引用来源",
+    "fact_verification": "只探测页面；HTTP成功不等于数值核验，失败不代表资产不存在"
+  },
+  {
+    "country": "阿联酋",
+    "name": "Al Dabb'iya",
+    "url": "https://www.gem.wiki/Al_Dabb'iya_Oil_Field_(UAE)",
+    "checked_at": "2026-10-01",
+    "error": "HTTP Error 403: Forbidden",
+    "url_role": "候选目录URL（可能由名称构造）；不是新确认的引用来源",
+    "fact_verification": "只探测页面；HTTP成功不等于数值核验，失败不代表资产不存在"
+  },
+  {
+    "country": "沙特阿拉伯",
+    "name": "Sakab",
+    "url": "https://www.gem.wiki/Sakab_Oil_Field_(Saudi Arabia)",
+    "checked_at": "2026-10-01",
+    "error": "HTTP Error 403: Forbidden",
+    "url_role": "候选目录URL（可能由名称构造）；不是新确认的引用来源",
+    "fact_verification": "只探测页面；HTTP成功不等于数值核验，失败不代表资产不存在"
+  },
+  {
+    "country": "阿联酋",
+    "name": "Shanayel",
+    "url": "https://www.gem.wiki/Shanayel_Oil_Field_(UAE)",
+    "checked_at": "2026-10-01",
+    "error": "HTTP Error 403: Forbidden",
+    "url_role": "候选目录URL（可能由名称构造）；不是新确认的引用来源",
+    "fact_verification": "只探测页面；HTTP成功不等于数值核验，失败不代表资产不存在"
+  },
+  {
+    "country": "阿联酋",
+    "name": "Qusahwira",
+    "url": "https://www.gem.wiki/Qusahwira_Oil_Field_(UAE)",
+    "checked_at": "2026-10-01",
+    "error": "HTTP Error 403: Forbidden",
+    "url_role": "候选目录URL（可能由名称构造）；不是新确认的引用来源",
+    "fact_verification": "只探测页面；HTTP成功不等于数值核验，失败不代表资产不存在"
+  },
+  {
+    "country": "阿联酋",
+    "name": "Asab",
+    "url": "https://www.gem.wiki/Asab_Oil_Field_(UAE)",
+    "checked_at": "2026-10-01",
+    "error": "HTTP Error 403: Forbidden",
+    "url_role": "候选目录URL（可能由名称构造）；不是新确认的引用来源",
+    "fact_verification": "只探测页面；HTTP成功不等于数值核验，失败不代表资产不存在"
+  },
+  {
+    "country": "阿联酋",
+    "name": "Rumaitha",
+    "url": "https://www.gem.wiki/Rumaitha_Oil_Field_(UAE)",
+    "checked_at": "2026-10-01",
+    "error": "HTTP Error 403: Forbidden",
+    "url_role": "候选目录URL（可能由名称构造）；不是新确认的引用来源",
+    "fact_verification": "只探测页面；HTTP成功不等于数值核验，失败不代表资产不存在"
+  },
+  {
+    "country": "阿联酋",
+    "name": "Sahil",
+    "url": "https://www.gem.wiki/Sahil_Oil_Field_(UAE)",
+    "checked_at": "2026-10-01",
+    "error": "HTTP Error 403: Forbidden",
+    "url_role": "候选目录URL（可能由名称构造）；不是新确认的引用来源",
+    "fact_verification": "只探测页面；HTTP成功不等于数值核验，失败不代表资产不存在"
+  },
+  {
+    "country": "阿联酋",
+    "name": "Mender",
+    "url": "https://www.gem.wiki/Mender_Oil_Field_(UAE)",
+    "checked_at": "2026-10-01",
+    "error": "HTTP Error 403: Forbidden",
+    "url_role": "候选目录URL（可能由名称构造）；不是新确认的引用来源",
+    "fact_verification": "只探测页面；HTTP成功不等于数值核验，失败不代表资产不存在"
+  },
+  {
+    "country": "阿联酋",
+    "name": "Belbazem",
+    "url": "https://www.gem.wiki/Belbazem_Oil_Field_(UAE)",
+    "checked_at": "2026-10-01",
+    "error": "HTTP Error 403: Forbidden",
+    "url_role": "候选目录URL（可能由名称构造）；不是新确认的引用来源",
+    "fact_verification": "只探测页面；HTTP成功不等于数值核验，失败不代表资产不存在"
+  },
+  {
+    "country": "阿联酋",
+    "name": "Al Nouf",
+    "url": "https://www.gem.wiki/Al_Nouf_Oil_Field_(UAE)",
+    "checked_at": "2026-10-01",
+    "error": "HTTP Error 403: Forbidden",
+    "url_role": "候选目录URL（可能由名称构造）；不是新确认的引用来源",
+    "fact_verification": "只探测页面；HTTP成功不等于数值核验，失败不代表资产不存在"
+  },
+  {
+    "country": "阿联酋",
+    "name": "Abu Al Bukhoosh",
+    "url": "https://www.gem.wiki/Abu_Al_Bukhoosh_Oil_Field_(UAE)",
+    "checked_at": "2026-10-01",
+    "error": "HTTP Error 403: Forbidden",
+    "url_role": "候选目录URL（可能由名称构造）；不是新确认的引用来源",
+    "fact_verification": "只探测页面；HTTP成功不等于数值核验，失败不代表资产不存在"
+  },
+  {
+    "country": "阿联酋",
+    "name": "Jumaylah",
+    "url": "https://www.gem.wiki/Jumaylah_Oil_Field_(UAE)",
+    "checked_at": "2026-10-01",
+    "error": "HTTP Error 403: Forbidden",
+    "url_role": "候选目录URL（可能由名称构造）；不是新确认的引用来源",
+    "fact_verification": "只探测页面；HTTP成功不等于数值核验，失败不代表资产不存在"
+  },
+  {
+    "country": "阿联酋",
+    "name": "Satah",
+    "url": "https://www.gem.wiki/Satah_Oil_Field_(UAE)",
+    "checked_at": "2026-10-01",
+    "error": "HTTP Error 403: Forbidden",
+    "url_role": "候选目录URL（可能由名称构造）；不是新确认的引用来源",
+    "fact_verification": "只探测页面；HTTP成功不等于数值核验，失败不代表资产不存在"
+  },
+  {
+    "country": "阿联酋",
+    "name": "Umm Al Dalkh",
+    "url": "https://www.gem.wiki/Umm_Al_Dalkh_Oil_Field_(UAE)",
+    "checked_at": "2026-10-01",
+    "error": "HTTP Error 403: Forbidden",
+    "url_role": "候选目录URL（可能由名称构造）；不是新确认的引用来源",
+    "fact_verification": "只探测页面；HTTP成功不等于数值核验，失败不代表资产不存在"
+  },
+  {
+    "country": "阿联酋",
+    "name": "Umm Al Salsal",
+    "url": "https://www.gem.wiki/Umm_Al_Salsal_Oil_Field_(UAE)",
+    "checked_at": "2026-10-01",
+    "error": "HTTP Error 403: Forbidden",
+    "url_role": "候选目录URL（可能由名称构造）；不是新确认的引用来源",
+    "fact_verification": "只探测页面；HTTP成功不等于数值核验，失败不代表资产不存在"
+  },
+  {
+    "country": "阿联酋",
+    "name": "Bin Hadi",
+    "url": "https://www.gem.wiki/Bin_Hadi_Oil_Field_(UAE)",
+    "checked_at": "2026-10-01",
+    "error": "HTTP Error 403: Forbidden",
+    "url_role": "候选目录URL（可能由名称构造）；不是新确认的引用来源",
+    "fact_verification": "只探测页面；HTTP成功不等于数值核验，失败不代表资产不存在"
+  },
+  {
+    "country": "阿联酋",
+    "name": "Arzanah",
+    "url": "https://www.gem.wiki/Arzanah_Oil_Field_(UAE)",
+    "checked_at": "2026-10-01",
+    "error": "HTTP Error 403: Forbidden",
+    "url_role": "候选目录URL（可能由名称构造）；不是新确认的引用来源",
+    "fact_verification": "只探测页面；HTTP成功不等于数值核验，失败不代表资产不存在"
+  },
+  {
+    "country": "阿联酋",
+    "name": "Nahaidiin",
+    "url": "https://www.gem.wiki/Nahaidiin_Oil_Field_(UAE)",
+    "checked_at": "2026-10-01",
+    "error": "HTTP Error 403: Forbidden",
+    "url_role": "候选目录URL（可能由名称构造）；不是新确认的引用来源",
+    "fact_verification": "只探测页面；HTTP成功不等于数值核验，失败不代表资产不存在"
+  },
+  {
+    "country": "阿联酋",
+    "name": "Umm Al Dholou",
+    "url": "https://www.gem.wiki/Umm_Al_Dholou_Oil_Field_(UAE)",
+    "checked_at": "2026-10-01",
+    "error": "HTTP Error 403: Forbidden",
+    "url_role": "候选目录URL（可能由名称构造）；不是新确认的引用来源",
+    "fact_verification": "只探测页面；HTTP成功不等于数值核验，失败不代表资产不存在"
+  },
+  {
+    "country": "阿联酋",
+    "name": "Gezira",
+    "url": "https://www.gem.wiki/Gezira_Oil_Field_(UAE)",
+    "checked_at": "2026-10-01",
+    "error": "HTTP Error 403: Forbidden",
+    "url_role": "候选目录URL（可能由名称构造）；不是新确认的引用来源",
+    "fact_verification": "只探测页面；HTTP成功不等于数值核验，失败不代表资产不存在"
+  },
+  {
+    "country": "阿联酋",
+    "name": "Muhaymat",
+    "url": "https://www.gem.wiki/Muhaymat_Oil_Field_(UAE)",
+    "checked_at": "2026-10-01",
+    "error": "HTTP Error 403: Forbidden",
+    "url_role": "候选目录URL（可能由名称构造）；不是新确认的引用来源",
+    "fact_verification": "只探测页面；HTTP成功不等于数值核验，失败不代表资产不存在"
+  },
+  {
+    "country": "阿联酋",
+    "name": "Hail (ADOC)",
+    "url": "https://www.gem.wiki/Hail_(ADOC)_Oil_Field_(UAE)",
+    "checked_at": "2026-10-01",
+    "error": "HTTP Error 403: Forbidden",
+    "url_role": "候选目录URL（可能由名称构造）；不是新确认的引用来源",
+    "fact_verification": "只探测页面；HTTP成功不等于数值核验，失败不代表资产不存在"
+  },
+  {
+    "country": "阿联酋",
+    "name": "Ghasha",
+    "url": "https://www.gem.wiki/Ghasha_Gas_Field_(UAE)",
+    "checked_at": "2026-10-01",
+    "error": "HTTP Error 403: Forbidden",
+    "url_role": "候选目录URL（可能由名称构造）；不是新确认的引用来源",
+    "fact_verification": "只探测页面；HTTP成功不等于数值核验，失败不代表资产不存在"
+  },
+  {
+    "country": "阿联酋",
+    "name": "Sila",
+    "url": "https://www.gem.wiki/Sila_Oil_Field_(UAE)",
+    "checked_at": "2026-10-01",
+    "error": "HTTP Error 403: Forbidden",
+    "url_role": "候选目录URL（可能由名称构造）；不是新确认的引用来源",
+    "fact_verification": "只探测页面；HTTP成功不等于数值核验，失败不代表资产不存在"
+  },
+  {
+    "country": "阿联酋",
+    "name": "Dalma",
+    "url": "https://www.gem.wiki/Dalma_Gas_Field_(UAE)",
+    "checked_at": "2026-10-01",
+    "error": "HTTP Error 403: Forbidden",
+    "url_role": "候选目录URL（可能由名称构造）；不是新确认的引用来源",
+    "fact_verification": "只探测页面；HTTP成功不等于数值核验，失败不代表资产不存在"
+  },
+  {
+    "country": "阿联酋",
+    "name": "Shuweihat",
+    "url": "https://www.gem.wiki/Shuweihat_Gas_Field_(UAE)",
+    "checked_at": "2026-10-01",
+    "error": "HTTP Error 403: Forbidden",
+    "url_role": "候选目录URL（可能由名称构造）；不是新确认的引用来源",
+    "fact_verification": "只探测页面；HTTP成功不等于数值核验，失败不代表资产不存在"
+  },
+  {
+    "country": "阿联酋",
+    "name": "Fateh",
+    "url": "https://www.gem.wiki/Fateh_Oil_Field_(UAE)",
+    "checked_at": "2026-10-01",
+    "error": "HTTP Error 403: Forbidden",
+    "url_role": "候选目录URL（可能由名称构造）；不是新确认的引用来源",
+    "fact_verification": "只探测页面；HTTP成功不等于数值核验，失败不代表资产不存在"
+  },
+  {
+    "country": "阿联酋",
+    "name": "Umm Al-Anbar",
+    "url": "https://www.gem.wiki/Umm_Al-Anbar_Oil_Field_(UAE)",
+    "checked_at": "2026-10-01",
+    "error": "HTTP Error 403: Forbidden",
+    "url_role": "候选目录URL（可能由名称构造）；不是新确认的引用来源",
+    "fact_verification": "只探测页面；HTTP成功不等于数值核验，失败不代表资产不存在"
+  },
+  {
+    "country": "阿联酋",
+    "name": "Mubarraz",
+    "url": "https://www.gem.wiki/Mubarraz_Oil_Field_(UAE)",
+    "checked_at": "2026-10-01",
+    "error": "HTTP Error 403: Forbidden",
+    "url_role": "候选目录URL（可能由名称构造）；不是新确认的引用来源",
+    "fact_verification": "只探测页面；HTTP成功不等于数值核验，失败不代表资产不存在"
+  },
+  {
+    "country": "阿联酋",
+    "name": "Neewat Al-Ghalan",
+    "url": "https://www.gem.wiki/Neewat_Al-Ghalan_Oil_Field_(UAE)",
+    "checked_at": "2026-10-01",
+    "error": "HTTP Error 403: Forbidden",
+    "url_role": "候选目录URL（可能由名称构造）；不是新确认的引用来源",
+    "fact_verification": "只探测页面；HTTP成功不等于数值核验，失败不代表资产不存在"
+  },
+  {
+    "country": "阿联酋",
+    "name": "South-West Fateh",
+    "url": "https://www.gem.wiki/South-West_Fateh_Oil_Field_(UAE)",
+    "checked_at": "2026-10-01",
+    "error": "HTTP Error 403: Forbidden",
+    "url_role": "候选目录URL（可能由名称构造）；不是新确认的引用来源",
+    "fact_verification": "只探测页面；HTTP成功不等于数值核验，失败不代表资产不存在"
+  },
+  {
+    "country": "阿联酋",
+    "name": "Hail (ADNOC Ghasha)",
+    "url": "https://www.gem.wiki/Hail_(ADNOC_Ghasha)_Oil_and_Gas_Field_(UAE)",
+    "checked_at": "2026-10-01",
+    "error": "HTTP Error 403: Forbidden",
+    "url_role": "候选目录URL（可能由名称构造）；不是新确认的引用来源",
+    "fact_verification": "只探测页面；HTTP成功不等于数值核验，失败不代表资产不存在"
+  },
+  {
+    "country": "阿联酋",
+    "name": "Margham",
+    "url": "https://www.gem.wiki/Margham_Oil_and_Gas_Field_(UAE)",
+    "checked_at": "2026-10-01",
+    "error": "HTTP Error 403: Forbidden",
+    "url_role": "候选目录URL（可能由名称构造）；不是新确认的引用来源",
+    "fact_verification": "只探测页面；HTTP成功不等于数值核验，失败不代表资产不存在"
+  },
+  {
+    "country": "阿联酋",
+    "name": "Falah",
+    "url": "https://www.gem.wiki/Falah_Oil_Field_(UAE)",
+    "checked_at": "2026-10-01",
+    "error": "HTTP Error 403: Forbidden",
+    "url_role": "候选目录URL（可能由名称构造）；不是新确认的引用来源",
+    "fact_verification": "只探测页面；HTTP成功不等于数值核验，失败不代表资产不存在"
+  },
+  {
+    "country": "阿联酋",
+    "name": "Sajaa",
+    "url": "https://www.gem.wiki/Sajaa_Oil_and_Gas_Field_(UAE)",
+    "checked_at": "2026-10-01",
+    "error": "HTTP Error 403: Forbidden",
+    "url_role": "候选目录URL（可能由名称构造）；不是新确认的引用来源",
+    "fact_verification": "只探测页面；HTTP成功不等于数值核验，失败不代表资产不存在"
+  },
+  {
+    "country": "阿联酋",
+    "name": "Jalilah",
+    "url": "https://www.gem.wiki/Jalilah_Oil_Field_(UAE)",
+    "checked_at": "2026-10-01",
+    "error": "HTTP Error 403: Forbidden",
+    "url_role": "候选目录URL（可能由名称构造）；不是新确认的引用来源",
+    "fact_verification": "只探测页面；HTTP成功不等于数值核验，失败不代表资产不存在"
+  },
+  {
+    "country": "阿联酋",
+    "name": "Rashid",
+    "url": "https://www.gem.wiki/Rashid_Oil_Field_(UAE)",
+    "checked_at": "2026-10-01",
+    "error": "HTTP Error 403: Forbidden",
+    "url_role": "候选目录URL（可能由名称构造）；不是新确认的引用来源",
+    "fact_verification": "只探测页面；HTTP成功不等于数值核验，失败不代表资产不存在"
+  },
+  {
+    "country": "阿联酋",
+    "name": "Ruwais Diyab",
+    "url": "https://www.gem.wiki/Ruwais_Diyab_Gas_Field_(UAE)",
+    "checked_at": "2026-10-01",
+    "error": "HTTP Error 403: Forbidden",
+    "url_role": "候选目录URL（可能由名称构造）；不是新确认的引用来源",
+    "fact_verification": "只探测页面；HTTP成功不等于数值核验，失败不代表资产不存在"
+  },
+  {
+    "country": "阿联酋",
+    "name": "Umm Al Quwain",
+    "url": "https://www.gem.wiki/Umm_Al_Quwain_Gas_Field_(UAE)",
+    "checked_at": "2026-10-01",
+    "error": "HTTP Error 403: Forbidden",
+    "url_role": "候选目录URL（可能由名称构造）；不是新确认的引用来源",
+    "fact_verification": "只探测页面；HTTP成功不等于数值核验，失败不代表资产不存在"
+  },
+  {
+    "country": "阿联酋",
+    "name": "Kahaif",
+    "url": "https://www.gem.wiki/Kahaif_Oil_and_Gas_Field_(UAE)",
+    "checked_at": "2026-10-01",
+    "error": "HTTP Error 403: Forbidden",
+    "url_role": "候选目录URL（可能由名称构造）；不是新确认的引用来源",
+    "fact_verification": "只探测页面；HTTP成功不等于数值核验，失败不代表资产不存在"
+  },
+  {
+    "country": "阿联酋",
+    "name": "Mahani",
+    "url": "https://www.gem.wiki/Mahani_Oil_and_Gas_Field_(UAE)",
+    "checked_at": "2026-10-01",
+    "error": "HTTP Error 403: Forbidden",
+    "url_role": "候选目录URL（可能由名称构造）；不是新确认的引用来源",
+    "fact_verification": "只探测页面；HTTP成功不等于数值核验，失败不代表资产不存在"
+  },
+  {
+    "country": "阿联酋",
+    "name": "Moveyeid",
+    "url": "https://www.gem.wiki/Moveyeid_Gas_Field_(UAE)",
+    "checked_at": "2026-10-01",
+    "error": "HTTP Error 403: Forbidden",
+    "url_role": "候选目录URL（可能由名称构造）；不是新确认的引用来源",
+    "fact_verification": "只探测页面；HTTP成功不等于数值核验，失败不代表资产不存在"
+  },
+  {
+    "country": "阿联酋",
+    "name": "Saleh",
+    "url": "https://www.gem.wiki/Saleh_Gas_Field_(UAE)",
+    "checked_at": "2026-10-01",
+    "error": "HTTP Error 403: Forbidden",
+    "url_role": "候选目录URL（可能由名称构造）；不是新确认的引用来源",
+    "fact_verification": "只探测页面；HTTP成功不等于数值核验，失败不代表资产不存在"
+  },
+  {
+    "country": "阿联酋",
+    "name": "Hedebah",
+    "url": "https://www.gem.wiki/Hedebah_Oil_and_Gas_Field_(UAE)",
+    "checked_at": "2026-10-01",
+    "error": "HTTP Error 403: Forbidden",
+    "url_role": "候选目录URL（可能由名称构造）；不是新确认的引用来源",
+    "fact_verification": "只探测页面；HTTP成功不等于数值核验，失败不代表资产不存在"
+  },
+  {
+    "country": "伊拉克",
+    "name": "Nahr Umar",
+    "url": "https://www.gem.wiki/Nahr_Umar_Oil_Field_(Iraq)",
+    "checked_at": "2026-10-01",
+    "error": "HTTP Error 403: Forbidden",
+    "url_role": "候选目录URL（可能由名称构造）；不是新确认的引用来源",
+    "fact_verification": "只探测页面；HTTP成功不等于数值核验，失败不代表资产不存在"
+  },
+  {
+    "country": "伊拉克",
+    "name": "Kirkuk",
+    "url": "https://www.gem.wiki/Kirkuk_Oil_Field_(Iraq)",
+    "checked_at": "2026-10-01",
+    "error": "HTTP Error 403: Forbidden",
+    "url_role": "候选目录URL（可能由名称构造）；不是新确认的引用来源",
+    "fact_verification": "只探测页面；HTTP成功不等于数值核验，失败不代表资产不存在"
+  },
+  {
+    "country": "伊拉克",
+    "name": "Najma",
+    "url": "https://www.gem.wiki/Najma_Oil_Field_(Iraq)",
+    "checked_at": "2026-10-01",
+    "error": "HTTP Error 403: Forbidden",
+    "url_role": "候选目录URL（可能由名称构造）；不是新确认的引用来源",
+    "fact_verification": "只探测页面；HTTP成功不等于数值核验，失败不代表资产不存在"
+  },
+  {
+    "country": "伊拉克",
+    "name": "Nassiriya",
+    "url": "https://www.gem.wiki/Nassiriya_Oil_Field_(Iraq)",
+    "checked_at": "2026-10-01",
+    "error": "HTTP Error 403: Forbidden",
+    "url_role": "候选目录URL（可能由名称构造）；不是新确认的引用来源",
+    "fact_verification": "只探测页面；HTTP成功不等于数值核验，失败不代表资产不存在"
+  },
+  {
+    "country": "伊拉克",
+    "name": "Swara Tika",
+    "url": "https://www.gem.wiki/Swara_Tika_Oil_Field_(Iraq)",
+    "checked_at": "2026-10-01",
+    "error": "HTTP Error 403: Forbidden",
+    "url_role": "候选目录URL（可能由名称构造）；不是新确认的引用来源",
+    "fact_verification": "只探测页面；HTTP成功不等于数值核验，失败不代表资产不存在"
+  },
+  {
+    "country": "伊拉克",
+    "name": "Qayyarah",
+    "url": "https://www.gem.wiki/Qayyarah_Oil_Field_(Iraq)",
+    "checked_at": "2026-10-01",
+    "error": "HTTP Error 403: Forbidden",
+    "url_role": "候选目录URL（可能由名称构造）；不是新确认的引用来源",
+    "fact_verification": "只探测页面；HTTP成功不等于数值核验，失败不代表资产不存在"
+  },
+  {
+    "country": "伊拉克",
+    "name": "Bazerkan",
+    "url": "https://www.gem.wiki/Bazerkan_Oil_Field_(Iraq)",
+    "checked_at": "2026-10-01",
+    "error": "HTTP Error 403: Forbidden",
+    "url_role": "候选目录URL（可能由名称构造）；不是新确认的引用来源",
+    "fact_verification": "只探测页面；HTTP成功不等于数值核验，失败不代表资产不存在"
+  },
+  {
+    "country": "伊拉克",
+    "name": "East Swara Tika",
+    "url": "https://www.gem.wiki/East_Swara_Tika_Oil_Field_(Iraq)",
+    "checked_at": "2026-10-01",
+    "error": "HTTP Error 403: Forbidden",
+    "url_role": "候选目录URL（可能由名称构造）；不是新确认的引用来源",
+    "fact_verification": "只探测页面；HTTP成功不等于数值核验，失败不代表资产不存在"
+  },
+  {
+    "country": "伊拉克",
+    "name": "Khurmala",
+    "url": "https://www.gem.wiki/Khurmala_Oil_Field_(Iraq)",
+    "checked_at": "2026-10-01",
+    "error": "HTTP Error 403: Forbidden",
+    "url_role": "候选目录URL（可能由名称构造）；不是新确认的引用来源",
+    "fact_verification": "只探测页面；HTTP成功不等于数值核验，失败不代表资产不存在"
+  },
+  {
+    "country": "伊拉克",
+    "name": "Eridu (Block 10)",
+    "url": "https://www.gem.wiki/Eridu_(Block_10)_Oil_Field_(Iraq)",
+    "checked_at": "2026-10-01",
+    "error": "HTTP Error 403: Forbidden",
+    "url_role": "候选目录URL（可能由名称构造）；不是新确认的引用来源",
+    "fact_verification": "只探测页面；HTTP成功不等于数值核验，失败不代表资产不存在"
+  },
+  {
+    "country": "伊拉克",
+    "name": "Fakkah",
+    "url": "https://www.gem.wiki/Fakkah_Oil_Field_(Iraq)",
+    "checked_at": "2026-10-01",
+    "error": "HTTP Error 403: Forbidden",
+    "url_role": "候选目录URL（可能由名称构造）；不是新确认的引用来源",
+    "fact_verification": "只探测页面；HTTP成功不等于数值核验，失败不代表资产不存在"
+  },
+  {
+    "country": "伊拉克",
+    "name": "Baeshiqa",
+    "url": "https://www.gem.wiki/Baeshiqa_Oil_Field_(Iraq)",
+    "checked_at": "2026-10-01",
+    "error": "HTTP Error 403: Forbidden",
+    "url_role": "候选目录URL（可能由名称构造）；不是新确认的引用来源",
+    "fact_verification": "只探测页面；HTTP成功不等于数值核验，失败不代表资产不存在"
+  },
+  {
+    "country": "伊拉克",
+    "name": "Naft Khana",
+    "url": "https://www.gem.wiki/Naft_Khana_Oil_Field_(Iraq)",
+    "checked_at": "2026-10-01",
+    "error": "HTTP Error 403: Forbidden",
+    "url_role": "候选目录URL（可能由名称构造）；不是新确认的引用来源",
+    "fact_verification": "只探测页面；HTTP成功不等于数值核验，失败不代表资产不存在"
+  },
+  {
+    "country": "伊拉克",
+    "name": "Abu Gharb",
+    "url": "https://www.gem.wiki/Abu_Gharb_Oil_Field_(Iraq)",
+    "checked_at": "2026-10-01",
+    "error": "HTTP Error 403: Forbidden",
+    "url_role": "候选目录URL（可能由名称构造）；不是新确认的引用来源",
+    "fact_verification": "只探测页面；HTTP成功不等于数值核验，失败不代表资产不存在"
+  },
+  {
+    "country": "伊拉克",
+    "name": "Amara",
+    "url": "https://www.gem.wiki/Amara_Oil_Field_(Iraq)",
+    "checked_at": "2026-10-01",
+    "error": "HTTP Error 403: Forbidden",
+    "url_role": "候选目录URL（可能由名称构造）；不是新确认的引用来源",
+    "fact_verification": "只探测页面；HTTP成功不等于数值核验，失败不代表资产不存在"
+  },
+  {
+    "country": "伊拉克",
+    "name": "Noor",
+    "url": "https://www.gem.wiki/Noor_Oil_Field_(Iraq)",
+    "checked_at": "2026-10-01",
+    "error": "HTTP Error 403: Forbidden",
+    "url_role": "候选目录URL（可能由名称构造）；不是新确认的引用来源",
+    "fact_verification": "只探测页面；HTTP成功不等于数值核验，失败不代表资产不存在"
+  },
+  {
+    "country": "伊拉克",
+    "name": "Hamrin",
+    "url": "https://www.gem.wiki/Hamrin_Oil_Field_(Iraq)",
+    "checked_at": "2026-10-01",
+    "error": "HTTP Error 403: Forbidden",
+    "url_role": "候选目录URL（可能由名称构造）；不是新确认的引用来源",
+    "fact_verification": "只探测页面；HTTP成功不等于数值核验，失败不代表资产不存在"
+  },
+  {
+    "country": "伊拉克",
+    "name": "Subba",
+    "url": "https://www.gem.wiki/Subba_Oil_Field_(Iraq)",
+    "checked_at": "2026-10-01",
+    "error": "HTTP Error 403: Forbidden",
+    "url_role": "候选目录URL（可能由名称构造）；不是新确认的引用来源",
+    "fact_verification": "只探测页面；HTTP成功不等于数值核验，失败不代表资产不存在"
+  },
+  {
+    "country": "伊拉克",
+    "name": "Safiya",
+    "url": "https://www.gem.wiki/Safiya_Oil_Field_(Iraq)",
+    "checked_at": "2026-10-01",
+    "error": "HTTP Error 403: Forbidden",
+    "url_role": "候选目录URL（可能由名称构造）；不是新确认的引用来源",
+    "fact_verification": "只探测页面；HTTP成功不等于数值核验，失败不代表资产不存在"
+  },
+  {
+    "country": "伊朗",
+    "name": "Reg-e-Safid",
+    "url": "https://www.gem.wiki/Reg-e-Safid_Oil_Field_(Iran)",
+    "checked_at": "2026-10-01",
+    "error": "HTTP Error 403: Forbidden",
+    "url_role": "候选目录URL（可能由名称构造）；不是新确认的引用来源",
+    "fact_verification": "只探测页面；HTTP成功不等于数值核验，失败不代表资产不存在"
+  },
+  {
+    "country": "伊朗",
+    "name": "Marun",
+    "url": "https://www.gem.wiki/Marun_Oil_Field_(Iran)",
+    "checked_at": "2026-10-01",
+    "error": "HTTP Error 403: Forbidden",
+    "url_role": "候选目录URL（可能由名称构造）；不是新确认的引用来源",
+    "fact_verification": "只探测页面；HTTP成功不等于数值核验，失败不代表资产不存在"
+  },
+  {
+    "country": "伊朗",
+    "name": "Ahvaz",
+    "url": "https://www.gem.wiki/Ahvaz_Oil_Field_(Iran)",
+    "checked_at": "2026-10-01",
+    "error": "HTTP Error 403: Forbidden",
+    "url_role": "候选目录URL（可能由名称构造）；不是新确认的引用来源",
+    "fact_verification": "只探测页面；HTTP成功不等于数值核验，失败不代表资产不存在"
+  },
+  {
+    "country": "伊朗",
+    "name": "Gachsaran",
+    "url": "https://www.gem.wiki/Gachsaran_Oil_and_Gas_Field_(Iran)",
+    "checked_at": "2026-10-01",
+    "error": "HTTP Error 403: Forbidden",
+    "url_role": "候选目录URL（可能由名称构造）；不是新确认的引用来源",
+    "fact_verification": "只探测页面；HTTP成功不等于数值核验，失败不代表资产不存在"
+  },
+  {
+    "country": "伊朗",
+    "name": "Aghajari",
+    "url": "https://www.gem.wiki/Aghajari_Oil_Field_(Iran)",
+    "checked_at": "2026-10-01",
+    "error": "HTTP Error 403: Forbidden",
+    "url_role": "候选目录URL（可能由名称构造）；不是新确认的引用来源",
+    "fact_verification": "只探测页面；HTTP成功不等于数值核验，失败不代表资产不存在"
+  },
+  {
+    "country": "伊朗",
+    "name": "Azar",
+    "url": "https://www.gem.wiki/Azar_Oil_Field_(Iran)",
+    "checked_at": "2026-10-01",
+    "error": "HTTP Error 403: Forbidden",
+    "url_role": "候选目录URL（可能由名称构造）；不是新确认的引用来源",
+    "fact_verification": "只探测页面；HTTP成功不等于数值核验，失败不代表资产不存在"
+  },
+  {
+    "country": "伊朗",
+    "name": "South Azadegan",
+    "url": "https://www.gem.wiki/Azadegan_South_Oil_Field_(Iran)",
+    "checked_at": "2026-10-01",
+    "error": "HTTP Error 403: Forbidden",
+    "url_role": "候选目录URL（可能由名称构造）；不是新确认的引用来源",
+    "fact_verification": "只探测页面；HTTP成功不等于数值核验，失败不代表资产不存在"
+  },
+  {
+    "country": "伊朗",
+    "name": "South Yaran",
+    "url": "https://www.gem.wiki/South_Yaran_Oil_Field_(Iran)",
+    "checked_at": "2026-10-01",
+    "error": "HTTP Error 403: Forbidden",
+    "url_role": "候选目录URL（可能由名称构造）；不是新确认的引用来源",
+    "fact_verification": "只探测页面；HTTP成功不等于数值核验，失败不代表资产不存在"
+  },
+  {
+    "country": "伊朗",
+    "name": "Yadavaran",
+    "url": "https://www.gem.wiki/Yadavaran_Oil_Field_(Iran)",
+    "checked_at": "2026-10-01",
+    "error": "HTTP Error 403: Forbidden",
+    "url_role": "候选目录URL（可能由名称构造）；不是新确认的引用来源",
+    "fact_verification": "只探测页面；HTTP成功不等于数值核验，失败不代表资产不存在"
+  },
+  {
+    "country": "伊朗",
+    "name": "North Yaran",
+    "url": "https://www.gem.wiki/North_Yaran_Oil_Field_(Iran)",
+    "checked_at": "2026-10-01",
+    "error": "HTTP Error 403: Forbidden",
+    "url_role": "候选目录URL（可能由名称构造）；不是新确认的引用来源",
+    "fact_verification": "只探测页面；HTTP成功不等于数值核验，失败不代表资产不存在"
+  },
+  {
+    "country": "伊朗",
+    "name": "Darkhovin",
+    "url": "https://www.gem.wiki/Darkhovin_Oil_Field_(Iran)",
+    "checked_at": "2026-10-01",
+    "error": "HTTP Error 403: Forbidden",
+    "url_role": "候选目录URL（可能由名称构造）；不是新确认的引用来源",
+    "fact_verification": "只探测页面；HTTP成功不等于数值核验，失败不代表资产不存在"
+  },
+  {
+    "country": "伊朗",
+    "name": "Doroud",
+    "url": "https://www.gem.wiki/Doroud_Oil_Field_(Iran)",
+    "checked_at": "2026-10-01",
+    "error": "HTTP Error 403: Forbidden",
+    "url_role": "候选目录URL（可能由名称构造）；不是新确认的引用来源",
+    "fact_verification": "只探测页面；HTTP成功不等于数值核验，失败不代表资产不存在"
+  },
+  {
+    "country": "伊朗",
+    "name": "Salman",
+    "url": "https://www.gem.wiki/Salman_Oil_and_Gas_Field_(Iran)",
+    "checked_at": "2026-10-01",
+    "error": "HTTP Error 403: Forbidden",
+    "url_role": "候选目录URL（可能由名称构造）；不是新确认的引用来源",
+    "fact_verification": "只探测页面；HTTP成功不等于数值核验，失败不代表资产不存在"
+  },
+  {
+    "country": "伊朗",
+    "name": "Soroush",
+    "url": "https://www.gem.wiki/Soroush_Oil_Field_(Iran)",
+    "checked_at": "2026-10-01",
+    "error": "HTTP Error 403: Forbidden",
+    "url_role": "候选目录URL（可能由名称构造）；不是新确认的引用来源",
+    "fact_verification": "只探测页面；HTTP成功不等于数值核验，失败不代表资产不存在"
+  },
+  {
+    "country": "伊朗",
+    "name": "Nowruz",
+    "url": "https://www.gem.wiki/Nowruz_Oil_Field_(Iran)",
+    "checked_at": "2026-10-01",
+    "error": "HTTP Error 403: Forbidden",
+    "url_role": "候选目录URL（可能由名称构造）；不是新确认的引用来源",
+    "fact_verification": "只探测页面；HTTP成功不等于数值核验，失败不代表资产不存在"
+  },
+  {
+    "country": "伊朗",
+    "name": "Hendijan",
+    "url": "https://www.gem.wiki/Hendijan_Oil_Field_(Iran)",
+    "checked_at": "2026-10-01",
+    "error": "HTTP Error 403: Forbidden",
+    "url_role": "候选目录URL（可能由名称构造）；不是新确认的引用来源",
+    "fact_verification": "只探测页面；HTTP成功不等于数值核验，失败不代表资产不存在"
+  },
+  {
+    "country": "伊朗",
+    "name": "Foroozan",
+    "url": "https://www.gem.wiki/Foroozan_Oil_Field_(Iran)",
+    "checked_at": "2026-10-01",
+    "error": "HTTP Error 403: Forbidden",
+    "url_role": "候选目录URL（可能由名称构造）；不是新确认的引用来源",
+    "fact_verification": "只探测页面；HTTP成功不等于数值核验，失败不代表资产不存在"
+  },
+  {
+    "country": "伊朗",
+    "name": "Bibi Hakimeh",
+    "url": "https://www.gem.wiki/Bibi_Hakimeh_Oil_Field_(Iran)",
+    "checked_at": "2026-10-01",
+    "error": "HTTP Error 403: Forbidden",
+    "url_role": "候选目录URL（可能由名称构造）；不是新确认的引用来源",
+    "fact_verification": "只探测页面；HTTP成功不等于数值核验，失败不代表资产不存在"
+  },
+  {
+    "country": "伊朗",
+    "name": "Sepehr-Jufair",
+    "url": "https://www.gem.wiki/Sepehr-Jufair_Oil_Field_(Iran)",
+    "checked_at": "2026-10-01",
+    "error": "HTTP Error 403: Forbidden",
+    "url_role": "候选目录URL（可能由名称构造）；不是新确认的引用来源",
+    "fact_verification": "只探测页面；HTTP成功不等于数值核验，失败不代表资产不存在"
+  },
+  {
+    "country": "伊朗",
+    "name": "Parsi",
+    "url": "https://www.gem.wiki/Parsi_Oil_Field_(Iran)",
+    "checked_at": "2026-10-01",
+    "error": "HTTP Error 403: Forbidden",
+    "url_role": "候选目录URL（可能由名称构造）；不是新确认的引用来源",
+    "fact_verification": "只探测页面；HTTP成功不等于数值核验，失败不代表资产不存在"
+  },
+  {
+    "country": "伊朗",
+    "name": "Karanj",
+    "url": "https://www.gem.wiki/Karanj_Oil_Field_(Iran)",
+    "checked_at": "2026-10-01",
+    "error": "HTTP Error 403: Forbidden",
+    "url_role": "候选目录URL（可能由名称构造）；不是新确认的引用来源",
+    "fact_verification": "只探测页面；HTTP成功不等于数值核验，失败不代表资产不存在"
+  },
+  {
+    "country": "伊朗",
+    "name": "Abuzar",
+    "url": "https://www.gem.wiki/Abuzar_Oil_Field_(Iran)",
+    "checked_at": "2026-10-01",
+    "error": "HTTP Error 403: Forbidden",
+    "url_role": "候选目录URL（可能由名称构造）；不是新确认的引用来源",
+    "fact_verification": "只探测页面；HTTP成功不等于数值核验，失败不代表资产不存在"
+  },
+  {
+    "country": "伊朗",
+    "name": "Mansouri",
+    "url": "https://www.gem.wiki/Mansouri_Oil_Field_(Iran)",
+    "checked_at": "2026-10-01",
+    "error": "HTTP Error 403: Forbidden",
+    "url_role": "候选目录URL（可能由名称构造）；不是新确认的引用来源",
+    "fact_verification": "只探测页面；HTTP成功不等于数值核验，失败不代表资产不存在"
+  },
+  {
+    "country": "伊朗",
+    "name": "Bahregansar",
+    "url": "https://www.gem.wiki/Bahregansar_Oil_Field_(Iran)",
+    "checked_at": "2026-10-01",
+    "error": "HTTP Error 403: Forbidden",
+    "url_role": "候选目录URL（可能由名称构造）；不是新确认的引用来源",
+    "fact_verification": "只探测页面；HTTP成功不等于数值核验，失败不代表资产不存在"
+  },
+  {
+    "country": "伊朗",
+    "name": "Kupal",
+    "url": "https://www.gem.wiki/Kupal_Oil_Field_(Iran)",
+    "checked_at": "2026-10-01",
+    "error": "HTTP Error 403: Forbidden",
+    "url_role": "候选目录URL（可能由名称构造）；不是新确认的引用来源",
+    "fact_verification": "只探测页面；HTTP成功不等于数值核验，失败不代表资产不存在"
+  },
+  {
+    "country": "伊朗",
+    "name": "Dehloran",
+    "url": "https://www.gem.wiki/Dehloran_Oil_Field_(Iran)",
+    "checked_at": "2026-10-01",
+    "error": "HTTP Error 403: Forbidden",
+    "url_role": "候选目录URL（可能由名称构造）；不是新确认的引用来源",
+    "fact_verification": "只探测页面；HTTP成功不等于数值核验，失败不代表资产不存在"
+  },
+  {
+    "country": "伊朗",
+    "name": "Pazanan",
+    "url": "https://www.gem.wiki/Pazanan_Oil_Field_(Iran)",
+    "checked_at": "2026-10-01",
+    "error": "HTTP Error 403: Forbidden",
+    "url_role": "候选目录URL（可能由名称构造）；不是新确认的引用来源",
+    "fact_verification": "只探测页面；HTTP成功不等于数值核验，失败不代表资产不存在"
+  },
+  {
+    "country": "伊朗",
+    "name": "Masjed Soleyman",
+    "url": "https://www.gem.wiki/Masjed_Soleyman_Oil_Field_(Iran)",
+    "checked_at": "2026-10-01",
+    "error": "HTTP Error 403: Forbidden",
+    "url_role": "候选目录URL（可能由名称构造）；不是新确认的引用来源",
+    "fact_verification": "只探测页面；HTTP成功不等于数值核验，失败不代表资产不存在"
+  },
+  {
+    "country": "伊朗",
+    "name": "Sirri E",
+    "url": "https://www.gem.wiki/Sirri_E_Oil_and_Gas_Field_(Iran)",
+    "checked_at": "2026-10-01",
+    "error": "HTTP Error 403: Forbidden",
+    "url_role": "候选目录URL（可能由名称构造）；不是新确认的引用来源",
+    "fact_verification": "只探测页面；HTTP成功不等于数值核验，失败不代表资产不存在"
+  },
+  {
+    "country": "伊朗",
+    "name": "Danan",
+    "url": "https://www.gem.wiki/Danan_Oil_Field_(Iran)",
+    "checked_at": "2026-10-01",
+    "error": "HTTP Error 403: Forbidden",
+    "url_role": "候选目录URL（可能由名称构造）；不是新确认的引用来源",
+    "fact_verification": "只探测页面；HTTP成功不等于数值核验，失败不代表资产不存在"
+  },
+  {
+    "country": "伊朗",
+    "name": "Paranj",
+    "url": "https://www.gem.wiki/Paranj_Oil_Field_(Iran)",
+    "checked_at": "2026-10-01",
+    "error": "HTTP Error 403: Forbidden",
+    "url_role": "候选目录URL（可能由名称构造）；不是新确认的引用来源",
+    "fact_verification": "只探测页面；HTTP成功不等于数值核验，失败不代表资产不存在"
+  },
+  {
+    "country": "伊朗",
+    "name": "Nargesi",
+    "url": "https://www.gem.wiki/Nargesi_Oil_Field_(Iran)",
+    "checked_at": "2026-10-01",
+    "error": "HTTP Error 403: Forbidden",
+    "url_role": "候选目录URL（可能由名称构造）；不是新确认的引用来源",
+    "fact_verification": "只探测页面；HTTP成功不等于数值核验，失败不代表资产不存在"
+  },
+  {
+    "country": "伊朗",
+    "name": "West Paydar",
+    "url": "https://www.gem.wiki/West_Paydar_Oil_Field_(Iran)",
+    "checked_at": "2026-10-01",
+    "error": "HTTP Error 403: Forbidden",
+    "url_role": "候选目录URL（可能由名称构造）；不是新确认的引用来源",
+    "fact_verification": "只探测页面；HTTP成功不等于数值核验，失败不代表资产不存在"
+  },
+  {
+    "country": "伊朗",
+    "name": "Band-e-Karkheh",
+    "url": "https://www.gem.wiki/Band-e-Karkheh_Oil_Field_(Iran)",
+    "checked_at": "2026-10-01",
+    "error": "HTTP Error 403: Forbidden",
+    "url_role": "候选目录URL（可能由名称构造）；不是新确认的引用来源",
+    "fact_verification": "只探测页面；HTTP成功不等于数值核验，失败不代表资产不存在"
+  },
+  {
+    "country": "伊朗",
+    "name": "Chehsmeh-Khosh",
+    "url": "https://www.gem.wiki/Chehsmeh-Khosh_Oil_Field_(Iran)",
+    "checked_at": "2026-10-01",
+    "error": "HTTP Error 403: Forbidden",
+    "url_role": "候选目录URL（可能由名称构造）；不是新确认的引用来源",
+    "fact_verification": "只探测页面；HTTP成功不等于数值核验，失败不代表资产不存在"
+  },
+  {
+    "country": "伊朗",
+    "name": "Changuleh",
+    "url": "https://www.gem.wiki/Changuleh_Oil_Field_(Iran)",
+    "checked_at": "2026-10-01",
+    "error": "HTTP Error 403: Forbidden",
+    "url_role": "候选目录URL（可能由名称构造）；不是新确认的引用来源",
+    "fact_verification": "只探测页面；HTTP成功不等于数值核验，失败不代表资产不存在"
+  },
+  {
+    "country": "伊朗",
+    "name": "Paydar",
+    "url": "https://www.gem.wiki/Paydar_Oil_Field_(Iran)",
+    "checked_at": "2026-10-01",
+    "error": "HTTP Error 403: Forbidden",
+    "url_role": "候选目录URL（可能由名称构造）；不是新确认的引用来源",
+    "fact_verification": "只探测页面；HTTP成功不等于数值核验，失败不代表资产不存在"
+  },
+  {
+    "country": "伊朗",
+    "name": "Dalpari",
+    "url": "https://www.gem.wiki/Dalpari_Oil_Field_(Iran)",
+    "checked_at": "2026-10-01",
+    "error": "HTTP Error 403: Forbidden",
+    "url_role": "候选目录URL（可能由名称构造）；不是新确认的引用来源",
+    "fact_verification": "只探测页面；HTTP成功不等于数值核验，失败不代表资产不存在"
+  },
+  {
+    "country": "科威特",
+    "name": "Magwa",
+    "url": "https://www.gem.wiki/Magwa_Oil_Field_(Kuwait)",
+    "checked_at": "2026-10-01",
+    "error": "HTTP Error 403: Forbidden",
+    "url_role": "候选目录URL（可能由名称构造）；不是新确认的引用来源",
+    "fact_verification": "只探测页面；HTTP成功不等于数值核验，失败不代表资产不存在"
+  },
+  {
+    "country": "科威特",
+    "name": "Burgan",
+    "url": "https://www.gem.wiki/Burgan_Oil_Field_(Kuwait)",
+    "checked_at": "2026-10-01",
+    "error": "HTTP Error 403: Forbidden",
+    "url_role": "候选目录URL（可能由名称构造）；不是新确认的引用来源",
+    "fact_verification": "只探测页面；HTTP成功不等于数值核验，失败不代表资产不存在"
+  },
+  {
+    "country": "伊朗",
+    "name": "South Pars",
+    "url": "https://www.gem.wiki/South_Pars_Oil_and_Gas_Field_(Iran)",
+    "checked_at": "2026-10-01",
+    "error": "HTTP Error 403: Forbidden",
+    "url_role": "候选目录URL（可能由名称构造）；不是新确认的引用来源",
+    "fact_verification": "只探测页面；HTTP成功不等于数值核验，失败不代表资产不存在"
+  },
+  {
+    "country": "科威特",
+    "name": "Ahmadi",
+    "url": "https://www.gem.wiki/Ahmadi_Oil_Field_(Kuwait)",
+    "checked_at": "2026-10-01",
+    "error": "HTTP Error 403: Forbidden",
+    "url_role": "候选目录URL（可能由名称构造）；不是新确认的引用来源",
+    "fact_verification": "只探测页面；HTTP成功不等于数值核验，失败不代表资产不存在"
+  },
+  {
+    "country": "科威特",
+    "name": "Sabriya",
+    "url": "https://www.gem.wiki/Sabriya_Oil_Field_(Kuwait)",
+    "checked_at": "2026-10-01",
+    "error": "HTTP Error 403: Forbidden",
+    "url_role": "候选目录URL（可能由名称构造）；不是新确认的引用来源",
+    "fact_verification": "只探测页面；HTTP成功不等于数值核验，失败不代表资产不存在"
+  },
+  {
+    "country": "科威特",
+    "name": "Umm Niqa",
+    "url": "https://www.gem.wiki/Umm_Niqa_Oil_Field_(Kuwait)",
+    "checked_at": "2026-10-01",
+    "error": "HTTP Error 403: Forbidden",
+    "url_role": "候选目录URL（可能由名称构造）；不是新确认的引用来源",
+    "fact_verification": "只探测页面；HTTP成功不等于数值核验，失败不代表资产不存在"
+  },
+  {
+    "country": "科威特",
+    "name": "Ratqa",
+    "url": "https://www.gem.wiki/Ratqa_Oil_Field_(Kuwait)",
+    "checked_at": "2026-10-01",
+    "error": "HTTP Error 403: Forbidden",
+    "url_role": "候选目录URL（可能由名称构造）；不是新确认的引用来源",
+    "fact_verification": "只探测页面；HTTP成功不等于数值核验，失败不代表资产不存在"
+  },
+  {
+    "country": "科威特",
+    "name": "Bahra",
+    "url": "https://www.gem.wiki/Bahra_Oil_Field_(Kuwait)",
+    "checked_at": "2026-10-01",
+    "error": "HTTP Error 403: Forbidden",
+    "url_role": "候选目录URL（可能由名称构造）；不是新确认的引用来源",
+    "fact_verification": "只探测页面；HTTP成功不等于数值核验，失败不代表资产不存在"
+  },
+  {
+    "country": "科威特",
+    "name": "Raudhatain",
+    "url": "https://www.gem.wiki/Raudhatain_Oil_Field_(Kuwait)",
+    "checked_at": "2026-10-01",
+    "error": "HTTP Error 403: Forbidden",
+    "url_role": "候选目录URL（可能由名称构造）；不是新确认的引用来源",
+    "fact_verification": "只探测页面；HTTP成功不等于数值核验，失败不代表资产不存在"
+  },
+  {
+    "country": "科威特",
+    "name": "Umm Gudair",
+    "url": "https://www.gem.wiki/Umm_Gudair_Oil_Field_(Kuwait)",
+    "checked_at": "2026-10-01",
+    "error": "HTTP Error 403: Forbidden",
+    "url_role": "候选目录URL（可能由名称构造）；不是新确认的引用来源",
+    "fact_verification": "只探测页面；HTTP成功不等于数值核验，失败不代表资产不存在"
+  },
+  {
+    "country": "科威特",
+    "name": "South Ratqa",
+    "url": "https://www.gem.wiki/South_Ratqa_Oil_Field_(Kuwait)",
+    "checked_at": "2026-10-01",
+    "error": "HTTP Error 403: Forbidden",
+    "url_role": "候选目录URL（可能由名称构造）；不是新确认的引用来源",
+    "fact_verification": "只探测页面；HTTP成功不等于数值核验，失败不代表资产不存在"
+  },
+  {
+    "country": "科威特",
+    "name": "Khafji",
+    "url": "https://www.gem.wiki/Khafji_Oil_Field_(Kuwait)",
+    "checked_at": "2026-10-01",
+    "error": "HTTP Error 403: Forbidden",
+    "url_role": "候选目录URL（可能由名称构造）；不是新确认的引用来源",
+    "fact_verification": "只探测页面；HTTP成功不等于数值核验，失败不代表资产不存在"
+  },
+  {
+    "country": "科威特",
+    "name": "Abdali",
+    "url": "https://www.gem.wiki/Abdali_Oil_Field_(Kuwait)",
+    "checked_at": "2026-10-01",
+    "error": "HTTP Error 403: Forbidden",
+    "url_role": "候选目录URL（可能由名称构造）；不是新确认的引用来源",
+    "fact_verification": "只探测页面；HTTP成功不等于数值核验，失败不代表资产不存在"
+  },
+  {
+    "country": "科威特",
+    "name": "Minagish",
+    "url": "https://www.gem.wiki/Minagish_Oil_Field_(Kuwait)",
+    "checked_at": "2026-10-01",
+    "error": "HTTP Error 403: Forbidden",
+    "url_role": "候选目录URL（可能由名称构造）；不是新确认的引用来源",
+    "fact_verification": "只探测页面；HTTP成功不等于数值核验，失败不代表资产不存在"
+  },
+  {
+    "country": "科威特",
+    "name": "Wafra",
+    "url": "https://www.gem.wiki/Wafra_Oil_Field_(Kuwait)",
+    "checked_at": "2026-10-01",
+    "error": "HTTP Error 403: Forbidden",
+    "url_role": "候选目录URL（可能由名称构造）；不是新确认的引用来源",
+    "fact_verification": "只探测页面；HTTP成功不等于数值核验，失败不代表资产不存在"
+  },
+  {
+    "country": "科威特",
+    "name": "Mutriba",
+    "url": "https://www.gem.wiki/Mutriba_Oil_Field_(Kuwait)",
+    "checked_at": "2026-10-01",
+    "error": "HTTP Error 403: Forbidden",
+    "url_role": "候选目录URL（可能由名称构造）；不是新确认的引用来源",
+    "fact_verification": "只探测页面；HTTP成功不等于数值核验，失败不代表资产不存在"
+  },
+  {
+    "country": "卡塔尔",
+    "name": "Karkara",
+    "url": "https://www.gem.wiki/Karkara_Oil_Field_(Qatar)",
+    "checked_at": "2026-10-01",
+    "error": "HTTP Error 403: Forbidden",
+    "url_role": "候选目录URL（可能由名称构造）；不是新确认的引用来源",
+    "fact_verification": "只探测页面；HTTP成功不等于数值核验，失败不代表资产不存在"
+  },
+  {
+    "country": "科威特",
+    "name": "Shaham",
+    "url": "https://www.gem.wiki/Shaham_Oil_Field_(Kuwait)",
+    "checked_at": "2026-10-01",
+    "error": "HTTP Error 403: Forbidden",
+    "url_role": "候选目录URL（可能由名称构造）；不是新确认的引用来源",
+    "fact_verification": "只探测页面；HTTP成功不等于数值核验，失败不代表资产不存在"
+  },
+  {
+    "country": "科威特",
+    "name": "Julaiah",
+    "url": "https://www.gem.wiki/Julaiah_Oil_Field_(Kuwait)",
+    "checked_at": "2026-10-01",
+    "error": "HTTP Error 403: Forbidden",
+    "url_role": "候选目录URL（可能由名称构造）；不是新确认的引用来源",
+    "fact_verification": "只探测页面；HTTP成功不等于数值核验，失败不代表资产不存在"
+  },
+  {
+    "country": "科威特",
+    "name": "Kra-al-Maru",
+    "url": "https://www.gem.wiki/Kra-al-Maru_Oil_Field_(Kuwait)",
+    "checked_at": "2026-10-01",
+    "error": "HTTP Error 403: Forbidden",
+    "url_role": "候选目录URL（可能由名称构造）；不是新确认的引用来源",
+    "fact_verification": "只探测页面；HTTP成功不等于数值核验，失败不代表资产不存在"
+  },
+  {
+    "country": "科威特",
+    "name": "Nokhetha",
+    "url": "https://www.gem.wiki/Nokhetha_Oil_Field_(Kuwait)",
+    "checked_at": "2026-10-01",
+    "error": "HTTP Error 403: Forbidden",
+    "url_role": "候选目录URL（可能由名称构造）；不是新确认的引用来源",
+    "fact_verification": "只探测页面；HTTP成功不等于数值核验，失败不代表资产不存在"
+  },
+  {
+    "country": "卡塔尔",
+    "name": "Al-Murjan",
+    "url": "https://www.gem.wiki/Al-Murjan_Oil_Field_(Qatar)",
+    "checked_at": "2026-10-01",
+    "error": "HTTP Error 403: Forbidden",
+    "url_role": "候选目录URL（可能由名称构造）；不是新确认的引用来源",
+    "fact_verification": "只探测页面；HTTP成功不等于数值核验，失败不代表资产不存在"
+  },
+  {
+    "country": "卡塔尔",
+    "name": "A-South",
+    "url": "https://www.gem.wiki/A-South_Oil_Field_(Qatar)",
+    "checked_at": "2026-10-01",
+    "error": "HTTP Error 403: Forbidden",
+    "url_role": "候选目录URL（可能由名称构造）；不是新确认的引用来源",
+    "fact_verification": "只探测页面；HTTP成功不等于数值核验，失败不代表资产不存在"
+  },
+  {
+    "country": "阿曼",
+    "name": "Mukhaizna",
+    "url": "https://www.gem.wiki/Mukhaizna_Oil_Field_(Oman)",
+    "checked_at": "2026-10-01",
+    "error": "HTTP Error 403: Forbidden",
+    "url_role": "候选目录URL（可能由名称构造）；不是新确认的引用来源",
+    "fact_verification": "只探测页面；HTTP成功不等于数值核验，失败不代表资产不存在"
+  },
+  {
+    "country": "卡塔尔",
+    "name": "A-Structures (A-North / A-South)",
+    "url": "https://www.gem.wiki/A-Structures_(A-North_/_A-South)_Oil_Field_(Qatar)",
+    "checked_at": "2026-10-01",
+    "error": "HTTP Error 403: Forbidden",
+    "url_role": "候选目录URL（可能由名称构造）；不是新确认的引用来源",
+    "fact_verification": "只探测页面；HTTP成功不等于数值核验，失败不代表资产不存在"
+  },
+  {
+    "country": "卡塔尔",
+    "name": "North Field",
+    "url": "https://www.gem.wiki/North_Field_Gas_Field_(Qatar)",
+    "checked_at": "2026-10-01",
+    "error": "HTTP Error 403: Forbidden",
+    "url_role": "候选目录URL（可能由名称构造）；不是新确认的引用来源",
+    "fact_verification": "只探测页面；HTTP成功不等于数值核验，失败不代表资产不存在"
+  },
+  {
+    "country": "卡塔尔",
+    "name": "A-North",
+    "url": "https://www.gem.wiki/A-North_Oil_Field_(Qatar)",
+    "checked_at": "2026-10-01",
+    "error": "HTTP Error 403: Forbidden",
+    "url_role": "候选目录URL（可能由名称构造）；不是新确认的引用来源",
+    "fact_verification": "只探测页面；HTTP成功不等于数值核验，失败不代表资产不存在"
+  },
+  {
+    "country": "阿曼",
+    "name": "Qarn Alam",
+    "url": "https://www.gem.wiki/Qarn_Alam_Oil_Field_(Oman)",
+    "checked_at": "2026-10-01",
+    "error": "HTTP Error 403: Forbidden",
+    "url_role": "候选目录URL（可能由名称构造）；不是新确认的引用来源",
+    "fact_verification": "只探测页面；HTTP成功不等于数值核验，失败不代表资产不存在"
+  },
+  {
+    "country": "阿曼",
+    "name": "Natih",
+    "url": "https://www.gem.wiki/Natih_Oil_Field_(Oman)",
+    "checked_at": "2026-10-01",
+    "error": "HTTP Error 403: Forbidden",
+    "url_role": "候选目录URL（可能由名称构造）；不是新确认的引用来源",
+    "fact_verification": "只探测页面；HTTP成功不等于数值核验，失败不代表资产不存在"
+  },
+  {
+    "country": "阿曼",
+    "name": "Yibal",
+    "url": "https://www.gem.wiki/Yibal_Oil_and_Gas_Field_(Oman)",
+    "checked_at": "2026-10-01",
+    "error": "HTTP Error 403: Forbidden",
+    "url_role": "候选目录URL（可能由名称构造）；不是新确认的引用来源",
+    "fact_verification": "只探测页面；HTTP成功不等于数值核验，失败不代表资产不存在"
+  },
+  {
+    "country": "阿曼",
+    "name": "Nimr",
+    "url": "https://www.gem.wiki/Nimr_Oil_Field_(Oman)",
+    "checked_at": "2026-10-01",
+    "error": "HTTP Error 403: Forbidden",
+    "url_role": "候选目录URL（可能由名称构造）；不是新确认的引用来源",
+    "fact_verification": "只探测页面；HTTP成功不等于数值核验，失败不代表资产不存在"
+  },
+  {
+    "country": "阿曼",
+    "name": "Marmul",
+    "url": "https://www.gem.wiki/Marmul_Oil_Field_(Oman)",
+    "checked_at": "2026-10-01",
+    "error": "HTTP Error 403: Forbidden",
+    "url_role": "候选目录URL（可能由名称构造）；不是新确认的引用来源",
+    "fact_verification": "只探测页面；HTTP成功不等于数值核验，失败不代表资产不存在"
+  },
+  {
+    "country": "阿曼",
+    "name": "Fahud",
+    "url": "https://www.gem.wiki/Fahud_Oil_Field_(Oman)",
+    "checked_at": "2026-10-01",
+    "error": "HTTP Error 403: Forbidden",
+    "url_role": "候选目录URL（可能由名称构造）；不是新确认的引用来源",
+    "fact_verification": "只探测页面；HTTP成功不等于数值核验，失败不代表资产不存在"
+  },
+  {
+    "country": "阿曼",
+    "name": "Amal",
+    "url": "https://www.gem.wiki/Amal_Oil_Field_(Oman)",
+    "checked_at": "2026-10-01",
+    "error": "HTTP Error 403: Forbidden",
+    "url_role": "候选目录URL（可能由名称构造）；不是新确认的引用来源",
+    "fact_verification": "只探测页面；HTTP成功不等于数值核验，失败不代表资产不存在"
+  },
+  {
+    "country": "阿曼",
+    "name": "Bahja",
+    "url": "https://www.gem.wiki/Bahja_Oil_Field_(Oman)",
+    "checked_at": "2026-10-01",
+    "error": "HTTP Error 403: Forbidden",
+    "url_role": "候选目录URL（可能由名称构造）；不是新确认的引用来源",
+    "fact_verification": "只探测页面；HTTP成功不等于数值核验，失败不代表资产不存在"
+  },
+  {
+    "country": "阿曼",
+    "name": "Zalzala",
+    "url": "https://www.gem.wiki/Zalzala_Oil_Field_(Oman)",
+    "checked_at": "2026-10-01",
+    "error": "HTTP Error 403: Forbidden",
+    "url_role": "候选目录URL（可能由名称构造）；不是新确认的引用来源",
+    "fact_verification": "只探测页面；HTTP成功不等于数值核验，失败不代表资产不存在"
+  },
+  {
+    "country": "阿曼",
+    "name": "Lekhwair",
+    "url": "https://www.gem.wiki/Lekhwair_Oil_Field_(Oman)",
+    "checked_at": "2026-10-01",
+    "error": "HTTP Error 403: Forbidden",
+    "url_role": "候选目录URL（可能由名称构造）；不是新确认的引用来源",
+    "fact_verification": "只探测页面；HTTP成功不等于数值核验，失败不代表资产不存在"
+  },
+  {
+    "country": "阿曼",
+    "name": "Haima West",
+    "url": "https://www.gem.wiki/Haima_West_Oil_Field_(Oman)",
+    "checked_at": "2026-10-01",
+    "error": "HTTP Error 403: Forbidden",
+    "url_role": "候选目录URL（可能由名称构造）；不是新确认的引用来源",
+    "fact_verification": "只探测页面；HTTP成功不等于数值核验，失败不代表资产不存在"
+  },
+  {
+    "country": "阿曼",
+    "name": "Harweel",
+    "url": "https://www.gem.wiki/Harweel_Oil_Field_(Oman)",
+    "checked_at": "2026-10-01",
+    "error": "HTTP Error 403: Forbidden",
+    "url_role": "候选目录URL（可能由名称构造）；不是新确认的引用来源",
+    "fact_verification": "只探测页面；HTTP成功不等于数值核验，失败不代表资产不存在"
+  },
+  {
+    "country": "阿曼",
+    "name": "Al Noor",
+    "url": "https://www.gem.wiki/Al_Noor_Oil_Field_(Oman)",
+    "checked_at": "2026-10-01",
+    "error": "HTTP Error 403: Forbidden",
+    "url_role": "候选目录URL（可能由名称构造）；不是新确认的引用来源",
+    "fact_verification": "只探测页面；HTTP成功不等于数值核验，失败不代表资产不存在"
+  },
+  {
+    "country": "阿曼",
+    "name": "Block 50 (Masirah)",
+    "url": "https://www.gem.wiki/Block_50_(Masirah)_Oil_and_Gas_Field_(Oman)",
+    "checked_at": "2026-10-01",
+    "error": "HTTP Error 403: Forbidden",
+    "url_role": "候选目录URL（可能由名称构造）；不是新确认的引用来源",
+    "fact_verification": "只探测页面；HTTP成功不等于数值核验，失败不代表资产不存在"
+  },
+  {
+    "country": "阿曼",
+    "name": "Bisat",
+    "url": "https://www.gem.wiki/Bisat_Oil_Field_(Oman)",
+    "checked_at": "2026-10-01",
+    "error": "HTTP Error 403: Forbidden",
+    "url_role": "候选目录URL（可能由名称构造）；不是新确认的引用来源",
+    "fact_verification": "只探测页面；HTTP成功不等于数值核验，失败不代表资产不存在"
+  },
+  {
+    "country": "阿曼",
+    "name": "Budour Northeast",
+    "url": "https://www.gem.wiki/Budour_Northeast_Oil_Field_(Oman)",
+    "checked_at": "2026-10-01",
+    "error": "HTTP Error 403: Forbidden",
+    "url_role": "候选目录URL（可能由名称构造）；不是新确认的引用来源",
+    "fact_verification": "只探测页面；HTTP成功不等于数值核验，失败不代表资产不存在"
+  },
+  {
+    "country": "阿曼",
+    "name": "Nimr-E",
+    "url": "https://www.gem.wiki/Nimr-E_Oil_Field_(Oman)",
+    "checked_at": "2026-10-01",
+    "error": "HTTP Error 403: Forbidden",
+    "url_role": "候选目录URL（可能由名称构造）；不是新确认的引用来源",
+    "fact_verification": "只探测页面；HTTP成功不等于数值核验，失败不代表资产不存在"
+  },
+  {
+    "country": "阿曼",
+    "name": "Nimr-A",
+    "url": "https://www.gem.wiki/Nimr-A_Oil_Field_(Oman)",
+    "checked_at": "2026-10-01",
+    "error": "HTTP Error 403: Forbidden",
+    "url_role": "候选目录URL（可能由名称构造）；不是新确认的引用来源",
+    "fact_verification": "只探测页面；HTTP成功不等于数值核验，失败不代表资产不存在"
+  },
+  {
+    "country": "阿曼",
+    "name": "Daleel",
+    "url": "https://www.gem.wiki/Daleel_Oil_Field_(Oman)",
+    "checked_at": "2026-10-01",
+    "error": "HTTP Error 403: Forbidden",
+    "url_role": "候选目录URL（可能由名称构造）；不是新确认的引用来源",
+    "fact_verification": "只探测页面；HTTP成功不等于数值核验，失败不代表资产不存在"
+  },
+  {
+    "country": "阿曼",
+    "name": "Thahab",
+    "url": "https://www.gem.wiki/Thahab_Oil_Field_(Oman)",
+    "checked_at": "2026-10-01",
+    "error": "HTTP Error 403: Forbidden",
+    "url_role": "候选目录URL（可能由名称构造）；不是新确认的引用来源",
+    "fact_verification": "只探测页面；HTTP成功不等于数值核验，失败不代表资产不存在"
+  },
+  {
+    "country": "阿曼",
+    "name": "Mazoon",
+    "url": "https://www.gem.wiki/Mazoon_Oil_Field_(Oman)",
+    "checked_at": "2026-10-01",
+    "error": "HTTP Error 403: Forbidden",
+    "url_role": "候选目录URL（可能由名称构造）；不是新确认的引用来源",
+    "fact_verification": "只探测页面；HTTP成功不等于数值核验，失败不代表资产不存在"
+  },
+  {
+    "country": "阿曼",
+    "name": "Bushra",
+    "url": "https://www.gem.wiki/Bushra_Oil_Field_(Oman)",
+    "checked_at": "2026-10-01",
+    "error": "HTTP Error 403: Forbidden",
+    "url_role": "候选目录URL（可能由名称构造）；不是新确认的引用来源",
+    "fact_verification": "只探测页面；HTTP成功不等于数值核验，失败不代表资产不存在"
+  },
+  {
+    "country": "阿曼",
+    "name": "Furat",
+    "url": "https://www.gem.wiki/Furat_Oil_Field_(Oman)",
+    "checked_at": "2026-10-01",
+    "error": "HTTP Error 403: Forbidden",
+    "url_role": "候选目录URL（可能由名称构造）；不是新确认的引用来源",
+    "fact_verification": "只探测页面；HTTP成功不等于数值核验，失败不代表资产不存在"
+  },
+  {
+    "country": "阿曼",
+    "name": "Shadi",
+    "url": "https://www.gem.wiki/Shadi_Oil_Field_(Oman)",
+    "checked_at": "2026-10-01",
+    "error": "HTTP Error 403: Forbidden",
+    "url_role": "候选目录URL（可能由名称构造）；不是新确认的引用来源",
+    "fact_verification": "只探测页面；HTTP成功不等于数值核验，失败不代表资产不存在"
+  },
+  {
+    "country": "阿曼",
+    "name": "Khamilah",
+    "url": "https://www.gem.wiki/Khamilah_Oil_Field_(Oman)",
+    "checked_at": "2026-10-01",
+    "error": "HTTP Error 403: Forbidden",
+    "url_role": "候选目录URL（可能由名称构造）；不是新确认的引用来源",
+    "fact_verification": "只探测页面；HTTP成功不等于数值核验，失败不代表资产不存在"
+  },
+  {
+    "country": "阿曼",
+    "name": "Block 9 (Oman)",
+    "url": "https://www.gem.wiki/Block_9_(Oman)_Oil_and_Gas_Field_(Oman)",
+    "checked_at": "2026-10-01",
+    "error": "HTTP Error 403: Forbidden",
+    "url_role": "候选目录URL（可能由名称构造）；不是新确认的引用来源",
+    "fact_verification": "只探测页面；HTTP成功不等于数值核验，失败不代表资产不存在"
+  },
+  {
+    "country": "阿曼",
+    "name": "Block 27 (Oman)",
+    "url": "https://www.gem.wiki/Block_27_(Oman)_Oil_and_Gas_Field_(Oman)",
+    "checked_at": "2026-10-01",
+    "error": "HTTP Error 403: Forbidden",
+    "url_role": "候选目录URL（可能由名称构造）；不是新确认的引用来源",
+    "fact_verification": "只探测页面；HTTP成功不等于数值核验，失败不代表资产不存在"
+  },
+  {
+    "country": "阿曼",
+    "name": "Wadi Latham",
+    "url": "https://www.gem.wiki/Wadi_Latham_Oil_Field_(Oman)",
+    "checked_at": "2026-10-01",
+    "error": "HTTP Error 403: Forbidden",
+    "url_role": "候选目录URL（可能由名称构造）；不是新确认的引用来源",
+    "fact_verification": "只探测页面；HTTP成功不等于数值核验，失败不代表资产不存在"
+  },
+  {
+    "country": "阿曼",
+    "name": "Safah",
+    "url": "https://www.gem.wiki/Safah_Oil_Field_(Oman)",
+    "checked_at": "2026-10-01",
+    "error": "HTTP Error 403: Forbidden",
+    "url_role": "候选目录URL（可能由名称构造）；不是新确认的引用来源",
+    "fact_verification": "只探测页面；HTTP成功不等于数值核验，失败不代表资产不存在"
+  },
+  {
+    "country": "阿曼",
+    "name": "Wadi Aswad North",
+    "url": "https://www.gem.wiki/Wadi_Aswad_North_Oil_Field_(Oman)",
+    "checked_at": "2026-10-01",
+    "error": "HTTP Error 403: Forbidden",
+    "url_role": "候选目录URL（可能由名称构造）；不是新确认的引用来源",
+    "fact_verification": "只探测页面；HTTP成功不等于数值核验，失败不代表资产不存在"
+  },
+  {
+    "country": "阿曼",
+    "name": "West Bukha",
+    "url": "https://www.gem.wiki/West_Bukha_Oil_Field_(Oman)",
+    "checked_at": "2026-10-01",
+    "error": "HTTP Error 403: Forbidden",
+    "url_role": "候选目录URL（可能由名称构造）；不是新确认的引用来源",
+    "fact_verification": "只探测页面；HTTP成功不等于数值核验，失败不代表资产不存在"
+  },
+  {
+    "country": "阿曼",
+    "name": "Block 61 (Oman)",
+    "url": "https://www.gem.wiki/Block_61_(Oman)_Gas_Field_(Oman)",
+    "checked_at": "2026-10-01",
+    "error": "HTTP Error 403: Forbidden",
+    "url_role": "候选目录URL（可能由名称构造）；不是新确认的引用来源",
+    "fact_verification": "只探测页面；HTTP成功不等于数值核验，失败不代表资产不存在"
+  },
+  {
+    "country": "阿曼",
+    "name": "Block 7 (Oman)",
+    "url": "https://www.gem.wiki/Block_7_(Oman)_Oil_and_Gas_Field_(Oman)",
+    "checked_at": "2026-10-01",
+    "error": "HTTP Error 403: Forbidden",
+    "url_role": "候选目录URL（可能由名称构造）；不是新确认的引用来源",
+    "fact_verification": "只探测页面；HTTP成功不等于数值核验，失败不代表资产不存在"
+  },
+  {
+    "country": "阿曼",
+    "name": "Block 60 (Oman)",
+    "url": "https://www.gem.wiki/Block_60_(Oman)_Oil_and_Gas_Field_(Oman)",
+    "checked_at": "2026-10-01",
+    "error": "HTTP Error 403: Forbidden",
+    "url_role": "候选目录URL（可能由名称构造）；不是新确认的引用来源",
+    "fact_verification": "只探测页面；HTTP成功不等于数值核验，失败不代表资产不存在"
+  },
+  {
+    "country": "阿曼",
+    "name": "Safah North B",
+    "url": "https://www.gem.wiki/Safah_North_B_Oil_Field_(Oman)",
+    "checked_at": "2026-10-01",
+    "error": "HTTP Error 403: Forbidden",
+    "url_role": "候选目录URL（可能由名称构造）；不是新确认的引用来源",
+    "fact_verification": "只探测页面；HTTP成功不等于数值核验，失败不代表资产不存在"
+  },
+  {
+    "country": "阿曼",
+    "name": "Block 8 (Oman)",
+    "url": "https://www.gem.wiki/Block_8_(Oman)_Oil_and_Gas_Field_(Oman)",
+    "checked_at": "2026-10-01",
+    "error": "HTTP Error 403: Forbidden",
+    "url_role": "候选目录URL（可能由名称构造）；不是新确认的引用来源",
+    "fact_verification": "只探测页面；HTTP成功不等于数值核验，失败不代表资产不存在"
+  },
+  {
+    "country": "阿曼",
+    "name": "Abu Butabul",
+    "url": "https://www.gem.wiki/Abu_Butabul_Oil_and_Gas_Field_(Oman)",
+    "checked_at": "2026-10-01",
+    "error": "HTTP Error 403: Forbidden",
+    "url_role": "候选目录URL（可能由名称构造）；不是新确认的引用来源",
+    "fact_verification": "只探测页面；HTTP成功不等于数值核验，失败不代表资产不存在"
+  },
+  {
+    "country": "阿曼",
+    "name": "Khazzan",
+    "url": "https://www.gem.wiki/Khazzan_Gas_Field_(Oman)",
+    "checked_at": "2026-10-01",
+    "error": "HTTP Error 403: Forbidden",
+    "url_role": "候选目录URL（可能由名称构造）；不是新确认的引用来源",
+    "fact_verification": "只探测页面；HTTP成功不等于数值核验，失败不代表资产不存在"
+  },
+  {
+    "country": "阿曼",
+    "name": "Ghazeer",
+    "url": "https://www.gem.wiki/Ghazeer_Gas_Field_(Oman)",
+    "checked_at": "2026-10-01",
+    "error": "HTTP Error 403: Forbidden",
+    "url_role": "候选目录URL（可能由名称构造）；不是新确认的引用来源",
+    "fact_verification": "只探测页面；HTTP成功不等于数值核验，失败不代表资产不存在"
+  },
+  {
+    "country": "阿曼",
+    "name": "Sahma",
+    "url": "https://www.gem.wiki/Sahma_Oil_Field_(Oman)",
+    "checked_at": "2026-10-01",
+    "error": "HTTP Error 403: Forbidden",
+    "url_role": "候选目录URL（可能由名称构造）；不是新确认的引用来源",
+    "fact_verification": "只探测页面；HTTP成功不等于数值核验，失败不代表资产不存在"
+  },
+  {
+    "country": "也门",
+    "name": "Block 14 (Masila)",
+    "url": "https://www.gem.wiki/Block_14_(Masila)_Oil_and_Gas_Field_(Yemen)",
+    "checked_at": "2026-10-01",
+    "error": "HTTP Error 403: Forbidden",
+    "url_role": "候选目录URL（可能由名称构造）；不是新确认的引用来源",
+    "fact_verification": "只探测页面；HTTP成功不等于数值核验，失败不代表资产不存在"
+  },
+  {
+    "country": "阿曼",
+    "name": "Bukha",
+    "url": "https://www.gem.wiki/Bukha_Gas_Field_(Oman)",
+    "checked_at": "2026-10-01",
+    "error": "HTTP Error 403: Forbidden",
+    "url_role": "候选目录URL（可能由名称构造）；不是新确认的引用来源",
+    "fact_verification": "只探测页面；HTTP成功不等于数值核验，失败不代表资产不存在"
+  },
+  {
+    "country": "也门",
+    "name": "Block 10 (East Shabwa)",
+    "url": "https://www.gem.wiki/Block_10_(East_Shabwa)_Oil_and_Gas_Field_(Yemen)",
+    "checked_at": "2026-10-01",
+    "error": "HTTP Error 403: Forbidden",
+    "url_role": "候选目录URL（可能由名称构造）；不是新确认的引用来源",
+    "fact_verification": "只探测页面；HTTP成功不等于数值核验，失败不代表资产不存在"
+  },
+  {
+    "country": "也门",
+    "name": "Block 18 (Marib)",
+    "url": "https://www.gem.wiki/Block_18_(Marib)_Oil_and_Gas_Field_(Yemen)",
+    "checked_at": "2026-10-01",
+    "error": "HTTP Error 403: Forbidden",
+    "url_role": "候选目录URL（可能由名称构造）；不是新确认的引用来源",
+    "fact_verification": "只探测页面；HTTP成功不等于数值核验，失败不代表资产不存在"
+  },
+  {
+    "country": "也门",
+    "name": "Tasour",
+    "url": "https://www.gem.wiki/Tasour_Oil_Field_(Yemen)",
+    "checked_at": "2026-10-01",
+    "error": "HTTP Error 403: Forbidden",
+    "url_role": "候选目录URL（可能由名称构造）；不是新确认的引用来源",
+    "fact_verification": "只探测页面；HTTP成功不等于数值核验，失败不代表资产不存在"
+  },
+  {
+    "country": "也门",
+    "name": "Alif",
+    "url": "https://www.gem.wiki/Alif_Oil_Field_(Yemen)",
+    "checked_at": "2026-10-01",
+    "error": "HTTP Error 403: Forbidden",
+    "url_role": "候选目录URL（可能由名称构造）；不是新确认的引用来源",
+    "fact_verification": "只探测页面；HTTP成功不等于数值核验，失败不代表资产不存在"
+  },
+  {
+    "country": "也门",
+    "name": "Godah",
+    "url": "https://www.gem.wiki/Godah_Oil_Field_(Yemen)",
+    "checked_at": "2026-10-01",
+    "error": "HTTP Error 403: Forbidden",
+    "url_role": "候选目录URL（可能由名称构造）；不是新确认的引用来源",
+    "fact_verification": "只探测页面；HTTP成功不等于数值核验，失败不代表资产不存在"
+  },
+  {
+    "country": "也门",
+    "name": "Block 32 (Hawareem)",
+    "url": "https://www.gem.wiki/Block_32_(Hawareem)_Oil_and_Gas_Field_(Yemen)",
+    "checked_at": "2026-10-01",
+    "error": "HTTP Error 403: Forbidden",
+    "url_role": "候选目录URL（可能由名称构造）；不是新确认的引用来源",
+    "fact_verification": "只探测页面；HTTP成功不等于数值核验，失败不代表资产不存在"
+  },
+  {
+    "country": "也门",
+    "name": "Alroidhat (Al-Rowedhat)",
+    "url": "https://www.gem.wiki/Alroidhat_(Al-Rowedhat)_Oil_Field_(Yemen)",
+    "checked_at": "2026-10-01",
+    "error": "HTTP Error 403: Forbidden",
+    "url_role": "候选目录URL（可能由名称构造）；不是新确认的引用来源",
+    "fact_verification": "只探测页面；HTTP成功不等于数值核验，失败不代表资产不存在"
+  },
+  {
+    "country": "也门",
+    "name": "Hiswah (Haswa)",
+    "url": "https://www.gem.wiki/Hiswah_(Haswa)_Oil_Field_(Yemen)",
+    "checked_at": "2026-10-01",
+    "error": "HTTP Error 403: Forbidden",
+    "url_role": "候选目录URL（可能由名称构造）；不是新确认的引用来源",
+    "fact_verification": "只探测页面；HTTP成功不等于数值核验，失败不代表资产不存在"
+  },
+  {
+    "country": "也门",
+    "name": "Block 9 (Malik)",
+    "url": "https://www.gem.wiki/Block_9_(Malik)_Oil_and_Gas_Field_(Yemen)",
+    "checked_at": "2026-10-01",
+    "error": "HTTP Error 403: Forbidden",
+    "url_role": "候选目录URL（可能由名称构造）；不是新确认的引用来源",
+    "fact_verification": "只探测页面；HTTP成功不等于数值核验，失败不代表资产不存在"
+  },
+  {
+    "country": "也门",
+    "name": "Block S2 (Uqlah)",
+    "url": "https://www.gem.wiki/Block_S2_(Uqlah)_Oil_and_Gas_Field_(Yemen)",
+    "checked_at": "2026-10-01",
+    "error": "HTTP Error 403: Forbidden",
+    "url_role": "候选目录URL（可能由名称构造）；不是新确认的引用来源",
+    "fact_verification": "只探测页面；HTTP成功不等于数值核验，失败不代表资产不存在"
+  },
+  {
+    "country": "也门",
+    "name": "Qarn Qeamah",
+    "url": "https://www.gem.wiki/Qarn_Qeamah_Oil_Field_(Yemen)",
+    "checked_at": "2026-10-01",
+    "error": "HTTP Error 403: Forbidden",
+    "url_role": "候选目录URL（可能由名称构造）；不是新确认的引用来源",
+    "fact_verification": "只探测页面；HTTP成功不等于数值核验，失败不代表资产不存在"
+  },
+  {
+    "country": "也门",
+    "name": "Habban",
+    "url": "https://www.gem.wiki/Habban_Oil_Field_(Yemen)",
+    "checked_at": "2026-10-01",
+    "error": "HTTP Error 403: Forbidden",
+    "url_role": "候选目录URL（可能由名称构造）；不是新确认的引用来源",
+    "fact_verification": "只探测页面；HTTP成功不等于数值核验，失败不代表资产不存在"
+  },
+  {
+    "country": "叙利亚",
+    "name": "Al-Taym",
+    "url": "https://www.gem.wiki/Al-Taym_Oil_Field_(Syria)",
+    "checked_at": "2026-10-01",
+    "error": "HTTP Error 403: Forbidden",
+    "url_role": "候选目录URL（可能由名称构造）；不是新确认的引用来源",
+    "fact_verification": "只探测页面；HTTP成功不等于数值核验，失败不代表资产不存在"
+  },
+  {
+    "country": "叙利亚",
+    "name": "Rmeilan",
+    "url": "https://www.gem.wiki/Rmeilan_Oil_Field_(Syria)",
+    "checked_at": "2026-10-01",
+    "error": "HTTP Error 403: Forbidden",
+    "url_role": "候选目录URL（可能由名称构造）；不是新确认的引用来源",
+    "fact_verification": "只探测页面；HTTP成功不等于数值核验，失败不代表资产不存在"
+  },
+  {
+    "country": "叙利亚",
+    "name": "Al-Jafra",
+    "url": "https://www.gem.wiki/Al-Jafra_Oil_Field_(Syria)",
+    "checked_at": "2026-10-01",
+    "error": "HTTP Error 403: Forbidden",
+    "url_role": "候选目录URL（可能由名称构造）；不是新确认的引用来源",
+    "fact_verification": "只探测页面；HTTP成功不等于数值核验，失败不代表资产不存在"
+  },
+  {
+    "country": "叙利亚",
+    "name": "Al-Ward",
+    "url": "https://www.gem.wiki/Al-Ward_Oil_Field_(Syria)",
+    "checked_at": "2026-10-01",
+    "error": "HTTP Error 403: Forbidden",
+    "url_role": "候选目录URL（可能由名称构造）；不是新确认的引用来源",
+    "fact_verification": "只探测页面；HTTP成功不等于数值核验，失败不代表资产不存在"
+  },
+  {
+    "country": "叙利亚",
+    "name": "Al-Tanak",
+    "url": "https://www.gem.wiki/Al-Tanak_Oil_Field_(Syria)",
+    "checked_at": "2026-10-01",
+    "error": "HTTP Error 403: Forbidden",
+    "url_role": "候选目录URL（可能由名称构造）；不是新确认的引用来源",
+    "fact_verification": "只探测页面；HTTP成功不等于数值核验，失败不代表资产不存在"
+  },
+  {
+    "country": "叙利亚",
+    "name": "Suwaydiya",
+    "url": "https://www.gem.wiki/Suwaydiya_Oil_Field_(Syria)",
+    "checked_at": "2026-10-01",
+    "error": "HTTP Error 403: Forbidden",
+    "url_role": "候选目录URL（可能由名称构造）；不是新确认的引用来源",
+    "fact_verification": "只探测页面；HTTP成功不等于数值核验，失败不代表资产不存在"
+  },
+  {
+    "country": "叙利亚",
+    "name": "Qarachok",
+    "url": "https://www.gem.wiki/Qarachok_Oil_Field_(Syria)",
+    "checked_at": "2026-10-01",
+    "error": "HTTP Error 403: Forbidden",
+    "url_role": "候选目录URL（可能由名称构造）；不是新确认的引用来源",
+    "fact_verification": "只探测页面；HTTP成功不等于数值核验，失败不代表资产不存在"
+  },
+  {
+    "country": "叙利亚",
+    "name": "Sazabeh",
+    "url": "https://www.gem.wiki/Sazabeh_Oil_Field_(Syria)",
+    "checked_at": "2026-10-01",
+    "error": "HTTP Error 403: Forbidden",
+    "url_role": "候选目录URL（可能由名称构造）；不是新确认的引用来源",
+    "fact_verification": "只探测页面；HTTP成功不等于数值核验，失败不代表资产不存在"
+  },
+  {
+    "country": "叙利亚",
+    "name": "Hamza",
+    "url": "https://www.gem.wiki/Hamza_Oil_Field_(Syria)",
+    "checked_at": "2026-10-01",
+    "error": "HTTP Error 403: Forbidden",
+    "url_role": "候选目录URL（可能由名称构造）；不是新确认的引用来源",
+    "fact_verification": "只探测页面；HTTP成功不等于数值核验，失败不代表资产不存在"
+  },
+  {
+    "country": "叙利亚",
+    "name": "Alyan",
+    "url": "https://www.gem.wiki/Alyan_Oil_Field_(Syria)",
+    "checked_at": "2026-10-01",
+    "error": "HTTP Error 403: Forbidden",
+    "url_role": "候选目录URL（可能由名称构造）；不是新确认的引用来源",
+    "fact_verification": "只探测页面；HTTP成功不等于数值核验，失败不代表资产不存在"
+  },
+  {
+    "country": "叙利亚",
+    "name": "Tigris",
+    "url": "https://www.gem.wiki/Tigris_Oil_Field_(Syria)",
+    "checked_at": "2026-10-01",
+    "error": "HTTP Error 403: Forbidden",
+    "url_role": "候选目录URL（可能由名称构造）；不是新确认的引用来源",
+    "fact_verification": "只探测页面；HTTP成功不等于数值核验，失败不代表资产不存在"
+  },
+  {
+    "country": "叙利亚",
+    "name": "Ode",
+    "url": "https://www.gem.wiki/Ode_Oil_Field_(Syria)",
+    "checked_at": "2026-10-01",
+    "error": "HTTP Error 403: Forbidden",
+    "url_role": "候选目录URL（可能由名称构造）；不是新确认的引用来源",
+    "fact_verification": "只探测页面；HTTP成功不等于数值核验，失败不代表资产不存在"
+  },
+  {
+    "country": "以色列",
+    "name": "Tanin",
+    "url": "https://www.gem.wiki/Tanin_Gas_Field_(Israel)",
+    "checked_at": "2026-10-01",
+    "error": "HTTP Error 403: Forbidden",
+    "url_role": "候选目录URL（可能由名称构造）；不是新确认的引用来源",
+    "fact_verification": "只探测页面；HTTP成功不等于数值核验，失败不代表资产不存在"
+  },
+  {
+    "country": "以色列",
+    "name": "Leviathan",
+    "url": "https://www.gem.wiki/Leviathan_Gas_Field_(Israel)",
+    "checked_at": "2026-10-01",
+    "error": "HTTP Error 403: Forbidden",
+    "url_role": "候选目录URL（可能由名称构造）；不是新确认的引用来源",
+    "fact_verification": "只探测页面；HTTP成功不等于数值核验，失败不代表资产不存在"
+  },
+  {
+    "country": "以色列",
+    "name": "Heletz",
+    "url": "https://www.gem.wiki/Heletz_Oil_Field_(Israel)",
+    "checked_at": "2026-10-01",
+    "error": "HTTP Error 403: Forbidden",
+    "url_role": "候选目录URL（可能由名称构造）；不是新确认的引用来源",
+    "fact_verification": "只探测页面；HTTP成功不等于数值核验，失败不代表资产不存在"
+  },
+  {
+    "country": "以色列",
+    "name": "Tamar",
+    "url": "https://www.gem.wiki/Tamar_Gas_Field_(Israel)",
+    "checked_at": "2026-10-01",
+    "error": "HTTP Error 403: Forbidden",
+    "url_role": "候选目录URL（可能由名称构造）；不是新确认的引用来源",
+    "fact_verification": "只探测页面；HTTP成功不等于数值核验，失败不代表资产不存在"
+  },
+  {
+    "country": "以色列",
+    "name": "Meged",
+    "url": "https://www.gem.wiki/Meged_Oil_Field_(Israel)",
+    "checked_at": "2026-10-01",
+    "error": "HTTP Error 403: Forbidden",
+    "url_role": "候选目录URL（可能由名称构造）；不是新确认的引用来源",
+    "fact_verification": "只探测页面；HTTP成功不等于数值核验，失败不代表资产不存在"
+  },
+  {
+    "country": "以色列",
+    "name": "Karish",
+    "url": "https://www.gem.wiki/Karish_Gas_Field_(Israel)",
+    "checked_at": "2026-10-01",
+    "error": "HTTP Error 403: Forbidden",
+    "url_role": "候选目录URL（可能由名称构造）；不是新确认的引用来源",
+    "fact_verification": "只探测页面；HTTP成功不等于数值核验，失败不代表资产不存在"
+  },
+  {
+    "country": "土耳其",
+    "name": "Raman",
+    "url": "https://www.gem.wiki/Raman_Oil_Field_(Turkey)",
+    "checked_at": "2026-10-01",
+    "error": "HTTP Error 403: Forbidden",
+    "url_role": "候选目录URL（可能由名称构造）；不是新确认的引用来源",
+    "fact_verification": "只探测页面；HTTP成功不等于数值核验，失败不代表资产不存在"
+  },
+  {
+    "country": "埃及",
+    "name": "Shukheir Offshore (Gamma)",
+    "url": "https://www.gem.wiki/Shukheir_Offshore_(Gamma)_Oil_Field_(Egypt)",
+    "checked_at": "2026-10-01",
+    "error": "HTTP Error 403: Forbidden",
+    "url_role": "候选目录URL（可能由名称构造）；不是新确认的引用来源",
+    "fact_verification": "只探测页面；HTTP成功不等于数值核验，失败不代表资产不存在"
+  },
+  {
+    "country": "土耳其",
+    "name": "Garzan",
+    "url": "https://www.gem.wiki/Garzan_Oil_Field_(Turkey)",
+    "checked_at": "2026-10-01",
+    "error": "HTTP Error 403: Forbidden",
+    "url_role": "候选目录URL（可能由名称构造）；不是新确认的引用来源",
+    "fact_verification": "只探测页面；HTTP成功不等于数值核验，失败不代表资产不存在"
+  },
+  {
+    "country": "埃及",
+    "name": "Shukheir Offshore (Shukheir Bay)",
+    "url": "https://www.gem.wiki/Shukheir_Offshore_(Shukheir_Bay)_Oil_Field_(Egypt)",
+    "checked_at": "2026-10-01",
+    "error": "HTTP Error 403: Forbidden",
+    "url_role": "候选目录URL（可能由名称构造）；不是新确认的引用来源",
+    "fact_verification": "只探测页面；HTTP成功不等于数值核验，失败不代表资产不存在"
+  },
+  {
+    "country": "土耳其",
+    "name": "Şelmo",
+    "url": "https://www.gem.wiki/Şelmo_Oil_Field_(Turkey)",
+    "checked_at": "2026-10-01",
+    "error": "HTTP Error 403: Forbidden",
+    "url_role": "候选目录URL（可能由名称构造）；不是新确认的引用来源",
+    "fact_verification": "只探测页面；HTTP成功不等于数值核验，失败不代表资产不存在"
+  },
+  {
+    "country": "土耳其",
+    "name": "Batı Raman",
+    "url": "https://www.gem.wiki/Batı_Raman_Oil_Field_(Turkey)",
+    "checked_at": "2026-10-01",
+    "error": "HTTP Error 403: Forbidden",
+    "url_role": "候选目录URL（可能由名称构造）；不是新确认的引用来源",
+    "fact_verification": "只探测页面；HTTP成功不等于数值核验，失败不代表资产不存在"
+  },
+  {
+    "country": "埃及",
+    "name": "Gazwarina",
+    "url": "https://www.gem.wiki/Gazwarina_Oil_Field_(Egypt)",
+    "checked_at": "2026-10-01",
+    "error": "HTTP Error 403: Forbidden",
+    "url_role": "候选目录URL（可能由名称构造）；不是新确认的引用来源",
+    "fact_verification": "只探测页面；HTTP成功不等于数值核验，失败不代表资产不存在"
+  },
+  {
+    "country": "埃及",
+    "name": "East Zeit (E. Zeit)",
+    "url": "https://www.gem.wiki/East_Zeit_(E._Zeit)_Oil_Field_(Egypt)",
+    "checked_at": "2026-10-01",
+    "error": "HTTP Error 403: Forbidden",
+    "url_role": "候选目录URL（可能由名称构造）；不是新确认的引用来源",
+    "fact_verification": "只探测页面；HTTP成功不等于数值核验，失败不代表资产不存在"
+  },
+  {
+    "country": "埃及",
+    "name": "Ashrafi",
+    "url": "https://www.gem.wiki/Ashrafi_Oil_Field_(Egypt)",
+    "checked_at": "2026-10-01",
+    "error": "HTTP Error 403: Forbidden",
+    "url_role": "候选目录URL（可能由名称构造）；不是新确认的引用来源",
+    "fact_verification": "只探测页面；HTTP成功不等于数值核验，失败不代表资产不存在"
+  },
+  {
+    "country": "埃及",
+    "name": "Ras Budran",
+    "url": "https://www.gem.wiki/Ras_Budran_Oil_Field_(Egypt)",
+    "checked_at": "2026-10-01",
+    "error": "HTTP Error 403: Forbidden",
+    "url_role": "候选目录URL（可能由名称构造）；不是新确认的引用来源",
+    "fact_verification": "只探测页面；HTTP成功不等于数值核验，失败不代表资产不存在"
+  },
+  {
+    "country": "埃及",
+    "name": "Zeit Bay",
+    "url": "https://www.gem.wiki/Zeit_Bay_Oil_Field_(Egypt)",
+    "checked_at": "2026-10-01",
+    "error": "HTTP Error 403: Forbidden",
+    "url_role": "候选目录URL（可能由名称构造）；不是新确认的引用来源",
+    "fact_verification": "只探测页面；HTTP成功不等于数值核验，失败不代表资产不存在"
+  },
+  {
+    "country": "埃及",
+    "name": "Ras El Ush",
+    "url": "https://www.gem.wiki/Ras_El_Ush_Oil_Field_(Egypt)",
+    "checked_at": "2026-10-01",
+    "error": "HTTP Error 403: Forbidden",
+    "url_role": "候选目录URL（可能由名称构造）；不是新确认的引用来源",
+    "fact_verification": "只探测页面；HTTP成功不等于数值核验，失败不代表资产不存在"
+  },
+  {
+    "country": "埃及",
+    "name": "Wadi El Sahl Development Area",
+    "url": "https://www.gem.wiki/Wadi_El_Sahl_Development_Area_Oil_Field_(Egypt)",
+    "checked_at": "2026-10-01",
+    "error": "HTTP Error 403: Forbidden",
+    "url_role": "候选目录URL（可能由名称构造）；不是新确认的引用来源",
+    "fact_verification": "只探测页面；HTTP成功不等于数值核验，失败不代表资产不存在"
+  },
+  {
+    "country": "伊拉克",
+    "name": "Khanuqah",
+    "url": "https://www.gem.wiki/Khanuqah_Gas_Field_(Iraq)",
+    "checked_at": "2026-10-01",
+    "error": "HTTP Error 403: Forbidden",
+    "url_role": "候选目录URL（可能由名称构造）；不是新确认的引用来源",
+    "fact_verification": "只探测页面；HTTP成功不等于数值核验，失败不代表资产不存在"
+  },
+  {
+    "country": "伊拉克",
+    "name": "Jawan",
+    "url": "https://www.gem.wiki/Jawan_Oil_Field_(Iraq)",
+    "checked_at": "2026-10-01",
+    "error": "HTTP Error 403: Forbidden",
+    "url_role": "候选目录URL（可能由名称构造）；不是新确认的引用来源",
+    "fact_verification": "只探测页面；HTTP成功不等于数值核验，失败不代表资产不存在"
+  },
+  {
+    "country": "伊拉克",
+    "name": "Qasab",
+    "url": "https://www.gem.wiki/Qasab_Oil_Field_(Iraq)",
+    "checked_at": "2026-10-01",
+    "error": "HTTP Error 403: Forbidden",
+    "url_role": "候选目录URL（可能由名称构造）；不是新确认的引用来源",
+    "fact_verification": "只探测页面；HTTP成功不等于数值核验，失败不代表资产不存在"
+  },
+  {
+    "country": "伊拉克",
+    "name": "Ismail",
+    "url": "https://www.gem.wiki/Ismail_Oil_Field_(Iraq)",
+    "checked_at": "2026-10-01",
+    "error": "HTTP Error 403: Forbidden",
+    "url_role": "候选目录URL（可能由名称构造）；不是新确认的引用来源",
+    "fact_verification": "只探测页面；HTTP成功不等于数值核验，失败不代表资产不存在"
+  },
+  {
+    "country": "伊拉克",
+    "name": "Khashab",
+    "url": "https://www.gem.wiki/Khashab_Gas_Field_(Iraq)",
+    "checked_at": "2026-10-01",
+    "error": "HTTP Error 403: Forbidden",
+    "url_role": "候选目录URL（可能由名称构造）；不是新确认的引用来源",
+    "fact_verification": "只探测页面；HTTP成功不等于数值核验，失败不代表资产不存在"
+  },
+  {
+    "country": "伊拉克",
+    "name": "Ibrahim",
+    "url": "https://www.gem.wiki/Ibrahim_Oil_Field_(Iraq)",
+    "checked_at": "2026-10-01",
+    "error": "HTTP Error 403: Forbidden",
+    "url_role": "候选目录URL（可能由名称构造）；不是新确认的引用来源",
+    "fact_verification": "只探测页面；HTTP成功不等于数值核验，失败不代表资产不存在"
+  },
+  {
+    "country": "伊拉克",
+    "name": "Makhmur",
+    "url": "https://www.gem.wiki/Makhmur_Oil_Field_(Iraq)",
+    "checked_at": "2026-10-01",
+    "error": "HTTP Error 403: Forbidden",
+    "url_role": "候选目录URL（可能由名称构造）；不是新确认的引用来源",
+    "fact_verification": "只探测页面；HTTP成功不等于数值核验，失败不代表资产不存在"
+  },
+  {
+    "country": "伊拉克",
+    "name": "Pulkhana",
+    "url": "https://www.gem.wiki/Pulkhana_Oil_Field_(Iraq)",
+    "checked_at": "2026-10-01",
+    "error": "HTTP Error 403: Forbidden",
+    "url_role": "候选目录URL（可能由名称构造）；不是新确认的引用来源",
+    "fact_verification": "只探测页面；HTTP成功不等于数值核验，失败不代表资产不存在"
+  },
+  {
+    "country": "伊拉克",
+    "name": "Jadida",
+    "url": "https://www.gem.wiki/Jadida_Oil_Field_(Iraq)",
+    "checked_at": "2026-10-01",
+    "error": "HTTP Error 403: Forbidden",
+    "url_role": "候选目录URL（可能由名称构造）；不是新确认的引用来源",
+    "fact_verification": "只探测页面；HTTP成功不等于数值核验，失败不代表资产不存在"
+  },
+  {
+    "country": "伊拉克",
+    "name": "Alan / Sasan",
+    "url": "https://www.gem.wiki/Alan_/_Sasan_Oil_Field_(Iraq)",
+    "checked_at": "2026-10-01",
+    "error": "HTTP Error 403: Forbidden",
+    "url_role": "候选目录URL（可能由名称构造）；不是新确认的引用来源",
+    "fact_verification": "只探测页面；HTTP成功不等于数值核验，失败不代表资产不存在"
+  },
+  {
+    "country": "伊拉克",
+    "name": "Qara Chogh",
+    "url": "https://www.gem.wiki/Qara_Chogh_Oil_Field_(Iraq)",
+    "checked_at": "2026-10-01",
+    "error": "HTTP Error 403: Forbidden",
+    "url_role": "候选目录URL（可能由名称构造）；不是新确认的引用来源",
+    "fact_verification": "只探测页面；HTTP成功不等于数值核验，失败不代表资产不存在"
+  },
+  {
+    "country": "伊拉克",
+    "name": "Jaria Pika",
+    "url": "https://www.gem.wiki/Jaria_Pika_Gas_Field_(Iraq)",
+    "checked_at": "2026-10-01",
+    "error": "HTTP Error 403: Forbidden",
+    "url_role": "候选目录URL（可能由名称构造）；不是新确认的引用来源",
+    "fact_verification": "只探测页面；HTTP成功不等于数值核验，失败不代表资产不存在"
+  },
+  {
+    "country": "伊拉克",
+    "name": "Akkas",
+    "url": "https://www.gem.wiki/Akkas_Gas_Field_(Iraq)",
+    "checked_at": "2026-10-01",
+    "error": "HTTP Error 403: Forbidden",
+    "url_role": "候选目录URL（可能由名称构造）；不是新确认的引用来源",
+    "fact_verification": "只探测页面；HTTP成功不等于数值核验，失败不代表资产不存在"
+  },
+  {
+    "country": "伊拉克",
+    "name": "Nahrawan",
+    "url": "https://www.gem.wiki/Nahrawan_Oil_Field_(Iraq)",
+    "checked_at": "2026-10-01",
+    "error": "HTTP Error 403: Forbidden",
+    "url_role": "候选目录URL（可能由名称构造）；不是新确认的引用来源",
+    "fact_verification": "只探测页面；HTTP成功不等于数值核验，失败不代表资产不存在"
+  },
+  {
+    "country": "伊拉克",
+    "name": "Nao Doman",
+    "url": "https://www.gem.wiki/Nao_Doman_Oil_Field_(Iraq)",
+    "checked_at": "2026-10-01",
+    "error": "HTTP Error 403: Forbidden",
+    "url_role": "候选目录URL（可能由名称构造）；不是新确认的引用来源",
+    "fact_verification": "只探测页面；HTTP成功不等于数值核验，失败不代表资产不存在"
+  },
+  {
+    "country": "伊拉克",
+    "name": "Tal Ghazal",
+    "url": "https://www.gem.wiki/Tal_Ghazal_Oil_Field_(Iraq)",
+    "checked_at": "2026-10-01",
+    "error": "HTTP Error 403: Forbidden",
+    "url_role": "候选目录URL（可能由名称构造）；不是新确认的引用来源",
+    "fact_verification": "只探测页面；HTTP成功不等于数值核验，失败不代表资产不存在"
+  },
+  {
+    "country": "伊拉克",
+    "name": "Mansuriya",
+    "url": "https://www.gem.wiki/Mansuriya_Gas_Field_(Iraq)",
+    "checked_at": "2026-10-01",
+    "error": "HTTP Error 403: Forbidden",
+    "url_role": "候选目录URL（可能由名称构造）；不是新确认的引用来源",
+    "fact_verification": "只探测页面；HTTP成功不等于数值核验，失败不代表资产不存在"
+  },
+  {
+    "country": "伊拉克",
+    "name": "Kifl",
+    "url": "https://www.gem.wiki/Kifl_Oil_Field_(Iraq)",
+    "checked_at": "2026-10-01",
+    "error": "HTTP Error 403: Forbidden",
+    "url_role": "候选目录URL（可能由名称构造）；不是新确认的引用来源",
+    "fact_verification": "只探测页面；HTTP成功不等于数值核验，失败不代表资产不存在"
+  },
+  {
+    "country": "伊拉克",
+    "name": "Marjan (Iraq)",
+    "url": "https://www.gem.wiki/Marjan_(Iraq)_Oil_Field_(Iraq)",
+    "checked_at": "2026-10-01",
+    "error": "HTTP Error 403: Forbidden",
+    "url_role": "候选目录URL（可能由名称构造）；不是新确认的引用来源",
+    "fact_verification": "只探测页面；HTTP成功不等于数值核验，失败不代表资产不存在"
+  },
+  {
+    "country": "伊拉克",
+    "name": "West Kifl",
+    "url": "https://www.gem.wiki/West_Kifl_Oil_Field_(Iraq)",
+    "checked_at": "2026-10-01",
+    "error": "HTTP Error 403: Forbidden",
+    "url_role": "候选目录URL（可能由名称构造）；不是新确认的引用来源",
+    "fact_verification": "只探测页面；HTTP成功不等于数值核验，失败不代表资产不存在"
+  },
+  {
+    "country": "伊拉克",
+    "name": "Block 8 (Iraq)",
+    "url": "https://www.gem.wiki/Block_8_(Iraq)_Oil_Field_(Iraq)",
+    "checked_at": "2026-10-01",
+    "error": "HTTP Error 403: Forbidden",
+    "url_role": "候选目录URL（可能由名称构造）；不是新确认的引用来源",
+    "fact_verification": "只探测页面；HTTP成功不等于数值核验，失败不代表资产不存在"
+  },
+  {
+    "country": "伊拉克",
+    "name": "East Baghdad (Rashidiya)",
+    "url": "https://www.gem.wiki/East_Baghdad_(Rashidiya)_Oil_Field_(Iraq)",
+    "checked_at": "2026-10-01",
+    "error": "HTTP Error 403: Forbidden",
+    "url_role": "候选目录URL（可能由名称构造）；不是新确认的引用来源",
+    "fact_verification": "只探测页面；HTTP成功不等于数值核验，失败不代表资产不存在"
+  },
+  {
+    "country": "伊拉克",
+    "name": "Injana / Khashm Al-Ahmar",
+    "url": "https://www.gem.wiki/Injana_/_Khashm_Al-Ahmar_Oil_and_Gas_Field_(Iraq)",
+    "checked_at": "2026-10-01",
+    "error": "HTTP Error 403: Forbidden",
+    "url_role": "候选目录URL（可能由名称构造）；不是新确认的引用来源",
+    "fact_verification": "只探测页面；HTTP成功不等于数值核验，失败不代表资产不存在"
+  },
+  {
+    "country": "伊拉克",
+    "name": "Khalisiya",
+    "url": "https://www.gem.wiki/Khalisiya_Oil_Field_(Iraq)",
+    "checked_at": "2026-10-01",
+    "error": "HTTP Error 403: Forbidden",
+    "url_role": "候选目录URL（可能由名称构造）；不是新确认的引用来源",
+    "fact_verification": "只探测页面；HTTP成功不等于数值核验，失败不代表资产不存在"
+  },
+  {
+    "country": "伊拉克",
+    "name": "Block 7 (Iraq)",
+    "url": "https://www.gem.wiki/Block_7_(Iraq)_Oil_Field_(Iraq)",
+    "checked_at": "2026-10-01",
+    "error": "HTTP Error 403: Forbidden",
+    "url_role": "候选目录URL（可能由名称构造）；不是新确认的引用来源",
+    "fact_verification": "只探测页面；HTTP成功不等于数值核验，失败不代表资产不存在"
+  },
+  {
+    "country": "伊拉克",
+    "name": "Middle Euphrates",
+    "url": "https://www.gem.wiki/Middle_Euphrates_Oil_and_Gas_Field_(Iraq)",
+    "checked_at": "2026-10-01",
+    "error": "HTTP Error 403: Forbidden",
+    "url_role": "候选目录URL（可能由名称构造）；不是新确认的引用来源",
+    "fact_verification": "只探测页面；HTTP成功不等于数值核验，失败不代表资产不存在"
+  },
+  {
+    "country": "伊拉克",
+    "name": "Dhifriya",
+    "url": "https://www.gem.wiki/Dhifriya_Oil_Field_(Iraq)",
+    "checked_at": "2026-10-01",
+    "error": "HTTP Error 403: Forbidden",
+    "url_role": "候选目录URL（可能由名称构造）；不是新确认的引用来源",
+    "fact_verification": "只探测页面；HTTP成功不等于数值核验，失败不代表资产不存在"
+  },
+  {
+    "country": "伊拉克",
+    "name": "Qarnain",
+    "url": "https://www.gem.wiki/Qarnain_Oil_Field_(Iraq)",
+    "checked_at": "2026-10-01",
+    "error": "HTTP Error 403: Forbidden",
+    "url_role": "候选目录URL（可能由名称构造）；不是新确认的引用来源",
+    "fact_verification": "只探测页面；HTTP成功不等于数值核验，失败不代表资产不存在"
+  },
+  {
+    "country": "伊拉克",
+    "name": "Zurbatiya",
+    "url": "https://www.gem.wiki/Zurbatiya_Oil_and_Gas_Field_(Iraq)",
+    "checked_at": "2026-10-01",
+    "error": "HTTP Error 403: Forbidden",
+    "url_role": "候选目录URL（可能由名称构造）；不是新确认的引用来源",
+    "fact_verification": "只探测页面；HTTP成功不等于数值核验，失败不代表资产不存在"
+  },
+  {
+    "country": "伊拉克",
+    "name": "Huwaiza",
+    "url": "https://www.gem.wiki/Huwaiza_Oil_Field_(Iraq)",
+    "checked_at": "2026-10-01",
+    "error": "HTTP Error 403: Forbidden",
+    "url_role": "候选目录URL（可能由名称构造）；不是新确认的引用来源",
+    "fact_verification": "只探测页面；HTTP成功不等于数值核验，失败不代表资产不存在"
+  },
+  {
+    "country": "伊拉克",
+    "name": "Kumait",
+    "url": "https://www.gem.wiki/Kumait_Oil_Field_(Iraq)",
+    "checked_at": "2026-10-01",
+    "error": "HTTP Error 403: Forbidden",
+    "url_role": "候选目录URL（可能由名称构造）；不是新确认的引用来源",
+    "fact_verification": "只探测页面；HTTP成功不等于数值核验，失败不代表资产不存在"
+  },
+  {
+    "country": "伊拉克",
+    "name": "Rifai",
+    "url": "https://www.gem.wiki/Rifai_Oil_Field_(Iraq)",
+    "checked_at": "2026-10-01",
+    "error": "HTTP Error 403: Forbidden",
+    "url_role": "候选目录URL（可能由名称构造）；不是新确认的引用来源",
+    "fact_verification": "只探测页面；HTTP成功不等于数值核验，失败不代表资产不存在"
+  },
+  {
+    "country": "伊拉克",
+    "name": "Abu Amood",
+    "url": "https://www.gem.wiki/Abu_Amood_Oil_Field_(Iraq)",
+    "checked_at": "2026-10-01",
+    "error": "HTTP Error 403: Forbidden",
+    "url_role": "候选目录URL（可能由名称构造）；不是新确认的引用来源",
+    "fact_verification": "只探测页面；HTTP成功不等于数值核验，失败不代表资产不存在"
+  },
+  {
+    "country": "伊拉克",
+    "name": "Dujaila",
+    "url": "https://www.gem.wiki/Dujaila_Oil_Field_(Iraq)",
+    "checked_at": "2026-10-01",
+    "error": "HTTP Error 403: Forbidden",
+    "url_role": "候选目录URL（可能由名称构造）；不是新确认的引用来源",
+    "fact_verification": "只探测页面；HTTP成功不等于数值核验，失败不代表资产不存在"
+  },
+  {
+    "country": "伊拉克",
+    "name": "Dima",
+    "url": "https://www.gem.wiki/Dima_Oil_Field_(Iraq)",
+    "checked_at": "2026-10-01",
+    "error": "HTTP Error 403: Forbidden",
+    "url_role": "候选目录URL（可能由名称构造）；不是新确认的引用来源",
+    "fact_verification": "只探测页面；HTTP成功不等于数值核验，失败不代表资产不存在"
+  },
+  {
+    "country": "伊拉克",
+    "name": "Rachi",
+    "url": "https://www.gem.wiki/Rachi_Oil_Field_(Iraq)",
+    "checked_at": "2026-10-01",
+    "error": "HTTP Error 403: Forbidden",
+    "url_role": "候选目录URL（可能由名称构造）；不是新确认的引用来源",
+    "fact_verification": "只探测页面；HTTP成功不等于数值核验，失败不代表资产不存在"
+  },
+  {
+    "country": "伊拉克",
+    "name": "Abu Khaimah",
+    "url": "https://www.gem.wiki/Abu_Khaimah_Oil_Field_(Iraq)",
+    "checked_at": "2026-10-01",
+    "error": "HTTP Error 403: Forbidden",
+    "url_role": "候选目录URL（可能由名称构造）；不是新确认的引用来源",
+    "fact_verification": "只探测页面；HTTP成功不等于数值核验，失败不代表资产不存在"
+  },
+  {
+    "country": "伊拉克",
+    "name": "Adan",
+    "url": "https://www.gem.wiki/Adan_Oil_Field_(Iraq)",
+    "checked_at": "2026-10-01",
+    "error": "HTTP Error 403: Forbidden",
+    "url_role": "候选目录URL（可能由名称构造）；不是新确认的引用来源",
+    "fact_verification": "只探测页面；HTTP成功不等于数值核验，失败不代表资产不存在"
+  },
+  {
+    "country": "伊拉克",
+    "name": "Siba",
+    "url": "https://www.gem.wiki/Siba_Gas_Field_(Iraq)",
+    "checked_at": "2026-10-01",
+    "error": "HTTP Error 403: Forbidden",
+    "url_role": "候选目录URL（可能由名称构造）；不是新确认的引用来源",
+    "fact_verification": "只探测页面；HTTP成功不等于数值核验，失败不代表资产不存在"
+  },
+  {
+    "country": "伊拉克",
+    "name": "Jraishan",
+    "url": "https://www.gem.wiki/Jraishan_Oil_Field_(Iraq)",
+    "checked_at": "2026-10-01",
+    "error": "HTTP Error 403: Forbidden",
+    "url_role": "候选目录URL（可能由名称构造）；不是新确认的引用来源",
+    "fact_verification": "只探测页面；HTTP成功不等于数值核验，失败不代表资产不存在"
+  },
+  {
+    "country": "伊拉克",
+    "name": "Sumer",
+    "url": "https://www.gem.wiki/Sumer_Oil_Field_(Iraq)",
+    "checked_at": "2026-10-01",
+    "error": "HTTP Error 403: Forbidden",
+    "url_role": "候选目录URL（可能由名称构造）；不是新确认的引用来源",
+    "fact_verification": "只探测页面；HTTP成功不等于数值核验，失败不代表资产不存在"
+  },
+  {
+    "country": "伊拉克",
+    "name": "Sinbad",
+    "url": "https://www.gem.wiki/Sinbad_Oil_Field_(Iraq)",
+    "checked_at": "2026-10-01",
+    "error": "HTTP Error 403: Forbidden",
+    "url_role": "候选目录URL（可能由名称构造）；不是新确认的引用来源",
+    "fact_verification": "只探测页面；HTTP成功不等于数值核验，失败不代表资产不存在"
+  },
+  {
+    "country": "伊拉克",
+    "name": "Samawa",
+    "url": "https://www.gem.wiki/Samawa_Oil_Field_(Iraq)",
+    "checked_at": "2026-10-01",
+    "error": "HTTP Error 403: Forbidden",
+    "url_role": "候选目录URL（可能由名称构造）；不是新确认的引用来源",
+    "fact_verification": "只探测页面；HTTP成功不等于数值核验，失败不代表资产不存在"
+  },
+  {
+    "country": "伊拉克",
+    "name": "Khudr Al-May",
+    "url": "https://www.gem.wiki/Khudr_Al-May_Oil_and_Gas_Field_(Iraq)",
+    "checked_at": "2026-10-01",
+    "error": "HTTP Error 403: Forbidden",
+    "url_role": "候选目录URL（可能由名称构造）；不是新确认的引用来源",
+    "fact_verification": "只探测页面；HTTP成功不等于数值核验，失败不代表资产不存在"
+  },
+  {
+    "country": "伊拉克",
+    "name": "Fao",
+    "url": "https://www.gem.wiki/Fao_Oil_and_Gas_Field_(Iraq)",
+    "checked_at": "2026-10-01",
+    "error": "HTTP Error 403: Forbidden",
+    "url_role": "候选目录URL（可能由名称构造）；不是新确认的引用来源",
+    "fact_verification": "只探测页面；HTTP成功不等于数值核验，失败不代表资产不存在"
+  },
+  {
+    "country": "伊拉克",
+    "name": "Jabal Sanam",
+    "url": "https://www.gem.wiki/Jabal_Sanam_Oil_and_Gas_Field_(Iraq)",
+    "checked_at": "2026-10-01",
+    "error": "HTTP Error 403: Forbidden",
+    "url_role": "候选目录URL（可能由名称构造）；不是新确认的引用来源",
+    "fact_verification": "只探测页面；HTTP成功不等于数值核验，失败不代表资产不存在"
+  },
+  {
+    "country": "伊拉克",
+    "name": "Block 12 (Iraq)",
+    "url": "https://www.gem.wiki/Block_12_(Iraq)_Oil_Field_(Iraq)",
+    "checked_at": "2026-10-01",
+    "error": "HTTP Error 403: Forbidden",
+    "url_role": "候选目录URL（可能由名称构造）；不是新确认的引用来源",
+    "fact_verification": "只探测页面；HTTP成功不等于数值核验，失败不代表资产不存在"
+  },
+  {
+    "country": "伊朗",
+    "name": "Kish",
+    "url": "https://www.gem.wiki/Kish_Gas_Field_(Iran)",
+    "checked_at": "2026-10-01",
+    "error": "HTTP Error 403: Forbidden",
+    "url_role": "候选目录URL（可能由名称构造）；不是新确认的引用来源",
+    "fact_verification": "只探测页面；HTTP成功不等于数值核验，失败不代表资产不存在"
+  },
+  {
+    "country": "伊朗",
+    "name": "Farzad A",
+    "url": "https://www.gem.wiki/Farzad_A_Gas_Field_(Iran)",
+    "checked_at": "2026-10-01",
+    "error": "HTTP Error 403: Forbidden",
+    "url_role": "候选目录URL（可能由名称构造）；不是新确认的引用来源",
+    "fact_verification": "只探测页面；HTTP成功不等于数值核验，失败不代表资产不存在"
+  },
+  {
+    "country": "伊朗",
+    "name": "Farzad B",
+    "url": "https://www.gem.wiki/Farzad_B_Gas_Field_(Iran)",
+    "checked_at": "2026-10-01",
+    "error": "HTTP Error 403: Forbidden",
+    "url_role": "候选目录URL（可能由名称构造）；不是新确认的引用来源",
+    "fact_verification": "只探测页面；HTTP成功不等于数值核验，失败不代表资产不存在"
+  },
+  {
+    "country": "伊朗",
+    "name": "Khartang",
+    "url": "https://www.gem.wiki/Khartang_Gas_Field_(Iran)",
+    "checked_at": "2026-10-01",
+    "error": "HTTP Error 403: Forbidden",
+    "url_role": "候选目录URL（可能由名称构造）；不是新确认的引用来源",
+    "fact_verification": "只探测页面；HTTP成功不等于数值核验，失败不代表资产不存在"
+  },
+  {
+    "country": "伊朗",
+    "name": "Belal",
+    "url": "https://www.gem.wiki/Belal_Gas_Field_(Iran)",
+    "checked_at": "2026-10-01",
+    "error": "HTTP Error 403: Forbidden",
+    "url_role": "候选目录URL（可能由名称构造）；不是新确认的引用来源",
+    "fact_verification": "只探测页面；HTTP成功不等于数值核验，失败不代表资产不存在"
+  },
+  {
+    "country": "伊朗",
+    "name": "North Pars",
+    "url": "https://www.gem.wiki/North_Pars_Gas_Field_(Iran)",
+    "checked_at": "2026-10-01",
+    "error": "HTTP Error 403: Forbidden",
+    "url_role": "候选目录URL（可能由名称构造）；不是新确认的引用来源",
+    "fact_verification": "只探测页面；HTTP成功不等于数值核验，失败不代表资产不存在"
+  },
+  {
+    "country": "伊朗",
+    "name": "Gardan",
+    "url": "https://www.gem.wiki/Gardan_Gas_Field_(Iran)",
+    "checked_at": "2026-10-01",
+    "error": "HTTP Error 403: Forbidden",
+    "url_role": "候选目录URL（可能由名称构造）；不是新确认的引用来源",
+    "fact_verification": "只探测页面；HTTP成功不等于数值核验，失败不代表资产不存在"
+  },
+  {
+    "country": "伊朗",
+    "name": "Eram",
+    "url": "https://www.gem.wiki/Eram_Gas_Field_(Iran)",
+    "checked_at": "2026-10-01",
+    "error": "HTTP Error 403: Forbidden",
+    "url_role": "候选目录URL（可能由名称构造）；不是新确认的引用来源",
+    "fact_verification": "只探测页面；HTTP成功不等于数值核验，失败不代表资产不存在"
+  },
+  {
+    "country": "伊朗",
+    "name": "Sefid Baghun",
+    "url": "https://www.gem.wiki/Sefid_Baghun_Gas_Field_(Iran)",
+    "checked_at": "2026-10-01",
+    "error": "HTTP Error 403: Forbidden",
+    "url_role": "候选目录URL（可能由名称构造）；不是新确认的引用来源",
+    "fact_verification": "只探测页面；HTTP成功不等于数值核验，失败不代表资产不存在"
+  },
+  {
+    "country": "伊朗",
+    "name": "Halegan",
+    "url": "https://www.gem.wiki/Halegan_Gas_Field_(Iran)",
+    "checked_at": "2026-10-01",
+    "error": "HTTP Error 403: Forbidden",
+    "url_role": "候选目录URL（可能由名称构造）；不是新确认的引用来源",
+    "fact_verification": "只探测页面；HTTP成功不等于数值核验，失败不代表资产不存在"
+  },
+  {
+    "country": "伊朗",
+    "name": "Day",
+    "url": "https://www.gem.wiki/Day_Gas_Field_(Iran)",
+    "checked_at": "2026-10-01",
+    "error": "HTTP Error 403: Forbidden",
+    "url_role": "候选目录URL（可能由名称构造）；不是新确认的引用来源",
+    "fact_verification": "只探测页面；HTTP成功不等于数值核验，失败不代表资产不存在"
+  },
+  {
+    "country": "伊朗",
+    "name": "Sefid Zakhur",
+    "url": "https://www.gem.wiki/Sefid_Zakhur_Gas_Field_(Iran)",
+    "checked_at": "2026-10-01",
+    "error": "HTTP Error 403: Forbidden",
+    "url_role": "候选目录URL（可能由名称构造）；不是新确认的引用来源",
+    "fact_verification": "只探测页面；HTTP成功不等于数值核验，失败不代表资产不存在"
+  },
+  {
+    "country": "埃及",
+    "name": "Baltim South West",
+    "url": "https://www.gem.wiki/Baltim_South_West_Gas_Field_(Egypt)",
+    "checked_at": "2026-10-01",
+    "error": "HTTP Error 403: Forbidden",
+    "url_role": "候选目录URL（可能由名称构造）；不是新确认的引用来源",
+    "fact_verification": "只探测页面；HTTP成功不等于数值核验，失败不代表资产不存在"
+  },
+  {
+    "country": "伊拉克",
+    "name": "Bina Bawi",
+    "url": "https://www.gem.wiki/Bina_Bawi_Oil_and_Gas_Field_(Iraq)",
+    "checked_at": "2026-10-01",
+    "error": "HTTP Error 403: Forbidden",
+    "url_role": "候选目录URL（可能由名称构造）；不是新确认的引用来源",
+    "fact_verification": "只探测页面；HTTP成功不等于数值核验，失败不代表资产不存在"
+  },
+  {
+    "country": "埃及",
+    "name": "Nooros",
+    "url": "https://www.gem.wiki/Nooros_Gas_Field_(Egypt)",
+    "checked_at": "2026-10-01",
+    "error": "HTTP Error 403: Forbidden",
+    "url_role": "候选目录URL（可能由名称构造）；不是新确认的引用来源",
+    "fact_verification": "只探测页面；HTTP成功不等于数值核验，失败不代表资产不存在"
+  },
+  {
+    "country": "埃及",
+    "name": "Zohr",
+    "url": "https://www.gem.wiki/Zohr_Gas_Field_(Egypt)",
+    "checked_at": "2026-10-01",
+    "error": "HTTP Error 403: Forbidden",
+    "url_role": "候选目录URL（可能由名称构造）；不是新确认的引用来源",
+    "fact_verification": "只探测页面；HTTP成功不等于数值核验，失败不代表资产不存在"
+  },
+  {
+    "country": "伊拉克",
+    "name": "Miran",
+    "url": "https://www.gem.wiki/Miran_Oil_and_Gas_Field_(Iraq)",
+    "checked_at": "2026-10-01",
+    "error": "HTTP Error 403: Forbidden",
+    "url_role": "候选目录URL（可能由名称构造）；不是新确认的引用来源",
+    "fact_verification": "只探测页面；HTTP成功不等于数值核验，失败不代表资产不存在"
+  },
+  {
+    "country": "伊拉克",
+    "name": "Qara Dagh",
+    "url": "https://www.gem.wiki/Qara_Dagh_Oil_and_Gas_Field_(Iraq)",
+    "checked_at": "2026-10-01",
+    "error": "HTTP Error 403: Forbidden",
+    "url_role": "候选目录URL（可能由名称构造）；不是新确认的引用来源",
+    "fact_verification": "只探测页面；HTTP成功不等于数值核验，失败不代表资产不存在"
+  },
+  {
+    "country": "埃及",
+    "name": "Meleiha",
+    "url": "https://www.gem.wiki/Meleiha_Oil_and_Gas_Field_(Egypt)",
+    "checked_at": "2026-10-01",
+    "error": "HTTP Error 403: Forbidden",
+    "url_role": "候选目录URL（可能由名称构造）；不是新确认的引用来源",
+    "fact_verification": "只探测页面；HTTP成功不等于数值核验，失败不代表资产不存在"
+  },
+  {
+    "country": "埃及",
+    "name": "Libra",
+    "url": "https://www.gem.wiki/Libra_Gas_Field_(Egypt)",
+    "checked_at": "2026-10-01",
+    "error": "HTTP Error 403: Forbidden",
+    "url_role": "候选目录URL（可能由名称构造）；不是新确认的引用来源",
+    "fact_verification": "只探测页面；HTTP成功不等于数值核验，失败不代表资产不存在"
+  },
+  {
+    "country": "埃及",
+    "name": "Denise West",
+    "url": "https://www.gem.wiki/Denise_West_Gas_Field_(Egypt)",
+    "checked_at": "2026-10-01",
+    "error": "HTTP Error 403: Forbidden",
+    "url_role": "候选目录URL（可能由名称构造）；不是新确认的引用来源",
+    "fact_verification": "只探测页面；HTTP成功不等于数值核验，失败不代表资产不存在"
+  },
+  {
+    "country": "埃及",
+    "name": "Taurus",
+    "url": "https://www.gem.wiki/Taurus_Gas_Field_(Egypt)",
+    "checked_at": "2026-10-01",
+    "error": "HTTP Error 403: Forbidden",
+    "url_role": "候选目录URL（可能由名称构造）；不是新确认的引用来源",
+    "fact_verification": "只探测页面；HTTP成功不等于数值核验，失败不代表资产不存在"
+  },
+  {
+    "country": "埃及",
+    "name": "Giza",
+    "url": "https://www.gem.wiki/Giza_Gas_Field_(Egypt)",
+    "checked_at": "2026-10-01",
+    "error": "HTTP Error 403: Forbidden",
+    "url_role": "候选目录URL（可能由名称构造）；不是新确认的引用来源",
+    "fact_verification": "只探测页面；HTTP成功不等于数值核验，失败不代表资产不存在"
+  },
+  {
+    "country": "埃及",
+    "name": "Fayoum",
+    "url": "https://www.gem.wiki/Fayoum_Gas_Field_(Egypt)",
+    "checked_at": "2026-10-01",
+    "error": "HTTP Error 403: Forbidden",
+    "url_role": "候选目录URL（可能由名称构造）；不是新确认的引用来源",
+    "fact_verification": "只探测页面；HTTP成功不等于数值核验，失败不代表资产不存在"
+  },
+  {
+    "country": "伊朗",
+    "name": "Kangan",
+    "url": "https://www.gem.wiki/Kangan_Gas_Field_(Iran)",
+    "checked_at": "2026-10-01",
+    "error": "HTTP Error 403: Forbidden",
+    "url_role": "候选目录URL（可能由名称构造）；不是新确认的引用来源",
+    "fact_verification": "只探测页面；HTTP成功不等于数值核验，失败不代表资产不存在"
+  },
+  {
+    "country": "卡塔尔",
+    "name": "Al-Khaleej Gas Project 2 Gas Phase",
+    "url": "https://www.gem.wiki/Al-Khaleej_Gas_Project_2_Gas_Phase_(Qatar)",
+    "checked_at": "2026-10-01",
+    "error": "HTTP Error 403: Forbidden",
+    "url_role": "候选目录URL（可能由名称构造）；不是新确认的引用来源",
+    "fact_verification": "只探测页面；HTTP成功不等于数值核验，失败不代表资产不存在"
+  },
+  {
+    "country": "埃及",
+    "name": "Raven",
+    "url": "https://www.gem.wiki/Raven_Gas_Field_(Egypt)",
+    "checked_at": "2026-10-01",
+    "error": "HTTP Error 403: Forbidden",
+    "url_role": "候选目录URL（可能由名称构造）；不是新确认的引用来源",
+    "fact_verification": "只探测页面；HTTP成功不等于数值核验，失败不代表资产不存在"
+  },
+  {
+    "country": "卡塔尔",
+    "name": "Qatargas 2",
+    "url": "https://www.gem.wiki/Qatargas_2_Gas_Field_(Qatar)",
+    "checked_at": "2026-10-01",
+    "error": "HTTP Error 403: Forbidden",
+    "url_role": "候选目录URL（可能由名称构造）；不是新确认的引用来源",
+    "fact_verification": "只探测页面；HTTP成功不等于数值核验，失败不代表资产不存在"
+  },
+  {
+    "country": "卡塔尔",
+    "name": "Dolphin",
+    "url": "https://www.gem.wiki/Dolphin_Oil_and_Gas_Field_(Qatar)",
+    "checked_at": "2026-10-01",
+    "error": "HTTP Error 403: Forbidden",
+    "url_role": "候选目录URL（可能由名称构造）；不是新确认的引用来源",
+    "fact_verification": "只探测页面；HTTP成功不等于数值核验，失败不代表资产不存在"
+  },
+  {
+    "country": "埃及",
+    "name": "Morgan",
+    "url": "https://www.gem.wiki/Morgan_Oil_and_Gas_Field_(Egypt)",
+    "checked_at": "2026-10-01",
+    "error": "HTTP Error 403: Forbidden",
+    "url_role": "候选目录URL（可能由名称构造）；不是新确认的引用来源",
+    "fact_verification": "只探测页面；HTTP成功不等于数值核验，失败不代表资产不存在"
+  },
+  {
+    "country": "伊朗",
+    "name": "Aghar",
+    "url": "https://www.gem.wiki/Aghar_Gas_Field_(Iran)",
+    "checked_at": "2026-10-01",
+    "error": "HTTP Error 403: Forbidden",
+    "url_role": "候选目录URL（可能由名称构造）；不是新确认的引用来源",
+    "fact_verification": "只探测页面；HTTP成功不等于数值核验，失败不代表资产不存在"
+  },
+  {
+    "country": "卡塔尔",
+    "name": "Qatargas 4",
+    "url": "https://www.gem.wiki/Qatargas_4_Gas_Field_(Qatar)",
+    "checked_at": "2026-10-01",
+    "error": "HTTP Error 403: Forbidden",
+    "url_role": "候选目录URL（可能由名称构造）；不是新确认的引用来源",
+    "fact_verification": "只探测页面；HTTP成功不等于数值核验，失败不代表资产不存在"
+  },
+  {
+    "country": "卡塔尔",
+    "name": "Qatargas 3",
+    "url": "https://www.gem.wiki/Qatargas_3_Gas_Field_(Qatar)",
+    "checked_at": "2026-10-01",
+    "error": "HTTP Error 403: Forbidden",
+    "url_role": "候选目录URL（可能由名称构造）；不是新确认的引用来源",
+    "fact_verification": "只探测页面；HTTP成功不等于数值核验，失败不代表资产不存在"
+  },
+  {
+    "country": "卡塔尔",
+    "name": "RasGas Alpha",
+    "url": "https://www.gem.wiki/RasGas_Alpha_Oil_and_Gas_Field_(Qatar)",
+    "checked_at": "2026-10-01",
+    "error": "HTTP Error 403: Forbidden",
+    "url_role": "候选目录URL（可能由名称构造）；不是新确认的引用来源",
+    "fact_verification": "只探测页面；HTTP成功不等于数值核验，失败不代表资产不存在"
+  },
+  {
+    "country": "埃及",
+    "name": "Rosetta",
+    "url": "https://www.gem.wiki/Rosetta_Oil_and_Gas_Field_(Egypt)",
+    "checked_at": "2026-10-01",
+    "error": "HTTP Error 403: Forbidden",
+    "url_role": "候选目录URL（可能由名称构造）；不是新确认的引用来源",
+    "fact_verification": "只探测页面；HTTP成功不等于数值核验，失败不代表资产不存在"
+  },
+  {
+    "country": "伊朗",
+    "name": "Tabnak",
+    "url": "https://www.gem.wiki/Tabnak_Oil_and_Gas_Field_(Iran)",
+    "checked_at": "2026-10-01",
+    "error": "HTTP Error 403: Forbidden",
+    "url_role": "候选目录URL（可能由名称构造）；不是新确认的引用来源",
+    "fact_verification": "只探测页面；HTTP成功不等于数值核验，失败不代表资产不存在"
+  },
+  {
+    "country": "巴林",
+    "name": "Khuff",
+    "url": "https://www.gem.wiki/Khuff_Gas_Field_(Bahrain)",
+    "checked_at": "2026-10-01",
+    "error": "HTTP Error 403: Forbidden",
+    "url_role": "候选目录URL（可能由名称构造）；不是新确认的引用来源",
+    "fact_verification": "只探测页面；HTTP成功不等于数值核验，失败不代表资产不存在"
+  },
+  {
+    "country": "伊朗",
+    "name": "Khangiran",
+    "url": "https://www.gem.wiki/Khangiran_Gas_Field_(Iran)",
+    "checked_at": "2026-10-01",
+    "error": "HTTP Error 403: Forbidden",
+    "url_role": "候选目录URL（可能由名称构造）；不是新确认的引用来源",
+    "fact_verification": "只探测页面；HTTP成功不等于数值核验，失败不代表资产不存在"
+  },
+  {
+    "country": "埃及",
+    "name": "October",
+    "url": "https://www.gem.wiki/October_Oil_and_Gas_Field_(Egypt)",
+    "checked_at": "2026-10-01",
+    "error": "HTTP Error 403: Forbidden",
+    "url_role": "候选目录URL（可能由名称构造）；不是新确认的引用来源",
+    "fact_verification": "只探测页面；HTTP成功不等于数值核验，失败不代表资产不存在"
+  },
+  {
+    "country": "埃及",
+    "name": "Qasr",
+    "url": "https://www.gem.wiki/Qasr_Oil_and_Gas_Field_(Egypt)",
+    "checked_at": "2026-10-01",
+    "error": "HTTP Error 403: Forbidden",
+    "url_role": "候选目录URL（可能由名称构造）；不是新确认的引用来源",
+    "fact_verification": "只探测页面；HTTP成功不等于数值核验，失败不代表资产不存在"
+  },
+  {
+    "country": "埃及",
+    "name": "Ramadan",
+    "url": "https://www.gem.wiki/Ramadan_Oil_and_Gas_Field_(Egypt)",
+    "checked_at": "2026-10-01",
+    "error": "HTTP Error 403: Forbidden",
+    "url_role": "候选目录URL（可能由名称构造）；不是新确认的引用来源",
+    "fact_verification": "只探测页面；HTTP成功不等于数值核验，失败不代表资产不存在"
+  },
+  {
+    "country": "阿曼",
+    "name": "Mabrouk Northeast",
+    "url": "https://www.gem.wiki/Mabrouk_Northeast_Oil_and_Gas_Field_(Oman)",
+    "checked_at": "2026-10-01",
+    "error": "HTTP Error 403: Forbidden",
+    "url_role": "候选目录URL（可能由名称构造）；不是新确认的引用来源",
+    "fact_verification": "只探测页面；HTTP成功不等于数值核验，失败不代表资产不存在"
+  },
+  {
+    "country": "伊朗",
+    "name": "Homa",
+    "url": "https://www.gem.wiki/Homa_Gas_Field_(Iran)",
+    "checked_at": "2026-10-01",
+    "error": "HTTP Error 403: Forbidden",
+    "url_role": "候选目录URL（可能由名称构造）；不是新确认的引用来源",
+    "fact_verification": "只探测页面；HTTP成功不等于数值核验，失败不代表资产不存在"
+  },
+  {
+    "country": "卡塔尔",
+    "name": "Al-Khaleej Gas Project 1 Gas Phase",
+    "url": "https://www.gem.wiki/Al-Khaleej_Gas_Project_1_Gas_Phase_(Qatar)",
+    "checked_at": "2026-10-01",
+    "error": "HTTP Error 403: Forbidden",
+    "url_role": "候选目录URL（可能由名称构造）；不是新确认的引用来源",
+    "fact_verification": "只探测页面；HTTP成功不等于数值核验，失败不代表资产不存在"
+  },
+  {
+    "country": "伊朗",
+    "name": "Varavi",
+    "url": "https://www.gem.wiki/Varavi_Gas_Field_(Iran)",
+    "checked_at": "2026-10-01",
+    "error": "HTTP Error 403: Forbidden",
+    "url_role": "候选目录URL（可能由名称构造）；不是新确认的引用来源",
+    "fact_verification": "只探测页面；HTTP成功不等于数值核验，失败不代表资产不存在"
+  },
+  {
+    "country": "伊朗",
+    "name": "Ramshir",
+    "url": "https://www.gem.wiki/Ramshir_Oil_Field_(Iran)",
+    "checked_at": "2026-10-01",
+    "error": "HTTP Error 403: Forbidden",
+    "url_role": "候选目录URL（可能由名称构造）；不是新确认的引用来源",
+    "fact_verification": "只探测页面；HTTP成功不等于数值核验，失败不代表资产不存在"
+  },
+  {
+    "country": "卡塔尔",
+    "name": "Idd El Shargi North Dome (ISND)",
+    "url": "https://www.gem.wiki/Idd_El_Shargi_North_Dome_(ISND)_Oil_and_Gas_Field_(Qatar)",
+    "checked_at": "2026-10-01",
+    "error": "HTTP Error 403: Forbidden",
+    "url_role": "候选目录URL（可能由名称构造）；不是新确认的引用来源",
+    "fact_verification": "只探测页面；HTTP成功不等于数值核验，失败不代表资产不存在"
+  },
+  {
+    "country": "伊朗",
+    "name": "Shadegan",
+    "url": "https://www.gem.wiki/Shadegan_Oil_Field_(Iran)",
+    "checked_at": "2026-10-01",
+    "error": "HTTP Error 403: Forbidden",
+    "url_role": "候选目录URL（可能由名称构造）；不是新确认的引用来源",
+    "fact_verification": "只探测页面；HTTP成功不等于数值核验，失败不代表资产不存在"
+  },
+  {
+    "country": "埃及",
+    "name": "Abu El Gharadig",
+    "url": "https://www.gem.wiki/Abu_El_Gharadig_Oil_and_Gas_Field_(Egypt)",
+    "checked_at": "2026-10-01",
+    "error": "HTTP Error 403: Forbidden",
+    "url_role": "候选目录URL（可能由名称构造）；不是新确认的引用来源",
+    "fact_verification": "只探测页面；HTTP成功不等于数值核验，失败不代表资产不存在"
+  },
+  {
+    "country": "伊拉克",
+    "name": "Safwan",
+    "url": "https://www.gem.wiki/Safwan_Oil_Field_(Iraq)",
+    "checked_at": "2026-10-01",
+    "error": "HTTP Error 403: Forbidden",
+    "url_role": "候选目录URL（可能由名称构造）；不是新确认的引用来源",
+    "fact_verification": "只探测页面；HTTP成功不等于数值核验，失败不代表资产不存在"
+  },
+  {
+    "country": "伊朗",
+    "name": "Abteymour",
+    "url": "https://www.gem.wiki/Abteymour_Oil_Field_(Iran)",
+    "checked_at": "2026-10-01",
+    "error": "HTTP Error 403: Forbidden",
+    "url_role": "候选目录URL（可能由名称构造）；不是新确认的引用来源",
+    "fact_verification": "只探测页面；HTTP成功不等于数值核验，失败不代表资产不存在"
+  },
+  {
+    "country": "埃及",
+    "name": "Atoll",
+    "url": "https://www.gem.wiki/Atoll_Oil_and_Gas_Field_(Egypt)",
+    "checked_at": "2026-10-01",
+    "error": "HTTP Error 403: Forbidden",
+    "url_role": "候选目录URL（可能由名称构造）；不是新确认的引用来源",
+    "fact_verification": "只探测页面；HTTP成功不等于数值核验，失败不代表资产不存在"
+  },
+  {
+    "country": "阿曼",
+    "name": "Kauther/Fakhr",
+    "url": "https://www.gem.wiki/Kauther/Fakhr_Oil_and_Gas_Field_(Oman)",
+    "checked_at": "2026-10-01",
+    "error": "HTTP Error 403: Forbidden",
+    "url_role": "候选目录URL（可能由名称构造）；不是新确认的引用来源",
+    "fact_verification": "只探测页面；HTTP成功不等于数值核验，失败不代表资产不存在"
+  },
+  {
+    "country": "沙特阿拉伯",
+    "name": "South Ghawar",
+    "url": "https://www.gem.wiki/South_Ghawar_Gas_Field_(Saudi_Arabia)",
+    "checked_at": "2026-10-01",
+    "error": "HTTP Error 403: Forbidden",
+    "url_role": "候选目录URL（可能由名称构造）；不是新确认的引用来源",
+    "fact_verification": "只探测页面；HTTP成功不等于数值核验，失败不代表资产不存在"
+  },
+  {
+    "country": "埃及",
+    "name": "Burullus",
+    "url": "https://www.gem.wiki/Burullus_Gas_Field_(Egypt)",
+    "checked_at": "2026-10-01",
+    "error": "HTTP Error 403: Forbidden",
+    "url_role": "候选目录URL（可能由名称构造）；不是新确认的引用来源",
+    "fact_verification": "只探测页面；HTTP成功不等于数值核验，失败不代表资产不存在"
+  },
+  {
+    "country": "科威特",
+    "name": "Ratqa/Lower Fars",
+    "url": "https://www.gem.wiki/Ratqa/Lower_Fars_Oil_Field_(Kuwait)",
+    "checked_at": "2026-10-01",
+    "error": "HTTP Error 403: Forbidden",
+    "url_role": "候选目录URL（可能由名称构造）；不是新确认的引用来源",
+    "fact_verification": "只探测页面；HTTP成功不等于数值核验，失败不代表资产不存在"
+  },
+  {
+    "country": "伊朗",
+    "name": "Balal",
+    "url": "https://www.gem.wiki/Balal_Oil_and_Gas_Field_(Iran)",
+    "checked_at": "2026-10-01",
+    "error": "HTTP Error 403: Forbidden",
+    "url_role": "候选目录URL（可能由名称构造）；不是新确认的引用来源",
+    "fact_verification": "只探测页面；HTTP成功不等于数值核验，失败不代表资产不存在"
+  },
+  {
+    "country": "伊朗",
+    "name": "Lab-E-Safid",
+    "url": "https://www.gem.wiki/Lab-E-Safid_Oil_Field_(Iran)",
+    "checked_at": "2026-10-01",
+    "error": "HTTP Error 403: Forbidden",
+    "url_role": "候选目录URL（可能由名称构造）；不是新确认的引用来源",
+    "fact_verification": "只探测页面；HTTP成功不等于数值核验，失败不代表资产不存在"
+  },
+  {
+    "country": "埃及",
+    "name": "Belayim Land",
+    "url": "https://www.gem.wiki/Belayim_Land_Oil_and_Gas_Field_(Egypt)",
+    "checked_at": "2026-10-01",
+    "error": "HTTP Error 403: Forbidden",
+    "url_role": "候选目录URL（可能由名称构造）；不是新确认的引用来源",
+    "fact_verification": "只探测页面；HTTP成功不等于数值核验，失败不代表资产不存在"
+  },
+  {
+    "country": "土耳其",
+    "name": "Sehit Esma Cevik",
+    "url": "https://www.gem.wiki/Sehit_Esma_Cevik_Oil_Field_(Türkiye)",
+    "checked_at": "2026-10-01",
+    "error": "HTTP Error 403: Forbidden",
+    "url_role": "候选目录URL（可能由名称构造）；不是新确认的引用来源",
+    "fact_verification": "只探测页面；HTTP成功不等于数值核验，失败不代表资产不存在"
+  },
+  {
+    "country": "伊朗",
+    "name": "Sirri C",
+    "url": "https://www.gem.wiki/Sirri_C_Oil_Field_(Iran)",
+    "checked_at": "2026-10-01",
+    "error": "HTTP Error 403: Forbidden",
+    "url_role": "候选目录URL（可能由名称构造）；不是新确认的引用来源",
+    "fact_verification": "只探测页面；HTTP成功不等于数值核验，失败不代表资产不存在"
+  },
+  {
+    "country": "阿曼",
+    "name": "Farha South",
+    "url": "https://www.gem.wiki/Farha_South_Oil_Field_(Oman)",
+    "checked_at": "2026-10-01",
+    "error": "HTTP Error 403: Forbidden",
+    "url_role": "候选目录URL（可能由名称构造）；不是新确认的引用来源",
+    "fact_verification": "只探测页面；HTTP成功不等于数值核验，失败不代表资产不存在"
+  },
+  {
+    "country": "伊朗",
+    "name": "Tang-E-Bijar",
+    "url": "https://www.gem.wiki/Tang-E-Bijar_Gas_Field_(Iran)",
+    "checked_at": "2026-10-01",
+    "error": "HTTP Error 403: Forbidden",
+    "url_role": "候选目录URL（可能由名称构造）；不是新确认的引用来源",
+    "fact_verification": "只探测页面；HTTP成功不等于数值核验，失败不代表资产不存在"
+  },
+  {
+    "country": "伊朗",
+    "name": "Qaleh Nar",
+    "url": "https://www.gem.wiki/Qaleh_Nar_Oil_and_Gas_Field_(Iran)",
+    "checked_at": "2026-10-01",
+    "error": "HTTP Error 403: Forbidden",
+    "url_role": "候选目录URL（可能由名称构造）；不是新确认的引用来源",
+    "fact_verification": "只探测页面；HTTP成功不等于数值核验，失败不代表资产不存在"
+  },
+  {
+    "country": "埃及",
+    "name": "Al Karam",
+    "url": "https://www.gem.wiki/Al_Karam_Oil_and_Gas_Field_(Egypt)",
+    "checked_at": "2026-10-01",
+    "error": "HTTP Error 403: Forbidden",
+    "url_role": "候选目录URL（可能由名称构造）；不是新确认的引用来源",
+    "fact_verification": "只探测页面；HTTP成功不等于数值核验，失败不代表资产不存在"
+  },
+  {
+    "country": "沙特阿拉伯",
+    "name": "North Arabia",
+    "url": "https://www.gem.wiki/North_Arabia_Gas_Field_(Saudi_Arabia)",
+    "checked_at": "2026-10-01",
+    "error": "HTTP Error 403: Forbidden",
+    "url_role": "候选目录URL（可能由名称构造）；不是新确认的引用来源",
+    "fact_verification": "只探测页面；HTTP成功不等于数值核验，失败不代表资产不存在"
+  },
+  {
+    "country": "叙利亚",
+    "name": "Khurbet East",
+    "url": "https://www.gem.wiki/Khurbet_East_Oil_Field_(Syria)",
+    "checked_at": "2026-10-01",
+    "error": "HTTP Error 403: Forbidden",
+    "url_role": "候选目录URL（可能由名称构造）；不是新确认的引用来源",
+    "fact_verification": "只探测页面；HTTP成功不等于数值核验，失败不代表资产不存在"
+  },
+  {
+    "country": "埃及",
+    "name": "Abu Qir",
+    "url": "https://www.gem.wiki/Abu_Qir_Gas_Field_(Egypt)",
+    "checked_at": "2026-10-01",
+    "error": "HTTP Error 403: Forbidden",
+    "url_role": "候选目录URL（可能由名称构造）；不是新确认的引用来源",
+    "fact_verification": "只探测页面；HTTP成功不等于数值核验，失败不代表资产不存在"
+  },
+  {
+    "country": "埃及",
+    "name": "Karama",
+    "url": "https://www.gem.wiki/Karama_Oil_Field_(Egypt)",
+    "checked_at": "2026-10-01",
+    "error": "HTTP Error 403: Forbidden",
+    "url_role": "候选目录URL（可能由名称构造）；不是新确认的引用来源",
+    "fact_verification": "只探测页面；HTTP成功不等于数值核验，失败不代表资产不存在"
+  },
+  {
+    "country": "埃及",
+    "name": "Bashrush",
+    "url": "https://www.gem.wiki/Bashrush_Gas_Field_(Egypt)",
+    "checked_at": "2026-10-01",
+    "error": "HTTP Error 403: Forbidden",
+    "url_role": "候选目录URL（可能由名称构造）；不是新确认的引用来源",
+    "fact_verification": "只探测页面；HTTP成功不等于数值核验，失败不代表资产不存在"
+  },
+  {
+    "country": "伊朗",
+    "name": "Zeloi",
+    "url": "https://www.gem.wiki/Zeloi_Oil_and_Gas_Field_(Iran)",
+    "checked_at": "2026-10-01",
+    "error": "HTTP Error 403: Forbidden",
+    "url_role": "候选目录URL（可能由名称构造）；不是新确认的引用来源",
+    "fact_verification": "只探测页面；HTTP成功不等于数值核验，失败不代表资产不存在"
+  },
+  {
+    "country": "伊朗",
+    "name": "Reshadat",
+    "url": "https://www.gem.wiki/Reshadat_Oil_Field_(Iran)",
+    "checked_at": "2026-10-01",
+    "error": "HTTP Error 403: Forbidden",
+    "url_role": "候选目录URL（可能由名称构造）；不是新确认的引用来源",
+    "fact_verification": "只探测页面；HTTP成功不等于数值核验，失败不代表资产不存在"
+  },
+  {
+    "country": "埃及",
+    "name": "Obaiyed",
+    "url": "https://www.gem.wiki/Obaiyed_Oil_and_Gas_Field_(Egypt)",
+    "checked_at": "2026-10-01",
+    "error": "HTTP Error 403: Forbidden",
+    "url_role": "候选目录URL（可能由名称构造）；不是新确认的引用来源",
+    "fact_verification": "只探测页面；HTTP成功不等于数值核验，失败不代表资产不存在"
+  },
+  {
+    "country": "伊朗",
+    "name": "Binak",
+    "url": "https://www.gem.wiki/Binak_Oil_and_Gas_Field_(Iran)",
+    "checked_at": "2026-10-01",
+    "error": "HTTP Error 403: Forbidden",
+    "url_role": "候选目录URL（可能由名称构造）；不是新确认的引用来源",
+    "fact_verification": "只探测页面；HTTP成功不等于数值核验，失败不代表资产不存在"
+  },
+  {
+    "country": "阿联酋",
+    "name": "Nosrat",
+    "url": "https://www.gem.wiki/Nosrat_Oil_Field_(United_Arab_Emirates,_Iran)",
+    "checked_at": "2026-10-01",
+    "error": "HTTP Error 403: Forbidden",
+    "url_role": "候选目录URL（可能由名称构造）；不是新确认的引用来源",
+    "fact_verification": "只探测页面；HTTP成功不等于数值核验，失败不代表资产不存在"
+  },
+  {
+    "country": "伊朗",
+    "name": "Sarvestan",
+    "url": "https://www.gem.wiki/Sarvestan_Oil_and_Gas_Field_(Iran)",
+    "checked_at": "2026-10-01",
+    "error": "HTTP Error 403: Forbidden",
+    "url_role": "候选目录URL（可能由名称构造）；不是新确认的引用来源",
+    "fact_verification": "只探测页面；HTTP成功不等于数值核验，失败不代表资产不存在"
+  },
+  {
+    "country": "伊朗",
+    "name": "Resalat",
+    "url": "https://www.gem.wiki/Resalat_Oil_Field_(Iran)",
+    "checked_at": "2026-10-01",
+    "error": "HTTP Error 403: Forbidden",
+    "url_role": "候选目录URL（可能由名称构造）；不是新确认的引用来源",
+    "fact_verification": "只探测页面；HTTP成功不等于数值核验，失败不代表资产不存在"
+  },
+  {
+    "country": "沙特阿拉伯",
+    "name": "Midyan",
+    "url": "https://www.gem.wiki/Midyan_Oil_and_Gas_Field_(Saudi_Arabia)",
+    "checked_at": "2026-10-01",
+    "error": "HTTP Error 403: Forbidden",
+    "url_role": "候选目录URL（可能由名称构造）；不是新确认的引用来源",
+    "fact_verification": "只探测页面；HTTP成功不等于数值核验，失败不代表资产不存在"
+  },
+  {
+    "country": "科威特",
+    "name": "Dharif",
+    "url": "https://www.gem.wiki/Dharif_Oil_Field_(Kuwait)",
+    "checked_at": "2026-10-01",
+    "error": "HTTP Error 403: Forbidden",
+    "url_role": "候选目录URL（可能由名称构造）；不是新确认的引用来源",
+    "fact_verification": "只探测页面；HTTP成功不等于数值核验，失败不代表资产不存在"
+  },
+  {
+    "country": "伊朗",
+    "name": "Saadat Abad",
+    "url": "https://www.gem.wiki/Saadat_Abad_Oil_Field_(Iran)",
+    "checked_at": "2026-10-01",
+    "error": "HTTP Error 403: Forbidden",
+    "url_role": "候选目录URL（可能由名称构造）；不是新确认的引用来源",
+    "fact_verification": "只探测页面；HTTP成功不等于数值核验，失败不代表资产不存在"
+  },
+  {
+    "country": "阿曼",
+    "name": "Hawqa",
+    "url": "https://www.gem.wiki/Hawqa_Oil_and_Gas_Field_(Oman)",
+    "checked_at": "2026-10-01",
+    "error": "HTTP Error 403: Forbidden",
+    "url_role": "候选目录URL（可能由名称构造）；不是新确认的引用来源",
+    "fact_verification": "只探测页面；HTTP成功不等于数值核验，失败不代表资产不存在"
+  },
+  {
+    "country": "伊朗",
+    "name": "Gulkhari",
+    "url": "https://www.gem.wiki/Gulkhari_Oil_Field_(Iran)",
+    "checked_at": "2026-10-01",
+    "error": "HTTP Error 403: Forbidden",
+    "url_role": "候选目录URL（可能由名称构造）；不是新确认的引用来源",
+    "fact_verification": "只探测页面；HTTP成功不等于数值核验，失败不代表资产不存在"
+  },
+  {
+    "country": "埃及",
+    "name": "Temsah",
+    "url": "https://www.gem.wiki/Temsah_Oil_and_Gas_Field_(Egypt)",
+    "checked_at": "2026-10-01",
+    "error": "HTTP Error 403: Forbidden",
+    "url_role": "候选目录URL（可能由名称构造）；不是新确认的引用来源",
+    "fact_verification": "只探测页面；HTTP成功不等于数值核验，失败不代表资产不存在"
+  },
+  {
+    "country": "埃及",
+    "name": "Bed-3",
+    "url": "https://www.gem.wiki/Bed-3_Oil_and_Gas_Field_(Egypt)",
+    "checked_at": "2026-10-01",
+    "error": "HTTP Error 403: Forbidden",
+    "url_role": "候选目录URL（可能由名称构造）；不是新确认的引用来源",
+    "fact_verification": "只探测页面；HTTP成功不等于数值核验，失败不代表资产不存在"
+  },
+  {
+    "country": "伊拉克",
+    "name": "Simrit",
+    "url": "https://www.gem.wiki/Simrit_Oil_and_Gas_Field_(Iraq)",
+    "checked_at": "2026-10-01",
+    "error": "HTTP Error 403: Forbidden",
+    "url_role": "候选目录URL（可能由名称构造）；不是新确认的引用来源",
+    "fact_verification": "只探测页面；HTTP成功不等于数值核验，失败不代表资产不存在"
+  },
+  {
+    "country": "叙利亚",
+    "name": "Gbeibe",
+    "url": "https://www.gem.wiki/Gbeibe_Oil_Field_(Syria)",
+    "checked_at": "2026-10-01",
+    "error": "HTTP Error 403: Forbidden",
+    "url_role": "候选目录URL（可能由名称构造）；不是新确认的引用来源",
+    "fact_verification": "只探测页面；HTTP成功不等于数值核验，失败不代表资产不存在"
+  },
+  {
+    "country": "埃及",
+    "name": "Ha'py",
+    "url": "https://www.gem.wiki/Ha'py_Oil_and_Gas_Field_(Egypt)",
+    "checked_at": "2026-10-01",
+    "error": "HTTP Error 403: Forbidden",
+    "url_role": "候选目录URL（可能由名称构造）；不是新确认的引用来源",
+    "fact_verification": "只探测页面；HTTP成功不等于数值核验，失败不代表资产不存在"
+  },
+  {
+    "country": "埃及",
+    "name": "South West Melehia",
+    "url": "https://www.gem.wiki/South_West_Melehia_Oil_Field_(Egypt)",
+    "checked_at": "2026-10-01",
+    "error": "HTTP Error 403: Forbidden",
+    "url_role": "候选目录URL（可能由名称构造）；不是新确认的引用来源",
+    "fact_verification": "只探测页面；HTTP成功不等于数值核验，失败不代表资产不存在"
+  },
+  {
+    "country": "埃及",
+    "name": "Ras Fanar",
+    "url": "https://www.gem.wiki/Ras_Fanar_Oil_and_Gas_Field_(Egypt)",
+    "checked_at": "2026-10-01",
+    "error": "HTTP Error 403: Forbidden",
+    "url_role": "候选目录URL（可能由名称构造）；不是新确认的引用来源",
+    "fact_verification": "只探测页面；HTTP成功不等于数值核验，失败不代表资产不存在"
+  },
+  {
+    "country": "伊朗",
+    "name": "Sarkhun",
+    "url": "https://www.gem.wiki/Sarkhun_Gas_Field_(Iran)",
+    "checked_at": "2026-10-01",
+    "error": "HTTP Error 403: Forbidden",
+    "url_role": "候选目录URL（可能由名称构造）；不是新确认的引用来源",
+    "fact_verification": "只探测页面；HTTP成功不等于数值核验，失败不代表资产不存在"
+  },
+  {
+    "country": "土耳其",
+    "name": "Sehit Aybuke Yalcin",
+    "url": "https://www.gem.wiki/Sehit_Aybuke_Yalcin_Oil_Field_(Türkiye)",
+    "checked_at": "2026-10-01",
+    "error": "HTTP Error 403: Forbidden",
+    "url_role": "候选目录URL（可能由名称构造）；不是新确认的引用来源",
+    "fact_verification": "只探测页面；HTTP成功不等于数值核验，失败不代表资产不存在"
+  },
+  {
+    "country": "伊朗",
+    "name": "Chillingar",
+    "url": "https://www.gem.wiki/Chillingar_Oil_Field_(Iran)",
+    "checked_at": "2026-10-01",
+    "error": "HTTP Error 403: Forbidden",
+    "url_role": "候选目录URL（可能由名称构造）；不是新确认的引用来源",
+    "fact_verification": "只探测页面；HTTP成功不等于数值核验，失败不代表资产不存在"
+  },
+  {
+    "country": "阿曼",
+    "name": "Tayseer",
+    "url": "https://www.gem.wiki/Tayseer_Oil_and_Gas_Field_(Oman)",
+    "checked_at": "2026-10-01",
+    "error": "HTTP Error 403: Forbidden",
+    "url_role": "候选目录URL（可能由名称构造）；不是新确认的引用来源",
+    "fact_verification": "只探测页面；HTTP成功不等于数值核验，失败不代表资产不存在"
+  },
+  {
+    "country": "埃及",
+    "name": "Berenice",
+    "url": "https://www.gem.wiki/Berenice_Oil_Field_(Egypt)",
+    "checked_at": "2026-10-01",
+    "error": "HTTP Error 403: Forbidden",
+    "url_role": "候选目录URL（可能由名称构造）；不是新确认的引用来源",
+    "fact_verification": "只探测页面；HTTP成功不等于数值核验，失败不代表资产不存在"
+  },
+  {
+    "country": "埃及",
+    "name": "Amal Redevelop (A and B)",
+    "url": "https://www.gem.wiki/Amal_Redevelop_(A_and_B)_Oil_and_Gas_Field_(Egypt)",
+    "checked_at": "2026-10-01",
+    "error": "HTTP Error 403: Forbidden",
+    "url_role": "候选目录URL（可能由名称构造）；不是新确认的引用来源",
+    "fact_verification": "只探测页面；HTTP成功不等于数值核验，失败不代表资产不存在"
+  },
+  {
+    "country": "伊朗",
+    "name": "Khesht",
+    "url": "https://www.gem.wiki/Khesht_Oil_Field_(Iran)",
+    "checked_at": "2026-10-01",
+    "error": "HTTP Error 403: Forbidden",
+    "url_role": "候选目录URL（可能由名称构造）；不是新确认的引用来源",
+    "fact_verification": "只探测页面；HTTP成功不等于数值核验，失败不代表资产不存在"
+  },
+  {
+    "country": "埃及",
+    "name": "Melehia West Deep",
+    "url": "https://www.gem.wiki/Melehia_West_Deep_Oil_and_Gas_Field_(Egypt)",
+    "checked_at": "2026-10-01",
+    "error": "HTTP Error 403: Forbidden",
+    "url_role": "候选目录URL（可能由名称构造）；不是新确认的引用来源",
+    "fact_verification": "只探测页面；HTTP成功不等于数值核验，失败不代表资产不存在"
+  },
+  {
+    "country": "卡塔尔",
+    "name": "Idd El Shargi South Dome (ISSD)",
+    "url": "https://www.gem.wiki/Idd_El_Shargi_South_Dome_(ISSD)_Oil_and_Gas_Field_(Qatar)",
+    "checked_at": "2026-10-01",
+    "error": "HTTP Error 403: Forbidden",
+    "url_role": "候选目录URL（可能由名称构造）；不是新确认的引用来源",
+    "fact_verification": "只探测页面；HTTP成功不等于数值核验，失败不代表资产不存在"
+  },
+  {
+    "country": "科威特",
+    "name": "South Umm-Gudair",
+    "url": "https://www.gem.wiki/South_Umm-Gudair_Oil_and_Gas_Field_(Kuwait,_Saudi_Arabia)",
+    "checked_at": "2026-10-01",
+    "error": "HTTP Error 403: Forbidden",
+    "url_role": "候选目录URL（可能由名称构造）；不是新确认的引用来源",
+    "fact_verification": "只探测页面；HTTP成功不等于数值核验，失败不代表资产不存在"
+  },
+  {
+    "country": "阿曼",
+    "name": "Simsim",
+    "url": "https://www.gem.wiki/Simsim_Oil_and_Gas_Field_(Oman)",
+    "checked_at": "2026-10-01",
+    "error": "HTTP Error 403: Forbidden",
+    "url_role": "候选目录URL（可能由名称构造）；不是新确认的引用来源",
+    "fact_verification": "只探测页面；HTTP成功不等于数值核验，失败不代表资产不存在"
+  },
+  {
+    "country": "埃及",
+    "name": "Zaafarana",
+    "url": "https://www.gem.wiki/Zaafarana_Oil_Field_(Egypt)",
+    "checked_at": "2026-10-01",
+    "error": "HTTP Error 403: Forbidden",
+    "url_role": "候选目录URL（可能由名称构造）；不是新确认的引用来源",
+    "fact_verification": "只探测页面；HTTP成功不等于数值核验，失败不代表资产不存在"
+  },
+  {
+    "country": "埃及",
+    "name": "Alamein",
+    "url": "https://www.gem.wiki/Alamein_Oil_Field_(Egypt)",
+    "checked_at": "2026-10-01",
+    "error": "HTTP Error 403: Forbidden",
+    "url_role": "候选目录URL（可能由名称构造）；不是新确认的引用来源",
+    "fact_verification": "只探测页面；HTTP成功不等于数值核验，失败不代表资产不存在"
+  },
+  {
+    "country": "伊朗",
+    "name": "Mansurabad",
+    "url": "https://www.gem.wiki/Mansurabad_Oil_and_Gas_Field_(Iran)",
+    "checked_at": "2026-10-01",
+    "error": "HTTP Error 403: Forbidden",
+    "url_role": "候选目录URL（可能由名称构造）；不是新确认的引用来源",
+    "fact_verification": "只探测页面；HTTP成功不等于数值核验，失败不代表资产不存在"
+  },
+  {
+    "country": "埃及",
+    "name": "Geisum",
+    "url": "https://www.gem.wiki/Geisum_Oil_Field_(Egypt)",
+    "checked_at": "2026-10-01",
+    "error": "HTTP Error 403: Forbidden",
+    "url_role": "候选目录URL（可能由名称构造）；不是新确认的引用来源",
+    "fact_verification": "只探测页面；HTTP成功不等于数值核验，失败不代表资产不存在"
+  },
+  {
+    "country": "埃及",
+    "name": "Abu Rudies-Sidri",
+    "url": "https://www.gem.wiki/Abu_Rudies-Sidri_Oil_Field_(Egypt)",
+    "checked_at": "2026-10-01",
+    "error": "HTTP Error 403: Forbidden",
+    "url_role": "候选目录URL（可能由名称构造）；不是新确认的引用来源",
+    "fact_verification": "只探测页面；HTTP成功不等于数值核验，失败不代表资产不存在"
+  },
+  {
+    "country": "伊拉克",
+    "name": "Sarqala",
+    "url": "https://www.gem.wiki/Sarqala_Oil_Field_(Iraq)",
+    "checked_at": "2026-10-01",
+    "error": "HTTP Error 403: Forbidden",
+    "url_role": "候选目录URL（可能由名称构造）；不是新确认的引用来源",
+    "fact_verification": "只探测页面；HTTP成功不等于数值核验，失败不代表资产不存在"
+  },
+  {
+    "country": "埃及",
+    "name": "Ptah",
+    "url": "https://www.gem.wiki/Ptah_Oil_Field_(Egypt)",
+    "checked_at": "2026-10-01",
+    "error": "HTTP Error 403: Forbidden",
+    "url_role": "候选目录URL（可能由名称构造）；不是新确认的引用来源",
+    "fact_verification": "只探测页面；HTTP成功不等于数值核验，失败不代表资产不存在"
+  },
+  {
+    "country": "伊朗",
+    "name": "Siah Makan",
+    "url": "https://www.gem.wiki/Siah_Makan_Oil_and_Gas_Field_(Iran)",
+    "checked_at": "2026-10-01",
+    "error": "HTTP Error 403: Forbidden",
+    "url_role": "候选目录URL（可能由名称构造）；不是新确认的引用来源",
+    "fact_verification": "只探测页面；HTTP成功不等于数值核验，失败不代表资产不存在"
+  },
+  {
+    "country": "伊拉克",
+    "name": "Banan",
+    "url": "https://www.gem.wiki/Banan_Oil_Field_(Iraq)",
+    "checked_at": "2026-10-01",
+    "error": "HTTP Error 403: Forbidden",
+    "url_role": "候选目录URL（可能由名称构造）；不是新确认的引用来源",
+    "fact_verification": "只探测页面；HTTP成功不等于数值核验，失败不代表资产不存在"
+  },
+  {
+    "country": "伊朗",
+    "name": "Ramin",
+    "url": "https://www.gem.wiki/Ramin_Oil_and_Gas_Field_(Iran)",
+    "checked_at": "2026-10-01",
+    "error": "HTTP Error 403: Forbidden",
+    "url_role": "候选目录URL（可能由名称构造）；不是新确认的引用来源",
+    "fact_verification": "只探测页面；HTTP成功不等于数值核验，失败不代表资产不存在"
+  },
+  {
+    "country": "伊拉克",
+    "name": "Demir Dagh",
+    "url": "https://www.gem.wiki/Demir_Dagh_Oil_Field_(Iraq)",
+    "checked_at": "2026-10-01",
+    "error": "HTTP Error 403: Forbidden",
+    "url_role": "候选目录URL（可能由名称构造）；不是新确认的引用来源",
+    "fact_verification": "只探测页面；HTTP成功不等于数值核验，失败不代表资产不存在"
+  },
+  {
+    "country": "埃及",
+    "name": "Wakar",
+    "url": "https://www.gem.wiki/Wakar_Oil_and_Gas_Field_(Egypt)",
+    "checked_at": "2026-10-01",
+    "error": "HTTP Error 403: Forbidden",
+    "url_role": "候选目录URL（可能由名称构造）；不是新确认的引用来源",
+    "fact_verification": "只探测页面；HTTP成功不等于数值核验，失败不代表资产不存在"
+  },
+  {
+    "country": "叙利亚",
+    "name": "Margada",
+    "url": "https://www.gem.wiki/Margada_Oil_Field_(Syria)",
+    "checked_at": "2026-10-01",
+    "error": "HTTP Error 403: Forbidden",
+    "url_role": "候选目录URL（可能由名称构造）；不是新确认的引用来源",
+    "fact_verification": "只探测页面；HTTP成功不等于数值核验，失败不代表资产不存在"
+  },
+  {
+    "country": "叙利亚",
+    "name": "Al Jubaissah",
+    "url": "https://www.gem.wiki/Al_Jubaissah_Oil_Field_(Syria)",
+    "checked_at": "2026-10-01",
+    "error": "HTTP Error 403: Forbidden",
+    "url_role": "候选目录URL（可能由名称构造）；不是新确认的引用来源",
+    "fact_verification": "只探测页面；HTTP成功不等于数值核验，失败不代表资产不存在"
+  },
+  {
+    "country": "伊朗",
+    "name": "Naft Shahr",
+    "url": "https://www.gem.wiki/Naft_Shahr_Oil_Field_(Iran)",
+    "checked_at": "2026-10-01",
+    "error": "HTTP Error 403: Forbidden",
+    "url_role": "候选目录URL（可能由名称构造）；不是新确认的引用来源",
+    "fact_verification": "只探测页面；HTTP成功不等于数值核验，失败不代表资产不存在"
+  },
+  {
+    "country": "埃及",
+    "name": "Baltim East",
+    "url": "https://www.gem.wiki/Baltim_East_Oil_Field_(Egypt)",
+    "checked_at": "2026-10-01",
+    "error": "HTTP Error 403: Forbidden",
+    "url_role": "候选目录URL（可能由名称构造）；不是新确认的引用来源",
+    "fact_verification": "只探测页面；HTTP成功不等于数值核验，失败不代表资产不存在"
+  },
+  {
+    "country": "叙利亚",
+    "name": "Tishreen",
+    "url": "https://www.gem.wiki/Tishreen_Oil_Field_(Syria)",
+    "checked_at": "2026-10-01",
+    "error": "HTTP Error 403: Forbidden",
+    "url_role": "候选目录URL（可能由名称构造）；不是新确认的引用来源",
+    "fact_verification": "只探测页面；HTTP成功不等于数值核验，失败不代表资产不存在"
+  },
+  {
+    "country": "伊朗",
+    "name": "Maleh Kuh",
+    "url": "https://www.gem.wiki/Maleh_Kuh_Oil_and_Gas_Field_(Iran)",
+    "checked_at": "2026-10-01",
+    "error": "HTTP Error 403: Forbidden",
+    "url_role": "候选目录URL（可能由名称构造）；不是新确认的引用来源",
+    "fact_verification": "只探测页面；HTTP成功不等于数值核验，失败不代表资产不存在"
+  },
+  {
+    "country": "叙利亚",
+    "name": "Jazal-Heil",
+    "url": "https://www.gem.wiki/Jazal-Heil_Oil_Field_(Syria)",
+    "checked_at": "2026-10-01",
+    "error": "HTTP Error 403: Forbidden",
+    "url_role": "候选目录URL（可能由名称构造）；不是新确认的引用来源",
+    "fact_verification": "只探测页面；HTTP成功不等于数值核验，失败不代表资产不存在"
+  },
+  {
+    "country": "埃及",
+    "name": "Abu Madi",
+    "url": "https://www.gem.wiki/Abu_Madi_Gas_Field_(Egypt)",
+    "checked_at": "2026-10-01",
+    "error": "HTTP Error 403: Forbidden",
+    "url_role": "候选目录URL（可能由名称构造）；不是新确认的引用来源",
+    "fact_verification": "只探测页面；HTTP成功不等于数值核验，失败不代表资产不存在"
+  },
+  {
+    "country": "伊朗",
+    "name": "Sohrab",
+    "url": "https://www.gem.wiki/Sohrab_Oil_Field_(Iran)",
+    "checked_at": "2026-10-01",
+    "error": "HTTP Error 403: Forbidden",
+    "url_role": "候选目录URL（可能由名称构造）；不是新确认的引用来源",
+    "fact_verification": "只探测页面；HTTP成功不等于数值核验，失败不代表资产不存在"
+  },
+  {
+    "country": "埃及",
+    "name": "Baltim North",
+    "url": "https://www.gem.wiki/Baltim_North_Oil_Field_(Egypt)",
+    "checked_at": "2026-10-01",
+    "error": "HTTP Error 403: Forbidden",
+    "url_role": "候选目录URL（可能由名称构造）；不是新确认的引用来源",
+    "fact_verification": "只探测页面；HTTP成功不等于数值核验，失败不代表资产不存在"
+  },
+  {
+    "country": "叙利亚",
+    "name": "Gouna",
+    "url": "https://www.gem.wiki/Gouna_Oil_Field_(Syria)",
+    "checked_at": "2026-10-01",
+    "error": "HTTP Error 403: Forbidden",
+    "url_role": "候选目录URL（可能由名称构造）；不是新确认的引用来源",
+    "fact_verification": "只探测页面；HTTP成功不等于数值核验，失败不代表资产不存在"
+  },
+  {
+    "country": "埃及",
+    "name": "Assil",
+    "url": "https://www.gem.wiki/Assil_Oil_and_Gas_Field_(Egypt)",
+    "checked_at": "2026-10-01",
+    "error": "HTTP Error 403: Forbidden",
+    "url_role": "候选目录URL（可能由名称构造）；不是新确认的引用来源",
+    "fact_verification": "只探测页面；HTTP成功不等于数值核验，失败不代表资产不存在"
+  },
+  {
+    "country": "埃及",
+    "name": "Bahga",
+    "url": "https://www.gem.wiki/Bahga_Oil_and_Gas_Field_(Egypt)",
+    "checked_at": "2026-10-01",
+    "error": "HTTP Error 403: Forbidden",
+    "url_role": "候选目录URL（可能由名称构造）；不是新确认的引用来源",
+    "fact_verification": "只探测页面；HTTP成功不等于数值核验，失败不代表资产不存在"
+  },
+  {
+    "country": "阿联酋",
+    "name": "Zora",
+    "url": "https://www.gem.wiki/Zora_Gas_Field_(United_Arab_Emirates)",
+    "checked_at": "2026-10-01",
+    "error": "HTTP Error 403: Forbidden",
+    "url_role": "候选目录URL（可能由名称构造）；不是新确认的引用来源",
+    "fact_verification": "只探测页面；HTTP成功不等于数值核验，失败不代表资产不存在"
+  },
+  {
+    "country": "埃及",
+    "name": "Barq",
+    "url": "https://www.gem.wiki/Barq_Oil_and_Gas_Field_(Egypt)",
+    "checked_at": "2026-10-01",
+    "error": "HTTP Error 403: Forbidden",
+    "url_role": "候选目录URL（可能由名称构造）；不是新确认的引用来源",
+    "fact_verification": "只探测页面；HTTP成功不等于数值核验，失败不代表资产不存在"
+  },
+  {
+    "country": "阿曼",
+    "name": "Ulfa",
+    "url": "https://www.gem.wiki/Ulfa_Oil_Field_(Oman)",
+    "checked_at": "2026-10-01",
+    "error": "HTTP Error 403: Forbidden",
+    "url_role": "候选目录URL（可能由名称构造）；不是新确认的引用来源",
+    "fact_verification": "只探测页面；HTTP成功不等于数值核验，失败不代表资产不存在"
+  },
+  {
+    "country": "土耳其",
+    "name": "Çaycuma",
+    "url": "https://www.gem.wiki/Çaycuma_Gas_Field_(Türkiye)",
+    "checked_at": "2026-10-01",
+    "error": "HTTP Error 403: Forbidden",
+    "url_role": "候选目录URL（可能由名称构造）；不是新确认的引用来源",
+    "fact_verification": "只探测页面；HTTP成功不等于数值核验，失败不代表资产不存在"
+  },
+  {
+    "country": "埃及",
+    "name": "Magd",
+    "url": "https://www.gem.wiki/Magd_Oil_and_Gas_Field_(Egypt)",
+    "checked_at": "2026-10-01",
+    "error": "HTTP Error 403: Forbidden",
+    "url_role": "候选目录URL（可能由名称构造）；不是新确认的引用来源",
+    "fact_verification": "只探测页面；HTTP成功不等于数值核验，失败不代表资产不存在"
+  },
+  {
+    "country": "叙利亚",
+    "name": "Tayyani",
+    "url": "https://www.gem.wiki/Tayyani_Oil_Field_(Syria)",
+    "checked_at": "2026-10-01",
+    "error": "HTTP Error 403: Forbidden",
+    "url_role": "候选目录URL（可能由名称构造）；不是新确认的引用来源",
+    "fact_verification": "只探测页面；HTTP成功不等于数值核验，失败不代表资产不存在"
+  },
+  {
+    "country": "埃及",
+    "name": "Denise",
+    "url": "https://www.gem.wiki/Denise_Gas_Field_(Egypt)",
+    "checked_at": "2026-10-01",
+    "error": "HTTP Error 403: Forbidden",
+    "url_role": "候选目录URL（可能由名称构造）；不是新确认的引用来源",
+    "fact_verification": "只探测页面；HTTP成功不等于数值核验，失败不代表资产不存在"
+  },
+  {
+    "country": "伊朗",
+    "name": "Towsan",
+    "url": "https://www.gem.wiki/Towsan_Oil_Field_(Iran)",
+    "checked_at": "2026-10-01",
+    "error": "HTTP Error 403: Forbidden",
+    "url_role": "候选目录URL（可能由名称构造）；不是新确认的引用来源",
+    "fact_verification": "只探测页面；HTTP成功不等于数值核验，失败不代表资产不存在"
+  },
+  {
+    "country": "叙利亚",
+    "name": "Deilla",
+    "url": "https://www.gem.wiki/Deilla_Oil_Field_(Syria)",
+    "checked_at": "2026-10-01",
+    "error": "HTTP Error 403: Forbidden",
+    "url_role": "候选目录URL（可能由名称构造）；不是新确认的引用来源",
+    "fact_verification": "只探测页面；HTTP成功不等于数值核验，失败不代表资产不存在"
+  },
+  {
+    "country": "伊拉克",
+    "name": "Topkhana",
+    "url": "https://www.gem.wiki/Topkhana_Oil_and_Gas_Field_(Iraq)",
+    "checked_at": "2026-10-01",
+    "error": "HTTP Error 403: Forbidden",
+    "url_role": "候选目录URL（可能由名称构造）；不是新确认的引用来源",
+    "fact_verification": "只探测页面；HTTP成功不等于数值核验，失败不代表资产不存在"
+  },
+  {
+    "country": "埃及",
+    "name": "Tut",
+    "url": "https://www.gem.wiki/Tut_Oil_and_Gas_Field_(Egypt)",
+    "checked_at": "2026-10-01",
+    "error": "HTTP Error 403: Forbidden",
+    "url_role": "候选目录URL（可能由名称构造）；不是新确认的引用来源",
+    "fact_verification": "只探测页面；HTTP成功不等于数值核验，失败不代表资产不存在"
+  },
+  {
+    "country": "以色列",
+    "name": "Dalit",
+    "url": "https://www.gem.wiki/Dalit_Gas_Field_(Israel)",
+    "checked_at": "2026-10-01",
+    "error": "HTTP Error 403: Forbidden",
+    "url_role": "候选目录URL（可能由名称构造）；不是新确认的引用来源",
+    "fact_verification": "只探测页面；HTTP成功不等于数值核验，失败不代表资产不存在"
+  },
+  {
+    "country": "伊朗",
+    "name": "Dalan",
+    "url": "https://www.gem.wiki/Dalan_Oil_and_Gas_Field_(Iran)",
+    "checked_at": "2026-10-01",
+    "error": "HTTP Error 403: Forbidden",
+    "url_role": "候选目录URL（可能由名称构造）；不是新确认的引用来源",
+    "fact_verification": "只探测页面；HTTP成功不等于数值核验，失败不代表资产不存在"
+  },
+  {
+    "country": "科威特",
+    "name": "Dorra",
+    "url": "https://www.gem.wiki/Dorra_Oil_and_Gas_Field_(Kuwait)",
+    "checked_at": "2026-10-01",
+    "error": "HTTP Error 403: Forbidden",
+    "url_role": "候选目录URL（可能由名称构造）；不是新确认的引用来源",
+    "fact_verification": "只探测页面；HTTP成功不等于数值核验，失败不代表资产不存在"
+  },
+  {
+    "country": "阿联酋",
+    "name": "XF-002",
+    "url": "https://www.gem.wiki/XF-002_Oil_and_Gas_Field_(United_Arab_Emirates)",
+    "checked_at": "2026-10-01",
+    "error": "HTTP Error 403: Forbidden",
+    "url_role": "候选目录URL（可能由名称构造）；不是新确认的引用来源",
+    "fact_verification": "只探测页面；HTTP成功不等于数值核验，失败不代表资产不存在"
+  },
+  {
+    "country": "埃及",
+    "name": "Amal",
+    "url": "https://www.gem.wiki/Amal_Oil_Field_(Egypt)",
+    "checked_at": "2026-10-01",
+    "error": "HTTP Error 403: Forbidden",
+    "url_role": "候选目录URL（可能由名称构造）；不是新确认的引用来源",
+    "fact_verification": "只探测页面；HTTP成功不等于数值核验，失败不代表资产不存在"
+  },
+  {
+    "country": "阿曼",
+    "name": "Amal West",
+    "url": "https://www.gem.wiki/Amal_West_Oil_Field_(Oman)",
+    "checked_at": "2026-10-01",
+    "error": "HTTP Error 403: Forbidden",
+    "url_role": "候选目录URL（可能由名称构造）；不是新确认的引用来源",
+    "fact_verification": "只探测页面；HTTP成功不等于数值核验，失败不代表资产不存在"
+  },
+  {
+    "country": "叙利亚",
+    "name": "Al Khairat",
+    "url": "https://www.gem.wiki/Al_Khairat_Oil_and_Gas_Field_(Syria)",
+    "checked_at": "2026-10-01",
+    "error": "HTTP Error 403: Forbidden",
+    "url_role": "候选目录URL（可能由名称构造）；不是新确认的引用来源",
+    "fact_verification": "只探测页面；HTTP成功不等于数值核验，失败不代表资产不存在"
+  },
+  {
+    "country": "埃及",
+    "name": "Amal C",
+    "url": "https://www.gem.wiki/Amal_C_Oil_and_Gas_Field_(Egypt)",
+    "checked_at": "2026-10-01",
+    "error": "HTTP Error 403: Forbidden",
+    "url_role": "候选目录URL（可能由名称构造）；不是新确认的引用来源",
+    "fact_verification": "只探测页面；HTTP成功不等于数值核验，失败不代表资产不存在"
+  },
+  {
+    "country": "叙利亚",
+    "name": "Akash",
+    "url": "https://www.gem.wiki/Akash_Oil_Field_(Syria)",
+    "checked_at": "2026-10-01",
+    "error": "HTTP Error 403: Forbidden",
+    "url_role": "候选目录URL（可能由名称构造）；不是新确认的引用来源",
+    "fact_verification": "只探测页面；HTTP成功不等于数值核验，失败不代表资产不存在"
+  },
+  {
+    "country": "阿联酋",
+    "name": "Aqam",
+    "url": "https://www.gem.wiki/Aqam_Oil_and_Gas_Field_(United_Arab_Emirates)",
+    "checked_at": "2026-10-01",
+    "error": "HTTP Error 403: Forbidden",
+    "url_role": "候选目录URL（可能由名称构造）；不是新确认的引用来源",
+    "fact_verification": "只探测页面；HTTP成功不等于数值核验，失败不代表资产不存在"
+  },
+  {
+    "country": "叙利亚",
+    "name": "Azraq",
+    "url": "https://www.gem.wiki/Azraq_Oil_Field_(Syria)",
+    "checked_at": "2026-10-01",
+    "error": "HTTP Error 403: Forbidden",
+    "url_role": "候选目录URL（可能由名称构造）；不是新确认的引用来源",
+    "fact_verification": "只探测页面；HTTP成功不等于数值核验，失败不代表资产不存在"
+  },
+  {
+    "country": "阿曼",
+    "name": "Amin",
+    "url": "https://www.gem.wiki/Amin_Oil_Field_(Oman)",
+    "checked_at": "2026-10-01",
+    "error": "HTTP Error 403: Forbidden",
+    "url_role": "候选目录URL（可能由名称构造）；不是新确认的引用来源",
+    "fact_verification": "只探测页面；HTTP成功不等于数值核验，失败不代表资产不存在"
+  },
+  {
+    "country": "以色列",
+    "name": "Athena",
+    "url": "https://www.gem.wiki/Athena_Gas_Field_(Israel)",
+    "checked_at": "2026-10-01",
+    "error": "HTTP Error 403: Forbidden",
+    "url_role": "候选目录URL（可能由名称构造）；不是新确认的引用来源",
+    "fact_verification": "只探测页面；HTTP成功不等于数值核验，失败不代表资产不存在"
+  },
+  {
+    "country": "叙利亚",
+    "name": "Zumlat al-Maharr",
+    "url": "https://www.gem.wiki/Zumlat_al-Maharr_Gas_Field_(Syria)",
+    "checked_at": "2026-10-01",
+    "error": "HTTP Error 403: Forbidden",
+    "url_role": "候选目录URL（可能由名称构造）；不是新确认的引用来源",
+    "fact_verification": "只探测页面；HTTP成功不等于数值核验，失败不代表资产不存在"
+  },
+  {
+    "country": "科威特",
+    "name": "Abduliyah",
+    "url": "https://www.gem.wiki/Abduliyah_Oil_and_Gas_Field_(Kuwait)",
+    "checked_at": "2026-10-01",
+    "error": "HTTP Error 403: Forbidden",
+    "url_role": "候选目录URL（可能由名称构造）；不是新确认的引用来源",
+    "fact_verification": "只探测页面；HTTP成功不等于数值核验，失败不代表资产不存在"
+  },
+  {
+    "country": "埃及",
+    "name": "Badri",
+    "url": "https://www.gem.wiki/Badri_Oil_and_Gas_Field_(Egypt)",
+    "checked_at": "2026-10-01",
+    "error": "HTTP Error 403: Forbidden",
+    "url_role": "候选目录URL（可能由名称构造）；不是新确认的引用来源",
+    "fact_verification": "只探测页面；HTTP成功不等于数值核验，失败不代表资产不存在"
+  },
+  {
+    "country": "伊朗",
+    "name": "Aban",
+    "url": "https://www.gem.wiki/Aban_Oil_Field_(Iran)",
+    "checked_at": "2026-10-01",
+    "error": "HTTP Error 403: Forbidden",
+    "url_role": "候选目录URL（可能由名称构造）；不是新确认的引用来源",
+    "fact_verification": "只探测页面；HTTP成功不等于数值核验，失败不代表资产不存在"
+  },
+  {
+    "country": "埃及",
+    "name": "Bakr",
+    "url": "https://www.gem.wiki/Bakr_Oil_and_Gas_Field_(Egypt)",
+    "checked_at": "2026-10-01",
+    "error": "HTTP Error 403: Forbidden",
+    "url_role": "候选目录URL（可能由名称构造）；不是新确认的引用来源",
+    "fact_verification": "只探测页面；HTTP成功不等于数值核验，失败不代表资产不存在"
+  },
+  {
+    "country": "以色列",
+    "name": "Zeus",
+    "url": "https://www.gem.wiki/Zeus_Gas_Field_(Israel)",
+    "checked_at": "2026-10-01",
+    "error": "HTTP Error 403: Forbidden",
+    "url_role": "候选目录URL（可能由名称构造）；不是新确认的引用来源",
+    "fact_verification": "只探测页面；HTTP成功不等于数值核验，失败不代表资产不存在"
+  },
+  {
+    "country": "埃及",
+    "name": "Yazzi",
+    "url": "https://www.gem.wiki/Yazzi_Oil_and_Gas_Field_(Egypt)",
+    "checked_at": "2026-10-01",
+    "error": "HTTP Error 403: Forbidden",
+    "url_role": "候选目录URL（可能由名称构造）；不是新确认的引用来源",
+    "fact_verification": "只探测页面；HTTP成功不等于数值核验，失败不代表资产不存在"
+  },
+  {
+    "country": "伊朗",
+    "name": "Balaroud",
+    "url": "https://www.gem.wiki/Balaroud_Oil_and_Gas_Field_(Iran)",
+    "checked_at": "2026-10-01",
+    "error": "HTTP Error 403: Forbidden",
+    "url_role": "候选目录URL（可能由名称构造）；不是新确认的引用来源",
+    "fact_verification": "只探测页面；HTTP成功不等于数值核验，失败不代表资产不存在"
+  },
+  {
+    "country": "埃及",
+    "name": "WDDM Phase 11 Gas Phase",
+    "url": "https://www.gem.wiki/WDDM_Phase_11_Gas_Phase_(Egypt)",
+    "checked_at": "2026-10-01",
+    "error": "HTTP Error 403: Forbidden",
+    "url_role": "候选目录URL（可能由名称构造）；不是新确认的引用来源",
+    "fact_verification": "只探测页面；HTTP成功不等于数值核验，失败不代表资产不存在"
+  },
+  {
+    "country": "阿联酋",
+    "name": "Ras Al Sadr",
+    "url": "https://www.gem.wiki/Ras_Al_Sadr_Gas_Field_(United_Arab_Emirates)",
+    "checked_at": "2026-10-01",
+    "error": "HTTP Error 403: Forbidden",
+    "url_role": "候选目录URL（可能由名称构造）；不是新确认的引用来源",
+    "fact_verification": "只探测页面；HTTP成功不等于数值核验，失败不代表资产不存在"
+  },
+  {
+    "country": "埃及",
+    "name": "Belayim Marine",
+    "url": "https://www.gem.wiki/Belayim_Marine_Oil_and_Gas_Field_(Egypt)",
+    "checked_at": "2026-10-01",
+    "error": "HTTP Error 403: Forbidden",
+    "url_role": "候选目录URL（可能由名称构造）；不是新确认的引用来源",
+    "fact_verification": "只探测页面；HTTP成功不等于数值核验，失败不代表资产不存在"
+  },
+  {
+    "country": "叙利亚",
+    "name": "Wahab",
+    "url": "https://www.gem.wiki/Wahab_Oil_Field_(Syria)",
+    "checked_at": "2026-10-01",
+    "error": "HTTP Error 403: Forbidden",
+    "url_role": "候选目录URL（可能由名称构造）；不是新确认的引用来源",
+    "fact_verification": "只探测页面；HTTP成功不等于数值核验，失败不代表资产不存在"
+  },
+  {
+    "country": "埃及",
+    "name": "Bed-2",
+    "url": "https://www.gem.wiki/Bed-2_Oil_and_Gas_Field_(Egypt)",
+    "checked_at": "2026-10-01",
+    "error": "HTTP Error 403: Forbidden",
+    "url_role": "候选目录URL（可能由名称构造）；不是新确认的引用来源",
+    "fact_verification": "只探测页面；HTTP成功不等于数值核验，失败不代表资产不存在"
+  },
+  {
+    "country": "阿曼",
+    "name": "Makarem",
+    "url": "https://www.gem.wiki/Makarem_Oil_and_Gas_Field_(Oman)",
+    "checked_at": "2026-10-01",
+    "error": "HTTP Error 403: Forbidden",
+    "url_role": "候选目录URL（可能由名称构造）；不是新确认的引用来源",
+    "fact_verification": "只探测页面；HTTP成功不等于数值核验，失败不代表资产不存在"
+  },
+  {
+    "country": "科威特",
+    "name": "Raudhatain East",
+    "url": "https://www.gem.wiki/Raudhatain_East_Oil_and_Gas_Field_(Kuwait)",
+    "checked_at": "2026-10-01",
+    "error": "HTTP Error 403: Forbidden",
+    "url_role": "候选目录URL（可能由名称构造）；不是新确认的引用来源",
+    "fact_verification": "只探测页面；HTTP成功不等于数值核验，失败不代表资产不存在"
+  },
+  {
+    "country": "阿曼",
+    "name": "Mabrouk Southwest",
+    "url": "https://www.gem.wiki/Mabrouk_Southwest_Oil_and_Gas_Field_(Oman)",
+    "checked_at": "2026-10-01",
+    "error": "HTTP Error 403: Forbidden",
+    "url_role": "候选目录URL（可能由名称构造）；不是新确认的引用来源",
+    "fact_verification": "只探测页面；HTTP成功不等于数值核验，失败不代表资产不存在"
+  },
+  {
+    "country": "卡塔尔",
+    "name": "RasGas 2",
+    "url": "https://www.gem.wiki/RasGas_2_Gas_Field_(Qatar)",
+    "checked_at": "2026-10-01",
+    "error": "HTTP Error 403: Forbidden",
+    "url_role": "候选目录URL（可能由名称构造）；不是新确认的引用来源",
+    "fact_verification": "只探测页面；HTTP成功不等于数值核验，失败不代表资产不存在"
+  },
+  {
+    "country": "卡塔尔",
+    "name": "RasGas 3",
+    "url": "https://www.gem.wiki/RasGas_3_Oil_and_Gas_Field_(Qatar)",
+    "checked_at": "2026-10-01",
+    "error": "HTTP Error 403: Forbidden",
+    "url_role": "候选目录URL（可能由名称构造）；不是新确认的引用来源",
+    "fact_verification": "只探测页面；HTTP成功不等于数值核验，失败不代表资产不存在"
+  },
+  {
+    "country": "伊朗",
+    "name": "Madar",
+    "url": "https://www.gem.wiki/Madar_Gas_Field_(Iran)",
+    "checked_at": "2026-10-01",
+    "error": "HTTP Error 403: Forbidden",
+    "url_role": "候选目录URL（可能由名称构造）；不是新确认的引用来源",
+    "fact_verification": "只探测页面；HTTP成功不等于数值核验，失败不代表资产不存在"
+  },
+  {
+    "country": "沙特阿拉伯",
+    "name": "Maharah",
+    "url": "https://www.gem.wiki/Maharah_Oil_Field_(Saudi_Arabia)",
+    "checked_at": "2026-10-01",
+    "error": "HTTP Error 403: Forbidden",
+    "url_role": "候选目录URL（可能由名称构造）；不是新确认的引用来源",
+    "fact_verification": "只探测页面；HTTP成功不等于数值核验，失败不代表资产不存在"
+  },
+  {
+    "country": "科威特",
+    "name": "Marrat",
+    "url": "https://www.gem.wiki/Marrat_Oil_and_Gas_Field_(Kuwait)",
+    "checked_at": "2026-10-01",
+    "error": "HTTP Error 403: Forbidden",
+    "url_role": "候选目录URL（可能由名称构造）；不是新确认的引用来源",
+    "fact_verification": "只探测页面；HTTP成功不等于数值核验，失败不代表资产不存在"
+  },
+  {
+    "country": "阿曼",
+    "name": "Mabrouk Deep",
+    "url": "https://www.gem.wiki/Mabrouk_Deep_Oil_and_Gas_Field_(Oman)",
+    "checked_at": "2026-10-01",
+    "error": "HTTP Error 403: Forbidden",
+    "url_role": "候选目录URL（可能由名称构造）；不是新确认的引用来源",
+    "fact_verification": "只探测页面；HTTP成功不等于数值核验，失败不代表资产不存在"
+  },
+  {
+    "country": "埃及",
+    "name": "Python",
+    "url": "https://www.gem.wiki/Python_Oil_and_Gas_Field_(Egypt)",
+    "checked_at": "2026-10-01",
+    "error": "HTTP Error 403: Forbidden",
+    "url_role": "候选目录URL（可能由名称构造）；不是新确认的引用来源",
+    "fact_verification": "只探测页面；HTTP成功不等于数值核验，失败不代表资产不存在"
+  },
+  {
+    "country": "以色列",
+    "name": "Mari-B",
+    "url": "https://www.gem.wiki/Mari-B_Oil_and_Gas_Field_(Israel)",
+    "checked_at": "2026-10-01",
+    "error": "HTTP Error 403: Forbidden",
+    "url_role": "候选目录URL（可能由名称构造）；不是新确认的引用来源",
+    "fact_verification": "只探测页面；HTTP成功不等于数值核验，失败不代表资产不存在"
+  },
+  {
+    "country": "科威特",
+    "name": "Lulu",
+    "url": "https://www.gem.wiki/Lulu_Oil_and_Gas_Field_(Kuwait,_Saudi_Arabia,_Iran)",
+    "checked_at": "2026-10-01",
+    "error": "HTTP Error 403: Forbidden",
+    "url_role": "候选目录URL（可能由名称构造）；不是新确认的引用来源",
+    "fact_verification": "只探测页面；HTTP成功不等于数值核验，失败不代表资产不存在"
+  },
+  {
+    "country": "埃及",
+    "name": "Saffron",
+    "url": "https://www.gem.wiki/Saffron_Oil_and_Gas_Field_(Egypt)",
+    "checked_at": "2026-10-01",
+    "error": "HTTP Error 403: Forbidden",
+    "url_role": "候选目录URL（可能由名称构造）；不是新确认的引用来源",
+    "fact_verification": "只探测页面；HTTP成功不等于数值核验，失败不代表资产不存在"
+  },
+  {
+    "country": "阿联酋",
+    "name": "Qusahwira (Phase 2)",
+    "url": "https://www.gem.wiki/Qusahwira_(Phase_2)_Oil_Field_(United_Arab_Emirates)",
+    "checked_at": "2026-10-01",
+    "error": "HTTP Error 403: Forbidden",
+    "url_role": "候选目录URL（可能由名称构造）；不是新确认的引用来源",
+    "fact_verification": "只探测页面；HTTP成功不等于数值核验，失败不代表资产不存在"
+  },
+  {
+    "country": "阿联酋",
+    "name": "Qusahwira (Phase 1)",
+    "url": "https://www.gem.wiki/Qusahwira_(Phase_1)_Oil_Field_(United_Arab_Emirates)",
+    "checked_at": "2026-10-01",
+    "error": "HTTP Error 403: Forbidden",
+    "url_role": "候选目录URL（可能由名称构造）；不是新确认的引用来源",
+    "fact_verification": "只探测页面；HTTP成功不等于数值核验，失败不代表资产不存在"
+  },
+  {
+    "country": "阿曼",
+    "name": "Maradi Huraymah/Fushaigah",
+    "url": "https://www.gem.wiki/Maradi_Huraymah/Fushaigah_Oil_and_Gas_Field_(Oman)",
+    "checked_at": "2026-10-01",
+    "error": "HTTP Error 403: Forbidden",
+    "url_role": "候选目录URL（可能由名称构造）；不是新确认的引用来源",
+    "fact_verification": "只探测页面；HTTP成功不等于数值核验，失败不代表资产不存在"
+  },
+  {
+    "country": "埃及",
+    "name": "Qarun",
+    "url": "https://www.gem.wiki/Qarun_Oil_and_Gas_Field_(Egypt)",
+    "checked_at": "2026-10-01",
+    "error": "HTTP Error 403: Forbidden",
+    "url_role": "候选目录URL（可能由名称构造）；不是新确认的引用来源",
+    "fact_verification": "只探测页面；HTTP成功不等于数值核验，失败不代表资产不存在"
+  },
+  {
+    "country": "卡塔尔",
+    "name": "Qatargas 1",
+    "url": "https://www.gem.wiki/Qatargas_1_Gas_Field_(Qatar)",
+    "checked_at": "2026-10-01",
+    "error": "HTTP Error 403: Forbidden",
+    "url_role": "候选目录URL（可能由名称构造）；不是新确认的引用来源",
+    "fact_verification": "只探测页面；HTTP成功不等于数值核验，失败不代表资产不存在"
+  },
+  {
+    "country": "阿曼",
+    "name": "Sadad North",
+    "url": "https://www.gem.wiki/Sadad_North_Oil_Field_(Oman)",
+    "checked_at": "2026-10-01",
+    "error": "HTTP Error 403: Forbidden",
+    "url_role": "候选目录URL（可能由名称构造）；不是新确认的引用来源",
+    "fact_verification": "只探测页面；HTTP成功不等于数值核验，失败不代表资产不存在"
+  },
+  {
+    "country": "伊朗",
+    "name": "Lali",
+    "url": "https://www.gem.wiki/Lali_Oil_Field_(Iran)",
+    "checked_at": "2026-10-01",
+    "error": "HTTP Error 403: Forbidden",
+    "url_role": "候选目录URL（可能由名称构造）；不是新确认的引用来源",
+    "fact_verification": "只探测页面；HTTP成功不等于数值核验，失败不代表资产不存在"
+  },
+  {
+    "country": "阿曼",
+    "name": "Saih Rawl",
+    "url": "https://www.gem.wiki/Saih_Rawl_Oil_and_Gas_Field_(Oman)",
+    "checked_at": "2026-10-01",
+    "error": "HTTP Error 403: Forbidden",
+    "url_role": "候选目录URL（可能由名称构造）；不是新确认的引用来源",
+    "fact_verification": "只探测页面；HTTP成功不等于数值核验，失败不代表资产不存在"
+  },
+  {
+    "country": "伊朗",
+    "name": "Rudak Milatun",
+    "url": "https://www.gem.wiki/Rudak_Milatun_Oil_and_Gas_Field_(Iran)",
+    "checked_at": "2026-10-01",
+    "error": "HTTP Error 403: Forbidden",
+    "url_role": "候选目录URL（可能由名称构造）；不是新确认的引用来源",
+    "fact_verification": "只探测页面；HTTP成功不等于数值核验，失败不代表资产不存在"
+  },
+  {
+    "country": "阿曼",
+    "name": "Runib",
+    "url": "https://www.gem.wiki/Runib_Oil_Field_(Oman)",
+    "checked_at": "2026-10-01",
+    "error": "HTTP Error 403: Forbidden",
+    "url_role": "候选目录URL（可能由名称构造）；不是新确认的引用来源",
+    "fact_verification": "只探测页面；HTTP成功不等于数值核验，失败不代表资产不存在"
+  },
+  {
+    "country": "伊拉克",
+    "name": "Salman",
+    "url": "https://www.gem.wiki/Salman_Oil_and_Gas_Field_(Iraq)",
+    "checked_at": "2026-10-01",
+    "error": "HTTP Error 403: Forbidden",
+    "url_role": "候选目录URL（可能由名称构造）；不是新确认的引用来源",
+    "fact_verification": "只探测页面；HTTP成功不等于数值核验，失败不代表资产不存在"
+  },
+  {
+    "country": "以色列",
+    "name": "Noa",
+    "url": "https://www.gem.wiki/Noa_Gas_Field_(Israel)",
+    "checked_at": "2026-10-01",
+    "error": "HTTP Error 403: Forbidden",
+    "url_role": "候选目录URL（可能由名称构造）；不是新确认的引用来源",
+    "fact_verification": "只探测页面；HTTP成功不等于数值核验，失败不代表资产不存在"
+  },
+  {
+    "country": "沙特阿拉伯",
+    "name": "Nuayyim",
+    "url": "https://www.gem.wiki/Nuayyim_Oil_and_Gas_Field_(Saudi_Arabia)",
+    "checked_at": "2026-10-01",
+    "error": "HTTP Error 403: Forbidden",
+    "url_role": "候选目录URL（可能由名称构造）；不是新确认的引用来源",
+    "fact_verification": "只探测页面；HTTP成功不等于数值核验，失败不代表资产不存在"
+  },
+  {
+    "country": "阿曼",
+    "name": "Sakhiya",
+    "url": "https://www.gem.wiki/Sakhiya_Oil_Field_(Oman)",
+    "checked_at": "2026-10-01",
+    "error": "HTTP Error 403: Forbidden",
+    "url_role": "候选目录URL（可能由名称构造）；不是新确认的引用来源",
+    "fact_verification": "只探测页面；HTTP成功不等于数值核验，失败不代表资产不存在"
+  },
+  {
+    "country": "埃及",
+    "name": "Nooros East",
+    "url": "https://www.gem.wiki/Nooros_East_Oil_and_Gas_Field_(Egypt)",
+    "checked_at": "2026-10-01",
+    "error": "HTTP Error 403: Forbidden",
+    "url_role": "候选目录URL（可能由名称构造）；不是新确认的引用来源",
+    "fact_verification": "只探测页面；HTTP成功不等于数值核验，失败不代表资产不存在"
+  },
+  {
+    "country": "阿曼",
+    "name": "Rima",
+    "url": "https://www.gem.wiki/Rima_Oil_Field_(Oman)",
+    "checked_at": "2026-10-01",
+    "error": "HTTP Error 403: Forbidden",
+    "url_role": "候选目录URL（可能由名称构造）；不是新确认的引用来源",
+    "fact_verification": "只探测页面；HTTP成功不等于数值核验，失败不代表资产不存在"
+  },
+  {
+    "country": "埃及",
+    "name": "Nour",
+    "url": "https://www.gem.wiki/Nour_Gas_Field_(Egypt)",
+    "checked_at": "2026-10-01",
+    "error": "HTTP Error 403: Forbidden",
+    "url_role": "候选目录URL（可能由名称构造）；不是新确认的引用来源",
+    "fact_verification": "只探测页面；HTTP成功不等于数值核验，失败不代表资产不存在"
+  },
+  {
+    "country": "埃及",
+    "name": "North Abu Qir PIII",
+    "url": "https://www.gem.wiki/North_Abu_Qir_PIII_Oil_and_Gas_Field_(Egypt)",
+    "checked_at": "2026-10-01",
+    "error": "HTTP Error 403: Forbidden",
+    "url_role": "候选目录URL（可能由名称构造）；不是新确认的引用来源",
+    "fact_verification": "只探测页面；HTTP成功不等于数值核验，失败不代表资产不存在"
+  },
+  {
+    "country": "埃及",
+    "name": "Nidoco NW",
+    "url": "https://www.gem.wiki/Nidoco_NW_Gas_Field_(Egypt)",
+    "checked_at": "2026-10-01",
+    "error": "HTTP Error 403: Forbidden",
+    "url_role": "候选目录URL（可能由名称构造）；不是新确认的引用来源",
+    "fact_verification": "只探测页面；HTTP成功不等于数值核验，失败不代表资产不存在"
+  },
+  {
+    "country": "埃及",
+    "name": "North Safa",
+    "url": "https://www.gem.wiki/North_Safa_Oil_and_Gas_Field_(Egypt)",
+    "checked_at": "2026-10-01",
+    "error": "HTTP Error 403: Forbidden",
+    "url_role": "候选目录URL（可能由名称构造）；不是新确认的引用来源",
+    "fact_verification": "只探测页面；HTTP成功不等于数值核验，失败不代表资产不存在"
+  },
+  {
+    "country": "伊朗",
+    "name": "Pol Dokhtar",
+    "url": "https://www.gem.wiki/Pol_Dokhtar_Oil_and_Gas_Field_(Iran)",
+    "checked_at": "2026-10-01",
+    "error": "HTTP Error 403: Forbidden",
+    "url_role": "候选目录URL（可能由名称构造）；不是新确认的引用来源",
+    "fact_verification": "只探测页面；HTTP成功不等于数值核验，失败不代表资产不存在"
+  },
+  {
+    "country": "科威特",
+    "name": "North Wafra",
+    "url": "https://www.gem.wiki/North_Wafra_Oil_and_Gas_Field_(Kuwait,_Saudi_Arabia)",
+    "checked_at": "2026-10-01",
+    "error": "HTTP Error 403: Forbidden",
+    "url_role": "候选目录URL（可能由名称构造）；不是新确认的引用来源",
+    "fact_verification": "只探测页面；HTTP成功不等于数值核验，失败不代表资产不存在"
+  },
+  {
+    "country": "土耳其",
+    "name": "North Sakarya",
+    "url": "https://www.gem.wiki/North_Sakarya_Gas_Field_(Türkiye)",
+    "checked_at": "2026-10-01",
+    "error": "HTTP Error 403: Forbidden",
+    "url_role": "候选目录URL（可能由名称构造）；不是新确认的引用来源",
+    "fact_verification": "只探测页面；HTTP成功不等于数值核验，失败不代表资产不存在"
+  },
+  {
+    "country": "埃及",
+    "name": "Narges",
+    "url": "https://www.gem.wiki/Narges_Gas_Field_(Egypt)",
+    "checked_at": "2026-10-01",
+    "error": "HTTP Error 403: Forbidden",
+    "url_role": "候选目录URL（可能由名称构造）；不是新确认的引用来源",
+    "fact_verification": "只探测页面；HTTP成功不等于数值核验，失败不代表资产不存在"
+  },
+  {
+    "country": "伊朗",
+    "name": "Namavaran",
+    "url": "https://www.gem.wiki/Namavaran_Oil_Field_(Iran)",
+    "checked_at": "2026-10-01",
+    "error": "HTTP Error 403: Forbidden",
+    "url_role": "候选目录URL（可能由名称构造）；不是新确认的引用来源",
+    "fact_verification": "只探测页面；HTTP成功不等于数值核验，失败不代表资产不存在"
+  },
+  {
+    "country": "埃及",
+    "name": "Mina West",
+    "url": "https://www.gem.wiki/Mina_West_Gas_Field_(Egypt)",
+    "checked_at": "2026-10-01",
+    "error": "HTTP Error 403: Forbidden",
+    "url_role": "候选目录URL（可能由名称构造）；不是新确认的引用来源",
+    "fact_verification": "只探测页面；HTTP成功不等于数值核验，失败不代表资产不存在"
+  },
+  {
+    "country": "阿联酋",
+    "name": "Mubarak",
+    "url": "https://www.gem.wiki/Mubarak_Oil_and_Gas_Field_(United_Arab_Emirates)",
+    "checked_at": "2026-10-01",
+    "error": "HTTP Error 403: Forbidden",
+    "url_role": "候选目录URL（可能由名称构造）；不是新确认的引用来源",
+    "fact_verification": "只探测页面；HTTP成功不等于数值核验，失败不代表资产不存在"
+  },
+  {
+    "country": "伊朗",
+    "name": "Naft Safid",
+    "url": "https://www.gem.wiki/Naft_Safid_Oil_Field_(Iran)",
+    "checked_at": "2026-10-01",
+    "error": "HTTP Error 403: Forbidden",
+    "url_role": "候选目录URL（可能由名称构造）；不是新确认的引用来源",
+    "fact_verification": "只探测页面；HTTP成功不等于数值核验，失败不代表资产不存在"
+  },
+  {
+    "country": "伊朗",
+    "name": "Nar",
+    "url": "https://www.gem.wiki/Nar_Gas_Field_(Iran)",
+    "checked_at": "2026-10-01",
+    "error": "HTTP Error 403: Forbidden",
+    "url_role": "候选目录URL（可能由名称构造）；不是新确认的引用来源",
+    "fact_verification": "只探测页面；HTTP成功不等于数值核验，失败不代表资产不存在"
+  },
+  {
+    "country": "伊拉克",
+    "name": "Kurdamir",
+    "url": "https://www.gem.wiki/Kurdamir_Gas_Field_(Iraq)",
+    "checked_at": "2026-10-01",
+    "error": "HTTP Error 403: Forbidden",
+    "url_role": "候选目录URL（可能由名称构造）；不是新确认的引用来源",
+    "fact_verification": "只探测页面；HTTP成功不等于数值核验，失败不代表资产不存在"
+  },
+  {
+    "country": "沙特阿拉伯",
+    "name": "Haradh",
+    "url": "https://www.gem.wiki/Haradh_Gas_Field_(Saudi_Arabia)",
+    "checked_at": "2026-10-01",
+    "error": "HTTP Error 403: Forbidden",
+    "url_role": "候选目录URL（可能由名称构造）；不是新确认的引用来源",
+    "fact_verification": "只探测页面；HTTP成功不等于数值核验，失败不代表资产不存在"
+  },
+  {
+    "country": "叙利亚",
+    "name": "Habbari",
+    "url": "https://www.gem.wiki/Habbari_Oil_Field_(Syria)",
+    "checked_at": "2026-10-01",
+    "error": "HTTP Error 403: Forbidden",
+    "url_role": "候选目录URL（可能由名称构造）；不是新确认的引用来源",
+    "fact_verification": "只探测页面；HTTP成功不等于数值核验，失败不代表资产不存在"
+  },
+  {
+    "country": "阿联酋",
+    "name": "Habshan",
+    "url": "https://www.gem.wiki/Habshan_Oil_and_Gas_Field_(United_Arab_Emirates)",
+    "checked_at": "2026-10-01",
+    "error": "HTTP Error 403: Forbidden",
+    "url_role": "候选目录URL（可能由名称构造）；不是新确认的引用来源",
+    "fact_verification": "只探测页面；HTTP成功不等于数值核验，失败不代表资产不存在"
+  },
+  {
+    "country": "土耳其",
+    "name": "Goktepe",
+    "url": "https://www.gem.wiki/Goktepe_Gas_Field_(Türkiye)",
+    "checked_at": "2026-10-01",
+    "error": "HTTP Error 403: Forbidden",
+    "url_role": "候选目录URL（可能由名称构造）；不是新确认的引用来源",
+    "fact_verification": "只探测页面；HTTP成功不等于数值核验，失败不代表资产不存在"
+  },
+  {
+    "country": "埃及",
+    "name": "GNN",
+    "url": "https://www.gem.wiki/GNN_Oil_and_Gas_Field_(Egypt)",
+    "checked_at": "2026-10-01",
+    "error": "HTTP Error 403: Forbidden",
+    "url_role": "候选目录URL（可能由名称构造）；不是新确认的引用来源",
+    "fact_verification": "只探测页面；HTTP成功不等于数值核验，失败不代表资产不存在"
+  },
+  {
+    "country": "伊朗",
+    "name": "Golshan",
+    "url": "https://www.gem.wiki/Golshan_Gas_Field_(Iran)",
+    "checked_at": "2026-10-01",
+    "error": "HTTP Error 403: Forbidden",
+    "url_role": "候选目录URL（可能由名称构造）；不是新确认的引用来源",
+    "fact_verification": "只探测页面；HTTP成功不等于数值核验，失败不代表资产不存在"
+  },
+  {
+    "country": "埃及",
+    "name": "Harmattan",
+    "url": "https://www.gem.wiki/Harmattan_Gas_Field_(Egypt)",
+    "checked_at": "2026-10-01",
+    "error": "HTTP Error 403: Forbidden",
+    "url_role": "候选目录URL（可能由名称构造）；不是新确认的引用来源",
+    "fact_verification": "只探测页面；HTTP成功不等于数值核验，失败不代表资产不存在"
+  },
+  {
+    "country": "科威特",
+    "name": "Humma",
+    "url": "https://www.gem.wiki/Humma_Oil_and_Gas_Field_(Kuwait,_Saudi_Arabia)",
+    "checked_at": "2026-10-01",
+    "error": "HTTP Error 403: Forbidden",
+    "url_role": "候选目录URL（可能由名称构造）；不是新确认的引用来源",
+    "fact_verification": "只探测页面；HTTP成功不等于数值核验，失败不代表资产不存在"
+  },
+  {
+    "country": "埃及",
+    "name": "Hilal",
+    "url": "https://www.gem.wiki/Hilal_Oil_and_Gas_Field_(Egypt)",
+    "checked_at": "2026-10-01",
+    "error": "HTTP Error 403: Forbidden",
+    "url_role": "候选目录URL（可能由名称构造）；不是新确认的引用来源",
+    "fact_verification": "只探测页面；HTTP成功不等于数值核验，失败不代表资产不存在"
+  },
+  {
+    "country": "沙特阿拉伯",
+    "name": "Hasbah",
+    "url": "https://www.gem.wiki/Hasbah_Oil_and_Gas_Field_(Saudi_Arabia)",
+    "checked_at": "2026-10-01",
+    "error": "HTTP Error 403: Forbidden",
+    "url_role": "候选目录URL（可能由名称构造）；不是新确认的引用来源",
+    "fact_verification": "只探测页面；HTTP成功不等于数值核验，失败不代表资产不存在"
+  },
+  {
+    "country": "科威特",
+    "name": "Homah",
+    "url": "https://www.gem.wiki/Homah_Oil_and_Gas_Field_(Kuwait)",
+    "checked_at": "2026-10-01",
+    "error": "HTTP Error 403: Forbidden",
+    "url_role": "候选目录URL（可能由名称构造）；不是新确认的引用来源",
+    "fact_verification": "只探测页面；HTTP成功不等于数值核验，失败不代表资产不存在"
+  },
+  {
+    "country": "沙特阿拉伯",
+    "name": "Hawiyah",
+    "url": "https://www.gem.wiki/Hawiyah_Gas_Field_(Saudi_Arabia)",
+    "checked_at": "2026-10-01",
+    "error": "HTTP Error 403: Forbidden",
+    "url_role": "候选目录URL（可能由名称构造）；不是新确认的引用来源",
+    "fact_verification": "只探测页面；HTTP成功不等于数值核验，失败不代表资产不存在"
+  },
+  {
+    "country": "埃及",
+    "name": "South Sidri",
+    "url": "https://www.gem.wiki/South_Sidri_Oil_Field_(Egypt)",
+    "checked_at": "2026-10-01",
+    "error": "HTTP Error 403: Forbidden",
+    "url_role": "候选目录URL（可能由名称构造）；不是新确认的引用来源",
+    "fact_verification": "只探测页面；HTTP成功不等于数值核验，失败不代表资产不存在"
+  },
+  {
+    "country": "阿曼",
+    "name": "Fahd South",
+    "url": "https://www.gem.wiki/Fahd_South_Oil_Field_(Oman)",
+    "checked_at": "2026-10-01",
+    "error": "HTTP Error 403: Forbidden",
+    "url_role": "候选目录URL（可能由名称构造）；不是新确认的引用来源",
+    "fact_verification": "只探测页面；HTTP成功不等于数值核验，失败不代表资产不存在"
+  },
+  {
+    "country": "科威特",
+    "name": "South Magwa",
+    "url": "https://www.gem.wiki/South_Magwa_Oil_Field_(Kuwait)",
+    "checked_at": "2026-10-01",
+    "error": "HTTP Error 403: Forbidden",
+    "url_role": "候选目录URL（可能由名称构造）；不是新确认的引用来源",
+    "fact_verification": "只探测页面；HTTP成功不等于数值核验，失败不代表资产不存在"
+  },
+  {
+    "country": "伊朗",
+    "name": "Esfandiar",
+    "url": "https://www.gem.wiki/Esfandiar_Oil_Field_(Iran)",
+    "checked_at": "2026-10-01",
+    "error": "HTTP Error 403: Forbidden",
+    "url_role": "候选目录URL（可能由名称构造）；不是新确认的引用来源",
+    "fact_verification": "只探测页面；HTTP成功不等于数值核验，失败不代表资产不存在"
+  },
+  {
+    "country": "以色列",
+    "name": "Hermes",
+    "url": "https://www.gem.wiki/Hermes_Gas_Field_(Israel)",
+    "checked_at": "2026-10-01",
+    "error": "HTTP Error 403: Forbidden",
+    "url_role": "候选目录URL（可能由名称构造）；不是新确认的引用来源",
+    "fact_verification": "只探测页面；HTTP成功不等于数值核验，失败不代表资产不存在"
+  },
+  {
+    "country": "阿曼",
+    "name": "Fahd Southwest",
+    "url": "https://www.gem.wiki/Fahd_Southwest_Oil_Field_(Oman)",
+    "checked_at": "2026-10-01",
+    "error": "HTTP Error 403: Forbidden",
+    "url_role": "候选目录URL（可能由名称构造）；不是新确认的引用来源",
+    "fact_verification": "只探测页面；HTTP成功不等于数值核验，失败不代表资产不存在"
+  },
+  {
+    "country": "阿曼",
+    "name": "Ghaba North",
+    "url": "https://www.gem.wiki/Ghaba_North_Oil_Field_(Oman)",
+    "checked_at": "2026-10-01",
+    "error": "HTTP Error 403: Forbidden",
+    "url_role": "候选目录URL（可能由名称构造）；不是新确认的引用来源",
+    "fact_verification": "只探测页面；HTTP成功不等于数值核验，失败不代表资产不存在"
+  },
+  {
+    "country": "埃及",
+    "name": "El Qar",
+    "url": "https://www.gem.wiki/El_Qar_Oil_and_Gas_Field_(Egypt)",
+    "checked_at": "2026-10-01",
+    "error": "HTTP Error 403: Forbidden",
+    "url_role": "候选目录URL（可能由名称构造）；不是新确认的引用来源",
+    "fact_verification": "只探测页面；HTTP成功不等于数值核验，失败不代表资产不存在"
+  },
+  {
+    "country": "以色列",
+    "name": "Tamar Southwest",
+    "url": "https://www.gem.wiki/Tamar_Southwest_Oil_and_Gas_Field_(Israel)",
+    "checked_at": "2026-10-01",
+    "error": "HTTP Error 403: Forbidden",
+    "url_role": "候选目录URL（可能由名称构造）；不是新确认的引用来源",
+    "fact_verification": "只探测页面；HTTP成功不等于数值核验，失败不代表资产不存在"
+  },
+  {
+    "country": "埃及",
+    "name": "El King",
+    "url": "https://www.gem.wiki/El_King_Oil_and_Gas_Field_(Egypt)",
+    "checked_at": "2026-10-01",
+    "error": "HTTP Error 403: Forbidden",
+    "url_role": "候选目录URL（可能由名称构造）；不是新确认的引用来源",
+    "fact_verification": "只探测页面；HTTP成功不等于数值核验，失败不代表资产不存在"
+  },
+  {
+    "country": "阿曼",
+    "name": "Ghafeer",
+    "url": "https://www.gem.wiki/Ghafeer_Oil_and_Gas_Field_(Oman)",
+    "checked_at": "2026-10-01",
+    "error": "HTTP Error 403: Forbidden",
+    "url_role": "候选目录URL（可能由名称构造）；不是新确认的引用来源",
+    "fact_verification": "只探测页面；HTTP成功不等于数值核验，失败不代表资产不存在"
+  },
+  {
+    "country": "以色列",
+    "name": "Karish North",
+    "url": "https://www.gem.wiki/Karish_North_Oil_and_Gas_Field_(Israel)",
+    "checked_at": "2026-10-01",
+    "error": "HTTP Error 403: Forbidden",
+    "url_role": "候选目录URL（可能由名称构造）；不是新确认的引用来源",
+    "fact_verification": "只探测页面；HTTP成功不等于数值核验，失败不代表资产不存在"
+  },
+  {
+    "country": "埃及",
+    "name": "Khalda",
+    "url": "https://www.gem.wiki/Khalda_Oil_and_Gas_Field_(Egypt)",
+    "checked_at": "2026-10-01",
+    "error": "HTTP Error 403: Forbidden",
+    "url_role": "候选目录URL（可能由名称构造）；不是新确认的引用来源",
+    "fact_verification": "只探测页面；HTTP成功不等于数值核验，失败不代表资产不存在"
+  },
+  {
+    "country": "埃及",
+    "name": "Scarab",
+    "url": "https://www.gem.wiki/Scarab_Oil_and_Gas_Field_(Egypt)",
+    "checked_at": "2026-10-01",
+    "error": "HTTP Error 403: Forbidden",
+    "url_role": "候选目录URL（可能由名称构造）；不是新确认的引用来源",
+    "fact_verification": "只探测页面；HTTP成功不等于数值核验，失败不代表资产不存在"
+  },
+  {
+    "country": "以色列",
+    "name": "Katlan",
+    "url": "https://www.gem.wiki/Katlan_Gas_Field_(Israel)",
+    "checked_at": "2026-10-01",
+    "error": "HTTP Error 403: Forbidden",
+    "url_role": "候选目录URL（可能由名称构造）；不是新确认的引用来源",
+    "fact_verification": "只探测页面；HTTP成功不等于数值核验，失败不代表资产不存在"
+  },
+  {
+    "country": "巴林",
+    "name": "Khaleej Al-Bahrain",
+    "url": "https://www.gem.wiki/Khaleej_Al-Bahrain_Oil_and_Gas_Field_(Bahrain)",
+    "checked_at": "2026-10-01",
+    "error": "HTTP Error 403: Forbidden",
+    "url_role": "候选目录URL（可能由名称构造）；不是新确认的引用来源",
+    "fact_verification": "只探测页面；HTTP成功不等于数值核验，失败不代表资产不存在"
+  },
+  {
+    "country": "科威特",
+    "name": "Khashman",
+    "url": "https://www.gem.wiki/Khashman_Oil_and_Gas_Field_(Kuwait)",
+    "checked_at": "2026-10-01",
+    "error": "HTTP Error 403: Forbidden",
+    "url_role": "候选目录URL（可能由名称构造）；不是新确认的引用来源",
+    "fact_verification": "只探测页面；HTTP成功不等于数值核验，失败不代表资产不存在"
+  },
+  {
+    "country": "伊朗",
+    "name": "Kilur Karim",
+    "url": "https://www.gem.wiki/Kilur_Karim_Oil_Field_(Iran)",
+    "checked_at": "2026-10-01",
+    "error": "HTTP Error 403: Forbidden",
+    "url_role": "候选目录URL（可能由名称构造）；不是新确认的引用来源",
+    "fact_verification": "只探测页面；HTTP成功不等于数值核验，失败不代表资产不存在"
+  },
+  {
+    "country": "埃及",
+    "name": "Saqqara",
+    "url": "https://www.gem.wiki/Saqqara_Oil_and_Gas_Field_(Egypt)",
+    "checked_at": "2026-10-01",
+    "error": "HTTP Error 403: Forbidden",
+    "url_role": "候选目录URL（可能由名称构造）；不是新确认的引用来源",
+    "fact_verification": "只探测页面；HTTP成功不等于数值核验，失败不代表资产不存在"
+  },
+  {
+    "country": "埃及",
+    "name": "Sapphire",
+    "url": "https://www.gem.wiki/Sapphire_Gas_Field_(Egypt)",
+    "checked_at": "2026-10-01",
+    "error": "HTTP Error 403: Forbidden",
+    "url_role": "候选目录URL（可能由名称构造）；不是新确认的引用来源",
+    "fact_verification": "只探测页面；HTTP成功不等于数值核验，失败不代表资产不存在"
+  },
+  {
+    "country": "伊朗",
+    "name": "Kuh-e-Mond",
+    "url": "https://www.gem.wiki/Kuh-e-Mond_Oil_Field_(Iran)",
+    "checked_at": "2026-10-01",
+    "error": "HTTP Error 403: Forbidden",
+    "url_role": "候选目录URL（可能由名称构造）；不是新确认的引用来源",
+    "fact_verification": "只探测页面；HTTP成功不等于数值核验，失败不代表资产不存在"
+  },
+  {
+    "country": "沙特阿拉伯",
+    "name": "Karan",
+    "url": "https://www.gem.wiki/Karan_Gas_Field_(Saudi_Arabia)",
+    "checked_at": "2026-10-01",
+    "error": "HTTP Error 403: Forbidden",
+    "url_role": "候选目录URL（可能由名称构造）；不是新确认的引用来源",
+    "fact_verification": "只探测页面；HTTP成功不等于数值核验，失败不代表资产不存在"
+  },
+  {
+    "country": "伊朗",
+    "name": "Sarkhan",
+    "url": "https://www.gem.wiki/Sarkhan_Oil_and_Gas_Field_(Iran)",
+    "checked_at": "2026-10-01",
+    "error": "HTTP Error 403: Forbidden",
+    "url_role": "候选目录URL（可能由名称构造）；不是新确认的引用来源",
+    "fact_verification": "只探测页面；HTTP成功不等于数值核验，失败不代表资产不存在"
+  },
+  {
+    "country": "伊朗",
+    "name": "Sirri D",
+    "url": "https://www.gem.wiki/Sirri_D_Oil_Field_(Iran)",
+    "checked_at": "2026-10-01",
+    "error": "HTTP Error 403: Forbidden",
+    "url_role": "候选目录URL（可能由名称构造）；不是新确认的引用来源",
+    "fact_verification": "只探测页面；HTTP成功不等于数值核验，失败不代表资产不存在"
+  },
+  {
+    "country": "沙特阿拉伯",
+    "name": "Jalamid",
+    "url": "https://www.gem.wiki/Jalamid_Gas_Field_(Saudi_Arabia)",
+    "checked_at": "2026-10-01",
+    "error": "HTTP Error 403: Forbidden",
+    "url_role": "候选目录URL（可能由名称构造）；不是新确认的引用来源",
+    "fact_verification": "只探测页面；HTTP成功不等于数值核验，失败不代表资产不存在"
+  },
+  {
+    "country": "叙利亚",
+    "name": "Sijan",
+    "url": "https://www.gem.wiki/Sijan_Oil_Field_(Syria)",
+    "checked_at": "2026-10-01",
+    "error": "HTTP Error 403: Forbidden",
+    "url_role": "候选目录URL（可能由名称构造）；不是新确认的引用来源",
+    "fact_verification": "只探测页面；HTTP成功不等于数值核验，失败不代表资产不存在"
+  },
+  {
+    "country": "埃及",
+    "name": "Simian",
+    "url": "https://www.gem.wiki/Simian_Oil_and_Gas_Field_(Egypt)",
+    "checked_at": "2026-10-01",
+    "error": "HTTP Error 403: Forbidden",
+    "url_role": "候选目录URL（可能由名称构造）；不是新确认的引用来源",
+    "fact_verification": "只探测页面；HTTP成功不等于数值核验，失败不代表资产不存在"
+  },
+  {
+    "country": "埃及",
+    "name": "JG-NEAG",
+    "url": "https://www.gem.wiki/JG-NEAG_Oil_and_Gas_Field_(Egypt)",
+    "checked_at": "2026-10-01",
+    "error": "HTTP Error 403: Forbidden",
+    "url_role": "候选目录URL（可能由名称构造）；不是新确认的引用来源",
+    "fact_verification": "只探测页面；HTTP成功不等于数值核验，失败不代表资产不存在"
+  },
+  {
+    "country": "阿联酋",
+    "name": "Jebel Ali",
+    "url": "https://www.gem.wiki/Jebel_Ali_Gas_Field_(United_Arab_Emirates)",
+    "checked_at": "2026-10-01",
+    "error": "HTTP Error 403: Forbidden",
+    "url_role": "候选目录URL（可能由名称构造）；不是新确认的引用来源",
+    "fact_verification": "只探测页面；HTTP成功不等于数值核验，失败不代表资产不存在"
+  },
+  {
+    "country": "埃及",
+    "name": "Shams",
+    "url": "https://www.gem.wiki/Shams_Oil_and_Gas_Field_(Egypt)",
+    "checked_at": "2026-10-01",
+    "error": "HTTP Error 403: Forbidden",
+    "url_role": "候选目录URL（可能由名称构造）；不是新确认的引用来源",
+    "fact_verification": "只探测页面；HTTP成功不等于数值核验，失败不代表资产不存在"
+  },
+  {
+    "country": "伊朗",
+    "name": "Sirri A",
+    "url": "https://www.gem.wiki/Sirri_A_Oil_Field_(Iran)",
+    "checked_at": "2026-10-01",
+    "error": "HTTP Error 403: Forbidden",
+    "url_role": "候选目录URL（可能由名称构造）；不是新确认的引用来源",
+    "fact_verification": "只探测页面；HTTP成功不等于数值核验，失败不代表资产不存在"
+  },
+  {
+    "country": "埃及",
+    "name": "July",
+    "url": "https://www.gem.wiki/July_Oil_and_Gas_Field_(Egypt)",
+    "checked_at": "2026-10-01",
+    "error": "HTTP Error 403: Forbidden",
+    "url_role": "候选目录URL（可能由名称构造）；不是新确认的引用来源",
+    "fact_verification": "只探测页面；HTTP成功不等于数值核验，失败不代表资产不存在"
+  },
+  {
+    "country": "以色列",
+    "name": "Shimson",
+    "url": "https://www.gem.wiki/Shimson_Gas_Field_(Israel)",
+    "checked_at": "2026-10-01",
+    "error": "HTTP Error 403: Forbidden",
+    "url_role": "候选目录URL（可能由名称构造）；不是新确认的引用来源",
+    "fact_verification": "只探测页面；HTTP成功不等于数值核验，失败不代表资产不存在"
+  },
+  {
+    "country": "伊朗",
+    "name": "Shahini",
+    "url": "https://www.gem.wiki/Shahini_Gas_Field_(Iran)",
+    "checked_at": "2026-10-01",
+    "error": "HTTP Error 403: Forbidden",
+    "url_role": "候选目录URL（可能由名称构造）；不是新确认的引用来源",
+    "fact_verification": "只探测页面；HTTP成功不等于数值核验，失败不代表资产不存在"
+  },
+  {
+    "country": "埃及",
+    "name": "Shoab Ali",
+    "url": "https://www.gem.wiki/Shoab_Ali_Oil_Field_(Egypt)",
+    "checked_at": "2026-10-01",
+    "error": "HTTP Error 403: Forbidden",
+    "url_role": "候选目录URL（可能由名称构造）；不是新确认的引用来源",
+    "fact_verification": "只探测页面；HTTP成功不等于数值核验，失败不代表资产不存在"
+  },
+  {
+    "country": "伊朗",
+    "name": "Shanul",
+    "url": "https://www.gem.wiki/Shanul_Oil_and_Gas_Field_(Iran)",
+    "checked_at": "2026-10-01",
+    "error": "HTTP Error 403: Forbidden",
+    "url_role": "候选目录URL（可能由名称构造）；不是新确认的引用来源",
+    "fact_verification": "只探测页面；HTTP成功不等于数值核验，失败不代表资产不存在"
+  },
+  {
+    "country": "伊拉克",
+    "name": "Chemchemal",
+    "url": "https://www.gem.wiki/Chemchemal_Gas_Field_(Iraq)",
+    "checked_at": "2026-10-01",
+    "error": "HTTP Error 403: Forbidden",
+    "url_role": "候选目录URL（可能由名称构造）；不是新确认的引用来源",
+    "fact_verification": "只探测页面；HTTP成功不等于数值核验，失败不代表资产不存在"
+  },
+  {
+    "country": "伊拉克",
+    "name": "Khor Mor",
+    "url": "https://www.gem.wiki/Khor_Mor_Gas_Field_(Iraq)",
+    "checked_at": "2026-10-01",
+    "error": "HTTP Error 403: Forbidden",
+    "url_role": "候选目录URL（可能由名称构造）；不是新确认的引用来源",
+    "fact_verification": "只探测页面；HTTP成功不等于数值核验，失败不代表资产不存在"
+  },
+  {
+    "country": "伊朗",
+    "name": "Sulabedar",
+    "url": "https://www.gem.wiki/Sulabedar_Oil_Field_(Iran)",
+    "checked_at": "2026-10-01",
+    "error": "HTTP Error 403: Forbidden",
+    "url_role": "候选目录URL（可能由名称构造）；不是新确认的引用来源",
+    "fact_verification": "只探测页面；HTTP成功不等于数值核验，失败不代表资产不存在"
+  },
+  {
+    "country": "埃及",
+    "name": "Sitra",
+    "url": "https://www.gem.wiki/Sitra_Oil_and_Gas_Field_(Egypt)",
+    "checked_at": "2026-10-01",
+    "error": "HTTP Error 403: Forbidden",
+    "url_role": "候选目录URL（可能由名称构造）；不是新确认的引用来源",
+    "fact_verification": "只探测页面；HTTP成功不等于数值核验，失败不代表资产不存在"
+  },
+  {
+    "country": "土耳其",
+    "name": "Sakarya",
+    "url": "https://www.gem.wiki/Sakarya_Gas_Field_(Turkey)",
+    "checked_at": "2026-10-01",
+    "error": "HTTP Error 403: Forbidden",
+    "url_role": "候选目录URL（可能由名称构造）；不是新确认的引用来源",
+    "fact_verification": "只探测页面；HTTP成功不等于数值核验，失败不代表资产不存在"
+  },
+  {
+    "country": "埃及",
+    "name": "East Bahariya",
+    "url": "https://www.gem.wiki/East_Bahariya_Oil_and_Gas_Field_(Egypt)",
+    "checked_at": "2026-10-01",
+    "error": "HTTP Error 403: Forbidden",
+    "url_role": "候选目录URL（可能由名称构造）；不是新确认的引用来源",
+    "fact_verification": "只探测页面；HTTP成功不等于数值核验，失败不代表资产不存在"
+  },
+  {
+    "country": "叙利亚",
+    "name": "Ahmer",
+    "url": "https://www.gem.wiki/Ahmer_Oil_Field_(Syria)",
+    "checked_at": "2026-10-01",
+    "error": "HTTP Error 403: Forbidden",
+    "url_role": "候选目录URL（可能由名称构造）；不是新确认的引用来源",
+    "fact_verification": "只探测页面；HTTP成功不等于数值核验，失败不代表资产不存在"
+  },
+  {
+    "country": "埃及",
+    "name": "West Kalabsha",
+    "url": "https://www.gem.wiki/West_Kalabsha_Oil_and_Gas_Field_(Egypt)",
+    "checked_at": "2026-10-01",
+    "error": "HTTP Error 403: Forbidden",
+    "url_role": "候选目录URL（可能由名称构造）；不是新确认的引用来源",
+    "fact_verification": "只探测页面；HTTP成功不等于数值核验，失败不代表资产不存在"
+  },
+  {
+    "country": "伊朗",
+    "name": "Toos",
+    "url": "https://www.gem.wiki/Toos_Gas_Field_(Iran)",
+    "checked_at": "2026-10-01",
+    "error": "HTTP Error 403: Forbidden",
+    "url_role": "候选目录URL（可能由名称构造）；不是新确认的引用来源",
+    "fact_verification": "只探测页面；HTTP成功不等于数值核验，失败不代表资产不存在"
+  },
+  {
+    "country": "埃及",
+    "name": "East Beni Suef",
+    "url": "https://www.gem.wiki/East_Beni_Suef_Oil_and_Gas_Field_(Egypt)",
+    "checked_at": "2026-10-01",
+    "error": "HTTP Error 403: Forbidden",
+    "url_role": "候选目录URL（可能由名称构造）；不是新确认的引用来源",
+    "fact_verification": "只探测页面；HTTP成功不等于数值核验，失败不代表资产不存在"
+  },
+  {
+    "country": "叙利亚",
+    "name": "Ratka",
+    "url": "https://www.gem.wiki/Ratka_Oil_Field_(Syria)",
+    "checked_at": "2026-10-01",
+    "error": "HTTP Error 403: Forbidden",
+    "url_role": "候选目录URL（可能由名称构造）；不是新确认的引用来源",
+    "fact_verification": "只探测页面；HTTP成功不等于数值核验，失败不代表资产不存在"
+  },
+  {
+    "country": "伊朗",
+    "name": "Ferdowsi",
+    "url": "https://www.gem.wiki/Ferdowsi_Oil_and_Gas_Field_(Iran)",
+    "checked_at": "2026-10-01",
+    "error": "HTTP Error 403: Forbidden",
+    "url_role": "候选目录URL（可能由名称构造）；不是新确认的引用来源",
+    "fact_verification": "只探测页面；HTTP成功不等于数值核验，失败不代表资产不存在"
+  },
+  {
+    "country": "叙利亚",
+    "name": "Fadeh",
+    "url": "https://www.gem.wiki/Fadeh_Oil_Field_(Syria)",
+    "checked_at": "2026-10-01",
+    "error": "HTTP Error 403: Forbidden",
+    "url_role": "候选目录URL（可能由名称构造）；不是新确认的引用来源",
+    "fact_verification": "只探测页面；HTTP成功不等于数值核验，失败不代表资产不存在"
+  },
+  {
+    "country": "阿曼",
+    "name": "Fahd",
+    "url": "https://www.gem.wiki/Fahd_Oil_Field_(Oman)",
+    "checked_at": "2026-10-01",
+    "error": "HTTP Error 403: Forbidden",
+    "url_role": "候选目录URL（可能由名称构造）；不是新确认的引用来源",
+    "fact_verification": "只探测页面；HTTP成功不等于数值核验，失败不代表资产不存在"
+  },
+  {
+    "country": "以色列",
+    "name": "Royee",
+    "url": "https://www.gem.wiki/Royee_Oil_and_Gas_Field_(Israel)",
+    "checked_at": "2026-10-01",
+    "error": "HTTP Error 403: Forbidden",
+    "url_role": "候选目录URL（可能由名称构造）；不是新确认的引用来源",
+    "fact_verification": "只探测页面；HTTP成功不等于数值核验，失败不代表资产不存在"
+  },
+  {
+    "country": "叙利亚",
+    "name": "Maleh",
+    "url": "https://www.gem.wiki/Maleh_Oil_Field_(Syria)",
+    "checked_at": "2026-10-01",
+    "error": "HTTP Error 403: Forbidden",
+    "url_role": "候选目录URL（可能由名称构造）；不是新确认的引用来源",
+    "fact_verification": "只探测页面；HTTP成功不等于数值核验，失败不代表资产不存在"
+  },
+  {
+    "country": "埃及",
+    "name": "Herunefer",
+    "url": "https://www.gem.wiki/Herunefer_Oil_and_Gas_Field_(Egypt)",
+    "checked_at": "2026-10-01",
+    "error": "HTTP Error 403: Forbidden",
+    "url_role": "候选目录URL（可能由名称构造）；不是新确认的引用来源",
+    "fact_verification": "只探测页面；HTTP成功不等于数值核验，失败不代表资产不存在"
+  },
+  {
+    "country": "伊朗",
+    "name": "Khayyam",
+    "url": "https://www.gem.wiki/Khayyam_Gas_Field_(Iran)",
+    "checked_at": "2026-10-01",
+    "error": "HTTP Error 403: Forbidden",
+    "url_role": "候选目录URL（可能由名称构造）；不是新确认的引用来源",
+    "fact_verification": "只探测页面；HTTP成功不等于数值核验，失败不代表资产不存在"
+  },
+  {
+    "country": "埃及",
+    "name": "Satis West",
+    "url": "https://www.gem.wiki/Satis_West_Gas_Field_(Egypt)",
+    "checked_at": "2026-10-01",
+    "error": "HTTP Error 403: Forbidden",
+    "url_role": "候选目录URL（可能由名称构造）；不是新确认的引用来源",
+    "fact_verification": "只探测页面；HTTP成功不等于数值核验，失败不代表资产不存在"
+  },
+  {
+    "country": "埃及",
+    "name": "Siwa",
+    "url": "https://www.gem.wiki/Siwa_Oil_and_Gas_Field_(Egypt)",
+    "checked_at": "2026-10-01",
+    "error": "HTTP Error 403: Forbidden",
+    "url_role": "候选目录URL（可能由名称构造）；不是新确认的引用来源",
+    "fact_verification": "只探测页面；HTTP成功不等于数值核验，失败不代表资产不存在"
+  },
+  {
+    "country": "埃及",
+    "name": "Kanayes",
+    "url": "https://www.gem.wiki/Kanayes_Oil_and_Gas_Field_(Egypt)",
+    "checked_at": "2026-10-01",
+    "error": "HTTP Error 403: Forbidden",
+    "url_role": "候选目录URL（可能由名称构造）；不是新确认的引用来源",
+    "fact_verification": "只探测页面；HTTP成功不等于数值核验，失败不代表资产不存在"
+  },
+  {
+    "country": "科威特",
+    "name": "Jazza",
+    "url": "https://www.gem.wiki/Jazza_Oil_and_Gas_Field_(Kuwait)",
+    "checked_at": "2026-10-01",
+    "error": "HTTP Error 403: Forbidden",
+    "url_role": "候选目录URL（可能由名称构造）；不是新确认的引用来源",
+    "fact_verification": "只探测页面；HTTP成功不等于数值核验，失败不代表资产不存在"
+  }
+]

@@ -15,15 +15,23 @@ import streamlit as st
 import field_catalog
 import ais
 import portwatch
+import audited_measurements
+import supplemental_assets
+import reconciled_assets
+import port_inventory
 
 # Streamlit 的热重载会重跑此文件；显式重新读取目录模块以同步仓库中的数据修订。
 importlib.invalidate_caches()
+importlib.reload(audited_measurements)
+importlib.reload(supplemental_assets)
+importlib.reload(reconciled_assets)
+importlib.reload(port_inventory)
 CATALOG = importlib.reload(field_catalog)
 AIS = importlib.reload(ais)
 PORTWATCH = importlib.reload(portwatch)
 ASSETS = CATALOG.ASSETS
 
-if (getattr(PORTWATCH, "MODULE_VERSION", 0) < 4
+if (getattr(PORTWATCH, "MODULE_VERSION", 0) < 5
         or not hasattr(PORTWATCH, "chokepoint_activity")
         or not hasattr(PORTWATCH, "port_risk_capacity")):
     st.error("港口数据模块版本未同步。请在 Streamlit 管理页重启应用后重试。")
@@ -104,7 +112,10 @@ st.markdown("""
 """, unsafe_allow_html=True)
 
 METRIC_LABELS = {
+    "estimated_daily_average": "估算期间日均（公布总量×份额）",
     "actual_output": "来源直报实际产量",
+    "sales_volume": "期间销售量（非产量）",
+    "actual_output_boe": "来源实绩（油当量；非原油桶）",
     "derived_daily_average": "历史推算日均产量",
     "capacity": "产能",
     "oil_capacity": "原油产能",
@@ -145,6 +156,13 @@ def display_value(asset: dict[str, object]) -> str:
         except ValueError:
             pass
     return f"{value} {unit}" if unit else str(value)
+
+
+def extra_measurements(asset: dict) -> str:
+    return "；".join(
+        f"{CATALOG.COMMODITY_LABELS[m['commodity']]} {m['value']} {m['unit']}"
+        f"（{METRIC_LABELS[m['metric_type']]}，{m['data_date']}）"
+        for m in asset.get("additional_measurements", [])) or "未披露"
 
 
 def display_date(asset: dict[str, object]) -> str:
@@ -272,6 +290,9 @@ def _popup(asset: dict[str, object]) -> str:
         f'<div class="status">原始状态说明：{esc(asset["status"])}</div>'
         f'<div class="basis">状态依据：{esc(asset["operating_status_basis"])}</div>'
         f'<div class="basis">权益口径：{esc(asset["ownership_basis"])}</div>'
+        f'<div class="basis">其他商品指标：{esc(extra_measurements(asset))}</div>'
+        f'<div class="basis">数据时效：{esc(asset["freshness_note"])}</div>'
+        f'<div class="basis">数值复核：{esc(asset["numeric_audit"])}</div>'
         f'<div class="basis">说明：{esc(asset["note"] or "公开命名资产；本层级数值未公开。")}</div>'
         f'<a class="source" href="{status_source_url}" target="_blank" rel="noopener">生产状态证据</a>'
         f'<a class="source" href="{source_url}" target="_blank" rel="noopener">目录来源：{esc(asset["source"])}</a>'
@@ -349,7 +370,8 @@ def _port_popup(port: dict, day: str) -> str:
         '<div class="basis">活动指数比较相邻等长窗口；100表示持平。平衡指数范围−100至+100，'
         '负值偏进口、正值偏出口。风险运力来自2019—2024港口航线网络，是历史冲击暴露估算。'
         '“—”表示窗口不完整、基期为0或源数据不足，不按零处理。</div>'
-        f'<a class="source" href="{esc(PORTWATCH.SOURCE)}" target="_blank" rel="noopener">IMF PortWatch 数据与方法</a>'
+        f'<div class="basis">统计覆盖：{esc(port.get("coverage_note", ""))}</div>'
+        f'<a class="source" href="{esc(port.get("source_url", PORTWATCH.SOURCE))}" target="_blank" rel="noopener">港口目录/统计来源</a>'
         '</div>'
     )
 
@@ -924,7 +946,8 @@ filtered_all = [
     and (not values_only or asset["value"] is not None)
     and (not output_only or asset["is_daily_output"])
     and (not asset_search or asset_search in str(asset["name"]).lower()
-         or asset_search in str(asset["name_cn"]).lower())
+         or asset_search in str(asset["name_cn"]).lower()
+         or any(asset_search in alias.lower() for alias in asset["aliases"]))
 ]
 filtered = [
     asset for asset in filtered_all
@@ -947,7 +970,7 @@ for port in ports:
         value = port.get(key)
         return None if value is None else round(value / 10000, 6)
 
-    notes = []
+    notes = [port.get("coverage_note", "")]
     if not port.get("has_data"):
         notes.append("所选日缺少源记录")
     if port.get("observed_days") != rolling_days:
@@ -986,7 +1009,8 @@ for port in ports:
                             if port.get("share_tanker") is not None else None),
         f"{rolling_days}天有效日期": port.get("observed_days"),
         "数据提示": "；".join(notes),
-        "纬度": port["lat"], "经度": port["lon"], "来源": PORTWATCH.SOURCE,
+        "纬度": port["lat"], "经度": port["lon"], "来源": port.get("source_url", PORTWATCH.SOURCE),
+        "统计覆盖": port.get("activity_source"), "NGA WPI编号": str(port.get("wpi_ids", [])),
     })
 
 asset_rows = [
@@ -997,6 +1021,9 @@ asset_rows = [
         "组成资产": "、".join(asset["constituent_assets"]) or "—",
         "汇总规则": asset["rollup_policy"],
         "英文名称": asset["name"], "中文名称": asset["name_cn"],
+        "别名": "、".join(asset["aliases"]), "数据时效提示": asset["freshness_note"],
+        "数值复核": asset["numeric_audit"], "数据复核日": asset["data_audit_date"],
+        "其他商品指标": extra_measurements(asset),
         "资产类型": asset["asset_type"], "商品": asset["commodity_label"],
         "生产状态": asset["operating_status_label"], "状态截至": asset["operating_status_as_of"],
         "本层级日产量": daily_output_value(asset), "其他日量指标": other_daily_metric(asset),
@@ -1249,7 +1276,7 @@ with tab_method:
         "避免把更新节奏不同的两张表强行对齐。"
     )
     st.markdown(
-        f"**资产覆盖与战略层级。** 底层目录保留全部{len(ASSETS)}项公开命名的生产、开发、发现或历史资产；"
+        f"**资产覆盖与战略层级（公开目录，非全量保证）。** 底层目录保留全部{len(ASSETS)}项公开命名的生产、开发、发现或历史资产；"
         f"默认地图仅显示{sum(a['strategic_default'] for a in ASSETS)}个战略生产节点，其中"
         f"{sum(a['strategic_default'] and a['map_drawable'] for a in ASSETS)}个具备可绘制坐标。"
         "上级油田群、区块或特许区有"
@@ -1268,3 +1295,17 @@ with tab_method:
         "不得相加。来源为千桶/日的油品数值在界面统一换算为万桶/日；生产状态带证据时点，"
         "不等于实时遥测。"
     )
+
+pending_clues = reconciled_assets.pending()
+with st.expander(f"待核资产线索（{len(pending_clues)}条；未纳入确认目录）"):
+    if pending_clues:
+        st.caption("以下线索来自保存的历史名录。原页及定向检索未取得充分确认内容，保留供继续核验；不填产量或坐标。")
+        st.dataframe(pending_clues, hide_index=True, width="stretch")
+        pending_buffer = io.StringIO()
+        pending_writer = csv.DictWriter(pending_buffer, fieldnames=pending_clues[0].keys())
+        pending_writer.writeheader()
+        pending_writer.writerows(pending_clues)
+        st.download_button("下载待核线索 CSV", pending_buffer.getvalue().encode("utf-8-sig"),
+                           "pending_asset_clues.csv", "text/csv", key="pending_asset_clues")
+    else:
+        st.caption("历史检查点的19条名称线索已完成范围对账。产量、坐标和现时状态的缺口仍见资产审计表。")

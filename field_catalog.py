@@ -237,9 +237,9 @@ ASSETS = [
     record("阿联酋", "SARB Deep Gas", "SARB 深层气项目", "天然气项目", 25.19, 53.18, value="200", metric_type="target_capacity", unit="百万标准立方英尺/日", data_date="2026-01-07", source="ADNOC Ghasha", note="天然气项目，不能与原油日产量相加。"),
     record("阿联酋", "Hail (ADOC)", "海尔（ADOC）", "海上油田", 24.37, 53.41, status="2017年投产", source="ADOC Fields", note="ADOC确认Hail与Mubarraz等田的原油混合外运；原列21千桶/日未在该单田来源中核实，撤回。"),
     record("阿联酋", "Hail (ADNOC Ghasha)", "海尔（ADNOC Ghasha）", "含酸气海上油气田", None, None, status="ADNOC列为Ghasha开发项目组成资产；单田投产状态待核", source="ADNOC Ghasha", note="与上方Hail (ADOC)是不同资产。ADNOC将Hail列入Ghasha项目；项目层级的气量／液体目标不分摊为该田产量，单田坐标和产量未核实。"),
-    record("阿联酋", "Mubarraz", "穆巴拉兹", "海上油田", 24.40, 53.52, source="ADNOC Ghasha"),
-    record("阿联酋", "Umm Al-Anbar", "乌姆阿尔安巴尔", "海上油田", 24.30, 53.45, source="ADNOC Ghasha"),
-    record("阿联酋", "Neewat Al-Ghalan", "尼瓦特阿尔加兰", "海上油田", 24.22, 53.55, source="ADNOC Ghasha"),
+    record("阿联酋", "Mubarraz", "穆巴拉兹", "海上油田", 24.40, 53.52, source="ADOC Fields"),
+    record("阿联酋", "Umm Al-Anbar", "乌姆阿尔安巴尔", "海上油田", 24.30, 53.45, source="ADOC Fields"),
+    record("阿联酋", "Neewat Al-Ghalan", "尼瓦特阿尔加兰", "海上油田", 24.22, 53.55, source="ADOC Fields"),
     record("阿联酋", "Bunduq", "本杜克", "跨境海上油田", 25.22, 52.72, value="9.2", metric_type="actual_output", unit="千桶/日", data_date="2024年平均", source="QatarEnergy", note="QatarEnergy投资者材料第13页列El Bunduq全田2024年平均原油产量；跨境资产仅列一次，不是阿联酋权益量。"),
     record("阿联酋", "Haliba", "哈利巴", "油田", 23.00, 53.80, value="10", metric_type="actual_output", unit="千桶/日", data_date="2019年6月初期投产口径", source="ADNOC Haliba", note="ADNOC Al Dhafra称2019年6月开始以10千桶/日生产；40千桶/日仅为目标产能，本值非当前实产。"),
     record("阿联酋", "Fateh", "法泰赫", "海上油田", 25.54, 54.29, source="Dubai Petroleum"),
@@ -247,7 +247,7 @@ ASSETS = [
     record("阿联酋", "Falah", "法拉赫", "海上油田", 25.63, 54.21, source="Dubai Petroleum"),
     record("阿联酋", "Rashid", "拉希德", "海上油田", 25.45, 54.40, source="Dubai Petroleum"),
     record("阿联酋", "Jalilah", "贾利拉", "海上油田", 25.38, 54.34, source="Dubai Petroleum"),
-    record("阿联酋", "Margham", "马尔格姆", "凝析油气田", 24.98, 55.61, value="25", metric_type="historical_condensate_output", unit="千桶/日", data_date="2010-12-31", source="Dubai Petroleum", note="2010年凝析油，非当前原油日产量。"),
+    record("阿联酋", "Margham", "马尔格姆", "凝析油气田", 24.98, 55.61, source="Dubai Petroleum", note="撤回25千桶/日历史凝析油值：所引Dubai Petroleum资产页未提供该数字。"),
     record("阿联酋", "Bab Gas Cap", "巴布气顶项目", "天然气项目", 23.93, 53.79, value="1,500", metric_type="target_capacity", unit="百万标准立方英尺/日", data_date="2026-01-01", source="ADNOC Onshore", note="天然气项目。"),
     record("阿联酋", "Ruwais Diyab", "鲁韦斯迪亚布", "非常规气特许权", 24.15, 52.70, source="ADNOC Ghasha", note="特许权，不是单一油田。"),
     record("阿联酋", "Sajaa", "萨贾", "气／凝析油田", None, None, source="SNOC Upstream", note="沙迦SNOC列为既有油气资产；原油逐田日产量未披露。"),
@@ -266,18 +266,18 @@ ASSETS = [
     record("伊拉克", "Majnoon", "马季努恩", "油田", 31.05, 47.72, value="176.0", metric_type="derived_daily_average", unit="千桶/日", data_date="2021年推算日均", source="Iraq EITI 2021", note="EITI 2021 表58（PCLD）年产64,240,000桶÷365日=176.0千桶/日（四舍五入）；历史均值，非当前日产量。"),
     record("伊拉克", "Halfaya", "哈法亚", "油田", 31.58, 47.30, value="389.6", metric_type="derived_daily_average", unit="千桶/日", data_date="2021年推算日均", source="Iraq EITI 2021", note="EITI 2021 表58（PCLD）年产142,213,694桶÷365日=389.6千桶/日（四舍五入）；历史均值，非当前日产量。"),
     record("伊拉克", "Gharraf", "加拉夫", "油田", 31.45, 46.78, value="130", metric_type="actual_output", unit="千桶/日", data_date="截至2022-04-20的运营资料", source="PETRONAS Gharraf", note="PETRONAS资料称该田平均约13万桶/日；网页给出2022-04-20累计出口基准日，属于历史资料。"),
-    record("伊拉克", "Badra", "巴德拉", "油田", 33.03, 45.03, value="41.3", metric_type="derived_daily_average", unit="千桶/日", data_date="2021年推算日均", source="Iraq EITI 2021", note="EITI 2021 表58（PCLD）年产15,083,829桶÷365日=41.3千桶/日（四舍五入）；历史均值，非当前日产量。"),
+    record("伊拉克", "Badra", "巴德拉", "油田", 33.03, 45.03, value="35.2", metric_type="derived_daily_average", unit="千桶/日", data_date="2021年推算日均", source="Iraq EITI 2021", note="EITI 2021 表58（PCLD）年产12,857,981桶÷365日=35.2千桶/日（四舍五入）；历史均值，非当前日产量。"),
     record("伊拉克", "Ahdab", "阿赫达卜", "油田", 32.99, 44.63, value="49.2", metric_type="derived_daily_average", unit="千桶/日", data_date="2021年推算日均", source="Iraq EITI 2021", note="EITI 2021 表58（PCLD）年产17,956,867桶÷365日=49.2千桶/日（四舍五入）；历史均值，非当前日产量。"),
-    record("伊拉克", "East Baghdad", "东巴格达", "油田", 33.45, 44.60, value="27.1", metric_type="derived_daily_average", unit="千桶/日", data_date="2021年推算日均", source="Iraq EITI 2021", note="EITI 2021 表58（PCLD）年产9,900,000桶÷365日=27.1千桶/日（四舍五入）；历史均值，非当前日产量。"),
-    record("伊拉克", "Nahr Umar", "纳赫尔乌马尔", "油田", 30.40, 47.72, value="3.0", metric_type="derived_daily_average", unit="千桶/日", data_date="2021年推算日均", source="Iraq EITI 2021", note="EITI 2021 表58（PCLD）年产1,109,514桶÷365日=3.0千桶/日（四舍五入）；历史均值，非当前日产量。"),
+    record("伊拉克", "East Baghdad", "东巴格达", "油田", 33.45, 44.60, value="18.2", metric_type="derived_daily_average", unit="千桶/日", data_date="2021年推算日均", source="Iraq EITI 2021", note="EITI 2021 表58（PCLD）年产6,630,000桶÷365日=18.2千桶/日（四舍五入）；历史均值，非当前日产量。"),
+    record("伊拉克", "Nahr Umar", "纳赫尔乌马尔", "油田", 30.40, 47.72, source="Iraq EITI 2021", note="2026-09-30撤回原目录无原表支持的2021日产量；EITI 2021表58没有该田报送行。当前逐田实产未知。"),
     record("伊拉克", "Artawi", "阿尔塔维", "油田", 30.42, 47.91, value="16.7", metric_type="derived_daily_average", unit="千桶/日", data_date="2016年推算日均", status="EITI 2023列为非生产田；后续待核", source="Iraq EITI 2016", note="EITI 2016报告第75页Basra Oil Company逐田年产6,123,726桶÷366日=16.7千桶/日（四舍五入）；EITI 2023表17列非生产田，不能据历史值认定当前产量。"),
-    record("伊拉克", "Nassiriya", "纳西里耶", "油田", 31.12, 46.27, value="5.8", metric_type="derived_daily_average", unit="千桶/日", data_date="2021年推算日均", source="Iraq EITI 2021", note="EITI 2021 表58（PCLD）年产2,124,402桶÷365日=5.8千桶/日（四舍五入）；历史均值，非当前日产量。"),
+    record("伊拉克", "Nassiriya", "纳西里耶", "油田", 31.12, 46.27, source="Iraq EITI 2021", note="2026-09-30撤回原目录无原表支持的2021日产量；EITI 2021表58没有该田报送行。当前逐田实产未知。"),
     record("伊拉克", "Kirkuk", "基尔库克", "油田", 35.47, 44.39, source="EIA Iraq"),
     record("伊拉克", "Bai Hassan", "拜哈桑", "油田", 35.61, 44.40, value="133.3", metric_type="derived_daily_average", unit="千桶/日", data_date="2021年推算日均", source="Iraq EITI 2021", note="EITI 2021 表57（North Oil Company）；年产48,672,087桶÷365日=133.3千桶/日（四舍五入）；历史均值，非当前日产量。"),
     record("伊拉克", "Jambur", "詹布尔", "油田", 35.31, 44.48, value="38.4", metric_type="derived_daily_average", unit="千桶/日", data_date="2021年推算日均", source="Iraq EITI 2021", note="EITI 2021 表57（North Oil Company）；年产14,008,692桶÷365日=38.4千桶/日（四舍五入）；历史均值，非当前日产量。"),
     record("伊拉克", "Khabbaz", "哈巴兹", "油田", 35.52, 44.21, value="25.0", metric_type="derived_daily_average", unit="千桶/日", data_date="2021年推算日均", source="Iraq EITI 2021", note="EITI 2021 表57（North Oil Company）；年产9,139,429桶÷365日=25.0千桶/日（四舍五入）；历史均值，非当前日产量。"),
     record("伊拉克", "Qayyarah", "盖亚拉", "油田", 35.80, 43.31, source="EIA Iraq"),
-    record("伊拉克", "Najma", "纳杰马", "油田", 35.91, 43.20, value="10.2", metric_type="derived_daily_average", unit="千桶/日", data_date="2021年推算日均", status="EITI 2023列为非生产田", source="Iraq EITI 2021", note="EITI 2021 表58（PCLD）年产3,720,000桶÷365日=10.2千桶/日（四舍五入）；EITI 2023报告表13列为非生产田，历史值不能视作当期日产量。"),
+    record("伊拉克", "Najma", "纳杰马", "油田", 35.91, 43.20, status="EITI 2023列为非生产田", source="Iraq EITI 2021", note="2026-09-30撤回原目录无原表支持的2021日产量；EITI 2021表58没有该田报送行。当前逐田实产未知。"),
     record("伊拉克", "Tawke", "陶凯", "油田（库区）", 37.02, 43.27, value="29.095", metric_type="actual_output", unit="千桶/日", data_date="2025年第四季度平均", source="DNO 2025 Results", note="DNO直报全田总产量；不是DNO的75%权益产量。"),
     record("伊拉克", "Peshkabir", "佩什卡比尔", "油田（库区）", 37.13, 43.47, value="48.173", metric_type="actual_output", unit="千桶/日", data_date="2025年第四季度平均", source="DNO 2025 Results", note="DNO直报全田总产量；不是DNO的75%权益产量。"),
     record("伊拉克", "Taq Taq", "塔克塔克", "油田（库区）", 35.91, 44.62, value="1.36", metric_type="actual_output", unit="千桶/日", data_date="2023年平均", status="Genel称2023-05-20起停产；后续待核", source="Genel Q1 2024", note="运营方直报2023年全田总产量1,360桶/日（含停产期的年度平均）；不是Genel权益产量，更非当前日产量。"),
@@ -296,10 +296,10 @@ ASSETS = [
     record("伊拉克", "Bazerkan", "巴泽尔坎", "油田", 31.936, 47.372, metric_type="undisclosed", status="运营", source="GEM Bazerkan", note="GEM列为运营油田，亦称Buzurgan；未找到可核验的单田日产量。"),
     record("伊拉克", "Abu Gharb", "阿布加尔卜", "油田", 32.365, 47.306, status="运营", source="GEM Abu Gharb", note="原列年度数值的原始引文未证实是该年度实际产油总量；撤回据此换算的推算日均。逐田实产待核。"),
     record("伊拉克", "Luhais", "卢海斯", "油田", 29.904, 46.952, value="89.2", metric_type="derived_daily_average", unit="千桶/日", data_date="2016年推算日均", status="EITI 2023列为生产田；当期数值待核", source="Iraq EITI 2016", note="EITI 2016报告第75页Basra Oil Company逐田年产32,631,608桶÷366日=89.2千桶/日（四舍五入）；EITI 2023表17列为生产田，但未给该田2023实产。"),
-    record("伊拉克", "Subba", "苏巴", "油田", 30.258, 46.829, status="运营", value="5.8", metric_type="derived_daily_average", unit="千桶/日", data_date="2021年推算日均", source="Iraq EITI 2021", note="EITI 2021 表58（PCLD）年产2,100,000桶÷365日=5.8千桶/日（四舍五入）；历史均值，非当前日产量。"),
+    record("伊拉克", "Subba", "苏巴", "油田", 30.258, 46.829, status="运营", source="Iraq EITI 2021", note="2026-09-30撤回原目录无原表支持的2021日产量；EITI 2021表58没有该田报送行。当前逐田实产未知。"),
     record("伊拉克", "Tuba", "图巴", "油气田", 30.4036, 47.4977, value="36.2", metric_type="derived_daily_average", unit="千桶/日", data_date="2016年推算日均", status="EITI 2023列为生产田；当期数值待核", source="Iraq EITI 2016", note="EITI 2016报告第75页Basra Oil Company逐田年产13,262,897桶÷366日=36.2千桶/日（四舍五入）；EITI 2023表17列为生产田但未给该田实产。"),
 
-    record("伊拉克", "Ajil", "阿吉勒", "油田", None, None, source="Iraq EITI 2021", note="EITI 2021表57与表58对该田年产量不一致，暂不换算日产量。"),
+    record("伊拉克", "Ajil", "阿吉勒", "油田", None, None, source="Iraq EITI 2021", note="EITI 2021表57 NOC年产2,167,278桶；表58没有Ajil行，不存在该田两表冲突。"),
     record("伊拉克", "Ain Zalah", "艾因扎拉", "油田", None, None, source="Iraq EITI 2021", note="EITI 2021表57列为产油田；无近期可核验逐田日产量。"),
     record("伊拉克", "Batmah", "巴特马", "油田", None, None, source="Iraq EITI 2021", note="EITI 2021表57列为产油田；无近期可核验逐田日产量。"),
     record("伊拉克", "Hamrin", "哈姆林", "油田", None, None, source="Iraq EITI 2021", note="EITI 2021表58列为产油田；逐田当期日产量未披露。"),
@@ -355,7 +355,6 @@ ASSETS = [
     record("伊朗", "Changuleh", "昌古莱", "油田", None, None, status="EIA 2024具名；当期生产状态待核", source="EIA Iran", note="EIA报告表2列名；不把伴生气收集设施容量当作原油产量。"),
     record("伊朗", "Dalpari", "达尔帕里", "油田", None, None, status="EIA 2024具名；当期生产状态待核", source="EIA Iran", note="EIA报告表2列名；逐田原油日产量未核实。"),
     record("伊朗", "South Pars", "南帕尔斯", "海上气／凝析油田", None, None, status="已开发；原油逐田值不适用", source="EIA Iran", note="EIA称为伊朗最大非伴生气田；与卡塔尔North Field同一跨境地质构造的伊朗侧，天然气和凝析油数据不作为原油实产。"),
-    record("伊朗", "Darquain", "达尔昆", "油田", 30.7289, 48.2934, status="GEM列为运营；当前逐田产量未核", source="GEM Darquain", note="坐标为GEM列示WGS84位置；EIA 2024也将Darquain列入NGL 3200伴生气收集项目的供气油田名单。设施处理能力不等于该田原油产量。"),
 
     # Kuwait
     record("科威特", "Burgan", "布尔干", "油田", 29.05, 47.91, source="KOC / KPC"),
@@ -500,6 +499,55 @@ ASSETS = [
 ]
 
 
+# 本轮原始报告复核；补充目录与数字在元数据生成之前应用。
+import supplemental_assets as SUPPLEMENT
+import reconciled_assets as RECONCILED
+import continuation_assets as CONTINUATION
+from audited_measurements import apply_annual_volumes, additional_measurements
+ASSETS.extend(SUPPLEMENT.additions(record))
+ASSETS.extend(RECONCILED.additions(record))
+RECONCILED.apply_existing(ASSETS)
+ASSETS.extend(CONTINUATION.additions(record))
+CONTINUATION.apply_measurements(ASSETS)
+apply_annual_volumes(ASSETS)
+for asset in ASSETS:
+    if asset["country"] == "伊朗" and asset["name"] == "Darkhovin":
+        asset.update(aliases=["Darquain", "Darkhoveyn"], lat=30.7289, lon=48.2934,
+                     coordinate_precision="GEM所列近似田中心；非边界",
+                     note="Darkhovin / Darquain为同田异名，已合并；不重复计数。")
+    if asset["country"] == "伊拉克" and asset["name"] in {"Tawke", "Peshkabir"}:
+        asset.update(value="0.363" if asset["name"] == "Tawke" else "0",
+                     metric_type="actual_output_boe", unit="千桶油当量/日",
+                     data_date="2026年第二季度平均",
+                     source="DNO Q2 2026", source_url="https://www.dno.no/media/ezuglbal/q2-2026-interim-results-report.pdf",
+                     numeric_audit="运营商Q2表原值已复核；BOE不转换为原油桶",
+                     note="DNO Q2 2026第4页：Tawke 363 boe/d、Peshkabir 0 boe/d，100%毛口径。两田分别6月28日、7月11日恢复；季度零不等于当前停产。")
+    if asset["name"] == "Marjan":
+        asset.update(source="Aramco Annual Report 2025", source_url="https://www.aramco.com/-/media/publications/corporate-reports/reports-and-presentations/2025/fy/saudi-aramco-ara-2025-english.pdf",
+                     numeric_audit="2025年报原文300 mbpd已复核；新增产能，非实产")
+    if asset["name"] == "SARB Deep Gas":
+        asset.update(source="ADNOC SARB Deep Gas FID", source_url="https://www.adnoc.ae/en/news-and-media/press-releases/2026/adnoc-announces-final-investment-decision-for-the-sarb-deep-gas-development/",
+                     note="2026-01-07 FID公告：目标最高200百万标准立方英尺/日，非已投产实绩。")
+    if asset["name"] == "Bab Gas Cap":
+        asset.update(source="TotalEnergies Bab Gas Cap 2026", source_url="https://www.sec.gov/Archives/edgar/data/879764/000110465926079516/tm2619405d1_ex99-6.htm",
+                     data_date="2026-06-24特许区公告", note="开发目标1.5十亿立方英尺/日，非当前实产；已更换不能支撑数字的通用资产页。")
+    if asset["name"] == "Upper Zakum":
+        asset.update(value="1,500", metric_type="target_capacity", data_date="2026-02-04承包商业绩会规划口径",
+                     source="NMDC Energy FY25 Results Call", source_url="https://www.nmdc-energy.com/assets/files/earnings-results/NMDC%20Energy%20FY25%20Results%20Conference%20Call%20020426%20final.pdf",
+                     numeric_audit="承包商原始会议稿已核；目标，不是运营商实产",
+                     note="NMDC Energy CEO原始会议稿披露Upper Zakum计划由100万桶/日增至150万桶/日；替换2017年100万目标。该值是扩产规划，未据承包商口述填当前实产。")
+    if asset["name"] == "Bahrain Field (Awali)":
+        asset["asset_type"] = "油气田（原油及凝析油）"
+        asset["note"] += " 原报告39.5千桶/日合计含原油及凝析油，不是纯原油。"
+    if asset["name"] == "Margham":
+        asset.update(source="DUSUP Margham", source_url="https://www.dusup.ae/supply-operations/margham-gas-plant/")
+    if asset["name"] == "Hedebah":
+        asset.update(source="SNOC Hedebah 2025", source_url="https://www.snoc.ae/news/snoc-strengthens-sharjahs-energy-security-with-second-well-success-in-hedebah-field/")
+    if asset["name"] == "Umm Niqa":
+        asset.update(value=None, metric_type="undisclosed", unit=None, data_date=None,
+                     numeric_audit="历史22.14值的引用PDF失效；暂撤回待恢复原表",
+                     note=asset["note"] + " 2026-09-30原引用2023/24年报HTTP404，未恢复原表前不展示22.14千桶/日。")
+
 # 分层审计：层级字段独立于资产类型，防止区块／油田群合计与单田重复计算。
 ASSET_LEVEL_LABELS = {
     "field": "单一油气田",
@@ -513,10 +561,15 @@ ASSET_LEVEL_LABELS = {
 COMMODITY_LABELS = {
     "crude_oil": "原油",
     "natural_gas": "天然气",
+    "condensate": "凝析油",
     "oil_and_gas": "油气／凝析油",
 }
 
 LEVEL_OVERRIDES = {
+    ("伊拉克", "Baba Dome"): "development_area",
+    ("伊拉克", "Avana Dome"): "development_area",
+    ("埃及", "Meleiha"): "development_area",
+    ("埃及", "Belayim"): "field_group",
     ("沙特阿拉伯", "Ghawar"): "field_group",
     ("沙特阿拉伯", "Khurais"): "field_group",
     ("沙特阿拉伯", "Abu Jifan"): "field",
@@ -532,6 +585,11 @@ LEVEL_OVERRIDES = {
 }
 
 PARENT_RELATIONSHIPS = {
+    ("伊拉克", "Baba Dome"): "Kirkuk",
+    ("伊拉克", "Avana Dome"): "Kirkuk",
+    ("伊拉克", "Fakkah"): "Missan Fields",
+    ("伊拉克", "Bazerkan"): "Missan Fields",
+    ("伊拉克", "Abu Gharb"): "Missan Fields",
     ("沙特阿拉伯", "Abu Jifan"): "Khurais",
     ("沙特阿拉伯", "Mazalij"): "Khurais",
     ("沙特阿拉伯", "Qirdi"): "Khurais",
@@ -1072,10 +1130,19 @@ COORDINATE_OVERRIDES: dict[tuple[str, str], dict[str, Any]] = {
 
 OUTPUT_METRIC_TYPES = {
     "actual_output",
+    "estimated_daily_average",
+    "actual_output_boe",
     "derived_daily_average",
     "historical_condensate_output",
     "historical_peak",
 }
+
+PARENT_RELATIONSHIPS.update(RECONCILED.PARENTS)
+COORDINATE_OVERRIDES.update(RECONCILED.coordinates())
+COORDINATE_OVERRIDES.update(CONTINUATION.coordinates())
+LEVEL_OVERRIDES.update(CONTINUATION.levels())
+LEVEL_OVERRIDES.update({key: "project" for key in RECONCILED.PROJECTS})
+LEVEL_OVERRIDES.update({key: "development_area" for key in RECONCILED.AREAS})
 
 
 def infer_asset_level(asset_type: str) -> str:
@@ -1103,7 +1170,8 @@ def infer_commodity(asset_type: str) -> str:
 for asset in ASSETS:
     key = (asset["country"], asset["name"])
     asset_level = LEVEL_OVERRIDES.get(key, infer_asset_level(asset["asset_type"]))
-    commodity = infer_commodity(asset["asset_type"])
+    commodity = ("oil_and_gas" if asset["metric_type"] == "actual_output_boe"
+                 else infer_commodity(asset["asset_type"]))
     asset["asset_level"] = asset_level
     asset["asset_level_label"] = ASSET_LEVEL_LABELS[asset_level]
     asset["parent_asset"] = PARENT_RELATIONSHIPS.get(key)
@@ -1125,6 +1193,8 @@ for asset in ASSETS:
     )
 
 _asset_index = {(asset["country"], asset["name"]): asset for asset in ASSETS}
+if len(_asset_index) != len(ASSETS):
+    raise ValueError("资产目录出现重复国家/名称")
 for asset in ASSETS:
     parent_name = asset["parent_asset"]
     if parent_name:
@@ -1146,7 +1216,7 @@ for asset in ASSETS:
     key = (asset["country"], asset["name"])
     direct_children = _children.get(key, [])
     named_children = list(NAMED_CONSTITUENTS.get(key, ()))
-    asset["constituent_assets"] = [child["name"] for child in direct_children] + named_children
+    asset["constituent_assets"] = list(dict.fromkeys([child["name"] for child in direct_children] + named_children))
     asset["constituent_count"] = len(asset["constituent_assets"])
     asset["aggregate_children_on_map"] = bool(direct_children) and asset["value"] is not None
     coordinate = COORDINATE_OVERRIDES.get(key)
@@ -1161,7 +1231,8 @@ for asset in ASSETS:
         asset["coordinate_source_url"] = coordinate["url"]
     elif asset["map_lat"] is not None and asset["map_lon"] is not None:
         asset["coordinate_source"] = "原目录坐标记录"
-        asset["coordinate_source_url"] = asset["source_url"]
+        asset["coordinate_source_url"] = None
+        asset["coordinate_source"] = "继承目录近似坐标；独立坐标出处待核"
     else:
         asset["coordinate_source"] = "暂无可核验坐标"
         asset["coordinate_source_url"] = None
@@ -1316,7 +1387,7 @@ _assign_status("伊拉克", "Artawi | Najma | Baeshiqa | Eridu (Block 10)", "non
 _assign_status("伊拉克", "Ain Zalah | Batmah", "producing", "2022-03-30", "中", "摩苏尔大学石油与采矿工程学院对两田的现场记录逐名说明，从油井、处理和湿油分离直至外输管线观察了产油流程；证据为2022年现场时点，未外推为2026年实时状态。", "https://uomosul.edu.iq/petroleumengineering/%D8%B2%D9%8A%D8%A7%D8%B1%D8%A9-%D8%B9%D9%84%D9%85%D9%8A%D8%A9-5/")
 
 # 伊朗：来源页可确认运营资产，但2026年战争和出口封锁使“当前运行强度”不确定。
-_assign_status("伊朗", "Ahvaz | Marun | Aghajari | Gachsaran | Reg-e-Safid | South Azadegan | North Azadegan | Yadavaran | North Yaran | South Yaran | Azar | Darkhovin | Hendijan | Doroud | Foroozan | Soroush | Nowruz | Salman | Bibi Hakimeh | Karanj | Abuzar | Mansouri | Sepehr-Jufair | Parsi | Bahregansar | Sirri E | Masjed Soleyman | Pazanan | Kupal | Dehloran | Paranj | Nargesi | South Pars | Darquain", "producing", "2024—2026年最后可核实公开时点", "中", "EIA、SHANA或资产资料列为开发／运营资产；2026年地区冲突下不把出口量变化下推成单田停复产。")
+_assign_status("伊朗", "Ahvaz | Marun | Aghajari | Gachsaran | Reg-e-Safid | South Azadegan | North Azadegan | Yadavaran | North Yaran | South Yaran | Azar | Darkhovin | Hendijan | Doroud | Foroozan | Soroush | Nowruz | Salman | Bibi Hakimeh | Karanj | Abuzar | Mansouri | Sepehr-Jufair | Parsi | Bahregansar | Sirri E | Masjed Soleyman | Pazanan | Kupal | Dehloran | Paranj | Nargesi | South Pars", "producing", "2024—2026年最后可核实公开时点", "中", "EIA、SHANA或资产资料列为开发／运营资产；2026年地区冲突下不把出口量变化下推成单田停复产。")
 _assign_status("伊朗", "Hengam", "producing", "2025年资产状态／复核2026-09-28", "中", "当前油气资产跟踪器将Hengam列为Operating；逐田最新公开产量仍较旧。", "https://www.gem.wiki/Hengam_Oil_and_Gas_Field_(Iran)")
 _assign_status("伊朗", "Band-e-Karkheh", "development", "2026-02-21", "高", "MAPNA宣布开发合同完成审批并进入实施阶段；目标增产不当作当前实产。", "https://mapnagroup.com/63236/mapna-officially-notified-of-ipc-contract-for-development-of-bande-karkheh-oil-field/?lang=en")
 _assign_status("伊朗", "West Paydar", "producing", "2026年资产报告", "高", "当前资产报告明确该田已生产多年并进入2025—2030加速开发阶段。", "https://www.woodmac.com/reports/upstream-oil-and-gas-aban-and-west-paydar-ipc-54481312/")
@@ -1377,6 +1448,32 @@ _assign_status("埃及", "Shukheir Offshore (Shukheir Bay) | Shukheir Offshore (
 _assign_status("埃及", "Zeit Bay | Ras Budran", "producing", "FY2025/26", "高", "SOCO FY2025/26披露持续生产和在Ras Budran增加生产井；设施同时服务Zeit Bay。", "https://egyptoil-gas.com/news/suez-oil-company-increased-proven-reserves-by-3-9-mmbbl/")
 _assign_status("埃及", "Wadi El Sahl Development Area", "development", "2025-11-25", "高", "埃及批准法律授权与Lukoil签署该开发区勘探、开发和生产合同，尚不以目标或发现量当作当前商业产量。", "https://www.egypttoday.com/Article/3/143692/El-Sisi-ratifies-law-on-oil-exploration-and-development-in")
 
+SUPPLEMENT.register_statuses(_assign_status)
+RECONCILED.register_statuses(_assign_status)
+CONTINUATION.register_statuses(_assign_status)
+# 纠正旧状态，明确每个证据时点；覆盖更新而不是重复登记。
+def _revise_status(country, names, state, as_of, confidence, basis, url):
+    for name in names.split(" | "):
+        _STATUS_AUDIT.pop((country, name))
+    _assign_status(country, names, state, as_of, confidence, basis, url)
+
+CONTINUATION.revise_statuses(_revise_status)
+_revise_status("阿联酋", "Hedebah", "producing", "2025-11-04", "高",
+               "SNOC披露首井已在发现后十个月投产；第二井当时计划接入，不填产量。",
+               "https://www.snoc.ae/news/snoc-strengthens-sharjahs-energy-security-with-second-well-success-in-hedebah-field/")
+_revise_status("伊拉克", "Atrush | Sarsang | Swara Tika | East Swara Tika", "temporarily_suspended", "2026-08-05公告；停产自07-20", "高",
+               "ShaMaran Q2公告明确两资产7月20日起再次停产；Sarsang组成田按区块停产证据。9月材料的预计复产流量并非实际复产证明。",
+               SOURCES["ShaMaran Q2 2026"])
+_revise_status("伊拉克", "Tawke | Peshkabir", "producing", "2026-08 Q2报告", "高",
+               "DNO Q2报告分别披露Tawke于06-28、Peshkabir于07-11复产；不以Q2均值代替当前值。",
+               "https://www.dno.no/media/ezuglbal/q2-2026-interim-results-report.pdf")
+_revise_status("伊拉克", "Taq Taq | Sarta", "historical_unverified", "2025参考年；2026-03年报", "中",
+               "Genel 2025年报确认已退出Taq Taq和Sarta许可证；运营商退出不证明资产永久停产，2026逐田实绩待核。",
+               "https://genelenergy.com/wp-content/uploads/190326_Genel-AR_web-1.pdf")
+_revise_status("伊拉克", "Artawi", "development", "2025-09-15", "高",
+               "TotalEnergies披露Artawi再开发项目施工，未来120/210千桶日为分期目标，不是当期实产。",
+               "https://totalenergies.com/newsroom/iraq-totalenergies-launches-construction-final-two-major-projects-ggip/?lang=eng")
+
 _catalog_keys = set(_asset_index)
 _audited_keys = set(_STATUS_AUDIT)
 if _catalog_keys != _audited_keys:
@@ -1418,3 +1515,22 @@ for asset in ASSETS:
     if asset["map_role"] == "strategic_standalone" and not asset["strategic_default"]:
         asset["map_role"] = "catalog_detail"
         asset["map_role_label"] = "完整目录资产（默认不展示）"
+
+# 下载成功不等于数值已核验；审计日期不等于观测日期。
+for asset in ASSETS:
+    if asset["name"] == "Belayim" and asset["country"] == "埃及":
+        asset["map_is_proxy"] = True
+        asset["map_coordinate_precision"] = "Belayim Marine代表点；105千桶/日是Belayim历史整体口径"
+    asset.setdefault("aliases", [])
+    if asset["source"] == "QatarEnergy" and asset["value"] is not None:
+        asset["numeric_audit"] = "原始2025-11演示第12页2024均值已核；不是2026实绩"
+    if asset["name"] in {"Taq Taq", "Sarta"}:
+        asset["numeric_audit"] = "Genel 2024-01原表2023毛产量已核；非权益产量或当前值"
+    asset.setdefault("numeric_audit", "数值缺失；不可估计当前产量" if asset["value"] is None
+                     else "保留来源期数据；详见2026-09-30逐行审计，非实时实绩")
+    asset["data_audit_date"] = "2026-09-30"
+    asset["freshness_note"] = ("没有当前逐资产实绩；缺失不等于零" if asset["value"] is None else
+                              "数值仅对应数据日期；复核日不是观测日，不能视作2026-09-30实绩")
+
+additional_measurements(ASSETS)
+CONTINUATION.finish_review(ASSETS)
