@@ -85,8 +85,9 @@ class HistoryTests(unittest.TestCase):
 
     def test_old_day_never_calls_recent_only_interface(self):
         with patch.object(history, "_fetch_track") as fetch:
-            history.historical_snapshot(date(2020, 1, 1), ("123456789",))
+            state = history.historical_snapshot(date(2020, 1, 1), tuple(str(123456789 + i) for i in range(30)))
             fetch.assert_not_called()
+            self.assertFalse(state["candidate_limit"])
 
     def test_background_collector_archives_without_open_page(self):
         from test_ais import position_event, NOW

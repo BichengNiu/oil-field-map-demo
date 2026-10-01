@@ -12,6 +12,7 @@ from unittest.mock import patch
 from streamlit.testing.v1 import AppTest
 import ais
 import ais_history
+import public_ais_archive
 import portwatch
 import port_inventory
 
@@ -134,6 +135,25 @@ class PageUpdates(unittest.TestCase):
         app.slider(key="map_history_day").set_value(date(2026, 9, 22)).run()
         self.assertIn("const vessels = [];", app.get("iframe")[0].proto.srcdoc)
         self.assertTrue(any("历史船位不可用" in item.value for item in app.info))
+
+    def test_public_sample_button_selects_date_enables_layer_and_discloses_coverage(self):
+        ais_history.archive_reports([{
+            "mmsi": "123456789", "received_at": "2026-03-16T23:59:59Z",
+            "provider_received_at": "2026-03-17T00:00:05Z",
+            "lat": 26.2, "lon": 56.4, "source": "synthetic-test-fixture"}])
+        with patch.object(public_ais_archive, "ensure_public_archive",
+                          return_value={"coverage": "fixture coverage, not actual AIS"}):
+            app = self.page()
+            app.button(key="public_ais_history").click().run()
+        self.assertFalse(app.exception, [e.message for e in app.exception])
+        self.assertEqual(app.slider(key="map_history_day").value, date(2026, 3, 16))
+        self.assertEqual(app.radio(key="map_time_mode").value, "历史回看")
+        self.assertIn("vessels", app.multiselect(key="map_layers").value)
+        self.assertEqual(set(app.multiselect(key="monitor_regions").value), {"波斯湾", "霍尔木兹海峡", "阿曼湾"})
+        table = next(df.value for df in app.dataframe if "MMSI" in df.value.columns)
+        self.assertEqual(table.iloc[0]["历史日期 UTC"], "2026-03-16")
+        self.assertEqual(table.iloc[0]["采集器接收时间 UTC"], "2026-03-17T00:00:05Z")
+        self.assertTrue(any("fixture coverage" in item.value for item in app.caption))
 
 
 if __name__ == "__main__":

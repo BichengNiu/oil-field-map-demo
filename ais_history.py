@@ -62,6 +62,7 @@ def normalize_report(row: dict) -> dict:
     if not source:
         raise ValueError("需要提供原始数据源")
     return {**row, "mmsi": str(mmsi), "received_at": observed.isoformat(),
+            "provider_received_at": row.get("provider_received_at", row.get("采集器接收时间 UTC")),
             "lat": lat, "lon": lon, "region": ais.region_for(lat, lon),
             "name": row.get("name", row.get("船名")),
             "imo": row.get("imo", row.get("IMO")),
@@ -174,6 +175,12 @@ def _fetch_track(mmsi: str, day: date) -> tuple[list[dict], bool]:
 def historical_snapshot(day: date, candidates: tuple[str, ...] = ()) -> dict:
     errors = []
     reports = []
+    public_archive = None
+    try:
+        from public_ais_archive import ensure_public_archive
+        public_archive = ensure_public_archive(day)
+    except Exception as exc:
+        errors.append(f"公开历史样本载入失败：{type(exc).__name__}: {exc}")
     try:
         reports = day_reports(day)
     except Exception as exc:
@@ -201,6 +208,7 @@ def historical_snapshot(day: date, candidates: tuple[str, ...] = ()) -> dict:
     for vessel in vessels:
         vessel.update({"historical_day": day.isoformat(), "age_minutes": None})
     return {"vessels": vessels, "day": day.isoformat(), "reports": len(reports),
+            "public_archive": public_archive,
             "queried_vessels": attempted, "truncated": truncated,
-            "candidate_limit": len(candidates) > 20, "error": "; ".join(errors) or None,
+            "candidate_limit": recent and len(candidates) > 20, "error": "; ".join(errors) or None,
             "coverage": "当日有报告船舶的最后观测位置；档案与已知MMSI轨迹样本，非完整水域普查、非同时快照"}

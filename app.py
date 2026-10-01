@@ -69,6 +69,15 @@ def _show_history() -> None:
     st.session_state["map_time_mode"] = "历史回看"
 
 
+def _show_public_history() -> None:
+    _show_history()
+    st.session_state["map_history_day"] = date(2026, 3, 16)
+    st.session_state["ais_enabled"] = True
+    st.session_state["monitor_regions"] = ["波斯湾", "霍尔木兹海峡", "阿曼湾"]
+    st.session_state["map_layers"] = list(dict.fromkeys(
+        [*st.session_state.get("map_layers", []), "vessels"]))
+
+
 st.set_page_config(page_title="中东能源保供监测", page_icon="◉", layout="wide",
                    initial_sidebar_state="expanded")
 
@@ -889,6 +898,9 @@ with st.sidebar:
             _historical_snapshot.clear()
             st.rerun()
 
+        st.caption("公开历史采样：2026-03-14—04-11，迪拜附近为主；五个水域覆盖不完整。")
+        st.button("回看公开AIS样本（3月16日）", key="public_ais_history",
+                  on_click=_show_public_history, width="stretch")
         history_upload = st.file_uploader(
             "导入历史船位 CSV", type=["csv"], key="ais_history_upload",
             help="支持本页导出的CSV，或mmsi、received_at、lat、lon、source列；时间按UTC解释。")
@@ -1180,6 +1192,7 @@ def vessel_rows(vessels: list[dict]) -> list[dict]:
         "目的地": vessel.get("destination"),
         "吃水 米": vessel.get("draught"),
         "AIS报告时间 UTC": vessel.get("received_at"),
+        "采集器接收时间 UTC": vessel.get("provider_received_at"),
         "数据年龄 分钟": (round(vessel["age_minutes"], 1)
                          if vessel.get("age_minutes") is not None else None),
         "历史日期 UTC": vessel.get("historical_day"),
@@ -1207,6 +1220,8 @@ def render_map_panel() -> None:
         if "vessels" in visible_map_layers and ais_enabled:
             st.caption(f"历史船位 {history_day} UTC：{len(all_positions)} 艘有报告样本。" +
                        history_state.get("coverage", ""))
+            if history_state.get("public_archive"):
+                st.caption(history_state["public_archive"]["coverage"])
             if history_state.get("error"):
                 st.warning(f'历史船位读取问题：{history_state["error"]}')
             if not all_positions:
@@ -1273,6 +1288,9 @@ def render_ais_panel() -> None:
     if historical_map:
         st.caption(f"历史日期：{history_day} UTC · 当日每船末次报告；不混入当前船位。")
         st.caption(history_state.get("coverage", "历史样本覆盖范围未知"))
+        if history_state.get("public_archive"):
+            st.caption(history_state["public_archive"]["coverage"])
+            st.markdown("历史样本来源：[yasumorishima / AISStream](https://huggingface.co/datasets/yasumorishima/hormuz-ais)。2026-03-14—04-11；保留原始报告时间，排除无效MMSI及异常航速候选。")
         if history_state.get("error"):
             st.warning(f'历史船位读取问题：{history_state["error"]}')
         if not all_positions:
@@ -1390,7 +1408,7 @@ with tab_method:
         {"数据": "港口 / 咽喉点官方目录", "当前更新": "打开页面重读 PortWatch API", "进一步自动化": "已接入；补充 WPI / 运营商名录仍需版本核验"},
         {"数据": "港口风险运力", "当前更新": "打开页面重读源 API", "进一步自动化": "源为历史航线模型；重新抓取不代表实时风险"},
         {"数据": "油气产量、产能、状态和坐标", "当前更新": "经核验的静态公开披露记录", "进一步自动化": "接运营商 / 监管机构 API 或公告抓取，校验资产、日期、单位、产量 / 产能后更新"},
-        {"数据": "历史船位", "当前更新": "自动归档取得的快照及AISStream位置事件；历史日读取档案并尝试已知MMSI近48小时轨迹；支持CSV导入", "进一步自动化": "设置持久AIS_ARCHIVE_PATH；完整的早期水域历史仍需有授权的数据源"},
+        {"数据": "历史船位", "当前更新": "自动归档快照及AISStream事件；2026-03-14—04-11自动载入公开岸基采样；近期尝试已知MMSI轨迹；支持CSV导入", "进一步自动化": "设置持久AIS_ARCHIVE_PATH；公开采样集中在迪拜附近；五水域完整历史需有授权的数据源"},
     ], hide_index=True, width="stretch")
     st.markdown("**时间轴与截图。** 历史回看按 UTC 日同步切换港口、咽喉点及船位。船位显示每船当日末次报告，不能视为同一时刻的全部船舶；缺报保持未知，船舶表与CSV同步日期。油气保留披露日期。地图右上角保存 PNG，包含当前视野、图例、日期、弹窗及底图署名。")
     st.markdown(

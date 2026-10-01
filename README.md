@@ -32,6 +32,16 @@
 
 左侧可导入有来源的历史CSV（本页导出格式，或 `mmsi,received_at,lat,lon,source` 列）。导入前整批验证时间、坐标、MMSI和来源，失败不写入；同船同时间同源去重。更早日期须已有档案或另接历史授权服务，页面不会伪造完整历史。
 
+已取得并核查一份[公开岸基AIS档案](https://huggingface.co/datasets/yasumorishima/hormuz-ais)：2026-03-14 06:57:51 至 2026-04-11 10:38:16 UTC，原始175,773条、619个MMSI。切换到该时间段并启用船舶层时，应用按固定源版本下载6.9MB Parquet，校验SHA256，再原子导入SQLite；无需API密钥。也可先运行 `python public_ais_archive.py`。后续打开日期复用档案，载入失败会明确提示。
+
+按来源建议的航速<40节筛选及有效九位MMSI检查，保留159,386条、587个MMSI。航速筛选是保守质量规则，不等于证明所有被排除报告均虚假；原件保留。项目水域分区结果：波斯湾159,314条，阿曼湾65条，霍尔木兹7条，苏伊士与曼德均无报告。不同分区的船舶数有重叠。**这份档案主要在迪拜附近，不是霍尔木兹或五水域全量历史，不用于计算通行总量。** 审计见 [AIS_HISTORY_SOURCE_AUDIT.json](AIS_HISTORY_SOURCE_AUDIT.json)。
+
+`timestamp` 是上游历史报告时间（原文件为无时区UTC），用于选日；原文件 `received_at` 是采集器接收时间，另存 `provider_received_at`，不会拿下载时间或采集时间替代报告日。静态字段仅采用对应历史行，不借用今天资料。下载固定版本和内容散列，字段、坐标、时间或校验失败不标记成功。
+
+原数据许可标为 `other/see-source-terms`，发布者并未授予无条件再分发许可；原文件、数据库和逐条数据不提交公开仓库，使用及再分发须遵守AISStream来源条款。
+
+如需更完整的指定区域历史，应索取实际日期和水域的覆盖样本及授权：[VesselFinder](https://www.vesselfinder.com/historical-ais-data)提供2009年以来自定义区域的卫星/岸基历史CSV；[Datalastic](https://datalastic.com/historical-location-ais-data-api/)提供按地点、半径和历史时段枚举船舶的报告API（须密钥/订阅）。单船轨迹API无法发现所有历史过境船舶，应优先区域查询，核查缺报及卫星覆盖，不能把供应商“全球”营销文案当成具体海峡完整性保证。
+
 ## 2026-10-01 续查
 
 [续查报告](AUDIT_2026-10-01.md)及[631行资产审计](ASSET_DATA_AUDIT_2026-10-01.csv)记录最新结论：19条待核名称全部得到历史名称/层级证据，现目录631项、有主指标89项。补26个原目录参考位置、Kanayes田级点及5个新特许区代理点。Leviathan销售量与产能分别列示，Royee、Fahd及Fahd South明确为勘探项目。历史名称待核清单已清零；542条无主指标和92条无位置记录保留具体缺口。
