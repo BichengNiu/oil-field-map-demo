@@ -8,6 +8,7 @@ import json
 import csv
 import io
 import os
+import time
 from datetime import date, datetime, timedelta, timezone
 
 import streamlit as st
@@ -20,6 +21,7 @@ import audited_measurements
 import supplemental_assets
 import reconciled_assets
 import port_inventory
+import portwatch_downloads
 import map_tools
 
 # Streamlit 的热重载会重跑此文件；显式重新读取目录模块以同步仓库中的数据修订。
@@ -76,6 +78,168 @@ def _show_public_history() -> None:
     st.session_state["monitor_regions"] = ["波斯湾", "霍尔木兹海峡", "阿曼湾"]
     st.session_state["map_layers"] = list(dict.fromkeys(
         [*st.session_state.get("map_layers", []), "vessels"]))
+
+
+def _open_download_tab(kind: str | None = None, node_ids: tuple[str, ...] = ()) -> None:
+    """Open the downloader with either the map scope or a chosen node."""
+    st.session_state["main_tabs"] = "数据下载"
+    st.session_state["pw_download_mode"] = "全部可用历史"
+    if node_ids:
+        st.session_state["pw_download_scope"] = "按条件筛选"
+        st.session_state["pw_download_regions"] = []
+        st.session_state["pw_download_countries"] = []
+        st.session_state["pw_download_nodes"] = [(kind, pid) for pid in node_ids]
+    else:
+        st.session_state["pw_download_scope"] = "沿用地图筛选"
+        st.session_state.pop("pw_download_nodes", None)
+    st.session_state["pw_download_kinds"] = [kind] if kind else ["ports", "chokepoints"]
+
+
+def _render_portwatch_download_panel(region_port_catalog: list[dict], selected_regions: set[str],
+                                     selected_countries: list[str], selected_port_ids: list[str],
+                                     newest_port_day: date | None, newest_choke_day: date | None,
+                                     map_chokepoints: list[dict]) -> None:
+    st.subheader("港口与咽喉要道数据")
+    st.caption("来源：IMF PortWatch。下载的是AIS推算的港口／要道日度汇总，不含逐船AIS航迹；日度数据从2019-01-01起，缺报不补零。")
+    latest = [day for day in (newest_port_day, newest_choke_day) if day]
+    default_last = max(latest) if latest else datetime.now(timezone.utc).date()
+    last_downloadable = datetime.now(timezone.utc).date()
+
+    try:
+        all_ports = [portwatch_downloads.node("ports", row) for row in PORTWATCH.port_catalog()]
+        all_chokes = [portwatch_downloads.node("chokepoints", row)
+                      for row in PORTWATCH.chokepoint_catalog()]
+    except Exception as exc:
+        st.error(f"无法读取下载节点目录：{exc}")
+        return
+
+    kind_options = list(portwatch_downloads.KINDS)
+    selected_kinds = st.multiselect("数据类型", kind_options, default=kind_options,
+        format_func=lambda value: portwatch_downloads.KINDS[value], key="pw_download_kinds")
+    scope_options = ["全部项目节点", "按条件筛选", "沿用地图筛选"]
+    scope = st.radio("节点范围", scope_options, horizontal=True, key="pw_download_scope")
+    selected_nodes = []
+    if scope == "全部项目节点":
+        selected_nodes = [*all_ports, *all_chokes]
+    elif scope == "沿用地图筛选":
+        selected_nodes = [n for n in all_ports if n["region"] in selected_regions
+                          and (not selected_countries or n["country"] in selected_countries)
+                          and (not selected_port_ids or n["portid"] in selected_port_ids)]
+        choke_ids = {str(p["portid"]) for p in map_chokepoints}
+        selected_nodes += [n for n in all_chokes if n["portid"] in choke_ids]
+    else:
+        region_options = list(PORTWATCH.REGIONS)
+        chosen_regions = st.multiselect("水域（空选＝全部五个水域）", region_options,
+                                        key="pw_download_regions")
+        regions = set(chosen_regions or region_options)
+        region_ports = [n for n in all_ports if n["region"] in regions]
+        country_options = sorted({n["country"] for n in region_ports if n["country"]})
+        countries = st.multiselect("国家（空选＝以上水域全部国家）", country_options,
+                                   key="pw_download_countries")
+        candidate_ports = [n for n in region_ports if not countries or n["country"] in countries]
+        choke_options = [n for n in all_chokes if n["region"] in regions]
+        options = [("ports", n["portid"]) for n in candidate_ports] + [
+            ("chokepoints", n["portid"]) for n in choke_options]
+        labels = {("ports", n["portid"]): f'{n["node_name"]} · {n["country"] or "国家未知"}'
+                  for n in candidate_ports}
+        labels.update({("chokepoints", n["portid"]): n["node_name"] for n in choke_options})
+        chosen_nodes = st.multiselect("节点（空选＝按水域及国家纳入全部节点）", options,
+            format_func=lambda key: labels.get(key, key[1]), key="pw_download_nodes")
+        selected = set(chosen_nodes)
+        selected_nodes = [n for n in candidate_ports if not selected or ("ports", n["portid"]) in selected]
+        selected_nodes += [n for n in choke_options if not selected or ("chokepoints", n["portid"]) in selected]
+
+    selected_nodes = [n for n in selected_nodes if n["node_kind"] in selected_kinds]
+    st.caption(f"当前范围：{len(selected_nodes):,} 个节点，其中有独立活动统计的节点 "
+               f"{sum(n['statistics_available'] for n in selected_nodes):,} 个。")
+    mode = st.radio("时间范围", ["最新数据", "历史区间", "全部可用历史"], horizontal=True,
+                    key="pw_download_mode")
+    first = last = None
+    if mode == "历史区间":
+        preset = st.radio("日期快捷选项", ["近30天", "近90天", "今年以来", "自定义日期"],
+                          horizontal=True, key="pw_download_preset")
+        if preset == "自定义日期":
+            current = st.session_state.get("pw_download_dates")
+            default_start, default_end = (current if isinstance(current, (tuple, list))
+                and len(current) == 2 else
+                (max(portwatch_downloads.FIRST_DAY, default_last - timedelta(days=29)), default_last))
+            dates = st.date_input("UTC日期范围", value=(default_start, default_end),
+                min_value=portwatch_downloads.FIRST_DAY, max_value=last_downloadable,
+                key="pw_download_dates")
+            if isinstance(dates, (tuple, list)) and len(dates) == 2:
+                first, last = dates
+        else:
+            last = default_last
+            days = {"近30天": 30, "近90天": 90}.get(preset)
+            first = date(last.year, 1, 1) if preset == "今年以来" else max(
+                portwatch_downloads.FIRST_DAY, last - timedelta(days=days - 1))
+    derived = st.checkbox("附加连续7日和30日均值", value=False, key="pw_download_derived")
+    force = st.checkbox("重新读取源站（忽略24小时历史缓存）", value=False,
+                        key="pw_download_force")
+    st.caption("港口进口／出口为AIS推算货量；咽喉要道capacity为通行运力。两者口径不同。")
+    if not selected_nodes:
+        st.info("按条件选择至少一个数据类型与节点。")
+        return
+
+    def selection_signature():
+        import hashlib
+        payload = {"nodes": sorted((n["node_kind"], n["portid"]) for n in selected_nodes),
+                   "mode": mode, "start": first.isoformat() if first else None,
+                   "end": last.isoformat() if last else None, "derived": derived, "force": force}
+        return hashlib.sha256(json.dumps(payload, sort_keys=True).encode()).hexdigest()
+
+    signature = selection_signature()
+    if st.button("生成下载数据", type="primary", key="pw_download_generate"):
+        try:
+            status = st.status("正在查询PortWatch历史…", expanded=True)
+            last_notice = [0.0]
+            def progress(message: str):
+                now = time.monotonic()
+                if now - last_notice[0] >= 1.0:
+                    status.update(label=message, state="running", expanded=True)
+                    last_notice[0] = now
+            mode_key = {"最新数据": "latest", "历史区间": "history", "全部可用历史": "all"}[mode]
+            result = portwatch_downloads.collect(selected_nodes, mode_key,
+                first=first, last=last, derived=derived, force=force, progress=progress)
+            st.session_state["pw_download_result"] = {"signature": signature, "value": result}
+            status.update(label="数据已生成并完成记录数校验", state="complete", expanded=False)
+        except Exception as exc:
+            st.session_state.pop("pw_download_result", None)
+            st.error(f"数据下载准备失败：{exc}")
+    saved = st.session_state.get("pw_download_result")
+    if not saved:
+        return
+    if saved.get("signature") != signature:
+        st.info("下载条件已更改。点击“生成下载数据”以刷新导出。")
+        return
+    result = saved["value"]
+    st.success("已完成来源记录数与分页校验。")
+    summary = result["manifest"]["row_counts"]
+    st.write(f"港口记录 {summary.get('ports', 0):,} 行；咽喉要道记录 "
+             f"{summary.get('chokepoints', 0):,} 行；覆盖状态详见ZIP中的coverage.csv。")
+    slug = "latest" if mode == "最新数据" else "all-history" if mode == "全部可用历史" else f"{first}_{last}"
+    for kind, rows in result["datasets"].items():
+        data = portwatch_downloads.csv_bytes(rows, portwatch_downloads.columns(
+            kind, result["manifest"]["derived"]))
+        st.download_button(f"下载{portwatch_downloads.KINDS[kind]} CSV",
+            data, file_name=f"portwatch_{kind}_{slug}.csv", mime="text/csv",
+            key=f"pw_download_csv_{kind}_{signature[:12]}")
+    st.download_button("下载完整 ZIP（CSV、节点目录、覆盖、字典、来源查询）",
+        portwatch_downloads.zip_bytes(result), file_name=f"portwatch_{slug}.zip",
+        mime="application/zip", key=f"pw_download_zip_{signature[:12]}")
+    records = sum(map(len, result["datasets"].values()))
+    if records <= portwatch_downloads.XLSX_ROW_LIMIT:
+        st.download_button("下载 Excel 工作簿", portwatch_downloads.xlsx_bytes(result),
+            file_name=f"portwatch_{slug}.xlsx",
+            mime="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
+            key=f"pw_download_xlsx_{signature[:12]}")
+    else:
+        st.info(f"当前结果超过{portwatch_downloads.XLSX_ROW_LIMIT:,}行，已提供完整CSV与ZIP下载；缩短日期范围即可下载Excel。")
+    left, right = st.columns(2)
+    with left:
+        st.dataframe(result["coverage"], width="stretch", hide_index=True, height=300)
+    with right:
+        st.dataframe(result["dictionary"], width="stretch", hide_index=True, height=300)
 
 
 st.set_page_config(page_title="中东能源保供监测", page_icon="◉", layout="wide",
@@ -946,8 +1110,9 @@ with st.sidebar:
 
     st.caption("航运水域同时作用于港口、咽喉点和船舶；其他筛选留空表示全部。")
 
-tab_map, tab_ports, tab_vessels, tab_assets, tab_method = st.tabs(
-    ["地图", "港口", "船舶", "油气", "数据与方法"])
+tab_map, tab_ports, tab_vessels, tab_assets, tab_download, tab_method = st.tabs(
+    ["地图", "港口", "船舶", "油气", "数据下载", "数据与方法"],
+    key="main_tabs", on_change="rerun")
 with tab_map:
     time_mode = st.radio("地图时间", ["最新", "历史回看"], horizontal=True, key="map_time_mode")
     available_days = [d for d in (newest_day, newest_chokepoint_day) if d is not None]
@@ -1216,6 +1381,10 @@ def render_map_panel() -> None:
         st.error(f"港口数据加载失败：{port_error}")
     if chokepoint_error:
         st.error(f"咽喉点数据加载失败：{chokepoint_error}")
+    if chokepoints:
+        st.button("下载当前咽喉要道历史", key="download_chokepoint_history",
+                  on_click=_open_download_tab,
+                  args=("chokepoints", tuple(p["portid"] for p in chokepoints)))
     if historical_map:
         if "vessels" in visible_map_layers and ais_enabled:
             st.caption(f"历史船位 {history_day} UTC：{len(all_positions)} 艘有报告样本。" +
@@ -1375,8 +1544,15 @@ with tab_ports:
         st.download_button("下载当前筛选结果 CSV", buffer.getvalue().encode("utf-8-sig"),
                            file_name=f"portwatch_ports_{selected_day.isoformat()}.csv",
                            mime="text/csv", type="primary")
+        st.button("下载当前筛选港口历史", key="download_port_history",
+                  on_click=_open_download_tab, args=("ports", tuple(p["portid"] for p in ports)))
     else:
         st.info("当前筛选没有匹配港口。清空水域和搜索框可恢复全部港口。")
+
+with tab_download:
+    _render_portwatch_download_panel(
+        region_port_catalog, selected_region_set, selected_port_countries,
+        selected_port_ids, newest_day, newest_chokepoint_day, chokepoints)
 
 with tab_vessels:
     render_ais_panel()
