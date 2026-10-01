@@ -28,7 +28,7 @@ SOURCE = "https://aisstream.io/documentation"
 STREAM_URL = "wss://stream.aisstream.io/v0/stream"
 OPENWATERS_SOURCE = "https://openwaters.io/ais/"
 OPENWATERS_API = "https://ais.openwaters.io/v1/vessels"
-MODULE_VERSION = 3
+MODULE_VERSION = 4
 
 # south, north, west, east.  Keep aligned with portwatch.REGIONS.
 REGIONS = {
@@ -490,6 +490,7 @@ class AISCollector:
         self._connected_at: str | None = None
         self._subscription_confirmed_at: str | None = None
         self._compression_enabled: bool | None = None
+        self._archive_error: str | None = None
 
     def start(self) -> "AISCollector":
         if self._thread and self._thread.is_alive():
@@ -608,6 +609,17 @@ class AISCollector:
                     **{key: value for key, value in normalized.items()
                        if value is not None},
                 }
+        if normalized["kind"] == "position" and normalized.get("region"):
+            try:
+                import ais_history
+                with self._lock:
+                    archived = {**self._static.get(mmsi, {}), **normalized}
+                ais_history.archive_reports([archived])
+                with self._lock:
+                    self._archive_error = None
+            except Exception as exc:
+                with self._lock:
+                    self._archive_error = f"{type(exc).__name__}: {exc}"
         return True
 
     def snapshot(self, max_age_minutes: int = 30,
@@ -660,4 +672,5 @@ class AISCollector:
                 "subscription_confirmed_at": self._subscription_confirmed_at,
                 "compression_enabled": self._compression_enabled,
                 "tracked_vessels": len(self._positions),
+                "archive_error": self._archive_error,
             }

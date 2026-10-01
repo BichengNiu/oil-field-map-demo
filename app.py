@@ -14,6 +14,7 @@ import streamlit as st
 
 import field_catalog
 import ais
+import ais_history
 import portwatch
 import audited_measurements
 import supplemental_assets
@@ -57,6 +58,11 @@ def _ais_collector(api_key: str, collector_version: int) -> AIS.AISCollector:
 @st.cache_data(ttl=15, show_spinner=False)
 def _openwaters_snapshot(max_age_minutes: int, collector_version: int) -> dict:
     return AIS.openwaters_snapshot(max_age_minutes=max_age_minutes)
+
+
+@st.cache_data(ttl=300, show_spinner="读取当日历史船位…")
+def _historical_snapshot(day: date, candidates: tuple[str, ...], revision: str) -> dict:
+    return ais_history.historical_snapshot(day, candidates)
 
 
 def _show_history() -> None:
@@ -462,7 +468,8 @@ def _map_html(assets: list[dict[str, object]], ports: list[dict],
               chokepoints: list[dict], vessels: list[dict], day: str, chokepoint_day: str,
               focus_assets: bool = False, ais_configured: bool = True,
               visible_layers: set[str] | None = None,
-              region_bounds: list[tuple[float, float, float, float]] | None = None) -> str:
+              region_bounds: list[tuple[float, float, float, float]] | None = None,
+              vessel_day: str | None = None) -> str:
     visible_layers = set(MAP_LAYER_LABELS) if visible_layers is None else visible_layers
     show_assets = "assets" in visible_layers
     show_ports = "ports" in visible_layers
@@ -530,6 +537,8 @@ def _map_html(assets: list[dict[str, object]], ports: list[dict],
     focus_json = json.dumps(focus_assets)
     region_bounds_json = json.dumps(region_bounds or [])
     date_label = html.escape(f"港口 {day} UTC · 咽喉点 {chokepoint_day} UTC")
+    if vessel_day:
+        date_label += html.escape(f" · 船位 {vessel_day} UTC 样本／当日末次报告（非同时快照）")
     date_label_json = json.dumps(date_label, ensure_ascii=False)
     screenshot_date_json = json.dumps(day if day != "无数据" else chokepoint_day)
     return f"""
@@ -835,7 +844,7 @@ with st.sidebar:
 
     with st.expander("船舶", expanded=True):
         ais_enabled = st.toggle(
-            "启用实时船位", value=True,
+            "启用船位", value=True,
             key="ais_enabled")
         selected_ais_categories = st.multiselect(
             "船型（空选＝全部）", list(AIS.VESSEL_TYPE_LABELS), default=[],
@@ -877,7 +886,24 @@ with st.sidebar:
             if ais_api_key:
                 _ais_collector.clear()
             _openwaters_snapshot.clear()
+            _historical_snapshot.clear()
             st.rerun()
+
+        history_upload = st.file_uploader(
+            "导入历史船位 CSV", type=["csv"], key="ais_history_upload",
+            help="支持本页导出的CSV，或mmsi、received_at、lat、lon、source列；时间按UTC解释。")
+        if history_upload is not None:
+            import hashlib
+            upload_bytes = history_upload.getvalue()
+            upload_hash = hashlib.sha256(upload_bytes).hexdigest()
+            if st.session_state.get("ais_imported_hash") != upload_hash:
+                try:
+                    count = ais_history.import_csv(upload_bytes)
+                    st.session_state["ais_imported_hash"] = upload_hash
+                    _historical_snapshot.clear()
+                    st.success(f"已归档 {count} 条新增历史船位报告")
+                except Exception as exc:
+                    st.error(f"历史CSV导入失败：{exc}")
 
     with st.expander("油气", expanded=False):
         asset_view = st.radio(
@@ -914,26 +940,25 @@ with tab_map:
     time_mode = st.radio("地图时间", ["最新", "历史回看"], horizontal=True, key="map_time_mode")
     available_days = [d for d in (newest_day, newest_chokepoint_day) if d is not None]
     history_day = None
-    if available_days:
-        last_day = max(available_days)
-        first_day = date(2019, 1, 1)
-        if time_mode == "最新" or "map_history_day" not in st.session_state:
-            st.session_state["map_history_day"] = last_day
-        else:
-            st.session_state["map_history_day"] = min(last_day, max(first_day, st.session_state["map_history_day"]))
-        history_day = st.slider(
-            "通行时间轴（UTC，按日）", min_value=first_day, max_value=last_day,
-            step=timedelta(days=1), format="YYYY-MM-DD",
-            key="map_history_day", on_change=_show_history,
-            help="拖动即进入历史回看，港口及咽喉点一起切换到选中日期。缺报保持未知；选择最新可返回当前数据。")
+    last_day = max([datetime.now(timezone.utc).date(), *available_days])
+    first_day = date(2019, 1, 1)
+    if time_mode == "最新" or "map_history_day" not in st.session_state:
+        st.session_state["map_history_day"] = max(available_days) if available_days else last_day
     else:
-        st.warning("源站未返回可用日期，暂不能读取时间轴。")
+        st.session_state["map_history_day"] = min(last_day, max(first_day, st.session_state["map_history_day"]))
+    history_day = st.slider(
+        "通行时间轴（UTC，按日）", min_value=first_day, max_value=last_day,
+        step=timedelta(days=1), format="YYYY-MM-DD",
+        key="map_history_day", on_change=_show_history,
+        help="拖动后港口、咽喉点和船位一起切换到所选UTC日。船位用当日末次报告；无档案或超出接口覆盖时保持未知。")
+    if not available_days:
+        st.warning("源站未返回可用日期；仍可选择日期读取已有船位档案，港口与咽喉点的缺报保持未知。")
     historical_map = time_mode == "历史回看"
     if historical_map and history_day is not None:
         selected_day = history_day
     selected_chokepoint_day = history_day if historical_map else newest_chokepoint_day
     if historical_map:
-        st.caption("历史回看：港口与咽喉点使用同一日的日度记录；船舶实时图层暂停显示，油气资料保留各自披露日期。")
+        st.caption("历史回看：港口、咽喉点和船位使用所选UTC日；船位是每船当日末次观测，非同时快照。油气资料保留披露日期。")
     else:
         st.caption("最新模式：港口与咽喉点各用源站最新可用日；船位按各自 AIS 报告时间显示。")
     st.caption(f"最近向源站检查：{st.session_state['source_check_utc']} UTC")
@@ -987,10 +1012,31 @@ def current_ais_positions() -> list[dict]:
     return AIS.merge_vessel_snapshots(stream_rows, open_state.get("vessels", []))
 
 
+live_positions = current_ais_positions()
+archive_error = None
+try:
+    ais_history.archive_reports(live_positions)
+except Exception as exc:
+    archive_error = f"船位归档失败：{exc}"
+history_state = {"vessels": [], "error": None}
+if historical_map and history_day is not None and ais_enabled:
+    try:
+        candidates = tuple(dict.fromkeys(
+            [v["mmsi"] for v in live_positions] + ais_history.known_mmsis()))
+        revision = str(st.session_state.get("ais_imported_hash", ""))
+        history_state = _historical_snapshot(history_day, candidates, revision)
+    except Exception as exc:
+        history_state["error"] = str(exc)
+
+
+def selected_ais_positions() -> list[dict]:
+    return history_state["vessels"] if historical_map else live_positions
+
+
 def current_vessels(rows: list[dict] | None = None) -> list[dict]:
     """Return one consistent, filtered snapshot; missing AIS is unavailable, not zero."""
 
-    snapshot = current_ais_positions() if rows is None else rows
+    snapshot = selected_ais_positions() if rows is None else rows
     return AIS.filter_vessels(
         snapshot,
         regions=selected_region_set,
@@ -1134,7 +1180,10 @@ def vessel_rows(vessels: list[dict]) -> list[dict]:
         "目的地": vessel.get("destination"),
         "吃水 米": vessel.get("draught"),
         "AIS报告时间 UTC": vessel.get("received_at"),
-        "数据年龄 分钟": round(vessel.get("age_minutes", 0), 1),
+        "数据年龄 分钟": (round(vessel["age_minutes"], 1)
+                         if vessel.get("age_minutes") is not None else None),
+        "历史日期 UTC": vessel.get("historical_day"),
+        "来源署名": vessel.get("source_attribution"),
         "纬度": vessel.get("lat"), "经度": vessel.get("lon"),
         "数据源": vessel.get("data_source"),
         "来源": vessel.get("source_url") or AIS.SOURCE,
@@ -1142,11 +1191,11 @@ def vessel_rows(vessels: list[dict]) -> list[dict]:
 
 
 def render_map_panel() -> None:
-    all_positions = current_ais_positions()
+    all_positions = selected_ais_positions()
     filtered_vessels = current_vessels(all_positions)
     map_vessels = (
         filtered_vessels
-        if "vessels" in visible_map_layers and not historical_map
+        if "vessels" in visible_map_layers
         else []
     )
     stream_state = current_ais_status()
@@ -1155,6 +1204,15 @@ def render_map_panel() -> None:
     if chokepoint_error:
         st.error(f"咽喉点数据加载失败：{chokepoint_error}")
     if historical_map:
+        if "vessels" in visible_map_layers and ais_enabled:
+            st.caption(f"历史船位 {history_day} UTC：{len(all_positions)} 艘有报告样本。" +
+                       history_state.get("coverage", ""))
+            if history_state.get("error"):
+                st.warning(f'历史船位读取问题：{history_state["error"]}')
+            if not all_positions:
+                st.info("所选日期没有可用历史船位档案或接口报告；不代表当天没有船舶。可导入历史CSV。")
+            if history_state.get("truncated") or history_state.get("candidate_limit"):
+                st.warning("历史接口或候选船舶查询达到上限，当前样本不完整。")
         if chokepoints and "chokepoints" in visible_map_layers:
             summary_columns = st.columns(len(chokepoints))
             for column, point in zip(summary_columns, chokepoints):
@@ -1170,6 +1228,8 @@ def render_map_panel() -> None:
     elif "vessels" in visible_map_layers:
         if stream_state.get("last_error") and not all_positions:
             st.warning(f'AISStream 暂无可用船位，后台将自动重连：{stream_state["last_error"]}')
+        if stream_state.get("archive_error"):
+            st.warning(f'AISStream 船位归档失败：{stream_state["archive_error"]}')
         if open_state.get("error"):
             st.warning(f'Open Waters 免费数据暂不可用：{open_state["error"]}')
         if not all_positions and not open_state.get("error"):
@@ -1190,9 +1250,10 @@ def render_map_panel() -> None:
             map_assets, map_ports, map_chokepoints, map_vessels,
             selected_day.isoformat() if selected_day else "无数据",
             selected_chokepoint_day.isoformat() if selected_chokepoint_day else "无数据",
-            focus_assets=bool(asset_search), ais_configured=bool(ais_enabled and not historical_map),
+            focus_assets=bool(asset_search), ais_configured=bool(ais_enabled),
             visible_layers=visible_map_layers,
-            region_bounds=selected_region_bounds),
+            region_bounds=selected_region_bounds,
+            vessel_day=history_day.isoformat() if historical_map and history_day else None),
         height=735,
     )
 
@@ -1202,11 +1263,21 @@ def render_ais_panel() -> None:
     if not ais_enabled:
         st.info("船舶位置已关闭，可在左侧‘船舶’中启用。")
         return
-    all_positions = current_ais_positions()
+    all_positions = selected_ais_positions()
     vessels = current_vessels(all_positions)
     rows = vessel_rows(vessels)
     state = current_ais_status()
     has_position_data = bool(all_positions)
+    if archive_error:
+        st.warning(archive_error)
+    if historical_map:
+        st.caption(f"历史日期：{history_day} UTC · 当日每船末次报告；不混入当前船位。")
+        st.caption(history_state.get("coverage", "历史样本覆盖范围未知"))
+        if history_state.get("error"):
+            st.warning(f'历史船位读取问题：{history_state["error"]}')
+        if not all_positions:
+            st.info("该日历史船位不可用，不能据此判断当天船舶数量为零。可导入有来源的历史CSV。")
+            return
     vessel_metric = len(vessels) if has_position_data else "—"
     v1, v2, v3, v4, v5 = st.columns(5)
     v1.metric("筛选后船舶", vessel_metric)
@@ -1217,9 +1288,9 @@ def render_ais_panel() -> None:
               if has_position_data else "—")
     v5.metric("船型待识别", sum(v.get("category") == "unknown" for v in vessels)
               if has_position_data else "—")
-    if open_state.get("truncated"):
+    if not historical_map and open_state.get("truncated"):
         st.warning("Open Waters 返回结果达到该区域查询上限，较早船位可能未包含。")
-    if open_state.get("error"):
+    if not historical_map and open_state.get("error"):
         st.warning(f'Open Waters 快照错误：{open_state["error"]}')
     if state.get("compression_enabled") is False:
         st.warning("AISStream 未确认 WebSocket 压缩协商；未压缩连接可能受带宽限制。")
@@ -1232,8 +1303,10 @@ def render_ais_panel() -> None:
         writer = csv.DictWriter(buffer, fieldnames=rows[0].keys())
         writer.writeheader(); writer.writerows(rows)
         st.download_button(
-            "下载当前船位快照 CSV", buffer.getvalue().encode("utf-8-sig"),
-            file_name="ais_vessel_snapshot.csv", mime="text/csv", type="primary")
+            "下载历史船位 CSV" if historical_map else "下载当前船位快照 CSV",
+            buffer.getvalue().encode("utf-8-sig"),
+            file_name=f"ais_vessels_{history_day}.csv" if historical_map else "ais_vessel_snapshot.csv",
+            mime="text/csv", type="primary")
     elif not all_positions:
         if (state.get("status") == "订阅已确认"
                 and state.get("raw_event_count", 0) == 0
@@ -1317,9 +1390,9 @@ with tab_method:
         {"数据": "港口 / 咽喉点官方目录", "当前更新": "打开页面重读 PortWatch API", "进一步自动化": "已接入；补充 WPI / 运营商名录仍需版本核验"},
         {"数据": "港口风险运力", "当前更新": "打开页面重读源 API", "进一步自动化": "源为历史航线模型；重新抓取不代表实时风险"},
         {"数据": "油气产量、产能、状态和坐标", "当前更新": "经核验的静态公开披露记录", "进一步自动化": "接运营商 / 监管机构 API 或公告抓取，校验资产、日期、单位、产量 / 产能后更新"},
-        {"数据": "历史船位", "当前更新": "当前地图未接入历史水域快照", "进一步自动化": "持续归档 AIS，或接有历史授权的服务；Open Waters 单船近 48 小时轨迹不等于完整水域历史"},
+        {"数据": "历史船位", "当前更新": "自动归档取得的快照及AISStream位置事件；历史日读取档案并尝试已知MMSI近48小时轨迹；支持CSV导入", "进一步自动化": "设置持久AIS_ARCHIVE_PATH；完整的早期水域历史仍需有授权的数据源"},
     ], hide_index=True, width="stretch")
-    st.markdown("**时间轴与截图。** 历史回看按 UTC 日切换港口及咽喉点；缺报显示无记录，实时船位暂停显示。油气记录不是历史重放，保留披露日期。地图右上角保存 PNG，包含当前视野、图例、日期、打开的弹窗及底图署名。")
+    st.markdown("**时间轴与截图。** 历史回看按 UTC 日同步切换港口、咽喉点及船位。船位显示每船当日末次报告，不能视为同一时刻的全部船舶；缺报保持未知，船舶表与CSV同步日期。油气保留披露日期。地图右上角保存 PNG，包含当前视野、图例、日期、弹窗及底图署名。")
     st.markdown(
         "**港口覆盖。** 地图读取 IMF 当前维护的 PortWatch 港口点位数据库，"
         "并按下表五个经纬度框选取港口。交叠区域按表中顺序唯一归属。"

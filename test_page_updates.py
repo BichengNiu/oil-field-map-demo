@@ -1,6 +1,9 @@
 """Session freshness and historical-date integration, without upstream traffic."""
 from datetime import date, timedelta
 from pathlib import Path
+import tempfile
+import os
+import json
 import importlib
 import re
 import unittest
@@ -8,17 +11,22 @@ from unittest.mock import patch
 
 from streamlit.testing.v1 import AppTest
 import ais
+import ais_history
 import portwatch
 import port_inventory
 
 
 class PageUpdates(unittest.TestCase):
     def setUp(self):
+        temp = tempfile.TemporaryDirectory()
+        self.addCleanup(temp.cleanup)
         self.latest_port = date(2026, 9, 25)
         self.latest_choke = date(2026, 9, 27)
         self.queries = []
         self.fail_dates = False
         self.patches = [
+            patch.dict(os.environ, {"AIS_ARCHIVE_PATH": str(Path(temp.name) / "ais.sqlite3")}),
+            patch.object(ais_history, "_fetch_track", return_value=([], False)),
             patch.object(importlib, "reload", side_effect=lambda module: module),
             patch.object(port_inventory, "enrich", side_effect=lambda rows: rows),
             patch.object(portwatch, "_query", side_effect=self.query),
@@ -103,9 +111,29 @@ class PageUpdates(unittest.TestCase):
         self.fail_dates = True
         failed = self.page()
         self.assertFalse(failed.exception)
-        self.assertFalse(failed.slider)
+        self.assertTrue(failed.slider)
         self.assertEqual(failed.status[0].state, "error")
         self.assertTrue(any("fixture source unavailable" in w.value for w in failed.warning))
+
+    def test_historical_map_table_and_export_use_same_day_not_current_positions(self):
+        def report(day, lat):
+            return {"mmsi": "123456789", "received_at": f"2026-09-{day:02d}T12:00:00Z",
+                    "lat": lat, "lon": 56.4, "source": "dated-test-fixture", "sog": 2}
+        ais_history.archive_reports([report(23, 26.1), report(24, 26.2), report(25, 26.3)])
+        app = self.page()
+        app.multiselect(key="map_layers").set_value(["ports", "chokepoints", "vessels"]).run()
+        app.slider(key="map_history_day").set_value(date(2026, 9, 24)).run()
+        self.assertFalse(app.exception, [e.message for e in app.exception])
+        iframe = app.get("iframe")[0].proto.srcdoc
+        vessels = json.loads(re.search(r"const vessels = (.*?);", iframe).group(1))
+        self.assertEqual([v["lat"] for v in vessels], [26.2])
+        self.assertIn("船位 2026-09-24 UTC", iframe)
+        table = next(df.value for df in app.dataframe if "MMSI" in df.value.columns)
+        self.assertEqual(table.iloc[0]["历史日期 UTC"], "2026-09-24")
+        self.assertTrue(table["AIS报告时间 UTC"].str.startswith("2026-09-24").all())
+        app.slider(key="map_history_day").set_value(date(2026, 9, 22)).run()
+        self.assertIn("const vessels = [];", app.get("iframe")[0].proto.srcdoc)
+        self.assertTrue(any("历史船位不可用" in item.value for item in app.info))
 
 
 if __name__ == "__main__":
