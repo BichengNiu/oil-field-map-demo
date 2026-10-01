@@ -41,7 +41,8 @@ def main():
     for filename, rows in ((f"ASSET_CHECKPOINT_RECONCILIATION_{review_date}.csv", output),
                            (f"PENDING_ASSET_CLUES_{review_date}.csv", pending())):
         with (root / filename).open("w", encoding="utf-8-sig", newline="") as stream:
-            writer = csv.DictWriter(stream, fieldnames=rows[0].keys(), lineterminator="\n")
+            fields = rows[0].keys() if rows else ("国家", "名称线索", "原页", "核验结果")
+            writer = csv.DictWriter(stream, fieldnames=fields, lineterminator="\n")
             writer.writeheader()
             writer.writerows(rows)
         print(filename, len(rows))

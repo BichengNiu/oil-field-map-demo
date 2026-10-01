@@ -1298,11 +1298,14 @@ with tab_method:
 
 pending_clues = reconciled_assets.pending()
 with st.expander(f"待核资产线索（{len(pending_clues)}条；未纳入确认目录）"):
-    st.caption("以下线索来自保存的历史名录。原页及定向检索未取得充分确认内容，保留供继续核验；不填产量或坐标。")
-    st.dataframe(pending_clues, hide_index=True, width="stretch")
-    pending_buffer = io.StringIO()
-    pending_writer = csv.DictWriter(pending_buffer, fieldnames=pending_clues[0].keys())
-    pending_writer.writeheader()
-    pending_writer.writerows(pending_clues)
-    st.download_button("下载待核线索 CSV", pending_buffer.getvalue().encode("utf-8-sig"),
-                       "pending_asset_clues.csv", "text/csv", key="pending_asset_clues")
+    if pending_clues:
+        st.caption("以下线索来自保存的历史名录。原页及定向检索未取得充分确认内容，保留供继续核验；不填产量或坐标。")
+        st.dataframe(pending_clues, hide_index=True, width="stretch")
+        pending_buffer = io.StringIO()
+        pending_writer = csv.DictWriter(pending_buffer, fieldnames=pending_clues[0].keys())
+        pending_writer.writeheader()
+        pending_writer.writerows(pending_clues)
+        st.download_button("下载待核线索 CSV", pending_buffer.getvalue().encode("utf-8-sig"),
+                           "pending_asset_clues.csv", "text/csv", key="pending_asset_clues")
+    else:
+        st.caption("历史检查点的19条名称线索已完成范围对账。产量、坐标和现时状态的缺口仍见资产审计表。")

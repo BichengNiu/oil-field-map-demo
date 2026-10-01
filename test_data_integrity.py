@@ -70,6 +70,29 @@ class CatalogIntegrity(unittest.TestCase):
             self.assertIn("2024", a["data_date"])
             self.assertFalse(a["is_daily_output"])
 
+    def test_original_map_recovery_rejects_country_centres_and_cross_country_names(self):
+        index = {(a["country"], a["name"]): a for a in field_catalog.ASSETS}
+        self.assertEqual(reconciled_assets.pending(), [])
+        kanayes = index[("埃及", "Kanayes")]
+        self.assertEqual((kanayes["map_lat"], kanayes["map_lon"]), (30.947, 28.011))
+        self.assertEqual(kanayes["operating_status"], "historical_unverified")
+        self.assertIsNone(kanayes["value"])
+        self.assertIn("Ras/East/West", kanayes["note"])
+        for name in ("Abu Qir", "Alamein", "Ptah", "Assil", "JG-NEAG"):
+            self.assertFalse(index[("埃及", name)]["map_drawable"])
+        for name in ("Namavaran", "Towsan"):
+            self.assertFalse(index[("伊朗", name)]["map_drawable"])
+        self.assertFalse(index[("以色列", "Hermes")]["map_drawable"])
+        self.assertEqual((index[("埃及", "Libra")]["map_lat"], index[("埃及", "Libra")]["map_lon"]),
+                         (31.956, 30.169))
+        self.assertEqual((index[("伊朗", "Eram")]["map_lat"], index[("伊朗", "Eram")]["map_lon"]),
+                         (28.0158, 52.6218))
+        self.assertIn("approximate", index[("伊朗", "Eram")]["map_coordinate_precision"])
+        with Path("PENDING_ASSET_CLUES_2026-10-01.csv").open(encoding="utf-8-sig") as stream:
+            pending_rows = csv.DictReader(stream)
+            self.assertEqual(pending_rows.fieldnames, ["国家", "名称线索", "原页", "核验结果"])
+            self.assertEqual(list(pending_rows), [])
+
     def test_confirmed_prospects_concessions_and_groups_keep_their_scope(self):
         index = {(a["country"], a["name"]): a for a in field_catalog.ASSETS}
         for country, name in (("阿曼", "Fahd"), ("以色列", "Royee")):

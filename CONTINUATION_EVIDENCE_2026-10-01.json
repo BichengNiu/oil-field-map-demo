@@ -253,6 +253,20 @@
       "confidence": "低",
       "status_basis": "历史合同记录证明名称，不证明当前生产；不把合同组合目标视作田级实绩",
       "status_url": "https://www.everycrsreport.com/files/2019-09-10_RS20871_881f4870768e444d3494ae34cef43faf8cb3614a.html"
+    },
+    {
+      "country": "埃及",
+      "name": "Kanayes",
+      "asset_type": "油气田",
+      "asset_level": "field",
+      "source": "GEM original public map CSV; field page cross-check",
+      "source_url": "https://greeninfo-network.github.io/global-oil-gas-extraction-tracker/data/data.csv",
+      "as_of": "1992发现；地图版本未注明，页面复核2026-10-01",
+      "note": "GEM原始地图CSV及独立田级页面均列Kanayes，1992发现；对应保存检查点的同一URL。只确认该目录范围，不归并Ras/East/West Kanayes特许区。CSV与页面运营商不同且版期未标，均不用于认定当前运营商或产量。",
+      "state": "historical_unverified",
+      "confidence": "低",
+      "status_basis": "GEM名录列operating但状态底层引用期混杂；保留历史资产，不能证明当前在产。GEM原始地图CSV及独立田级页面均列Kanayes，1992发现；对应保存检查点的同一URL。只确认该目录范围，不归并Ras/East/West Kanayes特许区。CSV与页面运营商不同且版期未标，均不用于认定当前运营商或产量。",
+      "status_url": "https://www.gem.wiki/Kanayes_Oil_and_Gas_Field_(Egypt)"
     }
   ],
   "measurements": [
@@ -542,6 +556,196 @@
       "precision": "GEM exact；09-30保存的同田别名参考点，非独立测绘",
       "source": "Preserved GEM table; verified one-to-one name mapping",
       "url": "https://www.gem.wiki/Merjan_Oil_Field_(Iraq)",
+      "proxy": false
+    },
+    {
+      "country": "伊拉克",
+      "name": "Akkas",
+      "lat": 34.115,
+      "lon": 41.18,
+      "precision": "GEM exact；源田级公开参考点，非独立测绘",
+      "source": "GEM field-level WGS84 location table re-read 2026-10-01",
+      "url": "https://www.gem.wiki/Akkas_Gas_Field_(Iraq)",
+      "proxy": false
+    },
+    {
+      "country": "伊拉克",
+      "name": "Kifl",
+      "lat": 32.085,
+      "lon": 44.279,
+      "precision": "GEM exact；源田级公开参考点，非独立测绘",
+      "source": "GEM field-level WGS84 location table re-read 2026-10-01",
+      "url": "https://www.gem.wiki/Kifl_Oil_Field_(Iraq)",
+      "proxy": false
+    },
+    {
+      "country": "伊拉克",
+      "name": "West Kifl",
+      "lat": 32.243,
+      "lon": 43.901,
+      "precision": "GEM exact；源田级公开参考点，非独立测绘",
+      "source": "GEM field-level WGS84 location table re-read 2026-10-01",
+      "url": "https://www.gem.wiki/West_Kifl_Oil_Field_(Iraq)",
+      "proxy": false
+    },
+    {
+      "country": "伊拉克",
+      "name": "Siba",
+      "lat": 30.032,
+      "lon": 48.003,
+      "precision": "GEM exact；源田级公开参考点，非独立测绘",
+      "source": "GEM field-level WGS84 location table re-read 2026-10-01",
+      "url": "https://www.gem.wiki/Siba_Gas_Field_(Iraq)",
+      "proxy": false
+    },
+    {
+      "country": "伊朗",
+      "name": "Kish",
+      "lat": 26.5293,
+      "lon": 53.9434,
+      "precision": "GEM exact；源田级公开参考点，非独立测绘",
+      "source": "GEM field-level WGS84 location table re-read 2026-10-01",
+      "url": "https://www.gem.wiki/Kish_Oil_and_Gas_Field_(Iran)",
+      "proxy": false
+    },
+    {
+      "country": "伊朗",
+      "name": "Eram",
+      "lat": 28.0158,
+      "lon": 52.6218,
+      "precision": "GEM approximate；源田级公开参考点，非独立测绘",
+      "source": "GEM field-level WGS84 location table re-read 2026-10-01",
+      "url": "https://www.gem.wiki/Eram_Gas_Field_(Iran)",
+      "proxy": false
+    },
+    {
+      "country": "埃及",
+      "name": "Taurus",
+      "lat": 31.917,
+      "lon": 30.097,
+      "precision": "GEM exact；源田级公开参考点，非独立测绘",
+      "source": "GEM field-level WGS84 location table re-read 2026-10-01",
+      "url": "https://www.gem.wiki/Taurus_Gas_Field_(Egypt)",
+      "proxy": false
+    },
+    {
+      "country": "埃及",
+      "name": "Libra",
+      "lat": 31.956,
+      "lon": 30.169,
+      "precision": "GEM exact；源田级公开参考点，非独立测绘",
+      "source": "GEM field-level WGS84 location table re-read 2026-10-01",
+      "url": "https://www.gem.wiki/Libra_Gas_Field_(Egypt)",
+      "proxy": false
+    },
+    {
+      "country": "埃及",
+      "name": "Giza",
+      "lat": 31.703,
+      "lon": 29.846,
+      "precision": "GEM exact；源田级公开参考点，非独立测绘",
+      "source": "GEM field-level WGS84 location table re-read 2026-10-01",
+      "url": "https://www.gem.wiki/Giza_Gas_Field_(Egypt)",
+      "proxy": false
+    },
+    {
+      "country": "埃及",
+      "name": "Fayoum",
+      "lat": 31.602,
+      "lon": 29.884,
+      "precision": "GEM exact；源田级公开参考点，非独立测绘",
+      "source": "GEM field-level WGS84 location table re-read 2026-10-01",
+      "url": "https://www.gem.wiki/Fayoum_Gas_Field_(Egypt)",
+      "proxy": false
+    },
+    {
+      "country": "埃及",
+      "name": "Raven",
+      "lat": 31.743,
+      "lon": 29.951,
+      "precision": "GEM exact；源田级公开参考点，非独立测绘",
+      "source": "GEM field-level WGS84 location table re-read 2026-10-01",
+      "url": "https://www.gem.wiki/Raven_Oil_and_Gas_Field_(Egypt)",
+      "proxy": false
+    },
+    {
+      "country": "伊朗",
+      "name": "Resalat",
+      "lat": 25.9844,
+      "lon": 53.1499,
+      "precision": "GEM exact；源田级公开参考点，非独立测绘",
+      "source": "GEM field-level WGS84 location table re-read 2026-10-01",
+      "url": "https://www.gem.wiki/Resalat_Oil_Field_(Iran)",
+      "proxy": false
+    },
+    {
+      "country": "埃及",
+      "name": "Berenice",
+      "lat": 30.547,
+      "lon": 26.021,
+      "precision": "GEM exact；源田级公开参考点，非独立测绘",
+      "source": "GEM field-level WGS84 location table re-read 2026-10-01",
+      "url": "https://www.gem.wiki/Berenice_Oil_Field_(Egypt)",
+      "proxy": false
+    },
+    {
+      "country": "伊朗",
+      "name": "Maleh Kuh",
+      "lat": 33.2051,
+      "lon": 47.6291,
+      "precision": "GEM exact；源田级公开参考点，非独立测绘",
+      "source": "GEM field-level WGS84 location table re-read 2026-10-01",
+      "url": "https://www.gem.wiki/Maleh_Kuh_Oil_and_Gas_Field_(Iran)",
+      "proxy": false
+    },
+    {
+      "country": "埃及",
+      "name": "Magd",
+      "lat": 29.3372,
+      "lon": 28.4631,
+      "precision": "GEM exact；源田级公开参考点，非独立测绘",
+      "source": "GEM field-level WGS84 location table re-read 2026-10-01",
+      "url": "https://www.gem.wiki/Magd_Oil_and_Gas_Field_(Egypt)",
+      "proxy": false
+    },
+    {
+      "country": "埃及",
+      "name": "Amal",
+      "lat": 28.0667,
+      "lon": 33.5167,
+      "precision": "GEM approximate；源田级公开参考点，非独立测绘",
+      "source": "GEM field-level WGS84 location table re-read 2026-10-01",
+      "url": "https://www.gem.wiki/Amal_Oil_Field_(Egypt)",
+      "proxy": false
+    },
+    {
+      "country": "埃及",
+      "name": "Hilal",
+      "lat": 27.781,
+      "lon": 33.757,
+      "precision": "GEM exact；源田级公开参考点，非独立测绘",
+      "source": "GEM field-level WGS84 location table re-read 2026-10-01",
+      "url": "https://www.gem.wiki/Hilal_Oil_and_Gas_Field_(Egypt)",
+      "proxy": false
+    },
+    {
+      "country": "埃及",
+      "name": "Simian",
+      "lat": 32.204,
+      "lon": 30.384,
+      "precision": "GEM exact；源田级公开参考点，非独立测绘",
+      "source": "GEM field-level WGS84 location table re-read 2026-10-01",
+      "url": "https://www.gem.wiki/Simian_Oil_and_Gas_Field_(Egypt)",
+      "proxy": false
+    },
+    {
+      "country": "埃及",
+      "name": "Kanayes",
+      "lat": 30.947,
+      "lon": 28.011,
+      "precision": "GEM exact；源田级公开参考点，非独立测绘",
+      "source": "GEM field-level WGS84 location table re-read 2026-10-01",
+      "url": "https://www.gem.wiki/Kanayes_Oil_and_Gas_Field_(Egypt)",
       "proxy": false
     }
   ],
@@ -869,5 +1073,621 @@
       "source_url": "https://www.tethysoil.com/en/prospective-resources-in-fahd-area-block-58/",
       "note": "运营商明确Fahd South为独立prospect，与Fahd不同；2024年Q3 Kunooz-1测试未构成商业生产证据。纠正目录旧单田/历史生产分类，不填前景资源、公司总量或试井流量。"
     }
-  ]
+  ],
+  "goget_original_map_review": {
+    "url": "https://greeninfo-network.github.io/global-oil-gas-extraction-tracker/data/data.csv",
+    "accessed_at": "2026-10-01",
+    "sha256": "257515a8ff70b2164e683dff93ffa08088e8f4179501568ae1b5a356021b6106",
+    "raw_rows": 5391,
+    "release_date": null,
+    "release_limitation": "地图CSV未标版本且与现时wiki部分值不同；不能宣称2026-03最新数据。只用于发现候选，再读田级位置表，不导入年量/状态/运营商。",
+    "name_resolution": {
+      "country": "埃及",
+      "name": "Kanayes",
+      "checkpoint_url": "https://www.gem.wiki/Kanayes_Oil_and_Gas_Field_(Egypt)",
+      "page_url": "https://www.gem.wiki/Kanayes_Oil_and_Gas_Field_(Egypt)",
+      "page_revision_id": "1163453",
+      "discovery_year": 1992,
+      "identity_basis": "相同国家、资产名、field层级、原快照相同wiki URL；CSV独立行与田级页交叉确认。",
+      "scope_limit": "不将Ras/East/West Kanayes特许区视为别名。"
+    },
+    "selected_original_rows": [
+      {
+        "project": "Akkas",
+        "country": "Iraq",
+        "status": "in development",
+        "discovery_year": "1992",
+        "start_year": "",
+        "operator": "Korea Gas Company (KOGAS)",
+        "owner": "Korean Gas Corporation (KOGAS) (75%);North Oil Company (25%)",
+        "parent": "Korean Gas Corporation (KOGAS) (75%);Qatar Petroleum (nan%);TotalEnergies (nan%)",
+        "fuel_type": "gas",
+        "unit_type": "field",
+        "lat": "34.115",
+        "lng": "41.18",
+        "url": "https://www.gem.wiki/Akkas_Gas_Field_(Iraq)"
+      },
+      {
+        "project": "Kifl",
+        "country": "Iraq",
+        "status": "discovered",
+        "discovery_year": "1960",
+        "start_year": "",
+        "operator": "",
+        "owner": "",
+        "parent": "",
+        "fuel_type": "oil",
+        "unit_type": "field",
+        "lat": "32.085",
+        "lng": "44.279",
+        "url": "https://www.gem.wiki/Kifl_Oil_Field_(Iraq)"
+      },
+      {
+        "project": "West Kifl",
+        "country": "Iraq",
+        "status": "discovered",
+        "discovery_year": "1987",
+        "start_year": "",
+        "operator": "",
+        "owner": "",
+        "parent": "",
+        "fuel_type": "oil",
+        "unit_type": "field",
+        "lat": "32.243",
+        "lng": "43.901",
+        "url": "https://www.gem.wiki/West_Kifl_Oil_Field_(Iraq)"
+      },
+      {
+        "project": "Siba",
+        "country": "Iraq",
+        "status": "operating",
+        "discovery_year": "1968",
+        "start_year": "2018",
+        "operator": "Kuwait Energy",
+        "owner": "Kuwait Energy (25%);Türkiye Petrolleri Anonim Ortaklığı (TPAO) (30%);Egyptian General Petroleum Corporation (EGPC) (20%);Missan Oil Company (25%)",
+        "parent": "United Energy Group (25%);Türkiye Petrolleri Anonim Ortaklığı (30%);Egyptian General Petroleum Corporation (EGPC) (20%);Missan Oil Company (25%)",
+        "fuel_type": "gas",
+        "unit_type": "field",
+        "lat": "30.032",
+        "lng": "48.003",
+        "url": "https://www.gem.wiki/Siba_Gas_Field_(Iraq)"
+      },
+      {
+        "project": "Kish",
+        "country": "Iran",
+        "status": "in development",
+        "discovery_year": "2006",
+        "start_year": "",
+        "operator": "Iranian Offshore Oil Company",
+        "owner": "National Iranian Oil Company (100%)",
+        "parent": "National Iranian Oil Company (100%)",
+        "fuel_type": "oil and gas",
+        "unit_type": "field",
+        "lat": "26.529",
+        "lng": "53.943",
+        "url": "https://www.gem.wiki/Kish_Oil_and_Gas_Field_(Iran)"
+      },
+      {
+        "project": "Eram",
+        "country": "Iran",
+        "status": "discovered",
+        "discovery_year": "2019",
+        "start_year": "",
+        "operator": "",
+        "owner": "",
+        "parent": "",
+        "fuel_type": "gas",
+        "unit_type": "field",
+        "lat": "32.229",
+        "lng": "54.259",
+        "url": "https://www.gem.wiki/Eram_Gas_Field_(Iran)"
+      },
+      {
+        "project": "Taurus",
+        "country": "Egypt",
+        "status": "discovered",
+        "discovery_year": "2000",
+        "start_year": "2017",
+        "operator": "BP",
+        "owner": "BP (82.8%);Wintershall DEA (17.2%)",
+        "parent": "BP P.L.C. (82.8%);BASF SE (17.2%)",
+        "fuel_type": "gas",
+        "unit_type": "field",
+        "lat": "31.917",
+        "lng": "30.097",
+        "url": "https://www.gem.wiki/Taurus_Gas_Field_(Egypt)"
+      },
+      {
+        "project": "Libra",
+        "country": "Egypt",
+        "status": "in development",
+        "discovery_year": "2001",
+        "start_year": "2017",
+        "operator": "BP",
+        "owner": "BP (82.8%);Wintershall DEA (17.2%)",
+        "parent": "BP P.L.C. (82.8%);BASF SE (17.2%)",
+        "fuel_type": "gas",
+        "unit_type": "field",
+        "lat": "31.956",
+        "lng": "30.169",
+        "url": "https://www.gem.wiki/Libra_Gas_Field_(Egypt)"
+      },
+      {
+        "project": "Giza",
+        "country": "Egypt",
+        "status": "operating",
+        "discovery_year": "2007",
+        "start_year": "2019",
+        "operator": "BP",
+        "owner": "BP (82.8%);Wintershall DEA (17.2%)",
+        "parent": "BP P.L.C. (82.8%);BASF SE (17.2%)",
+        "fuel_type": "gas",
+        "unit_type": "field",
+        "lat": "31.703",
+        "lng": "29.846",
+        "url": "https://www.gem.wiki/Giza_Gas_Field_(Egypt)"
+      },
+      {
+        "project": "Fayoum",
+        "country": "Egypt",
+        "status": "in development",
+        "discovery_year": "2001",
+        "start_year": "2019",
+        "operator": "BP",
+        "owner": "BP (82.8%);Wintershall DEA (17.2%)",
+        "parent": "BP P.L.C. (82.8%);BASF SE (17.2%)",
+        "fuel_type": "gas",
+        "unit_type": "field",
+        "lat": "31.602",
+        "lng": "29.884",
+        "url": "https://www.gem.wiki/Fayoum_Gas_Field_(Egypt)"
+      },
+      {
+        "project": "Raven",
+        "country": "Egypt",
+        "status": "operating",
+        "discovery_year": "2004",
+        "start_year": "2019",
+        "operator": "BP",
+        "owner": "BP (82.8%);Wintershall DEA (17.2%)",
+        "parent": "BP P.L.C. (82.8%);BASF SE (17.2%)",
+        "fuel_type": "oil and gas",
+        "unit_type": "field",
+        "lat": "31.743",
+        "lng": "29.951",
+        "url": "https://www.gem.wiki/Raven_Oil_and_Gas_Field_(Egypt)"
+      },
+      {
+        "project": "Abu Qir",
+        "country": "Egypt",
+        "status": "operating",
+        "discovery_year": "1971",
+        "start_year": "1987",
+        "operator": "Edison E&P",
+        "owner": "Energean (100%)",
+        "parent": "Energean (100%)",
+        "fuel_type": "gas",
+        "unit_type": "field",
+        "lat": "27.219",
+        "lng": "30.232",
+        "url": "https://www.gem.wiki/Abu_Qir_Gas_Field_(Egypt)"
+      },
+      {
+        "project": "Resalat",
+        "country": "Iran",
+        "status": "operating",
+        "discovery_year": "1967",
+        "start_year": "1969",
+        "operator": "Iranian Offshore Oil Company",
+        "owner": "National Iranian Oil Company (100%)",
+        "parent": "National Iranian Oil Company (100%)",
+        "fuel_type": "oil",
+        "unit_type": "field",
+        "lat": "25.984",
+        "lng": "53.15",
+        "url": "https://www.gem.wiki/Resalat_Oil_Field_(Iran)"
+      },
+      {
+        "project": "Berenice",
+        "country": "Egypt",
+        "status": "operating",
+        "discovery_year": "2014",
+        "start_year": "2014",
+        "operator": "Khalda Petroleum",
+        "owner": "Apache Corporation;Egyptian General Petroleum Corporation (EGPC)",
+        "parent": "APA Coropration;Egyptian General Petroleum Corporation (EGPC)",
+        "fuel_type": "oil",
+        "unit_type": "field",
+        "lat": "30.547",
+        "lng": "26.021",
+        "url": "https://www.gem.wiki/Berenice_Oil_Field_(Egypt)"
+      },
+      {
+        "project": "Alamein",
+        "country": "Egypt",
+        "status": "operating",
+        "discovery_year": "1966",
+        "start_year": "1968",
+        "operator": "IPR Energy Group",
+        "owner": "IPR Energy Group",
+        "parent": "",
+        "fuel_type": "oil",
+        "unit_type": "field",
+        "lat": "27.219",
+        "lng": "30.232",
+        "url": "https://www.gem.wiki/Alamein_Oil_Field_(Egypt)"
+      },
+      {
+        "project": "Ptah",
+        "country": "Egypt",
+        "status": "operating",
+        "discovery_year": "",
+        "start_year": "",
+        "operator": "Khalda",
+        "owner": "",
+        "parent": "",
+        "fuel_type": "oil",
+        "unit_type": "field",
+        "lat": "27.219",
+        "lng": "30.232",
+        "url": "https://www.gem.wiki/Ptah_Oil_Field_(Egypt)"
+      },
+      {
+        "project": "Maleh Kuh",
+        "country": "Iran",
+        "status": "operating",
+        "discovery_year": "1968",
+        "start_year": "",
+        "operator": "Iranian Central Oil Fields Company",
+        "owner": "National Iranian Oil Company (100%)",
+        "parent": "National Iranian Oil Company (100%)",
+        "fuel_type": "oil and gas",
+        "unit_type": "field",
+        "lat": "33.205",
+        "lng": "47.629",
+        "url": "https://www.gem.wiki/Maleh_Kuh_Oil_and_Gas_Field_(Iran)"
+      },
+      {
+        "project": "Assil",
+        "country": "Egypt",
+        "status": "operating",
+        "discovery_year": "",
+        "start_year": "",
+        "operator": "Badreddin Petroleum Co. (BAPETCO)",
+        "owner": "Egyptian General Petroleum Corporation (EGPC);Shell Egypt",
+        "parent": "Egyptian General Petroleum Corporation (EGPC);Shell plc",
+        "fuel_type": "oil and gas",
+        "unit_type": "field",
+        "lat": "27.219",
+        "lng": "30.232",
+        "url": "https://www.gem.wiki/Assil_Oil_and_Gas_Field_(Egypt)"
+      },
+      {
+        "project": "Magd",
+        "country": "Egypt",
+        "status": "operating",
+        "discovery_year": "",
+        "start_year": "",
+        "operator": "Badreddin Petroleum Co. (BAPETCO)",
+        "owner": "Egyptian General Petroleum Corporation (EGPC);Shell Egypt",
+        "parent": "Egyptian General Petroleum Corporation (EGPC);Shell plc",
+        "fuel_type": "oil and gas",
+        "unit_type": "field",
+        "lat": "29.337",
+        "lng": "28.463",
+        "url": "https://www.gem.wiki/Magd_Oil_and_Gas_Field_(Egypt)"
+      },
+      {
+        "project": "Towsan",
+        "country": "Iran",
+        "status": "in development",
+        "discovery_year": "2000",
+        "start_year": "",
+        "operator": "Iranian Offshore Oil Company",
+        "owner": "National Iranian Oil Company (100%)",
+        "parent": "National Iranian Oil Company (100%)",
+        "fuel_type": "oil",
+        "unit_type": "field",
+        "lat": "32.229",
+        "lng": "54.259",
+        "url": "https://www.gem.wiki/Towsan_Oil_Field_(Iran)"
+      },
+      {
+        "project": "Amal",
+        "country": "Egypt",
+        "status": "in development",
+        "discovery_year": "1959",
+        "start_year": "",
+        "operator": "",
+        "owner": "",
+        "parent": "",
+        "fuel_type": "oil",
+        "unit_type": "field",
+        "lat": "28.067",
+        "lng": "33.517",
+        "url": "https://www.gem.wiki/Amal_Oil_Field_(Egypt)"
+      },
+      {
+        "project": "Namavaran",
+        "country": "Iran",
+        "status": "discovered",
+        "discovery_year": "2019",
+        "start_year": "",
+        "operator": "",
+        "owner": "",
+        "parent": "",
+        "fuel_type": "oil",
+        "unit_type": "field",
+        "lat": "32.229",
+        "lng": "54.259",
+        "url": "https://www.gem.wiki/Namavaran_Oil_Field_(Iran)"
+      },
+      {
+        "project": "Hilal",
+        "country": "Egypt",
+        "status": "operating",
+        "discovery_year": "1976",
+        "start_year": "",
+        "operator": "GUPCO",
+        "owner": "",
+        "parent": "",
+        "fuel_type": "oil and gas",
+        "unit_type": "field",
+        "lat": "27.781",
+        "lng": "33.757",
+        "url": "https://www.gem.wiki/Hilal_Oil_and_Gas_Field_(Egypt)"
+      },
+      {
+        "project": "Simian",
+        "country": "Egypt",
+        "status": "operating",
+        "discovery_year": "1999",
+        "start_year": "2004",
+        "operator": "Rashpetco",
+        "owner": "",
+        "parent": "",
+        "fuel_type": "oil and gas",
+        "unit_type": "field",
+        "lat": "32.204",
+        "lng": "30.384",
+        "url": "https://www.gem.wiki/Simian_Oil_and_Gas_Field_(Egypt)"
+      },
+      {
+        "project": "JG-NEAG",
+        "country": "Egypt",
+        "status": "operating",
+        "discovery_year": "",
+        "start_year": "2002",
+        "operator": "",
+        "owner": "",
+        "parent": "",
+        "fuel_type": "oil and gas",
+        "unit_type": "field",
+        "lat": "27.219",
+        "lng": "30.232",
+        "url": "https://www.gem.wiki/JG-NEAG_Oil_and_Gas_Field_(Egypt)"
+      },
+      {
+        "project": "Kanayes",
+        "country": "Egypt",
+        "status": "operating",
+        "discovery_year": "1992",
+        "start_year": "",
+        "operator": "IEOC",
+        "owner": "",
+        "parent": "",
+        "fuel_type": "oil and gas",
+        "unit_type": "field",
+        "lat": "30.947",
+        "lng": "28.011",
+        "url": "https://www.gem.wiki/Kanayes_Oil_and_Gas_Field_(Egypt)"
+      }
+    ],
+    "coordinate_decisions": [
+      {
+        "country": "伊拉克",
+        "name": "Akkas",
+        "lat": 34.115,
+        "lon": 41.18,
+        "source_accuracy": "exact",
+        "decision": "使用重新读取的田级位置表，不复制未分类CSV坐标"
+      },
+      {
+        "country": "伊拉克",
+        "name": "Kifl",
+        "lat": 32.085,
+        "lon": 44.279,
+        "source_accuracy": "exact",
+        "decision": "使用重新读取的田级位置表，不复制未分类CSV坐标"
+      },
+      {
+        "country": "伊拉克",
+        "name": "West Kifl",
+        "lat": 32.243,
+        "lon": 43.901,
+        "source_accuracy": "exact",
+        "decision": "使用重新读取的田级位置表，不复制未分类CSV坐标"
+      },
+      {
+        "country": "伊拉克",
+        "name": "Siba",
+        "lat": 30.032,
+        "lon": 48.003,
+        "source_accuracy": "exact",
+        "decision": "使用重新读取的田级位置表，不复制未分类CSV坐标"
+      },
+      {
+        "country": "伊朗",
+        "name": "Kish",
+        "lat": 26.5293,
+        "lon": 53.9434,
+        "source_accuracy": "exact",
+        "decision": "使用重新读取的田级位置表，不复制未分类CSV坐标"
+      },
+      {
+        "country": "伊朗",
+        "name": "Eram",
+        "lat": 28.0158,
+        "lon": 52.6218,
+        "source_accuracy": "approximate",
+        "decision": "使用重新读取的田级位置表，不复制未分类CSV坐标"
+      },
+      {
+        "country": "埃及",
+        "name": "Taurus",
+        "lat": 31.917,
+        "lon": 30.097,
+        "source_accuracy": "exact",
+        "decision": "使用重新读取的田级位置表，不复制未分类CSV坐标"
+      },
+      {
+        "country": "埃及",
+        "name": "Libra",
+        "lat": 31.956,
+        "lon": 30.169,
+        "source_accuracy": "exact",
+        "decision": "使用重新读取的田级位置表，不复制未分类CSV坐标"
+      },
+      {
+        "country": "埃及",
+        "name": "Giza",
+        "lat": 31.703,
+        "lon": 29.846,
+        "source_accuracy": "exact",
+        "decision": "使用重新读取的田级位置表，不复制未分类CSV坐标"
+      },
+      {
+        "country": "埃及",
+        "name": "Fayoum",
+        "lat": 31.602,
+        "lon": 29.884,
+        "source_accuracy": "exact",
+        "decision": "使用重新读取的田级位置表，不复制未分类CSV坐标"
+      },
+      {
+        "country": "埃及",
+        "name": "Raven",
+        "lat": 31.743,
+        "lon": 29.951,
+        "source_accuracy": "exact",
+        "decision": "使用重新读取的田级位置表，不复制未分类CSV坐标"
+      },
+      {
+        "country": "伊朗",
+        "name": "Resalat",
+        "lat": 25.9844,
+        "lon": 53.1499,
+        "source_accuracy": "exact",
+        "decision": "使用重新读取的田级位置表，不复制未分类CSV坐标"
+      },
+      {
+        "country": "埃及",
+        "name": "Berenice",
+        "lat": 30.547,
+        "lon": 26.021,
+        "source_accuracy": "exact",
+        "decision": "使用重新读取的田级位置表，不复制未分类CSV坐标"
+      },
+      {
+        "country": "伊朗",
+        "name": "Maleh Kuh",
+        "lat": 33.2051,
+        "lon": 47.6291,
+        "source_accuracy": "exact",
+        "decision": "使用重新读取的田级位置表，不复制未分类CSV坐标"
+      },
+      {
+        "country": "埃及",
+        "name": "Magd",
+        "lat": 29.3372,
+        "lon": 28.4631,
+        "source_accuracy": "exact",
+        "decision": "使用重新读取的田级位置表，不复制未分类CSV坐标"
+      },
+      {
+        "country": "埃及",
+        "name": "Amal",
+        "lat": 28.0667,
+        "lon": 33.5167,
+        "source_accuracy": "approximate",
+        "decision": "使用重新读取的田级位置表，不复制未分类CSV坐标"
+      },
+      {
+        "country": "埃及",
+        "name": "Hilal",
+        "lat": 27.781,
+        "lon": 33.757,
+        "source_accuracy": "exact",
+        "decision": "使用重新读取的田级位置表，不复制未分类CSV坐标"
+      },
+      {
+        "country": "埃及",
+        "name": "Simian",
+        "lat": 32.204,
+        "lon": 30.384,
+        "source_accuracy": "exact",
+        "decision": "使用重新读取的田级位置表，不复制未分类CSV坐标"
+      },
+      {
+        "country": "埃及",
+        "name": "Kanayes",
+        "lat": 30.947,
+        "lon": 28.011,
+        "source_accuracy": "exact",
+        "decision": "使用重新读取的田级位置表，不复制未分类CSV坐标"
+      }
+    ],
+    "rejected_candidates": [
+      {
+        "country": "埃及",
+        "name": "Abu Qir",
+        "decision": "wiki位置表无位置；CSV 27.219,30.232为国家中心占位，不导入"
+      },
+      {
+        "country": "埃及",
+        "name": "Alamein",
+        "decision": "wiki位置表无位置；CSV 27.219,30.232为国家中心占位，不导入"
+      },
+      {
+        "country": "埃及",
+        "name": "Ptah",
+        "decision": "wiki位置表无位置；CSV 27.219,30.232为国家中心占位，不导入"
+      },
+      {
+        "country": "埃及",
+        "name": "Assil",
+        "decision": "wiki位置表无位置；CSV 27.219,30.232为国家中心占位，不导入"
+      },
+      {
+        "country": "埃及",
+        "name": "JG-NEAG",
+        "decision": "wiki位置表无位置；CSV 27.219,30.232为国家中心占位，不导入"
+      },
+      {
+        "country": "伊朗",
+        "name": "Namavaran",
+        "decision": "wiki无位置；CSV 32.229,54.259为国家中心占位，不导入"
+      },
+      {
+        "country": "伊朗",
+        "name": "Towsan",
+        "decision": "CSV仅国家中心；未取得田级位置表，不导入"
+      },
+      {
+        "country": "以色列",
+        "name": "Hermes",
+        "decision": "同名CSV行属于澳大利亚；跨国同名排除"
+      },
+      {
+        "country": "埃及",
+        "name": "Libra",
+        "decision": "同名巴西行排除，使用埃及单田表。"
+      },
+      {
+        "country": "伊朗",
+        "name": "Eram",
+        "decision": "排除旧CSV国家中心，使用现时页近似点28.0158,52.6218。"
+      }
+    ]
+  }
 }

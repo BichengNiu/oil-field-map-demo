@@ -13,9 +13,7 @@ UPDATED = RESOLVED | {(r["country"], r["name"]) for r in EVIDENCE["measurements"
 UPDATED |= {(r["country"], r["name"]) for r in EVIDENCE["coordinates"]}
 REVISED = {(r["country"], r["name"]) for r in EVIDENCE.get("scope_revisions", [])}
 UPDATED |= REVISED
-PENDING = {
-    ("埃及", "Kanayes"): "名称有文献线索，但原快照未能唯一对应Ras Kanayes、East Kanayes或West Kanayes；Apex原页明确E. Kanayes为特许区，未按词根合并或复制组合量/坐标",
-}
+PENDING = {}
 
 
 def additions(record):
