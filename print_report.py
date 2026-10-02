@@ -356,7 +356,7 @@ def build_report_html(
     choke_names = {str(row.get("portid")): row.get("name_cn") or row.get("name") or row.get("portname") or row.get("portid")
                    for row in choke_catalog}
     n_series = [(str(choke_names.get(point_id, point_id)),
-                 [(row.get("date"), row.get("n_total")) for row in rows
+                 [(row.get("date"), row.get("n_total")) for row in choke_history
                   if str(row.get("portid")) == point_id])
                 for point_id in sorted({str(row.get("portid")) for row in choke_history})]
     capacity_series = [(str(choke_names.get(point_id, point_id)),
