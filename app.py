@@ -980,18 +980,6 @@ ais_collector_instance: AIS.AISCollector | None = None
 with st.sidebar:
     st.session_state.pop("monitor_regions", None)
     st.markdown("### 中东能源监测")
-    with st.expander("打印报告", expanded=False):
-        st.caption("浏览器菜单选择“打印”即可输出报告；勾选预览可先在页面末尾校对。")
-        report_scope = st.radio(
-            "报告范围", ["全项目", "当前筛选"], horizontal=True,
-            key="print_report_scope")
-        print_report_preview = st.checkbox(
-            "页面预览报告", value=False, key="print_report_preview")
-        include_asset_appendix = st.checkbox(
-            "附完整油气资产目录", value=False, key="print_report_asset_appendix")
-        if st.button("重读报告历史曲线", key="refresh_print_report_history"):
-            _print_report_history.clear()
-            st.rerun()
     map_layers_selection = _multiselect_with_all(
         "地图内容", list(MAP_LAYER_LABELS), key="map_layers",
         default_all=False, default=["ports"],
@@ -1632,29 +1620,12 @@ with tab_method:
         "不等于实时遥测。"
     )
 
-# Prepare the print-only report on every page run so the browser's native Print
-# command can switch layouts without depending on an asynchronous Python callback.
-if report_scope == "全项目":
-    report_port_catalog = list(available_ports)
-    report_choke_catalog = list(available_chokepoints)
-    report_assets = [asset for asset in ASSETS if asset.get("strategic_default")]
-    report_vessels = list(live_positions)
-    appendix_assets = list(ASSETS)
-else:
-    selected_port_id_set = set(selected_port_ids)
-    report_port_catalog = [
-        port for port in available_ports
-        if port.get("country") in selected_port_countries
-        and port.get("portid") in selected_port_id_set
-    ]
-    selected_choke_id_set = {str(value) for value in selected_chokepoint_ids}
-    report_choke_catalog = [
-        point for point in available_chokepoints
-        if str(point.get("portid")) in selected_choke_id_set
-    ]
-    report_assets = list(filtered)
-    report_vessels = current_vessels()
-    appendix_assets = list(filtered)
+# Prepare a full-project report on every page run for the browser's native Print command.
+report_scope = "全项目"
+report_port_catalog = list(available_ports)
+report_choke_catalog = list(available_chokepoints)
+report_assets = [asset for asset in ASSETS if asset.get("strategic_default")]
+report_vessels = list(live_positions)
 
 report_port_ids = tuple(sorted(
     str(port["portid"]) for port in report_port_catalog
@@ -1720,10 +1691,6 @@ def _print_asset_record(asset: dict) -> dict:
     }
 
 report_asset_table = [_print_asset_record(asset) for asset in report_assets]
-report_appendix = (
-    [_print_asset_record(asset) for asset in appendix_assets]
-    if include_asset_appendix else None
-)
 report_ais_state = current_ais_status()
 report_ais_status = (
     "已关闭" if not ais_enabled
@@ -1751,14 +1718,7 @@ report_html = print_report.build_report_html(
     ais_status=report_ais_status,
     ais_source_note=report_ais_note,
     errors=report_errors,
-    asset_appendix=report_appendix,
 )
-if print_report_preview:
-    report_html = report_html.replace(
-        '<div class="print-report">',
-        '<div class="print-report print-report-preview" style="display:block">',
-        1,
-    )
 st.html(
     print_report.PRINT_CSS + report_html,
 )
