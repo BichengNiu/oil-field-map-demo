@@ -1,4 +1,5 @@
 """Tests for Chinese PortWatch selector labels."""
+import csv
 import json
 from pathlib import Path
 import unittest
@@ -41,11 +42,24 @@ class PortInventoryLabelTests(unittest.TestCase):
             label = port_inventory.port_label({
                 "portid": port_id, "name": row["name"], "country": row["country"],
             })
-            fallback = (f"{port_inventory.country_label(row['country'])}"
-                        f"港口（编号{port_id}）")
             with self.subTest(port=row["name"]):
                 self.assertTrue(_has_chinese(label))
-                self.assertNotEqual(label, fallback)
+                self.assertFalse(label.startswith("港口（编号"), msg=label)
+
+    def test_latest_regional_catalog_snapshot_has_no_generic_labels(self):
+        snapshot = Path(__file__).with_name("PORT_ACTIVITY_AUDIT_2026-09-25.csv")
+        with snapshot.open(encoding="utf-8-sig", newline="") as stream:
+            rows = list(csv.DictReader(stream))
+        self.assertEqual(len(rows), 96)
+        for row in rows:
+            label = port_inventory.port_label({
+                "portid": row["PortWatch ID"],
+                "name": row["点位库港名"],
+                "country": row["国家"],
+            })
+            with self.subTest(port_id=row["PortWatch ID"], name=row["点位库港名"]):
+                self.assertTrue(_has_chinese(label))
+                self.assertFalse(label.startswith("港口（编号"), msg=label)
 
     def test_enriched_port_records_carry_chinese_names(self):
         raw_by_id = {}
