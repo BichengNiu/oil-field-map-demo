@@ -246,7 +246,7 @@ st.set_page_config(page_title="中东能源监测", page_icon="◉", layout="wid
 st.markdown("""
 <style>
   .stApp { background: #f5f7fb; }
-  .block-container { padding-top: 1.35rem; padding-bottom: 2.5rem; max-width: 1680px; }
+  .block-container { padding-top: 4rem; padding-bottom: 2.5rem; max-width: 1680px; }
   [data-testid="stSidebar"] {
       background: #f1f5f9;
       border-right: 1px solid #dbe4ee;
