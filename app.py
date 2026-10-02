@@ -193,17 +193,23 @@ def _render_portwatch_download_panel(selected_port_countries: list[str],
             placeholder="全选或选择水域")
         regions = set(_selected_values(regions_selection, region_options))
         region_ports = [n for n in all_ports if n["region"] in regions]
-        country_options = sorted({n["country"] for n in region_ports if n["country"]})
+        country_options = sorted(
+            {n["country"] for n in region_ports if n["country"]},
+            key=port_inventory.country_label)
         countries_selection = _multiselect_with_all(
             "国家", country_options, key="pw_download_countries",
+            format_func=port_inventory.country_label,
             placeholder="全选或选择国家")
         countries = set(_selected_values(countries_selection, country_options))
         candidate_ports = [n for n in region_ports if n["country"] in countries]
         choke_options = [n for n in all_chokes if n["region"] in regions]
         node_options = [("ports", n["portid"]) for n in candidate_ports] + [
             ("chokepoints", n["portid"]) for n in choke_options]
-        labels = {("ports", n["portid"]): f'{n["node_name"]} · {n["country"] or "国家未知"}'
-                  for n in candidate_ports}
+        labels = {
+            ("ports", n["portid"]):
+                f'{port_inventory.port_label(n)} · {port_inventory.country_label(n["country"])}'
+            for n in candidate_ports
+        }
         labels.update({("chokepoints", n["portid"]): n["node_name"] for n in choke_options})
         nodes_selection = _multiselect_with_all(
             "节点", node_options, key="pw_download_nodes",
@@ -1002,9 +1008,12 @@ with st.sidebar:
         chokepoint_catalog_error = str(exc)
 
     with st.expander("港口筛选", expanded=False):
-        port_country_options = sorted({port["country"] for port in available_ports})
+        port_country_options = sorted(
+            {port["country"] for port in available_ports},
+            key=port_inventory.country_label)
         port_countries_selection = _multiselect_with_all(
             "国家", port_country_options, key="port_countries",
+            format_func=port_inventory.country_label,
             placeholder="全选或选择国家",
             help="“全选”表示所有国家；清空选择时不显示港口。")
         selected_port_countries = _selected_values(
@@ -1013,12 +1022,15 @@ with st.sidebar:
             port for port in available_ports if port["country"] in selected_port_countries
         ]
         port_labels = {
-            port["portid"]: f'{port["name"]} · {port["country"]}'
+            port["portid"]:
+                f'{port_inventory.port_label(port)} · {port_inventory.country_label(port["country"])}'
             for port in country_port_catalog
         }
         port_id_options = [
             port["portid"] for port in sorted(
-                country_port_catalog, key=lambda port: (port["country"], port["name"]))
+                country_port_catalog,
+                key=lambda port: (port_inventory.country_label(port["country"]),
+                                  port_inventory.port_label(port)))
         ]
         port_ids_selection = _multiselect_with_all(
             "港口", port_id_options, key="port_ids",
@@ -1123,6 +1135,7 @@ with st.sidebar:
                                      key="asset_search").strip().lower()
         selected_countries = _selected_values(
             _multiselect_with_all("国家", country_options, key="asset_countries",
+                                  format_func=port_inventory.country_label,
                                   placeholder="全选或选择国家"),
             country_options)
         selected_levels = _selected_values(
