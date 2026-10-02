@@ -1042,15 +1042,11 @@ with st.sidebar:
         if port_catalog_error:
             st.warning(f"港口目录暂时不可用：{port_catalog_error}")
         try:
-            newest_day = PORTWATCH.latest_date()
-            selected_day = newest_day
-            st.caption(f"源站最新：{newest_day.isoformat()}")
+            selected_day = PORTWATCH.latest_date()
         except Exception as exc:
             newest_day = selected_day = None
             st.warning(f"PortWatch 暂时不可用：{exc}")
-        rolling_label = st.radio("日均窗口", ["过去 7 天", "过去 30 天"],
-                                 horizontal=True, key="rolling_window")
-        rolling_days = 7 if rolling_label == "过去 7 天" else 30
+        rolling_days = 7
 
     with st.expander("咽喉点筛选", expanded=False):
         if chokepoint_catalog_error:
@@ -1574,7 +1570,7 @@ with tab_method:
         "[每日咽喉点 API](https://services9.arcgis.com/weJ1QsnbMYJlCHdG/arcgis/rest/services/Daily_Chokepoints_Data/FeatureServer/0) · "
         "[风险运力网络 API](https://services9.arcgis.com/weJ1QsnbMYJlCHdG/arcgis/rest/services/spillovers_port_level_impact/FeatureServer/0)"
     )
-    st.markdown("**港口派生指标。** 所有窗口指标使用同一7日或30日完整日历窗口；缺报不补零。")
+    st.markdown("**港口派生指标。** 所有窗口指标固定使用所选观测日及此前6个日历日；缺报不补零。")
     st.dataframe([
         {"指标": "港口活动指数", "计算": "当前窗口日均有效进港艘次 ÷ 前一等长窗口日均值 × 100",
          "解释": "100持平；高于100表示进港活动增加"},
