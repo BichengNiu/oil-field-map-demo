@@ -152,12 +152,42 @@ _PORT_NAMES_ZH = {
     _port_name_key("Khor Al Zubair"): "祖拜尔港",
     _port_name_key("Khalifa Port"): "哈利法港",
     _port_name_key("Jebel Dhanna"): "杰贝尔丹那港",
+    # Raw catalog variants audited in PORT_ACTIVITY_AUDIT_2026-09-25.csv.
+    _port_name_key("Hudaydah (Hodeidah)"): "荷台达港",
+    _port_name_key("Mokha"): "穆哈港",
+    _port_name_key("Ras Isa Terminal"): "拉斯伊萨海洋码头",
+    _port_name_key("Bahregan"): "巴里根角港",
+    _port_name_key("Bandar Khomeini"): "霍梅尼港",
+    _port_name_key("Kharg Island"): "哈尔克岛石油码头",
+    _port_name_key("Lavan"): "拉万岛石油码头",
+    _port_name_key("Basrah Oil Terminal"): "巴士拉石油码头",
+    _port_name_key("Mina Al Zour"): "祖尔港",
+    _port_name_key("Shuaiba"): "舒艾拜港",
+    _port_name_key("Shuwaikh"): "舒韦赫港",
+    _port_name_key("Al Ruwais"): "鲁韦斯港",
+    _port_name_key("Doha-Umm Said"): "多哈—乌姆赛义德港",
+    _port_name_key("Hamad Port"): "哈马德港",
+    _port_name_key("Juaymah"): "朱艾玛石油码头",
+    _port_name_key("Jubail"): "朱拜勒港",
+    _port_name_key("Ras Al-Khair"): "拉斯海尔港",
+    _port_name_key("Saudi Arabia - Offshore Oil Terminal 1"): "海上石油终端1",
+    _port_name_key("Das Island"): "达斯岛港",
+    _port_name_key("Umm al Qaiwain"): "乌姆盖万港",
+    _port_name_key("Zirku Island"): "吉尔库岛港",
+    _port_name_key("Al Adabiyah"): "阿达比亚港",
+    _port_name_key("El Sokhna"): "苏赫纳港",
+    _port_name_key("Chabahar"): "恰巴哈尔港",
+    _port_name_key("Port Sultan Qaboos"): "卡布斯港",
+    _port_name_key("Shinas"): "希纳斯港",
+    _port_name_key("Suwaiq"): "苏瓦伊克港",
+    _port_name_key("Bandar Shahid Rajaee"): "沙希德拉贾伊港",
 }
 
 
 _PORT_ID_NAMES_ZH = {
     "port2025": "哈利法港",
     "port2236": "杰贝尔丹那港",
+    "fso158": "海上石油终端1",
 }
 
 
