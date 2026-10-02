@@ -235,7 +235,7 @@ def _overview_svg(ports: list[dict], chokes: list[dict], assets: list[dict],
         if yv is None or xv is None or not (lat_min <= yv <= lat_max and lon_min <= xv <= lon_max):
             return None
         return left + (xv - lon_min) / (lon_max - lon_min) * plot_w, top + (lat_max - yv) / (lat_max - lat_min) * plot_h
-    parts = [f'<svg viewBox="0 0 {width} {height}" role="img" aria-label="监测点位经纬度示意" xmlns="http://www.w3.org/2000/svg">',
+    parts = [f'<svg viewBox="0 0 {width} {height}" role="img" aria-label="监测水域与节点空间分布示意" xmlns="http://www.w3.org/2000/svg">',
              f'<rect x="{left}" y="{top}" width="{plot_w}" height="{plot_h}" fill="#f8fafc" stroke="#94a3b8"/>']
     for lon in range(30, 65, 5):
         x = left + (lon - lon_min) / (lon_max - lon_min) * plot_w
@@ -324,7 +324,7 @@ def build_report_html(
     covered_calls = sum(_number(p.get("portcalls")) or 0 for p in dated_calls)
     catalog_chokes = len(choke_catalog)
     report_assets = list(assets)
-    map_html = _overview_svg(port_catalog, choke_catalog, report_assets, regions)
+    map_html = _overview_svg(port_catalog, choke_catalog, report_assets, regions, vessels)
     cover_cards = _metric_cards([
         ("港口监测点", str(len(port_catalog)), f"其中独立统计点 {len(stat_ports)} 个"),
         ("战略通道", str(catalog_chokes), "逐节点分别报告，不合并解释"),
@@ -342,13 +342,20 @@ def build_report_html(
         ],
     )
     overview = (
-        f'<div class="report-meta"><span>报告范围：{_esc(scope_label)}</span>'
-        f'<span>生成时间：{timestamp.strftime("%Y-%m-%d %H:%M")}（UTC+8）</span></div>'
-        + cover_cards
+        f'<div class="report-date-rule"><span>生成时间：{timestamp.strftime("%Y年%m月")}</span></div>'
+        + '<p class="report-sponsor">中国驻阿联酋大使馆、国家发改委国家信息中心</p>'
+        + f'<div class="report-meta"><span>报告范围：{_esc(scope_label)}</span></div>'
         + '<h3>能源资产与战略通道监测范围</h3>'
         + f'<div class="map-frame">{map_html}</div>'
-        + '<p class="note">点位按经纬度绘制，区域框为项目监测范围；未绘制海岸线或航线。'
-          '空间分布示意不代表实际航迹。</p>'
+        + '<div class="map-legend">'
+          '<span><i style="background:#1769aa"></i>港口</span>'
+          '<span><i style="background:#7c3aed"></i>咽喉点</span>'
+          '<span><i style="background:#d97706"></i>油气资产</span>'
+          '<span><i style="background:#14866d"></i>AIS船位</span>'
+          '</div>'
+        + '<p class="note">点位按经纬度绘制，区域框为项目监测范围；'
+          '空间分布示意不代表海岸线或实际航迹。</p>'
+        + cover_cards
         + cover_table
     )
 
@@ -470,7 +477,7 @@ def build_report_html(
     source_content += '<p class="note">港口进口/出口货量是 PortWatch 基于 AIS 推算的估算值；AIS 船位点不能替代逐船航迹；油气目录中的静态披露不能作为实时生产监测。</p>'
 
     body = (
-        _section("监测概览", overview)
+        f'<section class="report-cover report-overview">{overview}</section>'
         + _section("战略通道运输", choke_content, page=True)
         + _section("港口运输活动", port_content, page=True)
         + _section("油气供给与资产", oil_content, page=True)
@@ -495,7 +502,12 @@ PRINT_CSS = """
 <style>
 .print-report { display: none; color: #17212b; background: #fff; font: 10pt/1.38 Arial, "Noto Sans CJK SC", sans-serif; }
 .print-report * { box-sizing: border-box; }
-.print-report h1 { text-align: center; font-size: 22pt; margin: 0 0 8mm; line-height: 1.2; }
+.print-report h1 { text-align: center; font-size: 22pt; margin: 0 0 4mm; line-height: 1.2; }
+.report-date-rule { position:relative; border-top:1px solid #9aa7b4; text-align:center; margin:0 0 3mm; height:4mm; }
+.report-date-rule span { position:relative; top:-.7em; padding:0 4mm; background:#fff; font-size:9pt; }
+.report-sponsor { margin:0 0 3mm; text-align:center; font-size:10pt; font-weight:400!important; }
+.map-legend { display:flex; justify-content:center; flex-wrap:wrap; gap:2mm 5mm; font-size:8pt; margin:1mm 0 2mm; }
+.map-legend i { display:inline-block; width:2.5mm; height:2.5mm; margin-right:1mm; vertical-align:middle; }
 .print-report h2 { font-size: 15pt; border-bottom: 1px solid #9aa7b4; padding-bottom: 2mm; margin: 0 0 4mm; }
 .print-report h3 { font-size: 10.5pt; margin: 4mm 0 2mm; }
 .report-page { break-before: page; page-break-before: always; }
@@ -523,8 +535,10 @@ PRINT_CSS = """
 .print-report thead { display:table-header-group; }
 .print-report tr { break-inside:avoid; page-break-inside:avoid; }
 @page { size:A4 portrait; margin:10mm 10mm 14mm; }
+body:has(.print-report-preview) [data-testid="stTabs"] { display:none!important; }
 @media print {
   @page { @bottom-center { content:"第 " counter(page) " 页"; color:#64748b; font-size:8pt; } }
+  [data-testid="stTabs"] { display:none!important; }
   html,body,#root,.stApp,[data-testid="stAppViewContainer"],[data-testid="stMain"],[data-testid="stMainBlockContainer"] { height:auto!important; min-height:0!important; background:#fff!important; }
   [data-testid="stSidebar"],[data-testid="stHeader"],[data-testid="stToolbar"],[data-testid="stDecoration"],[data-testid="stStatusWidget"],[data-testid="stToast"],[data-testid="stToastContainer"] { display:none!important; }
   [data-testid="stMainBlockContainer"] > div[data-testid="stElementContainer"]:not(:has(.print-report)) { display:none!important; }
