@@ -150,10 +150,21 @@ _PORT_NAMES_ZH = {
     _port_name_key("Mesaieed"): "乌姆赛义德港",
     _port_name_key("Imam Khomeini Port"): "霍梅尼港",
     _port_name_key("Khor Al Zubair"): "祖拜尔港",
+    _port_name_key("Khalifa Port"): "哈利法港",
+    _port_name_key("Jebel Dhanna"): "杰贝尔丹那港",
+}
+
+
+_PORT_ID_NAMES_ZH = {
+    "port2025": "哈利法港",
+    "port2236": "杰贝尔丹那港",
 }
 
 
 def port_label(port: dict) -> str:
+    port_id = str(port.get("portid") or "")
+    if port_id in _PORT_ID_NAMES_ZH:
+        return _PORT_ID_NAMES_ZH[port_id]
     candidates = [port.get("name_cn"), port.get("name"), port.get("portname"),
                   port.get("node_name"), *port.get("wpi_names", [])]
     for candidate in candidates:
