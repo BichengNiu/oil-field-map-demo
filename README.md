@@ -21,7 +21,14 @@
 | 油气产量、产能、状态、坐标 | 静态已核验披露；不能从页面刷新获得新的田级数值 | 接入监管机构 / 运营商 API、公告或 PDF 抓取，核验资产映射、日期、商品、单位和口径后发布；没有披露的值仍未知 |
 | AIS船位归档 | 运行期间自动保存当前快照及AISStream事件；地图只显示当前船位 | 设置持久 `AIS_ARCHIVE_PATH`；完整水域历史需要有授权的数据源 |
 
-验证：`python -m unittest test_data_integrity test_ais test_ais_history test_public_ais_archive test_portwatch_downloads test_page_updates`。
+### 打印报告
+
+侧栏“打印报告”可选择“全项目”或“当前筛选”，并可先勾选页面预览、附完整油气资产目录。报告默认包含监测范围图、港口和咽喉点运输趋势、资产披露表、AIS快照及数据口径说明。浏览器菜单选择“打印”或使用 Ctrl+P，即可按 A4 报告样式打印或另存为 PDF；报告按港口、咽喉点分别列示源站观测日，缺报数值留空。
+
+首次准备报告时，应用会读取所选节点最近90天的 PortWatch 历史记录，用于绘制趋势和最近7日对比；同一会话缓存15分钟。侧栏“重读报告历史曲线”会重新请求历史数据。地图点位图是经纬度示意，不表示海岸线或实际航迹。
+
+
+验证：`python -m unittest test_data_integrity test_ais test_ais_history test_public_ais_archive test_portwatch_downloads test_page_updates test_print_report`。
 
 ### 港口与咽喉点数据下载
 
