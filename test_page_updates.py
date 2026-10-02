@@ -114,7 +114,7 @@ class PageUpdates(unittest.TestCase):
         failed = self.page()
         self.assertFalse(failed.exception)
         self.assertTrue(failed.slider)
-        self.assertEqual(failed.status[0].state, "error")
+        self.assertFalse(failed.status)
         self.assertTrue(any("fixture source unavailable" in w.value for w in failed.warning))
 
     def test_historical_map_table_and_export_use_same_day_not_current_positions(self):

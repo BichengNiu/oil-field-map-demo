@@ -19,7 +19,6 @@ import ais_history
 import portwatch
 import audited_measurements
 import supplemental_assets
-import reconciled_assets
 import port_inventory
 import portwatch_downloads
 import map_tools
@@ -28,7 +27,6 @@ import map_tools
 importlib.invalidate_caches()
 importlib.reload(audited_measurements)
 importlib.reload(supplemental_assets)
-importlib.reload(reconciled_assets)
 importlib.reload(port_inventory)
 CATALOG = importlib.reload(field_catalog)
 AIS = importlib.reload(ais)
@@ -242,7 +240,7 @@ def _render_portwatch_download_panel(region_port_catalog: list[dict], selected_r
         st.dataframe(result["dictionary"], width="stretch", hide_index=True, height=300)
 
 
-st.set_page_config(page_title="中东能源保供监测", page_icon="◉", layout="wide",
+st.set_page_config(page_title="中东能源监测", page_icon="◉", layout="wide",
                    initial_sidebar_state="expanded")
 
 st.markdown("""
@@ -285,10 +283,6 @@ st.markdown("""
       padding: 13px 16px; box-shadow: 0 3px 12px rgba(25, 49, 74, .05); }
   [data-testid="stMetricLabel"] { color: #557085; }
   [data-testid="stMetricValue"] { color: #102a43; }
-  .hero { background: linear-gradient(115deg,#0b2742,#0e5570); border-radius: 18px; padding: 20px 24px;
-      color: white; margin-bottom: 14px; box-shadow: 0 12px 30px rgba(10,42,68,.16); }
-  .hero h1 { margin: 0 0 5px; font-size: 1.65rem; color: white; }
-  .hero p { margin: 0; color: #cfe5ef; font-size: .94rem; }
   div[data-testid="stTabs"] button { font-weight: 650; }
   div[data-testid="stDataFrame"] { border: 1px solid #dfe7ef; border-radius: 12px; overflow: hidden; }
   .stAlert { border-radius: 12px; }
@@ -903,17 +897,9 @@ def _map_html(assets: list[dict[str, object]], ports: list[dict],
     """
 
 
-st.markdown("""
-<div class="hero">
-  <h1>中东能源保供监测</h1>
-</div>
-""", unsafe_allow_html=True)
-
 # A page reload creates a new Streamlit session. Recheck sources before drawing
 # the map, but retain caches when the same session changes filters or dates.
 opening_page = not st.session_state.get("sources_checked")
-load_status = st.status("正在更新数据…" if opening_page else "正在读取所选日期数据…",
-                        expanded=False)
 if opening_page:
     PORTWATCH.clear_live_cache()
     _openwaters_snapshot.clear()
@@ -928,7 +914,7 @@ ais_api_key = _ais_api_key()
 ais_collector_instance: AIS.AISCollector | None = None
 
 with st.sidebar:
-    st.markdown("### 监测视图")
+    st.markdown("### 中东能源监测")
     selected_map_layers = st.multiselect(
         "地图内容", list(MAP_LAYER_LABELS), default=["ports"],
         format_func=lambda value: MAP_LAYER_LABELS[value], key="map_layers",
@@ -1010,7 +996,7 @@ with st.sidebar:
             newest_chokepoint_day = None
             chokepoint_date_error = str(exc)
             st.warning(f"咽喉点数据暂时不可用：{exc}")
-        if st.button("刷新 PortWatch 数据", width="stretch"):
+        if st.button("刷新 PortWatch 数据", type="primary", width="stretch"):
             st.session_state["sources_checked"] = False
             st.rerun()
 
@@ -1052,7 +1038,7 @@ with st.sidebar:
                 f'AISStream {stream_status}')
             if open_state.get("error"):
                 st.caption(f'Open Waters 错误：{open_state["error"]}')
-        if st.button("刷新船舶数据", width="stretch", disabled=not ais_enabled):
+        if st.button("刷新船舶数据", type="primary", width="stretch", disabled=not ais_enabled):
             if ais_collector_instance:
                 ais_collector_instance.stop()
             if ais_api_key:
@@ -1063,7 +1049,7 @@ with st.sidebar:
 
         st.caption("公开历史采样：2026-03-14—04-11，迪拜附近为主；五个水域覆盖不完整。")
         st.button("回看公开AIS样本（3月16日）", key="public_ais_history",
-                  on_click=_show_public_history, width="stretch")
+                  on_click=_show_public_history, type="primary", width="stretch")
         history_upload = st.file_uploader(
             "导入历史船位 CSV", type=["csv"], key="ais_history_upload",
             help="支持本页导出的CSV，或mmsi、received_at、lat、lon、source列；时间按UTC解释。")
@@ -1508,11 +1494,6 @@ def render_ais_panel() -> None:
         st.info("当前船型、水域、搜索和数据年龄筛选没有匹配船舶。")
 
 
-load_errors = [error for error in (port_error, chokepoint_error, port_date_error, chokepoint_date_error,
-               open_state.get("error") if ais_enabled else None) if error]
-load_status.update(label="数据读取完成；部分来源暂不可用" if load_errors else "数据已更新",
-                   state="error" if load_errors else "complete", expanded=False)
-
 with tab_map:
     render_map_panel()
 
@@ -1653,17 +1634,3 @@ with tab_method:
         "不得相加。来源为千桶/日的油品数值在界面统一换算为万桶/日；生产状态带证据时点，"
         "不等于实时遥测。"
     )
-
-pending_clues = reconciled_assets.pending()
-with st.expander(f"待核资产线索（{len(pending_clues)}条；未纳入确认目录）"):
-    if pending_clues:
-        st.caption("以下线索来自保存的历史名录。原页及定向检索未取得充分确认内容，保留供继续核验；不填产量或坐标。")
-        st.dataframe(pending_clues, hide_index=True, width="stretch")
-        pending_buffer = io.StringIO()
-        pending_writer = csv.DictWriter(pending_buffer, fieldnames=pending_clues[0].keys())
-        pending_writer.writeheader()
-        pending_writer.writerows(pending_clues)
-        st.download_button("下载待核线索 CSV", pending_buffer.getvalue().encode("utf-8-sig"),
-                           "pending_asset_clues.csv", "text/csv", key="pending_asset_clues")
-    else:
-        st.caption("历史检查点的19条名称线索已完成范围对账。产量、坐标和现时状态的缺口仍见资产审计表。")
