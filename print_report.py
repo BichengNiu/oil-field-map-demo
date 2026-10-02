@@ -535,7 +535,6 @@ PRINT_CSS = """
 .print-report thead { display:table-header-group; }
 .print-report tr { break-inside:avoid; page-break-inside:avoid; }
 @page { size:A4 portrait; margin:10mm 10mm 14mm; }
-body:has(.print-report-preview) [data-testid="stTabs"] { display:none!important; }
 @media print {
   @page { @bottom-center { content:"第 " counter(page) " 页"; color:#64748b; font-size:8pt; } }
   [data-testid="stTabs"] { display:none!important; }
