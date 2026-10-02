@@ -22,6 +22,7 @@ import supplemental_assets
 import port_inventory
 import portwatch_downloads
 import map_tools
+import print_report
 
 # Streamlit 的热重载会重跑此文件；显式重新读取目录模块以同步仓库中的数据修订。
 importlib.invalidate_caches()
@@ -38,6 +39,65 @@ if (getattr(PORTWATCH, "MODULE_VERSION", 0) < 5
         or not hasattr(PORTWATCH, "port_risk_capacity")):
     st.error("港口数据模块版本未同步。请在 Streamlit 管理页重启应用后重试。")
     st.stop()
+
+
+ALL_SELECTION = "全选"
+
+
+def _exclusive_multiselect_changed(key: str) -> None:
+    """Keep 全选 exclusive while allowing an empty selection to mean none."""
+    previous_key = f"_selection_previous_{key}"
+    selected = list(st.session_state.get(key, []))
+    previous = list(st.session_state.get(previous_key, []))
+    newly_added = [value for value in selected if value not in previous]
+    if ALL_SELECTION in newly_added:
+        selected = [ALL_SELECTION]
+    elif ALL_SELECTION in selected:
+        selected = [value for value in selected if value != ALL_SELECTION]
+    st.session_state[key] = selected
+    st.session_state[previous_key] = list(selected)
+
+
+def _multiselect_with_all(label: str, options: list, *, key: str,
+                          default_all: bool = True, default: list | None = None,
+                          format_func=None, **kwargs) -> list:
+    """Add an exclusive 全选 option; an empty selection stays empty."""
+    options = list(options)
+    valid_options = set(options)
+    previous_key = f"_selection_previous_{key}"
+    if key not in st.session_state:
+        selected = [ALL_SELECTION] if default_all else list(default or [])
+    else:
+        current = st.session_state.get(key, [])
+        selected = list(current) if isinstance(current, (list, tuple)) else [current]
+        # Migrate an old empty selection once; new empty selections remain empty.
+        if not selected and default_all and previous_key not in st.session_state:
+            selected = [ALL_SELECTION]
+        selected = [value for value in selected
+                    if value == ALL_SELECTION or value in valid_options]
+        if ALL_SELECTION in selected and len(selected) > 1:
+            previous = list(st.session_state.get(previous_key, []))
+            newly_added = [value for value in selected if value not in previous]
+            if ALL_SELECTION in newly_added:
+                selected = [ALL_SELECTION]
+            else:
+                selected = [value for value in selected if value != ALL_SELECTION]
+    st.session_state[key] = selected
+    st.session_state[previous_key] = list(selected)
+
+    def display(value):
+        if value == ALL_SELECTION:
+            return ALL_SELECTION
+        return format_func(value) if format_func else str(value)
+
+    return st.multiselect(
+        label, [ALL_SELECTION, *options], key=key, format_func=display,
+        on_change=_exclusive_multiselect_changed, args=(key,), **kwargs)
+
+
+def _selected_values(selection: list, options: list) -> list:
+    """Expand explicit 全选; keep [] as an empty filter."""
+    return list(options) if ALL_SELECTION in selection else list(selection)
 
 
 def _ais_api_key() -> str:
@@ -60,25 +120,41 @@ def _openwaters_snapshot(max_age_minutes: int, collector_version: int) -> dict:
     return AIS.openwaters_snapshot(max_age_minutes=max_age_minutes)
 
 
+@st.cache_data(ttl=900, show_spinner=False)
+def _print_report_history(kind: str, node_ids: tuple[str, ...],
+                          end_day: str) -> tuple[list[dict], str | None]:
+    """Fetch one verified 90-day report window; cache failures briefly for reruns."""
+    if not node_ids:
+        return [], None
+    try:
+        end = date.fromisoformat(end_day)
+        rows, _ = portwatch_downloads.fetch_window(
+            kind, node_ids, end - timedelta(days=89), end)
+        return rows, None
+    except Exception as exc:
+        return [], f"{kind} 历史窗口：{type(exc).__name__}: {exc}"
+
+
 def _open_download_tab(kind: str | None = None, node_ids: tuple[str, ...] = ()) -> None:
     """Open the downloader with either the map scope or a chosen node."""
     st.session_state["main_tabs"] = "数据下载"
     st.session_state["pw_download_mode"] = "全部可用历史"
     if node_ids:
         st.session_state["pw_download_scope"] = "按条件筛选"
-        st.session_state["pw_download_regions"] = []
-        st.session_state["pw_download_countries"] = []
+        st.session_state["pw_download_regions"] = [ALL_SELECTION]
+        st.session_state["pw_download_countries"] = [ALL_SELECTION]
         st.session_state["pw_download_nodes"] = [(kind, pid) for pid in node_ids]
     else:
         st.session_state["pw_download_scope"] = "沿用地图筛选"
         st.session_state.pop("pw_download_nodes", None)
-    st.session_state["pw_download_kinds"] = [kind] if kind else ["ports", "chokepoints"]
+    st.session_state["pw_download_kinds"] = [kind] if kind else [ALL_SELECTION]
 
 
-def _render_portwatch_download_panel(region_port_catalog: list[dict], selected_regions: set[str],
-                                     selected_countries: list[str], selected_port_ids: list[str],
-                                     newest_port_day: date | None, newest_choke_day: date | None,
-                                     map_chokepoints: list[dict]) -> None:
+def _render_portwatch_download_panel(selected_port_countries: list[str],
+                                     selected_port_ids: list[str],
+                                     selected_chokepoint_ids: list[str],
+                                     newest_port_day: date | None,
+                                     newest_choke_day: date | None) -> None:
     st.subheader("港口与咽喉要道数据")
     st.caption("来源：IMF PortWatch。下载的是AIS推算的港口／要道日度汇总，不含逐船AIS航迹；日度数据从2019-01-01起，缺报不补零。")
     latest = [day for day in (newest_port_day, newest_choke_day) if day]
@@ -94,44 +170,54 @@ def _render_portwatch_download_panel(region_port_catalog: list[dict], selected_r
         return
 
     kind_options = list(portwatch_downloads.KINDS)
-    selected_kinds = st.multiselect("数据类型", kind_options, default=kind_options,
-        format_func=lambda value: portwatch_downloads.KINDS[value], key="pw_download_kinds")
+    kinds_selection = _multiselect_with_all(
+        "数据类型", kind_options, key="pw_download_kinds",
+        format_func=lambda value: portwatch_downloads.KINDS[value],
+        placeholder="全选或选择数据类型")
+    selected_kinds = set(_selected_values(kinds_selection, kind_options))
     scope_options = ["全部项目节点", "按条件筛选", "沿用地图筛选"]
     scope = st.radio("节点范围", scope_options, horizontal=True, key="pw_download_scope")
     selected_nodes = []
     if scope == "全部项目节点":
         selected_nodes = [*all_ports, *all_chokes]
     elif scope == "沿用地图筛选":
-        selected_nodes = [n for n in all_ports if n["region"] in selected_regions
-                          and (not selected_countries or n["country"] in selected_countries)
-                          and (not selected_port_ids or n["portid"] in selected_port_ids)]
-        choke_ids = {str(p["portid"]) for p in map_chokepoints}
+        selected_nodes = [n for n in all_ports
+                          if n["country"] in selected_port_countries
+                          and n["portid"] in selected_port_ids]
+        choke_ids = set(selected_chokepoint_ids)
         selected_nodes += [n for n in all_chokes if n["portid"] in choke_ids]
     else:
         region_options = list(PORTWATCH.REGIONS)
-        chosen_regions = st.multiselect("水域（空选＝全部五个水域）", region_options,
-                                        key="pw_download_regions")
-        regions = set(chosen_regions or region_options)
+        regions_selection = _multiselect_with_all(
+            "水域", region_options, key="pw_download_regions",
+            placeholder="全选或选择水域")
+        regions = set(_selected_values(regions_selection, region_options))
         region_ports = [n for n in all_ports if n["region"] in regions]
         country_options = sorted({n["country"] for n in region_ports if n["country"]})
-        countries = st.multiselect("国家（空选＝以上水域全部国家）", country_options,
-                                   key="pw_download_countries")
-        candidate_ports = [n for n in region_ports if not countries or n["country"] in countries]
+        countries_selection = _multiselect_with_all(
+            "国家", country_options, key="pw_download_countries",
+            placeholder="全选或选择国家")
+        countries = set(_selected_values(countries_selection, country_options))
+        candidate_ports = [n for n in region_ports if n["country"] in countries]
         choke_options = [n for n in all_chokes if n["region"] in regions]
-        options = [("ports", n["portid"]) for n in candidate_ports] + [
+        node_options = [("ports", n["portid"]) for n in candidate_ports] + [
             ("chokepoints", n["portid"]) for n in choke_options]
         labels = {("ports", n["portid"]): f'{n["node_name"]} · {n["country"] or "国家未知"}'
                   for n in candidate_ports}
         labels.update({("chokepoints", n["portid"]): n["node_name"] for n in choke_options})
-        chosen_nodes = st.multiselect("节点（空选＝按水域及国家纳入全部节点）", options,
-            format_func=lambda key: labels.get(key, key[1]), key="pw_download_nodes")
-        selected = set(chosen_nodes)
-        selected_nodes = [n for n in candidate_ports if not selected or ("ports", n["portid"]) in selected]
-        selected_nodes += [n for n in choke_options if not selected or ("chokepoints", n["portid"]) in selected]
+        nodes_selection = _multiselect_with_all(
+            "节点", node_options, key="pw_download_nodes",
+            format_func=lambda key: labels.get(key, key[1]),
+            placeholder="全选或选择节点")
+        chosen_nodes = set(_selected_values(nodes_selection, node_options))
+        selected_nodes = [n for n in candidate_ports if ("ports", n["portid"]) in chosen_nodes]
+        selected_nodes += [n for n in choke_options
+                           if ("chokepoints", n["portid"]) in chosen_nodes]
 
     selected_nodes = [n for n in selected_nodes if n["node_kind"] in selected_kinds]
     st.caption(f"当前范围：{len(selected_nodes):,} 个节点，其中有独立活动统计的节点 "
                f"{sum(n['statistics_available'] for n in selected_nodes):,} 个。")
+
     mode = st.radio("时间范围", ["最新数据", "历史区间", "全部可用历史"], horizontal=True,
                     key="pw_download_mode")
     first = last = None
@@ -472,6 +558,13 @@ def _port_popup(port: dict, day: str) -> str:
             return "<0.1"
         return f"{value / divisor:,.{decimals}f}"
 
+    if port.get("activity_source") == "无独立PortWatch统计":
+        date_label = "无独立统计"
+    elif port.get("has_data"):
+        date_label = f"观测日 UTC：{day}"
+    else:
+        date_label = "该日无源记录"
+
     window = port.get("window_days", 7)
     activity = port.get("activity_index")
     activity_text = f"{activity:,.0f}" if activity is not None else "—"
@@ -507,7 +600,7 @@ def _port_popup(port: dict, day: str) -> str:
     return (
         '<div class="popup-card">'
         f'<div class="field-name">⚓ {esc(port["name"])}</div>'
-        f'<div class="country">{esc(port["country"])} · {esc(port["region"])} · {esc(day)}</div>'
+        f'<div class="country">{esc(port["country"])} · {esc(port["region"])} · {esc(date_label)}</div>'
         '<div class="row"><span>当日有效进港</span>'
         f'<strong>{amount("portcalls", decimals=0)} 艘次</strong></div>'
         '<div class="row"><span>当日估算装卸</span>'
@@ -616,8 +709,7 @@ def _vessel_popup(vessel: dict[str, object]) -> str:
 def _map_html(assets: list[dict[str, object]], ports: list[dict],
               chokepoints: list[dict], vessels: list[dict], day: str, chokepoint_day: str,
               focus_assets: bool = False, ais_configured: bool = True,
-              visible_layers: set[str] | None = None,
-              region_bounds: list[tuple[float, float, float, float]] | None = None) -> str:
+              visible_layers: set[str] | None = None) -> str:
     visible_layers = set(MAP_LAYER_LABELS) if visible_layers is None else visible_layers
     show_assets = "assets" in visible_layers
     show_ports = "ports" in visible_layers
@@ -683,7 +775,6 @@ def _map_html(assets: list[dict[str, object]], ports: list[dict],
         ])
     legend_json = json.dumps("".join(legend_lines), ensure_ascii=False).replace("</", "<\\/")
     focus_json = json.dumps(focus_assets)
-    region_bounds_json = json.dumps(region_bounds or [])
     date_label = html.escape(f"港口 {day} UTC · 咽喉点 {chokepoint_day} UTC")
     date_label_json = json.dumps(date_label, ensure_ascii=False)
     screenshot_date_json = json.dumps(day if day != "无数据" else chokepoint_day)
@@ -763,7 +854,6 @@ def _map_html(assets: list[dict[str, object]], ports: list[dict],
       const ports = {port_json};
       const chokepoints = {chokepoint_json};
       const vessels = {vessel_json};
-      const regionBounds = {region_bounds_json};
       const assetLayer = L.markerClusterGroup({{showCoverageOnHover: false, maxClusterRadius: 34,
           disableClusteringAtZoom: 8, spiderfyOnMaxZoom: true}}).addTo(map);
       const portLayer = L.layerGroup().addTo(map);
@@ -851,16 +941,11 @@ def _map_html(assets: list[dict[str, object]], ports: list[dict],
       }} else if (focusAssets && assets.length > 1) {{
         map.fitBounds(L.latLngBounds(assets.map((a) => [a.lat, a.lon])),
           {{padding: [42, 42], maxZoom: 7}});
-      }} else if (regionBounds.length) {{
-        const selectedBounds = regionBounds.reduce((bounds, region) =>
-          bounds.extend([[region[0], region[2]], [region[1], region[3]]]),
-          L.latLngBounds([]));
-        map.fitBounds(selectedBounds, {{padding: [42, 42], maxZoom: 8}});
       }} else if (allPoints.length) {{
         map.fitBounds(L.latLngBounds(allPoints), {{padding: [36, 36], maxZoom: 5}});
       }}
       // Keep the user's viewport while the time slider changes the data.
-      const viewKey = 'energy-map-view:' + JSON.stringify([regionBounds, focusAssets,
+      const viewKey = 'energy-map-view:' + JSON.stringify([focusAssets,
         focusAssets ? assets.map(a => a.name) : []]);
       try {{
         const saved = JSON.parse(sessionStorage.getItem(viewKey));
@@ -893,45 +978,51 @@ ais_api_key = _ais_api_key()
 ais_collector_instance: AIS.AISCollector | None = None
 
 with st.sidebar:
+    st.session_state.pop("monitor_regions", None)
     st.markdown("### 中东能源监测")
-    selected_map_layers = st.multiselect(
-        "地图内容", list(MAP_LAYER_LABELS), default=["ports"],
-        format_func=lambda value: MAP_LAYER_LABELS[value], key="map_layers",
-        placeholder="全部图层",
-        help="默认显示港口；可选择一个或多个图层。",
-        select_all=False)
-    selected_regions = st.multiselect(
-        "航运水域", list(PORTWATCH.REGIONS), default=["霍尔木兹海峡"],
-        placeholder="全部五个水域", key="monitor_regions",
-        help="同时筛选港口、咽喉点和船舶，并自动调整地图视野。")
-    active_regions = tuple(selected_regions or PORTWATCH.REGIONS)
-    selected_region_set = set(active_regions)
-    selected_region_bounds = [PORTWATCH.REGIONS[region] for region in active_regions]
+    with st.expander("打印报告", expanded=False):
+        st.caption("浏览器菜单选择“打印”即可输出报告；勾选预览可先在页面末尾校对。")
+        report_scope = st.radio(
+            "报告范围", ["全项目", "当前筛选"], horizontal=True,
+            key="print_report_scope")
+        print_report_preview = st.checkbox(
+            "页面预览报告", value=False, key="print_report_preview")
+        include_asset_appendix = st.checkbox(
+            "附完整油气资产目录", value=False, key="print_report_asset_appendix")
+        if st.button("重读报告历史曲线", key="refresh_print_report_history"):
+            _print_report_history.clear()
+            st.rerun()
+    map_layers_selection = _multiselect_with_all(
+        "地图内容", list(MAP_LAYER_LABELS), key="map_layers",
+        default_all=False, default=["ports"],
+        format_func=lambda value: MAP_LAYER_LABELS[value],
+        placeholder="全选或选择图层",
+        help="“全选”显示所有图层；清空选择时地图不显示任何图层。")
+    selected_map_layers = _selected_values(map_layers_selection, list(MAP_LAYER_LABELS))
+
     try:
-        region_port_catalog = [
-            port for port in PORTWATCH.port_catalog()
-            if port["region"] in selected_region_set
-        ]
+        available_ports = PORTWATCH.port_catalog()
         port_catalog_error = None
     except Exception as exc:
-        region_port_catalog = []
+        available_ports = []
         port_catalog_error = str(exc)
+    try:
+        available_chokepoints = PORTWATCH.chokepoint_catalog()
+        chokepoint_catalog_error = None
+    except Exception as exc:
+        available_chokepoints = []
+        chokepoint_catalog_error = str(exc)
 
-    with st.expander("港口与咽喉点", expanded=False):
-        port_country_options = sorted({port["country"] for port in region_port_catalog})
-        if "port_countries" in st.session_state:
-            st.session_state["port_countries"] = [
-                country for country in st.session_state["port_countries"]
-                if country in port_country_options
-            ]
-        selected_port_countries = st.multiselect(
-            "国家（可多选）", port_country_options, default=[],
-            placeholder="全部国家", key="port_countries",
-            help="国家列表随航运水域联动；空选表示当前水域内全部国家。",
-            select_all=False)
+    with st.expander("港口筛选", expanded=False):
+        port_country_options = sorted({port["country"] for port in available_ports})
+        port_countries_selection = _multiselect_with_all(
+            "国家", port_country_options, key="port_countries",
+            placeholder="全选或选择国家",
+            help="“全选”表示所有国家；清空选择时不显示港口。")
+        selected_port_countries = _selected_values(
+            port_countries_selection, port_country_options)
         country_port_catalog = [
-            port for port in region_port_catalog
-            if port["country"] in selected_port_countries
+            port for port in available_ports if port["country"] in selected_port_countries
         ]
         port_labels = {
             port["portid"]: f'{port["name"]} · {port["country"]}'
@@ -941,52 +1032,62 @@ with st.sidebar:
             port["portid"] for port in sorted(
                 country_port_catalog, key=lambda port: (port["country"], port["name"]))
         ]
-        if "port_ids" in st.session_state:
-            st.session_state["port_ids"] = [
-                port_id for port_id in st.session_state["port_ids"]
-                if port_id in port_labels
-            ]
-        selected_port_ids = st.multiselect(
-            "港口（可多选）", port_id_options, default=[],
+        port_ids_selection = _multiselect_with_all(
+            "港口", port_id_options, key="port_ids",
             format_func=lambda port_id: port_labels.get(port_id, port_id),
-            placeholder=("请先选择国家" if not selected_port_countries else "所选国家的全部港口"),
-            key="port_ids", disabled=not selected_port_countries,
-            help="先选择一个或多个国家；港口空选时显示所选国家的全部港口。",
-            select_all=False)
+            placeholder="全选或选择港口",
+            disabled=not bool(selected_port_countries),
+            help="“全选”表示所选国家中的所有港口；清空选择时不显示港口。")
+        selected_port_ids = _selected_values(port_ids_selection, port_id_options)
         if port_catalog_error:
             st.warning(f"港口目录暂时不可用：{port_catalog_error}")
-        port_date_error = None
         try:
             newest_day = PORTWATCH.latest_date()
             selected_day = newest_day
             st.caption(f"源站最新：{newest_day.isoformat()}")
         except Exception as exc:
             newest_day = selected_day = None
-            port_date_error = str(exc)
             st.warning(f"PortWatch 暂时不可用：{exc}")
         rolling_label = st.radio("日均窗口", ["过去 7 天", "过去 30 天"],
                                  horizontal=True, key="rolling_window")
         rolling_days = 7 if rolling_label == "过去 7 天" else 30
-        chokepoint_date_error = None
+
+    with st.expander("咽喉点筛选", expanded=False):
+        if chokepoint_catalog_error:
+            st.warning(f"咽喉点目录暂时不可用：{chokepoint_catalog_error}")
+        chokepoint_id_options = [str(point["portid"]) for point in available_chokepoints]
+        chokepoint_labels = {
+            str(point["portid"]): point.get("name_cn", point.get("portname", str(point["portid"])))
+            for point in available_chokepoints
+        }
+        chokepoints_selection = _multiselect_with_all(
+            "咽喉点", chokepoint_id_options, key="chokepoint_ids",
+            format_func=lambda point_id: chokepoint_labels.get(point_id, point_id),
+            placeholder="全选或选择咽喉点",
+            help="此筛选独立于港口国家与港口筛选；清空选择时不显示咽喉点。")
+        selected_chokepoint_ids = _selected_values(
+            chokepoints_selection, chokepoint_id_options)
         try:
             newest_chokepoint_day = PORTWATCH.latest_chokepoint_date()
             st.caption(f"咽喉点最新：{newest_chokepoint_day.isoformat()} UTC")
         except Exception as exc:
             newest_chokepoint_day = None
-            chokepoint_date_error = str(exc)
             st.warning(f"咽喉点数据暂时不可用：{exc}")
-        if st.button("刷新 PortWatch 数据", type="primary", width="stretch"):
-            st.session_state["sources_checked"] = False
-            st.rerun()
+
+    if st.button("刷新 PortWatch 数据", type="primary", width="stretch"):
+        st.session_state["sources_checked"] = False
+        st.rerun()
 
     with st.expander("船舶", expanded=True):
         ais_enabled = st.toggle(
-            "启用船位", value=True,
-            key="ais_enabled")
-        selected_ais_categories = st.multiselect(
-            "船型（空选＝全部）", list(AIS.VESSEL_TYPE_LABELS), default=[],
+            "显示 AIS 实时船位", value=True, key="ais_enabled",
+            help="开启后读取 Open Waters 当前船位快照，并合并已配置的 AISStream 数据；地图还需在“地图内容”中选中“船舶”图层。")
+        ais_categories_selection = _multiselect_with_all(
+            "船型", list(AIS.VESSEL_TYPE_LABELS), key="ais_categories",
             format_func=lambda key: AIS.VESSEL_TYPE_LABELS[key],
-            placeholder="全部船型", key="ais_categories")
+            placeholder="全选或选择船型")
+        selected_ais_categories = set(_selected_values(
+            ais_categories_selection, list(AIS.VESSEL_TYPE_LABELS)))
         ais_search = st.text_input(
             "搜索船名、MMSI或IMO", placeholder="例如 EVER GIVEN / 636…",
             key="ais_search").strip().lower()
@@ -1032,27 +1133,36 @@ with st.sidebar:
         st.caption("战略视图按油田群／区块优先，避免组成资产与上级重复展示。")
         asset_search = st.text_input("搜索资产", placeholder="输入中英文名称",
                                      key="asset_search").strip().lower()
-        selected_countries = st.multiselect("国家（空选＝全部）", country_options, default=[],
-                                            placeholder="全部国家", key="asset_countries")
-        selected_levels = st.multiselect(
-            "资产层级（空选＝全部）", level_options, default=[],
-            format_func=lambda key: LEVEL_LABELS[key], placeholder="全部层级",
-            key="asset_levels")
-        selected_statuses = st.multiselect(
-            "生产状态（空选＝全部）", status_options, default=[],
-            format_func=lambda key: STATUS_LABELS[key], placeholder="全部状态",
-            key="asset_statuses")
+        selected_countries = _selected_values(
+            _multiselect_with_all("国家", country_options, key="asset_countries",
+                                  placeholder="全选或选择国家"),
+            country_options)
+        selected_levels = _selected_values(
+            _multiselect_with_all("资产层级", level_options, key="asset_levels",
+                                  format_func=lambda key: LEVEL_LABELS[key],
+                                  placeholder="全选或选择层级"),
+            level_options)
+        selected_statuses = _selected_values(
+            _multiselect_with_all("生产状态", status_options, key="asset_statuses",
+                                  format_func=lambda key: STATUS_LABELS[key],
+                                  placeholder="全选或选择状态"),
+            status_options)
         values_only = st.toggle("只看有公开数值", value=False, key="values_only")
         output_only = st.toggle("只看有日产量", value=False, key="output_only")
         st.markdown("**高级筛选**")
-        selected_types = st.multiselect("资产类型（空选＝全部）", type_options, default=[],
-                                        placeholder="全部类型", key="asset_types")
-        selected_metrics = st.multiselect(
-            "指标口径（空选＝全部）", metric_options, default=[],
-            format_func=lambda key: METRIC_LABELS[key], placeholder="全部口径",
-            key="asset_metrics")
+        selected_types = _selected_values(
+            _multiselect_with_all("资产类型", type_options, key="asset_types",
+                                  placeholder="全选或选择资产类型"),
+            type_options)
+        selected_metrics = _selected_values(
+            _multiselect_with_all("指标口径", metric_options, key="asset_metrics",
+                                  format_func=lambda key: METRIC_LABELS[key],
+                                  placeholder="全选或选择口径"),
+            metric_options)
 
-    st.caption("航运水域同时作用于港口、咽喉点和船舶；其他筛选留空表示全部。")
+    st.caption("港口和咽喉点在独立筛选区选择；多选器中的“全选”与单项互斥，清空选择表示无匹配结果。")
+
+
 
 tab_map, tab_ports, tab_vessels, tab_assets, tab_download, tab_method = st.tabs(
     ["地图", "港口", "船舶", "油气", "数据下载", "数据与方法"],
@@ -1064,10 +1174,9 @@ port_error = port_catalog_error
 if selected_day is not None and not port_error:
     try:
         catalog = [
-            port for port in region_port_catalog
-            if (not selected_port_countries
-                or port["country"] in selected_port_countries)
-            and (not selected_port_ids or port["portid"] in selected_port_ids)
+            port for port in available_ports
+            if port["country"] in selected_port_countries
+            and port["portid"] in selected_port_ids
         ]
         ids = tuple(p["portid"] for p in catalog)
         if ids:
@@ -1079,13 +1188,13 @@ if selected_day is not None and not port_error:
         port_error = str(exc)
 
 chokepoints: list[dict] = []
-chokepoint_error = None
-if selected_chokepoint_day is not None:
+chokepoint_error = chokepoint_catalog_error
+if selected_chokepoint_day is not None and not chokepoint_error:
     try:
-        chokepoint_catalog = PORTWATCH.chokepoint_catalog()
+        chosen_chokepoint_ids = set(selected_chokepoint_ids)
         chokepoint_catalog = [
-            point for point in chokepoint_catalog
-            if point.get("name_cn") in selected_region_set
+            point for point in available_chokepoints
+            if str(point["portid"]) in chosen_chokepoint_ids
         ]
         chokepoint_ids = tuple(point["portid"] for point in chokepoint_catalog)
         if chokepoint_ids:
@@ -1117,10 +1226,12 @@ except Exception as exc:
 def current_vessels() -> list[dict]:
     """Return one consistent, filtered snapshot; missing AIS is unavailable, not zero."""
 
+    if not selected_ais_categories:
+        return []
     return AIS.filter_vessels(
         live_positions,
-        regions=selected_region_set,
-        categories=set(selected_ais_categories),
+        regions=set(PORTWATCH.REGIONS),
+        categories=selected_ais_categories,
         moving_only=ais_moving_only,
         query=ais_search,
     )
@@ -1142,11 +1253,11 @@ def current_ais_status() -> dict:
 
 filtered_all = [
     asset for asset in ASSETS
-    if (not selected_countries or asset["country"] in selected_countries)
-    and (not selected_levels or asset["asset_level"] in selected_levels)
-    and (not selected_types or asset["asset_type"] in selected_types)
-    and (not selected_statuses or asset["operating_status"] in selected_statuses)
-    and (not selected_metrics or asset["metric_type"] in selected_metrics)
+    if asset["country"] in selected_countries
+    and asset["asset_level"] in selected_levels
+    and asset["asset_type"] in selected_types
+    and asset["operating_status"] in selected_statuses
+    and asset["metric_type"] in selected_metrics
     and (not values_only or asset["value"] is not None)
     and (not output_only or asset["is_daily_output"])
     and (not asset_search or asset_search in str(asset["name"]).lower()
@@ -1157,7 +1268,7 @@ filtered = [
     asset for asset in filtered_all
     if asset_view == "完整资产目录" or asset["strategic_default"] or bool(asset_search)
 ]
-visible_map_layers = set(selected_map_layers) or set(MAP_LAYER_LABELS)
+visible_map_layers = set(selected_map_layers)
 map_asset_candidates = filtered if "assets" in visible_map_layers else []
 map_assets = [asset for asset in map_asset_candidates if asset["map_drawable"]]
 unlocated_map_assets = [asset for asset in map_asset_candidates if not asset["map_drawable"]]
@@ -1313,8 +1424,7 @@ def render_map_panel() -> None:
             selected_day.isoformat() if selected_day else "无数据",
             selected_chokepoint_day.isoformat() if selected_chokepoint_day else "无数据",
             focus_assets=bool(asset_search), ais_configured=bool(ais_enabled),
-            visible_layers=visible_map_layers,
-            region_bounds=selected_region_bounds),
+            visible_layers=visible_map_layers),
         height=735,
     )
 
@@ -1408,12 +1518,12 @@ with tab_ports:
         st.button("下载当前筛选港口历史", key="download_port_history",
                   on_click=_open_download_tab, args=("ports", tuple(p["portid"] for p in ports)))
     else:
-        st.info("当前筛选没有匹配港口。清空水域和搜索框可恢复全部港口。")
+        st.info("当前筛选没有匹配港口。选择“全选”可恢复全部港口。")
 
 with tab_download:
     _render_portwatch_download_panel(
-        region_port_catalog, selected_region_set, selected_port_countries,
-        selected_port_ids, newest_day, newest_chokepoint_day, chokepoints)
+        selected_port_countries, selected_port_ids, selected_chokepoint_ids,
+        newest_day, newest_chokepoint_day)
 
 with tab_vessels:
     render_ais_panel()
@@ -1521,3 +1631,134 @@ with tab_method:
         "不得相加。来源为千桶/日的油品数值在界面统一换算为万桶/日；生产状态带证据时点，"
         "不等于实时遥测。"
     )
+
+# Prepare the print-only report on every page run so the browser's native Print
+# command can switch layouts without depending on an asynchronous Python callback.
+if report_scope == "全项目":
+    report_port_catalog = list(available_ports)
+    report_choke_catalog = list(available_chokepoints)
+    report_assets = [asset for asset in ASSETS if asset.get("strategic_default")]
+    report_vessels = list(live_positions)
+    appendix_assets = list(ASSETS)
+else:
+    selected_port_id_set = set(selected_port_ids)
+    report_port_catalog = [
+        port for port in available_ports
+        if port.get("country") in selected_port_countries
+        and port.get("portid") in selected_port_id_set
+    ]
+    selected_choke_id_set = {str(value) for value in selected_chokepoint_ids}
+    report_choke_catalog = [
+        point for point in available_chokepoints
+        if str(point.get("portid")) in selected_choke_id_set
+    ]
+    report_assets = list(filtered)
+    report_vessels = current_vessels()
+    appendix_assets = list(filtered)
+
+report_port_ids = tuple(sorted(
+    str(port["portid"]) for port in report_port_catalog
+    if port.get("statistics_available", True)
+))
+report_choke_ids = tuple(sorted(
+    str(point["portid"]) for point in report_choke_catalog
+))
+report_errors = []
+if port_error:
+    report_errors.append(f"港口最新数据：{port_error}")
+if chokepoint_error:
+    report_errors.append(f"咽喉点最新数据：{chokepoint_error}")
+if open_state.get("error"):
+    report_errors.append(f"Open Waters：{open_state['error']}")
+
+report_port_history = []
+report_choke_history = []
+if selected_day is not None and report_port_ids:
+    with st.spinner("准备打印报告：读取最近90天港口记录…"):
+        report_port_history, history_error = _print_report_history(
+            "ports", report_port_ids, selected_day.isoformat())
+    if history_error:
+        report_errors.append(history_error)
+if selected_chokepoint_day is not None and report_choke_ids:
+    with st.spinner("准备打印报告：读取最近90天咽喉点记录…"):
+        report_choke_history, history_error = _print_report_history(
+            "chokepoints", report_choke_ids, selected_chokepoint_day.isoformat())
+    if history_error:
+        report_errors.append(history_error)
+
+def _latest_report_rows(catalog: list[dict], history: list[dict]) -> list[dict]:
+    latest = {}
+    for row in history:
+        key = str(row.get("portid", ""))
+        if key and (key not in latest or str(row.get("date", "")) > str(latest[key].get("date", ""))):
+            latest[key] = row
+    return [
+        {**point, **latest.get(str(point.get("portid")), {})}
+        for point in catalog
+    ]
+
+if report_scope == "全项目":
+    report_latest_ports = _latest_report_rows(report_port_catalog, report_port_history)
+    report_latest_chokes = _latest_report_rows(report_choke_catalog, report_choke_history)
+else:
+    report_latest_ports = list(ports)
+    report_latest_chokes = list(chokepoints)
+
+def _print_asset_record(asset: dict) -> dict:
+    metric_type = str(asset.get("metric_type") or "")
+    return {
+        "中文名称": asset.get("name_cn") or asset.get("name"),
+        "英文名称": asset.get("name"),
+        "国家": asset.get("country"),
+        "资产层级": asset.get("asset_level_label"),
+        "生产状态": asset.get("operating_status_label"),
+        "本层级日产量": daily_output_value(asset),
+        "其他日量指标": other_daily_metric(asset),
+        "指标口径": METRIC_LABELS.get(metric_type, metric_type or "未披露"),
+        "数据日期": display_date(asset),
+        "地图坐标精度": asset.get("map_coordinate_precision") or "未核验",
+    }
+
+report_asset_table = [_print_asset_record(asset) for asset in report_assets]
+report_appendix = (
+    [_print_asset_record(asset) for asset in appendix_assets]
+    if include_asset_appendix else None
+)
+report_ais_state = current_ais_status()
+report_ais_status = (
+    "已关闭" if not ais_enabled
+    else str(report_ais_state.get("status") or "等待数据")
+)
+report_ais_note = (
+    f"Open Waters 快照 {len(open_state.get('vessels') or [])} 艘；"
+    f"AISStream 状态：{report_ais_status}"
+)
+report_html = print_report.build_report_html(
+    scope_label=report_scope,
+    generated_at=None,
+    port_catalog=report_port_catalog,
+    choke_catalog=report_choke_catalog,
+    latest_ports=report_latest_ports,
+    latest_chokes=report_latest_chokes,
+    port_history=report_port_history,
+    choke_history=report_choke_history,
+    assets=report_assets,
+    asset_table=report_asset_table,
+    vessels=report_vessels,
+    regions=PORTWATCH.REGIONS,
+    port_day=selected_day,
+    choke_day=selected_chokepoint_day,
+    ais_status=report_ais_status,
+    ais_source_note=report_ais_note,
+    errors=report_errors,
+    asset_appendix=report_appendix,
+)
+if print_report_preview:
+    report_html = report_html.replace(
+        '<div class="print-report">',
+        '<div class="print-report" style="display:block">',
+        1,
+    )
+st.html(
+    print_report.PRINT_CSS + report_html,
+)
