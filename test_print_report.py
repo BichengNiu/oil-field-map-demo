@@ -52,6 +52,23 @@ class PrintReportTests(unittest.TestCase):
         self.assertIn("@media print", print_report.PRINT_CSS)
         self.assertIn("@page { size:A4 portrait", print_report.PRINT_CSS)
 
+    def test_cover_has_the_requested_attribution_month_and_map(self):
+        html = self.make_report(vessels=[{
+            "name": "测试船", "lat": 25.0, "lon": 55.0,
+        }])
+
+        self.assertIn("生成时间：2026年10月", html)
+        self.assertNotIn("2026-10-02 10:30", html)
+        self.assertIn('<p class="report-sponsor">中国驻阿联酋大使馆、国家发改委国家信息中心</p>', html)
+        self.assertNotIn("<strong>中国驻阿联酋大使馆", html)
+        self.assertNotIn("<h2>监测概览</h2>", html)
+        self.assertIn('<section class="report-cover report-overview">', html)
+        self.assertLess(html.index('<div class="map-frame">'), html.index('<div class="metric-grid">'))
+        self.assertIn('aria-label="监测水域与节点空间分布示意"', html)
+        self.assertIn('fill="#14866d" fill-opacity=".65"', html)
+        self.assertIn("body:has(.print-report-preview)", print_report.PRINT_CSS)
+        self.assertIn('[data-testid="stTabs"] { display:none!important; }', print_report.PRINT_CSS)
+
     def test_asset_text_is_html_escaped(self):
         html = self.make_report(asset_table=[{
             "中文名称": "<script>alert(1)</script>",
