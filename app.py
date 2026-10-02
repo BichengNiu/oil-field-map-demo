@@ -472,6 +472,13 @@ def _port_popup(port: dict, day: str) -> str:
             return "<0.1"
         return f"{value / divisor:,.{decimals}f}"
 
+    if port.get("activity_source") == "无独立PortWatch统计":
+        date_label = "无独立统计"
+    elif port.get("has_data"):
+        date_label = f"观测日 UTC：{day}"
+    else:
+        date_label = "该日无源记录"
+
     window = port.get("window_days", 7)
     activity = port.get("activity_index")
     activity_text = f"{activity:,.0f}" if activity is not None else "—"
@@ -507,7 +514,7 @@ def _port_popup(port: dict, day: str) -> str:
     return (
         '<div class="popup-card">'
         f'<div class="field-name">⚓ {esc(port["name"])}</div>'
-        f'<div class="country">{esc(port["country"])} · {esc(port["region"])} · {esc(day)}</div>'
+        f'<div class="country">{esc(port["country"])} · {esc(port["region"])} · {esc(date_label)}</div>'
         '<div class="row"><span>当日有效进港</span>'
         f'<strong>{amount("portcalls", decimals=0)} 艘次</strong></div>'
         '<div class="row"><span>当日估算装卸</span>'
