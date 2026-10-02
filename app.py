@@ -1756,7 +1756,7 @@ report_html = print_report.build_report_html(
 if print_report_preview:
     report_html = report_html.replace(
         '<div class="print-report">',
-        '<div class="print-report" style="display:block">',
+        '<div class="print-report print-report-preview" style="display:block">',
         1,
     )
 st.html(
