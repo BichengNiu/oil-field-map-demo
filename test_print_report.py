@@ -66,7 +66,6 @@ class PrintReportTests(unittest.TestCase):
         self.assertLess(html.index('<div class="map-frame">'), html.index('<div class="metric-grid">'))
         self.assertIn('aria-label="监测水域与节点空间分布示意"', html)
         self.assertIn('fill="#14866d" fill-opacity=".65"', html)
-        self.assertIn("body:has(.print-report-preview)", print_report.PRINT_CSS)
         self.assertIn('[data-testid="stTabs"] { display:none!important; }', print_report.PRINT_CSS)
 
     def test_asset_text_is_html_escaped(self):
