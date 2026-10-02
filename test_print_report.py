@@ -49,6 +49,8 @@ class PrintReportTests(unittest.TestCase):
         self.assertIn("2026-10-01", html)
         self.assertIn("—", html)
         self.assertNotIn("2026-09-25", html.split("PortWatch 咽喉点", 1)[1].split("</tr>", 1)[0])
+        self.assertIn("@media print", print_report.PRINT_CSS)
+        self.assertIn("@page { size:A4 portrait", print_report.PRINT_CSS)
 
     def test_asset_text_is_html_escaped(self):
         html = self.make_report(asset_table=[{
