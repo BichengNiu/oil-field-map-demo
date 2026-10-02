@@ -918,7 +918,6 @@ if opening_page:
     PORTWATCH.clear_live_cache()
     _openwaters_snapshot.clear()
     st.session_state["sources_checked"] = True
-    st.session_state["source_check_utc"] = datetime.now(timezone.utc).strftime("%Y-%m-%d %H:%M:%S")
 
 country_options = sorted({str(asset["country"]) for asset in ASSETS})
 level_options = list(LEVEL_LABELS)
@@ -1136,9 +1135,6 @@ with tab_map:
     selected_chokepoint_day = history_day if historical_map else newest_chokepoint_day
     if historical_map:
         st.caption("历史回看：港口、咽喉点和船位使用所选UTC日；船位是每船当日末次观测，非同时快照。油气资料保留披露日期。")
-    else:
-        st.caption("最新模式：港口与咽喉点各用源站最新可用日；船位按各自 AIS 报告时间显示。")
-    st.caption(f"最近向源站检查：{st.session_state['source_check_utc']} UTC")
 
 ports: list[dict] = []
 port_error = port_catalog_error
@@ -1381,10 +1377,6 @@ def render_map_panel() -> None:
         st.error(f"港口数据加载失败：{port_error}")
     if chokepoint_error:
         st.error(f"咽喉点数据加载失败：{chokepoint_error}")
-    if chokepoints:
-        st.button("下载当前咽喉要道历史", key="download_chokepoint_history",
-                  on_click=_open_download_tab,
-                  args=("chokepoints", tuple(p["portid"] for p in chokepoints)))
     if historical_map:
         if "vessels" in visible_map_layers and ais_enabled:
             st.caption(f"历史船位 {history_day} UTC：{len(all_positions)} 艘有报告样本。" +

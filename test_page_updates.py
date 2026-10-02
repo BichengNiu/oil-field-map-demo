@@ -156,21 +156,18 @@ class PageUpdates(unittest.TestCase):
         self.assertEqual(table.iloc[0]["采集器接收时间 UTC"], "2026-03-17T00:00:05Z")
         self.assertTrue(any("fixture coverage" in item.value for item in app.caption))
 
-    def test_port_and_chokepoint_shortcuts_open_full_history_download(self):
+    def test_port_shortcut_opens_full_history_download_and_map_hides_removed_elements(self):
         app = self.page()
+        self.assertNotIn("download_chokepoint_history", app.session_state)
+        self.assertNotIn("source_check_utc", app.session_state)
+        self.assertFalse(any("最新模式：" in item.value or "最近向源站检查：" in item.value
+                             for item in app.caption))
         app.button(key="download_port_history").click().run()
         self.assertFalse(app.exception, [e.message for e in app.exception])
         self.assertEqual(app.session_state["main_tabs"], "数据下载")
         self.assertEqual(app.radio(key="pw_download_mode").value, "全部可用历史")
         self.assertEqual(app.multiselect(key="pw_download_kinds").value, ["ports"])
         self.assertEqual(app.multiselect(key="pw_download_nodes").value, [("ports", "port1")])
-
-        app = self.page()
-        app.button(key="download_chokepoint_history").click().run()
-        self.assertFalse(app.exception, [e.message for e in app.exception])
-        self.assertEqual(app.multiselect(key="pw_download_kinds").value, ["chokepoints"])
-        self.assertEqual(app.multiselect(key="pw_download_nodes").value,
-                         [("chokepoints", "chokepoint6")])
 
     def test_download_page_passes_normalized_mode_to_source_collector(self):
         manifest = {"schema_version": 1, "source": "IMF PortWatch / UN Global Platform",
