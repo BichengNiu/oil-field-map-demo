@@ -165,9 +165,8 @@ def port_label(port: dict) -> str:
         label = _PORT_NAMES_ZH.get(_port_name_key(raw))
         if label:
             return label
-    country = country_label(port.get("country"))
     port_id = str(port.get("portid") or "未知")
-    return f"{country}港口（编号{port_id}）"
+    return f"港口（编号{port_id}）"
 
 
 def enrich(ports: list[dict]) -> list[dict]:
