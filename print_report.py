@@ -323,14 +323,14 @@ def build_report_html(
     dated_calls = [p for p in latest_ports if _number(p.get("portcalls")) is not None]
     covered_calls = sum(_number(p.get("portcalls")) or 0 for p in dated_calls)
     catalog_chokes = len(choke_catalog)
-    report_assets = [a for a in assets if a.get("strategic_default", True)]
+    report_assets = list(assets)
     map_html = _overview_svg(port_catalog, choke_catalog, report_assets, regions)
     cover_cards = _metric_cards([
         ("港口监测点", str(len(port_catalog)), f"其中独立统计点 {len(stat_ports)} 个"),
         ("战略通道", str(catalog_chokes), "逐节点分别报告，不合并解释"),
-        ("AIS快照船位", str(len(vessels)) if ais_status != "不可用" else "—",
+        ("AIS快照船位", str(len(vessels)) if vessels else "—",
          "公开观测样本，不代表区域全量船舶"),
-        ("战略油气资产", str(len(report_assets)), "目录节点数，指标口径分别列示"),
+        ("油气资产节点", str(len(report_assets)), "目录节点数，指标口径分别列示"),
     ])
     cover_table = _table(
         ["数据", "源站观测日 / 状态", "说明"],
@@ -358,7 +358,7 @@ def build_report_html(
     n_series = [(str(choke_names.get(point_id, point_id)),
                  [(row.get("date"), row.get("n_total")) for row in rows
                   if str(row.get("portid")) == point_id])
-                for point_id in sorted({_esc(row.get("portid")) for row in choke_history})]
+                for point_id in sorted({str(row.get("portid")) for row in choke_history})]
     capacity_series = [(str(choke_names.get(point_id, point_id)),
                         [(row.get("date"), row.get("capacity")) for row in choke_history
                          if str(row.get("portid")) == point_id])
