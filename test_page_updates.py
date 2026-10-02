@@ -97,6 +97,37 @@ class PageUpdates(unittest.TestCase):
         self.assertFalse(any(widget.label == "通行时间轴（UTC，按日）" for widget in app.slider))
         self.assertIn("港口 2026-09-25 UTC · 咽喉点 2026-09-27 UTC", iframe)
 
+    def test_explicit_select_all_and_independent_location_filters(self):
+        app = self.page()
+        self.assertNotIn("monitor_regions", app.session_state)
+        self.assertFalse(any(widget.label == "航运水域" for widget in app.multiselect))
+        self.assertIn("港口筛选", [item.label for item in app.expander])
+        self.assertIn("咽喉点筛选", [item.label for item in app.expander])
+
+        for key in ("port_countries", "port_ids", "chokepoint_ids",
+                    "ais_categories", "asset_countries", "asset_levels",
+                    "asset_statuses", "asset_types", "asset_metrics",
+                    "pw_download_kinds"):
+            self.assertEqual(app.multiselect(key=key).value, ["全选"])
+
+        countries = app.multiselect(key="asset_countries")
+        one_country = countries.options[1]
+        countries.set_value([one_country]).run()
+        self.assertEqual(app.multiselect(key="asset_countries").value, [one_country])
+        app.multiselect(key="asset_countries").set_value(
+            [one_country, "全选"]).run()
+        self.assertEqual(app.multiselect(key="asset_countries").value, ["全选"])
+        app.multiselect(key="asset_countries").set_value(
+            ["全选", one_country]).run()
+        self.assertEqual(app.multiselect(key="asset_countries").value, [one_country])
+        app.multiselect(key="asset_countries").set_value([]).run()
+        self.assertEqual(app.multiselect(key="asset_countries").value, [])
+
+        app.multiselect(key="chokepoint_ids").set_value([]).run()
+        self.assertEqual(app.multiselect(key="port_countries").value, ["全选"])
+        self.assertEqual(app.multiselect(key="port_ids").value, ["全选"])
+        self.assertTrue(any(widget.label == "显示 AIS 实时船位" for widget in app.toggle))
+
     def test_source_failure_is_visible_without_replay_controls(self):
         self.fail_dates = True
         failed = self.page()
