@@ -7,6 +7,169 @@ WPI_ROWS = json.loads(Path(__file__).with_name("port_inventory_wpi_2026-09-30.js
 NGA_SAILING = "https://msi.nga.mil/api/publications/download?key=16694491%2FSFH00000%2FPub172bk.pdf"
 
 
+# Chinese labels used in the country and port selectors. Source catalog values
+# remain unchanged for filtering and API requests.
+_COUNTRY_NAMES_ZH = {
+    "bahrain": "巴林",
+    "djibouti": "吉布提",
+    "egypt": "埃及",
+    "eritrea": "厄立特里亚",
+    "iran": "伊朗",
+    "iraq": "伊拉克",
+    "kuwait": "科威特",
+    "oman": "阿曼",
+    "qatar": "卡塔尔",
+    "saudi arabia": "沙特阿拉伯",
+    "united arab emirates": "阿联酋",
+    "yemen": "也门",
+    "uae": "阿联酋",
+    "united arab emirates (uae)": "阿联酋",
+    "islamic republic of iran": "伊朗",
+    "republic of yemen": "也门",
+    "state of kuwait": "科威特",
+}
+
+def country_label(country: object) -> str:
+    raw = str(country or "").strip()
+    if not raw:
+        return "国家未知"
+    if any("\u4e00" <= character <= "\u9fff" for character in raw):
+        return raw
+    return _COUNTRY_NAMES_ZH.get(raw.casefold(), "其他国家")
+
+
+def _port_name_key(value: object) -> str:
+    raw = str(value or "").strip().casefold().replace("’", "'")
+    raw = raw.replace("-", " ").replace("/", " ")
+    return " ".join(raw.split())
+
+
+_PORT_NAMES_ZH = {
+    _port_name_key("Ras Al Ghar"): "拉斯盖尔港",
+    _port_name_key("Kharg Island Oil Terminal"): "哈尔克岛石油码头",
+    _port_name_key("Bandar-E Mahshahr"): "马赫沙赫尔港",
+    _port_name_key("Ras Sudr"): "拉斯苏德尔港",
+    _port_name_key("Khorramshahr"): "霍拉姆沙赫尔港",
+    _port_name_key("Umm Qasr"): "乌姆盖斯尔港",
+    _port_name_key("Bandar Khomeyni"): "霍梅尼港",
+    _port_name_key("Mina Ash Shuaybah"): "舒艾拜港",
+    _port_name_key("Al Kuwayt"): "科威特港",
+    _port_name_key("Al Jubayl"): "朱拜勒港",
+    _port_name_key("Mina Az Zawr"): "祖尔港",
+    _port_name_key("Ras Al Khafji"): "哈夫吉港",
+    _port_name_key("Ras  Tannurah"): "拉斯坦努拉港",
+    _port_name_key("Mina Salman"): "萨勒曼港",
+    _port_name_key("Al-Basra Oil Terminal"): "巴士拉石油码头",
+    _port_name_key("Al Rayyan Terminal"): "阿尔赖扬码头",
+    _port_name_key("As Suways"): "苏伊士港",
+    _port_name_key("Al Basrah"): "巴士拉港",
+    _port_name_key("Khawr Al Zubair"): "祖拜尔港",
+    _port_name_key("Abadan"): "阿巴丹港",
+    _port_name_key("Khosrowabad"): "霍斯罗阿巴德港",
+    _port_name_key("El Ismailiya"): "伊斯梅利亚港",
+    _port_name_key("Damietta"): "达米埃塔港",
+    _port_name_key("Khawr Al Amaya"): "阿迈耶港",
+    _port_name_key("Mina Abd Allah"): "阿卜杜拉港",
+    _port_name_key("Mina Al Ahmadi"): "艾哈迈迪港",
+    _port_name_key("Jask"): "贾斯克港",
+    _port_name_key("Khawr Al Zubair Lng Terminal"): "祖拜尔液化天然气码头",
+    _port_name_key("Jazireh-Ye Hormoz"): "霍尔木兹岛港",
+    _port_name_key("Jazireh-Ye Sirri"): "锡里岛港",
+    _port_name_key("Khawr Fakkan"): "豪尔费坎港",
+    _port_name_key("Mina Qabus"): "卡布斯港",
+    _port_name_key("Mina Al Fahl"): "法赫勒港",
+    _port_name_key("Dammam"): "达曼港",
+    _port_name_key("Ju Aymah Oil Terminal"): "朱艾玛石油码头",
+    _port_name_key("Al Manamah"): "麦纳麦港",
+    _port_name_key("Ju Aymah Lpg Terminal"): "朱艾玛液化石油气码头",
+    _port_name_key("Doha Harbor"): "多哈港",
+    _port_name_key("Al Mukha"): "穆哈港",
+    _port_name_key("Qalhat Lng Terminal"): "卡尔哈特液化天然气码头",
+    _port_name_key("Ras Isa Marine Terminal"): "拉斯伊萨海洋码头",
+    _port_name_key("Zirkuh Oil Field"): "吉尔库油田终端",
+    _port_name_key("Sitrah"): "西特拉港",
+    _port_name_key("Sokhna Port Gas Tanker Terminal"): "苏赫纳港气体船码头",
+    _port_name_key("Port Of Sohar"): "苏哈尔港",
+    _port_name_key("Bur Sa'id"): "塞得港",
+    _port_name_key("North Ain Sukhna Port"): "苏赫纳北港",
+    _port_name_key("Assab"): "阿萨布港",
+    _port_name_key("El-Adabiya"): "阿达比亚港",
+    _port_name_key("Ain Sukhna Terminal"): "艾因苏赫纳码头",
+    _port_name_key("Al Ahmadi"): "艾哈迈迪港",
+    _port_name_key("Aden"): "亚丁港",
+    _port_name_key("Khawr Khasab"): "哈萨卜港",
+    _port_name_key("Bandar Abbas"): "阿巴斯港",
+    _port_name_key("Hulaylah Oil Terminal"): "哈莱拉石油码头",
+    _port_name_key("Mina Saqr"): "萨克尔港",
+    _port_name_key("Jazireh-Ye Lavan Oil Terminal"): "拉万岛石油码头",
+    _port_name_key("Sharjah Offshore Terminal"): "沙迦海上码头",
+    _port_name_key("Umm Al Qaywayn"): "乌姆盖万港",
+    _port_name_key("Al Jazeera Port"): "贾齐拉港",
+    _port_name_key("Mina Jabal Ali"): "杰贝阿里港",
+    _port_name_key("Ash Shariqah"): "沙迦港",
+    _port_name_key("Dubayy"): "迪拜港",
+    _port_name_key("Ajman"): "阿治曼港",
+    _port_name_key("Al Hamriyah Lpg Terminal"): "哈姆里亚液化石油气码头",
+    _port_name_key("Doraleh"): "多哈雷港",
+    _port_name_key("Ras Al Mishab"): "米沙卜港",
+    _port_name_key("Salif"): "萨利夫港",
+    _port_name_key("Mubarraz Oil Terminal"): "穆巴拉兹石油码头",
+    _port_name_key("Doha"): "多哈港",
+    _port_name_key("Zirkuh"): "吉尔库岛港",
+    _port_name_key("Fateh Oil Terminal"): "法特赫石油码头",
+    _port_name_key("Al Shaheen Terminal"): "阿尔沙欣码头",
+    _port_name_key("Jabal Az Zannah/ruways"): "杰贝勒宰纳／鲁韦斯港",
+    _port_name_key("Jazirat Halul"): "哈卢尔岛港",
+    _port_name_key("Umm An Nar"): "乌姆纳尔港",
+    _port_name_key("Umm Said"): "乌姆赛义德港",
+    _port_name_key("Ras Laffan"): "拉斯拉凡港",
+    _port_name_key("Abu Zaby"): "阿布扎比港",
+    _port_name_key("Jazirat Das"): "达斯岛港",
+    _port_name_key("Bushehr"): "布什尔港",
+    _port_name_key("Bandar Taheri Offshore Terminal"): "塔赫里海上码头",
+    _port_name_key("Chah Bahar"): "恰巴哈尔港",
+    _port_name_key("Barkan Oil-loading Terminal"): "巴尔干石油装船码头",
+    _port_name_key("Bandar-E Pars Terminal"): "帕尔斯港码头",
+    _port_name_key("Sirus Oil Terminal"): "锡里斯石油码头",
+    _port_name_key("Bandar-E Shahid Rejaie"): "沙希德拉贾伊港",
+    _port_name_key("Hamad"): "哈马德港",
+    _port_name_key("Al Fujayrah"): "富查伊拉港",
+    _port_name_key("Khalifa Bin Salman"): "哈利法·本·萨勒曼港",
+    _port_name_key("Djibouti"): "吉布提港",
+    _port_name_key("Ras Tanura"): "拉斯坦努拉港",
+    _port_name_key("Khor Fakkan"): "豪尔费坎港",
+    _port_name_key("Port Said"): "塞得港",
+    _port_name_key("Abu Dhabi"): "阿布扎比港",
+    _port_name_key("Dubai"): "迪拜港",
+    _port_name_key("Jebel Ali"): "杰贝阿里港",
+    _port_name_key("Fujairah"): "富查伊拉港",
+    _port_name_key("Sharjah"): "沙迦港",
+    _port_name_key("Ras Al Khaimah"): "哈伊马角港",
+    _port_name_key("Sohar"): "苏哈尔港",
+    _port_name_key("Mina Qaboos"): "卡布斯港",
+    _port_name_key("Mesaieed"): "乌姆赛义德港",
+    _port_name_key("Imam Khomeini Port"): "霍梅尼港",
+    _port_name_key("Khor Al Zubair"): "祖拜尔港",
+}
+
+
+def port_label(port: dict) -> str:
+    candidates = [port.get("name_cn"), port.get("name"), port.get("portname"),
+                  port.get("node_name"), *port.get("wpi_names", [])]
+    for candidate in candidates:
+        raw = str(candidate or "").strip()
+        if not raw:
+            continue
+        if any("\u4e00" <= character <= "\u9fff" for character in raw):
+            return raw
+        label = _PORT_NAMES_ZH.get(_port_name_key(raw))
+        if label:
+            return label
+    country = country_label(port.get("country"))
+    port_id = str(port.get("portid") or "未知")
+    return f"{country}港口（编号{port_id}）"
+
+
 def enrich(ports: list[dict]) -> list[dict]:
     output = [dict(p, activity_source="IMF PortWatch", source_url="https://portwatch.imf.org/pages/data-and-methodology",
                    coverage_note="AIS识别进港及模型估算货量；不是港务局实测吞吐量", wpi_ids=[], wpi_names=[])
@@ -44,6 +207,8 @@ def enrich(ports: list[dict]) -> list[dict]:
     for port in output:
         if len(port["wpi_ids"]) > 1:
             port["coverage_note"] += "；跨库对应多个名录条目，PortWatch统计保持一个节点，不拆分：" + " / ".join(port["wpi_names"])
+    for port in output:
+        port["name_cn"] = port_label(port)
     return sorted(output, key=lambda p: (p["region"], p["country"], p["name"]))
 
 
