@@ -1759,7 +1759,6 @@ if print_report_preview:
         '<div class="print-report" style="display:block">',
         1,
     )
-st.markdown(
+st.html(
     print_report.PRINT_CSS + report_html,
-    unsafe_allow_html=True,
 )
