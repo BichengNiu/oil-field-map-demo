@@ -1042,7 +1042,8 @@ with st.sidebar:
         if port_catalog_error:
             st.warning(f"港口目录暂时不可用：{port_catalog_error}")
         try:
-            selected_day = PORTWATCH.latest_date()
+            newest_day = PORTWATCH.latest_date()
+            selected_day = newest_day
         except Exception as exc:
             newest_day = selected_day = None
             st.warning(f"PortWatch 暂时不可用：{exc}")
