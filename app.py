@@ -22,6 +22,7 @@ import supplemental_assets
 import port_inventory
 import portwatch_downloads
 import map_tools
+import print_report
 
 # Streamlit 的热重载会重跑此文件；显式重新读取目录模块以同步仓库中的数据修订。
 importlib.invalidate_caches()
@@ -117,6 +118,21 @@ def _ais_collector(api_key: str, collector_version: int) -> AIS.AISCollector:
 @st.cache_data(ttl=15, show_spinner=False)
 def _openwaters_snapshot(max_age_minutes: int, collector_version: int) -> dict:
     return AIS.openwaters_snapshot(max_age_minutes=max_age_minutes)
+
+
+@st.cache_data(ttl=900, show_spinner=False)
+def _print_report_history(kind: str, node_ids: tuple[str, ...],
+                          end_day: str) -> tuple[list[dict], str | None]:
+    """Fetch one verified 90-day report window; cache failures briefly for reruns."""
+    if not node_ids:
+        return [], None
+    try:
+        end = date.fromisoformat(end_day)
+        rows, _ = portwatch_downloads.fetch_window(
+            kind, node_ids, end - timedelta(days=89), end)
+        return rows, None
+    except Exception as exc:
+        return [], f"{kind} 历史窗口：{type(exc).__name__}: {exc}"
 
 
 def _open_download_tab(kind: str | None = None, node_ids: tuple[str, ...] = ()) -> None:
@@ -964,6 +980,18 @@ ais_collector_instance: AIS.AISCollector | None = None
 with st.sidebar:
     st.session_state.pop("monitor_regions", None)
     st.markdown("### 中东能源监测")
+    with st.expander("打印报告", expanded=False):
+        st.caption("浏览器菜单选择“打印”即可输出报告；勾选预览可先在页面末尾校对。")
+        report_scope = st.radio(
+            "报告范围", ["全项目", "当前筛选"], horizontal=True,
+            key="print_report_scope")
+        print_report_preview = st.checkbox(
+            "页面预览报告", value=False, key="print_report_preview")
+        include_asset_appendix = st.checkbox(
+            "附完整油气资产目录", value=False, key="print_report_asset_appendix")
+        if st.button("重读报告历史曲线", key="refresh_print_report_history"):
+            _print_report_history.clear()
+            st.rerun()
     map_layers_selection = _multiselect_with_all(
         "地图内容", list(MAP_LAYER_LABELS), key="map_layers",
         default_all=False, default=["ports"],
@@ -1603,3 +1631,135 @@ with tab_method:
         "不得相加。来源为千桶/日的油品数值在界面统一换算为万桶/日；生产状态带证据时点，"
         "不等于实时遥测。"
     )
+
+# Prepare the print-only report on every page run so the browser's native Print
+# command can switch layouts without depending on an asynchronous Python callback.
+if report_scope == "全项目":
+    report_port_catalog = list(available_ports)
+    report_choke_catalog = list(available_chokepoints)
+    report_assets = [asset for asset in ASSETS if asset.get("strategic_default")]
+    report_vessels = list(live_positions)
+    appendix_assets = list(ASSETS)
+else:
+    selected_port_id_set = set(selected_port_ids)
+    report_port_catalog = [
+        port for port in available_ports
+        if port.get("country") in selected_port_countries
+        and port.get("portid") in selected_port_id_set
+    ]
+    selected_choke_id_set = {str(value) for value in selected_chokepoint_ids}
+    report_choke_catalog = [
+        point for point in available_chokepoints
+        if str(point.get("portid")) in selected_choke_id_set
+    ]
+    report_assets = list(filtered)
+    report_vessels = current_vessels()
+    appendix_assets = list(filtered)
+
+report_port_ids = tuple(sorted(
+    str(port["portid"]) for port in report_port_catalog
+    if port.get("statistics_available", True)
+))
+report_choke_ids = tuple(sorted(
+    str(point["portid"]) for point in report_choke_catalog
+))
+report_errors = []
+if port_error:
+    report_errors.append(f"港口最新数据：{port_error}")
+if chokepoint_error:
+    report_errors.append(f"咽喉点最新数据：{chokepoint_error}")
+if open_state.get("error"):
+    report_errors.append(f"Open Waters：{open_state['error']}")
+
+report_port_history = []
+report_choke_history = []
+if selected_day is not None and report_port_ids:
+    with st.spinner("准备打印报告：读取最近90天港口记录…"):
+        report_port_history, history_error = _print_report_history(
+            "ports", report_port_ids, selected_day.isoformat())
+    if history_error:
+        report_errors.append(history_error)
+if selected_chokepoint_day is not None and report_choke_ids:
+    with st.spinner("准备打印报告：读取最近90天咽喉点记录…"):
+        report_choke_history, history_error = _print_report_history(
+            "chokepoints", report_choke_ids, selected_chokepoint_day.isoformat())
+    if history_error:
+        report_errors.append(history_error)
+
+def _latest_report_rows(catalog: list[dict], history: list[dict]) -> list[dict]:
+    latest = {}
+    for row in history:
+        key = str(row.get("portid", ""))
+        if key and (key not in latest or str(row.get("date", "")) > str(latest[key].get("date", ""))):
+            latest[key] = row
+    return [
+        {**point, **latest.get(str(point.get("portid")), {})}
+        for point in catalog
+    ]
+
+if report_scope == "全项目":
+    report_latest_ports = _latest_report_rows(report_port_catalog, report_port_history)
+    report_latest_chokes = _latest_report_rows(report_choke_catalog, report_choke_history)
+else:
+    report_latest_ports = list(ports)
+    report_latest_chokes = list(chokepoints)
+
+def _print_asset_record(asset: dict) -> dict:
+    metric_type = str(asset.get("metric_type") or "")
+    return {
+        "中文名称": asset.get("name_cn") or asset.get("name"),
+        "英文名称": asset.get("name"),
+        "国家": asset.get("country"),
+        "资产层级": asset.get("asset_level_label"),
+        "生产状态": asset.get("operating_status_label"),
+        "本层级日产量": daily_output_value(asset),
+        "其他日量指标": other_daily_metric(asset),
+        "指标口径": METRIC_LABELS.get(metric_type, metric_type or "未披露"),
+        "数据日期": display_date(asset),
+        "地图坐标精度": asset.get("map_coordinate_precision") or "未核验",
+    }
+
+report_asset_table = [_print_asset_record(asset) for asset in report_assets]
+report_appendix = (
+    [_print_asset_record(asset) for asset in appendix_assets]
+    if include_asset_appendix else None
+)
+report_ais_state = current_ais_status()
+report_ais_status = (
+    "已关闭" if not ais_enabled
+    else str(report_ais_state.get("status") or "等待数据")
+)
+report_ais_note = (
+    f"Open Waters 快照 {len(open_state.get('vessels') or [])} 艘；"
+    f"AISStream 状态：{report_ais_status}"
+)
+report_html = print_report.build_report_html(
+    scope_label=report_scope,
+    generated_at=None,
+    port_catalog=report_port_catalog,
+    choke_catalog=report_choke_catalog,
+    latest_ports=report_latest_ports,
+    latest_chokes=report_latest_chokes,
+    port_history=report_port_history,
+    choke_history=report_choke_history,
+    assets=report_assets,
+    asset_table=report_asset_table,
+    vessels=report_vessels,
+    regions=PORTWATCH.REGIONS,
+    port_day=selected_day,
+    choke_day=selected_chokepoint_day,
+    ais_status=report_ais_status,
+    ais_source_note=report_ais_note,
+    errors=report_errors,
+    asset_appendix=report_appendix,
+)
+if print_report_preview:
+    report_html = report_html.replace(
+        '<div class="print-report">',
+        '<div class="print-report" style="display:block">',
+        1,
+    )
+st.markdown(
+    print_report.PRINT_CSS + report_html,
+    unsafe_allow_html=True,
+)
