@@ -1,9 +1,8 @@
-"""Session freshness and historical-date integration, without upstream traffic."""
+"""Session freshness and latest-only dashboard behavior, without upstream traffic."""
 from datetime import date, timedelta
 from pathlib import Path
 import tempfile
 import os
-import json
 import importlib
 import re
 import unittest
@@ -11,8 +10,6 @@ from unittest.mock import patch
 
 from streamlit.testing.v1 import AppTest
 import ais
-import ais_history
-import public_ais_archive
 import portwatch
 import portwatch_downloads
 import port_inventory
@@ -28,7 +25,6 @@ class PageUpdates(unittest.TestCase):
         self.fail_dates = False
         self.patches = [
             patch.dict(os.environ, {"AIS_ARCHIVE_PATH": str(Path(temp.name) / "ais.sqlite3")}),
-            patch.object(ais_history, "_fetch_track", return_value=([], False)),
             patch.object(importlib, "reload", side_effect=lambda module: module),
             patch.object(port_inventory, "enrich", side_effect=lambda rows: rows),
             patch.object(portwatch, "_query", side_effect=self.query),
@@ -86,75 +82,37 @@ class PageUpdates(unittest.TestCase):
         self.assertEqual(len(self.queries), count)
         self.latest_port = date(2026, 9, 28)
         second_page = self.page()
-        self.assertEqual(second_page.slider(key="map_history_day").value, self.latest_port)
+        self.assertNotIn("map_history_day", second_page.session_state)
+        self.assertIn(
+            "港口 2026-09-28 UTC · 咽喉点 2026-09-27 UTC",
+            second_page.get("iframe")[0].proto.srcdoc)
         self.assertGreater(len(self.queries), count)
 
-    def test_drag_queries_same_historical_day_and_latest_returns_independent_dates(self):
+    def test_map_uses_latest_dates_without_replay_controls(self):
         app = self.page()
-        app.multiselect(key="map_layers").set_value(["ports", "chokepoints", "vessels"]).run()
-        app.slider(key="map_history_day").set_value(date(2026, 9, 24)).run()
-        self.assertFalse(app.exception, [e.message for e in app.exception])
-        self.assertEqual(app.radio(key="map_time_mode").value, "历史回看")
-        self.assertTrue(any(m.label == "霍尔木兹海峡" and m.value == "240 艘" for m in app.metric))
-        self.assertEqual(app.dataframe[0].value.iloc[0]["日期 UTC"], "2026-09-24")
         iframe = app.get("iframe")[0].proto.srcdoc
-        self.assertIn("const vessels = [];", iframe)
-        self.assertIn("港口 2026-09-24 UTC · 咽喉点 2026-09-24 UTC", iframe)
-        app.radio(key="map_time_mode").set_value("最新").run()
-        iframe = app.get("iframe")[0].proto.srcdoc
+        self.assertNotIn("map_time_mode", app.session_state)
+        self.assertNotIn("map_history_day", app.session_state)
+        self.assertFalse(any(widget.label == "地图时间" for widget in app.radio))
+        self.assertFalse(any(widget.label == "通行时间轴（UTC，按日）" for widget in app.slider))
         self.assertIn("港口 2026-09-25 UTC · 咽喉点 2026-09-27 UTC", iframe)
 
-    def test_missing_port_day_remains_unknown_and_source_failure_is_visible(self):
-        app = self.page()
-        app.slider(key="map_history_day").set_value(date(2026, 9, 26)).run()
-        self.assertFalse(app.exception)
-        self.assertIsNone(app.dataframe[0].value.iloc[0]["当日有效进港 艘次"])
-        self.assertIn("无日度记录", app.get("iframe")[0].proto.srcdoc)
+    def test_source_failure_is_visible_without_replay_controls(self):
         self.fail_dates = True
         failed = self.page()
         self.assertFalse(failed.exception)
-        self.assertTrue(failed.slider)
         self.assertFalse(failed.status)
         self.assertTrue(any("fixture source unavailable" in w.value for w in failed.warning))
+        self.assertNotIn("map_time_mode", failed.session_state)
+        self.assertNotIn("map_history_day", failed.session_state)
 
-    def test_historical_map_table_and_export_use_same_day_not_current_positions(self):
-        def report(day, lat):
-            return {"mmsi": "123456789", "received_at": f"2026-09-{day:02d}T12:00:00Z",
-                    "lat": lat, "lon": 56.4, "source": "dated-test-fixture", "sog": 2}
-        ais_history.archive_reports([report(23, 26.1), report(24, 26.2), report(25, 26.3)])
+    def test_history_replay_and_import_controls_are_removed(self):
         app = self.page()
-        app.multiselect(key="map_layers").set_value(["ports", "chokepoints", "vessels"]).run()
-        app.slider(key="map_history_day").set_value(date(2026, 9, 24)).run()
-        self.assertFalse(app.exception, [e.message for e in app.exception])
-        iframe = app.get("iframe")[0].proto.srcdoc
-        vessels = json.loads(re.search(r"const vessels = (.*?);", iframe).group(1))
-        self.assertEqual([v["lat"] for v in vessels], [26.2])
-        self.assertIn("船位 2026-09-24 UTC", iframe)
-        table = next(df.value for df in app.dataframe if "MMSI" in df.value.columns)
-        self.assertEqual(table.iloc[0]["历史日期 UTC"], "2026-09-24")
-        self.assertTrue(table["AIS报告时间 UTC"].str.startswith("2026-09-24").all())
-        app.slider(key="map_history_day").set_value(date(2026, 9, 22)).run()
-        self.assertIn("const vessels = [];", app.get("iframe")[0].proto.srcdoc)
-        self.assertTrue(any("历史船位不可用" in item.value for item in app.info))
-
-    def test_public_sample_button_selects_date_enables_layer_and_discloses_coverage(self):
-        ais_history.archive_reports([{
-            "mmsi": "123456789", "received_at": "2026-03-16T23:59:59Z",
-            "provider_received_at": "2026-03-17T00:00:05Z",
-            "lat": 26.2, "lon": 56.4, "source": "synthetic-test-fixture"}])
-        with patch.object(public_ais_archive, "ensure_public_archive",
-                          return_value={"coverage": "fixture coverage, not actual AIS"}):
-            app = self.page()
-            app.button(key="public_ais_history").click().run()
-        self.assertFalse(app.exception, [e.message for e in app.exception])
-        self.assertEqual(app.slider(key="map_history_day").value, date(2026, 3, 16))
-        self.assertEqual(app.radio(key="map_time_mode").value, "历史回看")
-        self.assertIn("vessels", app.multiselect(key="map_layers").value)
-        self.assertEqual(set(app.multiselect(key="monitor_regions").value), {"波斯湾", "霍尔木兹海峡", "阿曼湾"})
-        table = next(df.value for df in app.dataframe if "MMSI" in df.value.columns)
-        self.assertEqual(table.iloc[0]["历史日期 UTC"], "2026-03-16")
-        self.assertEqual(table.iloc[0]["采集器接收时间 UTC"], "2026-03-17T00:00:05Z")
-        self.assertTrue(any("fixture coverage" in item.value for item in app.caption))
+        self.assertNotIn("map_time_mode", app.session_state)
+        self.assertNotIn("map_history_day", app.session_state)
+        self.assertNotIn("ais_history_upload", app.session_state)
+        self.assertNotIn("public_ais_history", app.session_state)
+        self.assertFalse(any(button.key == "public_ais_history" for button in app.button))
 
     def test_port_shortcut_opens_full_history_download_and_map_hides_removed_elements(self):
         app = self.page()
