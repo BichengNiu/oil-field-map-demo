@@ -97,6 +97,20 @@ class PageUpdates(unittest.TestCase):
         self.assertFalse(any(widget.label == "通行时间轴（UTC，按日）" for widget in app.slider))
         self.assertIn("港口 2026-09-25 UTC · 咽喉点 2026-09-27 UTC", iframe)
 
+    def test_port_summary_uses_fixed_seven_day_window_without_source_date_controls(self):
+        portwatch.rolling_activity.clear()
+        app = self.page()
+        self.assertFalse(any(widget.label == "日均窗口" for widget in app.radio))
+        self.assertFalse(any("源站最新：" in item.value for item in app.caption))
+        rolling_queries = [
+            params.get("where", "") for url, params in self.queries
+            if url == portwatch.DAILY
+        ]
+        self.assertTrue(any(
+            "date >= DATE '2026-09-12' AND date <= DATE '2026-09-25'" in where
+            for where in rolling_queries
+        ), rolling_queries)
+
     def test_explicit_select_all_and_independent_location_filters(self):
         app = self.page()
         self.assertNotIn("monitor_regions", app.session_state)
