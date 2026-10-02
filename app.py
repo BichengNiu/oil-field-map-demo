@@ -207,7 +207,7 @@ def _render_portwatch_download_panel(selected_port_countries: list[str],
             ("chokepoints", n["portid"]) for n in choke_options]
         labels = {
             ("ports", n["portid"]):
-                f'{port_inventory.port_label(n)} · {port_inventory.country_label(n["country"])}'
+                port_inventory.port_label(n)
             for n in candidate_ports
         }
         labels.update({("chokepoints", n["portid"]): n["node_name"] for n in choke_options})
@@ -1023,7 +1023,7 @@ with st.sidebar:
         ]
         port_labels = {
             port["portid"]:
-                f'{port_inventory.port_label(port)} · {port_inventory.country_label(port["country"])}'
+                port_inventory.port_label(port)
             for port in country_port_catalog
         }
         port_id_options = [
