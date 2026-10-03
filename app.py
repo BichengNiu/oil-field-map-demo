@@ -1029,6 +1029,10 @@ with st.sidebar:
             disabled=not bool(selected_port_countries),
             help="“全选”表示所选国家中的所有港口；清空选择时不显示港口。")
         selected_port_ids = _selected_values(port_ids_selection, port_id_options)
+        show_only_ports_with_data = st.checkbox(
+            "仅在地图上显示有最新数据的港口", value=False,
+            key="ports_latest_data_only",
+            help="只显示在 PortWatch 最新观测日有日度记录的港口；不影响港口列表和统计。")
         if port_catalog_error:
             st.warning(f"港口目录暂时不可用：{port_catalog_error}")
         try:
@@ -1260,6 +1264,8 @@ map_asset_candidates = filtered if "assets" in visible_map_layers else []
 map_assets = [asset for asset in map_asset_candidates if asset["map_drawable"]]
 unlocated_map_assets = [asset for asset in map_asset_candidates if not asset["map_drawable"]]
 map_ports = ports if "ports" in visible_map_layers else []
+if show_only_ports_with_data:
+    map_ports = [port for port in map_ports if port.get("has_data")]
 map_chokepoints = (
     chokepoints
     if "chokepoints" in visible_map_layers
