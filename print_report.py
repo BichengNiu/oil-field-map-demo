@@ -488,6 +488,37 @@ def build_report_html(
     return f'<div class="print-report"><header><h1>{_esc(TITLE)}</h1>{body}</header></div>'
 
 
+def build_standalone_document(report_html: str) -> str:
+    """Wrap the report as a visible, browser-printable HTML document."""
+    standalone_css = PRINT_CSS.replace(
+        ".print-report { display: none;",
+        ".print-report { display: block;",
+        1,
+    )
+    standalone_css += """
+<style>
+body { margin: 0; padding: 18px; background: #eef2f6; }
+.print-report { max-width: 1100px; margin: 0 auto; padding: 28px; background: #fff; }
+.standalone-print-action { max-width: 1100px; margin: 0 auto 12px; text-align: right; }
+.standalone-print-action button { padding: 9px 14px; border: 0; border-radius: 6px;
+  color: #fff; background: #1769aa; font-size: 14px; cursor: pointer; }
+@media print {
+  body { padding: 0; background: #fff; }
+  .print-report { max-width: none; margin: 0; padding: 0; }
+  .standalone-print-action { display: none !important; }
+}
+</style>
+"""
+    return (
+        '<!doctype html><html lang="zh-CN"><head><meta charset="utf-8">'
+        '<meta name="viewport" content="width=device-width, initial-scale=1">'
+        f'<title>{_esc(TITLE)}</title>{standalone_css}</head><body>'
+        '<div class="standalone-print-action"><button type="button" '
+        'onclick="window.print()">打印 / 另存为 PDF</button></div>'
+        f'{report_html}</body></html>'
+    )
+
+
 PRINT_CSS = """
 <style>
 .print-report { display: none; color: #17212b; background: #fff; font: 10pt/1.38 Arial, "Noto Sans CJK SC", sans-serif; }

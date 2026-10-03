@@ -22,6 +22,22 @@ class MapRendererTests(unittest.TestCase):
         self.assertNotIn("船舶：三角形", html)
         self.assertNotIn("油气：菱形", html)
 
+    def test_viewport_is_refit_when_selected_layers_or_points_change(self):
+        html = map_renderer.build_map_html(
+            [], [], [{"lat": 26.5, "lon": 56.4, "name_cn": "霍尔木兹海峡",
+                     "portname": "Hormuz"}], [], "无数据", "2026-09-27",
+            visible_layers={"chokepoints"},
+            asset_popup=lambda _: "asset popup",
+            port_popup=lambda *_: "port popup",
+            chokepoint_popup=lambda *_: "choke popup",
+            vessel_popup=lambda _: "vessel popup",
+        )
+
+        self.assertIn('const visibleLayers = ["chokepoints"]', html)
+        self.assertIn('const viewKey = \'energy-map-view\'', html)
+        self.assertIn('saved.signature === viewSignature', html)
+        self.assertIn('"lat": 26.5, "lon": 56.4', html)
+
 
 if __name__ == "__main__":
     unittest.main()

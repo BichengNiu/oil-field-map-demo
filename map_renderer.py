@@ -84,6 +84,7 @@ def build_map_html(assets: list[dict[str, object]], ports: list[dict],
         ])
     legend_json = json.dumps("".join(legend_lines), ensure_ascii=False).replace("</", "<\\/")
     focus_json = json.dumps(focus_assets)
+    visible_layers_json = json.dumps(sorted(visible_layers))
     screenshot_date_json = json.dumps(day if day != "无数据" else chokepoint_day)
     return f"""
     <!doctype html><html lang="zh-CN"><head>
@@ -235,6 +236,7 @@ def build_map_html(assets: list[dict[str, object]], ports: list[dict],
         .concat(assets.map((a) => [a.lat, a.lon]))
         .concat(vessels.map((v) => [v.lat, v.lon]));
       const focusAssets = {focus_json};
+      const visibleLayers = {visible_layers_json};
       if (focusAssets && assets.length === 1) {{
         map.setView([assets[0].lat, assets[0].lon], 8);
       }} else if (focusAssets && assets.length > 1) {{
@@ -243,19 +245,22 @@ def build_map_html(assets: list[dict[str, object]], ports: list[dict],
       }} else if (allPoints.length) {{
         map.fitBounds(L.latLngBounds(allPoints), {{padding: [36, 36], maxZoom: 5}});
       }}
-      // Keep the user's viewport while the time slider changes the data.
-      const viewKey = 'energy-map-view:' + JSON.stringify([focusAssets,
-        focusAssets ? assets.map(a => a.name) : []]);
+      // Keep the viewport only while the selected layers and marker locations match.
+      const pointSignature = allPoints
+        .map(([lat, lon]) => [Number(lat), Number(lon)])
+        .sort((left, right) => left[0] - right[0] || left[1] - right[1]);
+      const viewKey = 'energy-map-view';
+      const viewSignature = JSON.stringify([focusAssets, visibleLayers, pointSignature]);
       try {{
         const saved = JSON.parse(sessionStorage.getItem(viewKey));
-        if (saved) map.setView(saved.center, saved.zoom);
+        if (saved && saved.signature === viewSignature) map.setView(saved.center, saved.zoom);
       }} catch (error) {{ /* Storage can be disabled by the embedding browser. */ }}
       map.on('moveend', () => {{
         try {{ sessionStorage.setItem(viewKey, JSON.stringify({{
+          signature: viewSignature,
           center: [map.getCenter().lat, map.getCenter().lng], zoom: map.getZoom()
         }})); }} catch (error) {{ }}
       }});
       {map_tools.SCREENSHOT_SCRIPT}
     </script></body></html>
     """
-

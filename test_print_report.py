@@ -52,6 +52,14 @@ class PrintReportTests(unittest.TestCase):
         self.assertIn("@media print", print_report.PRINT_CSS)
         self.assertIn("@page { size:A4 portrait", print_report.PRINT_CSS)
 
+    def test_standalone_report_is_visible_and_has_a_direct_print_action(self):
+        document = print_report.build_standalone_document(self.make_report())
+
+        self.assertTrue(document.startswith("<!doctype html>"))
+        self.assertIn(".print-report { display: block;", document)
+        self.assertIn("window.print()", document)
+        self.assertIn("中东能源与战略通道运输监测", document)
+
     def test_cover_has_the_requested_attribution_month_and_map(self):
         html = self.make_report(vessels=[{
             "name": "测试船", "lat": 25.0, "lon": 55.0,

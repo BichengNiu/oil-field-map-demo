@@ -90,6 +90,21 @@ def _selected_values(selection: list, options: list) -> list:
     return list(options) if ALL_SELECTION in selection else list(selection)
 
 
+def _has_independent_port_statistics(port: dict) -> bool:
+    """Handle catalog records from older PortWatch modules during hot reloads."""
+    checker = getattr(PORTWATCH, "has_independent_statistics", None)
+    if callable(checker):
+        return bool(checker(port))
+    if "statistics_available" in port:
+        return bool(port["statistics_available"])
+    port_id = str(port.get("portid", ""))
+    for prefix in ("port", "fso"):
+        suffix = port_id.removeprefix(prefix)
+        if suffix != port_id and suffix.isdigit():
+            return True
+    return False
+
+
 def _ais_api_key() -> str:
     """Read the key server-side without requiring or exposing it in the UI."""
 
@@ -316,7 +331,7 @@ def _render_portwatch_download_panel(selected_port_countries: list[str],
         st.dataframe(result["dictionary"], width="stretch", hide_index=True, height=300)
 
 
-st.set_page_config(page_title="中东能源监测", page_icon="◉", layout="wide",
+st.set_page_config(page_title="中东能源与战略通道运输监测", page_icon="◉", layout="wide",
                    initial_sidebar_state="expanded")
 
 st.markdown("""
@@ -724,10 +739,10 @@ ais_collector_instance: AIS.AISCollector | None = None
 
 with st.sidebar:
     st.session_state.pop("monitor_regions", None)
-    st.markdown("### 中东能源监测")
+    st.markdown("### 中东能源与战略通道运输监测")
     print_mode = st.toggle(
         "打印模式", value=False, key="print_mode",
-        help="按需准备全项目报告和最近90天曲线，再使用浏览器 Ctrl+P 打印或保存为PDF。")
+        help="开启后读取港口和咽喉点最近90天数据并生成全项目报告。可下载独立HTML报告，再打印或保存为PDF。")
     map_layers_selection = _multiselect_with_all(
         "地图内容", list(MAP_LAYER_LABELS), key="map_layers",
         default_all=False, default=["ports"],
@@ -931,7 +946,7 @@ if need_port_data and selected_day is not None and not port_error:
         ids = tuple(p["portid"] for p in catalog)
         statistical_ids = tuple(sorted(
             str(port["portid"]) for port in available_ports
-            if PORTWATCH.has_independent_statistics(port)))
+            if _has_independent_port_statistics(port)))
         if ids:
             activity_all = (PORTWATCH.daily_activity(selected_day, statistical_ids)
                             if statistical_ids else {})
@@ -1425,7 +1440,7 @@ if print_mode:
 
     report_port_ids = tuple(sorted(
         str(port["portid"]) for port in report_port_catalog
-        if PORTWATCH.has_independent_statistics(port)
+        if _has_independent_port_statistics(port)
     ))
     report_choke_ids = tuple(sorted(
         str(point["portid"]) for point in report_choke_catalog
@@ -1504,6 +1519,16 @@ if print_mode:
         ais_source_note=report_ais_note,
         errors=report_errors,
     )
-    st.html(
-        print_report.PRINT_CSS + report_html,
+    st.caption(
+        "此开关负责准备全项目报告数据。右上角 Streamlit Print 打印的是当前应用页面；"
+        "要打印独立报告，请下载下方 HTML，打开后点击报告顶部的按钮。"
     )
+    st.download_button(
+        "下载可打印报告（HTML）",
+        data=print_report.build_standalone_document(report_html),
+        file_name="中东能源与战略通道运输监测.html",
+        mime="text/html",
+        type="primary",
+        width="stretch",
+    )
+    st.html(print_report.PRINT_CSS + report_html)

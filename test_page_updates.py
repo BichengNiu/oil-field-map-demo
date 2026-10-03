@@ -135,6 +135,17 @@ class PageUpdates(unittest.TestCase):
         self.assertNotIn("港口 2026-09-25 UTC · 咽喉点 2026-09-27 UTC", iframe)
         self.assertNotIn("map-date", iframe)
 
+    def test_selected_chokepoint_is_sent_to_map_and_gets_a_fresh_viewport(self):
+        app = self.page()
+        app.multiselect(key="map_layers").set_value(["chokepoints"]).run()
+        app.multiselect(key="chokepoint_ids").set_value(["chokepoint6"]).run()
+        self.assertFalse(app.exception, [e.message for e in app.exception])
+
+        iframe = app.get("iframe")[0].proto.srcdoc
+        self.assertIn('const visibleLayers = ["chokepoints"]', iframe)
+        self.assertIn('"lat": 26.5, "lon": 56.4', iframe)
+        self.assertIn("saved.signature === viewSignature", iframe)
+
     def test_port_summary_uses_fixed_seven_day_window_without_source_date_controls(self):
         portwatch.rolling_activity.clear()
         app = self.page()
@@ -269,6 +280,7 @@ class PageUpdates(unittest.TestCase):
         self.assertIn("'port1'", report_counts[0]["where"])
         self.assertNotIn("wpi12345", report_counts[0]["where"])
         self.assertTrue(any(item.label == "打印模式" for item in app.toggle))
+        self.assertTrue(any(item.label == "下载可打印报告（HTML）" for item in app.get("download_button")))
 
 
 if __name__ == "__main__":
