@@ -6,6 +6,7 @@ import html
 import json
 import csv
 import io
+import importlib
 import os
 import time
 from datetime import date, datetime, timedelta, timezone
@@ -21,6 +22,20 @@ import portwatch_downloads
 import report_data
 import map_renderer
 import print_report
+
+
+def _reload_module_if_api_missing(module, api_name: str):
+    """Refresh a Python module when the current app needs a newer interface."""
+    if callable(getattr(module, api_name, None)):
+        return module
+    importlib.invalidate_caches()
+    try:
+        return importlib.reload(module)
+    except Exception:
+        return module
+
+
+print_report = _reload_module_if_api_missing(print_report, "build_standalone_document")
 
 ASSETS = CATALOG.ASSETS
 
@@ -103,6 +118,35 @@ def _has_independent_port_statistics(port: dict) -> bool:
         if suffix != port_id and suffix.isdigit():
             return True
     return False
+
+
+def _standalone_report_document(report_html: str) -> str:
+    """Build a printable file even if a deployed worker still has an old module."""
+    builder = getattr(print_report, "build_standalone_document", None)
+    if callable(builder):
+        return builder(report_html)
+
+    title = html.escape(str(getattr(print_report, "TITLE", "中东能源与战略通道运输监测")))
+    css = str(getattr(print_report, "PRINT_CSS", ""))
+    css = css.replace(
+        ".print-report { display: none;",
+        ".print-report { display: block;",
+        1,
+    )
+    return (
+        '<!doctype html><html lang="zh-CN"><head><meta charset="utf-8">'
+        f'<title>{title}</title>{css}<style>'
+        'body{margin:0;padding:18px;background:#eef2f6}'
+        '.print-report{display:block;max-width:1100px;margin:0 auto;padding:28px;background:#fff}'
+        '.standalone-print-action{max-width:1100px;margin:0 auto 12px;text-align:right}'
+        '.standalone-print-action button{padding:9px 14px;border:0;border-radius:6px;'
+        'color:#fff;background:#1769aa;font-size:14px;cursor:pointer}'
+        '@media print{body{padding:0;background:#fff}.print-report{max-width:none;margin:0;padding:0}'
+        '.standalone-print-action{display:none!important}}</style></head><body>'
+        '<div class="standalone-print-action"><button type="button" '
+        'onclick="window.print()">打印 / 另存为 PDF</button></div>'
+        f'{report_html}</body></html>'
+    )
 
 
 def _ais_api_key() -> str:
@@ -1525,7 +1569,7 @@ if print_mode:
     )
     st.download_button(
         "下载可打印报告（HTML）",
-        data=print_report.build_standalone_document(report_html),
+        data=_standalone_report_document(report_html),
         file_name="中东能源与战略通道运输监测.html",
         mime="text/html",
         type="primary",
