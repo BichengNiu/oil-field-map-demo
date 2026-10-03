@@ -6,7 +6,6 @@ import html
 import json
 import csv
 import io
-import importlib
 import os
 import time
 from datetime import date, datetime, timedelta, timezone
@@ -23,23 +22,10 @@ import report_data
 import map_renderer
 import print_report
 
-
-def _reload_module_if_api_missing(module, api_name: str):
-    """Refresh a Python module when the current app needs a newer interface."""
-    if callable(getattr(module, api_name, None)):
-        return module
-    importlib.invalidate_caches()
-    try:
-        return importlib.reload(module)
-    except Exception:
-        return module
-
-
-print_report = _reload_module_if_api_missing(print_report, "build_standalone_document")
-
 ASSETS = CATALOG.ASSETS
 
 if (getattr(PORTWATCH, "MODULE_VERSION", 0) < 5
+        or not hasattr(PORTWATCH, "has_independent_statistics")
         or not hasattr(PORTWATCH, "chokepoint_activity")
         or not hasattr(PORTWATCH, "port_risk_capacity")):
     st.error("港口数据模块版本未同步。请在 Streamlit 管理页重启应用后重试。")
@@ -103,50 +89,6 @@ def _multiselect_with_all(label: str, options: list, *, key: str,
 def _selected_values(selection: list, options: list) -> list:
     """Expand explicit 全选; keep [] as an empty filter."""
     return list(options) if ALL_SELECTION in selection else list(selection)
-
-
-def _has_independent_port_statistics(port: dict) -> bool:
-    """Handle catalog records from older PortWatch modules during hot reloads."""
-    checker = getattr(PORTWATCH, "has_independent_statistics", None)
-    if callable(checker):
-        return bool(checker(port))
-    if "statistics_available" in port:
-        return bool(port["statistics_available"])
-    port_id = str(port.get("portid", ""))
-    for prefix in ("port", "fso"):
-        suffix = port_id.removeprefix(prefix)
-        if suffix != port_id and suffix.isdigit():
-            return True
-    return False
-
-
-def _standalone_report_document(report_html: str) -> str:
-    """Build a printable file even if a deployed worker still has an old module."""
-    builder = getattr(print_report, "build_standalone_document", None)
-    if callable(builder):
-        return builder(report_html)
-
-    title = html.escape(str(getattr(print_report, "TITLE", "中东能源与战略通道运输监测")))
-    css = str(getattr(print_report, "PRINT_CSS", ""))
-    css = css.replace(
-        ".print-report { display: none;",
-        ".print-report { display: block;",
-        1,
-    )
-    return (
-        '<!doctype html><html lang="zh-CN"><head><meta charset="utf-8">'
-        f'<title>{title}</title>{css}<style>'
-        'body{margin:0;padding:18px;background:#eef2f6}'
-        '.print-report{display:block;max-width:1100px;margin:0 auto;padding:28px;background:#fff}'
-        '.standalone-print-action{max-width:1100px;margin:0 auto 12px;text-align:right}'
-        '.standalone-print-action button{padding:9px 14px;border:0;border-radius:6px;'
-        'color:#fff;background:#1769aa;font-size:14px;cursor:pointer}'
-        '@media print{body{padding:0;background:#fff}.print-report{max-width:none;margin:0;padding:0}'
-        '.standalone-print-action{display:none!important}}</style></head><body>'
-        '<div class="standalone-print-action"><button type="button" '
-        'onclick="window.print()">打印 / 另存为 PDF</button></div>'
-        f'{report_html}</body></html>'
-    )
 
 
 def _ais_api_key() -> str:
@@ -990,7 +932,7 @@ if need_port_data and selected_day is not None and not port_error:
         ids = tuple(p["portid"] for p in catalog)
         statistical_ids = tuple(sorted(
             str(port["portid"]) for port in available_ports
-            if _has_independent_port_statistics(port)))
+            if PORTWATCH.has_independent_statistics(port)))
         if ids:
             activity_all = (PORTWATCH.daily_activity(selected_day, statistical_ids)
                             if statistical_ids else {})
@@ -1484,7 +1426,7 @@ if print_mode:
 
     report_port_ids = tuple(sorted(
         str(port["portid"]) for port in report_port_catalog
-        if _has_independent_port_statistics(port)
+        if PORTWATCH.has_independent_statistics(port)
     ))
     report_choke_ids = tuple(sorted(
         str(point["portid"]) for point in report_choke_catalog
@@ -1569,7 +1511,7 @@ if print_mode:
     )
     st.download_button(
         "下载可打印报告（HTML）",
-        data=_standalone_report_document(report_html),
+        data=print_report.build_standalone_document(report_html),
         file_name="中东能源与战略通道运输监测.html",
         mime="text/html",
         type="primary",
