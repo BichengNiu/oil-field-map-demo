@@ -781,8 +781,6 @@ def _map_html(assets: list[dict[str, object]], ports: list[dict],
         ])
     legend_json = json.dumps("".join(legend_lines), ensure_ascii=False).replace("</", "<\\/")
     focus_json = json.dumps(focus_assets)
-    date_label = html.escape(f"港口 {day} UTC · 咽喉点 {chokepoint_day} UTC")
-    date_label_json = json.dumps(date_label, ensure_ascii=False)
     screenshot_date_json = json.dumps(day if day != "无数据" else chokepoint_day)
     return f"""
     <!doctype html><html lang="zh-CN"><head>
@@ -826,12 +824,11 @@ def _map_html(assets: list[dict[str, object]], ports: list[dict],
       .marker-cluster-small, .marker-cluster-medium, .marker-cluster-large {{ background: transparent; }}
       .marker-cluster-small div, .marker-cluster-medium div, .marker-cluster-large div {{ background: #ea580c; color: white; font-weight: 700; border-radius: 7px; transform: rotate(45deg); box-shadow: 0 0 0 5px rgba(234,88,12,.22); }}
       .marker-cluster-small span, .marker-cluster-medium span, .marker-cluster-large span {{ display: block; transform: rotate(-45deg); }}
-      .map-tools, .map-date {{ background: rgba(255,255,255,.96); border-radius: 8px; padding: 8px 10px; color: #172b4d; box-shadow: 0 2px 10px #0f172a26; }}
+      .map-tools {{ background: rgba(255,255,255,.96); border-radius: 8px; padding: 8px 10px; color: #172b4d; box-shadow: 0 2px 10px #0f172a26; }}
       .map-tools button {{ background: #0e5570; color: white; border: 0; border-radius: 5px; padding: 8px 12px; cursor: pointer; font-size: 13px; }}
       .map-tools button:disabled {{ opacity: .6; cursor: wait; }}
       .map-tools span {{ display: block; max-width: 230px; font-size: 11px; margin-top: 4px; }}
       .map-tools span:empty {{ display: none; }}
-      .map-date {{ font-size: 12px; max-width: 430px; }}
     </style></head><body><div id="map"></div>
     <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
     <script src="https://unpkg.com/leaflet.markercluster@1.5.3/dist/leaflet.markercluster.js"></script>
@@ -841,13 +838,6 @@ def _map_html(assets: list[dict[str, object]], ports: list[dict],
       L.tileLayer('https://server.arcgisonline.com/ArcGIS/rest/services/World_Street_Map/MapServer/tile/{{z}}/{{y}}/{{x}}', {{
         attribution: 'Tiles &copy; Esri', maxZoom: 18, crossOrigin: true
       }}).addTo(map);
-      const dateControl = L.control({{position: 'bottomleft'}});
-      dateControl.onAdd = () => {{
-        const el = L.DomUtil.create('div', 'map-date');
-        el.textContent = {date_label_json};
-        return el;
-      }};
-      dateControl.addTo(map);
       const screenshotDate = {screenshot_date_json};
       const legend = L.control({{position: 'bottomright'}});
       legend.onAdd = () => {{
@@ -1066,7 +1056,6 @@ with st.sidebar:
             chokepoints_selection, chokepoint_id_options)
         try:
             newest_chokepoint_day = PORTWATCH.latest_chokepoint_date()
-            st.caption(f"咽喉点最新：{newest_chokepoint_day.isoformat()} UTC")
         except Exception as exc:
             newest_chokepoint_day = None
             st.warning(f"咽喉点数据暂时不可用：{exc}")
