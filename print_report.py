@@ -312,14 +312,15 @@ def build_report_html(
     ais_status: str,
     ais_source_note: str,
     errors: list[str] | None = None,
-    asset_appendix: list[dict] | None = None,
 ) -> str:
     """Return self-contained HTML for browser preview and print/PDF."""
     timestamp = generated_at or datetime.now(ZoneInfo("Asia/Shanghai"))
     if timestamp.tzinfo is None:
         timestamp = timestamp.replace(tzinfo=ZoneInfo("Asia/Shanghai"))
     timestamp = timestamp.astimezone(ZoneInfo("Asia/Shanghai"))
-    stat_ports = [p for p in port_catalog if p.get("statistics_available", True)]
+    # Supplementary WPI/industry entries are map-only unless the catalog
+    # explicitly marks them as independent PortWatch statistics.
+    stat_ports = [p for p in port_catalog if p.get("statistics_available", False)]
     dated_calls = [p for p in latest_ports if _number(p.get("portcalls")) is not None]
     covered_calls = sum(_number(p.get("portcalls")) or 0 for p in dated_calls)
     catalog_chokes = len(choke_catalog)
@@ -484,17 +485,6 @@ def build_report_html(
         + _section("AIS 船位观测", ais_content, page=True)
         + _section("数据来源与口径", source_content, page=True)
     )
-    if asset_appendix:
-        appendix_rows = [[
-            row.get("中文名称") or row.get("英文名称"), row.get("国家"),
-            row.get("资产层级"), row.get("生产状态"),
-            row.get("本层级日产量"), row.get("其他日量指标"),
-            row.get("指标口径"), row.get("数据日期"), row.get("地图坐标精度"),
-        ] for row in asset_appendix]
-        body += _section("附录：完整油气资产目录", _table(
-            ["资产", "国家", "层级", "状态", "日产量", "其他指标", "口径", "日期", "坐标精度"],
-            appendix_rows,
-        ), page=True)
     return f'<div class="print-report"><header><h1>{_esc(TITLE)}</h1>{body}</header></div>'
 
 

@@ -140,6 +140,20 @@ class PortWatchDownloads(unittest.TestCase):
         self.assertEqual(len(rows), downloads.PAGE_SIZE + 17)
         self.assertTrue(query["count_verified"])
 
+    def test_refresh_revision_bypasses_old_disk_snapshot_and_then_reuses_new_one(self):
+        first, last = date(2026, 1, 1), date(2026, 1, 4)
+        original, _ = downloads.fetch_window("ports", ("port1",), first, last)
+        self.port_rows[0]["import"] = 777
+        cached, _ = downloads.fetch_window("ports", ("port1",), first, last)
+        refreshed, _ = downloads.fetch_window(
+            "ports", ("port1",), first, last, cache_revision=1)
+        refreshed_cached, _ = downloads.fetch_window(
+            "ports", ("port1",), first, last, cache_revision=1)
+
+        self.assertNotEqual(original[0]["import"], refreshed[0]["import"])
+        self.assertEqual(cached[0]["import"], original[0]["import"])
+        self.assertEqual(refreshed_cached, refreshed)
+
     def test_excel_limit_keeps_large_exports_in_csv_and_zip(self):
         result = {"datasets": {"ports": [{}] * (downloads.XLSX_ROW_LIMIT + 1)},
                   "manifest": {"derived": False}}

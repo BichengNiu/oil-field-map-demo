@@ -73,9 +73,15 @@ class PortInventoryLabelTests(unittest.TestCase):
                 })
         enriched = port_inventory.enrich(list(raw_by_id.values()))
         self.assertTrue(enriched)
+        by_id = {port["portid"]: port for port in enriched}
+        self.assertTrue(all(by_id[port_id]["statistics_available"] for port_id in raw_by_id))
         for port in enriched:
             with self.subTest(port=port["portid"]):
                 self.assertTrue(_has_chinese(port["name_cn"]))
+        supplemental = [port for port in enriched
+                        if port["portid"].startswith(("wpi", "facility_"))]
+        self.assertTrue(supplemental)
+        self.assertTrue(all(not port["statistics_available"] for port in supplemental))
 
     def test_common_portwatch_aliases_are_translated(self):
         self.assertEqual(port_inventory.port_label({

@@ -56,7 +56,7 @@ def node(kind: str, raw: dict) -> dict:
     if kind not in KINDS:
         raise DownloadError("数据类型无效")
     pid = str(raw["portid"])
-    supported = pw._valid_port_ids((pid,)) if kind == "ports" else pw._valid_chokepoint_ids((pid,))
+    supported = pw.valid_port_ids((pid,)) if kind == "ports" else pw.valid_chokepoint_ids((pid,))
     return {"node_kind": kind, "portid": pid,
             "node_name": raw.get("name_cn") or raw.get("name") or raw.get("portname") or pid,
             "country": raw.get("country"),
@@ -68,11 +68,13 @@ def node(kind: str, raw: dict) -> dict:
 
 
 def _endpoint(kind: str) -> str:
-    return pw.DAILY if kind == "ports" else pw.CHOKEPOINT_DAILY
+    return pw.endpoint_for(kind)
 
 
 def _ids_where(ids: tuple[str, ...], kind: str) -> str:
-    valid = pw._valid_port_ids(ids) if kind == "ports" else pw._valid_chokepoint_ids(ids)
+    if kind not in ("ports", "chokepoints"):
+        raise DownloadError("未知的PortWatch数据类型")
+    valid = pw.valid_port_ids(ids) if kind == "ports" else pw.valid_chokepoint_ids(ids)
     if not ids or not valid or len(set(ids)) != len(ids):
         raise DownloadError("节点编号为空、重复或无效")
     return "portid IN (" + ",".join(f"'{pid}'" for pid in ids) + ")"
@@ -88,7 +90,7 @@ def bounds(kind: str, ids: tuple[str, ...]) -> tuple[dict, list[dict]]:
             {"statisticType": "max", "onStatisticField": "date", "outStatisticFieldName": "last_date"},
             {"statisticType": "count", "onStatisticField": "ObjectId", "outStatisticFieldName": "records"},
         ]
-        response = pw._query(_endpoint(kind), where=where, returnGeometry="false",
+        response = pw.query(_endpoint(kind), where=where, returnGeometry="false",
                              outStatistics=json.dumps(statistics), groupByFieldsForStatistics="portid",
                              resultRecordCount=PAGE_SIZE)
         if response.get("exceededTransferLimit"):
@@ -135,18 +137,20 @@ def _cache(key: str, payload: dict | None = None) -> dict | None:
 
 
 def fetch_window(kind: str, ids: tuple[str, ...], first: date, last: date,
-                 force: bool = False, progress=None) -> tuple[list[dict], dict]:
+                 force: bool = False, progress=None,
+                 cache_revision: int = 0) -> tuple[list[dict], dict]:
     where = f"{_ids_where(ids, kind)} AND date >= DATE '{first}' AND date <= DATE '{last}'"
     endpoint = _endpoint(kind)
     metrics = PORT_METRICS if kind == "ports" else CHOKE_METRICS
     source_fields = ["ObjectId", "date", "portid", "portname"] + (["country", "ISO3"] if kind == "ports" else []) + metrics
-    key = hashlib.sha256(json.dumps([VERSION, endpoint, where, source_fields]).encode()).hexdigest()
+    key = hashlib.sha256(json.dumps(
+        [VERSION, endpoint, where, source_fields, cache_revision]).encode()).hexdigest()
     cached = None if force else _cache(key)
     if cached:
         return cached["rows"], {**cached["query"], "cache_hit": True}
 
     def count():
-        value = pw._query(endpoint, where=where, returnGeometry="false", returnCountOnly="true")
+        value = pw.query(endpoint, where=where, returnGeometry="false", returnCountOnly="true")
         if "count" not in value:
             raise DownloadError("源站未返回用于核对分页的总记录数")
         return int(value["count"])
@@ -155,7 +159,7 @@ def fetch_window(kind: str, ids: tuple[str, ...], first: date, last: date,
     rows, keys = [], set()
     offset = 0
     while offset < expected:
-        page = pw._query(endpoint, where=where, returnGeometry="false",
+        page = pw.query(endpoint, where=where, returnGeometry="false",
                          outFields=",".join(source_fields), orderByFields="portid ASC,date ASC,ObjectId ASC",
                          resultOffset=offset, resultRecordCount=PAGE_SIZE)
         items = page.get("features", [])

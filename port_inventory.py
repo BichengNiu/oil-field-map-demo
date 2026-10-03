@@ -211,7 +211,7 @@ def port_label(port: dict) -> str:
 
 
 def enrich(ports: list[dict]) -> list[dict]:
-    output = [dict(p, activity_source="IMF PortWatch", source_url="https://portwatch.imf.org/pages/data-and-methodology",
+    output = [dict(p, statistics_available=True, activity_source="IMF PortWatch", source_url="https://portwatch.imf.org/pages/data-and-methodology",
                    coverage_note="AIS识别进港及模型估算货量；不是港务局实测吞吐量", wpi_ids=[], wpi_names=[])
               for p in ports]
     index = {p["portid"]: p for p in output}
@@ -229,7 +229,7 @@ def enrich(ports: list[dict]) -> list[dict]:
         output.append(dict(portid=f"wpi{row['wpi']}", name=row["name"], country=row["country"],
                            lat=row["lat"], lon=row["lon"], region=row["region"],
                            wpi_ids=[row["wpi"]], source_url=WPI_SOURCE,
-                           activity_source="无独立PortWatch统计", inventory_source_url=WPI_SOURCE,
+                           statistics_available=False, activity_source="无独立PortWatch统计", inventory_source_url=WPI_SOURCE,
                            coordinate_precision="NGA港口代表点；非泊位边界",
                            coverage_note="NGA名录补充，观察量未知；邻近综合港可能范围重叠，不借用邻港统计；名录日期未注明"))
     # Nautical positions represent the named coastal locality, not a surveyed berth.
@@ -238,7 +238,8 @@ def enrich(ports: list[dict]) -> list[dict]:
         ("facility_suwaiq", "Suwaiq", 23 + 51 / 60, 57 + 27 / 60, "11.18"),
     ):
         output.append(dict(portid=pid, name=name, country="Oman", lat=lat, lon=lon, region="阿曼湾",
-                           wpi_ids=[], source_url="https://www.asyad.com/ports",
+                           wpi_ids=[], statistics_available=False,
+                           source_url="https://www.asyad.com/ports",
                            inventory_source_url=NGA_SAILING, activity_source="无独立PortWatch统计",
                            coordinate_precision=f"NGA Pub172 §{section}港口所在地代表点；分钟精度",
                            coverage_note="Asyad港口名录补充；坐标是所在地近似点，进港与货量未知"))

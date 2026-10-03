@@ -83,6 +83,15 @@ class PrintReportTests(unittest.TestCase):
         self.assertIn("&lt;script&gt;alert(1)&lt;/script&gt;", html)
         self.assertNotIn("<script>alert(1)</script>", html)
 
+    def test_supplemental_map_ports_are_not_counted_as_independent_statistics(self):
+        html = self.make_report(port_catalog=[
+            {"portid": "port-1", "name": "统计港", "statistics_available": True},
+            {"portid": "wpi-1", "name": "补充港"},
+            {"portid": "wpi-2", "name": "另一补充港", "statistics_available": False},
+        ])
+
+        self.assertIn("其中独立统计点 1 个", html)
+
     def test_chokepoint_comparison_uses_complete_seven_day_windows(self):
         first_day = datetime(2026, 9, 24).date()
         history = []

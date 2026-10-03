@@ -34,15 +34,27 @@ CHOKEPOINT_LABELS = {
 
 
 def clear_live_cache() -> None:
-    """Recheck upstream on a new page session or an explicit refresh."""
-    for reader in (port_catalog, latest_date, daily_activity, rolling_activity,
-                   port_risk_capacity, chokepoint_catalog,
+    """Refresh current PortWatch data while retaining the historical risk model."""
+    for reader in (port_catalog, latest_date, _activity_rows, daily_activity,
+                   rolling_activity, chokepoint_catalog,
                    latest_chokepoint_date, chokepoint_activity):
         reader.clear()
 
 
 def _valid_port_ids(ids: tuple[str, ...]) -> bool:
     return all(re.fullmatch(r"(?:port|fso)\d+", port_id) for port_id in ids)
+
+
+def valid_port_ids(ids: tuple[str, ...]) -> bool:
+    """Validate source-backed port identifiers at module boundaries."""
+    return _valid_port_ids(ids)
+
+
+def has_independent_statistics(port: dict) -> bool:
+    """Return whether a catalog point has a supported PortWatch activity ID."""
+    if "statistics_available" in port:
+        return bool(port["statistics_available"])
+    return _valid_port_ids((str(port.get("portid", "")),))
 
 
 def _activity_ids(ids: tuple[str, ...]) -> tuple[str, ...]:
@@ -55,6 +67,11 @@ def _activity_ids(ids: tuple[str, ...]) -> tuple[str, ...]:
 
 def _valid_chokepoint_ids(ids: tuple[str, ...]) -> bool:
     return all(re.fullmatch(r"chokepoint\d+", point_id) for point_id in ids)
+
+
+def valid_chokepoint_ids(ids: tuple[str, ...]) -> bool:
+    """Validate source-backed chokepoint identifiers at module boundaries."""
+    return _valid_chokepoint_ids(ids)
 
 # south, north, west, east. Order assigns ports in overlapping boxes only once.
 REGIONS = {
@@ -74,6 +91,19 @@ def _query(url: str, **params: object) -> dict:
     if "error" in result:
         raise ValueError(f"PortWatch API: {result['error'].get('message', result['error'])}")
     return result
+
+
+def query(url: str, **params: object) -> dict:
+    """Public shared ArcGIS query boundary for dashboard and download modules."""
+    return _query(url, **params)
+
+
+def endpoint_for(kind: str) -> str:
+    if kind == "ports":
+        return DAILY
+    if kind == "chokepoints":
+        return CHOKEPOINT_DAILY
+    raise ValueError("未知的 PortWatch 数据类型")
 
 
 def region_for(lat: float, lon: float) -> str | None:
@@ -127,16 +157,20 @@ def latest_date() -> date:
 
 
 @st.cache_data(ttl=3600, show_spinner=False)
-def daily_activity(day: date, port_ids: tuple[str, ...]) -> dict[str, dict]:
-    # DateOnly SQL literal; never interpolate user text into the where clause.
-    result = {}
-    port_ids = _activity_ids(port_ids)
+def _activity_rows(day: date, port_ids: tuple[str, ...], calendar_days: int) -> dict[str, dict[date, dict]]:
+    """Fetch one validated daily window for reuse by latest-day and rolling indicators."""
+    grouped: dict[str, dict[date, dict]] = {port_id: {} for port_id in port_ids}
+    port_ids = tuple(sorted(set(_activity_ids(port_ids))))
+    if calendar_days < 1:
+        raise ValueError("活动数据窗口天数无效")
+    first_day = day - timedelta(days=calendar_days - 1)
     for start in range(0, len(port_ids), 80):
         ids = port_ids[start:start + 80]
         if not _valid_port_ids(ids):
             raise ValueError("无效的 PortWatch 港口编号")
         quoted = ",".join(f"'{p}'" for p in ids)
-        where = f"date = DATE '{day.isoformat()}' AND portid IN ({quoted})"
+        where = (f"date >= DATE '{first_day.isoformat()}' AND date <= DATE '{day.isoformat()}' "
+                 f"AND portid IN ({quoted})")
         offset = 0
         while True:
             page = _query(DAILY, where=where, returnGeometry="false", resultOffset=offset,
@@ -152,13 +186,24 @@ def daily_activity(day: date, port_ids: tuple[str, ...]) -> dict[str, dict]:
             items = page.get("features", [])
             for item in items:
                 values = item["attributes"]
-                if values["portid"] in result:
-                    raise ValueError(f"PortWatch 日活动出现重复港口记录：{values['portid']}")
-                result[values["portid"]] = values
+                port_id = values.get("portid")
+                value_day = date.fromisoformat(values["date"])
+                if port_id not in grouped or not first_day <= value_day <= day:
+                    raise ValueError("PortWatch返回窗口之外或未请求的记录")
+                if value_day in grouped[port_id]:
+                    raise ValueError(f"PortWatch重复港口/日期：{port_id}/{value_day}")
+                grouped[port_id][value_day] = values
             if len(items) < 1000:
                 break
             offset += len(items)
-    return result
+    return grouped
+
+
+@st.cache_data(ttl=3600, show_spinner=False)
+def daily_activity(day: date, port_ids: tuple[str, ...]) -> dict[str, dict]:
+    # Reuse the same two-week response as the default rolling indicators.
+    rows = _activity_rows(day, port_ids, 14)
+    return {port_id: values[day] for port_id, values in rows.items() if day in values}
 
 
 @st.cache_data(ttl=3600, show_spinner=False)
@@ -169,42 +214,14 @@ def rolling_activity(day: date, port_ids: tuple[str, ...], days: int = 7) -> dic
     """
     if days not in (7, 30):
         raise ValueError("仅支持 7 天或 30 天窗口")
-    grouped: dict[str, dict[date, dict]] = {port_id: {} for port_id in port_ids}
+    requested_ids = tuple(port_ids)
     port_ids = _activity_ids(port_ids)
     current_first = day - timedelta(days=days - 1)
     previous_first = day - timedelta(days=2 * days - 1)
     previous_last = current_first - timedelta(days=1)
-    for start in range(0, len(port_ids), 80):
-        ids = port_ids[start:start + 80]
-        if not _valid_port_ids(ids):
-            raise ValueError("无效的 PortWatch 港口编号")
-        quoted = ",".join(f"'{p}'" for p in ids)
-        where = (f"date >= DATE '{previous_first.isoformat()}' AND date <= DATE '{day.isoformat()}' "
-                 f"AND portid IN ({quoted})")
-        offset = 0
-        while True:
-            page = _query(DAILY, where=where, returnGeometry="false", resultOffset=offset,
-                          resultRecordCount=1000, orderByFields="portid ASC,date ASC",
-                          outFields="date,portid,portname,country,ISO3,portcalls,"
-                                    "portcalls_container,portcalls_dry_bulk,"
-                                    "portcalls_general_cargo,portcalls_roro,portcalls_tanker,"
-                                    "portcalls_cargo,import,export,import_container,export_container,"
-                                    "import_dry_bulk,export_dry_bulk,"
-                                    "import_general_cargo,export_general_cargo,"
-                                    "import_roro,export_roro,import_tanker,export_tanker,"
-                                    "import_cargo,export_cargo")
-            items = page.get("features", [])
-            for item in items:
-                value = item["attributes"]
-                value_day = date.fromisoformat(value["date"])
-                if value["portid"] not in grouped or not previous_first <= value_day <= day:
-                    raise ValueError("PortWatch返回窗口之外或未请求的记录")
-                if value_day in grouped[value["portid"]]:
-                    raise ValueError(f"PortWatch重复港口/日期：{value['portid']}/{value_day}")
-                grouped[value["portid"]][value_day] = value
-            if len(items) < 1000:
-                break
-            offset += len(items)
+    grouped = _activity_rows(day, port_ids, 2 * days)
+    for port_id in requested_ids:
+        grouped.setdefault(port_id, {})
     summary = {}
     for port_id, by_day in grouped.items():
         values = [value for value_day, value in by_day.items()

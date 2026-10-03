@@ -93,9 +93,22 @@ class HistoryTests(unittest.TestCase):
         from test_ais import position_event, NOW
         collector = ais.AISCollector("unused", connector=lambda *args, **kwargs: None)
         self.assertTrue(collector.ingest(position_event(), NOW))
+        self.assertEqual(history.day_reports(NOW.date()), [])
+        collector._flush_archive()
         rows = history.day_reports(NOW.date())
         self.assertEqual(len(rows), 1)
         self.assertEqual(rows[0]["source"], "AISStream")
+
+    def test_collector_flushes_position_events_as_a_batch(self):
+        from test_ais import position_event, NOW
+        collector = ais.AISCollector("unused", connector=lambda *args, **kwargs: None)
+        with patch.object(history, "archive_reports", return_value=50) as archive:
+            for offset in range(50):
+                self.assertTrue(collector.ingest(
+                    position_event(mmsi=636000100 + offset), NOW))
+
+        archive.assert_called_once()
+        self.assertEqual(len(archive.call_args.args[0]), 50)
 
 
 if __name__ == "__main__":

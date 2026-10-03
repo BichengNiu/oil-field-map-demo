@@ -491,6 +491,7 @@ class AISCollector:
         self._subscription_confirmed_at: str | None = None
         self._compression_enabled: bool | None = None
         self._archive_error: str | None = None
+        self._archive_buffer: list[dict[str, Any]] = []
 
     def start(self) -> "AISCollector":
         if self._thread and self._thread.is_alive():
@@ -537,6 +538,7 @@ class AISCollector:
                         try:
                             frame = socket.recv(timeout=5)
                         except TimeoutError:
+                            self._flush_archive()
                             continue
                         if isinstance(frame, bytes):
                             frame = frame.decode("utf-8")
@@ -555,6 +557,7 @@ class AISCollector:
                             raise RuntimeError(str(event["error"]))
                         self.ingest(event)
             except Exception as exc:  # Network failures are expected; reconnect safely.
+                self._flush_archive()
                 attempt += 1
                 with self._lock:
                     self._status = "重连等待"
@@ -563,6 +566,23 @@ class AISCollector:
                 self._stop.wait(delay)
         with self._lock:
             self._status = "已停止"
+        self._flush_archive()
+
+    def _flush_archive(self) -> None:
+        """Persist buffered reports together instead of committing per AIS event."""
+        with self._lock:
+            batch, self._archive_buffer = self._archive_buffer, []
+        if not batch:
+            return
+        try:
+            import ais_history
+            ais_history.archive_reports(batch)
+            with self._lock:
+                self._archive_error = None
+        except Exception as exc:
+            with self._lock:
+                self._archive_error = f"{type(exc).__name__}: {exc}"
+                self._archive_buffer = batch + self._archive_buffer
 
     def ingest(self, event: dict[str, Any], received_at: datetime | None = None) -> bool:
         received = received_at or utc_now()
@@ -610,16 +630,12 @@ class AISCollector:
                        if value is not None},
                 }
         if normalized["kind"] == "position" and normalized.get("region"):
-            try:
-                import ais_history
-                with self._lock:
-                    archived = {**self._static.get(mmsi, {}), **normalized}
-                ais_history.archive_reports([archived])
-                with self._lock:
-                    self._archive_error = None
-            except Exception as exc:
-                with self._lock:
-                    self._archive_error = f"{type(exc).__name__}: {exc}"
+            flush = False
+            with self._lock:
+                self._archive_buffer.append({**self._static.get(mmsi, {}), **normalized})
+                flush = len(self._archive_buffer) >= 50
+            if flush:
+                self._flush_archive()
         return True
 
     def snapshot(self, max_age_minutes: int = 30,
