@@ -28,7 +28,7 @@
 首次进入打印模式时，应用会读取有独立统计的节点最近90天记录。补充名录港口不作为独立统计点；地图点位图是经纬度示意，不表示海岸线或实际航迹。
 
 
-验证：`python -m unittest test_data_integrity test_ais test_ais_history test_public_ais_archive test_portwatch_downloads test_page_updates test_print_report test_report_data`。
+验证：`python -m unittest test_data_integrity test_ais test_ais_history test_public_ais_archive test_portwatch_downloads test_page_updates test_print_report test_report_data test_map_renderer`。
 
 ### 港口与咽喉点数据下载
 
@@ -74,7 +74,7 @@
 - 油气默认采用“战略生产节点”视图：优先展示油田群、区块、特许区和有直接公开指标的主力独立田；可切换到“完整资产目录”查看全部 631 项记录。输入名称时会临时显示完整目录中的匹配项并缩放至该节点。
 - 油气统一使用实心菱形；产量、产能、目标及未披露数值在弹窗和表格中明确区分。上级节点有直接披露值时，组成项默认并入上级且不重复绘制；缺少独立点位时可使用组成油田几何中心、公开设施点或最近上级代表点，并在 popup 中注明精度和坐标证据。区域／设施代理点采用虚线边框，与精确点位视觉区分。
 - 底图固定使用 Esri 街道图且不显示底图选择框。
-- 港口目录、日活动、窗口指标、风险运力和咽喉点请求分别缓存；风险运力只在打开港口详情页时读取。`report_data.py` 负责打印报告的历史数据窗口和节点匹配；报告只在打印模式启用时组装。
+- 港口目录、日活动、窗口指标、风险运力和咽喉点请求分别缓存；风险运力只在打开港口详情页时读取。`map_renderer.py` 负责纯 Leaflet HTML 呈现，`report_data.py` 负责打印报告的历史数据窗口和节点匹配；页面控制与展示分离，报告只在打印模式启用时组装。
 
 ## 实时 AIS 配置
 
