@@ -1,0 +1,550 @@
+{
+  "retrieved_at": "2026-10-03",
+  "source": "https://services9.arcgis.com/weJ1QsnbMYJlCHdG/arcgis/rest/services/PortWatch_ports_database/FeatureServer/0",
+  "rows": [
+    {
+      "portid": "port563",
+      "portname": "Khorramshahr",
+      "country": "Iran",
+      "ISO3": "IRN",
+      "lat": 30.44360334,
+      "lon": 48.15439964
+    },
+    {
+      "portid": "port834",
+      "portname": "Nowshahr Port",
+      "country": "Iran",
+      "ISO3": "IRN",
+      "lat": 36.65505162,
+      "lon": 51.50857211
+    },
+    {
+      "portid": "port743",
+      "portname": "Mina Al Ahmadi",
+      "country": "Kuwait",
+      "ISO3": "KWT",
+      "lat": 29.0455478,
+      "lon": 48.14514574
+    },
+    {
+      "portid": "port5",
+      "portname": "Abu Dhabi",
+      "country": "United Arab Emirates",
+      "ISO3": "ARE",
+      "lat": 24.61243288,
+      "lon": 54.563683
+    },
+    {
+      "portid": "port13",
+      "portname": "Ajman",
+      "country": "United Arab Emirates",
+      "ISO3": "ARE",
+      "lat": 25.41978684,
+      "lon": 55.45367849
+    },
+    {
+      "portid": "port22",
+      "portname": "Al Hamriyah LPG Terminal",
+      "country": "United Arab Emirates",
+      "ISO3": "ARE",
+      "lat": 25.46752849,
+      "lon": 55.49501172
+    },
+    {
+      "portid": "port72",
+      "portname": "Sharjah",
+      "country": "United Arab Emirates",
+      "ISO3": "ARE",
+      "lat": 25.36312735,
+      "lon": 55.37623329
+    },
+    {
+      "portid": "port306",
+      "portname": "Dubai",
+      "country": "United Arab Emirates",
+      "ISO3": "ARE",
+      "lat": 25.27337362,
+      "lon": 55.290821
+    },
+    {
+      "portid": "port362",
+      "portname": "Fujairah",
+      "country": "United Arab Emirates",
+      "ISO3": "ARE",
+      "lat": 25.20017278,
+      "lon": 56.35942059
+    },
+    {
+      "portid": "port512",
+      "portname": "Jabal Az Zannah-Ruways",
+      "country": "United Arab Emirates",
+      "ISO3": "ARE",
+      "lat": 24.12697586,
+      "lon": 52.71021364
+    },
+    {
+      "portid": "port561",
+      "portname": "Khor Fakkan",
+      "country": "United Arab Emirates",
+      "ISO3": "ARE",
+      "lat": 25.35368858,
+      "lon": 56.36875484
+    },
+    {
+      "portid": "port744",
+      "portname": "Jebel Ali",
+      "country": "United Arab Emirates",
+      "ISO3": "ARE",
+      "lat": 24.99941947,
+      "lon": 55.07781687
+    },
+    {
+      "portid": "port747",
+      "portname": "Mina Saqr",
+      "country": "United Arab Emirates",
+      "ISO3": "ARE",
+      "lat": 25.96728647,
+      "lon": 56.06305892
+    },
+    {
+      "portid": "port1340",
+      "portname": "Umm al Qaiwain",
+      "country": "United Arab Emirates",
+      "ISO3": "ARE",
+      "lat": 25.58810902,
+      "lon": 55.58024004
+    },
+    {
+      "portid": "port20",
+      "portname": "Al Basrah",
+      "country": "Iraq",
+      "ISO3": "IRQ",
+      "lat": 30.55796288,
+      "lon": 47.79778641
+    },
+    {
+      "portid": "port1341",
+      "portname": "Umm Qasr",
+      "country": "Iraq",
+      "ISO3": "IRQ",
+      "lat": 30.1137845,
+      "lon": 47.90182168
+    },
+    {
+      "portid": "port305",
+      "portname": "Duba Bulk Plant Tanker Terminal",
+      "country": "Saudi Arabia",
+      "ISO3": "SAU",
+      "lat": 27.32760527,
+      "lon": 35.73491023
+    },
+    {
+      "portid": "port518",
+      "portname": "Jeddah",
+      "country": "Saudi Arabia",
+      "ISO3": "SAU",
+      "lat": 21.46079659,
+      "lon": 39.16640594
+    },
+    {
+      "portid": "port24",
+      "portname": "Jubail",
+      "country": "Saudi Arabia",
+      "ISO3": "SAU",
+      "lat": 27.05573014,
+      "lon": 49.6603903
+    },
+    {
+      "portid": "port275",
+      "portname": "Dammam",
+      "country": "Saudi Arabia",
+      "ISO3": "SAU",
+      "lat": 26.47626701,
+      "lon": 50.19439715
+    },
+    {
+      "portid": "port304",
+      "portname": "Duba (Port of Neom)",
+      "country": "Saudi Arabia",
+      "ISO3": "SAU",
+      "lat": 27.55991231,
+      "lon": 35.5465967
+    },
+    {
+      "portid": "port519",
+      "portname": "Shoaiba",
+      "country": "Saudi Arabia",
+      "ISO3": "SAU",
+      "lat": 20.65258296,
+      "lon": 39.54249452
+    },
+    {
+      "portid": "port526",
+      "portname": "Juaymah",
+      "country": "Saudi Arabia",
+      "ISO3": "SAU",
+      "lat": 26.80319051,
+      "lon": 49.97698013
+    },
+    {
+      "portid": "port43",
+      "portname": "Amirabad Port",
+      "country": "Iran",
+      "ISO3": "IRN",
+      "lat": 36.85068189,
+      "lon": 53.365271129999996
+    },
+    {
+      "portid": "port570",
+      "portname": "Yanbu (King Fahd Port)",
+      "country": "Saudi Arabia",
+      "ISO3": "SAU",
+      "lat": 23.95087468,
+      "lon": 38.27170365
+    },
+    {
+      "portid": "port58",
+      "portname": "Bandar-e Anzali",
+      "country": "Iran",
+      "ISO3": "IRN",
+      "lat": 37.47515153,
+      "lon": 49.46995908
+    },
+    {
+      "portid": "port1081",
+      "portname": "Rabigh",
+      "country": "Saudi Arabia",
+      "ISO3": "SAU",
+      "lat": 22.63873353,
+      "lon": 39.05376029
+    },
+    {
+      "portid": "port105",
+      "portname": "Bandar-E Pars Terminal",
+      "country": "Iran",
+      "ISO3": "IRN",
+      "lat": 27.56361956,
+      "lon": 52.51242998
+    },
+    {
+      "portid": "port1088",
+      "portname": "Ras Al Mishab",
+      "country": "Saudi Arabia",
+      "ISO3": "SAU",
+      "lat": 27.88827937,
+      "lon": 48.81709477
+    },
+    {
+      "portid": "port106",
+      "portname": "Bandar Shahid Rajaee",
+      "country": "Iran",
+      "ISO3": "IRN",
+      "lat": 27.13960482,
+      "lon": 56.06282679
+    },
+    {
+      "portid": "port1089",
+      "portname": "Ras Al-Khair",
+      "country": "Saudi Arabia",
+      "ISO3": "SAU",
+      "lat": 27.54005494,
+      "lon": 49.18719288
+    },
+    {
+      "portid": "port1091",
+      "portname": "Ras Tanura",
+      "country": "Saudi Arabia",
+      "ISO3": "SAU",
+      "lat": 26.67168923,
+      "lon": 50.12291543
+    },
+    {
+      "portid": "port107",
+      "portname": "Bandar Abbas",
+      "country": "Iran",
+      "ISO3": "IRN",
+      "lat": 27.14750008,
+      "lon": 56.20294512
+    },
+    {
+      "portid": "port1408",
+      "portname": "Yanbu (Yanbu city)",
+      "country": "Saudi Arabia",
+      "ISO3": "SAU",
+      "lat": 24.07715154,
+      "lon": 38.07030618
+    },
+    {
+      "portid": "port108",
+      "portname": "Bandar Khomeini",
+      "country": "Iran",
+      "ISO3": "IRN",
+      "lat": 30.4356647,
+      "lon": 49.06761425
+    },
+    {
+      "portid": "port25",
+      "portname": "Shuwaikh",
+      "country": "Kuwait",
+      "ISO3": "KWT",
+      "lat": 29.35210588,
+      "lon": 47.92389677
+    },
+    {
+      "portid": "port196",
+      "portname": "Bushehr",
+      "country": "Iran",
+      "ISO3": "IRN",
+      "lat": 28.99153747,
+      "lon": 50.83467263
+    },
+    {
+      "portid": "port226",
+      "portname": "Chabahar",
+      "country": "Iran",
+      "ISO3": "IRN",
+      "lat": 25.2960398,
+      "lon": 60.61107983
+    },
+    {
+      "portid": "port1203",
+      "portname": "Sitrah",
+      "country": "Bahrain",
+      "ISO3": "BHR",
+      "lat": 26.18935646,
+      "lon": 50.66794163
+    },
+    {
+      "portid": "port988",
+      "portname": "Port of Sohar",
+      "country": "Oman",
+      "ISO3": "OMN",
+      "lat": 24.51168743,
+      "lon": 56.6127179
+    },
+    {
+      "portid": "port1068",
+      "portname": "Qalhat LNG Terminal",
+      "country": "Oman",
+      "ISO3": "OMN",
+      "lat": 22.65195684,
+      "lon": 59.41585249
+    },
+    {
+      "portid": "port1090",
+      "portname": "Ras Laffan",
+      "country": "Qatar",
+      "ISO3": "QAT",
+      "lat": 25.90850676,
+      "lon": 51.59049926
+    },
+    {
+      "portid": "port1117",
+      "portname": "Al Ruwais",
+      "country": "Qatar",
+      "ISO3": "QAT",
+      "lat": 26.14559103,
+      "lon": 51.20530511
+    },
+    {
+      "portid": "port1342",
+      "portname": "Doha-Umm Said",
+      "country": "Qatar",
+      "ISO3": "QAT",
+      "lat": 24.96358831,
+      "lon": 51.56713164
+    },
+    {
+      "portid": "port745",
+      "portname": "Port Sultan Qaboos",
+      "country": "Oman",
+      "ISO3": "OMN",
+      "lat": 23.62884171,
+      "lon": 58.56595296
+    },
+    {
+      "portid": "port746",
+      "portname": "Salalah",
+      "country": "Oman",
+      "ISO3": "OMN",
+      "lat": 16.94229498,
+      "lon": 54.0083198
+    },
+    {
+      "portid": "port984",
+      "portname": "Duqm",
+      "country": "Oman",
+      "ISO3": "OMN",
+      "lat": 19.67066724,
+      "lon": 57.71736119
+    },
+    {
+      "portid": "port2012",
+      "portname": "Khalifa Bin Salman",
+      "country": "Bahrain",
+      "ISO3": "BHR",
+      "lat": 26.2546428806082,
+      "lon": 50.6789666064565
+    },
+    {
+      "portid": "port2025",
+      "portname": "Khalifa Port",
+      "country": "United Arab Emirates",
+      "ISO3": "ARE",
+      "lat": 24.8063011338021,
+      "lon": 54.6931452546069
+    },
+    {
+      "portid": "port2026",
+      "portname": "Hamad Port",
+      "country": "Qatar",
+      "ISO3": "QAT",
+      "lat": 25.0199084210527,
+      "lon": 51.6189139089543
+    },
+    {
+      "portid": "port2031",
+      "portname": "King Abdullah Port",
+      "country": "Saudi Arabia",
+      "ISO3": "SAU",
+      "lat": 22.5180255857748,
+      "lon": 39.0951887006265
+    },
+    {
+      "portid": "port2060",
+      "portname": "Mina Salman",
+      "country": "Bahrain",
+      "ISO3": "BHR",
+      "lat": 26.1915358163903,
+      "lon": 50.6100103379679
+    },
+    {
+      "portid": "port2067",
+      "portname": "Shuaiba",
+      "country": "Kuwait",
+      "ISO3": "KWT",
+      "lat": 29.0394783129701,
+      "lon": 48.1670519806477
+    },
+    {
+      "portid": "port2074",
+      "portname": "Jazan",
+      "country": "Saudi Arabia",
+      "ISO3": "SAU",
+      "lat": 16.8797436617626,
+      "lon": 42.5430314066133
+    },
+    {
+      "portid": "port2217",
+      "portname": "Ras Al Khafji",
+      "country": "Saudi Arabia",
+      "ISO3": "SAU",
+      "lat": 28.4147323996188,
+      "lon": 48.5244701173789
+    },
+    {
+      "portid": "port2235",
+      "portname": "Zirku Island",
+      "country": "United Arab Emirates",
+      "ISO3": "ARE",
+      "lat": 24.8851758085943,
+      "lon": 53.0746754938844
+    },
+    {
+      "portid": "port2164",
+      "portname": "Kharg Island",
+      "country": "Iran",
+      "ISO3": "IRN",
+      "lat": 29.2430727915583,
+      "lon": 50.335074434646
+    },
+    {
+      "portid": "port2165",
+      "portname": "Lavan",
+      "country": "Iran",
+      "ISO3": "IRN",
+      "lat": 26.7905436961137,
+      "lon": 53.3501575546447
+    },
+    {
+      "portid": "port2218",
+      "portname": "Shuqaiq",
+      "country": "Saudi Arabia",
+      "ISO3": "SAU",
+      "lat": 17.6283957836864,
+      "lon": 42.0779551591398
+    },
+    {
+      "portid": "port2236",
+      "portname": "Jebel Dhanna",
+      "country": "United Arab Emirates",
+      "ISO3": "ARE",
+      "lat": 24.174505328853,
+      "lon": 52.5910418293556
+    },
+    {
+      "portid": "port2237",
+      "portname": "Das Island",
+      "country": "United Arab Emirates",
+      "ISO3": "ARE",
+      "lat": 25.1459398379326,
+      "lon": 52.8754554358407
+    },
+    {
+      "portid": "fso151",
+      "portname": "Oman - Offshore Oil Terminal 1",
+      "country": "Oman",
+      "ISO3": "OMN",
+      "lat": 19.918000000000013,
+      "lon": 58.080000000000005
+    },
+    {
+      "portid": "fso158",
+      "portname": "Saudi Arabia - Offshore Oil Terminal 1",
+      "country": "Saudi Arabia",
+      "ISO3": "SAU",
+      "lat": 28.16699999999999,
+      "lon": 49.916999999999994
+    },
+    {
+      "portid": "port2477",
+      "portname": "Abadan",
+      "country": "Iran",
+      "ISO3": "IRN",
+      "lat": 30.332150759313542,
+      "lon": 48.27775739385089
+    },
+    {
+      "portid": "port2478",
+      "portname": "Bahregan",
+      "country": "Iran",
+      "ISO3": "IRN",
+      "lat": 29.832803889581644,
+      "lon": 50.25193205108165
+    },
+    {
+      "portid": "port2479",
+      "portname": "Basrah Oil Terminal",
+      "country": "Iraq",
+      "ISO3": "IRQ",
+      "lat": 29.681608480330027,
+      "lon": 48.824837389348225
+    },
+    {
+      "portid": "port2486",
+      "portname": "Jask",
+      "country": "Iran",
+      "ISO3": "IRN",
+      "lat": 25.65683066460673,
+      "lon": 57.768566432065185
+    },
+    {
+      "portid": "port2493",
+      "portname": "Mina Al Zour",
+      "country": "Kuwait",
+      "ISO3": "KWT",
+      "lat": 28.709723935656893,
+      "lon": 48.39148159230054
+    }
+  ]
+}

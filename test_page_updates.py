@@ -34,13 +34,20 @@ class PageUpdates(unittest.TestCase):
                 "PORTWATCH_DOWNLOAD_CACHE": str(Path(temp.name) / "portwatch.sqlite3"),
                 "AISSTREAM_API_KEY": "",
             }),
-            patch.object(port_inventory, "enrich", side_effect=lambda rows: rows),
+            patch.object(port_inventory, "enrich", side_effect=self.enrich_fixture),
             patch.object(portwatch, "_query", side_effect=self.query),
             patch.object(ais, "openwaters_snapshot", side_effect=self.openwaters_snapshot),
         ]
         for mocked in self.patches:
             mocked.start()
         self.addCleanup(lambda: [mocked.stop() for mocked in reversed(self.patches)])
+
+    @staticmethod
+    def enrich_fixture(rows):
+        return [dict(row, port_operating_status_label="当前停复运待核",
+                     port_operating_status_as_of="测试观察期",
+                     port_status_basis="测试用未核状态", port_status_evidence_url=None)
+                for row in rows]
 
     def query(self, url, **params):
         self.queries.append((url, params))
@@ -124,6 +131,20 @@ class PageUpdates(unittest.TestCase):
         app.run()
         self.assertFalse(app.exception, [e.message for e in app.exception])
         self.assertEqual(self.openwaters_calls, 1)
+
+    def test_reviewed_assets_render_and_shared_country_search_does_not_duplicate(self):
+        app = self.page()
+        app.multiselect(key="map_layers").set_value(["assets"]).run()
+        for name in ("Al Jumd", "Blocks 3&4", "Shadegan", "Bahrain Field (Awali)"):
+            app.text_input(key="asset_search").set_value(name).run()
+            self.assertFalse(app.exception, [e.message for e in app.exception])
+        app.text_input(key="asset_search").set_value("Khafji").run()
+        app.multiselect(key="asset_countries").set_value(["沙特阿拉伯"]).run()
+        self.assertIn('Khafji', app.get("iframe")[0].proto.srcdoc)
+        app.multiselect(key="asset_countries").set_value(["沙特阿拉伯", "科威特"]).run()
+        import json
+        markers = json.loads(re.search(r'const assets = (.*);', app.get("iframe")[0].proto.srcdoc).group(1))
+        self.assertEqual(len(markers), 1)
 
     def test_map_uses_latest_dates_without_replay_controls(self):
         app = self.page()

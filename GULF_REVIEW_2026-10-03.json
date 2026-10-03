@@ -1,0 +1,1138 @@
+{
+  "review_date": "2026-10-03",
+  "policy": "逐项证据决定；旧年数据不是今日数据；缺失不填零；试井、处理能力、权益量与全田实产分开。",
+  "additions": [
+    {
+      "country": "沙特阿拉伯",
+      "name": "Zumlah",
+      "asset_type": "气田",
+      "asset_level": "field",
+      "source": "公开原始披露复核",
+      "source_url": "https://saudipedia.com/en/oil-and-gas-fields-discovered-in-saudi-arabia-since-2001",
+      "as_of": "2006年发现",
+      "note": "政府具名发现清单确认名称；公告中的井流量不等于全田商业日产量；未取得后续逐田停复产证据。",
+      "state": "discovered",
+      "confidence": "中",
+      "status_basis": "政府具名发现清单确认名称；公告中的井流量不等于全田商业日产量；未取得后续逐田停复产证据。",
+      "status_url": "https://saudipedia.com/en/oil-and-gas-fields-discovered-in-saudi-arabia-since-2001"
+    },
+    {
+      "country": "沙特阿拉伯",
+      "name": "Nujayman",
+      "asset_type": "气田",
+      "asset_level": "field",
+      "source": "公开原始披露复核",
+      "source_url": "https://saudipedia.com/en/oil-and-gas-fields-discovered-in-saudi-arabia-since-2001",
+      "as_of": "2006年发现",
+      "note": "政府具名发现清单确认名称；公告中的井流量不等于全田商业日产量；未取得后续逐田停复产证据。",
+      "state": "discovered",
+      "confidence": "中",
+      "status_basis": "政府具名发现清单确认名称；公告中的井流量不等于全田商业日产量；未取得后续逐田停复产证据。",
+      "status_url": "https://saudipedia.com/en/oil-and-gas-fields-discovered-in-saudi-arabia-since-2001"
+    },
+    {
+      "country": "沙特阿拉伯",
+      "name": "Jaouf",
+      "asset_type": "油田",
+      "asset_level": "field",
+      "source": "公开原始披露复核",
+      "source_url": "https://saudipedia.com/en/oil-and-gas-fields-discovered-in-saudi-arabia-since-2001",
+      "as_of": "2009年发现",
+      "note": "政府具名发现清单确认名称；公告中的井流量不等于全田商业日产量；未取得后续逐田停复产证据。",
+      "state": "discovered",
+      "confidence": "中",
+      "status_basis": "政府具名发现清单确认名称；公告中的井流量不等于全田商业日产量；未取得后续逐田停复产证据。",
+      "status_url": "https://saudipedia.com/en/oil-and-gas-fields-discovered-in-saudi-arabia-since-2001"
+    },
+    {
+      "country": "沙特阿拉伯",
+      "name": "Rumthan",
+      "asset_type": "油田",
+      "asset_level": "field",
+      "source": "公开原始披露复核",
+      "source_url": "https://saudipedia.com/en/oil-and-gas-fields-discovered-in-saudi-arabia-since-2001",
+      "as_of": "2009年发现",
+      "note": "政府具名发现清单确认名称；公告中的井流量不等于全田商业日产量；未取得后续逐田停复产证据。",
+      "state": "discovered",
+      "confidence": "中",
+      "status_basis": "政府具名发现清单确认名称；公告中的井流量不等于全田商业日产量；未取得后续逐田停复产证据。",
+      "status_url": "https://saudipedia.com/en/oil-and-gas-fields-discovered-in-saudi-arabia-since-2001"
+    },
+    {
+      "country": "沙特阿拉伯",
+      "name": "Nayashin",
+      "asset_type": "油田",
+      "asset_level": "field",
+      "source": "公开原始披露复核",
+      "source_url": "https://saudipedia.com/en/oil-and-gas-fields-discovered-in-saudi-arabia-since-2001",
+      "as_of": "2009年发现",
+      "note": "政府具名发现清单确认名称；公告中的井流量不等于全田商业日产量；未取得后续逐田停复产证据。",
+      "state": "discovered",
+      "confidence": "中",
+      "status_basis": "政府具名发现清单确认名称；公告中的井流量不等于全田商业日产量；未取得后续逐田停复产证据。",
+      "status_url": "https://saudipedia.com/en/oil-and-gas-fields-discovered-in-saudi-arabia-since-2001"
+    },
+    {
+      "country": "沙特阿拉伯",
+      "name": "Jareed",
+      "asset_type": "油田",
+      "asset_level": "field",
+      "source": "公开原始披露复核",
+      "source_url": "https://saudipedia.com/en/oil-and-gas-fields-discovered-in-saudi-arabia-since-2001",
+      "as_of": "2009年发现",
+      "note": "政府具名发现清单确认名称；公告中的井流量不等于全田商业日产量；未取得后续逐田停复产证据。",
+      "state": "discovered",
+      "confidence": "中",
+      "status_basis": "政府具名发现清单确认名称；公告中的井流量不等于全田商业日产量；未取得后续逐田停复产证据。",
+      "status_url": "https://saudipedia.com/en/oil-and-gas-fields-discovered-in-saudi-arabia-since-2001"
+    },
+    {
+      "country": "沙特阿拉伯",
+      "name": "Arabiya",
+      "asset_type": "气田",
+      "asset_level": "field",
+      "source": "公开原始披露复核",
+      "source_url": "https://saudipedia.com/en/oil-and-gas-fields-discovered-in-saudi-arabia-since-2001",
+      "as_of": "2009年发现",
+      "note": "政府具名发现清单确认名称；公告中的井流量不等于全田商业日产量；未取得后续逐田停复产证据。",
+      "state": "discovered",
+      "confidence": "中",
+      "status_basis": "政府具名发现清单确认名称；公告中的井流量不等于全田商业日产量；未取得后续逐田停复产证据。",
+      "status_url": "https://saudipedia.com/en/oil-and-gas-fields-discovered-in-saudi-arabia-since-2001"
+    },
+    {
+      "country": "沙特阿拉伯",
+      "name": "Rabib",
+      "asset_type": "气田",
+      "asset_level": "field",
+      "source": "公开原始披露复核",
+      "source_url": "https://saudipedia.com/en/oil-and-gas-fields-discovered-in-saudi-arabia-since-2001",
+      "as_of": "2009年发现",
+      "note": "政府具名发现清单确认名称；公告中的井流量不等于全田商业日产量；未取得后续逐田停复产证据。",
+      "state": "discovered",
+      "confidence": "中",
+      "status_basis": "政府具名发现清单确认名称；公告中的井流量不等于全田商业日产量；未取得后续逐田停复产证据。",
+      "status_url": "https://saudipedia.com/en/oil-and-gas-fields-discovered-in-saudi-arabia-since-2001"
+    },
+    {
+      "country": "沙特阿拉伯",
+      "name": "Al-Saadawi",
+      "asset_type": "油田",
+      "asset_level": "field",
+      "source": "公开原始披露复核",
+      "source_url": "https://saudipedia.com/en/oil-and-gas-fields-discovered-in-saudi-arabia-since-2001",
+      "as_of": "2014年发现",
+      "note": "政府具名发现清单确认名称；公告中的井流量不等于全田商业日产量；未取得后续逐田停复产证据。",
+      "state": "discovered",
+      "confidence": "中",
+      "status_basis": "政府具名发现清单确认名称；公告中的井流量不等于全田商业日产量；未取得后续逐田停复产证据。",
+      "status_url": "https://saudipedia.com/en/oil-and-gas-fields-discovered-in-saudi-arabia-since-2001"
+    },
+    {
+      "country": "沙特阿拉伯",
+      "name": "Al-Naqa",
+      "asset_type": "油田",
+      "asset_level": "field",
+      "source": "公开原始披露复核",
+      "source_url": "https://saudipedia.com/en/oil-and-gas-fields-discovered-in-saudi-arabia-since-2001",
+      "as_of": "2014年发现",
+      "note": "政府具名发现清单确认名称；公告中的井流量不等于全田商业日产量；未取得后续逐田停复产证据。",
+      "state": "discovered",
+      "confidence": "中",
+      "status_basis": "政府具名发现清单确认名称；公告中的井流量不等于全田商业日产量；未取得后续逐田停复产证据。",
+      "status_url": "https://saudipedia.com/en/oil-and-gas-fields-discovered-in-saudi-arabia-since-2001"
+    },
+    {
+      "country": "沙特阿拉伯",
+      "name": "Abu Ali",
+      "asset_type": "气田",
+      "asset_level": "field",
+      "source": "公开原始披露复核",
+      "source_url": "https://saudipedia.com/en/oil-and-gas-fields-discovered-in-saudi-arabia-since-2001",
+      "as_of": "2014年发现",
+      "note": "政府具名发现清单确认名称；公告中的井流量不等于全田商业日产量；未取得后续逐田停复产证据。",
+      "state": "discovered",
+      "confidence": "中",
+      "status_basis": "政府具名发现清单确认名称；公告中的井流量不等于全田商业日产量；未取得后续逐田停复产证据。",
+      "status_url": "https://saudipedia.com/en/oil-and-gas-fields-discovered-in-saudi-arabia-since-2001"
+    },
+    {
+      "country": "沙特阿拉伯",
+      "name": "Faras",
+      "asset_type": "气田",
+      "asset_level": "field",
+      "source": "公开原始披露复核",
+      "source_url": "https://saudipedia.com/en/oil-and-gas-fields-discovered-in-saudi-arabia-since-2001",
+      "as_of": "2014年发现",
+      "note": "政府具名发现清单确认名称；公告中的井流量不等于全田商业日产量；未取得后续逐田停复产证据。",
+      "state": "discovered",
+      "confidence": "中",
+      "status_basis": "政府具名发现清单确认名称；公告中的井流量不等于全田商业日产量；未取得后续逐田停复产证据。",
+      "status_url": "https://saudipedia.com/en/oil-and-gas-fields-discovered-in-saudi-arabia-since-2001"
+    },
+    {
+      "country": "沙特阿拉伯",
+      "name": "Amjad",
+      "asset_type": "气田",
+      "asset_level": "field",
+      "source": "公开原始披露复核",
+      "source_url": "https://saudipedia.com/en/oil-and-gas-fields-discovered-in-saudi-arabia-since-2001",
+      "as_of": "2014年发现",
+      "note": "政府具名发现清单确认名称；公告中的井流量不等于全田商业日产量；未取得后续逐田停复产证据。",
+      "state": "discovered",
+      "confidence": "中",
+      "status_basis": "政府具名发现清单确认名称；公告中的井流量不等于全田商业日产量；未取得后续逐田停复产证据。",
+      "status_url": "https://saudipedia.com/en/oil-and-gas-fields-discovered-in-saudi-arabia-since-2001"
+    },
+    {
+      "country": "沙特阿拉伯",
+      "name": "Al-Badi",
+      "asset_type": "气田",
+      "asset_level": "field",
+      "source": "公开原始披露复核",
+      "source_url": "https://saudipedia.com/en/oil-and-gas-fields-discovered-in-saudi-arabia-since-2001",
+      "as_of": "2014年发现",
+      "note": "政府具名发现清单确认名称；公告中的井流量不等于全田商业日产量；未取得后续逐田停复产证据。",
+      "state": "discovered",
+      "confidence": "中",
+      "status_basis": "政府具名发现清单确认名称；公告中的井流量不等于全田商业日产量；未取得后续逐田停复产证据。",
+      "status_url": "https://saudipedia.com/en/oil-and-gas-fields-discovered-in-saudi-arabia-since-2001"
+    },
+    {
+      "country": "沙特阿拉伯",
+      "name": "Faris",
+      "asset_type": "气田",
+      "asset_level": "field",
+      "source": "公开原始披露复核",
+      "source_url": "https://saudipedia.com/en/oil-and-gas-fields-discovered-in-saudi-arabia-since-2001",
+      "as_of": "2014年发现",
+      "note": "政府具名发现清单确认名称；公告中的井流量不等于全田商业日产量；未取得后续逐田停复产证据。",
+      "state": "discovered",
+      "confidence": "中",
+      "status_basis": "政府具名发现清单确认名称；公告中的井流量不等于全田商业日产量；未取得后续逐田停复产证据。",
+      "status_url": "https://saudipedia.com/en/oil-and-gas-fields-discovered-in-saudi-arabia-since-2001"
+    },
+    {
+      "country": "沙特阿拉伯",
+      "name": "Al-Qadqad",
+      "asset_type": "油气田",
+      "asset_level": "field",
+      "source": "公开原始披露复核",
+      "source_url": "https://saudipedia.com/en/oil-and-gas-fields-discovered-in-saudi-arabia-since-2001",
+      "as_of": "2014年发现",
+      "note": "政府具名发现清单确认名称；公告中的井流量不等于全田商业日产量；未取得后续逐田停复产证据。",
+      "state": "discovered",
+      "confidence": "中",
+      "status_basis": "政府具名发现清单确认名称；公告中的井流量不等于全田商业日产量；未取得后续逐田停复产证据。",
+      "status_url": "https://saudipedia.com/en/oil-and-gas-fields-discovered-in-saudi-arabia-since-2001"
+    },
+    {
+      "country": "沙特阿拉伯",
+      "name": "Faskar",
+      "asset_type": "油田",
+      "asset_level": "field",
+      "source": "公开原始披露复核",
+      "source_url": "https://saudipedia.com/en/oil-and-gas-fields-discovered-in-saudi-arabia-since-2001",
+      "as_of": "2015年发现",
+      "note": "政府具名发现清单确认名称；公告中的井流量不等于全田商业日产量；未取得后续逐田停复产证据。",
+      "state": "discovered",
+      "confidence": "中",
+      "status_basis": "政府具名发现清单确认名称；公告中的井流量不等于全田商业日产量；未取得后续逐田停复产证据。",
+      "status_url": "https://saudipedia.com/en/oil-and-gas-fields-discovered-in-saudi-arabia-since-2001"
+    },
+    {
+      "country": "沙特阿拉伯",
+      "name": "Janab",
+      "asset_type": "油田",
+      "asset_level": "field",
+      "source": "公开原始披露复核",
+      "source_url": "https://saudipedia.com/en/oil-and-gas-fields-discovered-in-saudi-arabia-since-2001",
+      "as_of": "2015年发现",
+      "note": "政府具名发现清单确认名称；公告中的井流量不等于全田商业日产量；未取得后续逐田停复产证据。",
+      "state": "discovered",
+      "confidence": "中",
+      "status_basis": "政府具名发现清单确认名称；公告中的井流量不等于全田商业日产量；未取得后续逐田停复产证据。",
+      "status_url": "https://saudipedia.com/en/oil-and-gas-fields-discovered-in-saudi-arabia-since-2001"
+    },
+    {
+      "country": "沙特阿拉伯",
+      "name": "Maqam",
+      "asset_type": "油田",
+      "asset_level": "field",
+      "source": "公开原始披露复核",
+      "source_url": "https://saudipedia.com/en/oil-and-gas-fields-discovered-in-saudi-arabia-since-2001",
+      "as_of": "2015年发现",
+      "note": "政府具名发现清单确认名称；公告中的井流量不等于全田商业日产量；未取得后续逐田停复产证据。",
+      "state": "discovered",
+      "confidence": "中",
+      "status_basis": "政府具名发现清单确认名称；公告中的井流量不等于全田商业日产量；未取得后续逐田停复产证据。",
+      "status_url": "https://saudipedia.com/en/oil-and-gas-fields-discovered-in-saudi-arabia-since-2001"
+    },
+    {
+      "country": "沙特阿拉伯",
+      "name": "Edmee",
+      "asset_type": "气田",
+      "asset_level": "field",
+      "source": "公开原始披露复核",
+      "source_url": "https://saudipedia.com/en/oil-and-gas-fields-discovered-in-saudi-arabia-since-2001",
+      "as_of": "2015年发现",
+      "note": "政府具名发现清单确认名称；公告中的井流量不等于全田商业日产量；未取得后续逐田停复产证据。",
+      "state": "discovered",
+      "confidence": "中",
+      "status_basis": "政府具名发现清单确认名称；公告中的井流量不等于全田商业日产量；未取得后续逐田停复产证据。",
+      "status_url": "https://saudipedia.com/en/oil-and-gas-fields-discovered-in-saudi-arabia-since-2001"
+    },
+    {
+      "country": "沙特阿拉伯",
+      "name": "Murooj",
+      "asset_type": "气田",
+      "asset_level": "field",
+      "source": "公开原始披露复核",
+      "source_url": "https://saudipedia.com/en/oil-and-gas-fields-discovered-in-saudi-arabia-since-2001",
+      "as_of": "2015年发现",
+      "note": "政府具名发现清单确认名称；公告中的井流量不等于全田商业日产量；未取得后续逐田停复产证据。",
+      "state": "discovered",
+      "confidence": "中",
+      "status_basis": "政府具名发现清单确认名称；公告中的井流量不等于全田商业日产量；未取得后续逐田停复产证据。",
+      "status_url": "https://saudipedia.com/en/oil-and-gas-fields-discovered-in-saudi-arabia-since-2001"
+    },
+    {
+      "country": "沙特阿拉伯",
+      "name": "Abraq at-Tulul",
+      "asset_type": "油田",
+      "asset_level": "field",
+      "source": "公开原始披露复核",
+      "source_url": "https://saudipedia.com/en/oil-and-gas-fields-discovered-in-saudi-arabia-since-2001",
+      "as_of": "2020年发现",
+      "note": "政府具名发现清单确认名称；公告中的井流量不等于全田商业日产量；未取得后续逐田停复产证据。",
+      "state": "discovered",
+      "confidence": "中",
+      "status_basis": "政府具名发现清单确认名称；公告中的井流量不等于全田商业日产量；未取得后续逐田停复产证据。",
+      "status_url": "https://saudipedia.com/en/oil-and-gas-fields-discovered-in-saudi-arabia-since-2001"
+    },
+    {
+      "country": "沙特阿拉伯",
+      "name": "Al-Reesh",
+      "asset_type": "油田",
+      "asset_level": "field",
+      "source": "公开原始披露复核",
+      "source_url": "https://saudipedia.com/en/oil-and-gas-fields-discovered-in-saudi-arabia-since-2001",
+      "as_of": "2020年发现",
+      "note": "政府具名发现清单确认名称；公告中的井流量不等于全田商业日产量；未取得后续逐田停复产证据。",
+      "state": "discovered",
+      "confidence": "中",
+      "status_basis": "政府具名发现清单确认名称；公告中的井流量不等于全田商业日产量；未取得后续逐田停复产证据。",
+      "status_url": "https://saudipedia.com/en/oil-and-gas-fields-discovered-in-saudi-arabia-since-2001"
+    },
+    {
+      "country": "沙特阿拉伯",
+      "name": "Hadabat al-Hajara",
+      "asset_type": "气田",
+      "asset_level": "field",
+      "source": "公开原始披露复核",
+      "source_url": "https://saudipedia.com/en/oil-and-gas-fields-discovered-in-saudi-arabia-since-2001",
+      "as_of": "2020年发现",
+      "note": "政府具名发现清单确认名称；公告中的井流量不等于全田商业日产量；未取得后续逐田停复产证据。",
+      "state": "discovered",
+      "confidence": "中",
+      "status_basis": "政府具名发现清单确认名称；公告中的井流量不等于全田商业日产量；未取得后续逐田停复产证据。",
+      "status_url": "https://saudipedia.com/en/oil-and-gas-fields-discovered-in-saudi-arabia-since-2001"
+    },
+    {
+      "country": "沙特阿拉伯",
+      "name": "Shadoon",
+      "asset_type": "气田",
+      "asset_level": "field",
+      "source": "公开原始披露复核",
+      "source_url": "https://saudipedia.com/en/oil-and-gas-fields-discovered-in-saudi-arabia-since-2001",
+      "as_of": "2022年发现",
+      "note": "政府具名发现清单确认名称；公告中的井流量不等于全田商业日产量；未取得后续逐田停复产证据。",
+      "state": "discovered",
+      "confidence": "中",
+      "status_basis": "政府具名发现清单确认名称；公告中的井流量不等于全田商业日产量；未取得后续逐田停复产证据。",
+      "status_url": "https://saudipedia.com/en/oil-and-gas-fields-discovered-in-saudi-arabia-since-2001"
+    },
+    {
+      "country": "沙特阿拉伯",
+      "name": "Shehab",
+      "asset_type": "气田",
+      "asset_level": "field",
+      "source": "公开原始披露复核",
+      "source_url": "https://saudipedia.com/en/oil-and-gas-fields-discovered-in-saudi-arabia-since-2001",
+      "as_of": "2022年发现",
+      "note": "政府具名发现清单确认名称；公告中的井流量不等于全田商业日产量；未取得后续逐田停复产证据。",
+      "state": "discovered",
+      "confidence": "中",
+      "status_basis": "政府具名发现清单确认名称；公告中的井流量不等于全田商业日产量；未取得后续逐田停复产证据。",
+      "status_url": "https://saudipedia.com/en/oil-and-gas-fields-discovered-in-saudi-arabia-since-2001"
+    },
+    {
+      "country": "沙特阿拉伯",
+      "name": "Al-Shorfa",
+      "asset_type": "气田",
+      "asset_level": "field",
+      "source": "公开原始披露复核",
+      "source_url": "https://saudipedia.com/en/oil-and-gas-fields-discovered-in-saudi-arabia-since-2001",
+      "as_of": "2022年发现",
+      "note": "政府具名发现清单确认名称；公告中的井流量不等于全田商业日产量；未取得后续逐田停复产证据。",
+      "state": "discovered",
+      "confidence": "中",
+      "status_basis": "政府具名发现清单确认名称；公告中的井流量不等于全田商业日产量；未取得后续逐田停复产证据。",
+      "status_url": "https://saudipedia.com/en/oil-and-gas-fields-discovered-in-saudi-arabia-since-2001"
+    },
+    {
+      "country": "沙特阿拉伯",
+      "name": "Umm Khansar",
+      "asset_type": "气田",
+      "asset_level": "field",
+      "source": "公开原始披露复核",
+      "source_url": "https://saudipedia.com/en/oil-and-gas-fields-discovered-in-saudi-arabia-since-2001",
+      "as_of": "2022年发现",
+      "note": "政府具名发现清单确认名称；公告中的井流量不等于全田商业日产量；未取得后续逐田停复产证据。",
+      "state": "discovered",
+      "confidence": "中",
+      "status_basis": "政府具名发现清单确认名称；公告中的井流量不等于全田商业日产量；未取得后续逐田停复产证据。",
+      "status_url": "https://saudipedia.com/en/oil-and-gas-fields-discovered-in-saudi-arabia-since-2001"
+    },
+    {
+      "country": "沙特阿拉伯",
+      "name": "Samna",
+      "asset_type": "气田",
+      "asset_level": "field",
+      "source": "公开原始披露复核",
+      "source_url": "https://saudipedia.com/en/oil-and-gas-fields-discovered-in-saudi-arabia-since-2001",
+      "as_of": "2022年发现",
+      "note": "政府具名发现清单确认名称；公告中的井流量不等于全田商业日产量；未取得后续逐田停复产证据。",
+      "state": "discovered",
+      "confidence": "中",
+      "status_basis": "政府具名发现清单确认名称；公告中的井流量不等于全田商业日产量；未取得后续逐田停复产证据。",
+      "status_url": "https://saudipedia.com/en/oil-and-gas-fields-discovered-in-saudi-arabia-since-2001"
+    },
+    {
+      "country": "沙特阿拉伯",
+      "name": "Awtad",
+      "asset_type": "气田",
+      "asset_level": "field",
+      "source": "公开原始披露复核",
+      "source_url": "https://saudipedia.com/en/oil-and-gas-fields-discovered-in-saudi-arabia-since-2001",
+      "as_of": "2022年发现",
+      "note": "政府具名发现清单确认名称；公告中的井流量不等于全田商业日产量；未取得后续逐田停复产证据。",
+      "state": "discovered",
+      "confidence": "中",
+      "status_basis": "政府具名发现清单确认名称；公告中的井流量不等于全田商业日产量；未取得后续逐田停复产证据。",
+      "status_url": "https://saudipedia.com/en/oil-and-gas-fields-discovered-in-saudi-arabia-since-2001"
+    },
+    {
+      "country": "沙特阿拉伯",
+      "name": "Ad-Dahna",
+      "asset_type": "气田",
+      "asset_level": "field",
+      "source": "公开原始披露复核",
+      "source_url": "https://saudipedia.com/en/oil-and-gas-fields-discovered-in-saudi-arabia-since-2001",
+      "as_of": "2022年发现",
+      "note": "政府具名发现清单确认名称；公告中的井流量不等于全田商业日产量；未取得后续逐田停复产证据。",
+      "state": "discovered",
+      "confidence": "中",
+      "status_basis": "政府具名发现清单确认名称；公告中的井流量不等于全田商业日产量；未取得后续逐田停复产证据。",
+      "status_url": "https://saudipedia.com/en/oil-and-gas-fields-discovered-in-saudi-arabia-since-2001"
+    },
+    {
+      "country": "沙特阿拉伯",
+      "name": "Al-Hiran",
+      "asset_type": "气田",
+      "asset_level": "field",
+      "source": "公开原始披露复核",
+      "source_url": "https://saudipedia.com/en/oil-and-gas-fields-discovered-in-saudi-arabia-since-2001",
+      "as_of": "2023年发现",
+      "note": "政府具名发现清单确认名称；公告中的井流量不等于全田商业日产量；未取得后续逐田停复产证据。",
+      "state": "discovered",
+      "confidence": "中",
+      "status_basis": "政府具名发现清单确认名称；公告中的井流量不等于全田商业日产量；未取得后续逐田停复产证据。",
+      "status_url": "https://saudipedia.com/en/oil-and-gas-fields-discovered-in-saudi-arabia-since-2001"
+    },
+    {
+      "country": "沙特阿拉伯",
+      "name": "Al-Mahakik",
+      "asset_type": "气田",
+      "asset_level": "field",
+      "source": "公开原始披露复核",
+      "source_url": "https://saudipedia.com/en/oil-and-gas-fields-discovered-in-saudi-arabia-since-2001",
+      "as_of": "2023年发现",
+      "note": "政府具名发现清单确认名称；公告中的井流量不等于全田商业日产量；未取得后续逐田停复产证据。",
+      "state": "discovered",
+      "confidence": "中",
+      "status_basis": "政府具名发现清单确认名称；公告中的井流量不等于全田商业日产量；未取得后续逐田停复产证据。",
+      "status_url": "https://saudipedia.com/en/oil-and-gas-fields-discovered-in-saudi-arabia-since-2001"
+    },
+    {
+      "country": "沙特阿拉伯",
+      "name": "Asikra",
+      "asset_type": "气田",
+      "asset_level": "field",
+      "source": "公开原始披露复核",
+      "source_url": "https://saudipedia.com/en/oil-and-gas-fields-discovered-in-saudi-arabia-since-2001",
+      "as_of": "2023—2024年新储层公告涉及既有田",
+      "note": "政府具名发现清单确认名称；公告中的井流量不等于全田商业日产量；未取得后续逐田停复产证据。",
+      "state": "unknown",
+      "confidence": "中",
+      "status_basis": "政府具名发现清单确认名称；公告中的井流量不等于全田商业日产量；未取得后续逐田停复产证据。",
+      "status_url": "https://saudipedia.com/en/oil-and-gas-fields-discovered-in-saudi-arabia-since-2001"
+    },
+    {
+      "country": "沙特阿拉伯",
+      "name": "Al-Wudhaihi",
+      "asset_type": "气田",
+      "asset_level": "field",
+      "source": "公开原始披露复核",
+      "source_url": "https://saudipedia.com/en/oil-and-gas-fields-discovered-in-saudi-arabia-since-2001",
+      "as_of": "2023—2024年新储层公告涉及既有田",
+      "note": "政府具名发现清单确认名称；公告中的井流量不等于全田商业日产量；未取得后续逐田停复产证据。",
+      "state": "unknown",
+      "confidence": "中",
+      "status_basis": "政府具名发现清单确认名称；公告中的井流量不等于全田商业日产量；未取得后续逐田停复产证据。",
+      "status_url": "https://saudipedia.com/en/oil-and-gas-fields-discovered-in-saudi-arabia-since-2001"
+    },
+    {
+      "country": "沙特阿拉伯",
+      "name": "Al-Jahaq",
+      "asset_type": "气田",
+      "asset_level": "field",
+      "source": "公开原始披露复核",
+      "source_url": "https://saudipedia.com/en/oil-and-gas-fields-discovered-in-saudi-arabia-since-2001",
+      "as_of": "2024-07-01发现",
+      "note": "政府具名发现清单确认名称；公告中的井流量不等于全田商业日产量；未取得后续逐田停复产证据。",
+      "state": "discovered",
+      "confidence": "中",
+      "status_basis": "政府具名发现清单确认名称；公告中的井流量不等于全田商业日产量；未取得后续逐田停复产证据。",
+      "status_url": "https://saudipedia.com/en/oil-and-gas-fields-discovered-in-saudi-arabia-since-2001"
+    },
+    {
+      "country": "沙特阿拉伯",
+      "name": "Al-Katuf",
+      "asset_type": "气田",
+      "asset_level": "field",
+      "source": "公开原始披露复核",
+      "source_url": "https://saudipedia.com/en/oil-and-gas-fields-discovered-in-saudi-arabia-since-2001",
+      "as_of": "2024-07-01发现",
+      "note": "政府具名发现清单确认名称；公告中的井流量不等于全田商业日产量；未取得后续逐田停复产证据。",
+      "state": "discovered",
+      "confidence": "中",
+      "status_basis": "政府具名发现清单确认名称；公告中的井流量不等于全田商业日产量；未取得后续逐田停复产证据。",
+      "status_url": "https://saudipedia.com/en/oil-and-gas-fields-discovered-in-saudi-arabia-since-2001"
+    },
+    {
+      "country": "沙特阿拉伯",
+      "name": "Ghizlan",
+      "asset_type": "气田",
+      "asset_level": "field",
+      "source": "公开原始披露复核",
+      "source_url": "https://www.uqn.gov.sa/details?p=27105",
+      "as_of": "2025-04-09",
+      "note": "政府公告具名الغزلان；前两田为新发现，Mihwaz/Marzuq是新储层所属既有田；不将储层或井测试当作整田实产。",
+      "state": "discovered",
+      "confidence": "中",
+      "status_basis": "政府公告具名الغزلان；前两田为新发现，Mihwaz/Marzuq是新储层所属既有田；不将储层或井测试当作整田实产。",
+      "status_url": "https://www.uqn.gov.sa/details?p=27105",
+      "name_cn": "الغزلان"
+    },
+    {
+      "country": "沙特阿拉伯",
+      "name": "Araam",
+      "asset_type": "气田",
+      "asset_level": "field",
+      "source": "公开原始披露复核",
+      "source_url": "https://www.uqn.gov.sa/details?p=27105",
+      "as_of": "2025-04-09",
+      "note": "政府公告具名آرام；前两田为新发现，Mihwaz/Marzuq是新储层所属既有田；不将储层或井测试当作整田实产。",
+      "state": "discovered",
+      "confidence": "中",
+      "status_basis": "政府公告具名آرام；前两田为新发现，Mihwaz/Marzuq是新储层所属既有田；不将储层或井测试当作整田实产。",
+      "status_url": "https://www.uqn.gov.sa/details?p=27105",
+      "name_cn": "آرام"
+    },
+    {
+      "country": "沙特阿拉伯",
+      "name": "Mihwaz",
+      "asset_type": "气田",
+      "asset_level": "field",
+      "source": "公开原始披露复核",
+      "source_url": "https://www.uqn.gov.sa/details?p=27105",
+      "as_of": "2025-04-09",
+      "note": "政府公告具名المحواز；前两田为新发现，Mihwaz/Marzuq是新储层所属既有田；不将储层或井测试当作整田实产。",
+      "state": "unknown",
+      "confidence": "中",
+      "status_basis": "政府公告具名المحواز；前两田为新发现，Mihwaz/Marzuq是新储层所属既有田；不将储层或井测试当作整田实产。",
+      "status_url": "https://www.uqn.gov.sa/details?p=27105",
+      "name_cn": "المحواز"
+    },
+    {
+      "country": "沙特阿拉伯",
+      "name": "Marzuq",
+      "asset_type": "气田",
+      "asset_level": "field",
+      "source": "公开原始披露复核",
+      "source_url": "https://www.uqn.gov.sa/details?p=27105",
+      "as_of": "2025-04-09",
+      "note": "政府公告具名مرزوق；前两田为新发现，Mihwaz/Marzuq是新储层所属既有田；不将储层或井测试当作整田实产。",
+      "state": "unknown",
+      "confidence": "中",
+      "status_basis": "政府公告具名مرزوق；前两田为新发现，Mihwaz/Marzuq是新储层所属既有田；不将储层或井测试当作整田实产。",
+      "status_url": "https://www.uqn.gov.sa/details?p=27105",
+      "name_cn": "مرزوق"
+    },
+    {
+      "country": "阿曼",
+      "name": "Saiwan East",
+      "asset_type": "油田",
+      "asset_level": "field",
+      "source": "公开原始披露复核",
+      "source_url": "https://www.tethysoil.com/en/oman-blocks-34/",
+      "as_of": "运营商网页未标发布日；正文主要回顾2019年",
+      "note": "运营商明确描述该田生产；网页主要采用历史资料，不能证明2026年当日运行。Samha与Sahma不同；区块/设施合计不分配单田。",
+      "state": "historical_unverified",
+      "confidence": "低",
+      "status_basis": "运营商明确描述该田生产；网页主要采用历史资料，不能证明2026年当日运行。Samha与Sahma不同；区块/设施合计不分配单田。",
+      "status_url": "https://www.tethysoil.com/en/oman-blocks-34/"
+    },
+    {
+      "country": "阿曼",
+      "name": "Shahd",
+      "asset_type": "油田",
+      "asset_level": "field",
+      "source": "公开原始披露复核",
+      "source_url": "https://www.tethysoil.com/en/oman-blocks-34/",
+      "as_of": "运营商网页未标发布日；正文主要回顾2019年",
+      "note": "运营商明确描述该田生产；网页主要采用历史资料，不能证明2026年当日运行。Samha与Sahma不同；区块/设施合计不分配单田。",
+      "state": "historical_unverified",
+      "confidence": "低",
+      "status_basis": "运营商明确描述该田生产；网页主要采用历史资料，不能证明2026年当日运行。Samha与Sahma不同；区块/设施合计不分配单田。",
+      "status_url": "https://www.tethysoil.com/en/oman-blocks-34/"
+    },
+    {
+      "country": "阿曼",
+      "name": "Samha",
+      "asset_type": "油田",
+      "asset_level": "field",
+      "source": "公开原始披露复核",
+      "source_url": "https://www.tethysoil.com/en/oman-blocks-34/",
+      "as_of": "运营商网页未标发布日；正文主要回顾2019年",
+      "note": "运营商明确描述该田生产；网页主要采用历史资料，不能证明2026年当日运行。Samha与Sahma不同；区块/设施合计不分配单田。",
+      "state": "historical_unverified",
+      "confidence": "低",
+      "status_basis": "运营商明确描述该田生产；网页主要采用历史资料，不能证明2026年当日运行。Samha与Sahma不同；区块/设施合计不分配单田。",
+      "status_url": "https://www.tethysoil.com/en/oman-blocks-34/"
+    },
+    {
+      "country": "阿曼",
+      "name": "Erfan",
+      "asset_type": "油田",
+      "asset_level": "field",
+      "source": "公开原始披露复核",
+      "source_url": "https://www.tethysoil.com/en/oman-blocks-34/",
+      "as_of": "运营商网页未标发布日；正文主要回顾2019年",
+      "note": "运营商明确描述该田生产；网页主要采用历史资料，不能证明2026年当日运行。Samha与Sahma不同；区块/设施合计不分配单田。",
+      "state": "historical_unverified",
+      "confidence": "低",
+      "status_basis": "运营商明确描述该田生产；网页主要采用历史资料，不能证明2026年当日运行。Samha与Sahma不同；区块/设施合计不分配单田。",
+      "status_url": "https://www.tethysoil.com/en/oman-blocks-34/"
+    },
+    {
+      "country": "阿曼",
+      "name": "Farha North-West",
+      "asset_type": "油田",
+      "asset_level": "field",
+      "source": "公开原始披露复核",
+      "source_url": "https://www.tethysoil.com/en/wp-content/uploads/sites/2/2025/04/tethys-oil-ab-publ-annual-report-2024-250408.pdf",
+      "as_of": "2024年；2025-04-08年报",
+      "note": "年报第58页确认名称：前两田是2024年发现；Tibyan列为或有资源田。未取得本层级商业日产量或最新停复产披露。",
+      "state": "discovered",
+      "confidence": "中",
+      "status_basis": "年报第58页确认名称：前两田是2024年发现；Tibyan列为或有资源田。未取得本层级商业日产量或最新停复产披露。",
+      "status_url": "https://www.tethysoil.com/en/wp-content/uploads/sites/2/2025/04/tethys-oil-ab-publ-annual-report-2024-250408.pdf"
+    },
+    {
+      "country": "阿曼",
+      "name": "Farha East",
+      "asset_type": "油田",
+      "asset_level": "field",
+      "source": "公开原始披露复核",
+      "source_url": "https://www.tethysoil.com/en/wp-content/uploads/sites/2/2025/04/tethys-oil-ab-publ-annual-report-2024-250408.pdf",
+      "as_of": "2024年；2025-04-08年报",
+      "note": "年报第58页确认名称：前两田是2024年发现；Tibyan列为或有资源田。未取得本层级商业日产量或最新停复产披露。",
+      "state": "discovered",
+      "confidence": "中",
+      "status_basis": "年报第58页确认名称：前两田是2024年发现；Tibyan列为或有资源田。未取得本层级商业日产量或最新停复产披露。",
+      "status_url": "https://www.tethysoil.com/en/wp-content/uploads/sites/2/2025/04/tethys-oil-ab-publ-annual-report-2024-250408.pdf"
+    },
+    {
+      "country": "阿曼",
+      "name": "Tibyan",
+      "asset_type": "油田",
+      "asset_level": "field",
+      "source": "公开原始披露复核",
+      "source_url": "https://www.tethysoil.com/en/wp-content/uploads/sites/2/2025/04/tethys-oil-ab-publ-annual-report-2024-250408.pdf",
+      "as_of": "2024年；2025-04-08年报",
+      "note": "年报第58页确认名称：前两田是2024年发现；Tibyan列为或有资源田。未取得本层级商业日产量或最新停复产披露。",
+      "state": "discovered",
+      "confidence": "中",
+      "status_basis": "年报第58页确认名称：前两田是2024年发现；Tibyan列为或有资源田。未取得本层级商业日产量或最新停复产披露。",
+      "status_url": "https://www.tethysoil.com/en/wp-content/uploads/sites/2/2025/04/tethys-oil-ab-publ-annual-report-2024-250408.pdf"
+    },
+    {
+      "country": "阿曼",
+      "name": "Al Jumd",
+      "asset_type": "油田",
+      "asset_level": "field",
+      "source": "公开原始披露复核",
+      "source_url": "https://www.tethysoil.com/en/?p=12211",
+      "as_of": "2024-11-25 FDP批准",
+      "note": "2024年Block 56开发方案获批；母公司2026-07-07公告确认Al Jumd已于2026年4月投产，未披露本田商业日产量；试井流量不冒充持续日产量。",
+      "state": "development",
+      "confidence": "中",
+      "status_basis": "三田纳入Block 56获批开发方案；计划年份不证明执行，试井流量不填商业日产量。",
+      "status_url": "https://www.tethysoil.com/en/?p=12211"
+    },
+    {
+      "country": "阿曼",
+      "name": "Menna",
+      "asset_type": "油田",
+      "asset_level": "field",
+      "source": "公开原始披露复核",
+      "source_url": "https://www.tethysoil.com/en/?p=12211",
+      "as_of": "2024-11-25 FDP批准",
+      "note": "三田纳入Block 56获批开发方案；计划年份不证明执行，试井流量不填商业日产量。",
+      "state": "development",
+      "confidence": "中",
+      "status_basis": "三田纳入Block 56获批开发方案；计划年份不证明执行，试井流量不填商业日产量。",
+      "status_url": "https://www.tethysoil.com/en/?p=12211"
+    },
+    {
+      "country": "阿曼",
+      "name": "Sarha",
+      "asset_type": "油田",
+      "asset_level": "field",
+      "source": "公开原始披露复核",
+      "source_url": "https://www.tethysoil.com/en/?p=12211",
+      "as_of": "2024-11-25 FDP批准",
+      "note": "三田纳入Block 56获批开发方案；计划年份不证明执行，试井流量不填商业日产量。",
+      "state": "development",
+      "confidence": "中",
+      "status_basis": "三田纳入Block 56获批开发方案；计划年份不证明执行，试井流量不填商业日产量。",
+      "status_url": "https://www.tethysoil.com/en/?p=12211"
+    },
+    {
+      "country": "阿曼",
+      "name": "Blocks 3&4",
+      "asset_type": "油田区块",
+      "asset_level": "block",
+      "source": "公开原始披露复核",
+      "source_url": "https://www.hnmining.com/en/news_show.php?id=819",
+      "as_of": "2025年权益产量；2026-07-07披露",
+      "note": "两个区块组合层级；2025年Tethys权益日产量7,600桶，非全区块毛产量，不拆给单田。",
+      "state": "producing",
+      "confidence": "高",
+      "status_basis": "两个区块组合层级；2025年Tethys权益日产量7,600桶，非全区块毛产量，不拆给单田。",
+      "status_url": "https://www.hnmining.com/en/news_show.php?id=819"
+    },
+    {
+      "country": "阿曼",
+      "name": "Block 56",
+      "asset_type": "油田区块",
+      "asset_level": "block",
+      "source": "公开原始披露复核",
+      "source_url": "https://www.hnmining.com/en/news_show.php?id=819",
+      "as_of": "2026-07-07公告；商业首产2026-04",
+      "note": "母公司确认Al Jumd投产后Block 56进入商业生产；不据此认定Menna与Sarha已投产。",
+      "state": "producing",
+      "confidence": "高",
+      "status_basis": "母公司确认Al Jumd投产后Block 56进入商业生产；不据此认定Menna与Sarha已投产。",
+      "status_url": "https://www.hnmining.com/en/news_show.php?id=819"
+    },
+    {
+      "country": "科威特",
+      "name": "South Fuwaris",
+      "asset_type": "油田",
+      "asset_level": "field",
+      "source": "公开原始披露复核",
+      "source_url": "https://chevroncorp.gcs-web.com/news-releases/news-release-details/kingdom-saudi-arabia-and-chevron-extend-pnz-operating-agreement",
+      "as_of": "2008-09-23公告",
+      "note": "Chevron原始公告列为分区共同作业生产田；历史公告不能证明当前逐田停复产；无单田日产量。",
+      "state": "historical_unverified",
+      "confidence": "低",
+      "status_basis": "Chevron原始公告列为分区共同作业生产田；历史公告不能证明当前逐田停复产；无单田日产量。",
+      "status_url": "https://chevroncorp.gcs-web.com/news-releases/news-release-details/kingdom-saudi-arabia-and-chevron-extend-pnz-operating-agreement"
+    },
+    {
+      "country": "科威特",
+      "name": "Hout",
+      "name_cn": "胡特油田",
+      "asset_type": "油田",
+      "asset_level": "field",
+      "source": "Toyo Engineering 2018-07-02原始新闻稿（媒体PDF镜像）",
+      "source_url": "https://www.chem-t.com/fax/images/tmp_file2_1530497762.pdf",
+      "as_of": "2018-07-02历史名称/开发证据",
+      "note": "Toyo原始公告确认Khafji与Hout两个田及KJO沙特/科威特合营；350千桶/日是两田历史联合上限，未均分到单田。未取得当前Hout独立日产量及停复产公告。",
+      "state": "historical_unverified",
+      "confidence": "中",
+      "status_basis": "原始新闻稿确认独立田名和KJO联合运营；历史停产及计划复产不证明2026现况。",
+      "status_url": "https://www.chem-t.com/fax/images/tmp_file2_1530497762.pdf"
+    }
+  ],
+  "measurements": [
+    {
+      "country": "阿曼",
+      "name": "Blocks 3&4",
+      "value": "7.6",
+      "unit": "千桶/日",
+      "metric_type": "actual_output",
+      "data_date": "2025年权益日量（公告未定义是否全年均值）",
+      "source": "公开原始披露复核",
+      "source_url": "https://www.hnmining.com/en/news_show.php?id=819",
+      "note": "2026-07-07母公司公告：2025年Tethys权益日产量7,600桶；不外推当前，不换算毛产量，不分配单田。",
+      "numeric_audit": "已阅读原始段落/表格，保留商品、期间及资产/权益范围",
+      "ownership_basis": "Tethys权益产量；非全资产毛口径"
+    },
+    {
+      "country": "巴林",
+      "name": "Bahrain Field (Awali)",
+      "value": "38.378",
+      "unit": "千桶/日",
+      "metric_type": "actual_output",
+      "data_date": "2024全年平均",
+      "source": "公开原始披露复核",
+      "source_url": "https://www.rns-pdf.londonstockexchange.com/rns/7260H_2-2025-5-7.pdf",
+      "note": "巴林政府2025年发行文件印刷第60页：2024年Awali平均原油日产量38,378桶；不是炼厂产量，也不是2021年含凝析油40,130桶。",
+      "numeric_audit": "已阅读原始段落/表格，保留商品、期间及资产/权益范围"
+    },
+    {
+      "country": "沙特阿拉伯",
+      "name": "South Ghawar",
+      "value": "300",
+      "unit": "百万标准立方英尺/日",
+      "metric_type": "actual_output",
+      "data_date": "2023年末初期投产",
+      "source": "公开原始披露复核",
+      "source_url": "https://www.aramco.com/en/what-we-do/operations/unconventional-resources",
+      "note": "阿美官网明确称2023年末以300百万标准立方英尺/日开始生产；不是2026当前流量，未来750能力不填。",
+      "numeric_audit": "已阅读原始段落/表格，保留商品、期间及资产/权益范围"
+    },
+    {
+      "country": "沙特阿拉伯",
+      "name": "North Arabia",
+      "value": ">200",
+      "unit": "百万标准立方英尺/日",
+      "metric_type": "actual_output",
+      "data_date": "运营商网页未注明供气数值基准日（2018年投产）",
+      "source": "公开原始披露复核",
+      "source_url": "https://www.aramco.com/en/what-we-do/operations/unconventional-resources",
+      "note": "阿美官网明确为供应天然气超过200百万标准立方英尺/日；保留大于号，不作为2026观察值。",
+      "numeric_audit": "已阅读原始段落/表格，保留商品、期间及资产/权益范围"
+    }
+  ],
+  "statuses": [
+    {
+      "country": "阿曼",
+      "name": "Al Jumd",
+      "state": "producing",
+      "as_of": "2026-07-07公告；首产2026-04",
+      "confidence": "高",
+      "status_basis": "母公司明确称Al Jumd于2026年4月投产；没有披露商业日产量。",
+      "status_url": "https://www.hnmining.com/en/news_show.php?id=819"
+    },
+    {
+      "country": "巴林",
+      "name": "Bahrain Field (Awali)",
+      "state": "producing",
+      "as_of": "2024参考年；2025-05发行文件",
+      "confidence": "高",
+      "status_basis": "政府披露2024全年原油平均产量及钻井作业；不能解释为2026实时状态。",
+      "status_url": "https://www.rns-pdf.londonstockexchange.com/rns/7260H_2-2025-5-7.pdf"
+    },
+    {
+      "country": "沙特阿拉伯",
+      "name": "South Ghawar",
+      "state": "producing",
+      "as_of": "2023年末首产；官网未标更新日",
+      "confidence": "中",
+      "status_basis": "阿美明确披露首产与天然气日量；不凭GEM目录推断今日状态。",
+      "status_url": "https://www.aramco.com/en/what-we-do/operations/unconventional-resources"
+    },
+    {
+      "country": "沙特阿拉伯",
+      "name": "North Arabia",
+      "state": "producing",
+      "as_of": "2018年投产；官网未标更新日",
+      "confidence": "中",
+      "status_basis": "阿美明确描述供应天然气；网页无当前观测期。",
+      "status_url": "https://www.aramco.com/en/what-we-do/operations/unconventional-resources"
+    },
+    {
+      "country": "沙特阿拉伯",
+      "name": "Dammam",
+      "state": "producing",
+      "as_of": "2025参考年；2026年报",
+      "confidence": "高",
+      "status_basis": "阿美2025年报确认第一阶段上线；25千桶/日是新增产能，不是整个田的实际产量。",
+      "status_url": "https://www.aramco.com/-/media/publications/corporate-reports/reports-and-presentations/2025/fy/saudi-aramco-ara-2025-english.pdf"
+    },
+    {
+      "country": "科威特",
+      "name": "Mutriba",
+      "state": "producing",
+      "as_of": "2025-09-18公告；商业首产2025-06-15",
+      "confidence": "高",
+      "status_basis": "KOC原始公告确认商业首产为6月15日，9月18日是庆典；未披露当前逐田日产量，90千桶/日是后续开发目标。",
+      "status_url": "https://www.kockw.com/sites/EN/EMagazine/Pages/Events/1032.aspx"
+    }
+  ],
+  "parents": [
+    {
+      "country": "阿曼",
+      "name": "Farha South",
+      "parent": "Blocks 3&4"
+    },
+    {
+      "country": "阿曼",
+      "name": "Ulfa",
+      "parent": "Blocks 3&4"
+    },
+    {
+      "country": "阿曼",
+      "name": "Samha",
+      "parent": "Blocks 3&4"
+    },
+    {
+      "country": "阿曼",
+      "name": "Saiwan East",
+      "parent": "Blocks 3&4"
+    },
+    {
+      "country": "阿曼",
+      "name": "Shahd",
+      "parent": "Blocks 3&4"
+    },
+    {
+      "country": "阿曼",
+      "name": "Erfan",
+      "parent": "Blocks 3&4"
+    },
+    {
+      "country": "阿曼",
+      "name": "Farha North-West",
+      "parent": "Blocks 3&4"
+    },
+    {
+      "country": "阿曼",
+      "name": "Farha East",
+      "parent": "Blocks 3&4"
+    },
+    {
+      "country": "阿曼",
+      "name": "Tibyan",
+      "parent": "Blocks 3&4"
+    },
+    {
+      "country": "阿曼",
+      "name": "Al Jumd",
+      "parent": "Block 56"
+    },
+    {
+      "country": "阿曼",
+      "name": "Menna",
+      "parent": "Block 56"
+    },
+    {
+      "country": "阿曼",
+      "name": "Sarha",
+      "parent": "Block 56"
+    }
+  ],
+  "additional_measurements": [
+    {
+      "country": "阿曼",
+      "name": "Blocks 3&4",
+      "value": "7.889",
+      "unit": "千桶/日",
+      "metric_type": "actual_output",
+      "commodity": "crude_oil",
+      "data_date": "2024全年平均",
+      "basis": "Tethys 2024年报第3、57—58页；30%工作权益、政府分成前，非全区块毛量",
+      "source_url": "https://www.tethysoil.com/en/wp-content/uploads/sites/2/2025/04/tethys-oil-ab-publ-annual-report-2024-250408.pdf"
+    },
+    {
+      "country": "巴林",
+      "name": "Abu Safah",
+      "value": "195.814",
+      "unit": "千桶/日",
+      "metric_type": "actual_output",
+      "commodity": "crude_oil",
+      "data_date": "2024年巴林获分配份额",
+      "basis": "巴林政府发行文件印刷第62页的巴林份额，不是全田毛产量或按50%权益推算；政府原文说明历史分配可超过50%权利份额",
+      "source_url": "https://www.rns-pdf.londonstockexchange.com/rns/7260H_2-2025-5-7.pdf"
+    },
+    {
+      "country": "伊朗",
+      "name": "Shadegan",
+      "value": ">115",
+      "unit": "千桶/日",
+      "metric_type": "production_acceptance_test",
+      "commodity": "crude_oil",
+      "data_date": "2026-09-10至2026-09-28验收试验；2026-09-30报道",
+      "basis": "IRIB政府广播新闻转引NISOC总经理对SHANA的陈述；开发生产目标验收试验已达水平，非全年日均、非后续持续生产或当前观测。保留大于号；未取得SHANA原始报道。",
+      "source_url": "https://www.irib-news.ir/fa/news/5926271/افزایش-۱۷-هزار-بشکه‌ای-تولید-نفت-در-مناطق-نفت‌خیز-جنوب"
+    }
+  ],
+  "shared_countries": [
+    {
+      "name": "Wafra",
+      "country": "科威特",
+      "countries": [
+        "科威特",
+        "沙特阿拉伯"
+      ],
+      "evidence_url": "https://chevroncorp.gcs-web.com/news-releases/news-release-details/kingdom-saudi-arabia-and-chevron-extend-pnz-operating-agreement"
+    },
+    {
+      "name": "South Umm-Gudair",
+      "country": "科威特",
+      "countries": [
+        "科威特",
+        "沙特阿拉伯"
+      ],
+      "evidence_url": "https://chevroncorp.gcs-web.com/news-releases/news-release-details/kingdom-saudi-arabia-and-chevron-extend-pnz-operating-agreement"
+    },
+    {
+      "name": "Humma",
+      "country": "科威特",
+      "countries": [
+        "科威特",
+        "沙特阿拉伯"
+      ],
+      "evidence_url": "https://chevroncorp.gcs-web.com/news-releases/news-release-details/kingdom-saudi-arabia-and-chevron-extend-pnz-operating-agreement"
+    },
+    {
+      "name": "South Fuwaris",
+      "country": "科威特",
+      "countries": [
+        "科威特",
+        "沙特阿拉伯"
+      ],
+      "evidence_url": "https://chevroncorp.gcs-web.com/news-releases/news-release-details/kingdom-saudi-arabia-and-chevron-extend-pnz-operating-agreement"
+    },
+    {
+      "name": "Abu Safah",
+      "country": "巴林",
+      "countries": [
+        "巴林",
+        "沙特阿拉伯"
+      ],
+      "evidence_url": "https://www.rns-pdf.londonstockexchange.com/rns/7260H_2-2025-5-7.pdf"
+    },
+    {
+      "name": "Bunduq",
+      "country": "阿联酋",
+      "countries": [
+        "阿联酋",
+        "卡塔尔"
+      ],
+      "evidence_url": "https://www.qatarenergy.qa/en/MediaCenter/Publications/QatarEnergy_Investors_Presentation_November_2025.pdf"
+    },
+    {
+      "country": "科威特",
+      "name": "Hout",
+      "countries": [
+        "科威特",
+        "沙特阿拉伯"
+      ],
+      "evidence_url": "https://www.chem-t.com/fax/images/tmp_file2_1530497762.pdf"
+    },
+    {
+      "country": "科威特",
+      "name": "Khafji",
+      "countries": [
+        "科威特",
+        "沙特阿拉伯"
+      ],
+      "evidence_url": "https://www.chem-t.com/fax/images/tmp_file2_1530497762.pdf"
+    }
+  ],
+  "rechecked": [
+    {
+      "country": "伊拉克",
+      "names": [
+        "Atrush",
+        "Sarsang",
+        "Swara Tika",
+        "East Swara Tika"
+      ],
+      "url": "https://shamaran.mediaroom.com/2026-08-05-ShaMaran-Reports-Second-Quarter-2026-Results",
+      "decision": "保留8月5日公告的7月20日起暂停；未找到已实施复产披露，不把复产计划视作执行"
+    },
+    {
+      "country": "伊拉克",
+      "names": [
+        "Tawke",
+        "Peshkabir"
+      ],
+      "url": "https://www.dno.no/media/ezuglbal/q2-2026-interim-results-report.pdf",
+      "decision": "Q2历史平均BOE数值保留；6月28日和7月11日重启证据，不把Q2零量当作当前停产"
+    },
+    {
+      "country": "伊拉克",
+      "names": [
+        "Rumaila"
+      ],
+      "url": "https://rumaila.iq/english/about-us/history-2/",
+      "decision": "运营商明确2025全年日均1.37百万桶，保留1370千桶/日"
+    },
+    {
+      "country": "卡塔尔",
+      "names": [
+        "Al Shaheen",
+        "Dukhan",
+        "Maydan Mahzam",
+        "Bul Hanine",
+        "Idd El-Sharqi",
+        "Al-Rayyan",
+        "Al-Khaleej"
+      ],
+      "url": "https://www.qatarenergy.qa/en/MediaCenter/Publications/QatarEnergy_Investors_Presentation_November_2025.pdf",
+      "decision": "第12页2024油/气均值复核；未把2025文件发布日期当产量年"
+    },
+    {
+      "country": "阿曼",
+      "names": [
+        "Yumna"
+      ],
+      "url": "https://www.masirahoil.om/post/production-update-march-2026",
+      "decision": "保留3月742桶/日及31天生产期；未找到更晚实际产量，不推算后续"
+    },
+    {
+      "country": "科威特",
+      "names": [
+        "South Ratqa",
+        "Umm Niqa"
+      ],
+      "url": "https://www.kockw.com/sites/EN/Annual%20Reports/2024-2025%20English.pdf",
+      "decision": "95千桶/日为KOC重油组合口径，不全部分配South Ratqa单田；两田仍留空"
+    }
+  ],
+  "pending": [
+    {
+      "country": "伊朗",
+      "name": "Shadegan",
+      "issue": "IRIB政府广播2026-09-30转引SHANA报道>115千桶/日，为2026-09-10至09-28开发生产目标验收结果，已单列测试指标；未取得原始SHANA文章及持续生产观察，不改主指标或当前状态。",
+      "candidate_url": "https://www.irib-news.ir/fa/news/5926271/افزایش-۱۷-هزار-بشکه‌ای-تولید-نفت-در-مناطق-نفت‌خیز-جنوب"
+    },
+    {
+      "country": "科威特 / 沙特阿拉伯",
+      "name": "Humma / Homah / Arq",
+      "issue": "Humma与Homah名称对应、Arq边界及归属需运营商原文核对；不按相似拼写合并，不按油井名增加油田。"
+    },
+    {
+      "country": "伊朗",
+      "name": "Balal / Belal; Sarkhun / Sarkhan; Paydar / East Paydar",
+      "issue": "存在音译与范围线索，未取得明确一对一对应，不擅自归并或重复增加。"
+    }
+  ]
+}

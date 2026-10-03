@@ -15,6 +15,7 @@ import portwatch
 import port_inventory
 import reconciled_assets
 import continuation_assets
+import gulf_review
 from audited_measurements import daily_thousand_barrels
 
 
@@ -28,8 +29,14 @@ class CatalogIntegrity(unittest.TestCase):
                     self.assertIn((key[0], target), index)
             elif row["catalog_name_confirmed"]:
                 asset = index[key]
-                self.assertIsNone(asset["value"])
-                if key in continuation_assets.REVISED:
+                if key in gulf_review.MEASURED:
+                    self.assertEqual(asset["data_audit_date"], gulf_review.REVIEW_DATE)
+                    self.assertNotEqual(asset["source_url"], row["url"])
+                else:
+                    self.assertIsNone(asset["value"])
+                if key in gulf_review.STATUS_REVIEWED:
+                    self.assertEqual(asset["operating_status"], "producing")
+                elif key in continuation_assets.REVISED:
                     self.assertEqual(asset["operating_status"], "planned")
                     self.assertEqual(asset["asset_level"], "project")
                 else:
@@ -199,6 +206,8 @@ class PortWindowIntegrity(unittest.TestCase):
         return output
 
     def calculate(self, rows, ids=("port1",)):
+        # The same IDs/window intentionally exercise different source records.
+        portwatch._activity_rows.clear()
         with patch.object(portwatch, "_query", return_value={"features": rows}):
             return portwatch.rolling_activity.__wrapped__(self.end, ids, 7)
 

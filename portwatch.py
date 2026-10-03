@@ -22,7 +22,7 @@ CHOKEPOINTS = f"{ROOT}/PortWatch_chokepoints_database/FeatureServer/0/query"
 CHOKEPOINT_DAILY = f"{ROOT}/Daily_Chokepoints_Data/FeatureServer/0/query"
 SPILLOVERS = f"{ROOT}/spillovers_port_level_impact/FeatureServer/0/query"
 SOURCE = "https://portwatch.imf.org/pages/data-and-methodology"
-MODULE_VERSION = 5
+MODULE_VERSION = 6
 
 SHIP_TYPES = ("container", "dry_bulk", "general_cargo", "roro", "tanker")
 FOCUS_CHOKEPOINT_IDS = ("chokepoint1", "chokepoint4", "chokepoint6")
@@ -113,13 +113,35 @@ def region_for(lat: float, lon: float) -> str | None:
     return None
 
 
+GULF_COUNTRIES = ("Bahrain", "Iran", "Iraq", "Kuwait", "Oman", "Qatar",
+                  "Saudi Arabia", "United Arab Emirates")
+# Extra coastlines apply to the eight producers; AIS watch boxes stay separate.
+GULF_PORT_REGIONS = {
+    "红海沿岸": (15.4, 30.0, 32.0, 44.0),
+    "阿拉伯海": (15.0, 22.0, 50.0, 62.0),
+    "里海": (35.0, 39.0, 48.0, 56.0),
+}
+
+
+def port_region_for(lat: float, lon: float) -> str | None:
+    region = region_for(lat, lon)
+    if region:
+        return region
+    for name, (south, north, west, east) in GULF_PORT_REGIONS.items():
+        if south <= lat <= north and west <= lon <= east:
+            return name
+    return None
+
+
 @st.cache_data(ttl=24 * 3600, show_spinner=False)
 def port_catalog() -> list[dict]:
-    # Query only the union of the documented geographic boxes. ArcGIS pages results.
+    # Retain the five waters and all ports of the Gulf producers.
     where = " OR ".join(
         f"(lat >= {south} AND lat <= {north} AND lon >= {west} AND lon <= {east})"
         for south, north, west, east in REGIONS.values()
     )
+    where = "(" + where + ") OR country IN (" + ",".join(
+        f"'{country}'" for country in GULF_COUNTRIES) + ")"
     found = []
     offset = 0
     while True:
@@ -128,8 +150,10 @@ def port_catalog() -> list[dict]:
                       orderByFields="portid ASC")
         items = page.get("features", [])
         found.extend(item["attributes"] for item in items)
-        if len(items) < 1000:
+        if not page.get("exceededTransferLimit") and len(items) < 1000:
             break
+        if not items:
+            raise ValueError("PortWatch点位分页未前进")
         offset += len(items)
     if len({item["portid"] for item in found}) != len(found):
         raise ValueError("PortWatch点位库出现重复编号")
@@ -137,7 +161,10 @@ def port_catalog() -> list[dict]:
     for item in found:
         if item["lat"] is None or item["lon"] is None:
             continue
-        region = region_for(item["lat"], item["lon"])
+        region = (port_region_for(item["lat"], item["lon"])
+                  if item["country"] in GULF_COUNTRIES else region_for(item["lat"], item["lon"]))
+        if region is None and item["country"] in GULF_COUNTRIES:
+            region = "其他沿岸（水域待核）"
         if region:
             ports.append({"portid": item["portid"], "name": item["portname"],
                           "country": item["country"], "lat": item["lat"],

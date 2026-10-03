@@ -58,7 +58,7 @@ def additional_measurements(assets: list[dict]) -> None:
                 value="1,647", unit="百万标准立方英尺/日", metric_type="actual_output",
                 commodity="natural_gas", data_date="2022年平均",
                 basis="Bahrain BTR1原报告同一段；不可与原油/凝析油相加",
-                source_url=asset["source_url"]))
+                source_url="https://unfccc.int/sites/default/files/resource/30112025_Bahrain%27s_BTR1_2024_to_the_UNFCCC_vSubmitted.pdf"))
         if asset["name"] == "Ghasha Concession":
             asset["additional_measurements"].append(dict(
                 value="1,800", unit="百万标准立方英尺/日", metric_type="target_capacity",

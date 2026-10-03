@@ -369,6 +369,7 @@ st.markdown("""
 METRIC_LABELS = {
     "estimated_daily_average": "估算期间日均（公布总量×份额）",
     "actual_output": "来源直报实际产量",
+    "production_acceptance_test": "开发生产验收测试（非持续日产量）",
     "sales_volume": "期间销售量（非产量）",
     "actual_output_boe": "来源实绩（油当量；非原油桶）",
     "derived_daily_average": "历史推算日均产量",
@@ -411,7 +412,7 @@ def display_value(asset: dict[str, object]) -> str:
 def extra_measurements(asset: dict) -> str:
     return "；".join(
         f"{CATALOG.COMMODITY_LABELS[m['commodity']]} {m['value']} {m['unit']}"
-        f"（{METRIC_LABELS[m['metric_type']]}，{m['data_date']}）"
+        f"（{METRIC_LABELS[m['metric_type']]}，{m['data_date']}；{m['basis']}）"
         for m in asset.get("additional_measurements", [])) or "未披露"
 
 
@@ -509,7 +510,7 @@ def _popup(asset: dict[str, object]) -> str:
     return (
         '<div class="popup-card">'
         f'<div class="field-name">{esc(asset["name"])}（{esc(asset["name_cn"])}）</div>'
-        f'<div class="country">{esc(asset["country"])} · {esc(asset["asset_type"])}</div>'
+        f'<div class="country">{esc("、".join(asset["countries"]))} · {esc(asset["asset_type"])}</div>'
         '<div class="row"><span>资产层级</span>'
         f'<strong>{esc(asset["asset_level_label"])}</strong></div>'
         '<div class="row"><span>地图角色</span>'
@@ -626,6 +627,8 @@ def _port_popup(port: dict, day: str) -> str:
         '<div class="row"><span>进出口平衡指数</span>'
         f'<strong>{balance_text}</strong></div>'
         f'{risk_block}'
+        f'<div class="basis">停复运：{esc(port["port_operating_status_label"])}；'
+        f'{esc(port["port_operating_status_as_of"])}。{esc(port["port_status_basis"])}</div>'
         '<div class="hierarchy-title">船型结构</div>'
         f'{"".join(structure)}'
         '<div class="basis">活动指数比较相邻等长窗口；100表示持平。平衡指数范围−100至+100，'
@@ -715,7 +718,7 @@ def _vessel_popup(vessel: dict[str, object]) -> str:
 
 
 
-country_options = sorted({str(asset["country"]) for asset in ASSETS})
+country_options = sorted({country for asset in ASSETS for country in asset["countries"]})
 level_options = list(LEVEL_LABELS)
 type_options = sorted({str(asset["asset_type"]) for asset in ASSETS})
 metric_options = sorted({str(asset["metric_type"]) for asset in ASSETS})
@@ -1023,7 +1026,7 @@ def current_ais_status() -> dict:
 
 filtered_all = [
     asset for asset in ASSETS
-    if asset["country"] in selected_countries
+    if set(asset["countries"]) & set(selected_countries)
     and asset["asset_level"] in selected_levels
     and asset["asset_type"] in selected_types
     and asset["operating_status"] in selected_statuses
@@ -1098,11 +1101,15 @@ for port in ports:
         "数据提示": "；".join(notes),
         "纬度": port["lat"], "经度": port["lon"], "来源": port.get("source_url", PORTWATCH.SOURCE),
         "统计覆盖": port.get("activity_source"), "NGA WPI编号": str(port.get("wpi_ids", [])),
+        "停复运状态": port["port_operating_status_label"],
+        "状态截至": port["port_operating_status_as_of"],
+        "状态依据": port["port_status_basis"], "状态证据": port["port_status_evidence_url"],
     })
 
 asset_rows = [
     {
         "国家": asset["country"], "资产层级": asset["asset_level_label"],
+        "共享国家": "、".join(asset["countries"]), "权益口径": asset["ownership_basis"],
         "地图角色": asset["map_role_label"],
         "层级路径": hierarchy_path(asset), "上级资产": asset["parent_asset"] or "—",
         "组成资产": "、".join(asset["constituent_assets"]) or "—",
@@ -1190,6 +1197,9 @@ def render_map_panel() -> None:
             f"当前筛选有 {len(unlocated_map_assets)} 项仅列目录：既无可核验独立坐标，也无可用的"
             "上级资产代表点，因此不以猜测位置绘图。可在‘油气’表查看坐标证据。"
         )
+    unlocated_ports = sum(p["lat"] is None or p["lon"] is None for p in map_ports)
+    if unlocated_ports:
+        st.info(f"当前筛选有 {unlocated_ports} 个港口尚无可靠坐标，仅列于‘港口’目录。")
     st.iframe(
         map_renderer.build_map_html(
             map_assets, map_ports, map_chokepoints, map_vessels,
@@ -1235,7 +1245,8 @@ def render_ais_panel() -> None:
         st.warning(f'最近连接错误：{state["last_error"]}；采集器会自动指数退避重连。')
     if rows:
         st.dataframe(rows, width="stretch", hide_index=True, height=570,
-                     column_config={"来源": st.column_config.LinkColumn("来源")})
+                     column_config={"来源": st.column_config.LinkColumn("来源"),
+                                        "状态证据": st.column_config.LinkColumn("状态证据")})
         buffer = io.StringIO()
         writer = csv.DictWriter(buffer, fieldnames=rows[0].keys())
         writer.writeheader(); writer.writerows(rows)
@@ -1345,7 +1356,8 @@ if tab_method.open:
         st.markdown("**地图与截图。** 港口和咽喉点分别使用源站最新观测日，船舶图层显示当前AIS快照；油气保留披露日期。地图右上角保存 PNG，包含当前视野、图例、日期、弹窗及底图署名。")
         st.markdown(
             "**港口覆盖。** 地图读取 IMF 当前维护的 PortWatch 港口点位数据库，"
-            "并按下表五个经纬度框选取港口。交叠区域按表中顺序唯一归属。"
+            "覆盖下表五个水域框及沙特、阿联酋、伊拉克、伊朗、科威特、卡塔尔、阿曼、巴林全境的源库港口。"
+            "另补港务局、运营商及NGA具名设施；无独立统计的设施保留未知，无可靠坐标时仅列目录。"
         )
         st.dataframe([
             {"水域": name, "南界": b[0], "北界": b[1], "西界": b[2], "东界": b[3]}

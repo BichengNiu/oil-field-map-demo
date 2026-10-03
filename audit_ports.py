@@ -55,12 +55,15 @@ def main() -> None:
                               resultOffset=offset, resultRecordCount=1000)
         items = page.get("features", [])
         global_rows.extend(f["attributes"] for f in items)
-        if len(items) < 1000:
+        if not page.get("exceededTransferLimit") and len(items) < 1000:
             break
+        if not items:
+            raise ValueError("PortWatch全球点位分页未前进")
         offset += len(items)
     assert len({r["portid"] for r in global_rows}) == len(global_rows), "全球点位分页重复"
     regional = {r["portid"] for r in global_rows if r.get("lat") is not None
-                and r.get("lon") is not None and portwatch.region_for(r["lat"], r["lon"])}
+                and r.get("lon") is not None and (r["country"] in portwatch.GULF_COUNTRIES
+                or portwatch.region_for(r["lat"], r["lon"]))}
     assert regional == {p["portid"] for p in ports if portwatch._valid_port_ids((p["portid"],))}
     # Independent arithmetic on saved raw rows, not equality with a second call
     # to the same aggregation function.
@@ -146,14 +149,19 @@ def main() -> None:
             "30日其他货轮日均装卸吨": m["avg_handled_cargo"],
             "复核提示": "；".join(flags) or "当日记录与窗口记录已核对",
             "目录覆盖": port.get("coverage_note"),
+            "纬度": port["lat"], "经度": port["lon"],
+            "停复运状态": port["port_operating_status_label"],
+            "状态截至": port["port_operating_status_as_of"],
+            "状态依据": port["port_status_basis"],
+            "状态证据": port["port_status_evidence_url"],
             "来源": port.get("source_url", portwatch.SOURCE),
         })
-    filename = f"PORT_ACTIVITY_AUDIT_{day.isoformat()}.csv"
+    filename = f"PORT_ACTIVITY_AUDIT_{review_date}_OBS_{day.isoformat()}.csv"
     with open(filename, "w", encoding="utf-8-sig", newline="") as stream:
         writer = csv.DictWriter(stream, fieldnames=rows[0].keys(), lineterminator="\n")
         writer.writeheader()
         writer.writerows(rows)
-    raw_file = Path(f"PORTWATCH_RAW_{day.isoformat()}.json.gz")
+    raw_file = Path(f"PORTWATCH_RAW_{review_date}_OBS_{day.isoformat()}.json.gz")
     raw_bytes = (json.dumps(sorted(raw.values(), key=lambda r: (r["portid"], r["date"])),
                            ensure_ascii=False, separators=(",", ":")) + "\n").encode("utf-8")
     raw_file.write_bytes(gzip.compress(raw_bytes, mtime=0))
@@ -164,6 +172,9 @@ def main() -> None:
         "review_date": review_date,
         "port_date": day.isoformat(), "chokepoint_date": choke_day.isoformat(),
         "world_portwatch_rows": len(global_rows), "regional_portwatch_rows": len(regional),
+        "scope": "原五水域经纬度框并海湾八国全境；具名设施单列且不借用邻港统计",
+        "gulf_portwatch_rows": sum(r["country"] in portwatch.GULF_COUNTRIES for r in global_rows),
+        "supplemental_rows": sum(not p["statistics_available"] for p in ports),
         "combined_catalog_rows": len(ports), "raw_daily_rows": len(raw),
         "raw_file": raw_file.name, "raw_sha256": hashlib.sha256(raw_bytes).hexdigest(),
         "sum_consistency_issues": consistency_issues, "rounding_differences": rounding_differences,

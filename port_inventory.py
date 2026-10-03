@@ -9,6 +9,8 @@ NGA_SAILING = "https://msi.nga.mil/api/publications/download?key=16694491%2FSFH0
 
 # Chinese labels used in the country and port selectors. Source catalog values
 # remain unchanged for filtering and API requests.
+PORT_REVIEW = json.loads(Path(__file__).with_name("PORT_REVIEW_2026-10-03.json").read_text())
+
 _COUNTRY_NAMES_ZH = {
     "bahrain": "巴林",
     "djibouti": "吉布提",
@@ -45,6 +47,23 @@ def _port_name_key(value: object) -> str:
 
 
 _PORT_NAMES_ZH = {
+    _port_name_key('Duqm'): '杜库姆港',
+    _port_name_key('Salalah'): '塞拉莱港',
+    _port_name_key('Duba (Port of Neom)'): '杜巴港（NEOM）',
+    _port_name_key('Duba Bulk Plant Tanker Terminal'): '杜巴油轮码头',
+    _port_name_key('Al Ruwais'): '鲁韦斯港（卡塔尔）',
+    _port_name_key('Jeddah'): '吉达港',
+    _port_name_key('Shoaiba'): '舒艾拜港（沙特）',
+    _port_name_key('Yanbu (King Fahd Port)'): '延布法赫德国王工业港',
+    _port_name_key('Yanbu (Yanbu city)'): '延布商业港',
+    _port_name_key('Rabigh'): '拉比格港',
+    _port_name_key('King Abdullah Port'): '阿卜杜拉国王港',
+    _port_name_key('Jazan'): '吉赞港',
+    _port_name_key('Shuqaiq'): '舒盖格港',
+    _port_name_key('Nowshahr Port'): '诺沙赫尔港',
+    _port_name_key('Amirabad Port'): '阿米拉巴德港',
+    _port_name_key('Bandar-e Anzali'): '安扎利港',
+    _port_name_key('Oman - Offshore Oil Terminal 1'): '阿曼海上石油终端1（源库名称）',
     _port_name_key("Ras Al Ghar"): "拉斯盖尔港",
     _port_name_key("Kharg Island Oil Terminal"): "哈尔克岛石油码头",
     _port_name_key("Bandar-E Mahshahr"): "马赫沙赫尔港",
@@ -243,6 +262,19 @@ def enrich(ports: list[dict]) -> list[dict]:
                            inventory_source_url=NGA_SAILING, activity_source="无独立PortWatch统计",
                            coordinate_precision=f"NGA Pub172 §{section}港口所在地代表点；分钟精度",
                            coverage_note="Asyad港口名录补充；坐标是所在地近似点，进港与货量未知"))
+    output.extend(dict(row) for row in PORT_REVIEW["additions"])
+    decisions = {row["portid"]: row for row in PORT_REVIEW["status_decisions"]}
+    for port in output:
+        port.setdefault("port_operating_status", "unknown")
+        port.setdefault("port_operating_status_as_of", "未取得当前逐港公告")
+        port.setdefault("port_status_basis", "港口名录及AIS活动不直接证明停复运；零量或缺报不等于关闭。")
+        port.setdefault("port_status_evidence_url", None)
+        if port["portid"] in decisions:
+            port.update({k: v for k, v in decisions[port["portid"]].items() if k != "portid"})
+        port["port_operating_status_label"] = {
+            "unknown": "当前停复运待核", "development": "建设／商业启用待核",
+        }[port["port_operating_status"]]
+        port["port_status_audit_date"] = "2026-10-03"
     if len({p["portid"] for p in output}) != len(output):
         raise ValueError("合并港口目录出现重复编号")
     for port in output:
@@ -254,4 +286,4 @@ def enrich(ports: list[dict]) -> list[dict]:
 
 
 SUPPLEMENTAL_IDS = {f"wpi{r['wpi']}" for r in WPI_ROWS if not r["portwatch_id"]} | {
-    "facility_shinas", "facility_suwaiq"}
+    "facility_shinas", "facility_suwaiq"} | {r["portid"] for r in PORT_REVIEW["additions"]}

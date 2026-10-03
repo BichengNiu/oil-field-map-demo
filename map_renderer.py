@@ -41,6 +41,7 @@ def build_map_html(assets: list[dict[str, object]], ports: list[dict],
          "calls": port.get("portcalls"),
          "popup": port_popup(port, day)}
         for port in ports
+        if port["lat"] is not None and port["lon"] is not None
     ], ensure_ascii=False).replace("</", "<\\/")
     chokepoint_json = json.dumps([
         {"lat": point["lat"], "lon": point["lon"], "name": point.get("name_cn", point["portname"]),

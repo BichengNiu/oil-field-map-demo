@@ -39,6 +39,7 @@ def main():
             issues.append("继承近似点的独立坐标出处待核")
         rows.append({
             "国家": asset["country"], "名称": asset["name"], "中文/原文名": asset["name_cn"],
+            "共享国家": " | ".join(asset["countries"]), "权益口径": asset["ownership_basis"],
             "别名": " | ".join(asset["aliases"]), "层级": asset["asset_level"],
             "上级": asset["parent_asset"], "商品": asset["commodity_label"],
             "数值": asset["value"], "单位": asset["unit"], "指标类型": asset["metric_type"],

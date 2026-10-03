@@ -503,12 +503,15 @@ ASSETS = [
 import supplemental_assets as SUPPLEMENT
 import reconciled_assets as RECONCILED
 import continuation_assets as CONTINUATION
+import gulf_review as GULF_REVIEW
 from audited_measurements import apply_annual_volumes, additional_measurements
 ASSETS.extend(SUPPLEMENT.additions(record))
 ASSETS.extend(RECONCILED.additions(record))
 RECONCILED.apply_existing(ASSETS)
 ASSETS.extend(CONTINUATION.additions(record))
 CONTINUATION.apply_measurements(ASSETS)
+ASSETS.extend(GULF_REVIEW.additions(record))
+GULF_REVIEW.apply_measurements(ASSETS)
 apply_annual_volumes(ASSETS)
 for asset in ASSETS:
     if asset["country"] == "伊朗" and asset["name"] == "Darkhovin":
@@ -537,8 +540,7 @@ for asset in ASSETS:
                      numeric_audit="承包商原始会议稿已核；目标，不是运营商实产",
                      note="NMDC Energy CEO原始会议稿披露Upper Zakum计划由100万桶/日增至150万桶/日；替换2017年100万目标。该值是扩产规划，未据承包商口述填当前实产。")
     if asset["name"] == "Bahrain Field (Awali)":
-        asset["asset_type"] = "油气田（原油及凝析油）"
-        asset["note"] += " 原报告39.5千桶/日合计含原油及凝析油，不是纯原油。"
+        asset["asset_type"] = "油田"
     if asset["name"] == "Margham":
         asset.update(source="DUSUP Margham", source_url="https://www.dusup.ae/supply-operations/margham-gas-plant/")
     if asset["name"] == "Hedebah":
@@ -1141,6 +1143,8 @@ PARENT_RELATIONSHIPS.update(RECONCILED.PARENTS)
 COORDINATE_OVERRIDES.update(RECONCILED.coordinates())
 COORDINATE_OVERRIDES.update(CONTINUATION.coordinates())
 LEVEL_OVERRIDES.update(CONTINUATION.levels())
+LEVEL_OVERRIDES.update(GULF_REVIEW.levels())
+PARENT_RELATIONSHIPS.update(GULF_REVIEW.parents())
 LEVEL_OVERRIDES.update({key: "project" for key in RECONCILED.PROJECTS})
 LEVEL_OVERRIDES.update({key: "development_area" for key in RECONCILED.AREAS})
 
@@ -1451,6 +1455,7 @@ _assign_status("埃及", "Wadi El Sahl Development Area", "development", "2025-1
 SUPPLEMENT.register_statuses(_assign_status)
 RECONCILED.register_statuses(_assign_status)
 CONTINUATION.register_statuses(_assign_status)
+GULF_REVIEW.register_statuses(_assign_status)
 # 纠正旧状态，明确每个证据时点；覆盖更新而不是重复登记。
 def _revise_status(country, names, state, as_of, confidence, basis, url):
     for name in names.split(" | "):
@@ -1475,6 +1480,7 @@ _revise_status("伊拉克", "Artawi", "development", "2025-09-15", "高",
                "https://totalenergies.com/newsroom/iraq-totalenergies-launches-construction-final-two-major-projects-ggip/?lang=eng")
 
 _catalog_keys = set(_asset_index)
+GULF_REVIEW.revise_statuses(_revise_status)
 _audited_keys = set(_STATUS_AUDIT)
 if _catalog_keys != _audited_keys:
     missing = sorted(_catalog_keys - _audited_keys)
@@ -1534,3 +1540,4 @@ for asset in ASSETS:
 
 additional_measurements(ASSETS)
 CONTINUATION.finish_review(ASSETS)
+GULF_REVIEW.finish_review(ASSETS)
