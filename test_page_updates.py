@@ -83,7 +83,7 @@ class PageUpdates(unittest.TestCase):
         self.latest_port = date(2026, 9, 28)
         second_page = self.page()
         self.assertNotIn("map_history_day", second_page.session_state)
-        self.assertIn(
+        self.assertNotIn(
             "港口 2026-09-28 UTC · 咽喉点 2026-09-27 UTC",
             second_page.get("iframe")[0].proto.srcdoc)
         self.assertGreater(len(self.queries), count)
@@ -95,13 +95,15 @@ class PageUpdates(unittest.TestCase):
         self.assertNotIn("map_history_day", app.session_state)
         self.assertFalse(any(widget.label == "地图时间" for widget in app.radio))
         self.assertFalse(any(widget.label == "通行时间轴（UTC，按日）" for widget in app.slider))
-        self.assertIn("港口 2026-09-25 UTC · 咽喉点 2026-09-27 UTC", iframe)
+        self.assertNotIn("港口 2026-09-25 UTC · 咽喉点 2026-09-27 UTC", iframe)
+        self.assertNotIn("map-date", iframe)
 
     def test_port_summary_uses_fixed_seven_day_window_without_source_date_controls(self):
         portwatch.rolling_activity.clear()
         app = self.page()
         self.assertFalse(any(widget.label == "日均窗口" for widget in app.radio))
         self.assertFalse(any("源站最新：" in item.value for item in app.caption))
+        self.assertFalse(any("咽喉点最新：" in item.value for item in app.caption))
         rolling_queries = [
             params.get("where", "") for url, params in self.queries
             if url == portwatch.DAILY
