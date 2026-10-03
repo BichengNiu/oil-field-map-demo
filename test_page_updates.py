@@ -21,6 +21,7 @@ class PageUpdates(unittest.TestCase):
         self.addCleanup(temp.cleanup)
         self.latest_port = date(2026, 9, 25)
         self.latest_choke = date(2026, 9, 27)
+        self.include_no_data_port = False
         self.queries = []
         self.fail_dates = False
         self.patches = [
@@ -45,6 +46,9 @@ class PageUpdates(unittest.TestCase):
         if url == portwatch.PORTS:
             rows = [{"portid": "port1", "portname": "Fixture port", "country": "Oman",
                      "lat": 26.5, "lon": 56.4}]
+            if self.include_no_data_port:
+                rows.append({"portid": "port2", "portname": "No data fixture", "country": "Oman",
+                             "lat": 26.7, "lon": 56.5})
         elif url == portwatch.CHOKEPOINTS:
             rows = [{"portid": "chokepoint6", "portname": "Hormuz", "fullname": "Strait of Hormuz",
                      "lat": 26.5, "lon": 56.4}]
@@ -143,6 +147,18 @@ class PageUpdates(unittest.TestCase):
         self.assertEqual(app.multiselect(key="port_countries").value, ["全选"])
         self.assertEqual(app.multiselect(key="port_ids").value, ["全选"])
         self.assertTrue(any(widget.label == "显示 AIS 实时船位" for widget in app.toggle))
+
+    def test_latest_data_checkbox_filters_map_markers_only(self):
+        self.include_no_data_port = True
+        app = self.page()
+        self.assertFalse(app.checkbox(key="ports_latest_data_only").value)
+        iframe = app.get("iframe")[0].proto.srcdoc
+        self.assertIn("No data fixture", iframe)
+
+        app.checkbox(key="ports_latest_data_only").set_value(True).run()
+        iframe = app.get("iframe")[0].proto.srcdoc
+        self.assertIn("Fixture port", iframe)
+        self.assertNotIn("No data fixture", iframe)
 
     def test_source_failure_is_visible_without_replay_controls(self):
         self.fail_dates = True
