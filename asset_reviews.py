@@ -154,6 +154,10 @@ def apply_production_recheck(assets: list[dict]) -> None:
 def finish_production_recheck(assets: list[dict], output_types: set[str]) -> None:
     """Attach named aggregate references without copying totals into field values."""
     index = {_key(asset): asset for asset in assets}
+    for row in PRODUCTION_RECHECK.get("scope_adjustments", []):
+        asset = index[_key(row)]
+        asset["ownership_basis"] = row["ownership_basis"]
+        asset["data_audit_date"] = PRODUCTION_RECHECK["review_date"]
     for asset in assets:
         row = asset.get("production_evidence")
         if row:
