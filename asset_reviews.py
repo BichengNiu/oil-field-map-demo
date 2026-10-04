@@ -91,6 +91,9 @@ PUBLIC_METADATA = json.loads(
 GEM_HISTORICAL_PRODUCTION = json.loads(
     (Path(__file__).parent / "data" / "gem_historical_production.json").read_text(encoding="utf-8")
 )
+PRODUCTION_RECHECK = json.loads(
+    (Path(__file__).parent / "data" / "production_recheck.json").read_text(encoding="utf-8")
+)
 
 
 def public_reference_coordinates() -> dict:
@@ -123,31 +126,83 @@ def apply_public_metadata(assets: list[dict]) -> None:
         }
 
 
-def apply_gem_historical_production(assets: list[dict]) -> None:
-    """Attach cited annual oil volumes; derive an explicitly historical daily average."""
+def attach_gem_production_candidates(assets: list[dict]) -> None:
+    """Keep secondary transcriptions as leads until their original units are checked."""
     index = {_key(asset): asset for asset in assets}
     for row in GEM_HISTORICAL_PRODUCTION["rows"]:
-        key = row["country"], row["name"]
-        asset = index[key]
-        asset.setdefault("gem_historical_production", []).append(row)
-        if not row["is_latest_reported_year"] or asset["value"] is not None:
-            continue
-        asset.update(
-            value=f'{row["derived_daily_thousand_barrels"]:.3f}'.rstrip("0").rstrip("."),
-            metric_type="derived_daily_average",
-            unit="千桶/日",
-            data_date=f'{row["year"]}年历史年产量换算日均',
-            source="GEM Wiki field production table",
-            source_url=row["wiki_url"],
-            note=(
-                f'GEM逐田Production表列示{row["year"]}年原油年产量 '
-                f'{row["quantity_million_barrels_year"]:g} 百万桶；按 '
-                f'{row["days_in_year"]} 天换算为历史日均 '
-                f'{row["derived_daily_thousand_barrels"]:g} 千桶/日。'
-                "非当前产量；原表行引用与许可署名见历史产量记录。"
-            ),
-            numeric_audit="GEM二手逐田表；保留年产量及原始行引用，公式换算历史年均；非当前值",
-        )
+        index[_key(row)].setdefault("gem_production_candidates", []).append(row)
+
+
+def apply_production_recheck(assets: list[dict]) -> None:
+    """Apply reviewed source values before hierarchy and commodity classification."""
+    index = {_key(asset): asset for asset in assets}
+    for row in PRODUCTION_RECHECK["measurements"]:
+        asset = index[_key(row)]
+        asset["production_evidence"] = row
+        if asset["value"] is not None:
+            asset.setdefault("previous_measurements", []).append({
+                key: asset.get(key) for key in
+                ("value", "metric_type", "unit", "data_date", "source", "source_url", "note")
+            })
+        asset.setdefault("catalog_evidence_url", asset["source_url"])
+        for key in ("value", "metric_type", "unit", "data_date", "source", "source_url", "note",
+                    "numeric_audit", "annual_barrels", "calendar_days"):
+            if key in row:
+                asset[key] = row[key]
+
+
+def finish_production_recheck(assets: list[dict], output_types: set[str]) -> None:
+    """Attach named aggregate references without copying totals into field values."""
+    index = {_key(asset): asset for asset in assets}
+    for asset in assets:
+        row = asset.get("production_evidence")
+        if row:
+            asset["ownership_basis"] = row["ownership_basis"]
+            asset["data_audit_date"] = PRODUCTION_RECHECK["review_date"]
+            asset["freshness_note"] = "数值只对应标注期间；单田、合计和权益范围见备注，复核日不是观测日"
+            for previous in asset.get("previous_measurements", []):
+                asset["additional_measurements"].append({
+                    **previous,
+                    "commodity": "crude_oil" if str(previous.get("unit") or "").startswith("千桶/日")
+                    else asset["commodity"],
+                    "basis": previous.get("note") or "保留此前来源指标；不同日期与口径分别列示",
+                })
+        asset["aggregate_references"] = []
+        parent_name = asset["parent_asset"]
+        seen = {_key(asset)}
+        while parent_name:
+            parent_key = asset["country"], parent_name
+            if parent_key in seen:
+                raise ValueError(f"Cyclic aggregate reference: {parent_key}")
+            seen.add(parent_key)
+            parent = index[parent_key]
+            compatible_product = not (
+                asset["commodity"] == "natural_gas" and parent["unit"] == "千桶/日"
+            )
+            if (parent["value"] is not None and parent["metric_type"] in output_types
+                    and compatible_product):
+                asset["aggregate_references"].append({
+                    **{key: parent.get(key) for key in (
+                        "value", "metric_type", "unit", "data_date", "source", "source_url",
+                        "ownership_basis", "commodity", "note")},
+                    "id": f'{parent["country"]}/{parent["name"]}',
+                    "scope": parent["name"],
+                    "members": parent["constituent_assets"],
+                    "basis": "已登记上级资产合计；没有分配为组成田产量，不重复汇总",
+                })
+                break
+            parent_name = parent["parent_asset"]
+    for row in PRODUCTION_RECHECK["aggregate_measurements"]:
+        for name in row["members"]:
+            index[row["country"], name]["aggregate_references"].append(row)
+    for row in PRODUCTION_RECHECK.get("historical_measurements", []):
+        index[_key(row)]["additional_measurements"].append({
+            **row,
+            "commodity": "crude_oil",
+            "basis": row["note"],
+        })
+    for row in PRODUCTION_RECHECK["asset_reviews"]:
+        index[_key(row)]["production_review"] = row
 
 
 def finish_reviews(assets: list[dict]) -> None:
@@ -173,12 +228,13 @@ def finish_reviews(assets: list[dict]) -> None:
         item["freshness_note"] = "仅适用于标注的证据/观测期；复核日不是实绩日；缺失不等于零"
         if key in gulf_status_keys:
             item["status_audit_date"] = GULF.date
-    for row in GULF.evidence["additional_measurements"]:
-        item = index[_key(row)]
-        item["data_audit_date"] = GULF.date
-        item["additional_measurements"].append(
-            {key: value for key, value in row.items() if key not in {"country", "name"}}
-        )
+    for review in REVIEWS:
+        for row in review.evidence["additional_measurements"]:
+            item = index[_key(row)]
+            item["data_audit_date"] = review.date
+            item["additional_measurements"].append(
+                {key: value for key, value in row.items() if key not in {"country", "name"}}
+            )
     reviewed = FOLLOWUP.reviewed_keys
     followup_status_keys = FOLLOWUP.status_keys
     for row in FOLLOWUP.evidence["notes"]:

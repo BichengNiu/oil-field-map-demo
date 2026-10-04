@@ -456,17 +456,23 @@ def build_report_html(
             row.get("中文名称") or row.get("英文名称"),
             row.get("国家"),
             row.get("生产状态"),
-            row.get("本层级日产量"),
+            row.get("产量显示") or row.get("本层级日产量"),
             row.get("其他日量指标") if row.get("其他日量指标") not in (None, "—") else row.get("指标口径"),
             row.get("数据日期"),
-            row.get("地图坐标精度"),
+            row.get("产量口径说明") or row.get("合计口径说明") or row.get("地图坐标精度"),
         ])
     oil_content = (
         '<p class="note">只列公开披露且可定位的战略节点；实际产量、产能、目标与历史值按资产逐项区分，'
         '不跨口径相加。虚线边框代理点的坐标仅用于定位。</p>'
         + '<div class="map-frame">' + _overview_svg([], [], report_assets, regions) + '</div>'
         + '<h3>战略油气资产（最多20项）</h3>'
-        + _table(["资产", "国家", "状态", "本层级日产量", "其他指标", "披露日期", "坐标精度"], assets_table_rows)
+        + _table(["资产", "国家", "状态", "产量／注明范围的合计参考", "其他指标", "披露日期", "合计／权益口径说明"], assets_table_rows)
+        + '<h3>产量来源与检索结论（对应以上资产）</h3>'
+        + _table(
+            ["资产", "产量检索复核", "资产指标来源", "合计参考来源"],
+            [[row.get("英文名称"), row.get("产量检索复核"), row.get("来源链接"),
+              row.get("合计参考证据链接")] for row in asset_table[:20]],
+        )
     )
     reference_rows = [row for row in asset_table[:20] if row.get("GEM Unit ID")]
     if reference_rows:

@@ -1,5 +1,5 @@
 {
-  "title": "Historical field-level oil production",
+  "title": "GEM production-table research candidates (not validated annual production)",
   "prepared_date": "2026-10-04",
   "compilation": "Global Energy Monitor Wiki, field-level Production tables; exact asset article/unit match required.",
   "license": {
@@ -8,8 +8,8 @@
     "url": "https://creativecommons.org/licenses/by-nc-sa/4.0/"
   },
   "attribution": "Global Energy Monitor (GEM Wiki), individual field pages linked per record; production-row citations link to the references listed per record.",
-  "method": "Only rows categorized as production for oil/crude oil and annual million-barrel units were retained. Each article unit name was matched to the exact catalog asset or registered alias; conflicting values, non-full years, years before stated discovery, non-oil products, capacities and cumulative production were excluded. Derived daily rate = annual million barrels × 1,000 ÷ days in that calendar year. Values are historical annual averages, never current-rate observations.",
-  "limitations": "GEM Wiki is a secondary compilation. Row-level cited references are retained; underlying documents were not independently reverified for all records. Dates refer to the production year. Absence of a row does not mean zero production. Latest reported year means latest year available in this compilation, not necessarily the latest actual year.",
+  "method": "Preserve the prior exact-name matched GEM table transcriptions and citations. The table label million bbl/y does not establish a measured annual total. No daily rate is calculated or applied from these candidates. Accepted records require independently checked product, observation period, units and asset/ownership scope in production_recheck.json.",
+  "limitations": "Secondary table labels and years may conflict with original documents. Original citations, revision IDs and nominal table quantities are archived for inspection; neither latest year nor production label establishes actual production. Search/retrieval failures do not establish nondisclosure.",
   "excluded_count_summary": {
     "403": 66,
     "404": 15,
@@ -33,13 +33,13 @@
         "cite_note-autoref_2-3"
       ],
       "days_in_year": 365,
-      "derived_daily_thousand_barrels": 500.0,
       "is_latest_reported_year": true,
       "table_category": "production",
       "commodity": "oil",
       "reported_quantity": "182.5",
       "reported_unit": "million bbl/y",
-      "revision_url": "https://www.gem.wiki/w/index.php?title=Qatif_Oil_Field_(Saudi_Arabia)&oldid=1165692"
+      "revision_url": "https://www.gem.wiki/w/index.php?title=Qatif_Oil_Field_(Saudi_Arabia)&oldid=1165692",
+      "verification_status": "candidate_only_original_period_unit_scope_not_assumed"
     },
     {
       "country": "沙特阿拉伯",
@@ -57,13 +57,13 @@
         "cite_note-autoref_3-4"
       ],
       "days_in_year": 365,
-      "derived_daily_thousand_barrels": 400.0,
       "is_latest_reported_year": true,
       "table_category": "production",
       "commodity": "oil",
       "reported_quantity": "146.0",
       "reported_unit": "million bbl/y",
-      "revision_url": "https://www.gem.wiki/w/index.php?title=Abqaiq_Oil_Field_(Saudi_Arabia)&oldid=1159866"
+      "revision_url": "https://www.gem.wiki/w/index.php?title=Abqaiq_Oil_Field_(Saudi_Arabia)&oldid=1159866",
+      "verification_status": "candidate_only_original_period_unit_scope_not_assumed"
     },
     {
       "country": "沙特阿拉伯",
@@ -82,13 +82,13 @@
         "cite_note-autoref_1-2"
       ],
       "days_in_year": 366,
-      "derived_daily_thousand_barrels": 99.727,
       "is_latest_reported_year": true,
       "table_category": "production",
       "commodity": "oil",
       "reported_quantity": "36.5",
       "reported_unit": "million bbl/y",
-      "revision_url": "https://www.gem.wiki/w/index.php?title=Harmaliyah_Oil_and_Gas_Field_(Saudi_Arabia)&oldid=1162921"
+      "revision_url": "https://www.gem.wiki/w/index.php?title=Harmaliyah_Oil_and_Gas_Field_(Saudi_Arabia)&oldid=1162921",
+      "verification_status": "candidate_only_original_period_unit_scope_not_assumed"
     },
     {
       "country": "阿联酋",
@@ -107,13 +107,13 @@
         "cite_note-autoref_4-5"
       ],
       "days_in_year": 365,
-      "derived_daily_thousand_barrels": 28.0,
       "is_latest_reported_year": true,
       "table_category": "production",
       "commodity": "oil",
       "reported_quantity": "10.22",
       "reported_unit": "million bbl/y",
-      "revision_url": "https://www.gem.wiki/w/index.php?title=Huwaila_Oil_and_Gas_Field_(United_Arab_Emirates)&oldid=1163159"
+      "revision_url": "https://www.gem.wiki/w/index.php?title=Huwaila_Oil_and_Gas_Field_(United_Arab_Emirates)&oldid=1163159",
+      "verification_status": "candidate_only_original_period_unit_scope_not_assumed"
     },
     {
       "country": "阿联酋",
@@ -132,13 +132,13 @@
         "cite_note-autoref_5-6"
       ],
       "days_in_year": 365,
-      "derived_daily_thousand_barrels": 0.027,
       "is_latest_reported_year": true,
       "table_category": "production",
       "commodity": "oil",
       "reported_quantity": "0.01",
       "reported_unit": "million bbl/y",
-      "revision_url": "https://www.gem.wiki/w/index.php?title=Umm_Al-Dalkh_Oil_Field_(United_Arab_Emirates)&oldid=1167157"
+      "revision_url": "https://www.gem.wiki/w/index.php?title=Umm_Al-Dalkh_Oil_Field_(United_Arab_Emirates)&oldid=1167157",
+      "verification_status": "candidate_only_original_period_unit_scope_not_assumed"
     },
     {
       "country": "阿联酋",
@@ -157,13 +157,13 @@
         "cite_note-autoref_2-3"
       ],
       "days_in_year": 366,
-      "derived_daily_thousand_barrels": 24.918,
       "is_latest_reported_year": true,
       "table_category": "production",
       "commodity": "oil",
       "reported_quantity": "9.12",
       "reported_unit": "million bbl/y",
-      "revision_url": "https://www.gem.wiki/w/index.php?title=Margham_Oil_Field_(United_Arab_Emirates)&oldid=1164373"
+      "revision_url": "https://www.gem.wiki/w/index.php?title=Margham_Oil_Field_(United_Arab_Emirates)&oldid=1164373",
+      "verification_status": "candidate_only_original_period_unit_scope_not_assumed"
     },
     {
       "country": "伊拉克",
@@ -181,13 +181,13 @@
         "cite_note-autoref_6-7"
       ],
       "days_in_year": 366,
-      "derived_daily_thousand_barrels": 244.317,
       "is_latest_reported_year": true,
       "table_category": "production",
       "commodity": "oil",
       "reported_quantity": "89.42",
       "reported_unit": "million bbl/y",
-      "revision_url": "https://www.gem.wiki/w/index.php?title=Kirkuk_Oil_Field_(Iraq)&oldid=1163637"
+      "revision_url": "https://www.gem.wiki/w/index.php?title=Kirkuk_Oil_Field_(Iraq)&oldid=1163637",
+      "verification_status": "candidate_only_original_period_unit_scope_not_assumed"
     },
     {
       "country": "伊拉克",
@@ -206,13 +206,13 @@
         "cite_note-autoref_5-6"
       ],
       "days_in_year": 365,
-      "derived_daily_thousand_barrels": 30.0,
       "is_latest_reported_year": false,
       "table_category": "production",
       "commodity": "oil",
       "reported_quantity": "10.95",
       "reported_unit": "million bbl/y",
-      "revision_url": "https://www.gem.wiki/w/index.php?title=Subba_Oil_Field_(Iraq)&oldid=1166654"
+      "revision_url": "https://www.gem.wiki/w/index.php?title=Subba_Oil_Field_(Iraq)&oldid=1166654",
+      "verification_status": "candidate_only_original_period_unit_scope_not_assumed"
     },
     {
       "country": "伊拉克",
@@ -230,13 +230,13 @@
         "cite_note-autoref_3-4"
       ],
       "days_in_year": 365,
-      "derived_daily_thousand_barrels": 20.0,
       "is_latest_reported_year": false,
       "table_category": "production",
       "commodity": "oil",
       "reported_quantity": "7.3",
       "reported_unit": "million bbl/y",
-      "revision_url": "https://www.gem.wiki/w/index.php?title=Subba_Oil_Field_(Iraq)&oldid=1166654"
+      "revision_url": "https://www.gem.wiki/w/index.php?title=Subba_Oil_Field_(Iraq)&oldid=1166654",
+      "verification_status": "candidate_only_original_period_unit_scope_not_assumed"
     },
     {
       "country": "伊拉克",
@@ -254,13 +254,13 @@
         "cite_note-autoref_6-7"
       ],
       "days_in_year": 365,
-      "derived_daily_thousand_barrels": 30.0,
       "is_latest_reported_year": true,
       "table_category": "production",
       "commodity": "oil",
       "reported_quantity": "10.95",
       "reported_unit": "million bbl/y",
-      "revision_url": "https://www.gem.wiki/w/index.php?title=Subba_Oil_Field_(Iraq)&oldid=1166654"
+      "revision_url": "https://www.gem.wiki/w/index.php?title=Subba_Oil_Field_(Iraq)&oldid=1166654",
+      "verification_status": "candidate_only_original_period_unit_scope_not_assumed"
     },
     {
       "country": "伊朗",
@@ -279,13 +279,13 @@
         "cite_note-autoref_3-4"
       ],
       "days_in_year": 365,
-      "derived_daily_thousand_barrels": 520.0,
       "is_latest_reported_year": false,
       "table_category": "production",
       "commodity": "oil",
       "reported_quantity": "189.8",
       "reported_unit": "million bbl/y",
-      "revision_url": "https://www.gem.wiki/w/index.php?title=Marun_Oil_Field_(Iran)&oldid=1194522"
+      "revision_url": "https://www.gem.wiki/w/index.php?title=Marun_Oil_Field_(Iran)&oldid=1194522",
+      "verification_status": "candidate_only_original_period_unit_scope_not_assumed"
     },
     {
       "country": "伊朗",
@@ -303,13 +303,13 @@
         "cite_note-autoref_7-8"
       ],
       "days_in_year": 366,
-      "derived_daily_thousand_barrels": 349.044,
       "is_latest_reported_year": false,
       "table_category": "production",
       "commodity": "oil",
       "reported_quantity": "127.75",
       "reported_unit": "million bbl/y",
-      "revision_url": "https://www.gem.wiki/w/index.php?title=Marun_Oil_Field_(Iran)&oldid=1194522"
+      "revision_url": "https://www.gem.wiki/w/index.php?title=Marun_Oil_Field_(Iran)&oldid=1194522",
+      "verification_status": "candidate_only_original_period_unit_scope_not_assumed"
     },
     {
       "country": "伊朗",
@@ -328,13 +328,13 @@
         "cite_note-autoref_6-7"
       ],
       "days_in_year": 365,
-      "derived_daily_thousand_barrels": 600.0,
       "is_latest_reported_year": false,
       "table_category": "production",
       "commodity": "oil",
       "reported_quantity": "219.0",
       "reported_unit": "million bbl/y",
-      "revision_url": "https://www.gem.wiki/w/index.php?title=Marun_Oil_Field_(Iran)&oldid=1194522"
+      "revision_url": "https://www.gem.wiki/w/index.php?title=Marun_Oil_Field_(Iran)&oldid=1194522",
+      "verification_status": "candidate_only_original_period_unit_scope_not_assumed"
     },
     {
       "country": "伊朗",
@@ -352,13 +352,13 @@
         "cite_note-9"
       ],
       "days_in_year": 365,
-      "derived_daily_thousand_barrels": 560.0,
       "is_latest_reported_year": true,
       "table_category": "production",
       "commodity": "oil",
       "reported_quantity": "204.4",
       "reported_unit": "million bbl/y",
-      "revision_url": "https://www.gem.wiki/w/index.php?title=Marun_Oil_Field_(Iran)&oldid=1194522"
+      "revision_url": "https://www.gem.wiki/w/index.php?title=Marun_Oil_Field_(Iran)&oldid=1194522",
+      "verification_status": "candidate_only_original_period_unit_scope_not_assumed"
     },
     {
       "country": "伊朗",
@@ -377,13 +377,13 @@
         "cite_note-autoref_3-4"
       ],
       "days_in_year": 365,
-      "derived_daily_thousand_barrels": 200.0,
       "is_latest_reported_year": false,
       "table_category": "production",
       "commodity": "oil",
       "reported_quantity": "73.0",
       "reported_unit": "million bbl/y",
-      "revision_url": "https://www.gem.wiki/w/index.php?title=Aghajari_Oil_Field_(Iran)&oldid=1159924"
+      "revision_url": "https://www.gem.wiki/w/index.php?title=Aghajari_Oil_Field_(Iran)&oldid=1159924",
+      "verification_status": "candidate_only_original_period_unit_scope_not_assumed"
     },
     {
       "country": "伊朗",
@@ -402,13 +402,13 @@
         "cite_note-autoref_7-8"
       ],
       "days_in_year": 365,
-      "derived_daily_thousand_barrels": 300.0,
       "is_latest_reported_year": true,
       "table_category": "production",
       "commodity": "oil",
       "reported_quantity": "109.5",
       "reported_unit": "million bbl/y",
-      "revision_url": "https://www.gem.wiki/w/index.php?title=Aghajari_Oil_Field_(Iran)&oldid=1159924"
+      "revision_url": "https://www.gem.wiki/w/index.php?title=Aghajari_Oil_Field_(Iran)&oldid=1159924",
+      "verification_status": "candidate_only_original_period_unit_scope_not_assumed"
     },
     {
       "country": "伊朗",
@@ -427,13 +427,13 @@
         "cite_note-autoref_4-5"
       ],
       "days_in_year": 365,
-      "derived_daily_thousand_barrels": 560.0,
       "is_latest_reported_year": false,
       "table_category": "production",
       "commodity": "oil",
       "reported_quantity": "204.4",
       "reported_unit": "million bbl/y",
-      "revision_url": "https://www.gem.wiki/w/index.php?title=Gachsaran_Oil_and_Gas_Field_(Iran)&oldid=1194521"
+      "revision_url": "https://www.gem.wiki/w/index.php?title=Gachsaran_Oil_and_Gas_Field_(Iran)&oldid=1194521",
+      "verification_status": "candidate_only_original_period_unit_scope_not_assumed"
     },
     {
       "country": "伊朗",
@@ -452,13 +452,13 @@
         "cite_note-autoref_7-8"
       ],
       "days_in_year": 365,
-      "derived_daily_thousand_barrels": 560.0,
       "is_latest_reported_year": false,
       "table_category": "production",
       "commodity": "oil",
       "reported_quantity": "204.4",
       "reported_unit": "million bbl/y",
-      "revision_url": "https://www.gem.wiki/w/index.php?title=Gachsaran_Oil_and_Gas_Field_(Iran)&oldid=1194521"
+      "revision_url": "https://www.gem.wiki/w/index.php?title=Gachsaran_Oil_and_Gas_Field_(Iran)&oldid=1194521",
+      "verification_status": "candidate_only_original_period_unit_scope_not_assumed"
     },
     {
       "country": "伊朗",
@@ -476,13 +476,13 @@
         "cite_note-autoref_10-11"
       ],
       "days_in_year": 365,
-      "derived_daily_thousand_barrels": 480.0,
       "is_latest_reported_year": false,
       "table_category": "production",
       "commodity": "oil",
       "reported_quantity": "175.2",
       "reported_unit": "million bbl/y",
-      "revision_url": "https://www.gem.wiki/w/index.php?title=Gachsaran_Oil_and_Gas_Field_(Iran)&oldid=1194521"
+      "revision_url": "https://www.gem.wiki/w/index.php?title=Gachsaran_Oil_and_Gas_Field_(Iran)&oldid=1194521",
+      "verification_status": "candidate_only_original_period_unit_scope_not_assumed"
     },
     {
       "country": "伊朗",
@@ -500,13 +500,13 @@
         "cite_note-12"
       ],
       "days_in_year": 365,
-      "derived_daily_thousand_barrels": 560.0,
       "is_latest_reported_year": true,
       "table_category": "production",
       "commodity": "oil",
       "reported_quantity": "204.4",
       "reported_unit": "million bbl/y",
-      "revision_url": "https://www.gem.wiki/w/index.php?title=Gachsaran_Oil_and_Gas_Field_(Iran)&oldid=1194521"
+      "revision_url": "https://www.gem.wiki/w/index.php?title=Gachsaran_Oil_and_Gas_Field_(Iran)&oldid=1194521",
+      "verification_status": "candidate_only_original_period_unit_scope_not_assumed"
     },
     {
       "country": "伊朗",
@@ -525,13 +525,13 @@
         "cite_note-autoref_2-4"
       ],
       "days_in_year": 366,
-      "derived_daily_thousand_barrels": 53.852,
       "is_latest_reported_year": true,
       "table_category": "production",
       "commodity": "oil",
       "reported_quantity": "19.71",
       "reported_unit": "million bbl/y",
-      "revision_url": "https://www.gem.wiki/w/index.php?title=Yadavaran_Oil_Field_(Iran)&oldid=1149393"
+      "revision_url": "https://www.gem.wiki/w/index.php?title=Yadavaran_Oil_Field_(Iran)&oldid=1149393",
+      "verification_status": "candidate_only_original_period_unit_scope_not_assumed"
     },
     {
       "country": "伊朗",
@@ -550,13 +550,13 @@
         "cite_note-autoref_8-9"
       ],
       "days_in_year": 365,
-      "derived_daily_thousand_barrels": 50.0,
       "is_latest_reported_year": false,
       "table_category": "production",
       "commodity": "oil",
       "reported_quantity": "18.25",
       "reported_unit": "million bbl/y",
-      "revision_url": "https://www.gem.wiki/w/index.php?title=Darquain_Oil_Field_(Iran)&oldid=1161802"
+      "revision_url": "https://www.gem.wiki/w/index.php?title=Darquain_Oil_Field_(Iran)&oldid=1161802",
+      "verification_status": "candidate_only_original_period_unit_scope_not_assumed"
     },
     {
       "country": "伊朗",
@@ -574,13 +574,13 @@
         "cite_note-autoref_9-10"
       ],
       "days_in_year": 365,
-      "derived_daily_thousand_barrels": 160.0,
       "is_latest_reported_year": true,
       "table_category": "production",
       "commodity": "oil",
       "reported_quantity": "58.4",
       "reported_unit": "million bbl/y",
-      "revision_url": "https://www.gem.wiki/w/index.php?title=Darquain_Oil_Field_(Iran)&oldid=1161802"
+      "revision_url": "https://www.gem.wiki/w/index.php?title=Darquain_Oil_Field_(Iran)&oldid=1161802",
+      "verification_status": "candidate_only_original_period_unit_scope_not_assumed"
     },
     {
       "country": "伊朗",
@@ -599,13 +599,13 @@
         "cite_note-autoref_5-6"
       ],
       "days_in_year": 366,
-      "derived_daily_thousand_barrels": 51.776,
       "is_latest_reported_year": true,
       "table_category": "production",
       "commodity": "oil",
       "reported_quantity": "18.95",
       "reported_unit": "million bbl/y",
-      "revision_url": "https://www.gem.wiki/w/index.php?title=Doroud_Oil_and_Gas_Field_(Iran)&oldid=1161941"
+      "revision_url": "https://www.gem.wiki/w/index.php?title=Doroud_Oil_and_Gas_Field_(Iran)&oldid=1161941",
+      "verification_status": "candidate_only_original_period_unit_scope_not_assumed"
     },
     {
       "country": "伊朗",
@@ -624,13 +624,13 @@
         "cite_note-autoref_8-9"
       ],
       "days_in_year": 365,
-      "derived_daily_thousand_barrels": 100.0,
       "is_latest_reported_year": false,
       "table_category": "production",
       "commodity": "oil",
       "reported_quantity": "36.5",
       "reported_unit": "million bbl/y",
-      "revision_url": "https://www.gem.wiki/w/index.php?title=Foroozan_Oil_and_Gas_Field_(Iran,_Iran)&oldid=1162457"
+      "revision_url": "https://www.gem.wiki/w/index.php?title=Foroozan_Oil_and_Gas_Field_(Iran,_Iran)&oldid=1162457",
+      "verification_status": "candidate_only_original_period_unit_scope_not_assumed"
     },
     {
       "country": "伊朗",
@@ -649,13 +649,13 @@
         "cite_note-autoref_8-9"
       ],
       "days_in_year": 366,
-      "derived_daily_thousand_barrels": 39.891,
       "is_latest_reported_year": false,
       "table_category": "production",
       "commodity": "oil",
       "reported_quantity": "14.6",
       "reported_unit": "million bbl/y",
-      "revision_url": "https://www.gem.wiki/w/index.php?title=Foroozan_Oil_and_Gas_Field_(Iran,_Iran)&oldid=1162457"
+      "revision_url": "https://www.gem.wiki/w/index.php?title=Foroozan_Oil_and_Gas_Field_(Iran,_Iran)&oldid=1162457",
+      "verification_status": "candidate_only_original_period_unit_scope_not_assumed"
     },
     {
       "country": "伊朗",
@@ -674,13 +674,13 @@
         "cite_note-autoref_10-11"
       ],
       "days_in_year": 366,
-      "derived_daily_thousand_barrels": 37.896,
       "is_latest_reported_year": false,
       "table_category": "production",
       "commodity": "oil",
       "reported_quantity": "13.87",
       "reported_unit": "million bbl/y",
-      "revision_url": "https://www.gem.wiki/w/index.php?title=Foroozan_Oil_and_Gas_Field_(Iran,_Iran)&oldid=1162457"
+      "revision_url": "https://www.gem.wiki/w/index.php?title=Foroozan_Oil_and_Gas_Field_(Iran,_Iran)&oldid=1162457",
+      "verification_status": "candidate_only_original_period_unit_scope_not_assumed"
     },
     {
       "country": "伊朗",
@@ -699,13 +699,13 @@
         "cite_note-autoref_11-12"
       ],
       "days_in_year": 366,
-      "derived_daily_thousand_barrels": 39.891,
       "is_latest_reported_year": false,
       "table_category": "production",
       "commodity": "oil",
       "reported_quantity": "14.6",
       "reported_unit": "million bbl/y",
-      "revision_url": "https://www.gem.wiki/w/index.php?title=Foroozan_Oil_and_Gas_Field_(Iran,_Iran)&oldid=1162457"
+      "revision_url": "https://www.gem.wiki/w/index.php?title=Foroozan_Oil_and_Gas_Field_(Iran,_Iran)&oldid=1162457",
+      "verification_status": "candidate_only_original_period_unit_scope_not_assumed"
     },
     {
       "country": "伊朗",
@@ -723,13 +723,13 @@
         "cite_note-autoref_13-14"
       ],
       "days_in_year": 365,
-      "derived_daily_thousand_barrels": 35.014,
       "is_latest_reported_year": true,
       "table_category": "production",
       "commodity": "oil",
       "reported_quantity": "12.78",
       "reported_unit": "million bbl/y",
-      "revision_url": "https://www.gem.wiki/w/index.php?title=Foroozan_Oil_and_Gas_Field_(Iran,_Iran)&oldid=1162457"
+      "revision_url": "https://www.gem.wiki/w/index.php?title=Foroozan_Oil_and_Gas_Field_(Iran,_Iran)&oldid=1162457",
+      "verification_status": "candidate_only_original_period_unit_scope_not_assumed"
     },
     {
       "country": "伊朗",
@@ -747,13 +747,13 @@
         "cite_note-autoref_4-5"
       ],
       "days_in_year": 365,
-      "derived_daily_thousand_barrels": 4.986,
       "is_latest_reported_year": true,
       "table_category": "production",
       "commodity": "oil",
       "reported_quantity": "1.82",
       "reported_unit": "million bbl/y",
-      "revision_url": "https://www.gem.wiki/w/index.php?title=Nowruz_Oil_Field_(Iran)&oldid=1164990"
+      "revision_url": "https://www.gem.wiki/w/index.php?title=Nowruz_Oil_Field_(Iran)&oldid=1164990",
+      "verification_status": "candidate_only_original_period_unit_scope_not_assumed"
     },
     {
       "country": "伊朗",
@@ -772,13 +772,13 @@
         "cite_note-autoref_8-9"
       ],
       "days_in_year": 365,
-      "derived_daily_thousand_barrels": 84.986,
       "is_latest_reported_year": false,
       "table_category": "production",
       "commodity": "oil",
       "reported_quantity": "31.02",
       "reported_unit": "million bbl/y",
-      "revision_url": "https://www.gem.wiki/w/index.php?title=Salman_Oil_and_Gas_Field_(Iran)&oldid=1166018"
+      "revision_url": "https://www.gem.wiki/w/index.php?title=Salman_Oil_and_Gas_Field_(Iran)&oldid=1166018",
+      "verification_status": "candidate_only_original_period_unit_scope_not_assumed"
     },
     {
       "country": "伊朗",
@@ -796,13 +796,13 @@
         "cite_note-autoref_9-10"
       ],
       "days_in_year": 366,
-      "derived_daily_thousand_barrels": 49.863,
       "is_latest_reported_year": true,
       "table_category": "production",
       "commodity": "oil",
       "reported_quantity": "18.25",
       "reported_unit": "million bbl/y",
-      "revision_url": "https://www.gem.wiki/w/index.php?title=Salman_Oil_and_Gas_Field_(Iran)&oldid=1166018"
+      "revision_url": "https://www.gem.wiki/w/index.php?title=Salman_Oil_and_Gas_Field_(Iran)&oldid=1166018",
+      "verification_status": "candidate_only_original_period_unit_scope_not_assumed"
     },
     {
       "country": "伊朗",
@@ -821,13 +821,13 @@
         "cite_note-autoref_6-7"
       ],
       "days_in_year": 365,
-      "derived_daily_thousand_barrels": 130.0,
       "is_latest_reported_year": false,
       "table_category": "production",
       "commodity": "oil",
       "reported_quantity": "47.45",
       "reported_unit": "million bbl/y",
-      "revision_url": "https://www.gem.wiki/w/index.php?title=Bibi_Hakimeh_Oil_Field_(Iran)&oldid=1160657"
+      "revision_url": "https://www.gem.wiki/w/index.php?title=Bibi_Hakimeh_Oil_Field_(Iran)&oldid=1160657",
+      "verification_status": "candidate_only_original_period_unit_scope_not_assumed"
     },
     {
       "country": "伊朗",
@@ -845,13 +845,13 @@
         "cite_note-autoref_7-8"
       ],
       "days_in_year": 365,
-      "derived_daily_thousand_barrels": 105.014,
       "is_latest_reported_year": true,
       "table_category": "production",
       "commodity": "oil",
       "reported_quantity": "38.33",
       "reported_unit": "million bbl/y",
-      "revision_url": "https://www.gem.wiki/w/index.php?title=Bibi_Hakimeh_Oil_Field_(Iran)&oldid=1160657"
+      "revision_url": "https://www.gem.wiki/w/index.php?title=Bibi_Hakimeh_Oil_Field_(Iran)&oldid=1160657",
+      "verification_status": "candidate_only_original_period_unit_scope_not_assumed"
     },
     {
       "country": "伊朗",
@@ -870,13 +870,13 @@
         "cite_note-autoref_7-8"
       ],
       "days_in_year": 365,
-      "derived_daily_thousand_barrels": 150.0,
       "is_latest_reported_year": false,
       "table_category": "production",
       "commodity": "oil",
       "reported_quantity": "54.75",
       "reported_unit": "million bbl/y",
-      "revision_url": "https://www.gem.wiki/w/index.php?title=Karanj_Oil_Field_(Iran)&oldid=1163475"
+      "revision_url": "https://www.gem.wiki/w/index.php?title=Karanj_Oil_Field_(Iran)&oldid=1163475",
+      "verification_status": "candidate_only_original_period_unit_scope_not_assumed"
     },
     {
       "country": "伊朗",
@@ -895,13 +895,13 @@
         "cite_note-autoref_6-7"
       ],
       "days_in_year": 365,
-      "derived_daily_thousand_barrels": 230.0,
       "is_latest_reported_year": false,
       "table_category": "production",
       "commodity": "oil",
       "reported_quantity": "83.95",
       "reported_unit": "million bbl/y",
-      "revision_url": "https://www.gem.wiki/w/index.php?title=Karanj_Oil_Field_(Iran)&oldid=1163475"
+      "revision_url": "https://www.gem.wiki/w/index.php?title=Karanj_Oil_Field_(Iran)&oldid=1163475",
+      "verification_status": "candidate_only_original_period_unit_scope_not_assumed"
     },
     {
       "country": "伊朗",
@@ -920,13 +920,13 @@
         "cite_note-autoref_8-9"
       ],
       "days_in_year": 365,
-      "derived_daily_thousand_barrels": 200.0,
       "is_latest_reported_year": true,
       "table_category": "production",
       "commodity": "oil",
       "reported_quantity": "73.0",
       "reported_unit": "million bbl/y",
-      "revision_url": "https://www.gem.wiki/w/index.php?title=Karanj_Oil_Field_(Iran)&oldid=1163475"
+      "revision_url": "https://www.gem.wiki/w/index.php?title=Karanj_Oil_Field_(Iran)&oldid=1163475",
+      "verification_status": "candidate_only_original_period_unit_scope_not_assumed"
     },
     {
       "country": "伊朗",
@@ -945,13 +945,13 @@
         "cite_note-autoref_7-8"
       ],
       "days_in_year": 365,
-      "derived_daily_thousand_barrels": 220.0,
       "is_latest_reported_year": false,
       "table_category": "production",
       "commodity": "oil",
       "reported_quantity": "80.3",
       "reported_unit": "million bbl/y",
-      "revision_url": "https://www.gem.wiki/w/index.php?title=Abuzar_Oil_Field_(Iran)&oldid=1159870"
+      "revision_url": "https://www.gem.wiki/w/index.php?title=Abuzar_Oil_Field_(Iran)&oldid=1159870",
+      "verification_status": "candidate_only_original_period_unit_scope_not_assumed"
     },
     {
       "country": "伊朗",
@@ -970,13 +970,13 @@
         "cite_note-autoref_8-9"
       ],
       "days_in_year": 366,
-      "derived_daily_thousand_barrels": 199.454,
       "is_latest_reported_year": false,
       "table_category": "production",
       "commodity": "oil",
       "reported_quantity": "73.0",
       "reported_unit": "million bbl/y",
-      "revision_url": "https://www.gem.wiki/w/index.php?title=Abuzar_Oil_Field_(Iran)&oldid=1159870"
+      "revision_url": "https://www.gem.wiki/w/index.php?title=Abuzar_Oil_Field_(Iran)&oldid=1159870",
+      "verification_status": "candidate_only_original_period_unit_scope_not_assumed"
     },
     {
       "country": "伊朗",
@@ -994,13 +994,13 @@
         "cite_note-autoref_0-1"
       ],
       "days_in_year": 365,
-      "derived_daily_thousand_barrels": 185.014,
       "is_latest_reported_year": true,
       "table_category": "production",
       "commodity": "oil",
       "reported_quantity": "67.53",
       "reported_unit": "million bbl/y",
-      "revision_url": "https://www.gem.wiki/w/index.php?title=Abuzar_Oil_Field_(Iran)&oldid=1159870"
+      "revision_url": "https://www.gem.wiki/w/index.php?title=Abuzar_Oil_Field_(Iran)&oldid=1159870",
+      "verification_status": "candidate_only_original_period_unit_scope_not_assumed"
     },
     {
       "country": "伊朗",
@@ -1019,13 +1019,13 @@
         "cite_note-autoref_6-7"
       ],
       "days_in_year": 365,
-      "derived_daily_thousand_barrels": 60.0,
       "is_latest_reported_year": false,
       "table_category": "production",
       "commodity": "oil",
       "reported_quantity": "21.9",
       "reported_unit": "million bbl/y",
-      "revision_url": "https://www.gem.wiki/w/index.php?title=Mansouri_Oil_Field_(Iran)&oldid=1164303"
+      "revision_url": "https://www.gem.wiki/w/index.php?title=Mansouri_Oil_Field_(Iran)&oldid=1164303",
+      "verification_status": "candidate_only_original_period_unit_scope_not_assumed"
     },
     {
       "country": "伊朗",
@@ -1044,13 +1044,13 @@
         "cite_note-autoref_7-8"
       ],
       "days_in_year": 365,
-      "derived_daily_thousand_barrels": 180.0,
       "is_latest_reported_year": true,
       "table_category": "production",
       "commodity": "oil",
       "reported_quantity": "65.7",
       "reported_unit": "million bbl/y",
-      "revision_url": "https://www.gem.wiki/w/index.php?title=Mansouri_Oil_Field_(Iran)&oldid=1164303"
+      "revision_url": "https://www.gem.wiki/w/index.php?title=Mansouri_Oil_Field_(Iran)&oldid=1164303",
+      "verification_status": "candidate_only_original_period_unit_scope_not_assumed"
     },
     {
       "country": "伊朗",
@@ -1068,13 +1068,13 @@
         "cite_note-autoref_3-4"
       ],
       "days_in_year": 365,
-      "derived_daily_thousand_barrels": 64.0,
       "is_latest_reported_year": true,
       "table_category": "production",
       "commodity": "oil",
       "reported_quantity": "23.36",
       "reported_unit": "million bbl/y",
-      "revision_url": "https://www.gem.wiki/w/index.php?title=Sepehr-Jufair_Oil_Field_(Iran)&oldid=1166198"
+      "revision_url": "https://www.gem.wiki/w/index.php?title=Sepehr-Jufair_Oil_Field_(Iran)&oldid=1166198",
+      "verification_status": "candidate_only_original_period_unit_scope_not_assumed"
     },
     {
       "country": "伊朗",
@@ -1093,13 +1093,13 @@
         "cite_note-autoref_6-7"
       ],
       "days_in_year": 366,
-      "derived_daily_thousand_barrels": 99.727,
       "is_latest_reported_year": false,
       "table_category": "production",
       "commodity": "oil",
       "reported_quantity": "36.5",
       "reported_unit": "million bbl/y",
-      "revision_url": "https://www.gem.wiki/w/index.php?title=Sirri_E_Oil_and_Gas_Field_(Iran)&oldid=1166361"
+      "revision_url": "https://www.gem.wiki/w/index.php?title=Sirri_E_Oil_and_Gas_Field_(Iran)&oldid=1166361",
+      "verification_status": "candidate_only_original_period_unit_scope_not_assumed"
     },
     {
       "country": "伊朗",
@@ -1117,13 +1117,13 @@
         "cite_note-autoref_1-2"
       ],
       "days_in_year": 365,
-      "derived_daily_thousand_barrels": 60.0,
       "is_latest_reported_year": true,
       "table_category": "production",
       "commodity": "oil",
       "reported_quantity": "21.9",
       "reported_unit": "million bbl/y",
-      "revision_url": "https://www.gem.wiki/w/index.php?title=Sirri_E_Oil_and_Gas_Field_(Iran)&oldid=1166361"
+      "revision_url": "https://www.gem.wiki/w/index.php?title=Sirri_E_Oil_and_Gas_Field_(Iran)&oldid=1166361",
+      "verification_status": "candidate_only_original_period_unit_scope_not_assumed"
     },
     {
       "country": "伊朗",
@@ -1141,13 +1141,13 @@
         "cite_note-autoref_4-5"
       ],
       "days_in_year": 365,
-      "derived_daily_thousand_barrels": 28.0,
       "is_latest_reported_year": false,
       "table_category": "production",
       "commodity": "oil",
       "reported_quantity": "10.22",
       "reported_unit": "million bbl/y",
-      "revision_url": "https://www.gem.wiki/w/index.php?title=Masjed_Soleyman_Oil_Field_(Iran)&oldid=1164433"
+      "revision_url": "https://www.gem.wiki/w/index.php?title=Masjed_Soleyman_Oil_Field_(Iran)&oldid=1164433",
+      "verification_status": "candidate_only_original_period_unit_scope_not_assumed"
     },
     {
       "country": "伊朗",
@@ -1165,13 +1165,13 @@
         "cite_note-autoref_0-1"
       ],
       "days_in_year": 366,
-      "derived_daily_thousand_barrels": 4.973,
       "is_latest_reported_year": true,
       "table_category": "production",
       "commodity": "oil",
       "reported_quantity": "1.82",
       "reported_unit": "million bbl/y",
-      "revision_url": "https://www.gem.wiki/w/index.php?title=Masjed_Soleyman_Oil_Field_(Iran)&oldid=1164433"
+      "revision_url": "https://www.gem.wiki/w/index.php?title=Masjed_Soleyman_Oil_Field_(Iran)&oldid=1164433",
+      "verification_status": "candidate_only_original_period_unit_scope_not_assumed"
     },
     {
       "country": "伊朗",
@@ -1190,13 +1190,13 @@
         "cite_note-autoref_7-8"
       ],
       "days_in_year": 365,
-      "derived_daily_thousand_barrels": 70.0,
       "is_latest_reported_year": false,
       "table_category": "production",
       "commodity": "oil",
       "reported_quantity": "25.55",
       "reported_unit": "million bbl/y",
-      "revision_url": "https://www.gem.wiki/w/index.php?title=Pazanan_Oil_and_Gas_Field_(Iran)&oldid=1165326"
+      "revision_url": "https://www.gem.wiki/w/index.php?title=Pazanan_Oil_and_Gas_Field_(Iran)&oldid=1165326",
+      "verification_status": "candidate_only_original_period_unit_scope_not_assumed"
     },
     {
       "country": "伊朗",
@@ -1215,13 +1215,13 @@
         "cite_note-autoref_6-7"
       ],
       "days_in_year": 365,
-      "derived_daily_thousand_barrels": 45.014,
       "is_latest_reported_year": true,
       "table_category": "production",
       "commodity": "oil",
       "reported_quantity": "16.43",
       "reported_unit": "million bbl/y",
-      "revision_url": "https://www.gem.wiki/w/index.php?title=Pazanan_Oil_and_Gas_Field_(Iran)&oldid=1165326"
+      "revision_url": "https://www.gem.wiki/w/index.php?title=Pazanan_Oil_and_Gas_Field_(Iran)&oldid=1165326",
+      "verification_status": "candidate_only_original_period_unit_scope_not_assumed"
     },
     {
       "country": "伊朗",
@@ -1240,13 +1240,13 @@
         "cite_note-autoref_7-8"
       ],
       "days_in_year": 365,
-      "derived_daily_thousand_barrels": 101.014,
       "is_latest_reported_year": false,
       "table_category": "production",
       "commodity": "oil",
       "reported_quantity": "36.87",
       "reported_unit": "million bbl/y",
-      "revision_url": "https://www.gem.wiki/w/index.php?title=Kupal_Oil_Field_(Iran)&oldid=1163724"
+      "revision_url": "https://www.gem.wiki/w/index.php?title=Kupal_Oil_Field_(Iran)&oldid=1163724",
+      "verification_status": "candidate_only_original_period_unit_scope_not_assumed"
     },
     {
       "country": "伊朗",
@@ -1265,13 +1265,13 @@
         "cite_note-autoref_8-9"
       ],
       "days_in_year": 365,
-      "derived_daily_thousand_barrels": 60.0,
       "is_latest_reported_year": false,
       "table_category": "production",
       "commodity": "oil",
       "reported_quantity": "21.9",
       "reported_unit": "million bbl/y",
-      "revision_url": "https://www.gem.wiki/w/index.php?title=Kupal_Oil_Field_(Iran)&oldid=1163724"
+      "revision_url": "https://www.gem.wiki/w/index.php?title=Kupal_Oil_Field_(Iran)&oldid=1163724",
+      "verification_status": "candidate_only_original_period_unit_scope_not_assumed"
     },
     {
       "country": "伊朗",
@@ -1289,13 +1289,13 @@
         "cite_note-autoref_9-10"
       ],
       "days_in_year": 365,
-      "derived_daily_thousand_barrels": 62.493,
       "is_latest_reported_year": true,
       "table_category": "production",
       "commodity": "crude oil",
       "reported_quantity": "22.81",
       "reported_unit": "million bbl/y",
-      "revision_url": "https://www.gem.wiki/w/index.php?title=Kupal_Oil_Field_(Iran)&oldid=1163724"
+      "revision_url": "https://www.gem.wiki/w/index.php?title=Kupal_Oil_Field_(Iran)&oldid=1163724",
+      "verification_status": "candidate_only_original_period_unit_scope_not_assumed"
     },
     {
       "country": "伊朗",
@@ -1314,13 +1314,13 @@
         "cite_note-autoref_4-5"
       ],
       "days_in_year": 365,
-      "derived_daily_thousand_barrels": 24.0,
       "is_latest_reported_year": true,
       "table_category": "production",
       "commodity": "oil",
       "reported_quantity": "8.76",
       "reported_unit": "million bbl/y",
-      "revision_url": "https://www.gem.wiki/w/index.php?title=Dehloran_Oil_Field_(Iran)&oldid=1161829"
+      "revision_url": "https://www.gem.wiki/w/index.php?title=Dehloran_Oil_Field_(Iran)&oldid=1161829",
+      "verification_status": "candidate_only_original_period_unit_scope_not_assumed"
     },
     {
       "country": "伊朗",
@@ -1338,13 +1338,13 @@
         "cite_note-autoref_4-5"
       ],
       "days_in_year": 365,
-      "derived_daily_thousand_barrels": 14.986,
       "is_latest_reported_year": false,
       "table_category": "production",
       "commodity": "oil",
       "reported_quantity": "5.47",
       "reported_unit": "million bbl/y",
-      "revision_url": "https://www.gem.wiki/w/index.php?title=Nargesi_Oil_Field_(Iran)&oldid=1164778"
+      "revision_url": "https://www.gem.wiki/w/index.php?title=Nargesi_Oil_Field_(Iran)&oldid=1164778",
+      "verification_status": "candidate_only_original_period_unit_scope_not_assumed"
     },
     {
       "country": "伊朗",
@@ -1362,13 +1362,13 @@
         "cite_note-autoref_4-5"
       ],
       "days_in_year": 365,
-      "derived_daily_thousand_barrels": 40.0,
       "is_latest_reported_year": false,
       "table_category": "production",
       "commodity": "oil",
       "reported_quantity": "14.6",
       "reported_unit": "million bbl/y",
-      "revision_url": "https://www.gem.wiki/w/index.php?title=Nargesi_Oil_Field_(Iran)&oldid=1164778"
+      "revision_url": "https://www.gem.wiki/w/index.php?title=Nargesi_Oil_Field_(Iran)&oldid=1164778",
+      "verification_status": "candidate_only_original_period_unit_scope_not_assumed"
     },
     {
       "country": "伊朗",
@@ -1386,13 +1386,13 @@
         "cite_note-autoref_5-6"
       ],
       "days_in_year": 365,
-      "derived_daily_thousand_barrels": 26.0,
       "is_latest_reported_year": true,
       "table_category": "production",
       "commodity": "oil",
       "reported_quantity": "9.49",
       "reported_unit": "million bbl/y",
-      "revision_url": "https://www.gem.wiki/w/index.php?title=Nargesi_Oil_Field_(Iran)&oldid=1164778"
+      "revision_url": "https://www.gem.wiki/w/index.php?title=Nargesi_Oil_Field_(Iran)&oldid=1164778",
+      "verification_status": "candidate_only_original_period_unit_scope_not_assumed"
     },
     {
       "country": "伊朗",
@@ -1411,13 +1411,13 @@
         "cite_note-autoref_4-5"
       ],
       "days_in_year": 365,
-      "derived_daily_thousand_barrels": 8.0,
       "is_latest_reported_year": true,
       "table_category": "production",
       "commodity": "oil",
       "reported_quantity": "2.92",
       "reported_unit": "million bbl/y",
-      "revision_url": "https://www.gem.wiki/w/index.php?title=Danan_Oil_Field_(Iran)&oldid=1161792"
+      "revision_url": "https://www.gem.wiki/w/index.php?title=Danan_Oil_Field_(Iran)&oldid=1161792",
+      "verification_status": "candidate_only_original_period_unit_scope_not_assumed"
     },
     {
       "country": "伊朗",
@@ -1436,13 +1436,13 @@
         "cite_note-autoref_5-6"
       ],
       "days_in_year": 365,
-      "derived_daily_thousand_barrels": 14.0,
       "is_latest_reported_year": true,
       "table_category": "production",
       "commodity": "oil",
       "reported_quantity": "5.11",
       "reported_unit": "million bbl/y",
-      "revision_url": "https://www.gem.wiki/w/index.php?title=Dalpari_Oil_Field_(Iran)&oldid=1161780"
+      "revision_url": "https://www.gem.wiki/w/index.php?title=Dalpari_Oil_Field_(Iran)&oldid=1161780",
+      "verification_status": "candidate_only_original_period_unit_scope_not_assumed"
     },
     {
       "country": "科威特",
@@ -1461,13 +1461,13 @@
         "cite_note-autoref_9-10"
       ],
       "days_in_year": 366,
-      "derived_daily_thousand_barrels": 99.727,
       "is_latest_reported_year": true,
       "table_category": "production",
       "commodity": "oil",
       "reported_quantity": "36.5",
       "reported_unit": "million bbl/y",
-      "revision_url": "https://www.gem.wiki/w/index.php?title=Sabriya_Oil_Field_(Kuwait)&oldid=1165983"
+      "revision_url": "https://www.gem.wiki/w/index.php?title=Sabriya_Oil_Field_(Kuwait)&oldid=1165983",
+      "verification_status": "candidate_only_original_period_unit_scope_not_assumed"
     },
     {
       "country": "科威特",
@@ -1486,13 +1486,13 @@
         "cite_note-autoref_5-6"
       ],
       "days_in_year": 366,
-      "derived_daily_thousand_barrels": 14.945,
       "is_latest_reported_year": false,
       "table_category": "production",
       "commodity": "oil",
       "reported_quantity": "5.47",
       "reported_unit": "million bbl/y",
-      "revision_url": "https://www.gem.wiki/w/index.php?title=Umm_Niqa_Oil_Field_(Kuwait)&oldid=1167163"
+      "revision_url": "https://www.gem.wiki/w/index.php?title=Umm_Niqa_Oil_Field_(Kuwait)&oldid=1167163",
+      "verification_status": "candidate_only_original_period_unit_scope_not_assumed"
     },
     {
       "country": "科威特",
@@ -1510,13 +1510,13 @@
         "cite_note-autoref_6-7"
       ],
       "days_in_year": 365,
-      "derived_daily_thousand_barrels": 24.986,
       "is_latest_reported_year": true,
       "table_category": "production",
       "commodity": "oil",
       "reported_quantity": "9.12",
       "reported_unit": "million bbl/y",
-      "revision_url": "https://www.gem.wiki/w/index.php?title=Umm_Niqa_Oil_Field_(Kuwait)&oldid=1167163"
+      "revision_url": "https://www.gem.wiki/w/index.php?title=Umm_Niqa_Oil_Field_(Kuwait)&oldid=1167163",
+      "verification_status": "candidate_only_original_period_unit_scope_not_assumed"
     },
     {
       "country": "科威特",
@@ -1535,13 +1535,13 @@
         "cite_note-autoref_4-5"
       ],
       "days_in_year": 365,
-      "derived_daily_thousand_barrels": 100.0,
       "is_latest_reported_year": true,
       "table_category": "production",
       "commodity": "oil",
       "reported_quantity": "36.5",
       "reported_unit": "million bbl/y",
-      "revision_url": "https://www.gem.wiki/w/index.php?title=Umm_Gudair_Oil_Field_(Kuwait)&oldid=1167161"
+      "revision_url": "https://www.gem.wiki/w/index.php?title=Umm_Gudair_Oil_Field_(Kuwait)&oldid=1167161",
+      "verification_status": "candidate_only_original_period_unit_scope_not_assumed"
     },
     {
       "country": "阿曼",
@@ -1560,13 +1560,13 @@
         "cite_note-autoref_5-6"
       ],
       "days_in_year": 365,
-      "derived_daily_thousand_barrels": 100.0,
       "is_latest_reported_year": false,
       "table_category": "production",
       "commodity": "oil",
       "reported_quantity": "36.5",
       "reported_unit": "million bbl/y",
-      "revision_url": "https://www.gem.wiki/w/index.php?title=Mukhaizna_Oil_Field_(Oman)&oldid=1164721"
+      "revision_url": "https://www.gem.wiki/w/index.php?title=Mukhaizna_Oil_Field_(Oman)&oldid=1164721",
+      "verification_status": "candidate_only_original_period_unit_scope_not_assumed"
     },
     {
       "country": "阿曼",
@@ -1584,13 +1584,13 @@
         "cite_note-autoref_1-2"
       ],
       "days_in_year": 365,
-      "derived_daily_thousand_barrels": 80.0,
       "is_latest_reported_year": true,
       "table_category": "production",
       "commodity": "oil",
       "reported_quantity": "29.2",
       "reported_unit": "million bbl/y",
-      "revision_url": "https://www.gem.wiki/w/index.php?title=Mukhaizna_Oil_Field_(Oman)&oldid=1164721"
+      "revision_url": "https://www.gem.wiki/w/index.php?title=Mukhaizna_Oil_Field_(Oman)&oldid=1164721",
+      "verification_status": "candidate_only_original_period_unit_scope_not_assumed"
     },
     {
       "country": "阿曼",
@@ -1608,13 +1608,13 @@
         "cite_note-autoref_4-5"
       ],
       "days_in_year": 365,
-      "derived_daily_thousand_barrels": 92.274,
       "is_latest_reported_year": true,
       "table_category": "production",
       "commodity": "oil",
       "reported_quantity": "33.68",
       "reported_unit": "million bbl/y",
-      "revision_url": "https://www.gem.wiki/w/index.php?title=Fahud_Oil_and_Gas_Field_(Oman)&oldid=1162333"
+      "revision_url": "https://www.gem.wiki/w/index.php?title=Fahud_Oil_and_Gas_Field_(Oman)&oldid=1162333",
+      "verification_status": "candidate_only_original_period_unit_scope_not_assumed"
     },
     {
       "country": "阿曼",
@@ -1632,13 +1632,13 @@
         "cite_note-autoref_3-4"
       ],
       "days_in_year": 365,
-      "derived_daily_thousand_barrels": 90.959,
       "is_latest_reported_year": true,
       "table_category": "production",
       "commodity": "oil",
       "reported_quantity": "33.2",
       "reported_unit": "million bbl/y",
-      "revision_url": "https://www.gem.wiki/w/index.php?title=Qarn_Alam_Oil_and_Gas_Field_(Oman)&oldid=1165685"
+      "revision_url": "https://www.gem.wiki/w/index.php?title=Qarn_Alam_Oil_and_Gas_Field_(Oman)&oldid=1165685",
+      "verification_status": "candidate_only_original_period_unit_scope_not_assumed"
     },
     {
       "country": "阿曼",
@@ -1657,13 +1657,13 @@
         "cite_note-autoref_5-6"
       ],
       "days_in_year": 365,
-      "derived_daily_thousand_barrels": 8.0,
       "is_latest_reported_year": false,
       "table_category": "production",
       "commodity": "oil",
       "reported_quantity": "2.92",
       "reported_unit": "million bbl/y",
-      "revision_url": "https://www.gem.wiki/w/index.php?title=Marmul_Oil_Field_(Oman)&oldid=1164403"
+      "revision_url": "https://www.gem.wiki/w/index.php?title=Marmul_Oil_Field_(Oman)&oldid=1164403",
+      "verification_status": "candidate_only_original_period_unit_scope_not_assumed"
     },
     {
       "country": "阿曼",
@@ -1682,13 +1682,13 @@
         "cite_note-autoref_2-3"
       ],
       "days_in_year": 366,
-      "derived_daily_thousand_barrels": 81.366,
       "is_latest_reported_year": true,
       "table_category": "production",
       "commodity": "oil",
       "reported_quantity": "29.78",
       "reported_unit": "million bbl/y",
-      "revision_url": "https://www.gem.wiki/w/index.php?title=Marmul_Oil_Field_(Oman)&oldid=1164403"
+      "revision_url": "https://www.gem.wiki/w/index.php?title=Marmul_Oil_Field_(Oman)&oldid=1164403",
+      "verification_status": "candidate_only_original_period_unit_scope_not_assumed"
     },
     {
       "country": "阿曼",
@@ -1706,13 +1706,13 @@
         "cite_note-autoref_3-4"
       ],
       "days_in_year": 365,
-      "derived_daily_thousand_barrels": 100.0,
       "is_latest_reported_year": true,
       "table_category": "production",
       "commodity": "oil",
       "reported_quantity": "36.5",
       "reported_unit": "million bbl/y",
-      "revision_url": "https://www.gem.wiki/w/index.php?title=Lekhwair_Oil_and_Gas_Field_(Oman)&oldid=1163924"
+      "revision_url": "https://www.gem.wiki/w/index.php?title=Lekhwair_Oil_and_Gas_Field_(Oman)&oldid=1163924",
+      "verification_status": "candidate_only_original_period_unit_scope_not_assumed"
     },
     {
       "country": "阿曼",
@@ -1730,13 +1730,13 @@
         "cite_note-autoref_4-5"
       ],
       "days_in_year": 365,
-      "derived_daily_thousand_barrels": 77.671,
       "is_latest_reported_year": true,
       "table_category": "production",
       "commodity": "oil",
       "reported_quantity": "28.35",
       "reported_unit": "million bbl/y",
-      "revision_url": "https://www.gem.wiki/w/index.php?title=Bahja_(North_and_South)_Oil_and_Gas_Field_(Oman)&oldid=1160386"
+      "revision_url": "https://www.gem.wiki/w/index.php?title=Bahja_(North_and_South)_Oil_and_Gas_Field_(Oman)&oldid=1160386",
+      "verification_status": "candidate_only_original_period_unit_scope_not_assumed"
     },
     {
       "country": "阿曼",
@@ -1754,13 +1754,13 @@
         "cite_note-autoref_1-2"
       ],
       "days_in_year": 365,
-      "derived_daily_thousand_barrels": 60.0,
       "is_latest_reported_year": true,
       "table_category": "production",
       "commodity": "oil",
       "reported_quantity": "21.9",
       "reported_unit": "million bbl/y",
-      "revision_url": "https://www.gem.wiki/w/index.php?title=Bisat_Oil_Field_(Oman)&oldid=1160708"
+      "revision_url": "https://www.gem.wiki/w/index.php?title=Bisat_Oil_Field_(Oman)&oldid=1160708",
+      "verification_status": "candidate_only_original_period_unit_scope_not_assumed"
     },
     {
       "country": "阿曼",
@@ -1779,13 +1779,13 @@
         "cite_note-autoref_1-2"
       ],
       "days_in_year": 365,
-      "derived_daily_thousand_barrels": 56.0,
       "is_latest_reported_year": true,
       "table_category": "production",
       "commodity": "oil",
       "reported_quantity": "20.44",
       "reported_unit": "million bbl/y",
-      "revision_url": "https://www.gem.wiki/w/index.php?title=Daleel_Oil_Field_(Oman)&oldid=1161772"
+      "revision_url": "https://www.gem.wiki/w/index.php?title=Daleel_Oil_Field_(Oman)&oldid=1161772",
+      "verification_status": "candidate_only_original_period_unit_scope_not_assumed"
     },
     {
       "country": "也门",
@@ -1803,13 +1803,13 @@
         "cite_note-autoref_8-9"
       ],
       "days_in_year": 366,
-      "derived_daily_thousand_barrels": 144.59,
       "is_latest_reported_year": false,
       "table_category": "production",
       "commodity": "oil",
       "reported_quantity": "52.92",
       "reported_unit": "million bbl/y",
-      "revision_url": "https://www.gem.wiki/w/index.php?title=Alif_Oil_Field_(Yemen)&oldid=1160030"
+      "revision_url": "https://www.gem.wiki/w/index.php?title=Alif_Oil_Field_(Yemen)&oldid=1160030",
+      "verification_status": "candidate_only_original_period_unit_scope_not_assumed"
     },
     {
       "country": "也门",
@@ -1827,13 +1827,13 @@
         "cite_note-autoref_4-5"
       ],
       "days_in_year": 366,
-      "derived_daily_thousand_barrels": 118.169,
       "is_latest_reported_year": true,
       "table_category": "production",
       "commodity": "oil",
       "reported_quantity": "43.25",
       "reported_unit": "million bbl/y",
-      "revision_url": "https://www.gem.wiki/w/index.php?title=Alif_Oil_Field_(Yemen)&oldid=1160030"
+      "revision_url": "https://www.gem.wiki/w/index.php?title=Alif_Oil_Field_(Yemen)&oldid=1160030",
+      "verification_status": "candidate_only_original_period_unit_scope_not_assumed"
     },
     {
       "country": "叙利亚",
@@ -1852,13 +1852,13 @@
         "cite_note-autoref_3-4"
       ],
       "days_in_year": 365,
-      "derived_daily_thousand_barrels": 40.0,
       "is_latest_reported_year": false,
       "table_category": "production",
       "commodity": "oil",
       "reported_quantity": "14.6",
       "reported_unit": "million bbl/y",
-      "revision_url": "https://www.gem.wiki/w/index.php?title=al-Tanak_Oil_Field_(Syria)&oldid=1159999"
+      "revision_url": "https://www.gem.wiki/w/index.php?title=al-Tanak_Oil_Field_(Syria)&oldid=1159999",
+      "verification_status": "candidate_only_original_period_unit_scope_not_assumed"
     },
     {
       "country": "叙利亚",
@@ -1877,13 +1877,13 @@
         "cite_note-autoref_5-6"
       ],
       "days_in_year": 366,
-      "derived_daily_thousand_barrels": 11.475,
       "is_latest_reported_year": true,
       "table_category": "production",
       "commodity": "oil",
       "reported_quantity": "4.2",
       "reported_unit": "million bbl/y",
-      "revision_url": "https://www.gem.wiki/w/index.php?title=al-Tanak_Oil_Field_(Syria)&oldid=1159999"
+      "revision_url": "https://www.gem.wiki/w/index.php?title=al-Tanak_Oil_Field_(Syria)&oldid=1159999",
+      "verification_status": "candidate_only_original_period_unit_scope_not_assumed"
     },
     {
       "country": "土耳其",
@@ -1902,13 +1902,13 @@
         "cite_note-autoref_7-8"
       ],
       "days_in_year": 366,
-      "derived_daily_thousand_barrels": 4.863,
       "is_latest_reported_year": true,
       "table_category": "production",
       "commodity": "oil",
       "reported_quantity": "1.78",
       "reported_unit": "million bbl/y",
-      "revision_url": "https://www.gem.wiki/w/index.php?title=Raman_Oil_Field_(Türkiye)&oldid=1165750"
+      "revision_url": "https://www.gem.wiki/w/index.php?title=Raman_Oil_Field_(Türkiye)&oldid=1165750",
+      "verification_status": "candidate_only_original_period_unit_scope_not_assumed"
     },
     {
       "country": "埃及",
@@ -1927,13 +1927,13 @@
         "cite_note-autoref_8-9"
       ],
       "days_in_year": 365,
-      "derived_daily_thousand_barrels": 52.0,
       "is_latest_reported_year": false,
       "table_category": "production",
       "commodity": "oil",
       "reported_quantity": "18.98",
       "reported_unit": "million bbl/y",
-      "revision_url": "https://www.gem.wiki/w/index.php?title=Morgan_Oil_and_Gas_Field_(Egypt)&oldid=1164684"
+      "revision_url": "https://www.gem.wiki/w/index.php?title=Morgan_Oil_and_Gas_Field_(Egypt)&oldid=1164684",
+      "verification_status": "candidate_only_original_period_unit_scope_not_assumed"
     },
     {
       "country": "埃及",
@@ -1951,13 +1951,13 @@
         "cite_note-autoref_5-6"
       ],
       "days_in_year": 366,
-      "derived_daily_thousand_barrels": 329.098,
       "is_latest_reported_year": true,
       "table_category": "production",
       "commodity": "oil",
       "reported_quantity": "120.45",
       "reported_unit": "million bbl/y",
-      "revision_url": "https://www.gem.wiki/w/index.php?title=Morgan_Oil_and_Gas_Field_(Egypt)&oldid=1164684"
+      "revision_url": "https://www.gem.wiki/w/index.php?title=Morgan_Oil_and_Gas_Field_(Egypt)&oldid=1164684",
+      "verification_status": "candidate_only_original_period_unit_scope_not_assumed"
     },
     {
       "country": "埃及",
@@ -1975,13 +1975,13 @@
         "cite_note-autoref_4-5"
       ],
       "days_in_year": 365,
-      "derived_daily_thousand_barrels": 124.986,
       "is_latest_reported_year": true,
       "table_category": "production",
       "commodity": "oil",
       "reported_quantity": "45.62",
       "reported_unit": "million bbl/y",
-      "revision_url": "https://www.gem.wiki/w/index.php?title=Ramadan_Oil_and_Gas_Field_(Egypt)&oldid=1165748"
+      "revision_url": "https://www.gem.wiki/w/index.php?title=Ramadan_Oil_and_Gas_Field_(Egypt)&oldid=1165748",
+      "verification_status": "candidate_only_original_period_unit_scope_not_assumed"
     },
     {
       "country": "埃及",
@@ -2000,13 +2000,13 @@
         "cite_note-autoref_7-8"
       ],
       "days_in_year": 365,
-      "derived_daily_thousand_barrels": 134.986,
       "is_latest_reported_year": false,
       "table_category": "production",
       "commodity": "oil",
       "reported_quantity": "49.27",
       "reported_unit": "million bbl/y",
-      "revision_url": "https://www.gem.wiki/w/index.php?title=October_Oil_and_Gas_Field_(Egypt)&oldid=1165033"
+      "revision_url": "https://www.gem.wiki/w/index.php?title=October_Oil_and_Gas_Field_(Egypt)&oldid=1165033",
+      "verification_status": "candidate_only_original_period_unit_scope_not_assumed"
     },
     {
       "country": "埃及",
@@ -2025,13 +2025,13 @@
         "cite_note-autoref_1-2"
       ],
       "days_in_year": 366,
-      "derived_daily_thousand_barrels": 79.781,
       "is_latest_reported_year": true,
       "table_category": "production",
       "commodity": "oil",
       "reported_quantity": "29.2",
       "reported_unit": "million bbl/y",
-      "revision_url": "https://www.gem.wiki/w/index.php?title=October_Oil_and_Gas_Field_(Egypt)&oldid=1165033"
+      "revision_url": "https://www.gem.wiki/w/index.php?title=October_Oil_and_Gas_Field_(Egypt)&oldid=1165033",
+      "verification_status": "candidate_only_original_period_unit_scope_not_assumed"
     },
     {
       "country": "伊朗",
@@ -2050,13 +2050,13 @@
         "cite_note-autoref_4-5"
       ],
       "days_in_year": 365,
-      "derived_daily_thousand_barrels": 24.986,
       "is_latest_reported_year": false,
       "table_category": "production",
       "commodity": "oil",
       "reported_quantity": "9.12",
       "reported_unit": "million bbl/y",
-      "revision_url": "https://www.gem.wiki/w/index.php?title=Ramshir_Oil_Field_(Iran)&oldid=1165753"
+      "revision_url": "https://www.gem.wiki/w/index.php?title=Ramshir_Oil_Field_(Iran)&oldid=1165753",
+      "verification_status": "candidate_only_original_period_unit_scope_not_assumed"
     },
     {
       "country": "伊朗",
@@ -2074,13 +2074,13 @@
         "cite_note-autoref_6-7"
       ],
       "days_in_year": 365,
-      "derived_daily_thousand_barrels": 54.986,
       "is_latest_reported_year": true,
       "table_category": "production",
       "commodity": "oil",
       "reported_quantity": "20.07",
       "reported_unit": "million bbl/y",
-      "revision_url": "https://www.gem.wiki/w/index.php?title=Ramshir_Oil_Field_(Iran)&oldid=1165753"
+      "revision_url": "https://www.gem.wiki/w/index.php?title=Ramshir_Oil_Field_(Iran)&oldid=1165753",
+      "verification_status": "candidate_only_original_period_unit_scope_not_assumed"
     },
     {
       "country": "伊朗",
@@ -2099,13 +2099,13 @@
         "cite_note-autoref_4-5"
       ],
       "days_in_year": 365,
-      "derived_daily_thousand_barrels": 70.0,
       "is_latest_reported_year": true,
       "table_category": "production",
       "commodity": "oil",
       "reported_quantity": "25.55",
       "reported_unit": "million bbl/y",
-      "revision_url": "https://www.gem.wiki/w/index.php?title=Shadegan_Oil_Field_(Iran)&oldid=1166239"
+      "revision_url": "https://www.gem.wiki/w/index.php?title=Shadegan_Oil_Field_(Iran)&oldid=1166239",
+      "verification_status": "candidate_only_original_period_unit_scope_not_assumed"
     },
     {
       "country": "卡塔尔",
@@ -2124,13 +2124,13 @@
         "cite_note-autoref_1-2"
       ],
       "days_in_year": 365,
-      "derived_daily_thousand_barrels": 61.699,
       "is_latest_reported_year": false,
       "table_category": "production",
       "commodity": "oil",
       "reported_quantity": "22.52",
       "reported_unit": "million bbl/y",
-      "revision_url": "https://www.gem.wiki/w/index.php?title=Idd_El_Shargi_North_Dome_(ISND)_Oil_and_Gas_Field_(Qatar)&oldid=1163176"
+      "revision_url": "https://www.gem.wiki/w/index.php?title=Idd_El_Shargi_North_Dome_(ISND)_Oil_and_Gas_Field_(Qatar)&oldid=1163176",
+      "verification_status": "candidate_only_original_period_unit_scope_not_assumed"
     },
     {
       "country": "卡塔尔",
@@ -2149,13 +2149,13 @@
         "cite_note-autoref_0-1"
       ],
       "days_in_year": 366,
-      "derived_daily_thousand_barrels": 55.82,
       "is_latest_reported_year": true,
       "table_category": "production",
       "commodity": "oil",
       "reported_quantity": "20.43",
       "reported_unit": "million bbl/y",
-      "revision_url": "https://www.gem.wiki/w/index.php?title=Idd_El_Shargi_North_Dome_(ISND)_Oil_and_Gas_Field_(Qatar)&oldid=1163176"
+      "revision_url": "https://www.gem.wiki/w/index.php?title=Idd_El_Shargi_North_Dome_(ISND)_Oil_and_Gas_Field_(Qatar)&oldid=1163176",
+      "verification_status": "candidate_only_original_period_unit_scope_not_assumed"
     },
     {
       "country": "伊拉克",
@@ -2174,13 +2174,13 @@
         "cite_note-autoref_4-5"
       ],
       "days_in_year": 366,
-      "derived_daily_thousand_barrels": 9.973,
       "is_latest_reported_year": false,
       "table_category": "production",
       "commodity": "oil",
       "reported_quantity": "3.65",
       "reported_unit": "million bbl/y",
-      "revision_url": "https://www.gem.wiki/w/index.php?title=Safwan_Oil_Field_(Iraq)&oldid=1165991"
+      "revision_url": "https://www.gem.wiki/w/index.php?title=Safwan_Oil_Field_(Iraq)&oldid=1165991",
+      "verification_status": "candidate_only_original_period_unit_scope_not_assumed"
     },
     {
       "country": "伊拉克",
@@ -2198,13 +2198,13 @@
         "cite_note-autoref_1-2"
       ],
       "days_in_year": 365,
-      "derived_daily_thousand_barrels": 50.0,
       "is_latest_reported_year": true,
       "table_category": "production",
       "commodity": "oil",
       "reported_quantity": "18.25",
       "reported_unit": "million bbl/y",
-      "revision_url": "https://www.gem.wiki/w/index.php?title=Safwan_Oil_Field_(Iraq)&oldid=1165991"
+      "revision_url": "https://www.gem.wiki/w/index.php?title=Safwan_Oil_Field_(Iraq)&oldid=1165991",
+      "verification_status": "candidate_only_original_period_unit_scope_not_assumed"
     },
     {
       "country": "伊朗",
@@ -2223,13 +2223,13 @@
         "cite_note-autoref_4-5"
       ],
       "days_in_year": 365,
-      "derived_daily_thousand_barrels": 60.0,
       "is_latest_reported_year": false,
       "table_category": "production",
       "commodity": "oil",
       "reported_quantity": "21.9",
       "reported_unit": "million bbl/y",
-      "revision_url": "https://www.gem.wiki/w/index.php?title=Abteymour_Oil_Field_(Iran)&oldid=1159871"
+      "revision_url": "https://www.gem.wiki/w/index.php?title=Abteymour_Oil_Field_(Iran)&oldid=1159871",
+      "verification_status": "candidate_only_original_period_unit_scope_not_assumed"
     },
     {
       "country": "伊朗",
@@ -2247,13 +2247,13 @@
         "cite_note-autoref_6-7"
       ],
       "days_in_year": 365,
-      "derived_daily_thousand_barrels": 54.0,
       "is_latest_reported_year": false,
       "table_category": "production",
       "commodity": "oil",
       "reported_quantity": "19.71",
       "reported_unit": "million bbl/y",
-      "revision_url": "https://www.gem.wiki/w/index.php?title=Abteymour_Oil_Field_(Iran)&oldid=1159871"
+      "revision_url": "https://www.gem.wiki/w/index.php?title=Abteymour_Oil_Field_(Iran)&oldid=1159871",
+      "verification_status": "candidate_only_original_period_unit_scope_not_assumed"
     },
     {
       "country": "伊朗",
@@ -2273,13 +2273,13 @@
         "cite_note-autoref_0-1"
       ],
       "days_in_year": 366,
-      "derived_daily_thousand_barrels": 47.869,
       "is_latest_reported_year": true,
       "table_category": "production",
       "commodity": "oil",
       "reported_quantity": "17.52",
       "reported_unit": "million bbl/y",
-      "revision_url": "https://www.gem.wiki/w/index.php?title=Abteymour_Oil_Field_(Iran)&oldid=1159871"
+      "revision_url": "https://www.gem.wiki/w/index.php?title=Abteymour_Oil_Field_(Iran)&oldid=1159871",
+      "verification_status": "candidate_only_original_period_unit_scope_not_assumed"
     },
     {
       "country": "伊朗",
@@ -2298,13 +2298,13 @@
         "cite_note-autoref_3-4"
       ],
       "days_in_year": 365,
-      "derived_daily_thousand_barrels": 40.0,
       "is_latest_reported_year": true,
       "table_category": "production",
       "commodity": "oil",
       "reported_quantity": "14.6",
       "reported_unit": "million bbl/y",
-      "revision_url": "https://www.gem.wiki/w/index.php?title=Lab-E-Safid_Oil_Field_(Iran)&oldid=1163796"
+      "revision_url": "https://www.gem.wiki/w/index.php?title=Lab-E-Safid_Oil_Field_(Iran)&oldid=1163796",
+      "verification_status": "candidate_only_original_period_unit_scope_not_assumed"
     },
     {
       "country": "伊朗",
@@ -2323,13 +2323,13 @@
         "cite_note-autoref_4-5"
       ],
       "days_in_year": 365,
-      "derived_daily_thousand_barrels": 24.986,
       "is_latest_reported_year": true,
       "table_category": "production",
       "commodity": "oil",
       "reported_quantity": "9.12",
       "reported_unit": "million bbl/y",
-      "revision_url": "https://www.gem.wiki/w/index.php?title=Sirri_C_Oil_Field_(Iran)&oldid=1166360"
+      "revision_url": "https://www.gem.wiki/w/index.php?title=Sirri_C_Oil_Field_(Iran)&oldid=1166360",
+      "verification_status": "candidate_only_original_period_unit_scope_not_assumed"
     },
     {
       "country": "伊朗",
@@ -2347,13 +2347,13 @@
         "cite_note-autoref_4-5"
       ],
       "days_in_year": 365,
-      "derived_daily_thousand_barrels": 24.986,
       "is_latest_reported_year": true,
       "table_category": "production",
       "commodity": "oil",
       "reported_quantity": "9.12",
       "reported_unit": "million bbl/y",
-      "revision_url": "https://www.gem.wiki/w/index.php?title=Qaleh_Nar_Oil_and_Gas_Field_(Iran)&oldid=1165683"
+      "revision_url": "https://www.gem.wiki/w/index.php?title=Qaleh_Nar_Oil_and_Gas_Field_(Iran)&oldid=1165683",
+      "verification_status": "candidate_only_original_period_unit_scope_not_assumed"
     },
     {
       "country": "阿曼",
@@ -2372,13 +2372,13 @@
         "cite_note-autoref_3-4"
       ],
       "days_in_year": 366,
-      "derived_daily_thousand_barrels": 13.962,
       "is_latest_reported_year": false,
       "table_category": "production",
       "commodity": "oil",
       "reported_quantity": "5.11",
       "reported_unit": "million bbl/y",
-      "revision_url": "https://www.gem.wiki/w/index.php?title=Farha_South_Oil_Field_(Oman)&oldid=1162341"
+      "revision_url": "https://www.gem.wiki/w/index.php?title=Farha_South_Oil_Field_(Oman)&oldid=1162341",
+      "verification_status": "candidate_only_original_period_unit_scope_not_assumed"
     },
     {
       "country": "阿曼",
@@ -2396,13 +2396,13 @@
         "cite_note-autoref_0-1"
       ],
       "days_in_year": 366,
-      "derived_daily_thousand_barrels": 24.645,
       "is_latest_reported_year": true,
       "table_category": "production",
       "commodity": "oil",
       "reported_quantity": "9.02",
       "reported_unit": "million bbl/y",
-      "revision_url": "https://www.gem.wiki/w/index.php?title=Farha_South_Oil_Field_(Oman)&oldid=1162341"
+      "revision_url": "https://www.gem.wiki/w/index.php?title=Farha_South_Oil_Field_(Oman)&oldid=1162341",
+      "verification_status": "candidate_only_original_period_unit_scope_not_assumed"
     },
     {
       "country": "埃及",
@@ -2421,13 +2421,13 @@
         "cite_note-autoref_4-5"
       ],
       "days_in_year": 365,
-      "derived_daily_thousand_barrels": 22.986,
       "is_latest_reported_year": true,
       "table_category": "production",
       "commodity": "oil",
       "reported_quantity": "8.39",
       "reported_unit": "million bbl/y",
-      "revision_url": "https://www.gem.wiki/w/index.php?title=Karama_Oil_Field_(Egypt)&oldid=1163473"
+      "revision_url": "https://www.gem.wiki/w/index.php?title=Karama_Oil_Field_(Egypt)&oldid=1163473",
+      "verification_status": "candidate_only_original_period_unit_scope_not_assumed"
     },
     {
       "country": "叙利亚",
@@ -2446,13 +2446,13 @@
         "cite_note-autoref_2-3"
       ],
       "days_in_year": 365,
-      "derived_daily_thousand_barrels": 21.507,
       "is_latest_reported_year": true,
       "table_category": "production",
       "commodity": "oil",
       "reported_quantity": "7.85",
       "reported_unit": "million bbl/y",
-      "revision_url": "https://www.gem.wiki/w/index.php?title=Khurbet_East_Oil_Field_(Syria)&oldid=1163597"
+      "revision_url": "https://www.gem.wiki/w/index.php?title=Khurbet_East_Oil_Field_(Syria)&oldid=1163597",
+      "verification_status": "candidate_only_original_period_unit_scope_not_assumed"
     },
     {
       "country": "伊朗",
@@ -2470,13 +2470,13 @@
         "cite_note-autoref_5-6"
       ],
       "days_in_year": 366,
-      "derived_daily_thousand_barrels": 16.967,
       "is_latest_reported_year": false,
       "table_category": "production",
       "commodity": "oil",
       "reported_quantity": "6.21",
       "reported_unit": "million bbl/y",
-      "revision_url": "https://www.gem.wiki/w/index.php?title=Zeloi_Oil_and_Gas_Field_(Iran)&oldid=1167895"
+      "revision_url": "https://www.gem.wiki/w/index.php?title=Zeloi_Oil_and_Gas_Field_(Iran)&oldid=1167895",
+      "verification_status": "candidate_only_original_period_unit_scope_not_assumed"
     },
     {
       "country": "伊朗",
@@ -2494,13 +2494,13 @@
         "cite_note-autoref_1-2"
       ],
       "days_in_year": 365,
-      "derived_daily_thousand_barrels": 18.986,
       "is_latest_reported_year": true,
       "table_category": "production",
       "commodity": "oil",
       "reported_quantity": "6.93",
       "reported_unit": "million bbl/y",
-      "revision_url": "https://www.gem.wiki/w/index.php?title=Zeloi_Oil_and_Gas_Field_(Iran)&oldid=1167895"
+      "revision_url": "https://www.gem.wiki/w/index.php?title=Zeloi_Oil_and_Gas_Field_(Iran)&oldid=1167895",
+      "verification_status": "candidate_only_original_period_unit_scope_not_assumed"
     },
     {
       "country": "伊朗",
@@ -2518,13 +2518,13 @@
         "cite_note-autoref_5-6"
       ],
       "days_in_year": 365,
-      "derived_daily_thousand_barrels": 12.0,
       "is_latest_reported_year": false,
       "table_category": "production",
       "commodity": "oil",
       "reported_quantity": "4.38",
       "reported_unit": "million bbl/y",
-      "revision_url": "https://www.gem.wiki/w/index.php?title=Resalat_Oil_Field_(Iran)&oldid=1165830"
+      "revision_url": "https://www.gem.wiki/w/index.php?title=Resalat_Oil_Field_(Iran)&oldid=1165830",
+      "verification_status": "candidate_only_original_period_unit_scope_not_assumed"
     },
     {
       "country": "伊朗",
@@ -2543,13 +2543,13 @@
         "cite_note-autoref_6-7"
       ],
       "days_in_year": 365,
-      "derived_daily_thousand_barrels": 16.0,
       "is_latest_reported_year": true,
       "table_category": "production",
       "commodity": "oil",
       "reported_quantity": "5.84",
       "reported_unit": "million bbl/y",
-      "revision_url": "https://www.gem.wiki/w/index.php?title=Resalat_Oil_Field_(Iran)&oldid=1165830"
+      "revision_url": "https://www.gem.wiki/w/index.php?title=Resalat_Oil_Field_(Iran)&oldid=1165830",
+      "verification_status": "candidate_only_original_period_unit_scope_not_assumed"
     },
     {
       "country": "伊朗",
@@ -2568,13 +2568,13 @@
         "cite_note-autoref_6-7"
       ],
       "days_in_year": 365,
-      "derived_daily_thousand_barrels": 12.0,
       "is_latest_reported_year": false,
       "table_category": "production",
       "commodity": "oil",
       "reported_quantity": "4.38",
       "reported_unit": "million bbl/y",
-      "revision_url": "https://www.gem.wiki/w/index.php?title=Sarvestan_Oil_and_Gas_Field_(Iran)&oldid=1166131"
+      "revision_url": "https://www.gem.wiki/w/index.php?title=Sarvestan_Oil_and_Gas_Field_(Iran)&oldid=1166131",
+      "verification_status": "candidate_only_original_period_unit_scope_not_assumed"
     },
     {
       "country": "伊朗",
@@ -2593,13 +2593,13 @@
         "cite_note-autoref_7-8"
       ],
       "days_in_year": 366,
-      "derived_daily_thousand_barrels": 14.945,
       "is_latest_reported_year": true,
       "table_category": "production",
       "commodity": "oil",
       "reported_quantity": "5.47",
       "reported_unit": "million bbl/y",
-      "revision_url": "https://www.gem.wiki/w/index.php?title=Sarvestan_Oil_and_Gas_Field_(Iran)&oldid=1166131"
+      "revision_url": "https://www.gem.wiki/w/index.php?title=Sarvestan_Oil_and_Gas_Field_(Iran)&oldid=1166131",
+      "verification_status": "candidate_only_original_period_unit_scope_not_assumed"
     },
     {
       "country": "伊朗",
@@ -2617,13 +2617,13 @@
         "cite_note-autoref_1-2"
       ],
       "days_in_year": 366,
-      "derived_daily_thousand_barrels": 14.945,
       "is_latest_reported_year": true,
       "table_category": "production",
       "commodity": "oil",
       "reported_quantity": "5.47",
       "reported_unit": "million bbl/y",
-      "revision_url": "https://www.gem.wiki/w/index.php?title=Gulkhari_Oil_Field_(Iran)&oldid=1162845"
+      "revision_url": "https://www.gem.wiki/w/index.php?title=Gulkhari_Oil_Field_(Iran)&oldid=1162845",
+      "verification_status": "candidate_only_original_period_unit_scope_not_assumed"
     },
     {
       "country": "伊朗",
@@ -2642,13 +2642,13 @@
         "cite_note-autoref_4-5"
       ],
       "days_in_year": 366,
-      "derived_daily_thousand_barrels": 14.945,
       "is_latest_reported_year": true,
       "table_category": "production",
       "commodity": "oil",
       "reported_quantity": "5.47",
       "reported_unit": "million bbl/y",
-      "revision_url": "https://www.gem.wiki/w/index.php?title=Saadat_Abad_Oil_Field_(Iran)&oldid=1165975"
+      "revision_url": "https://www.gem.wiki/w/index.php?title=Saadat_Abad_Oil_Field_(Iran)&oldid=1165975",
+      "verification_status": "candidate_only_original_period_unit_scope_not_assumed"
     },
     {
       "country": "阿曼",
@@ -2666,13 +2666,13 @@
         "cite_note-autoref_3-4"
       ],
       "days_in_year": 365,
-      "derived_daily_thousand_barrels": 10.986,
       "is_latest_reported_year": true,
       "table_category": "production",
       "commodity": "oil",
       "reported_quantity": "4.01",
       "reported_unit": "million bbl/y",
-      "revision_url": "https://www.gem.wiki/w/index.php?title=Hawqa_Oil_and_Gas_Field_(Oman)&oldid=1162988"
+      "revision_url": "https://www.gem.wiki/w/index.php?title=Hawqa_Oil_and_Gas_Field_(Oman)&oldid=1162988",
+      "verification_status": "candidate_only_original_period_unit_scope_not_assumed"
     },
     {
       "country": "科威特",
@@ -2691,13 +2691,13 @@
         "cite_note-autoref_3-4"
       ],
       "days_in_year": 365,
-      "derived_daily_thousand_barrels": 13.507,
       "is_latest_reported_year": true,
       "table_category": "production",
       "commodity": "oil",
       "reported_quantity": "4.93",
       "reported_unit": "million bbl/y",
-      "revision_url": "https://www.gem.wiki/w/index.php?title=Dharif_Oil_Field_(Kuwait)&oldid=1161869"
+      "revision_url": "https://www.gem.wiki/w/index.php?title=Dharif_Oil_Field_(Kuwait)&oldid=1161869",
+      "verification_status": "candidate_only_original_period_unit_scope_not_assumed"
     },
     {
       "country": "伊拉克",
@@ -2716,13 +2716,13 @@
         "cite_note-autoref_4-5"
       ],
       "days_in_year": 365,
-      "derived_daily_thousand_barrels": 12.493,
       "is_latest_reported_year": true,
       "table_category": "production",
       "commodity": "oil",
       "reported_quantity": "4.56",
       "reported_unit": "million bbl/y",
-      "revision_url": "https://www.gem.wiki/w/index.php?title=Simrit_Oil_and_Gas_Field_(Iraq)&oldid=1166339"
+      "revision_url": "https://www.gem.wiki/w/index.php?title=Simrit_Oil_and_Gas_Field_(Iraq)&oldid=1166339",
+      "verification_status": "candidate_only_original_period_unit_scope_not_assumed"
     },
     {
       "country": "叙利亚",
@@ -2740,13 +2740,13 @@
         "cite_note-autoref_2-3"
       ],
       "days_in_year": 365,
-      "derived_daily_thousand_barrels": 12.11,
       "is_latest_reported_year": true,
       "table_category": "production",
       "commodity": "oil",
       "reported_quantity": "4.42",
       "reported_unit": "million bbl/y",
-      "revision_url": "https://www.gem.wiki/w/index.php?title=Gbeibe_Oil_Field_(Syria)&oldid=1162591"
+      "revision_url": "https://www.gem.wiki/w/index.php?title=Gbeibe_Oil_Field_(Syria)&oldid=1162591",
+      "verification_status": "candidate_only_original_period_unit_scope_not_assumed"
     },
     {
       "country": "埃及",
@@ -2765,13 +2765,13 @@
         "cite_note-autoref_5-6"
       ],
       "days_in_year": 365,
-      "derived_daily_thousand_barrels": 12.0,
       "is_latest_reported_year": true,
       "table_category": "production",
       "commodity": "oil",
       "reported_quantity": "4.38",
       "reported_unit": "million bbl/y",
-      "revision_url": "https://www.gem.wiki/w/index.php?title=Ras_Fanar_Oil_and_Gas_Field_(Egypt)&oldid=1165775"
+      "revision_url": "https://www.gem.wiki/w/index.php?title=Ras_Fanar_Oil_and_Gas_Field_(Egypt)&oldid=1165775",
+      "verification_status": "candidate_only_original_period_unit_scope_not_assumed"
     },
     {
       "country": "埃及",
@@ -2790,13 +2790,13 @@
         "cite_note-autoref_0-1"
       ],
       "days_in_year": 366,
-      "derived_daily_thousand_barrels": 11.967,
       "is_latest_reported_year": true,
       "table_category": "production",
       "commodity": "oil",
       "reported_quantity": "4.38",
       "reported_unit": "million bbl/y",
-      "revision_url": "https://www.gem.wiki/w/index.php?title=South_West_Melehia_Oil_Field_(Egypt)&oldid=1166486"
+      "revision_url": "https://www.gem.wiki/w/index.php?title=South_West_Melehia_Oil_Field_(Egypt)&oldid=1166486",
+      "verification_status": "candidate_only_original_period_unit_scope_not_assumed"
     },
     {
       "country": "伊朗",
@@ -2815,13 +2815,13 @@
         "cite_note-autoref_8-9"
       ],
       "days_in_year": 365,
-      "derived_daily_thousand_barrels": 9.014,
       "is_latest_reported_year": false,
       "table_category": "production",
       "commodity": "oil",
       "reported_quantity": "3.29",
       "reported_unit": "million bbl/y",
-      "revision_url": "https://www.gem.wiki/w/index.php?title=Khesht_Oil_Field_(Iran)&oldid=1163589"
+      "revision_url": "https://www.gem.wiki/w/index.php?title=Khesht_Oil_Field_(Iran)&oldid=1163589",
+      "verification_status": "candidate_only_original_period_unit_scope_not_assumed"
     },
     {
       "country": "伊朗",
@@ -2839,13 +2839,13 @@
         "cite_note-autoref_0-1"
       ],
       "days_in_year": 365,
-      "derived_daily_thousand_barrels": 10.0,
       "is_latest_reported_year": true,
       "table_category": "production",
       "commodity": "oil",
       "reported_quantity": "3.65",
       "reported_unit": "million bbl/y",
-      "revision_url": "https://www.gem.wiki/w/index.php?title=Khesht_Oil_Field_(Iran)&oldid=1163589"
+      "revision_url": "https://www.gem.wiki/w/index.php?title=Khesht_Oil_Field_(Iran)&oldid=1163589",
+      "verification_status": "candidate_only_original_period_unit_scope_not_assumed"
     },
     {
       "country": "伊朗",
@@ -2864,13 +2864,13 @@
         "cite_note-autoref_5-6"
       ],
       "days_in_year": 365,
-      "derived_daily_thousand_barrels": 10.0,
       "is_latest_reported_year": true,
       "table_category": "production",
       "commodity": "oil",
       "reported_quantity": "3.65",
       "reported_unit": "million bbl/y",
-      "revision_url": "https://www.gem.wiki/w/index.php?title=Chillingar_Oil_Field_(Iran)&oldid=1161442"
+      "revision_url": "https://www.gem.wiki/w/index.php?title=Chillingar_Oil_Field_(Iran)&oldid=1161442",
+      "verification_status": "candidate_only_original_period_unit_scope_not_assumed"
     },
     {
       "country": "埃及",
@@ -2889,13 +2889,13 @@
         "cite_note-autoref_6-7"
       ],
       "days_in_year": 365,
-      "derived_daily_thousand_barrels": 9.507,
       "is_latest_reported_year": true,
       "table_category": "production",
       "commodity": "oil",
       "reported_quantity": "3.47",
       "reported_unit": "million bbl/y",
-      "revision_url": "https://www.gem.wiki/w/index.php?title=Berenice_Oil_Field_(Egypt)&oldid=1160616"
+      "revision_url": "https://www.gem.wiki/w/index.php?title=Berenice_Oil_Field_(Egypt)&oldid=1160616",
+      "verification_status": "candidate_only_original_period_unit_scope_not_assumed"
     },
     {
       "country": "卡塔尔",
@@ -2914,13 +2914,13 @@
         "cite_note-autoref_1-2"
       ],
       "days_in_year": 365,
-      "derived_daily_thousand_barrels": 9.288,
       "is_latest_reported_year": false,
       "table_category": "production",
       "commodity": "oil",
       "reported_quantity": "3.39",
       "reported_unit": "million bbl/y",
-      "revision_url": "https://www.gem.wiki/w/index.php?title=Idd_El_Shargi_South_Dome_(ISSD)_Oil_and_Gas_Field_(Qatar)&oldid=1163177"
+      "revision_url": "https://www.gem.wiki/w/index.php?title=Idd_El_Shargi_South_Dome_(ISSD)_Oil_and_Gas_Field_(Qatar)&oldid=1163177",
+      "verification_status": "candidate_only_original_period_unit_scope_not_assumed"
     },
     {
       "country": "卡塔尔",
@@ -2939,13 +2939,13 @@
         "cite_note-autoref_0-1"
       ],
       "days_in_year": 366,
-      "derived_daily_thousand_barrels": 7.514,
       "is_latest_reported_year": true,
       "table_category": "production",
       "commodity": "oil",
       "reported_quantity": "2.75",
       "reported_unit": "million bbl/y",
-      "revision_url": "https://www.gem.wiki/w/index.php?title=Idd_El_Shargi_South_Dome_(ISSD)_Oil_and_Gas_Field_(Qatar)&oldid=1163177"
+      "revision_url": "https://www.gem.wiki/w/index.php?title=Idd_El_Shargi_South_Dome_(ISSD)_Oil_and_Gas_Field_(Qatar)&oldid=1163177",
+      "verification_status": "candidate_only_original_period_unit_scope_not_assumed"
     },
     {
       "country": "埃及",
@@ -2963,13 +2963,13 @@
         "cite_note-autoref_2-3"
       ],
       "days_in_year": 365,
-      "derived_daily_thousand_barrels": 7.205,
       "is_latest_reported_year": true,
       "table_category": "production",
       "commodity": "oil",
       "reported_quantity": "2.63",
       "reported_unit": "million bbl/y",
-      "revision_url": "https://www.gem.wiki/w/index.php?title=Zaafarana_Oil_Field_(Egypt)&oldid=1167854"
+      "revision_url": "https://www.gem.wiki/w/index.php?title=Zaafarana_Oil_Field_(Egypt)&oldid=1167854",
+      "verification_status": "candidate_only_original_period_unit_scope_not_assumed"
     },
     {
       "country": "埃及",
@@ -2987,13 +2987,13 @@
         "cite_note-autoref_2-3"
       ],
       "days_in_year": 365,
-      "derived_daily_thousand_barrels": 7.151,
       "is_latest_reported_year": true,
       "table_category": "production",
       "commodity": "oil",
       "reported_quantity": "2.61",
       "reported_unit": "million bbl/y",
-      "revision_url": "https://www.gem.wiki/w/index.php?title=Alamein_Oil_Field_(Egypt)&oldid=1160006"
+      "revision_url": "https://www.gem.wiki/w/index.php?title=Alamein_Oil_Field_(Egypt)&oldid=1160006",
+      "verification_status": "candidate_only_original_period_unit_scope_not_assumed"
     },
     {
       "country": "阿曼",
@@ -3011,13 +3011,13 @@
         "cite_note-autoref_0-1"
       ],
       "days_in_year": 365,
-      "derived_daily_thousand_barrels": 6.027,
       "is_latest_reported_year": true,
       "table_category": "production",
       "commodity": "oil",
       "reported_quantity": "2.2",
       "reported_unit": "million bbl/y",
-      "revision_url": "https://www.gem.wiki/w/index.php?title=Simsim_Oil_and_Gas_Field_(Oman)&oldid=1166344"
+      "revision_url": "https://www.gem.wiki/w/index.php?title=Simsim_Oil_and_Gas_Field_(Oman)&oldid=1166344",
+      "verification_status": "candidate_only_original_period_unit_scope_not_assumed"
     },
     {
       "country": "伊朗",
@@ -3035,13 +3035,13 @@
         "cite_note-autoref_3-4"
       ],
       "days_in_year": 365,
-      "derived_daily_thousand_barrels": 6.0,
       "is_latest_reported_year": true,
       "table_category": "production",
       "commodity": "oil",
       "reported_quantity": "2.19",
       "reported_unit": "million bbl/y",
-      "revision_url": "https://www.gem.wiki/w/index.php?title=Mansurabad_Oil_and_Gas_Field_(Iran)&oldid=1164305"
+      "revision_url": "https://www.gem.wiki/w/index.php?title=Mansurabad_Oil_and_Gas_Field_(Iran)&oldid=1164305",
+      "verification_status": "candidate_only_original_period_unit_scope_not_assumed"
     },
     {
       "country": "埃及",
@@ -3059,13 +3059,13 @@
         "cite_note-autoref_3-4"
       ],
       "days_in_year": 365,
-      "derived_daily_thousand_barrels": 4.986,
       "is_latest_reported_year": true,
       "table_category": "production",
       "commodity": "oil",
       "reported_quantity": "1.82",
       "reported_unit": "million bbl/y",
-      "revision_url": "https://www.gem.wiki/w/index.php?title=Abu_Rudies-Sidri_Oil_Field_(Egypt)&oldid=1159881"
+      "revision_url": "https://www.gem.wiki/w/index.php?title=Abu_Rudies-Sidri_Oil_Field_(Egypt)&oldid=1159881",
+      "verification_status": "candidate_only_original_period_unit_scope_not_assumed"
     },
     {
       "country": "伊拉克",
@@ -3084,13 +3084,13 @@
         "cite_note-autoref_3-4"
       ],
       "days_in_year": 365,
-      "derived_daily_thousand_barrels": 4.932,
       "is_latest_reported_year": true,
       "table_category": "production",
       "commodity": "oil",
       "reported_quantity": "1.8",
       "reported_unit": "million bbl/y",
-      "revision_url": "https://www.gem.wiki/w/index.php?title=Sarqala_Oil_Field_(Iraq)&oldid=1166127"
+      "revision_url": "https://www.gem.wiki/w/index.php?title=Sarqala_Oil_Field_(Iraq)&oldid=1166127",
+      "verification_status": "candidate_only_original_period_unit_scope_not_assumed"
     },
     {
       "country": "埃及",
@@ -3109,13 +3109,13 @@
         "cite_note-autoref_4-5"
       ],
       "days_in_year": 366,
-      "derived_daily_thousand_barrels": 4.891,
       "is_latest_reported_year": true,
       "table_category": "production",
       "commodity": "oil",
       "reported_quantity": "1.79",
       "reported_unit": "million bbl/y",
-      "revision_url": "https://www.gem.wiki/w/index.php?title=Geisum_Oil_Field_(Egypt)&oldid=1162600"
+      "revision_url": "https://www.gem.wiki/w/index.php?title=Geisum_Oil_Field_(Egypt)&oldid=1162600",
+      "verification_status": "candidate_only_original_period_unit_scope_not_assumed"
     },
     {
       "country": "埃及",
@@ -3133,13 +3133,13 @@
         "cite_note-autoref_5-6"
       ],
       "days_in_year": 365,
-      "derived_daily_thousand_barrels": 4.356,
       "is_latest_reported_year": true,
       "table_category": "production",
       "commodity": "oil",
       "reported_quantity": "1.59",
       "reported_unit": "million bbl/y",
-      "revision_url": "https://www.gem.wiki/w/index.php?title=Ptah_Oil_Field_(Egypt)&oldid=1165637"
+      "revision_url": "https://www.gem.wiki/w/index.php?title=Ptah_Oil_Field_(Egypt)&oldid=1165637",
+      "verification_status": "candidate_only_original_period_unit_scope_not_assumed"
     },
     {
       "country": "伊朗",
@@ -3157,13 +3157,13 @@
         "cite_note-autoref_4-5"
       ],
       "days_in_year": 365,
-      "derived_daily_thousand_barrels": 4.0,
       "is_latest_reported_year": true,
       "table_category": "production",
       "commodity": "oil",
       "reported_quantity": "1.46",
       "reported_unit": "million bbl/y",
-      "revision_url": "https://www.gem.wiki/w/index.php?title=Siah_Makan_Oil_and_Gas_Field_(Iran)&oldid=1166301"
+      "revision_url": "https://www.gem.wiki/w/index.php?title=Siah_Makan_Oil_and_Gas_Field_(Iran)&oldid=1166301",
+      "verification_status": "candidate_only_original_period_unit_scope_not_assumed"
     },
     {
       "country": "埃及",
@@ -3182,13 +3182,13 @@
         "cite_note-autoref_2-3"
       ],
       "days_in_year": 365,
-      "derived_daily_thousand_barrels": 3.945,
       "is_latest_reported_year": true,
       "table_category": "production",
       "commodity": "oil",
       "reported_quantity": "1.44",
       "reported_unit": "million bbl/y",
-      "revision_url": "https://www.gem.wiki/w/index.php?title=Wakar_Oil_and_Gas_Field_(Egypt)&oldid=1167389"
+      "revision_url": "https://www.gem.wiki/w/index.php?title=Wakar_Oil_and_Gas_Field_(Egypt)&oldid=1167389",
+      "verification_status": "candidate_only_original_period_unit_scope_not_assumed"
     },
     {
       "country": "伊拉克",
@@ -3207,13 +3207,13 @@
         "cite_note-autoref_5-6"
       ],
       "days_in_year": 365,
-      "derived_daily_thousand_barrels": 1.507,
       "is_latest_reported_year": false,
       "table_category": "production",
       "commodity": "oil",
       "reported_quantity": "0.55",
       "reported_unit": "million bbl/y",
-      "revision_url": "https://www.gem.wiki/w/index.php?title=Banan_Oil_Field_(Iraq)&oldid=1160440"
+      "revision_url": "https://www.gem.wiki/w/index.php?title=Banan_Oil_Field_(Iraq)&oldid=1160440",
+      "verification_status": "candidate_only_original_period_unit_scope_not_assumed"
     },
     {
       "country": "伊拉克",
@@ -3232,13 +3232,13 @@
         "cite_note-autoref_1-2"
       ],
       "days_in_year": 365,
-      "derived_daily_thousand_barrels": 3.918,
       "is_latest_reported_year": true,
       "table_category": "production",
       "commodity": "oil",
       "reported_quantity": "1.43",
       "reported_unit": "million bbl/y",
-      "revision_url": "https://www.gem.wiki/w/index.php?title=Banan_Oil_Field_(Iraq)&oldid=1160440"
+      "revision_url": "https://www.gem.wiki/w/index.php?title=Banan_Oil_Field_(Iraq)&oldid=1160440",
+      "verification_status": "candidate_only_original_period_unit_scope_not_assumed"
     },
     {
       "country": "伊拉克",
@@ -3257,13 +3257,13 @@
         "cite_note-autoref_0-1"
       ],
       "days_in_year": 365,
-      "derived_daily_thousand_barrels": 3.589,
       "is_latest_reported_year": true,
       "table_category": "production",
       "commodity": "oil",
       "reported_quantity": "1.31",
       "reported_unit": "million bbl/y",
-      "revision_url": "https://www.gem.wiki/w/index.php?title=Demir_Dagh_Oil_Field_(Iraq)&oldid=1161842"
+      "revision_url": "https://www.gem.wiki/w/index.php?title=Demir_Dagh_Oil_Field_(Iraq)&oldid=1161842",
+      "verification_status": "candidate_only_original_period_unit_scope_not_assumed"
     },
     {
       "country": "叙利亚",
@@ -3282,13 +3282,13 @@
         "cite_note-autoref_2-3"
       ],
       "days_in_year": 365,
-      "derived_daily_thousand_barrels": 3.507,
       "is_latest_reported_year": true,
       "table_category": "production",
       "commodity": "oil",
       "reported_quantity": "1.28",
       "reported_unit": "million bbl/y",
-      "revision_url": "https://www.gem.wiki/w/index.php?title=Al_Jubaissah_Oil_Field_(Syria)&oldid=1160061"
+      "revision_url": "https://www.gem.wiki/w/index.php?title=Al_Jubaissah_Oil_Field_(Syria)&oldid=1160061",
+      "verification_status": "candidate_only_original_period_unit_scope_not_assumed"
     },
     {
       "country": "伊朗",
@@ -3306,13 +3306,13 @@
         "cite_note-autoref_4-5"
       ],
       "days_in_year": 365,
-      "derived_daily_thousand_barrels": 2.0,
       "is_latest_reported_year": false,
       "table_category": "production",
       "commodity": "oil",
       "reported_quantity": "0.73",
       "reported_unit": "million bbl/y",
-      "revision_url": "https://www.gem.wiki/w/index.php?title=Ramin_Oil_and_Gas_Field_(Iran)&oldid=1165749"
+      "revision_url": "https://www.gem.wiki/w/index.php?title=Ramin_Oil_and_Gas_Field_(Iran)&oldid=1165749",
+      "verification_status": "candidate_only_original_period_unit_scope_not_assumed"
     },
     {
       "country": "伊朗",
@@ -3330,13 +3330,13 @@
         "cite_note-autoref_5-6"
       ],
       "days_in_year": 365,
-      "derived_daily_thousand_barrels": 3.096,
       "is_latest_reported_year": true,
       "table_category": "production",
       "commodity": "oil",
       "reported_quantity": "1.13",
       "reported_unit": "million bbl/y",
-      "revision_url": "https://www.gem.wiki/w/index.php?title=Ramin_Oil_and_Gas_Field_(Iran)&oldid=1165749"
+      "revision_url": "https://www.gem.wiki/w/index.php?title=Ramin_Oil_and_Gas_Field_(Iran)&oldid=1165749",
+      "verification_status": "candidate_only_original_period_unit_scope_not_assumed"
     },
     {
       "country": "叙利亚",
@@ -3355,13 +3355,13 @@
         "cite_note-autoref_1-2"
       ],
       "days_in_year": 365,
-      "derived_daily_thousand_barrels": 2.986,
       "is_latest_reported_year": true,
       "table_category": "production",
       "commodity": "oil",
       "reported_quantity": "1.09",
       "reported_unit": "million bbl/y",
-      "revision_url": "https://www.gem.wiki/w/index.php?title=Margada_Oil_Field_(Syria)&oldid=1164371"
+      "revision_url": "https://www.gem.wiki/w/index.php?title=Margada_Oil_Field_(Syria)&oldid=1164371",
+      "verification_status": "candidate_only_original_period_unit_scope_not_assumed"
     },
     {
       "country": "伊朗",
@@ -3380,13 +3380,13 @@
         "cite_note-autoref_2-3"
       ],
       "days_in_year": 365,
-      "derived_daily_thousand_barrels": 2.986,
       "is_latest_reported_year": true,
       "table_category": "production",
       "commodity": "oil",
       "reported_quantity": "1.09",
       "reported_unit": "million bbl/y",
-      "revision_url": "https://www.gem.wiki/w/index.php?title=Maleh_Kuh_Oil_and_Gas_Field_(Iran)&oldid=1164251"
+      "revision_url": "https://www.gem.wiki/w/index.php?title=Maleh_Kuh_Oil_and_Gas_Field_(Iran)&oldid=1164251",
+      "verification_status": "candidate_only_original_period_unit_scope_not_assumed"
     },
     {
       "country": "叙利亚",
@@ -3405,13 +3405,13 @@
         "cite_note-autoref_2-3"
       ],
       "days_in_year": 365,
-      "derived_daily_thousand_barrels": 2.493,
       "is_latest_reported_year": true,
       "table_category": "production",
       "commodity": "oil",
       "reported_quantity": "0.91",
       "reported_unit": "million bbl/y",
-      "revision_url": "https://www.gem.wiki/w/index.php?title=Jazal-Heil_Oil_Field_(Syria)&oldid=1163311"
+      "revision_url": "https://www.gem.wiki/w/index.php?title=Jazal-Heil_Oil_Field_(Syria)&oldid=1163311",
+      "verification_status": "candidate_only_original_period_unit_scope_not_assumed"
     },
     {
       "country": "埃及",
@@ -3430,13 +3430,13 @@
         "cite_note-autoref_2-3"
       ],
       "days_in_year": 365,
-      "derived_daily_thousand_barrels": 2.027,
       "is_latest_reported_year": true,
       "table_category": "production",
       "commodity": "oil",
       "reported_quantity": "0.74",
       "reported_unit": "million bbl/y",
-      "revision_url": "https://www.gem.wiki/w/index.php?title=Baltim_East_Oil_Field_(Egypt)&oldid=1160437"
+      "revision_url": "https://www.gem.wiki/w/index.php?title=Baltim_East_Oil_Field_(Egypt)&oldid=1160437",
+      "verification_status": "candidate_only_original_period_unit_scope_not_assumed"
     },
     {
       "country": "叙利亚",
@@ -3455,13 +3455,13 @@
         "cite_note-autoref_1-2"
       ],
       "days_in_year": 365,
-      "derived_daily_thousand_barrels": 2.0,
       "is_latest_reported_year": true,
       "table_category": "production",
       "commodity": "oil",
       "reported_quantity": "0.73",
       "reported_unit": "million bbl/y",
-      "revision_url": "https://www.gem.wiki/w/index.php?title=Tishreen_Oil_Field_(Syria)&oldid=1166974"
+      "revision_url": "https://www.gem.wiki/w/index.php?title=Tishreen_Oil_Field_(Syria)&oldid=1166974",
+      "verification_status": "candidate_only_original_period_unit_scope_not_assumed"
     },
     {
       "country": "伊朗",
@@ -3479,13 +3479,13 @@
         "cite_note-autoref_7-8"
       ],
       "days_in_year": 366,
-      "derived_daily_thousand_barrels": 1.995,
       "is_latest_reported_year": true,
       "table_category": "production",
       "commodity": "oil",
       "reported_quantity": "0.73",
       "reported_unit": "million bbl/y",
-      "revision_url": "https://www.gem.wiki/w/index.php?title=Sohrab_Oil_Field_(Iran)&oldid=1166411"
+      "revision_url": "https://www.gem.wiki/w/index.php?title=Sohrab_Oil_Field_(Iran)&oldid=1166411",
+      "verification_status": "candidate_only_original_period_unit_scope_not_assumed"
     },
     {
       "country": "埃及",
@@ -3504,13 +3504,13 @@
         "cite_note-autoref_3-4"
       ],
       "days_in_year": 365,
-      "derived_daily_thousand_barrels": 1.315,
       "is_latest_reported_year": true,
       "table_category": "production",
       "commodity": "oil",
       "reported_quantity": "0.48",
       "reported_unit": "million bbl/y",
-      "revision_url": "https://www.gem.wiki/w/index.php?title=Baltim_North_Oil_Field_(Egypt)&oldid=1160438"
+      "revision_url": "https://www.gem.wiki/w/index.php?title=Baltim_North_Oil_Field_(Egypt)&oldid=1160438",
+      "verification_status": "candidate_only_original_period_unit_scope_not_assumed"
     },
     {
       "country": "叙利亚",
@@ -3529,13 +3529,13 @@
         "cite_note-autoref_1-2"
       ],
       "days_in_year": 365,
-      "derived_daily_thousand_barrels": 0.986,
       "is_latest_reported_year": true,
       "table_category": "production",
       "commodity": "oil",
       "reported_quantity": "0.36",
       "reported_unit": "million bbl/y",
-      "revision_url": "https://www.gem.wiki/w/index.php?title=Gouna_Oil_Field_(Syria)&oldid=1162713"
+      "revision_url": "https://www.gem.wiki/w/index.php?title=Gouna_Oil_Field_(Syria)&oldid=1162713",
+      "verification_status": "candidate_only_original_period_unit_scope_not_assumed"
     },
     {
       "country": "埃及",
@@ -3554,13 +3554,13 @@
         "cite_note-autoref_3-4"
       ],
       "days_in_year": 365,
-      "derived_daily_thousand_barrels": 12.0,
       "is_latest_reported_year": true,
       "table_category": "production",
       "commodity": "oil",
       "reported_quantity": "4.38",
       "reported_unit": "million bbl/y",
-      "revision_url": "https://www.gem.wiki/w/index.php?title=Sitra_Oil_and_Gas_Field_(Egypt)&oldid=1166363"
+      "revision_url": "https://www.gem.wiki/w/index.php?title=Sitra_Oil_and_Gas_Field_(Egypt)&oldid=1166363",
+      "verification_status": "candidate_only_original_period_unit_scope_not_assumed"
     },
     {
       "country": "伊朗",
@@ -3578,13 +3578,16 @@
         "cite_note-autoref_5-6"
       ],
       "days_in_year": 366,
-      "derived_daily_thousand_barrels": 0.984,
       "is_latest_reported_year": true,
       "table_category": "production",
       "commodity": "oil",
       "reported_quantity": "0.36",
       "reported_unit": "million bbl/y",
-      "revision_url": "https://www.gem.wiki/w/index.php?title=Sulabedar_Oil_Field_(Iran)&oldid=1166690"
+      "revision_url": "https://www.gem.wiki/w/index.php?title=Sulabedar_Oil_Field_(Iran)&oldid=1166690",
+      "verification_status": "candidate_only_original_period_unit_scope_not_assumed"
     }
-  ]
+  ],
+  "usage": "research_candidates_only",
+  "withdrawal_date": "2026-10-04",
+  "withdrawal_reason": "Original citations show daily/quarterly rates, future targets, ownership-specific quantities and wrong transcription units. The previous conversion of 96 main asset values is withdrawn; these table rows are search leads, not accepted annual observations."
 }

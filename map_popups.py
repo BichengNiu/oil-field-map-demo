@@ -13,7 +13,7 @@ from portwatch_records import SHIP_TYPE_LABELS
 METRIC_LABELS = {
     "estimated_daily_average": "估算期间日均（公布总量×份额）",
     "actual_output": "来源直报实际产量",
-    "estimated_output": "来源转述估计产量",
+    "estimated_output": "来源披露估计产量",
     "production_acceptance_test": "开发生产验收测试（非持续日产量）",
     "sales_volume": "期间销售量（非产量）",
     "actual_output_boe": "来源实绩（油当量；非原油桶）",
@@ -65,6 +65,32 @@ def other_daily_metric(asset: dict[str, object]) -> str:
         return "—"
     metric_label = METRIC_LABELS[str(asset["metric_type"])]
     return f"{metric_label}：{display_value(asset)}"
+
+
+def production_display_value(asset: dict) -> str:
+    output = daily_output_value(asset)
+    if output != "未披露":
+        return output
+    references = asset.get("aggregate_references", [])
+    if references:
+        row = references[0]
+        return f'合计参考：{display_value(row)}（{row["scope"]}）'
+    return output
+
+
+def production_display_date(asset: dict) -> str:
+    references = asset.get("aggregate_references", [])
+    if daily_output_value(asset) == "未披露" and references:
+        return str(references[0]["data_date"])
+    return display_date(asset)
+
+
+def aggregate_production_note(asset: dict) -> str:
+    return "；".join(
+        f'{row["scope"]}（{row["data_date"]}）：{row.get("note") or row.get("basis", "")} '
+        f'权益口径：{row["ownership_basis"]}；合计不分配为本田产量，不重复汇总。'
+        for row in asset.get("aggregate_references", [])
+    )
 
 
 def hierarchy_chain(asset: dict[str, object]) -> list[dict[str, object]]:
@@ -143,30 +169,23 @@ def _public_metadata_panel(asset: dict) -> str:
     )
 
 
-def _historical_production_panel(asset: dict) -> str:
-    records = asset.get("gem_historical_production", [])
-    if not records:
+def _aggregate_production_panel(asset: dict) -> str:
+    references = asset.get("aggregate_references", [])
+    if daily_output_value(asset) != "未披露" or not references:
         return ""
     lines = []
-    for row in records:
-        refs = "、".join(
-            f'<a href="{_esc(url)}" target="_blank" rel="noopener">来源</a>'
-            for url in dict.fromkeys(row["source_urls"])
-        ) or "未提供行级来源链接"
+    for row in references:
         lines.append(
-            f'<div class="basis">{row["year"]}年：'
-            f'{row["quantity_million_barrels_year"]:g} 百万桶，'
-            f'换算 {row["derived_daily_thousand_barrels"]:g} 千桶/日；{refs}</div>'
+            f'<div class="basis"><b>{_esc(row["scope"])}</b>：{_esc(display_value(row))} '
+            f'（{_esc(METRIC_LABELS[row["metric_type"]])}；{_esc(row["data_date"])}）。'
+            f'范围说明：{_esc(row.get("note") or row.get("basis", ""))} '
+            f'权益：{_esc(row["ownership_basis"])}。'
+            f'<a href="{_esc(row["source_url"])}" target="_blank" rel="noopener">合计来源</a></div>'
         )
-    latest = max(records, key=lambda row: row["year"])
     return (
-        '<div class="hierarchy-title">历史原油年产量（不是当前产量）</div>'
+        '<div class="hierarchy-title">产量合计参考（本田逐田值未披露）</div>'
         + "".join(lines)
-        + '<div class="basis">日均换算 = 百万桶/年 × 1,000 ÷ 当年日数；'
-        f'逐田原表版本：<a href="{_esc(latest["revision_url"])}" target="_blank" rel="noopener">'
-        'GEM Wiki</a> · <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" '
-        'target="_blank" rel="noopener">CC BY-NC-SA 4.0</a> · 归属 Global Energy Monitor。'
-        '底层引文链接按每条记录列示。</div>'
+        + '<div class="basis">合计仅供所属范围参考；未分配为本田产量，不重复汇总。</div>'
     )
 
 
@@ -221,7 +240,8 @@ def asset_popup(asset: dict[str, object]) -> str:
         f'<div class="basis">其他商品指标：{_esc(extra_measurements(asset))}</div>'
         f'<div class="basis">数据时效：{_esc(asset["freshness_note"])}</div>'
         f'<div class="basis">数值复核：{_esc(asset["numeric_audit"])}</div>'
-        f"{_historical_production_panel(asset)}"
+        f'<div class="basis">产量检索结论：{_esc(asset.get("production_review", {}).get("conclusion") or "未登记")}</div>'
+        f"{_aggregate_production_panel(asset)}"
         f"{_public_metadata_panel(asset)}"
         f'<div class="basis">说明：{_esc(asset["note"] or "公开命名资产；本层级数值未公开。")}</div>'
         f'<a class="source" href="{status_source_url}" target="_blank" rel="noopener">生产状态证据</a>'

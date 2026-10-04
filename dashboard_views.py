@@ -207,15 +207,21 @@ def render_assets_panel(filtered: list[dict], asset_view: str) -> None:
     a1, a2, a3, a4, a5 = st.columns(5)
     a1.metric("当前视图", len(filtered))
     a2.metric("可绘制", sum(bool(a["map_drawable"]) for a in filtered))
-    a3.metric("有日产量", sum(bool(a["is_daily_output"]) for a in filtered))
+    a3.metric("有产量记录", sum(bool(a["is_daily_output"]) for a in filtered))
     a4.metric(
         "产能／目标", sum(a["value"] is not None and not a["is_daily_output"] for a in filtered)
     )
     a5.metric("底层目录", len(ASSETS))
     st.info(
         "上级节点有直接披露值时优先采用该值，组成资产不重复计入；"
+        "逐田产量缺失时，“产量显示”可列注明所属范围的合计参考；参考值不分配到单田、不重复计入。"
         "不同日期、商品或口径的子项不会自动相加。搜索可临时显示完整目录中的匹配资产。"
     )
+    aggregate_count = sum(
+        not asset["is_daily_output"] and bool(asset.get("aggregate_references"))
+        for asset in filtered
+    )
+    st.caption(f"其中 {aggregate_count} 项逐田产量未确认，显示注明范围的合计参考；产量记录包含历史期间。")
     reference_count = sum(bool(asset.get("public_metadata")) for asset in filtered)
     if reference_count:
         st.caption(

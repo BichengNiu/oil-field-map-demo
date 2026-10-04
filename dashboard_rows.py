@@ -14,6 +14,9 @@ from map_popups import (
     extra_measurements,
     hierarchy_path,
     other_daily_metric,
+    production_display_value,
+    production_display_date,
+    aggregate_production_note,
 )
 
 
@@ -105,14 +108,22 @@ def asset_rows(assets: list[dict]) -> list[dict]:
             "数值复核": asset["numeric_audit"],
             "数据复核日": asset["data_audit_date"],
             "其他商品指标": extra_measurements(asset),
-            "历史原油年产量记录": json.dumps(
-                asset.get("gem_historical_production", []), ensure_ascii=False, separators=(",", ":")
+            "待核验GEM产量线索": json.dumps(
+                asset.get("gem_production_candidates", []), ensure_ascii=False, separators=(",", ":")
             ),
+            "产量显示": production_display_value(asset),
+            "产量显示日期": production_display_date(asset),
+            "合计口径说明": aggregate_production_note(asset),
+            "合计参考日期": "；".join(row["data_date"] for row in asset.get("aggregate_references", [])),
+            "合计参考证据链接": "；".join(row["source_url"] for row in asset.get("aggregate_references", [])),
+            "产量检索复核": asset.get("production_review", {}).get("conclusion"),
             "资产类型": asset["asset_type"],
             "商品": asset["commodity_label"],
             "生产状态": asset["operating_status_label"],
             "状态截至": asset["operating_status_as_of"],
             "本层级日产量": daily_output_value(asset),
+            "本层级指标原值": str(asset["value"]) if asset["value"] is not None else None,
+            "本层级指标原单位": asset["unit"],
             "其他日量指标": other_daily_metric(asset),
             "指标口径": METRIC_LABELS[asset["metric_type"]],
             "数据日期": display_date(asset),
@@ -167,6 +178,8 @@ def vessel_rows(vessels: list[dict]) -> list[dict]:
 
 def print_asset_record(asset: dict) -> dict:
     metric_type = str(asset.get("metric_type") or "")
+    if daily_output_value(asset) == "未披露" and asset.get("aggregate_references"):
+        metric_type = asset["aggregate_references"][0]["metric_type"]
     return {
         "中文名称": asset.get("name_cn") or asset.get("name"),
         "英文名称": asset.get("name"),
@@ -174,8 +187,23 @@ def print_asset_record(asset: dict) -> dict:
         "资产层级": asset.get("asset_level_label"),
         "生产状态": asset.get("operating_status_label"),
         "本层级日产量": daily_output_value(asset),
+        "产量显示": production_display_value(asset),
+        "合计口径说明": aggregate_production_note(asset),
+        "产量口径说明": (
+            f'{asset["ownership_basis"]}；{asset["note"]}' if asset["is_daily_output"] else ""
+        ),
         "其他日量指标": other_daily_metric(asset),
         "指标口径": METRIC_LABELS.get(metric_type, metric_type or "未披露"),
-        "数据日期": display_date(asset),
+        "数据日期": production_display_date(asset),
+        "来源链接": asset.get("source_url"),
+        "合计参考证据链接": "；".join(
+            row["source_url"] for row in asset.get("aggregate_references", [])
+        ),
+        "产量检索复核": asset.get("production_review", {}).get("conclusion"),
+        "运营商（2026-03目录参考）": asset.get("public_metadata", {}).get("operator"),
+        "发现年（目录参考）": asset.get("public_metadata", {}).get("discoveryYear"),
+        "商业投产年（目录参考）": asset.get("public_metadata", {}).get("productionStartYear"),
+        "GEM Unit ID": asset.get("public_metadata", {}).get("unitId"),
+        "参考资料链接": asset.get("public_metadata", {}).get("source_url"),
         "地图坐标精度": asset.get("map_coordinate_precision") or "未核验",
     }

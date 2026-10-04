@@ -507,8 +507,8 @@ import supplemental_assets as SUPPLEMENT
 import reconciled_assets as RECONCILED
 import continuation_assets as CONTINUATION
 from asset_reviews import (
-    REVIEWS, apply_gem_historical_production, apply_public_metadata, finish_reviews,
-    public_reference_coordinates,
+    REVIEWS, apply_production_recheck, attach_gem_production_candidates, apply_public_metadata,
+    finish_production_recheck, finish_reviews, public_reference_coordinates,
 )
 from audited_measurements import apply_annual_volumes, additional_measurements
 ASSETS.extend(SUPPLEMENT.additions(record))
@@ -556,6 +556,8 @@ for asset in ASSETS:
         asset.update(value=None, metric_type="undisclosed", unit=None, data_date=None,
                      numeric_audit="历史22.14值的引用PDF失效；暂撤回待恢复原表",
                      note=asset["note"] + " 2026-09-30原引用2023/24年报HTTP404，未恢复原表前不展示22.14千桶/日。")
+
+apply_production_recheck(ASSETS)
 
 # 分层审计：层级字段独立于资产类型，防止区块／油田群合计与单田重复计算。
 ASSET_LEVEL_LABELS = {
@@ -1555,8 +1557,9 @@ for asset in ASSETS:
 additional_measurements(ASSETS)
 CONTINUATION.finish_review(ASSETS)
 finish_reviews(ASSETS)
-apply_gem_historical_production(ASSETS)
+attach_gem_production_candidates(ASSETS)
 apply_public_metadata(ASSETS)
+finish_production_recheck(ASSETS, OUTPUT_METRIC_TYPES)
 
 
 def _numeric_value(value: Any) -> tuple[Decimal | None, str]:
@@ -1583,7 +1586,7 @@ for asset in ASSETS:
     asset["value_raw"] = raw_value
     asset["value_numeric"] = amount
     asset["value_qualifier"] = asset.get("value_qualifier") or qualifier
-    for measurement in asset.get("additional_measurements", []):
+    for measurement in asset.get("additional_measurements", []) + asset.get("aggregate_references", []):
         raw_measurement = measurement.get("value")
         measurement_amount, measurement_qualifier = _numeric_value(raw_measurement)
         measurement["value_raw"] = raw_measurement
