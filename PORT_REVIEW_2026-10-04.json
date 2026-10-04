@@ -1,0 +1,100 @@
+{
+  "review_date": "2026-10-04",
+  "additions": [
+    {
+      "portid": "facility_yanbu_north_crude",
+      "name": "Yanbu North Crude Terminal",
+      "name_cn": "延布北原油码头",
+      "country": "Saudi Arabia",
+      "lat": null,
+      "lon": null,
+      "region": "红海沿岸",
+      "source_url": "https://www.aramco.com/-/media/downloads/working-with-us/ports-and-terminals-july-2025/10--yanbu-industrial-port-compressed.pdf",
+      "statistics_available": false,
+      "wpi_ids": [],
+      "activity_source": "无独立PortWatch统计",
+      "coordinate_precision": "未取得可核验独立点位；仅列目录",
+      "coverage_note": "Aramco 2025港口指南印刷第4页明确具名安装设施；泊位61—64。属于延布工业港子设施，范围重叠，不新增统计节点或借用综合港吞吐。",
+      "parent_portid": "port570",
+      "port_operating_status": "unknown",
+      "port_operating_status_as_of": "2025-07名录；当前各泊位停复运待核",
+      "port_status_basis": "官方港口指南证明设施及层级；不能由综合港装船公告推断每一子设施运营状态。",
+      "port_status_evidence_url": "https://www.aramco.com/-/media/downloads/working-with-us/ports-and-terminals-july-2025/10--yanbu-industrial-port-compressed.pdf"
+    },
+    {
+      "portid": "facility_yanbu_north_refined",
+      "name": "Yanbu North Refined Product Terminal",
+      "name_cn": "延布北成品油码头",
+      "country": "Saudi Arabia",
+      "lat": null,
+      "lon": null,
+      "region": "红海沿岸",
+      "source_url": "https://www.aramco.com/-/media/downloads/working-with-us/ports-and-terminals-july-2025/10--yanbu-industrial-port-compressed.pdf",
+      "statistics_available": false,
+      "wpi_ids": [],
+      "activity_source": "无独立PortWatch统计",
+      "coordinate_precision": "未取得可核验独立点位；仅列目录",
+      "coverage_note": "Aramco 2025港口指南印刷第4页明确具名安装设施；泊位91—94。属于延布工业港子设施，范围重叠，不新增统计节点或借用综合港吞吐。",
+      "parent_portid": "port570",
+      "port_operating_status": "unknown",
+      "port_operating_status_as_of": "2025-07名录；当前各泊位停复运待核",
+      "port_status_basis": "官方港口指南证明设施及层级；不能由综合港装船公告推断每一子设施运营状态。",
+      "port_status_evidence_url": "https://www.aramco.com/-/media/downloads/working-with-us/ports-and-terminals-july-2025/10--yanbu-industrial-port-compressed.pdf"
+    },
+    {
+      "portid": "facility_yanbu_south",
+      "name": "Yanbu South Terminal",
+      "name_cn": "延布南码头（Al Muajjiz）",
+      "country": "Saudi Arabia",
+      "lat": null,
+      "lon": null,
+      "region": "红海沿岸",
+      "source_url": "https://www.aramco.com/-/media/downloads/working-with-us/ports-and-terminals-july-2025/10--yanbu-industrial-port-compressed.pdf",
+      "statistics_available": false,
+      "wpi_ids": [],
+      "activity_source": "无独立PortWatch统计",
+      "coordinate_precision": "未取得可核验独立点位；仅列目录",
+      "coverage_note": "Aramco 2025港口指南印刷第4页明确具名安装设施；泊位101—103。属于延布工业港子设施，范围重叠，不新增统计节点或借用综合港吞吐。",
+      "parent_portid": "port570",
+      "port_operating_status": "unknown",
+      "port_operating_status_as_of": "2025-07名录；当前各泊位停复运待核",
+      "port_status_basis": "官方港口指南证明设施及层级；不能由综合港装船公告推断每一子设施运营状态。",
+      "port_status_evidence_url": "https://www.aramco.com/-/media/downloads/working-with-us/ports-and-terminals-july-2025/10--yanbu-industrial-port-compressed.pdf"
+    },
+    {
+      "portid": "facility_bahrain_lng",
+      "name": "Bahrain LNG Import Terminal",
+      "name_cn": "巴林LNG进口码头",
+      "country": "Bahrain",
+      "lat": null,
+      "lon": null,
+      "region": "波斯湾",
+      "source_url": "https://www.mediaoffice.abudhabi/en/transport/noatum-maritime-part-of-ad-ports-group-signs-5-year-agreement-with-bapco-upstream-to-provide-marine-services-at-bahrain-lng-import-terminal/",
+      "statistics_available": false,
+      "wpi_ids": [],
+      "activity_source": "无独立PortWatch统计",
+      "coordinate_precision": "未取得可核验独立点位；仅列目录",
+      "coverage_note": "2025-11-06政府公告确认独立海上LNG设施，位于Khalifa Bin Salman Port附近；当前货量及点位待核，不借用邻港数据。",
+      "port_operating_status": "unknown",
+      "port_operating_status_as_of": "2025-11-06合同公告；当前停复运待核",
+      "port_status_basis": "具名海事服务合同支持设施存在，不证明2026-10-04实时启闭。",
+      "port_status_evidence_url": "https://www.mediaoffice.abudhabi/en/transport/noatum-maritime-part-of-ad-ports-group-signs-5-year-agreement-with-bapco-upstream-to-provide-marine-services-at-bahrain-lng-import-terminal/"
+    }
+  ],
+  "status_decisions": [
+    {
+      "portid": "port570",
+      "port_operating_status": "activity_confirmed",
+      "port_operating_status_as_of": "2026-09-27卫星装船证据；09-29报道",
+      "port_status_basis": "Reuters确认延布及Al Muajjiz恢复原油装船。只能证明该时点装船活动，不是全部泊位全面恢复，不证明10月4日实时状态；不从报道量生成PortWatch独立吞吐。",
+      "port_status_evidence_url": "https://www.reuters.com/business/energy/saudi-resumes-yanbu-oil-loading-after-pipeline-restart-2026-09-29/"
+    },
+    {
+      "portid": "facility_yanbu_south",
+      "port_operating_status": "activity_confirmed",
+      "port_operating_status_as_of": "2026-09-27卫星装船证据；09-29报道",
+      "port_status_basis": "Reuters确认延布及Al Muajjiz恢复原油装船。只能证明该时点装船活动，不是全部泊位全面恢复，不证明10月4日实时状态；不从报道量生成PortWatch独立吞吐。",
+      "port_status_evidence_url": "https://www.reuters.com/business/energy/saudi-resumes-yanbu-oil-loading-after-pipeline-restart-2026-09-29/"
+    }
+  ]
+}

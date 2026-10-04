@@ -1,0 +1,286 @@
+{
+  "review_date": "2026-10-04",
+  "additions": [
+    {
+      "country": "科威特",
+      "name": "Arq",
+      "name_cn": "Arq",
+      "asset_type": "油田",
+      "asset_level": "field",
+      "source": "KPC Sustainability Report 2020/21",
+      "source_url": "https://www.kpc.com.kw/uploads/SustainabiltyReport/KPC_Sustainability%20Report%202020-2021.pdf",
+      "note": "KPC将Arq明确列为Wafra Joint Operations陆上中立区六个油田之一；与沙特共享，不是井名；未取得单田日量或当前停复产证据。",
+      "state": "historical_unverified",
+      "as_of": "2020/21报告印刷第24页",
+      "confidence": "中",
+      "status_basis": "KPC将Arq明确列为Wafra Joint Operations陆上中立区六个油田之一；与沙特共享，不是井名；未取得单田日量或当前停复产证据。",
+      "status_url": "https://www.kpc.com.kw/uploads/SustainabiltyReport/KPC_Sustainability%20Report%202020-2021.pdf"
+    },
+    {
+      "country": "科威特",
+      "name": "Kahlolah",
+      "name_cn": "Kahlolah",
+      "asset_type": "发现油田",
+      "asset_level": "field",
+      "source": "KOC Annual Report 2020/21",
+      "source_url": "https://www.kockw.com/sites/EN/Annual%20Reports/2020-2021%20English.pdf",
+      "note": "KOC报告明确列名及发现储层；API为油品性质，不是桶/日；商业产量和当前状态未核实。",
+      "state": "discovered",
+      "as_of": "FY2020/21报告印刷第31页",
+      "confidence": "中",
+      "status_basis": "KOC报告明确列名及发现储层；API为油品性质，不是桶/日；商业产量和当前状态未核实。",
+      "status_url": "https://www.kockw.com/sites/EN/Annual%20Reports/2020-2021%20English.pdf"
+    },
+    {
+      "country": "科威特",
+      "name": "Kabd",
+      "name_cn": "Kabd",
+      "asset_type": "发现油田",
+      "asset_level": "field",
+      "source": "KOC Annual Report 2020/21",
+      "source_url": "https://www.kockw.com/sites/EN/Annual%20Reports/2020-2021%20English.pdf",
+      "note": "KOC报告明确列名及发现储层；API为油品性质，不是桶/日；商业产量和当前状态未核实。",
+      "state": "discovered",
+      "as_of": "FY2020/21报告印刷第31页",
+      "confidence": "中",
+      "status_basis": "KOC报告明确列名及发现储层；API为油品性质，不是桶/日；商业产量和当前状态未核实。",
+      "status_url": "https://www.kockw.com/sites/EN/Annual%20Reports/2020-2021%20English.pdf"
+    },
+    {
+      "country": "科威特",
+      "name": "Al-Qashaniya",
+      "name_cn": "Al-Qashaniya",
+      "asset_type": "发现油田",
+      "asset_level": "field",
+      "source": "KDIPA Investment Guide 2022",
+      "source_url": "https://kdipa.gov.kw/wp-content/uploads/2022/08/Investment-Guide-Booklet_-Final-Version4-2.pdf",
+      "note": "政府投资指南确认具名发现；1,819桶/日属于发现时流量描述，尚无持续商业实产依据；保留主产量为空。",
+      "state": "discovered",
+      "as_of": "2022投资指南印刷第36页；回顾2021发现",
+      "confidence": "中",
+      "status_basis": "政府投资指南确认具名发现；1,819桶/日属于发现时流量描述，尚无持续商业实产依据；保留主产量为空。",
+      "status_url": "https://kdipa.gov.kw/wp-content/uploads/2022/08/Investment-Guide-Booklet_-Final-Version4-2.pdf"
+    },
+    {
+      "country": "阿联酋",
+      "name": "Shah Gas Project",
+      "name_cn": "沙阿天然气项目",
+      "asset_type": "天然气处理项目",
+      "asset_level": "project",
+      "source": "Occidental Q1 2026 Earnings Transcript",
+      "source_url": "https://www.oxy.com/siteassets/documents/investors/quarterly-earnings/oxy1q26transcript.pdf",
+      "note": "3月16日设施停运有官方声明转引；5月6日Oxy称Al Hosn存在运营约束，预计恢复不构成实际复产证明；尚无当前全面复产依据。油田原油产能不作为此项目处理量。",
+      "state": "unknown",
+      "as_of": "2026-05-06运营商电话会；非10月实时状态",
+      "confidence": "中",
+      "status_basis": "3月16日设施停运有官方声明转引；5月6日Oxy称Al Hosn存在运营约束，预计恢复不构成实际复产证明；尚无当前全面复产依据。油田原油产能不作为此项目处理量。",
+      "status_url": "https://www.oxy.com/siteassets/documents/investors/quarterly-earnings/oxy1q26transcript.pdf"
+    },
+    {
+      "country": "阿联酋",
+      "name": "Habshan Gas Processing Complex",
+      "name_cn": "哈卜善天然气处理综合体",
+      "asset_type": "天然气处理项目",
+      "asset_level": "project",
+      "source": "ADNOC Gas Q2 2026 Results",
+      "source_url": "https://adnocgas.ae/en/news-and-media/press-releases/2026/q2-2026-results",
+      "note": "ADNOC Gas披露4月3日及8日事件后供气已恢复至85%；为处理综合体供气恢复比例，不是Habshan单田日产量，也不意味着全部设施恢复。",
+      "state": "partially_operating",
+      "as_of": "2026-08-10公告",
+      "confidence": "中",
+      "status_basis": "ADNOC Gas披露4月3日及8日事件后供气已恢复至85%；为处理综合体供气恢复比例，不是Habshan单田日产量，也不意味着全部设施恢复。",
+      "status_url": "https://adnocgas.ae/en/news-and-media/press-releases/2026/q2-2026-results"
+    }
+  ],
+  "measurements": [
+    {
+      "country": "伊朗",
+      "name": "Reshadat",
+      "value": "8",
+      "metric_type": "actual_output",
+      "unit": "千桶/日",
+      "data_date": "2014-02 JICA最终报告；底层观察期未明",
+      "source": "JICA / IOOC 历史报告",
+      "source_url": "https://openjicareport.jica.go.jp/pdf/1000014245_01.pdf",
+      "note": "JICA报告印刷第2-7至2-8页描述当时维持8千桶/日生产；75千桶/日为重建目标，不使用。2014历史值，非2026实产。",
+      "numeric_audit": "历史直接报告值；底层观察期未注明，不当当前值"
+    }
+  ],
+  "statuses": [
+    {
+      "country": "科威特",
+      "name": "Homah",
+      "state": "discovered",
+      "as_of": "KOC FY2021/22报告印刷第22页",
+      "confidence": "中",
+      "status_basis": "KOC使用Houma名称，描述约70平方公里的新发现。该报告称2021年10月，2021年1月公开报道已出现同名发现，日期冲突未消除；不把1,452桶/日发现指标作为商业实产，不与中立区Humma合并。",
+      "status_url": "https://www.kockw.com/sites/EN/Annual%20Reports/2021-2022%20English.pdf"
+    },
+    {
+      "country": "阿联酋",
+      "name": "Shah",
+      "state": "unknown",
+      "as_of": "2026-05-06天然气项目证据；原油田当前状态未核",
+      "confidence": "中",
+      "status_basis": "原记录混含油气资产；较新事件涉及Al Hosn天然气设施，不能据此认定原油全田状态。原油产能保留历史日期，当前停复产待核。",
+      "status_url": "https://www.oxy.com/siteassets/documents/investors/quarterly-earnings/oxy1q26transcript.pdf"
+    },
+    {
+      "country": "沙特阿拉伯",
+      "name": "Manifa",
+      "state": "producing",
+      "as_of": "2026-04-12能源部公告",
+      "confidence": "中",
+      "status_basis": "能源部称已恢复约300千桶/日受影响量；这是恢复量，不是全田总日产量。未取得更晚单田实产，历史900千桶/日产能保留。",
+      "status_url": "https://www.spa.gov.sa/ar/N2557744?type=news&uuid=N2557744"
+    },
+    {
+      "country": "沙特阿拉伯",
+      "name": "Khurais",
+      "state": "restoration_unconfirmed",
+      "as_of": "2026-04-12能源部公告",
+      "confidence": "中",
+      "status_basis": "能源部称恢复全部产量的工作仍在进行；不能将管道与Manifa恢复公告解释为Khurais完全恢复。受影响300千桶/日不是全田实产，后续状态待核。",
+      "status_url": "https://www.spa.gov.sa/ar/N2557744?type=news&uuid=N2557744"
+    }
+  ],
+  "notes": [
+    {
+      "country": "科威特",
+      "name": "Humma",
+      "evidence_url": "https://www.kpc.com.kw/uploads/SustainabiltyReport/KPC_Sustainability%20Report%202020-2021.pdf",
+      "note": "KPC原报告确认Humma为陆上中立区具名油田；与北西科威特Houma/Homah发现记录分开；当前单田产量及停复产待核。"
+    },
+    {
+      "country": "阿联酋",
+      "name": "Shah",
+      "evidence_url": "https://www.oxy.com/siteassets/documents/investors/quarterly-earnings/oxy1q26transcript.pdf",
+      "note": "Shah原记录70千桶/日为原油历史产能；天然气设施3月停运及后续运营约束见Shah Gas Project独立项目，不据天然气设施事件推定原油全田停产或复产。"
+    },
+    {
+      "country": "伊朗",
+      "name": "Balal",
+      "evidence_url": "https://openjicareport.jica.go.jp/pdf/1000014245_01.pdf",
+      "note": "JICA 2014报告明确历史Balal原油开发；Belal气体开发另有范围。仅靠拼写不能证明同一开发资产或不同地质田，不归并；40千桶/日为原油转运描述，不填作持续实测日产量。"
+    },
+    {
+      "country": "伊朗",
+      "name": "Abuzar",
+      "evidence_url": "https://openjicareport.jica.go.jp/pdf/1000014245_01.pdf",
+      "note": "JICA表4.2.1-1三田数值140+140+80=360千桶/日，表内合计却为320；原表内部冲突，不导入主指标。没有从320反推或修改任何单田数值。"
+    },
+    {
+      "country": "伊朗",
+      "name": "Doroud",
+      "evidence_url": "https://openjicareport.jica.go.jp/pdf/1000014245_01.pdf",
+      "note": "JICA表4.2.1-1三田数值140+140+80=360千桶/日，表内合计却为320；原表内部冲突，不导入主指标。没有从320反推或修改任何单田数值。"
+    },
+    {
+      "country": "伊朗",
+      "name": "Foroozan",
+      "evidence_url": "https://openjicareport.jica.go.jp/pdf/1000014245_01.pdf",
+      "note": "JICA表4.2.1-1三田数值140+140+80=360千桶/日，表内合计却为320；原表内部冲突，不导入主指标。没有从320反推或修改任何单田数值。"
+    }
+  ],
+  "additional_measurements": [],
+  "shared_countries": [
+    {
+      "country": "科威特",
+      "name": "Arq",
+      "countries": [
+        "科威特",
+        "沙特阿拉伯"
+      ],
+      "evidence_url": "https://www.kpc.com.kw/uploads/SustainabiltyReport/KPC_Sustainability%20Report%202020-2021.pdf"
+    }
+  ],
+  "decisions": [
+    {
+      "names": [
+        "Arq",
+        "Humma",
+        "Homah"
+      ],
+      "decision": "Arq新增；Humma/Homah保留不同记录并注明来源；发现日期冲突单列",
+      "urls": [
+        "https://www.kpc.com.kw/uploads/SustainabiltyReport/KPC_Sustainability%20Report%202020-2021.pdf",
+        "https://www.kockw.com/sites/EN/Annual%20Reports/2021-2022%20English.pdf",
+        "https://kdipa.gov.kw/wp-content/uploads/2022/08/Investment-Guide-Booklet_-Final-Version4-2.pdf"
+      ]
+    },
+    {
+      "names": [
+        "Sarkhan",
+        "Sarkhun"
+      ],
+      "decision": "保持分开：源GEM不同资产ID/坐标，以及Sarkhan的Lurestan油藏资料，不支持仅凭相近拼写合并；Sarkhun项目原网页正文访问失败，仅作候选链接；当前产量和状态仍未知",
+      "urls": [
+        "https://ajsonline.org/article/65872-structures-of-the-zagros-fold-thrust-belt-in-iran/attachment/144376.pdf",
+        "https://www.ppzgeo.com/?page_id=173"
+      ]
+    },
+    {
+      "names": [
+        "Balal",
+        "Belal"
+      ],
+      "decision": "历史油开发与气体开发口径不同；地质范围尚未确认，暂不合并，也不新增同音田",
+      "urls": [
+        "https://openjicareport.jica.go.jp/pdf/1000014245_01.pdf",
+        "https://www.eia.gov/international/content/analysis/countries_long/Iran/pdf/Iran%20CAB%202024.pdf"
+      ]
+    },
+    {
+      "names": [
+        "Paydar",
+        "East Paydar"
+      ],
+      "decision": "现有记录已使用East Paydar来源点作代理；未取得明确同田范围，不另建一条",
+      "urls": [
+        "https://www.iranoilgas.com/fields/details.aspx?id=1089"
+      ]
+    },
+    {
+      "names": [
+        "Shadegan"
+      ],
+      "decision": "9月验收测试保留独立类型；原始SHANA与持续实产证据未得，不升级主值",
+      "urls": [
+        "https://www.irib-news.ir/fa/news/5926271/افزایش-۱۷-هزار-بشکه‌ای-تولید-نفت-در-مناطق-نفت‌خیز-جنوب"
+      ]
+    },
+    {
+      "names": [
+        "Bisat"
+      ],
+      "decision": "SLB 9月23日548千桶/日为规划总流体处理能力，含非油流体，非单田原油实产；不填主值",
+      "urls": [
+        "https://www.slb.com/newsroom/press-release/2026/pr-2026-0923-slb-oqep-oman"
+      ]
+    },
+    {
+      "names": [
+        "Yumna",
+        "Atrush",
+        "Sarsang",
+        "Tawke",
+        "Peshkabir",
+        "Rumaila",
+        "Bahrain Field (Awali)"
+      ],
+      "decision": "现有有日期的公开实绩保留；本轮新搜索没有取得可采纳的更晚单田实产，不将未查到解读为停产",
+      "urls": []
+    },
+    {
+      "names": [
+        "Abuzar",
+        "Doroud",
+        "Foroozan"
+      ],
+      "decision": "JICA表三行相加不等于合计；原值不导入，人工待核",
+      "urls": [
+        "https://openjicareport.jica.go.jp/pdf/1000014245_01.pdf"
+      ]
+    }
+  ]
+}

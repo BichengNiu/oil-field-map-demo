@@ -82,7 +82,7 @@ class GulfReviewTests(unittest.TestCase):
         self.assertEqual(json.loads(re.search(r'const ports = (.*);', rendered).group(1)), [])
 
     def test_new_raw_snapshot_hash_does_not_replace_previous_audit(self):
-        for day in ('2026-09-30', '2026-10-03'):
+        for day in ('2026-09-30', '2026-10-03', '2026-10-04'):
             summary = json.loads(Path(f'PORT_AUDIT_SUMMARY_{day}.json').read_text())
             raw = gzip.decompress(Path(summary['raw_file']).read_bytes())
             self.assertEqual(hashlib.sha256(raw).hexdigest(), summary['raw_sha256'])

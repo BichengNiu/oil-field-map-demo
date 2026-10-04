@@ -1,0 +1,83 @@
+{
+  "review_date": "2026-10-04",
+  "files": [
+    {
+      "id": "kpc2021",
+      "url": "https://www.kpc.com.kw/uploads/SustainabiltyReport/KPC_Sustainability%20Report%202020-2021.pdf",
+      "status": 200,
+      "bytes": 39233418,
+      "sha256": "e0bc70869ccbb9fa350c1f27351f74142bdf2626456884dd2ca02f7a82d99506",
+      "access_date": "2026-10-04",
+      "access_basis": "直接下载PDF；HTTP状态不等于事实核验"
+    },
+    {
+      "id": "kpc2025",
+      "url": "https://www.kpc.com.kw/uploads/SustainabiltyReport/KPC%202023-5%20Sustainability%20Report.pdf",
+      "status": 200,
+      "bytes": 29053872,
+      "sha256": "e50001c0f2794996be12fb74dd4db5e180830aa448dc6e202ad35a1e6d9bde81",
+      "access_date": "2026-10-04",
+      "access_basis": "直接下载PDF；HTTP状态不等于事实核验"
+    },
+    {
+      "id": "kdipa",
+      "url": "https://kdipa.gov.kw/wp-content/uploads/2022/08/Investment-Guide-Booklet_-Final-Version4-2.pdf",
+      "status": 200,
+      "bytes": 8402264,
+      "sha256": "9c84a7ab90b21d652bc9b4597cd1551af3518f5202ea5973deedb884e64f15d0",
+      "access_date": "2026-10-04",
+      "access_basis": "直接下载PDF；HTTP状态不等于事实核验"
+    },
+    {
+      "id": "kgoc2017",
+      "url": "https://www.kgoc.com/UploadFiles/publications/Annual%20Report%2017%20English191119093243.pdf",
+      "error": "HTTP Error 502: Bad Gateway",
+      "access_date": "2026-10-04",
+      "access_basis": "直接下载PDF；HTTP状态不等于事实核验"
+    },
+    {
+      "id": "koc2021",
+      "url": "https://www.kockw.com/sites/EN/Annual%20Reports/2020-2021%20English.pdf",
+      "status": 200,
+      "bytes": 11788445,
+      "sha256": "494b12850f960db49bacf89069c48a339af8878b1edf5d51c41d2b73a1d2f364",
+      "access_date": "2026-10-04",
+      "access_basis": "直接下载PDF；HTTP状态不等于事实核验"
+    },
+    {
+      "id": "koc2022",
+      "url": "https://www.kockw.com/sites/EN/Annual%20Reports/2021-2022%20English.pdf",
+      "status": 200,
+      "bytes": 10862827,
+      "sha256": "e4b5029c5a6874f04e662d56aab20f83409168ea181d142f660f68a334cec222",
+      "access_date": "2026-10-04",
+      "access_basis": "直接下载PDF；HTTP状态不等于事实核验"
+    },
+    {
+      "id": "jica2014",
+      "url": "https://openjicareport.jica.go.jp/pdf/1000014245_01.pdf",
+      "status": 200,
+      "bytes": 6857137,
+      "sha256": "da4396fb3e33855a08810f6434e616e44c6eb15ec35e5515be9d635324e7e089",
+      "access_date": "2026-10-04",
+      "access_basis": "直接下载PDF；HTTP状态不等于事实核验"
+    },
+    {
+      "id": "yanbu2025",
+      "url": "https://www.aramco.com/-/media/downloads/working-with-us/ports-and-terminals-july-2025/10--yanbu-industrial-port-compressed.pdf",
+      "status": 200,
+      "sha256": "241390018d2489d2ddd08cec71d04f14d2bc8726c7a842dde96a1fe4d3928f10",
+      "access_date": "2026-10-04",
+      "access_basis": "直接下载PDF；HTTP状态不等于事实核验"
+    },
+    {
+      "id": "pdofact",
+      "url": "https://www.pdo.co.om/en/PDOSERVICES/Fact%20File%202017.pdf",
+      "status": 502,
+      "sha256": "8c8725a026ebf6ffcefc29aa6727250f9e3c69d5264bbd1d9277497c93db4929",
+      "access_date": "2026-10-04",
+      "access_basis": "直接下载PDF；HTTP状态不等于事实核验"
+    }
+  ],
+  "limitation": "只列本轮直接下载的PDF，网页搜索和逐项判断另见证据清单；失败响应哈希不是PDF内容哈希"
+}

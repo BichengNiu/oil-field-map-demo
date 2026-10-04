@@ -133,6 +133,7 @@ def record(
     data_date: str | None = None,
     status: str = "公开命名资产",
     source: str,
+    source_url: str | None = None,
     note: str = "",
 ) -> dict[str, Any]:
     return {
@@ -149,7 +150,7 @@ def record(
         "status": status,
         "coordinate_precision": "近似中心点" if lat is not None and lon is not None else "待核验；仅列目录",
         "source": source,
-        "source_url": SOURCES[source],
+        "source_url": source_url or SOURCES[source],
         "note": note,
     }
 
@@ -504,6 +505,7 @@ import supplemental_assets as SUPPLEMENT
 import reconciled_assets as RECONCILED
 import continuation_assets as CONTINUATION
 import gulf_review as GULF_REVIEW
+import final_review as FINAL_REVIEW
 from audited_measurements import apply_annual_volumes, additional_measurements
 ASSETS.extend(SUPPLEMENT.additions(record))
 ASSETS.extend(RECONCILED.additions(record))
@@ -512,6 +514,8 @@ ASSETS.extend(CONTINUATION.additions(record))
 CONTINUATION.apply_measurements(ASSETS)
 ASSETS.extend(GULF_REVIEW.additions(record))
 GULF_REVIEW.apply_measurements(ASSETS)
+ASSETS.extend(FINAL_REVIEW.additions(record))
+FINAL_REVIEW.apply_measurements(ASSETS)
 apply_annual_volumes(ASSETS)
 for asset in ASSETS:
     if asset["country"] == "伊朗" and asset["name"] == "Darkhovin":
@@ -1144,6 +1148,7 @@ COORDINATE_OVERRIDES.update(RECONCILED.coordinates())
 COORDINATE_OVERRIDES.update(CONTINUATION.coordinates())
 LEVEL_OVERRIDES.update(CONTINUATION.levels())
 LEVEL_OVERRIDES.update(GULF_REVIEW.levels())
+LEVEL_OVERRIDES.update(FINAL_REVIEW.levels())
 PARENT_RELATIONSHIPS.update(GULF_REVIEW.parents())
 LEVEL_OVERRIDES.update({key: "project" for key in RECONCILED.PROJECTS})
 LEVEL_OVERRIDES.update({key: "development_area" for key in RECONCILED.AREAS})
@@ -1323,6 +1328,8 @@ for asset in ASSETS:
 # 逐资产生产状态审计（2026-09-28）。
 # 注意：状态是“截至证据日期”的公开资料结论，不是实时遥测；冲突地区尤其可能快速变化。
 OPERATING_STATUS_LABELS = {
+    "restoration_unconfirmed": "恢复未完成／当前产量待核（带时点）",
+    "partially_operating": "部分运行／恢复未完成（带时点）",
     "producing": "在产",
     "temporarily_suspended": "暂停生产",
     "ceased": "停产／终止",
@@ -1456,6 +1463,7 @@ SUPPLEMENT.register_statuses(_assign_status)
 RECONCILED.register_statuses(_assign_status)
 CONTINUATION.register_statuses(_assign_status)
 GULF_REVIEW.register_statuses(_assign_status)
+FINAL_REVIEW.register_statuses(_assign_status)
 # 纠正旧状态，明确每个证据时点；覆盖更新而不是重复登记。
 def _revise_status(country, names, state, as_of, confidence, basis, url):
     for name in names.split(" | "):
@@ -1481,6 +1489,7 @@ _revise_status("伊拉克", "Artawi", "development", "2025-09-15", "高",
 
 _catalog_keys = set(_asset_index)
 GULF_REVIEW.revise_statuses(_revise_status)
+FINAL_REVIEW.revise_statuses(_revise_status)
 _audited_keys = set(_STATUS_AUDIT)
 if _catalog_keys != _audited_keys:
     missing = sorted(_catalog_keys - _audited_keys)
@@ -1504,7 +1513,7 @@ for asset in ASSETS:
 # 以及少量已明确列出的主力独立田。完整目录仍保留全部记录；停产、仅发现及储存资产不进入
 # 默认战略视图。这里不要求有坐标，以便界面同时如实报告“战略节点但待定位”的数量。
 _STRATEGIC_STATUSES = {
-    "producing", "temporarily_suspended", "development",
+    "producing", "restoration_unconfirmed", "partially_operating", "temporarily_suspended", "development",
     "historical_unverified", "unknown",
 }
 for asset in ASSETS:
@@ -1541,3 +1550,4 @@ for asset in ASSETS:
 additional_measurements(ASSETS)
 CONTINUATION.finish_review(ASSETS)
 GULF_REVIEW.finish_review(ASSETS)
+FINAL_REVIEW.finish_review(ASSETS)

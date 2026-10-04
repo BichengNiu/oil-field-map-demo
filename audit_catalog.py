@@ -20,7 +20,12 @@ def main():
     health = {}
     if health_file.exists():
         with health_file.open(encoding="utf-8-sig") as stream:
-            health = {r["url"]: r for r in csv.DictReader(stream)}
+            health = {r["url"]: dict(r, access_date="2026-09-30") for r in csv.DictReader(stream)}
+    followup_file = Path(__file__).with_name("GULF_SOURCE_MANIFEST_2026-10-04.json")
+    if followup_file.exists():
+        for entry in json.loads(followup_file.read_text())["files"]:
+            health[entry["url"]] = dict(http_status=str(entry.get("status", "访问失败")),
+                                        access_date=entry["access_date"])
     rows = []
     for asset in ASSETS:
         source = health.get(asset["source_url"], {})
@@ -49,6 +54,7 @@ def main():
             "估计总气量_百万m3": asset.get("estimate_total_million_m3"),
             "估计公布份额": asset.get("estimate_share"),
             "其他商品指标JSON": json.dumps(asset["additional_measurements"], ensure_ascii=False),
+            "本轮补充证据JSON": json.dumps(asset.get("followup_evidence", []), ensure_ascii=False),
             "冲突年报送JSON": json.dumps(asset.get("conflicting_annual_returns", []), ensure_ascii=False),
             "数值核验结论": asset["numeric_audit"], "时效结论": asset["freshness_note"],
             "状态": asset["operating_status_label"], "状态证据时点": asset["operating_status_as_of"],
@@ -57,6 +63,9 @@ def main():
             "可绘制": asset["map_drawable"], "代理坐标": asset["map_is_proxy"],
             "地图纬度": asset["map_lat"], "地图经度": asset["map_lon"],
             "坐标证据": asset["coordinate_source_url"], "目录/指标来源": asset["source_url"],
+            "来源HTTP探测日期": source.get("access_date", "未探测"),
+            "状态复核日": asset["status_audit_date"],
+            "状态依据": asset["operating_status_basis"],
             "来源HTTP自动探测": source.get("http_status", "未探测"),
             "复核日": asset["data_audit_date"], "未解决事项": "；".join(issues), "说明": asset["note"],
         })

@@ -11,6 +11,8 @@ NGA_SAILING = "https://msi.nga.mil/api/publications/download?key=16694491%2FSFH0
 # remain unchanged for filtering and API requests.
 PORT_REVIEW = json.loads(Path(__file__).with_name("PORT_REVIEW_2026-10-03.json").read_text())
 
+PORT_FOLLOWUP = json.loads(Path(__file__).with_name("PORT_REVIEW_2026-10-04.json").read_text())
+
 _COUNTRY_NAMES_ZH = {
     "bahrain": "巴林",
     "djibouti": "吉布提",
@@ -262,8 +264,8 @@ def enrich(ports: list[dict]) -> list[dict]:
                            inventory_source_url=NGA_SAILING, activity_source="无独立PortWatch统计",
                            coordinate_precision=f"NGA Pub172 §{section}港口所在地代表点；分钟精度",
                            coverage_note="Asyad港口名录补充；坐标是所在地近似点，进港与货量未知"))
-    output.extend(dict(row) for row in PORT_REVIEW["additions"])
-    decisions = {row["portid"]: row for row in PORT_REVIEW["status_decisions"]}
+    output.extend(dict(row) for row in PORT_REVIEW["additions"] + PORT_FOLLOWUP["additions"])
+    decisions = {row["portid"]: row for row in PORT_REVIEW["status_decisions"] + PORT_FOLLOWUP["status_decisions"]}
     for port in output:
         port.setdefault("port_operating_status", "unknown")
         port.setdefault("port_operating_status_as_of", "未取得当前逐港公告")
@@ -273,8 +275,11 @@ def enrich(ports: list[dict]) -> list[dict]:
             port.update({k: v for k, v in decisions[port["portid"]].items() if k != "portid"})
         port["port_operating_status_label"] = {
             "unknown": "当前停复运待核", "development": "建设／商业启用待核",
+            "activity_confirmed": "已确认装船活动（带时点）",
         }[port["port_operating_status"]]
-        port["port_status_audit_date"] = "2026-10-03"
+        port["port_status_audit_date"] = ("2026-10-04" if port["portid"] in
+            {r["portid"] for r in PORT_FOLLOWUP["additions"] + PORT_FOLLOWUP["status_decisions"]}
+            else "2026-10-03")
     if len({p["portid"] for p in output}) != len(output):
         raise ValueError("合并港口目录出现重复编号")
     for port in output:
@@ -286,4 +291,4 @@ def enrich(ports: list[dict]) -> list[dict]:
 
 
 SUPPLEMENTAL_IDS = {f"wpi{r['wpi']}" for r in WPI_ROWS if not r["portwatch_id"]} | {
-    "facility_shinas", "facility_suwaiq"} | {r["portid"] for r in PORT_REVIEW["additions"]}
+    "facility_shinas", "facility_suwaiq"} | {r["portid"] for r in PORT_REVIEW["additions"] + PORT_FOLLOWUP["additions"]}
