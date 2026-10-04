@@ -6,6 +6,7 @@ from datetime import date, timedelta
 import streamlit as st
 
 import portwatch_downloads
+from portwatch_records import latest_by_node
 
 
 @st.cache_data(ttl=900, max_entries=12, show_spinner=False)
@@ -23,12 +24,7 @@ def history_window(kind: str, node_ids: tuple[str, ...], end_day: str,
 
 def merge_latest_rows(catalog: list[dict], history: list[dict]) -> list[dict]:
     """Attach each node's latest observed historical row, preserving empty nodes."""
-    latest: dict[str, dict] = {}
-    for row in history:
-        node_id = str(row.get("portid", ""))
-        if node_id and (node_id not in latest or
-                        str(row.get("date", "")) > str(latest[node_id].get("date", ""))):
-            latest[node_id] = row
+    latest = latest_by_node(history, require_date=False)
     return [
         {**point, **latest.get(str(point.get("portid")), {})}
         for point in catalog

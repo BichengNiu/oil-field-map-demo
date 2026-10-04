@@ -8,6 +8,8 @@ from html import escape
 import math
 from zoneinfo import ZoneInfo
 
+from portwatch_records import latest_by_node
+
 
 TITLE = "中东能源与战略通道运输监测"
 COLORS = ("#1769aa", "#d97706", "#7c3aed", "#14866d", "#dc4b4b", "#64748b")
@@ -155,26 +157,18 @@ def _history_by_node(rows: list[dict]) -> dict[str, list[dict]]:
     return result
 
 
-def _latest_by_node(rows: list[dict]) -> dict[str, dict]:
-    latest: dict[str, dict] = {}
-    for row in rows:
-        key = str(row.get("portid", ""))
-        day = str(row.get("date", ""))
-        if key and day and (key not in latest or day > str(latest[key].get("date", ""))):
-            latest[key] = row
-    return latest
-
-
 def _aggregate(rows: list[dict], metric: str, scale: float = 1.0) -> tuple[list[tuple[str, object]], dict[str, int]]:
     values: dict[str, list[float]] = defaultdict(list)
+    dates = set()
     for row in rows:
         day = _date(row.get("date"))
+        if day is not None:
+            dates.add(day)
         number = _number(row.get(metric))
         if day is not None and number is not None:
             values[day.isoformat()].append(number / scale)
-    dates = sorted({_date(row.get("date")) for row in rows if _date(row.get("date"))})
     output = [(day.isoformat(), sum(values[day.isoformat()]) if values.get(day.isoformat()) else None)
-              for day in dates]
+              for day in sorted(dates)]
     coverage = {day: len(numbers) for day, numbers in values.items()}
     return output, coverage
 
@@ -409,9 +403,10 @@ def build_report_html(
     port_name = {str(row.get("portid")): row.get("name") or row.get("portname") or row.get("portid")
                  for row in port_catalog}
     node_daily = _history_by_node(port_history)
+    latest_daily = latest_by_node(port_history)
     top_ids = sorted(
         history_ids,
-        key=lambda pid: _number((_latest_by_node(node_daily[pid]).get(pid) or {}).get("portcalls")) or 0,
+        key=lambda pid: _number((latest_daily.get(pid) or {}).get("portcalls")) or 0,
         reverse=True,
     )[:6]
     port_series = [(str(port_name.get(pid, pid)),

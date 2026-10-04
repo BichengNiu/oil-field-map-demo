@@ -26,7 +26,8 @@ def archive_path() -> Path:
 
 
 @contextmanager
-def _connect():
+def connect_archive():
+    """Open and close the shared archive transaction, including schema setup."""
     path = archive_path()
     path.parent.mkdir(parents=True, exist_ok=True)
     conn = sqlite3.connect(path, timeout=10)
@@ -38,11 +39,6 @@ def _connect():
             yield conn
     finally:
         conn.close()
-
-
-def connect_archive():
-    """Open the shared archive transaction for related archive importers."""
-    return _connect()
 
 
 def normalize_report(row: dict) -> dict:
@@ -102,7 +98,7 @@ def archive_reports(rows: list[dict]) -> int:
     normalized = [normalize_report(row) for row in rows_with_observation_time]
     if not normalized:
         return 0
-    with _connect() as conn:
+    with connect_archive() as conn:
         before = conn.total_changes
         conn.executemany("INSERT OR IGNORE INTO reports VALUES (?, ?, ?, ?)",
                          [(row["mmsi"], row["observed_at"], row["source"],
@@ -121,14 +117,14 @@ def import_csv(data: bytes) -> int:
 def day_reports(day: date) -> list[dict]:
     start = datetime.combine(day, time.min, timezone.utc)
     end = start + timedelta(days=1)
-    with _connect() as conn:
+    with connect_archive() as conn:
         rows = conn.execute("SELECT payload FROM reports WHERE observed >= ? AND observed < ? "
                             "ORDER BY observed", (start.isoformat(), end.isoformat())).fetchall()
     return [json.loads(row[0]) for row in rows]
 
 
 def known_mmsis() -> list[str]:
-    with _connect() as conn:
+    with connect_archive() as conn:
         return [row[0] for row in conn.execute("SELECT mmsi FROM reports GROUP BY mmsi "
                                               "ORDER BY MAX(observed) DESC LIMIT 1000")]
 

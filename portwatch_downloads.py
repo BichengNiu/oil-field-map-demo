@@ -14,12 +14,9 @@ import sqlite3
 import zipfile
 import zlib
 
-import openpyxl
-from openpyxl.styles import Alignment, Font, PatternFill
-from openpyxl.utils import get_column_letter
-
 import portwatch as pw
-import csv_export
+from csv_export import csv_bytes
+from portwatch_records import PORT_METRICS, CHOKE_METRICS, EXPORT_SHIP_LABELS as TYPES
 
 logger = logging.getLogger(__name__)
 VERSION = 1
@@ -28,12 +25,6 @@ PAGE_SIZE = 1000
 BATCH_SIZE = 60
 XLSX_ROW_LIMIT = 20_000
 KINDS = {"ports": "港口", "chokepoints": "咽喉要道"}
-TYPES = {"container": "集装箱船", "dry_bulk": "干散货船", "general_cargo": "普通货船",
-         "roro": "滚装船", "tanker": "油轮/液货船", "cargo": "货船合计"}
-PORT_METRICS = ["portcalls", "import", "export"] + [
-    f"{metric}_{ship}" for metric in ("portcalls", "import", "export") for ship in TYPES]
-CHOKE_METRICS = ["n_total", "capacity"] + [
-    f"{metric}_{ship}" for metric in ("n", "capacity") for ship in TYPES]
 BASE_FIELDS = ["date", "portid", "portname", "country", "ISO3", "region", "lat", "lon"]
 CATALOG_FIELDS = ["node_kind", "portid", "node_name", "country", "region", "lat", "lon",
                   "statistics_available", "first_available_utc", "latest_available_utc",
@@ -72,10 +63,6 @@ def node(kind: str, raw: dict) -> dict:
             "coverage_note": raw.get("coverage_note", "AIS推算日度活动；覆盖受信号与识别方法影响")}
 
 
-def _endpoint(kind: str) -> str:
-    return pw.endpoint_for(kind)
-
-
 def _ids_where(ids: tuple[str, ...], kind: str) -> str:
     if kind not in ("ports", "chokepoints"):
         raise DownloadError("未知的PortWatch数据类型")
@@ -95,7 +82,7 @@ def bounds(kind: str, ids: tuple[str, ...]) -> tuple[dict, list[dict]]:
             {"statisticType": "max", "onStatisticField": "date", "outStatisticFieldName": "last_date"},
             {"statisticType": "count", "onStatisticField": "ObjectId", "outStatisticFieldName": "records"},
         ]
-        response = pw.query(_endpoint(kind), where=where, returnGeometry="false",
+        response = pw.query(pw.endpoint_for(kind), where=where, returnGeometry="false",
                              outStatistics=json.dumps(statistics), groupByFieldsForStatistics="portid",
                              resultRecordCount=PAGE_SIZE)
         if response.get("exceededTransferLimit"):
@@ -110,7 +97,7 @@ def bounds(kind: str, ids: tuple[str, ...]) -> tuple[dict, list[dict]]:
                 raise DownloadError("源站日期范围或记录数无效")
             output[pid] = {"first": first.isoformat(), "last": last.isoformat(),
                            "records": int(row["records"])}
-        queries.append({"endpoint": _endpoint(kind), "where": where, "operation": "node_date_bounds",
+        queries.append({"endpoint": pw.endpoint_for(kind), "where": where, "operation": "node_date_bounds",
                         "retrieved_at_utc": _now()})
     return output, queries
 
@@ -152,7 +139,7 @@ def fetch_window(kind: str, ids: tuple[str, ...], first: date, last: date,
                  cache_revision: int | str = 0,
                  cache_ttl_seconds: int = 86400) -> tuple[list[dict], dict]:
     where = f"{_ids_where(ids, kind)} AND date >= DATE '{first}' AND date <= DATE '{last}'"
-    endpoint = _endpoint(kind)
+    endpoint = pw.endpoint_for(kind)
     metrics = PORT_METRICS if kind == "ports" else CHOKE_METRICS
     source_fields = ["ObjectId", "date", "portid", "portname"] + (["country", "ISO3"] if kind == "ports" else []) + metrics
     key = hashlib.sha256(json.dumps(
@@ -399,10 +386,6 @@ def dictionary(derived: bool) -> list[dict]:
     return entries
 
 
-def csv_bytes(rows: list[dict], fields: list[str]) -> bytes:
-    return csv_export.csv_bytes(rows, fields)
-
-
 def zip_bytes(result: dict) -> bytes:
     output = io.BytesIO()
     with zipfile.ZipFile(output, "w", compression=zipfile.ZIP_DEFLATED) as archive:
@@ -425,6 +408,10 @@ def zip_bytes(result: dict) -> bytes:
 
 def xlsx_bytes(result: dict) -> bytes:
     """Build typed, filterable Excel sheets with the maintained openpyxl package."""
+    import openpyxl
+    from openpyxl.styles import Alignment, Font, PatternFill
+    from openpyxl.utils import get_column_letter
+
     datasets = result["datasets"]
     records = sum(map(len, datasets.values()))
     if records > XLSX_ROW_LIMIT:

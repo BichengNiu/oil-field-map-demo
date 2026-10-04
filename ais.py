@@ -20,7 +20,7 @@ from typing import Any, Callable
 from urllib.parse import urlencode
 from urllib.request import Request, urlopen
 
-from regions import MONITORED_REGIONS
+from regions import MONITORED_REGIONS, region_for
 
 try:
     from websockets.sync.client import connect as websocket_connect
@@ -32,7 +32,7 @@ SOURCE = "https://aisstream.io/documentation"
 STREAM_URL = "wss://stream.aisstream.io/v0/stream"
 OPENWATERS_SOURCE = "https://openwaters.io/ais/"
 OPENWATERS_API = "https://ais.openwaters.io/v1/vessels"
-MODULE_VERSION = 5
+MODULE_VERSION = 6
 POSITION_RETENTION_SECONDS = 2 * 60 * 60
 MAX_TRACKED_VESSELS = 20_000
 MAX_ARCHIVE_BUFFER = 2_000
@@ -87,13 +87,6 @@ def utc_now() -> datetime:
     return datetime.now(timezone.utc)
 
 
-def region_for(lat: float, lon: float) -> str | None:
-    for name, (south, north, west, east) in REGIONS.items():
-        if south <= lat <= north and west <= lon <= east:
-            return name
-    return None
-
-
 def openwaters_bbox_groups() -> tuple[tuple[tuple[float, float, float, float], ...], ...]:
     """Return south/north/west/east boxes grouped below Open Waters' free cap."""
 
@@ -103,7 +96,8 @@ def openwaters_bbox_groups() -> tuple[tuple[tuple[float, float, float, float], .
     )
 
 
-def _parse_utc(value: Any) -> datetime | None:
+def parse_utc(value: Any) -> datetime | None:
+    """Normalize source timestamps to UTC, retaining missing or invalid values."""
     if not value:
         return None
     try:
@@ -126,32 +120,32 @@ def openwaters_feature_to_vessel(
     coordinates = geometry.get("coordinates") or []
     if properties.get("kind", "vessel") != "vessel" or len(coordinates) < 2:
         return None
-    lon = _number(coordinates[0])
-    lat = _number(coordinates[1])
-    if not _valid_coordinate(lat, lon):
+    lon = parse_number(coordinates[0])
+    lat = parse_number(coordinates[1])
+    if not valid_coordinate(lat, lon):
         return None
     assert lat is not None and lon is not None
     region = region_for(lat, lon)
     if region is None:
         return None
 
-    mmsi = _integer(properties.get("mmsi", feature.get("id")))
+    mmsi = parse_integer(properties.get("mmsi", feature.get("id")))
     if mmsi is None or not 100000000 <= mmsi <= 999999999:
         return None
-    observed = _parse_utc(properties.get("seen"))
+    observed = parse_utc(properties.get("seen"))
     received = received_at or utc_now()
-    sog = _number(properties.get("sog"))
-    cog = _number(properties.get("cog"))
-    heading = _number(properties.get("heading"))
+    sog = parse_number(properties.get("sog"))
+    cog = parse_number(properties.get("cog"))
+    heading = parse_number(properties.get("heading"))
     if sog is not None and not 0 <= sog < 102.3:
         sog = None
     if cog is not None and not 0 <= cog < 360:
         cog = None
     if heading is not None and not 0 <= heading < 360:
         heading = None
-    ship_type = _integer(properties.get("type"))
+    ship_type = parse_integer(properties.get("type"))
     category, category_label = classify_ship_type(ship_type)
-    nav_code = _integer(properties.get("nav_status"))
+    nav_code = parse_integer(properties.get("nav_status"))
     source = _clean_text(properties.get("source")) or "Open Waters"
     station = _clean_text(properties.get("station"))
     attribution_text = (attribution or {}).get(source)
@@ -178,10 +172,10 @@ def openwaters_feature_to_vessel(
         "ship_type_code": ship_type,
         "category": category if ship_type is not None else "unknown",
         "category_label": category_label if ship_type is not None else VESSEL_TYPE_LABELS["unknown"],
-        "imo": _integer(properties.get("imo")),
+        "imo": parse_integer(properties.get("imo")),
         "call_sign": _clean_text(properties.get("callsign", properties.get("call_sign"))),
         "destination": _clean_text(properties.get("dest", properties.get("destination"))),
-        "draught": _number(properties.get("draught")),
+        "draught": parse_number(properties.get("draught")),
         "moving": (sog or 0) >= 0.5,
         "age_minutes": age_minutes,
         "age_basis": "源站观测时间" if observed else None,
@@ -222,10 +216,10 @@ def openwaters_snapshot(max_age_minutes: int = 30) -> dict[str, Any]:
         futures = [pool.submit(_fetch_openwaters_group, group, max_age_minutes)
                    for group in groups]
     for future in as_completed(futures):
-            try:
-                results.append(future.result())
-            except Exception as exc:
-                errors.append(f"{type(exc).__name__}: {exc}")
+        try:
+            results.append(future.result())
+        except Exception as exc:
+            errors.append(f"{type(exc).__name__}: {exc}")
 
     received_at = utc_now()
     attribution: dict[str, str] = {}
@@ -315,20 +309,20 @@ def merge_vessel_snapshots(
 
 def _snapshot_is_newer(candidate: dict[str, Any], current: dict[str, Any]) -> bool:
     """Compare observations when both exist, otherwise compare local receipts."""
-    candidate_observed = _parse_utc(candidate.get("observed_at"))
-    current_observed = _parse_utc(current.get("observed_at"))
+    candidate_observed = parse_utc(candidate.get("observed_at"))
+    current_observed = parse_utc(current.get("observed_at"))
     if candidate_observed and current_observed:
         return candidate_observed >= current_observed
-    candidate_received = _parse_utc(candidate.get("received_at"))
-    current_received = _parse_utc(current.get("received_at"))
+    candidate_received = parse_utc(candidate.get("received_at"))
+    current_received = parse_utc(current.get("received_at"))
     return candidate_received is not None and (
         current_received is None or candidate_received >= current_received)
 
 
 def _snapshot_timestamp(vessel: dict[str, Any]) -> float:
     """Return the best available UTC timestamp for ordering map snapshots."""
-    observed = _parse_utc(vessel.get("observed_at"))
-    received = _parse_utc(vessel.get("received_at"))
+    observed = parse_utc(vessel.get("observed_at"))
+    received = parse_utc(vessel.get("received_at"))
     timestamp = observed or received
     return timestamp.timestamp() if timestamp else float("-inf")
 
@@ -355,7 +349,8 @@ def filter_vessels(
     ]
 
 
-def _number(value: Any) -> float | None:
+def parse_number(value: Any) -> float | None:
+    """Parse a numeric AIS field without inventing a value on failure."""
     try:
         number = float(value)
     except (TypeError, ValueError):
@@ -363,7 +358,8 @@ def _number(value: Any) -> float | None:
     return number
 
 
-def _integer(value: Any) -> int | None:
+def parse_integer(value: Any) -> int | None:
+    """Parse an integral identifier or AIS category code."""
     try:
         return int(value)
     except (TypeError, ValueError):
@@ -377,28 +373,9 @@ def _clean_text(value: Any) -> str | None:
     return text or None
 
 
-def _valid_coordinate(lat: float | None, lon: float | None) -> bool:
-    return lat is not None and lon is not None and -90 <= lat <= 90 and -180 <= lon <= 180
-
-
-def parse_utc(value: Any) -> datetime | None:
-    """Parse a UTC timestamp from a provider or a preserved archive row."""
-    return _parse_utc(value)
-
-
-def parse_number(value: Any) -> float | None:
-    """Parse one numeric AIS field, preserving missing and malformed values."""
-    return _number(value)
-
-
-def parse_integer(value: Any) -> int | None:
-    """Parse one integral AIS identifier or code."""
-    return _integer(value)
-
-
 def valid_coordinate(lat: float | None, lon: float | None) -> bool:
-    """Validate latitude and longitude before region classification."""
-    return _valid_coordinate(lat, lon)
+    """Validate a latitude/longitude pair before region classification."""
+    return lat is not None and lon is not None and -90 <= lat <= 90 and -180 <= lon <= 180
 
 
 def normalize_event(event: dict[str, Any], received_at: datetime | None = None) -> dict[str, Any] | None:
@@ -411,11 +388,11 @@ def normalize_event(event: dict[str, Any], received_at: datetime | None = None) 
     message = event.get("Message") or {}
     payload = message.get(message_type) or {}
     mmsi_value = metadata.get("MMSI", payload.get("UserID"))
-    mmsi_int = _integer(mmsi_value)
+    mmsi_int = parse_integer(mmsi_value)
     if mmsi_int is None or not 100000000 <= mmsi_int <= 999999999:
         return None
     received = received_at or utc_now()
-    observed = _parse_utc(
+    observed = parse_utc(
         metadata.get("time_utc", metadata.get("TimeUTC", metadata.get("timestamp"))))
     base: dict[str, Any] = {
         "mmsi": str(mmsi_int),
@@ -425,14 +402,14 @@ def normalize_event(event: dict[str, Any], received_at: datetime | None = None) 
     }
 
     if message_type in POSITION_MESSAGE_TYPES:
-        lat = _number(metadata.get("Latitude", payload.get("Latitude")))
-        lon = _number(metadata.get("Longitude", payload.get("Longitude")))
-        if not _valid_coordinate(lat, lon):
+        lat = parse_number(metadata.get("Latitude", payload.get("Latitude")))
+        lon = parse_number(metadata.get("Longitude", payload.get("Longitude")))
+        if not valid_coordinate(lat, lon):
             return None
         assert lat is not None and lon is not None
-        sog = _number(payload.get("Sog"))
-        cog = _number(payload.get("Cog"))
-        heading = _number(payload.get("TrueHeading"))
+        sog = parse_number(payload.get("Sog"))
+        cog = parse_number(payload.get("Cog"))
+        heading = parse_number(payload.get("TrueHeading"))
         # AIS sentinels: SOG 102.3, COG 3600/360, heading 511.
         if sog is not None and not 0 <= sog < 102.3:
             sog = None
@@ -440,7 +417,7 @@ def normalize_event(event: dict[str, Any], received_at: datetime | None = None) 
             cog = None
         if heading is not None and not 0 <= heading < 360:
             heading = None
-        nav_code = _integer(payload.get("NavigationalStatus"))
+        nav_code = parse_integer(payload.get("NavigationalStatus"))
         base.update({
             "kind": "position",
             "name": _clean_text(metadata.get("ShipName")),
@@ -455,7 +432,7 @@ def normalize_event(event: dict[str, Any], received_at: datetime | None = None) 
             "navigation_status": NAVIGATION_STATUS_LABELS.get(nav_code, "未报告"),
         })
         # Extended Class B reports can carry the base ship-type code directly.
-        ship_type = _integer(payload.get("Type", payload.get("ShipType")))
+        ship_type = parse_integer(payload.get("Type", payload.get("ShipType")))
         if ship_type is not None:
             category, label = classify_ship_type(ship_type)
             base.update({"ship_type_code": ship_type, "category": category,
@@ -471,7 +448,7 @@ def normalize_event(event: dict[str, Any], received_at: datetime | None = None) 
         report_a = {}
     if not report_b.get("Valid", True):
         report_b = {}
-    ship_type = _integer(payload.get(
+    ship_type = parse_integer(payload.get(
         "Type", payload.get("ShipType", report_b.get("ShipType"))))
     category, label = classify_ship_type(ship_type)
     base.update({
@@ -480,10 +457,10 @@ def normalize_event(event: dict[str, Any], received_at: datetime | None = None) 
             payload.get("Name", payload.get(
                 "ShipName", report_a.get("Name", metadata.get("ShipName"))))),
         "call_sign": _clean_text(payload.get("CallSign", report_b.get("CallSign"))),
-        "imo": _integer(payload.get("ImoNumber", payload.get("IMO"))),
+        "imo": parse_integer(payload.get("ImoNumber", payload.get("IMO"))),
         "destination": _clean_text(
             payload.get("DestinationName", payload.get("Destination"))),
-        "draught": _number(payload.get("MaximumStaticDraught", payload.get("Draught"))),
+        "draught": parse_number(payload.get("MaximumStaticDraught", payload.get("Draught"))),
         "ship_type_code": ship_type,
         "category": category if ship_type is not None else None,
         "category_label": label if ship_type is not None else None,
@@ -504,13 +481,13 @@ def _normalization_rejection_reason(event: dict[str, Any]) -> str:
     payload = message.get(message_type)
     payload = payload if isinstance(payload, dict) else {}
     mmsi_value = metadata.get("MMSI", payload.get("UserID"))
-    mmsi = _integer(mmsi_value)
+    mmsi = parse_integer(mmsi_value)
     if mmsi is None or not 100000000 <= mmsi <= 999999999:
         return "MMSI缺失或无效"
     if message_type in POSITION_MESSAGE_TYPES:
-        lat = _number(metadata.get("Latitude", payload.get("Latitude")))
-        lon = _number(metadata.get("Longitude", payload.get("Longitude")))
-        if not _valid_coordinate(lat, lon):
+        lat = parse_number(metadata.get("Latitude", payload.get("Latitude")))
+        lon = parse_number(metadata.get("Longitude", payload.get("Longitude")))
+        if not valid_coordinate(lat, lon):
             return "经纬度缺失或无效"
     return "消息结构不符合预期"
 
@@ -725,7 +702,7 @@ class AISCollector:
                     self._positions[mmsi] = normalized
             self._ingest_since_prune += 1
             if self._ingest_since_prune >= 256:
-                received_utc = _parse_utc(received.isoformat())
+                received_utc = parse_utc(received.isoformat())
                 self._prune_state_locked(received_utc.timestamp() if received_utc else 0)
                 self._ingest_since_prune = 0
         if normalized["kind"] == "position" and normalized.get("region"):
@@ -749,7 +726,7 @@ class AISCollector:
         cutoff = now_timestamp - POSITION_RETENTION_SECONDS
         stale = []
         for mmsi, position in self._positions.items():
-            received = _parse_utc(position.get("received_at"))
+            received = parse_utc(position.get("received_at"))
             if received is None or received.timestamp() < cutoff:
                 stale.append(mmsi)
         for mmsi in stale:
@@ -772,7 +749,7 @@ class AISCollector:
         with self._lock:
             rows = []
             for mmsi, position in self._positions.items():
-                received = _parse_utc(position.get("received_at"))
+                received = parse_utc(position.get("received_at"))
                 if received is None:
                     continue
                 static = self._static.get(mmsi, {})
@@ -784,7 +761,7 @@ class AISCollector:
                     merged["category"] = static["category"]
                     merged["category_label"] = static["category_label"]
                     merged["ship_type_code"] = static.get("ship_type_code")
-                observation = _parse_utc(merged.get("observed_at"))
+                observation = parse_utc(merged.get("observed_at"))
                 age_time = observation or received
                 if age_time.timestamp() < cutoff:
                     continue

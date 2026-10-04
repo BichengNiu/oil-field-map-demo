@@ -14,7 +14,8 @@ from urllib.request import Request, urlopen
 
 import streamlit as st
 import port_inventory
-from regions import MONITORED_REGIONS
+from regions import MONITORED_REGIONS, region_for
+from portwatch_records import SHIP_TYPES, PORT_METRICS, CHOKE_METRICS
 
 ROOT = "https://services9.arcgis.com/weJ1QsnbMYJlCHdG/arcgis/rest/services"
 PORTS = f"{ROOT}/PortWatch_ports_database/FeatureServer/0/query"
@@ -23,9 +24,8 @@ CHOKEPOINTS = f"{ROOT}/PortWatch_chokepoints_database/FeatureServer/0/query"
 CHOKEPOINT_DAILY = f"{ROOT}/Daily_Chokepoints_Data/FeatureServer/0/query"
 SPILLOVERS = f"{ROOT}/spillovers_port_level_impact/FeatureServer/0/query"
 SOURCE = "https://portwatch.imf.org/pages/data-and-methodology"
-MODULE_VERSION = 6
+MODULE_VERSION = 7
 
-SHIP_TYPES = ("container", "dry_bulk", "general_cargo", "roro", "tanker")
 FOCUS_CHOKEPOINT_IDS = ("chokepoint1", "chokepoint4", "chokepoint6")
 CHOKEPOINT_LABELS = {
     "chokepoint1": "苏伊士运河",
@@ -42,43 +42,37 @@ def clear_live_cache() -> None:
         reader.clear()
 
 
-def _valid_port_ids(ids: tuple[str, ...]) -> bool:
-    return all(re.fullmatch(r"(?:port|fso)\d+", port_id) for port_id in ids)
-
-
 def valid_port_ids(ids: tuple[str, ...]) -> bool:
     """Validate source-backed port identifiers at module boundaries."""
-    return _valid_port_ids(ids)
+    return all(re.fullmatch(r"(?:port|fso)\d+", port_id) for port_id in ids)
 
 
 def has_independent_statistics(port: dict) -> bool:
     """Return whether a catalog point has a supported PortWatch activity ID."""
     if "statistics_available" in port:
         return bool(port["statistics_available"])
-    return _valid_port_ids((str(port.get("portid", "")),))
+    return valid_port_ids((str(port.get("portid", "")),))
 
 
 def _activity_ids(ids: tuple[str, ...]) -> tuple[str, ...]:
-    unknown = [pid for pid in ids if not _valid_port_ids((pid,))
+    unknown = [pid for pid in ids if not valid_port_ids((pid,))
                and pid not in port_inventory.SUPPLEMENTAL_IDS]
     if unknown:
         raise ValueError("无效或未登记的港口编号")
-    return tuple(pid for pid in ids if _valid_port_ids((pid,)))
-
-
-def _valid_chokepoint_ids(ids: tuple[str, ...]) -> bool:
-    return all(re.fullmatch(r"chokepoint\d+", point_id) for point_id in ids)
+    return tuple(pid for pid in ids if valid_port_ids((pid,)))
 
 
 def valid_chokepoint_ids(ids: tuple[str, ...]) -> bool:
     """Validate source-backed chokepoint identifiers at module boundaries."""
-    return _valid_chokepoint_ids(ids)
+    return all(re.fullmatch(r"chokepoint\d+", point_id) for point_id in ids)
+
 
 # south, north, west, east. Order assigns ports in overlapping boxes only once.
 REGIONS = MONITORED_REGIONS
 
 
-def _query(url: str, **params: object) -> dict:
+def query(url: str, **params: object) -> dict:
+    """Read one ArcGIS response and surface source-reported errors."""
     request = Request(f"{url}?{urlencode({**params, 'f': 'json'})}",
                       headers={"User-Agent": "oil-field-map-demo/1.0"})
     with urlopen(request, timeout=35) as response:
@@ -88,24 +82,12 @@ def _query(url: str, **params: object) -> dict:
     return result
 
 
-def query(url: str, **params: object) -> dict:
-    """Public shared ArcGIS query boundary for dashboard and download modules."""
-    return _query(url, **params)
-
-
 def endpoint_for(kind: str) -> str:
     if kind == "ports":
         return DAILY
     if kind == "chokepoints":
         return CHOKEPOINT_DAILY
     raise ValueError("未知的 PortWatch 数据类型")
-
-
-def region_for(lat: float, lon: float) -> str | None:
-    for name, (south, north, west, east) in REGIONS.items():
-        if south <= lat <= north and west <= lon <= east:
-            return name
-    return None
 
 
 GULF_COUNTRIES = ("Bahrain", "Iran", "Iraq", "Kuwait", "Oman", "Qatar",
@@ -122,10 +104,7 @@ def port_region_for(lat: float, lon: float) -> str | None:
     region = region_for(lat, lon)
     if region:
         return region
-    for name, (south, north, west, east) in GULF_PORT_REGIONS.items():
-        if south <= lat <= north and west <= lon <= east:
-            return name
-    return None
+    return region_for(lat, lon, GULF_PORT_REGIONS)
 
 
 @st.cache_data(ttl=24 * 3600, show_spinner=False)
@@ -140,7 +119,7 @@ def port_catalog() -> list[dict]:
     found = []
     offset = 0
     while True:
-        page = _query(PORTS, where=where, outFields="portid,portname,country,lat,lon",
+        page = query(PORTS, where=where, outFields="portid,portname,country,lat,lon",
                       returnGeometry="false", resultOffset=offset, resultRecordCount=1000,
                       orderByFields="portid ASC")
         items = page.get("features", [])
@@ -167,15 +146,19 @@ def port_catalog() -> list[dict]:
     return port_inventory.enrich(ports)
 
 
-@st.cache_data(ttl=3600, show_spinner=False)
-def latest_date() -> date:
-    data = _query(DAILY, where="1=1", returnGeometry="false",
+def _latest_day(endpoint: str, missing_message: str) -> date:
+    data = query(endpoint, where="1=1", returnGeometry="false",
                   outStatistics=json.dumps([{"statisticType": "max", "onStatisticField": "date",
                                              "outStatisticFieldName": "latest_date"}]))
     value = data["features"][0]["attributes"]["latest_date"]
     if not value:
-        raise ValueError("PortWatch 尚无可用日期")
+        raise ValueError(missing_message)
     return date.fromisoformat(value)
+
+
+@st.cache_data(ttl=3600, show_spinner=False)
+def latest_date() -> date:
+    return _latest_day(DAILY, "PortWatch 尚无可用日期")
 
 
 @st.cache_data(ttl=3600, show_spinner=False)
@@ -188,12 +171,12 @@ def _activity_rows(day: date, port_ids: tuple[str, ...], calendar_days: int) -> 
     first_day = day - timedelta(days=calendar_days - 1)
     for start in range(0, len(port_ids), 80):
         ids = port_ids[start:start + 80]
-        if not _valid_port_ids(ids):
+        if not valid_port_ids(ids):
             raise ValueError("无效的 PortWatch 港口编号")
         quoted = ",".join(f"'{p}'" for p in ids)
         where = (f"date >= DATE '{first_day.isoformat()}' AND date <= DATE '{day.isoformat()}' "
                  f"AND portid IN ({quoted})")
-        count_before = _query(DAILY, where=where, returnGeometry="false",
+        count_before = query(DAILY, where=where, returnGeometry="false",
                               returnCountOnly="true").get("count")
         if count_before is None:
             raise ValueError("PortWatch未返回用于核对分页的记录总数")
@@ -201,16 +184,9 @@ def _activity_rows(day: date, port_ids: tuple[str, ...], calendar_days: int) -> 
         offset = 0
         fetched_count = 0
         while True:
-            page = _query(DAILY, where=where, returnGeometry="false", resultOffset=offset,
+            page = query(DAILY, where=where, returnGeometry="false", resultOffset=offset,
                           resultRecordCount=1000, orderByFields="portid ASC,date ASC",
-                          outFields="date,portid,portname,country,ISO3,portcalls,"
-                                    "portcalls_container,portcalls_dry_bulk,"
-                                    "portcalls_general_cargo,portcalls_roro,portcalls_tanker,"
-                                    "portcalls_cargo,import,export,import_container,export_container,"
-                                    "import_dry_bulk,export_dry_bulk,"
-                                    "import_general_cargo,export_general_cargo,"
-                                    "import_roro,export_roro,import_tanker,export_tanker,"
-                                    "import_cargo,export_cargo")
+                          outFields=",".join(["date", "portid", "portname", "country", "ISO3", *PORT_METRICS]))
             items = page.get("features", [])
             exceeded = bool(page.get("exceededTransferLimit"))
             if exceeded and not items:
@@ -228,7 +204,7 @@ def _activity_rows(day: date, port_ids: tuple[str, ...], calendar_days: int) -> 
             if not exceeded and len(items) < 1000:
                 break
             offset += len(items)
-        count_after = _query(DAILY, where=where, returnGeometry="false",
+        count_after = query(DAILY, where=where, returnGeometry="false",
                              returnCountOnly="true").get("count")
         if fetched_count != expected_count or count_after != expected_count:
             raise ValueError(
@@ -241,6 +217,13 @@ def daily_activity(day: date, port_ids: tuple[str, ...]) -> dict[str, dict]:
     # Reuse the same two-week response as the default rolling indicators.
     rows = _activity_rows(day, port_ids, 14)
     return {port_id: values[day] for port_id, values in rows.items() if day in values}
+
+
+def _complete_sum(rows: list[dict], days: int, *fields: str) -> float | None:
+    """Only sum a complete window; a reported zero remains a numeric value."""
+    if len(rows) != days or any(row.get(field) is None for row in rows for field in fields):
+        return None
+    return sum(sum(row[field] for field in fields) for row in rows)
 
 
 @st.cache_data(ttl=3600, show_spinner=False)
@@ -266,8 +249,7 @@ def rolling_activity(day: date, port_ids: tuple[str, ...], days: int = 7) -> dic
         previous = [value for value_day, value in by_day.items()
                     if previous_first <= value_day <= previous_last]
         current_complete = len(values) == days
-        previous_complete = len(previous) == days
-        calls_complete = current_complete and all(v.get("portcalls") is not None for v in values)
+        total_calls = _complete_sum(values, days, "portcalls")
         def positive_days(field):
             return (sum(v[field] > 0 for v in values)
                     if current_complete and all(v.get(field) is not None for v in values) else None)
@@ -281,26 +263,20 @@ def rolling_activity(day: date, port_ids: tuple[str, ...], days: int = 7) -> dic
                       for v in values for f in ("portcalls_tanker", "import_tanker", "export_tanker")) else None)}
         for kind in (*SHIP_TYPES, "cargo"):
             call_field, import_field, export_field = (f"portcalls_{kind}", f"import_{kind}", f"export_{kind}")
-            calls_ok = current_complete and all(v.get(call_field) is not None for v in values)
-            volume_ok = current_complete and all(v.get(f) is not None
-                                                 for v in values for f in (import_field, export_field))
-            result[f"avg_calls_{kind}"] = sum(v[call_field] for v in values) / days if calls_ok else None
-            result[f"avg_handled_{kind}"] = (sum(v[import_field] + v[export_field] for v in values) / days
-                                            if volume_ok else None)
-            result[f"window_calls_{kind}"] = sum(v[call_field] for v in values) if calls_ok else None
+            calls = _complete_sum(values, days, call_field)
+            handled = _complete_sum(values, days, import_field, export_field)
+            result[f"avg_calls_{kind}"] = calls / days if calls is not None else None
+            result[f"avg_handled_{kind}"] = handled / days if handled is not None else None
+            result[f"window_calls_{kind}"] = calls
 
-        previous_ok = previous_complete and all(
-            value.get("portcalls") is not None for value in previous)
-        total_calls = sum(value["portcalls"] for value in values) if calls_complete else None
-        total_import = sum(value["import"] for value in values) if current_complete and all(v.get("import") is not None for v in values) else None
-        total_export = sum(value["export"] for value in values) if current_complete and all(v.get("export") is not None for v in values) else None
-        previous_calls = (sum(value["portcalls"] for value in previous)
-                          if previous_ok else None)
+        total_import = _complete_sum(values, days, "import")
+        total_export = _complete_sum(values, days, "export")
+        previous_calls = _complete_sum(previous, days, "portcalls")
         result["avg_calls"] = total_calls / days if total_calls is not None else None
         result["avg_handled"] = ((total_import + total_export) / days
                                  if total_import is not None and total_export is not None else None)
         result["active_day_rate"] = (result["active_days"] / days * 100
-                                     if calls_complete else None)
+                                     if total_calls is not None else None)
         result["average_cargo_per_call"] = (
             (total_import + total_export) / total_calls
             if total_calls and total_import is not None and total_export is not None else None)
@@ -333,11 +309,11 @@ def port_risk_capacity(port_ids: tuple[str, ...]) -> dict[str, float | None]:
     }])
     for start in range(0, len(port_ids), 80):
         ids = port_ids[start:start + 80]
-        if not _valid_port_ids(ids):
+        if not valid_port_ids(ids):
             raise ValueError("无效的 PortWatch 港口编号")
         quoted = ",".join(f"'{port_id}'" for port_id in ids)
         where = f"from_portid IN ({quoted})"
-        page = _query(SPILLOVERS, where=where, returnGeometry="false",
+        page = query(SPILLOVERS, where=where, returnGeometry="false",
                       groupByFieldsForStatistics="from_portid", outStatistics=statistic,
                       orderByFields="from_portid ASC", outFields="from_portid")
         for item in page.get("features", []):
@@ -351,7 +327,7 @@ def port_risk_capacity(port_ids: tuple[str, ...]) -> dict[str, float | None]:
 def chokepoint_catalog() -> list[dict]:
     ids = FOCUS_CHOKEPOINT_IDS
     quoted = ",".join(f"'{point_id}'" for point_id in ids)
-    page = _query(CHOKEPOINTS, where=f"portid IN ({quoted})", returnGeometry="false",
+    page = query(CHOKEPOINTS, where=f"portid IN ({quoted})", returnGeometry="false",
                   outFields="portid,portname,fullname,lat,lon", resultRecordCount=100)
     found = {item["attributes"]["portid"]: item["attributes"]
              for item in page.get("features", [])}
@@ -366,28 +342,19 @@ def chokepoint_catalog() -> list[dict]:
 
 @st.cache_data(ttl=3600, show_spinner=False)
 def latest_chokepoint_date() -> date:
-    data = _query(CHOKEPOINT_DAILY, where="1=1", returnGeometry="false",
-                  outStatistics=json.dumps([{"statisticType": "max", "onStatisticField": "date",
-                                             "outStatisticFieldName": "latest_date"}]))
-    value = data["features"][0]["attributes"]["latest_date"]
-    if not value:
-        raise ValueError("PortWatch 尚无可用咽喉点日期")
-    return date.fromisoformat(value)
+    return _latest_day(CHOKEPOINT_DAILY, "PortWatch 尚无可用咽喉点日期")
 
 
 @st.cache_data(ttl=3600, show_spinner=False)
 def chokepoint_activity(day: date, chokepoint_ids: tuple[str, ...]) -> dict[str, dict]:
-    if not _valid_chokepoint_ids(chokepoint_ids):
+    if not valid_chokepoint_ids(chokepoint_ids):
         raise ValueError("无效的 PortWatch 咽喉点编号")
     quoted = ",".join(f"'{point_id}'" for point_id in chokepoint_ids)
     where = f"date = DATE '{day.isoformat()}' AND portid IN ({quoted})"
-    page = _query(
+    page = query(
         CHOKEPOINT_DAILY, where=where, returnGeometry="false", resultRecordCount=100,
         orderByFields="portid ASC,date ASC",
-        outFields="date,portid,portname,n_total,n_container,n_dry_bulk,"
-                  "n_general_cargo,n_roro,n_tanker,n_cargo,capacity,"
-                  "capacity_container,capacity_dry_bulk,capacity_general_cargo,"
-                  "capacity_roro,capacity_tanker,capacity_cargo")
+        outFields=",".join(["date", "portid", "portname", *CHOKE_METRICS]))
     if page.get("exceededTransferLimit"):
         raise ValueError("PortWatch咽喉点最新数据被截断")
     result = {}

@@ -12,6 +12,8 @@ NGA_SAILING = "https://msi.nga.mil/api/publications/download?key=16694491%2FSFH0
 PORT_REVIEW = json.loads(Path(__file__).with_name("PORT_REVIEW_2026-10-03.json").read_text())
 
 PORT_FOLLOWUP = json.loads(Path(__file__).with_name("PORT_REVIEW_2026-10-04.json").read_text())
+_FOLLOWUP_IDS = {row["portid"] for kind in ("additions", "status_decisions")
+                 for row in PORT_FOLLOWUP[kind]}
 
 _COUNTRY_NAMES_ZH = {
     "bahrain": "巴林",
@@ -277,9 +279,7 @@ def enrich(ports: list[dict]) -> list[dict]:
             "unknown": "当前停复运待核", "development": "建设／商业启用待核",
             "activity_confirmed": "已确认装船活动（带时点）",
         }[port["port_operating_status"]]
-        port["port_status_audit_date"] = ("2026-10-04" if port["portid"] in
-            {r["portid"] for r in PORT_FOLLOWUP["additions"] + PORT_FOLLOWUP["status_decisions"]}
-            else "2026-10-03")
+        port["port_status_audit_date"] = "2026-10-04" if port["portid"] in _FOLLOWUP_IDS else "2026-10-03"
     if len({p["portid"] for p in output}) != len(output):
         raise ValueError("合并港口目录出现重复编号")
     for port in output:
