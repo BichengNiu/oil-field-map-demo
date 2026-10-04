@@ -507,7 +507,8 @@ import supplemental_assets as SUPPLEMENT
 import reconciled_assets as RECONCILED
 import continuation_assets as CONTINUATION
 from asset_reviews import (
-    REVIEWS, apply_public_metadata, finish_reviews, public_reference_coordinates,
+    REVIEWS, apply_gem_historical_production, apply_public_metadata, finish_reviews,
+    public_reference_coordinates,
 )
 from audited_measurements import apply_annual_volumes, additional_measurements
 ASSETS.extend(SUPPLEMENT.additions(record))
@@ -1138,6 +1139,7 @@ COORDINATE_OVERRIDES: dict[tuple[str, str], dict[str, Any]] = {
 
 OUTPUT_METRIC_TYPES = {
     "actual_output",
+    "estimated_output",
     "estimated_daily_average",
     "actual_output_boe",
     "derived_daily_average",
@@ -1553,6 +1555,7 @@ for asset in ASSETS:
 additional_measurements(ASSETS)
 CONTINUATION.finish_review(ASSETS)
 finish_reviews(ASSETS)
+apply_gem_historical_production(ASSETS)
 apply_public_metadata(ASSETS)
 
 

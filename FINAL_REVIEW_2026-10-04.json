@@ -104,6 +104,19 @@
       "source_url": "https://openjicareport.jica.go.jp/pdf/1000014245_01.pdf",
       "note": "JICA报告印刷第2-7至2-8页描述当时维持8千桶/日生产；75千桶/日为重建目标，不使用。2014历史值，非2026实产。",
       "numeric_audit": "历史直接报告值；底层观察期未注明，不当当前值"
+    },
+    {
+      "country": "伊朗",
+      "name": "Sepehr-Jufair",
+      "value": "50",
+      "metric_type": "estimated_output",
+      "unit": "千桶/日",
+      "data_date": "2024-10 EIA报告时点（两个油田合计估算）",
+      "source": "U.S. EIA Iran Country Analysis Brief 2024",
+      "source_url": "https://www.eia.gov/international/content/analysis/countries_long/Iran/pdf/Iran%20CAB%202024.pdf",
+      "note": "EIA 2024年10月报告称，Pasargad于2024年3月开始Sepehr与Jufair油田生产，并转述伊朗估计两田当时合计产量50,000桶/日、规划产能110,000桶/日（截至报告时未给出目标日期）。50千桶/日只对应合计且是2024估算，不分摊给两田、不作为2026当前产量；规划产能另记，不并入产量。",
+      "measurement_basis": "EIA 2024 Iran CAB第3页，引用Facts Global Energy 2024-03-15及Mehr News 2023-08-12；商品原油，Pasargad两田项目合计。",
+      "numeric_audit": "政府能源机构报告的经营方估值；非实测；明确项目合计和报告时点"
     }
   ],
   "statuses": [
@@ -182,7 +195,19 @@
       "note": "JICA表4.2.1-1三田数值140+140+80=360千桶/日，表内合计却为320；原表内部冲突，不导入主指标。没有从320反推或修改任何单田数值。"
     }
   ],
-  "additional_measurements": [],
+  "additional_measurements": [
+    {
+      "country": "伊朗",
+      "name": "Sepehr-Jufair",
+      "value": "110",
+      "metric_type": "target_capacity",
+      "unit": "千桶/日",
+      "commodity": "crude_oil",
+      "data_date": "2024-10报告中的未定期规划目标",
+      "basis": "EIA Iran CAB 2024第3页：两田合计目标产能；来源未提供实现日期；非已建成或实际产量。",
+      "source_url": "https://www.eia.gov/international/content/analysis/countries_long/Iran/pdf/Iran%20CAB%202024.pdf"
+    }
+  ],
   "shared_countries": [
     {
       "country": "科威特",

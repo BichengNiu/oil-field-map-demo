@@ -88,6 +88,9 @@ REVIEWS = (GULF, FOLLOWUP)
 PUBLIC_METADATA = json.loads(
     (Path(__file__).parent / "data" / "asset_public_metadata.json").read_text(encoding="utf-8")
 )
+GEM_HISTORICAL_PRODUCTION = json.loads(
+    (Path(__file__).parent / "data" / "gem_historical_production.json").read_text(encoding="utf-8")
+)
 
 
 def public_reference_coordinates() -> dict:
@@ -118,6 +121,33 @@ def apply_public_metadata(assets: list[dict]) -> None:
             "confidence": PUBLIC_METADATA["source"]["confidence"],
             "limitations": PUBLIC_METADATA["source"]["limitations"],
         }
+
+
+def apply_gem_historical_production(assets: list[dict]) -> None:
+    """Attach cited annual oil volumes; derive an explicitly historical daily average."""
+    index = {_key(asset): asset for asset in assets}
+    for row in GEM_HISTORICAL_PRODUCTION["rows"]:
+        key = row["country"], row["name"]
+        asset = index[key]
+        asset.setdefault("gem_historical_production", []).append(row)
+        if not row["is_latest_reported_year"] or asset["value"] is not None:
+            continue
+        asset.update(
+            value=f'{row["derived_daily_thousand_barrels"]:.3f}'.rstrip("0").rstrip("."),
+            metric_type="derived_daily_average",
+            unit="千桶/日",
+            data_date=f'{row["year"]}年历史年产量换算日均',
+            source="GEM Wiki field production table",
+            source_url=row["wiki_url"],
+            note=(
+                f'GEM逐田Production表列示{row["year"]}年原油年产量 '
+                f'{row["quantity_million_barrels_year"]:g} 百万桶；按 '
+                f'{row["days_in_year"]} 天换算为历史日均 '
+                f'{row["derived_daily_thousand_barrels"]:g} 千桶/日。'
+                "非当前产量；原表行引用与许可署名见历史产量记录。"
+            ),
+            numeric_audit="GEM二手逐田表；保留年产量及原始行引用，公式换算历史年均；非当前值",
+        )
 
 
 def finish_reviews(assets: list[dict]) -> None:

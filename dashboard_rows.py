@@ -2,6 +2,7 @@
 
 from __future__ import annotations
 
+import json
 from datetime import date
 
 import ais as AIS
@@ -104,6 +105,9 @@ def asset_rows(assets: list[dict]) -> list[dict]:
             "数值复核": asset["numeric_audit"],
             "数据复核日": asset["data_audit_date"],
             "其他商品指标": extra_measurements(asset),
+            "历史原油年产量记录": json.dumps(
+                asset.get("gem_historical_production", []), ensure_ascii=False, separators=(",", ":")
+            ),
             "资产类型": asset["asset_type"],
             "商品": asset["commodity_label"],
             "生产状态": asset["operating_status_label"],
