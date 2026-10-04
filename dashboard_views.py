@@ -216,6 +216,12 @@ def render_assets_panel(filtered: list[dict], asset_view: str) -> None:
         "上级节点有直接披露值时优先采用该值，组成资产不重复计入；"
         "不同日期、商品或口径的子项不会自动相加。搜索可临时显示完整目录中的匹配资产。"
     )
+    reference_count = sum(bool(asset.get("public_metadata")) for asset in filtered)
+    if reference_count:
+        st.caption(
+            f"本视图 {reference_count} 项补有 Global Energy Monitor 2026-03公开目录参考（CC BY 4.0）；"
+            "运营商、权益和投产年有版本限制，不证明当前在产。未披露日产量继续留空。"
+        )
     st.dataframe(
         asset_rows,
         width="stretch",
@@ -225,6 +231,10 @@ def render_assets_panel(filtered: list[dict], asset_view: str) -> None:
             "状态证据链接": st.column_config.LinkColumn("状态证据"),
             "坐标来源链接": st.column_config.LinkColumn("坐标来源"),
             "来源链接": st.column_config.LinkColumn("目录来源"),
+            "参考资料链接": st.column_config.LinkColumn("GEM公开镜像（固定版本）"),
+            "参考资产页面": st.column_config.LinkColumn("GEM资产／项目页面"),
+            "发现年（目录参考）": st.column_config.NumberColumn(format="%d"),
+            "商业投产年（目录参考）": st.column_config.NumberColumn(format="%d"),
         },
     )
 
@@ -258,8 +268,13 @@ def render_method_panel() -> None:
             },
             {
                 "数据": "油气产量、产能、状态和坐标",
-                "当前更新": "经核验的静态公开披露记录",
+                "当前更新": "带来源的静态披露；公开目录参考点另标版本和精度限制",
                 "进一步自动化": "接运营商 / 监管机构 API 或公告抓取，校验资产、日期、单位、产量 / 产能后更新",
+            },
+            {
+                "数据": "油气运营商、权益、发现年和投产年",
+                "当前更新": "Global Energy Monitor 2026-03公开镜像参考（CC BY 4.0）；不代表当前在产",
+                "进一步自动化": "新版本需核对名称和层级；原字段缺失保持为空，不填补日产量",
             },
             {
                 "数据": "船位归档",

@@ -468,6 +468,19 @@ def build_report_html(
         + '<h3>战略油气资产（最多20项）</h3>'
         + _table(["资产", "国家", "状态", "本层级日产量", "其他指标", "披露日期", "坐标精度"], assets_table_rows)
     )
+    reference_rows = [row for row in asset_table[:20] if row.get("GEM Unit ID")]
+    if reference_rows:
+        oil_content += (
+            '<h3>公开目录背景（2026-03版本；最多20项）</h3>'
+            '<p class="note">Global Energy Monitor（CC BY 4.0）公开镜像；运营商和权益仅为目录参考，'
+            '投产年不表示当前在产；未披露字段保持为空。</p>'
+            + _table(
+                ["资产", "运营商（参考）", "发现年", "商业投产年", "GEM ID", "固定版本来源"],
+                [[row.get("英文名称"), row.get("运营商（2026-03目录参考）"),
+                  row.get("发现年（目录参考）"), row.get("商业投产年（目录参考）"),
+                  row.get("GEM Unit ID"), row.get("参考资料链接")] for row in reference_rows],
+            )
+        )
 
     ais_content = (
         '<p class="note">AIS 是事件驱动的公开/订阅观测快照，不是监测水域内全部船舶的普查；'
@@ -489,6 +502,7 @@ def build_report_html(
             ["咽喉点日活动", "IMF PortWatch", "总船次与承载能力按每个通道单独解释。"],
             ["AIS船位", "Open Waters / 可选 AISStream", "公开快照与WebSocket事件按MMSI去重；观测数量不等于总船数。"],
             ["油气资产", "公开披露及项目核验目录", "状态、产量、产能和目标保留各自日期与指标口径。"],
+            ["油气目录背景", "Global Energy Monitor / CC BY 4.0 公开镜像", "2026-03版本；运营商、发现和投产年份仅为参考，不据此填补日产量或当前停复产状态。"],
         ],
     )
     source_content += '<h3>异常与缺报</h3>' + _table(

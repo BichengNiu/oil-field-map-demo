@@ -85,6 +85,40 @@ GULF = _load("2026-10-03", "GULF_REVIEW_2026-10-03.json")
 FOLLOWUP = _load("2026-10-04", "FINAL_REVIEW_2026-10-04.json")
 REVIEWS = (GULF, FOLLOWUP)
 
+PUBLIC_METADATA = json.loads(
+    (Path(__file__).parent / "data" / "asset_public_metadata.json").read_text(encoding="utf-8")
+)
+
+
+def public_reference_coordinates() -> dict:
+    """Only reviewed missing points; mirror accuracy is unknown, so use proxies."""
+    return {
+        _key(row): {
+            "lat": row["record"]["latitude"],
+            "lon": row["record"]["longitude"],
+            "precision": "GEM 2026-03目录参考点；原始精度未保留，非核验油田中心或井位",
+            "source": "Global Energy Monitor（2026-03公开镜像；CC BY 4.0）",
+            "url": PUBLIC_METADATA["source"]["mirror_url"],
+            "proxy": True,
+        }
+        for row in PUBLIC_METADATA["records"]
+        if row["use_reference_coordinates"]
+    }
+
+
+def apply_public_metadata(assets: list[dict]) -> None:
+    """Keep directory facts separate from measurements and current status."""
+    index = {_key(asset): asset for asset in assets}
+    for row in PUBLIC_METADATA["records"]:
+        index[_key(row)]["public_metadata"] = {
+            **row["record"],
+            "release": PUBLIC_METADATA["source"]["release"],
+            "review_date": PUBLIC_METADATA["review_date"],
+            "source_url": PUBLIC_METADATA["source"]["mirror_url"],
+            "confidence": PUBLIC_METADATA["source"]["confidence"],
+            "limitations": PUBLIC_METADATA["source"]["limitations"],
+        }
+
 
 def finish_reviews(assets: list[dict]) -> None:
     """Preserve the distinct country, freshness, and note rules of both reviews."""

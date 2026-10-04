@@ -118,6 +118,30 @@ def _hierarchy_panel(asset: dict[str, object]) -> str:
     return "".join(cards)
 
 
+def _public_metadata_panel(asset: dict) -> str:
+    reference = asset.get("public_metadata")
+    if not reference:
+        return ""
+    rows = "".join(
+        f'<div class="row"><span>{label}</span><strong>{_esc(reference[key])}</strong></div>'
+        for key, label in (
+            ("operator", "运营商（目录参考）"),
+            ("owners", "权益持有人（目录参考）"),
+            ("discoveryYear", "发现年（目录参考）"),
+            ("productionStartYear", "商业投产年（目录参考）"),
+        )
+        if reference.get(key) is not None
+    )
+    return (
+        f'<div class="hierarchy-title">公开目录背景（{_esc(reference["release"])}）</div>'
+        + rows
+        + '<div class="basis">二手目录参考；投产年不证明当前在产，运营商与权益可能后续变更。'
+        '参考点精度未保留，不代表核验油田中心或井位。</div>'
+        + f'<a class="source" href="{_esc(reference["source_url"])}" target="_blank" rel="noopener">'
+        f'Global Energy Monitor · CC BY 4.0 · {_esc(reference["unitId"])}</a>'
+    )
+
+
 def asset_popup(asset: dict[str, object]) -> str:
     """生成分层中文信息卡；逐层列示当前资产及其上级的日产量。"""
 
@@ -169,6 +193,7 @@ def asset_popup(asset: dict[str, object]) -> str:
         f'<div class="basis">其他商品指标：{_esc(extra_measurements(asset))}</div>'
         f'<div class="basis">数据时效：{_esc(asset["freshness_note"])}</div>'
         f'<div class="basis">数值复核：{_esc(asset["numeric_audit"])}</div>'
+        f"{_public_metadata_panel(asset)}"
         f'<div class="basis">说明：{_esc(asset["note"] or "公开命名资产；本层级数值未公开。")}</div>'
         f'<a class="source" href="{status_source_url}" target="_blank" rel="noopener">生产状态证据</a>'
         f'<a class="source" href="{source_url}" target="_blank" rel="noopener">目录来源：{_esc(asset["source"])}</a>'

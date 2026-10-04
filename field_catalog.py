@@ -506,7 +506,9 @@ ASSETS = [
 import supplemental_assets as SUPPLEMENT
 import reconciled_assets as RECONCILED
 import continuation_assets as CONTINUATION
-from asset_reviews import REVIEWS, finish_reviews
+from asset_reviews import (
+    REVIEWS, apply_public_metadata, finish_reviews, public_reference_coordinates,
+)
 from audited_measurements import apply_annual_volumes, additional_measurements
 ASSETS.extend(SUPPLEMENT.additions(record))
 ASSETS.extend(RECONCILED.additions(record))
@@ -1146,6 +1148,8 @@ OUTPUT_METRIC_TYPES = {
 PARENT_RELATIONSHIPS.update(RECONCILED.PARENTS)
 COORDINATE_OVERRIDES.update(RECONCILED.coordinates())
 COORDINATE_OVERRIDES.update(CONTINUATION.coordinates())
+for key, coordinate in public_reference_coordinates().items():
+    COORDINATE_OVERRIDES.setdefault(key, coordinate)
 LEVEL_OVERRIDES.update(CONTINUATION.levels())
 for review in REVIEWS:
     LEVEL_OVERRIDES.update(review.levels())
@@ -1549,6 +1553,7 @@ for asset in ASSETS:
 additional_measurements(ASSETS)
 CONTINUATION.finish_review(ASSETS)
 finish_reviews(ASSETS)
+apply_public_metadata(ASSETS)
 
 
 def _numeric_value(value: Any) -> tuple[Decimal | None, str]:
