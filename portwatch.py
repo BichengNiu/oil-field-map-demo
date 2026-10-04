@@ -14,6 +14,7 @@ from urllib.request import Request, urlopen
 
 import streamlit as st
 import port_inventory
+from regions import MONITORED_REGIONS
 
 ROOT = "https://services9.arcgis.com/weJ1QsnbMYJlCHdG/arcgis/rest/services"
 PORTS = f"{ROOT}/PortWatch_ports_database/FeatureServer/0/query"
@@ -74,13 +75,7 @@ def valid_chokepoint_ids(ids: tuple[str, ...]) -> bool:
     return _valid_chokepoint_ids(ids)
 
 # south, north, west, east. Order assigns ports in overlapping boxes only once.
-REGIONS = {
-    "霍尔木兹海峡": (25.7, 27.4, 55.9, 57.5),
-    "阿曼湾": (22.0, 26.6, 56.0, 61.8),
-    "波斯湾": (23.5, 30.9, 47.0, 56.8),
-    "苏伊士运河": (29.4, 31.6, 31.7, 33.5),
-    "曼德海峡": (11.0, 15.4, 42.0, 45.7),
-}
+REGIONS = MONITORED_REGIONS
 
 
 def _query(url: str, **params: object) -> dict:
@@ -198,10 +193,16 @@ def _activity_rows(day: date, port_ids: tuple[str, ...], calendar_days: int) -> 
         quoted = ",".join(f"'{p}'" for p in ids)
         where = (f"date >= DATE '{first_day.isoformat()}' AND date <= DATE '{day.isoformat()}' "
                  f"AND portid IN ({quoted})")
+        count_before = _query(DAILY, where=where, returnGeometry="false",
+                              returnCountOnly="true").get("count")
+        if count_before is None:
+            raise ValueError("PortWatch未返回用于核对分页的记录总数")
+        expected_count = int(count_before)
         offset = 0
+        fetched_count = 0
         while True:
             page = _query(DAILY, where=where, returnGeometry="false", resultOffset=offset,
-                          resultRecordCount=1000, orderByFields="portid ASC",
+                          resultRecordCount=1000, orderByFields="portid ASC,date ASC",
                           outFields="date,portid,portname,country,ISO3,portcalls,"
                                     "portcalls_container,portcalls_dry_bulk,"
                                     "portcalls_general_cargo,portcalls_roro,portcalls_tanker,"
@@ -211,6 +212,10 @@ def _activity_rows(day: date, port_ids: tuple[str, ...], calendar_days: int) -> 
                                     "import_roro,export_roro,import_tanker,export_tanker,"
                                     "import_cargo,export_cargo")
             items = page.get("features", [])
+            exceeded = bool(page.get("exceededTransferLimit"))
+            if exceeded and not items:
+                raise ValueError("PortWatch活动数据分页被截断且未前进")
+            fetched_count += len(items)
             for item in items:
                 values = item["attributes"]
                 port_id = values.get("portid")
@@ -220,9 +225,14 @@ def _activity_rows(day: date, port_ids: tuple[str, ...], calendar_days: int) -> 
                 if value_day in grouped[port_id]:
                     raise ValueError(f"PortWatch重复港口/日期：{port_id}/{value_day}")
                 grouped[port_id][value_day] = values
-            if len(items) < 1000:
+            if not exceeded and len(items) < 1000:
                 break
             offset += len(items)
+        count_after = _query(DAILY, where=where, returnGeometry="false",
+                             returnCountOnly="true").get("count")
+        if fetched_count != expected_count or count_after != expected_count:
+            raise ValueError(
+                f"PortWatch活动数据分页不完整或源记录变化：{fetched_count}/{expected_count}")
     return grouped
 
 
@@ -373,10 +383,13 @@ def chokepoint_activity(day: date, chokepoint_ids: tuple[str, ...]) -> dict[str,
     where = f"date = DATE '{day.isoformat()}' AND portid IN ({quoted})"
     page = _query(
         CHOKEPOINT_DAILY, where=where, returnGeometry="false", resultRecordCount=100,
+        orderByFields="portid ASC,date ASC",
         outFields="date,portid,portname,n_total,n_container,n_dry_bulk,"
                   "n_general_cargo,n_roro,n_tanker,n_cargo,capacity,"
                   "capacity_container,capacity_dry_bulk,capacity_general_cargo,"
                   "capacity_roro,capacity_tanker,capacity_cargo")
+    if page.get("exceededTransferLimit"):
+        raise ValueError("PortWatch咽喉点最新数据被截断")
     result = {}
     for item in page.get("features", []):
         value = item["attributes"]

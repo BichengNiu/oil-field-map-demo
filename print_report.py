@@ -228,7 +228,28 @@ def _overview_svg(ports: list[dict], chokes: list[dict], assets: list[dict],
                   vessels: list[dict] | None = None) -> str:
     width, height = 860, 430
     left, right, top, bottom = 72, 28, 28, 52
-    lon_min, lon_max, lat_min, lat_max = 29.0, 64.0, 8.0, 34.0
+    coordinates = []
+    for row in ports + chokes + (vessels or []):
+        coordinates.append((_number(row.get("lat")), _number(row.get("lon"))))
+    for asset in assets:
+        if asset.get("map_drawable", True):
+            coordinates.append((
+                _number(asset.get("map_lat", asset.get("lat"))),
+                _number(asset.get("map_lon", asset.get("lon"))),
+            ))
+    for south, north, west, east in regions.values():
+        coordinates.extend(((south, west), (north, east)))
+    coordinates = [(lat, lon) for lat, lon in coordinates
+                   if lat is not None and lon is not None]
+    if coordinates:
+        lat_min, lat_max = min(lat for lat, _ in coordinates), max(lat for lat, _ in coordinates)
+        lon_min, lon_max = min(lon for _, lon in coordinates), max(lon for _, lon in coordinates)
+        lat_padding = max(0.5, (lat_max - lat_min) * 0.05)
+        lon_padding = max(0.5, (lon_max - lon_min) * 0.05)
+        lat_min, lat_max = lat_min - lat_padding, lat_max + lat_padding
+        lon_min, lon_max = lon_min - lon_padding, lon_max + lon_padding
+    else:
+        lon_min, lon_max, lat_min, lat_max = 29.0, 64.0, 8.0, 34.0
     plot_w, plot_h = width - left - right, height - top - bottom
     def xy(lat: object, lon: object) -> tuple[float, float] | None:
         yv, xv = _number(lat), _number(lon)
@@ -237,11 +258,16 @@ def _overview_svg(ports: list[dict], chokes: list[dict], assets: list[dict],
         return left + (xv - lon_min) / (lon_max - lon_min) * plot_w, top + (lat_max - yv) / (lat_max - lat_min) * plot_h
     parts = [f'<svg viewBox="0 0 {width} {height}" role="img" aria-label="监测水域与节点空间分布示意" xmlns="http://www.w3.org/2000/svg">',
              f'<rect x="{left}" y="{top}" width="{plot_w}" height="{plot_h}" fill="#f8fafc" stroke="#94a3b8"/>']
-    for lon in range(30, 65, 5):
+    lon_span, lat_span = lon_max - lon_min, lat_max - lat_min
+    lon_step = 10 if lon_span > 40 else 5 if lon_span > 20 else 2 if lon_span > 10 else 1
+    lat_step = 10 if lat_span > 40 else 5 if lat_span > 20 else 2 if lat_span > 10 else 1
+    lon_start = math.ceil(lon_min / lon_step) * lon_step
+    lat_start = math.ceil(lat_min / lat_step) * lat_step
+    for lon in range(lon_start, math.floor(lon_max) + 1, lon_step):
         x = left + (lon - lon_min) / (lon_max - lon_min) * plot_w
         parts.append(f'<line x1="{x:.1f}" y1="{top}" x2="{x:.1f}" y2="{top+plot_h}" class="grid"/>')
         parts.append(f'<text x="{x:.1f}" y="{height-25}" text-anchor="middle" class="axis">{lon}°E</text>')
-    for lat in range(10, 35, 5):
+    for lat in range(lat_start, math.floor(lat_max) + 1, lat_step):
         y = top + (lat_max - lat) / (lat_max - lat_min) * plot_h
         parts.append(f'<line x1="{left}" y1="{y:.1f}" x2="{left+plot_w}" y2="{y:.1f}" class="grid"/>')
         parts.append(f'<text x="{left-8}" y="{y+4:.1f}" text-anchor="end" class="axis">{lat}°N</text>')
@@ -262,10 +288,12 @@ def _overview_svg(ports: list[dict], chokes: list[dict], assets: list[dict],
     for asset in assets:
         if not asset.get("map_drawable", True):
             continue
-        point = xy(asset.get("lat"), asset.get("lon"))
+        point = xy(asset.get("map_lat", asset.get("lat")),
+                   asset.get("map_lon", asset.get("lon")))
         if point:
             x, y = point
-            parts.append(f'<polygon points="{x:.1f},{y-4:.1f} {x+4:.1f},{y:.1f} {x:.1f},{y+4:.1f} {x-4:.1f},{y:.1f}" fill="#d97706"/>')
+            dash = ' stroke="#7c2d12" stroke-dasharray="2 2"' if asset.get("map_is_proxy") else ""
+            parts.append(f'<polygon points="{x:.1f},{y-4:.1f} {x+4:.1f},{y:.1f} {x:.1f},{y+4:.1f} {x-4:.1f},{y:.1f}" fill="#d97706"{dash}/>')
     for choke in chokes:
         point = xy(choke.get("lat"), choke.get("lon"))
         if point:
@@ -300,7 +328,6 @@ def build_report_html(
     port_catalog: list[dict],
     choke_catalog: list[dict],
     latest_ports: list[dict],
-    latest_chokes: list[dict],
     port_history: list[dict],
     choke_history: list[dict],
     assets: list[dict],
@@ -322,7 +349,6 @@ def build_report_html(
     # explicitly marks them as independent PortWatch statistics.
     stat_ports = [p for p in port_catalog if p.get("statistics_available", False)]
     dated_calls = [p for p in latest_ports if _number(p.get("portcalls")) is not None]
-    covered_calls = sum(_number(p.get("portcalls")) or 0 for p in dated_calls)
     catalog_chokes = len(choke_catalog)
     report_assets = list(assets)
     map_html = _overview_svg(port_catalog, choke_catalog, report_assets, regions, vessels)
@@ -360,7 +386,6 @@ def build_report_html(
         + cover_table
     )
 
-    latest_choke_by_id = {str(row.get("portid")): row for row in latest_chokes}
     choke_names = {str(row.get("portid")): row.get("name_cn") or row.get("name") or row.get("portname") or row.get("portid")
                    for row in choke_catalog}
     n_series = [(str(choke_names.get(point_id, point_id)),

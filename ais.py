@@ -11,12 +11,16 @@ import json
 import random
 import re
 import threading
+import time
+from collections import deque
 from concurrent.futures import ThreadPoolExecutor, as_completed
 from copy import deepcopy
 from datetime import datetime, timezone
 from typing import Any, Callable
 from urllib.parse import urlencode
 from urllib.request import Request, urlopen
+
+from regions import MONITORED_REGIONS
 
 try:
     from websockets.sync.client import connect as websocket_connect
@@ -28,16 +32,14 @@ SOURCE = "https://aisstream.io/documentation"
 STREAM_URL = "wss://stream.aisstream.io/v0/stream"
 OPENWATERS_SOURCE = "https://openwaters.io/ais/"
 OPENWATERS_API = "https://ais.openwaters.io/v1/vessels"
-MODULE_VERSION = 4
+MODULE_VERSION = 5
+POSITION_RETENTION_SECONDS = 2 * 60 * 60
+MAX_TRACKED_VESSELS = 20_000
+MAX_ARCHIVE_BUFFER = 2_000
+ARCHIVE_BATCH_SIZE = 50
 
 # south, north, west, east.  Keep aligned with portwatch.REGIONS.
-REGIONS = {
-    "霍尔木兹海峡": (25.7, 27.4, 55.9, 57.5),
-    "阿曼湾": (22.0, 26.6, 56.0, 61.8),
-    "波斯湾": (23.5, 30.9, 47.0, 56.8),
-    "苏伊士运河": (29.4, 31.6, 31.7, 33.5),
-    "曼德海峡": (11.0, 15.4, 42.0, 45.7),
-}
+REGIONS = MONITORED_REGIONS
 
 # Open Waters' anonymous API allows 100 square degrees per request. Keep the
 # complete five-region coverage in two requests while respecting that limit.
@@ -136,7 +138,8 @@ def openwaters_feature_to_vessel(
     mmsi = _integer(properties.get("mmsi", feature.get("id")))
     if mmsi is None or not 100000000 <= mmsi <= 999999999:
         return None
-    seen = _parse_utc(properties.get("seen")) or received_at or utc_now()
+    observed = _parse_utc(properties.get("seen"))
+    received = received_at or utc_now()
     sog = _number(properties.get("sog"))
     cog = _number(properties.get("cog"))
     heading = _number(properties.get("heading"))
@@ -154,10 +157,12 @@ def openwaters_feature_to_vessel(
     attribution_text = (attribution or {}).get(source)
     source_url_match = re.search(r"https?://[^\s)]+", str(attribution_text or ""))
     source_url = source_url_match.group(0).rstrip(".,") if source_url_match else OPENWATERS_SOURCE
-    age_minutes = max(0.0, (utc_now() - seen).total_seconds() / 60)
+    age_minutes = (max(0.0, (utc_now() - observed).total_seconds() / 60)
+                   if observed else None)
     return {
         "mmsi": str(mmsi),
-        "received_at": seen.isoformat(),
+        "observed_at": observed.isoformat() if observed else None,
+        "received_at": received.isoformat(),
         "message_type": _clean_text(properties.get("msg_type")) or "PositionReport",
         "kind": "position",
         "name": _clean_text(properties.get("name")),
@@ -179,6 +184,7 @@ def openwaters_feature_to_vessel(
         "draught": _number(properties.get("draught")),
         "moving": (sog or 0) >= 0.5,
         "age_minutes": age_minutes,
+        "age_basis": "源站观测时间" if observed else None,
         "data_source": f"Open Waters · {source}",
         "source": source,
         "station": station,
@@ -215,12 +221,13 @@ def openwaters_snapshot(max_age_minutes: int = 30) -> dict[str, Any]:
     with ThreadPoolExecutor(max_workers=len(groups)) as pool:
         futures = [pool.submit(_fetch_openwaters_group, group, max_age_minutes)
                    for group in groups]
-        for future in as_completed(futures):
+    for future in as_completed(futures):
             try:
                 results.append(future.result())
             except Exception as exc:
                 errors.append(f"{type(exc).__name__}: {exc}")
 
+    received_at = utc_now()
     attribution: dict[str, str] = {}
     by_mmsi: dict[str, dict[str, Any]] = {}
     truncated = False
@@ -233,11 +240,11 @@ def openwaters_snapshot(max_age_minutes: int = 30) -> dict[str, Any]:
         for feature in result.get("features") or []:
             if not isinstance(feature, dict):
                 continue
-            vessel = openwaters_feature_to_vessel(feature, attribution)
+            vessel = openwaters_feature_to_vessel(feature, attribution, received_at)
             if vessel is None:
                 continue
             previous = by_mmsi.get(vessel["mmsi"])
-            if previous is None or vessel["received_at"] > previous["received_at"]:
+            if previous is None or _snapshot_is_newer(vessel, previous):
                 by_mmsi[vessel["mmsi"]] = vessel
 
     # Resolve attribution after combining both area responses, since one source
@@ -245,10 +252,11 @@ def openwaters_snapshot(max_age_minutes: int = 30) -> dict[str, Any]:
     for vessel in by_mmsi.values():
         vessel["source_attribution"] = attribution.get(vessel["source"])
     return {
-        "vessels": sorted(by_mmsi.values(), key=lambda row: row["received_at"], reverse=True),
+        "vessels": sorted(
+            by_mmsi.values(), key=_snapshot_timestamp, reverse=True),
         "attribution": attribution,
         "truncated": truncated,
-        "fetched_at": utc_now().isoformat(),
+        "fetched_at": received_at.isoformat(),
         "error": "; ".join(errors) if errors else None,
     }
 
@@ -300,9 +308,29 @@ def merge_vessel_snapshots(
         for vessel in snapshot:
             mmsi = str(vessel["mmsi"])
             previous = by_mmsi.get(mmsi)
-            if previous is None or vessel["received_at"] > previous["received_at"]:
+            if previous is None or _snapshot_is_newer(vessel, previous):
                 by_mmsi[mmsi] = vessel
     return list(by_mmsi.values())
+
+
+def _snapshot_is_newer(candidate: dict[str, Any], current: dict[str, Any]) -> bool:
+    """Compare observations when both exist, otherwise compare local receipts."""
+    candidate_observed = _parse_utc(candidate.get("observed_at"))
+    current_observed = _parse_utc(current.get("observed_at"))
+    if candidate_observed and current_observed:
+        return candidate_observed >= current_observed
+    candidate_received = _parse_utc(candidate.get("received_at"))
+    current_received = _parse_utc(current.get("received_at"))
+    return candidate_received is not None and (
+        current_received is None or candidate_received >= current_received)
+
+
+def _snapshot_timestamp(vessel: dict[str, Any]) -> float:
+    """Return the best available UTC timestamp for ordering map snapshots."""
+    observed = _parse_utc(vessel.get("observed_at"))
+    received = _parse_utc(vessel.get("received_at"))
+    timestamp = observed or received
+    return timestamp.timestamp() if timestamp else float("-inf")
 
 
 def filter_vessels(
@@ -353,6 +381,26 @@ def _valid_coordinate(lat: float | None, lon: float | None) -> bool:
     return lat is not None and lon is not None and -90 <= lat <= 90 and -180 <= lon <= 180
 
 
+def parse_utc(value: Any) -> datetime | None:
+    """Parse a UTC timestamp from a provider or a preserved archive row."""
+    return _parse_utc(value)
+
+
+def parse_number(value: Any) -> float | None:
+    """Parse one numeric AIS field, preserving missing and malformed values."""
+    return _number(value)
+
+
+def parse_integer(value: Any) -> int | None:
+    """Parse one integral AIS identifier or code."""
+    return _integer(value)
+
+
+def valid_coordinate(lat: float | None, lon: float | None) -> bool:
+    """Validate latitude and longitude before region classification."""
+    return _valid_coordinate(lat, lon)
+
+
 def normalize_event(event: dict[str, Any], received_at: datetime | None = None) -> dict[str, Any] | None:
     """Normalize one AISStream event into a position or static-data update."""
 
@@ -367,8 +415,11 @@ def normalize_event(event: dict[str, Any], received_at: datetime | None = None) 
     if mmsi_int is None or not 100000000 <= mmsi_int <= 999999999:
         return None
     received = received_at or utc_now()
+    observed = _parse_utc(
+        metadata.get("time_utc", metadata.get("TimeUTC", metadata.get("timestamp"))))
     base: dict[str, Any] = {
         "mmsi": str(mmsi_int),
+        "observed_at": observed.isoformat() if observed else None,
         "received_at": received.isoformat(),
         "message_type": message_type,
     }
@@ -491,7 +542,13 @@ class AISCollector:
         self._subscription_confirmed_at: str | None = None
         self._compression_enabled: bool | None = None
         self._archive_error: str | None = None
-        self._archive_buffer: list[dict[str, Any]] = []
+        self._archive_buffer: deque[dict[str, Any]] = deque()
+        self._archive_dropped_count = 0
+        self._archive_unobserved_count = 0
+        self._archive_wakeup = threading.Event()
+        self._archive_thread: threading.Thread | None = None
+        self._socket: Any | None = None
+        self._ingest_since_prune = 0
 
     def start(self) -> "AISCollector":
         if self._thread and self._thread.is_alive():
@@ -506,6 +563,10 @@ class AISCollector:
                 self._last_error = "请安装 requirements.txt 后重启应用"
             return self
         self._stop.clear()
+        self._archive_wakeup.clear()
+        self._archive_thread = threading.Thread(
+            target=self._archive_worker, name="ais-archive-writer", daemon=True)
+        self._archive_thread.start()
         self._thread = threading.Thread(
             target=self._run, name="aisstream-collector", daemon=True)
         self._thread.start()
@@ -513,12 +574,23 @@ class AISCollector:
 
     def stop(self) -> None:
         self._stop.set()
+        self._archive_wakeup.set()
+        with self._lock:
+            socket = self._socket
+        if socket is not None:
+            try:
+                socket.close()
+            except Exception:
+                pass
         if self._thread and self._thread.is_alive():
-            self._thread.join(timeout=3)
+            self._thread.join(timeout=7)
+        if self._archive_thread and self._archive_thread.is_alive():
+            self._archive_thread.join(timeout=3)
 
     def _run(self) -> None:
         attempt = 0
         while not self._stop.is_set():
+            connected_monotonic = None
             try:
                 with self._lock:
                     self._status = "连接中" if attempt == 0 else "重连中"
@@ -528,17 +600,19 @@ class AISCollector:
                     ping_interval=20, ping_timeout=20, compression="deflate",
                     max_size=2 * 1024 * 1024,
                 ) as socket:
+                    connected_monotonic = time.monotonic()
+                    with self._lock:
+                        self._socket = socket
                     socket.send(json.dumps(subscription(self._api_key)))
                     with self._lock:
                         self._status = "已连接，等待订阅确认"
                         self._connected_at = utc_now().isoformat()
                         self._last_error = None
-                    attempt = 0
                     while not self._stop.is_set():
                         try:
                             frame = socket.recv(timeout=5)
                         except TimeoutError:
-                            self._flush_archive()
+                            self._archive_wakeup.set()
                             continue
                         if isinstance(frame, bytes):
                             frame = frame.decode("utf-8")
@@ -552,37 +626,57 @@ class AISCollector:
                                 self._status = "订阅已确认"
                                 self._subscription_confirmed_at = utc_now().isoformat()
                                 self._compression_enabled = compression_enabled
+                            self._archive_wakeup.set()
                             continue
                         if event.get("error"):
                             raise RuntimeError(str(event["error"]))
                         self.ingest(event)
             except Exception as exc:  # Network failures are expected; reconnect safely.
-                self._flush_archive()
+                self._archive_wakeup.set()
+                if (connected_monotonic is not None
+                        and time.monotonic() - connected_monotonic >= 60):
+                    attempt = 0
                 attempt += 1
                 with self._lock:
                     self._status = "重连等待"
                     self._last_error = f"{type(exc).__name__}: {exc}"
                 delay = min(60.0, 2 ** min(attempt, 5)) + random.random()
                 self._stop.wait(delay)
+            finally:
+                with self._lock:
+                    self._socket = None
         with self._lock:
             self._status = "已停止"
-        self._flush_archive()
+        self._archive_wakeup.set()
 
-    def _flush_archive(self) -> None:
-        """Persist buffered reports together instead of committing per AIS event."""
-        with self._lock:
-            batch, self._archive_buffer = self._archive_buffer, []
-        if not batch:
-            return
-        try:
-            import ais_history
-            ais_history.archive_reports(batch)
+    def _archive_worker(self) -> None:
+        """Persist batches away from the websocket receive loop."""
+        while True:
+            self._archive_wakeup.wait(timeout=5)
+            self._archive_wakeup.clear()
             with self._lock:
-                self._archive_error = None
-        except Exception as exc:
-            with self._lock:
-                self._archive_error = f"{type(exc).__name__}: {exc}"
-                self._archive_buffer = batch + self._archive_buffer
+                batch = [self._archive_buffer.popleft() for _ in range(
+                    min(ARCHIVE_BATCH_SIZE, len(self._archive_buffer)))]
+                should_stop = self._stop.is_set() and not self._archive_buffer
+            if batch:
+                try:
+                    import ais_history
+                    ais_history.archive_reports(batch)
+                    with self._lock:
+                        self._archive_error = None
+                except Exception as exc:
+                    with self._lock:
+                        self._archive_error = f"{type(exc).__name__}: {exc}"
+                        for report in reversed(batch):
+                            self._archive_buffer.appendleft(report)
+                        while len(self._archive_buffer) > MAX_ARCHIVE_BUFFER:
+                            self._archive_buffer.pop()
+                            self._archive_dropped_count += 1
+                    if self._stop.is_set():
+                        return
+                    self._stop.wait(5)
+            if should_stop:
+                return
 
     def ingest(self, event: dict[str, Any], received_at: datetime | None = None) -> bool:
         received = received_at or utc_now()
@@ -615,55 +709,94 @@ class AISCollector:
             if normalized["kind"] == "static":
                 self._static_message_count += 1
                 previous = self._static.get(mmsi, {})
-                self._static[mmsi] = {
-                    **previous,
-                    **{key: value for key, value in normalized.items()
-                       if value is not None},
-                }
+                if not previous or _snapshot_is_newer(normalized, previous):
+                    self._static[mmsi] = {
+                        **previous,
+                        **{key: value for key, value in normalized.items()
+                           if value is not None},
+                    }
             else:
                 self._position_message_count += 1
                 self._last_position_message_at = normalized["received_at"]
                 previous = self._positions.get(mmsi, {})
-                self._positions[mmsi] = {
-                    **previous,
-                    **{key: value for key, value in normalized.items()
-                       if value is not None},
-                }
+                # Position reports replace dynamic values, including invalid AIS
+                # sentinels normalized to None. Stale SOG/course must not survive.
+                if not previous or _snapshot_is_newer(normalized, previous):
+                    self._positions[mmsi] = normalized
+            self._ingest_since_prune += 1
+            if self._ingest_since_prune >= 256:
+                received_utc = _parse_utc(received.isoformat())
+                self._prune_state_locked(received_utc.timestamp() if received_utc else 0)
+                self._ingest_since_prune = 0
         if normalized["kind"] == "position" and normalized.get("region"):
-            flush = False
             with self._lock:
-                self._archive_buffer.append({**self._static.get(mmsi, {}), **normalized})
-                flush = len(self._archive_buffer) >= 50
-            if flush:
-                self._flush_archive()
+                if normalized.get("observed_at"):
+                    static = self._static.get(mmsi, {})
+                    archive_row = {**static, **{
+                        key: value for key, value in normalized.items()
+                        if value is not None}}
+                    self._archive_buffer.append(archive_row)
+                    if len(self._archive_buffer) > MAX_ARCHIVE_BUFFER:
+                        self._archive_buffer.popleft()
+                        self._archive_dropped_count += 1
+                    if len(self._archive_buffer) >= ARCHIVE_BATCH_SIZE:
+                        self._archive_wakeup.set()
+                else:
+                    self._archive_unobserved_count += 1
         return True
+
+    def _prune_state_locked(self, now_timestamp: float) -> None:
+        cutoff = now_timestamp - POSITION_RETENTION_SECONDS
+        stale = []
+        for mmsi, position in self._positions.items():
+            received = _parse_utc(position.get("received_at"))
+            if received is None or received.timestamp() < cutoff:
+                stale.append(mmsi)
+        for mmsi in stale:
+            self._positions.pop(mmsi, None)
+            self._static.pop(mmsi, None)
+        if len(self._positions) > MAX_TRACKED_VESSELS:
+            oldest = sorted(self._positions, key=lambda key: self._positions[key]["received_at"])
+            for mmsi in oldest[:len(self._positions) - MAX_TRACKED_VESSELS]:
+                self._positions.pop(mmsi, None)
+                self._static.pop(mmsi, None)
+        if len(self._static) > MAX_TRACKED_VESSELS:
+            oldest = sorted(self._static, key=lambda key: self._static[key].get("received_at", ""))
+            for mmsi in oldest[:len(self._static) - MAX_TRACKED_VESSELS]:
+                self._static.pop(mmsi, None)
 
     def snapshot(self, max_age_minutes: int = 30,
                  limit: int | None = None) -> list[dict[str, Any]]:
-        cutoff = utc_now().timestamp() - max_age_minutes * 60
+        now = utc_now()
+        cutoff = now.timestamp() - max_age_minutes * 60
         with self._lock:
             rows = []
-            stale_mmsi = []
             for mmsi, position in self._positions.items():
-                received = datetime.fromisoformat(position["received_at"]).timestamp()
-                if received < cutoff:
-                    stale_mmsi.append(mmsi)
+                received = _parse_utc(position.get("received_at"))
+                if received is None:
                     continue
                 static = self._static.get(mmsi, {})
-                merged = {**static, **position}
+                merged = {**position, **{
+                    key: value for key, value in static.items()
+                    if position.get(key) in (None, "")}}
                 # Position messages often carry the fresher ship name; static data owns type.
                 if static.get("category"):
                     merged["category"] = static["category"]
                     merged["category_label"] = static["category_label"]
                     merged["ship_type_code"] = static.get("ship_type_code")
+                observation = _parse_utc(merged.get("observed_at"))
+                age_time = observation or received
+                if age_time.timestamp() < cutoff:
+                    continue
                 category = merged.get("category") or "unknown"
                 merged["category"] = category
                 merged["category_label"] = VESSEL_TYPE_LABELS[category]
                 merged["moving"] = (merged.get("sog") or 0) >= 0.5
-                merged["age_minutes"] = max(0.0, (utc_now().timestamp() - received) / 60)
+                merged["age_basis"] = (
+                    "源站观测时间" if observation else "本机接收时间")
+                merged["age_minutes"] = max(
+                    0.0, (now.timestamp() - age_time.timestamp()) / 60)
                 rows.append(merged)
-            for mmsi in stale_mmsi:
-                self._positions.pop(mmsi, None)
             rows.sort(key=lambda row: row["received_at"], reverse=True)
             if limit is not None:
                 rows = rows[:limit]
@@ -689,4 +822,7 @@ class AISCollector:
                 "compression_enabled": self._compression_enabled,
                 "tracked_vessels": len(self._positions),
                 "archive_error": self._archive_error,
+                "archive_dropped_count": self._archive_dropped_count,
+                "archive_unobserved_count": self._archive_unobserved_count,
+                "archive_pending_count": len(self._archive_buffer),
             }

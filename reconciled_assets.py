@@ -17,7 +17,7 @@ DENISE_URL = "https://www.eni.com/en-IT/media/press-release/2026/04/eni-unveils-
 
 def estimated_mean(total, share, days, divisor, places):
     result = Decimal(str(total)) * Decimal(str(share)) / Decimal(days) / Decimal(divisor)
-    return "约" + str(result.quantize(Decimal(places), rounding=ROUND_HALF_UP))
+    return result.quantize(Decimal(places), rounding=ROUND_HALF_UP)
 
 # Same referent or a source grouping already represented by multiple records.
 # No nearest-neighbour matching. Reasons are exported by reconcile_checkpoint.py.
@@ -102,7 +102,8 @@ def additions(record):
                         "750为处理能力，70千boe/d为公司净合计，均不替换本字段。原文公告年份有笔误，观察期以明确的2026年1月为准。",
                         numeric_audit="运营商原文下限已核；历史峰时产量水平，不是当前或全年均值")
         elif name == "Sakarya":
-            item.update(value=estimated_mean(1641, .92, 181, 1, ".01"), unit="百万立方米/日", metric_type="estimated_daily_average",
+            item.update(value=estimated_mean(1641, .92, 181, 1, ".01"),
+                        value_qualifier="约", unit="百万立方米/日", metric_type="estimated_daily_average",
                         data_date="2026上半年估算日均；181日", source="Turkey Ministry of Energy 2026-08-16",
                         source_url=TURKEY_URL, note="政府报全国上半年天然气超过1,641百万m³，Sakarya占92%。"
                         "以公布的约数基准1,641×92%÷181≈8.34百万m³/日；"
@@ -131,7 +132,8 @@ def apply_existing(assets):
     denise.update(source="Eni Denise W discovery 2026-04-07", source_url=DENISE_URL,
                   note="Eni 2026-04-07原公告确认Denise W气及凝析油发现；2 Tcf为原地资源量，非产量；未填井测试或推算坐标。")
     gabar = index[("土耳其", "Gabar")]
-    gabar.update(value=estimated_mean(23100000, .60, 181, 1000, ".1"), unit="千桶/日", metric_type="estimated_daily_average",
+    gabar.update(value=estimated_mean(23100000, .60, 181, 1000, ".1"),
+                 value_qualifier="约", unit="千桶/日", metric_type="estimated_daily_average",
                  data_date="2026上半年估算日均；181日", source="Turkey Ministry of Energy 2026-08-16",
                  source_url=TURKEY_URL, estimate_total_barrels=23100000, estimate_share=0.60,
                  calendar_days=181, numeric_audit="政府全国量×公布份额÷181日；近似估计，非独立实测",
@@ -166,12 +168,3 @@ def register_statuses(assign):
            "政府统计确认上半年贡献国内天然气生产的92%；不证明9月具体流量。", TURKEY_URL)
     assign("阿联酋", "Umm Shaif Gas Cap", "development", "2026-07-21 FID", "高",
            "开发最终投资决定；预计2030产气，目标不是当前产量。", UMM_SHAIF_URL)
-
-
-def pending():
-    from continuation_assets import RESOLVED, PENDING
-    return [{"国家": row["country"], "名称线索": row["name"], "原页": row["url"],
-             "核验结果": PENDING.get((row["country"], row["name"]), "保留历史快照线索；未读到可确认范围的内容，未加入确认目录；不填产量/坐标")}
-            for row in GEM_ROWS if not row["catalog_name_confirmed"]
-            and (row["country"], row["name"]) not in MERGES
-            and (row["country"], row["name"]) not in RESOLVED]

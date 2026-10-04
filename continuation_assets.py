@@ -13,7 +13,6 @@ UPDATED = RESOLVED | {(r["country"], r["name"]) for r in EVIDENCE["measurements"
 UPDATED |= {(r["country"], r["name"]) for r in EVIDENCE["coordinates"]}
 REVISED = {(r["country"], r["name"]) for r in EVIDENCE.get("scope_revisions", [])}
 UPDATED |= REVISED
-PENDING = {}
 
 
 def additions(record):

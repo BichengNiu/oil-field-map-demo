@@ -10,14 +10,14 @@ import portwatch_downloads
 
 @st.cache_data(ttl=900, max_entries=12, show_spinner=False)
 def history_window(kind: str, node_ids: tuple[str, ...], end_day: str,
-                   refresh_revision: int = 0) -> list[dict]:
+                   refresh_revision: str = "initial") -> list[dict]:
     """Return a verified 90-day window; failed reads are not cached."""
     if not node_ids:
         return []
     end = date.fromisoformat(end_day)
     rows, _ = portwatch_downloads.fetch_window(
         kind, node_ids, end - timedelta(days=89), end,
-        cache_revision=refresh_revision)
+        cache_revision=refresh_revision, cache_ttl_seconds=900)
     return rows
 
 

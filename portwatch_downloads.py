@@ -3,20 +3,25 @@ from __future__ import annotations
 
 from collections import defaultdict
 from datetime import date, datetime, timedelta, timezone
-import csv
 import hashlib
 import io
 import json
+import logging
 import math
 import os
 from pathlib import Path
-import re
 import sqlite3
 import zipfile
 import zlib
 
-import portwatch as pw
+import openpyxl
+from openpyxl.styles import Alignment, Font, PatternFill
+from openpyxl.utils import get_column_letter
 
+import portwatch as pw
+import csv_export
+
+logger = logging.getLogger(__name__)
 VERSION = 1
 FIRST_DAY = date(2019, 1, 1)
 PAGE_SIZE = 1000
@@ -111,11 +116,15 @@ def bounds(kind: str, ids: tuple[str, ...]) -> tuple[dict, list[dict]]:
 
 
 def _cache_path() -> Path:
-    return Path(os.environ.get("PORTWATCH_DOWNLOAD_CACHE") or
-                Path(__file__).with_name("runtime") / "portwatch-download-cache.sqlite3")
+    configured = os.environ.get("PORTWATCH_DOWNLOAD_CACHE")
+    if configured:
+        return Path(configured)
+    cache_home = Path(os.environ.get("XDG_CACHE_HOME") or Path.home() / ".cache")
+    return cache_home / "oil-field-map-demo" / "portwatch-download-cache.sqlite3"
 
 
-def _cache(key: str, payload: dict | None = None) -> dict | None:
+def _cache(key: str, payload: dict | None = None,
+           max_age_seconds: int = 86400) -> dict | None:
     """Cache only a validated complete query; a broken cache never hides source errors."""
     path = _cache_path()
     try:
@@ -129,23 +138,27 @@ def _cache(key: str, payload: dict | None = None) -> dict | None:
                 conn.execute("DELETE FROM queries WHERE saved < ?", (datetime.now(timezone.utc).timestamp() - 7 * 86400,))
                 return None
             row = conn.execute("SELECT saved,payload FROM queries WHERE key=?", (key,)).fetchone()
-        if row and datetime.now(timezone.utc).timestamp() - row[0] < 86400:
+        if row and datetime.now(timezone.utc).timestamp() - row[0] < max_age_seconds:
             return json.loads(zlib.decompress(row[1]))
-    except (OSError, sqlite3.Error, ValueError, zlib.error):
+    except (OSError, sqlite3.Error, ValueError, zlib.error) as exc:
+        logger.warning("PortWatch history cache unavailable (%s); continuing without it",
+                       type(exc).__name__)
         pass
     return None
 
 
 def fetch_window(kind: str, ids: tuple[str, ...], first: date, last: date,
                  force: bool = False, progress=None,
-                 cache_revision: int = 0) -> tuple[list[dict], dict]:
+                 cache_revision: int | str = 0,
+                 cache_ttl_seconds: int = 86400) -> tuple[list[dict], dict]:
     where = f"{_ids_where(ids, kind)} AND date >= DATE '{first}' AND date <= DATE '{last}'"
     endpoint = _endpoint(kind)
     metrics = PORT_METRICS if kind == "ports" else CHOKE_METRICS
     source_fields = ["ObjectId", "date", "portid", "portname"] + (["country", "ISO3"] if kind == "ports" else []) + metrics
     key = hashlib.sha256(json.dumps(
-        [VERSION, endpoint, where, source_fields, cache_revision]).encode()).hexdigest()
-    cached = None if force else _cache(key)
+        [VERSION, endpoint, where, source_fields, cache_revision,
+         cache_ttl_seconds]).encode()).hexdigest()
+    cached = None if force else _cache(key, max_age_seconds=cache_ttl_seconds)
     if cached:
         return cached["rows"], {**cached["query"], "cache_hit": True}
 
@@ -387,13 +400,7 @@ def dictionary(derived: bool) -> list[dict]:
 
 
 def csv_bytes(rows: list[dict], fields: list[str]) -> bytes:
-    buffer = io.StringIO(newline="")
-    writer = csv.DictWriter(buffer, fieldnames=fields, extrasaction="ignore")
-    writer.writeheader()
-    for row in rows:
-        writer.writerow({key: "'" + value if isinstance(value, str) and value.startswith(
-            ("=", "+", "-", "@", "\t", "\r")) else value for key, value in row.items()})
-    return buffer.getvalue().encode("utf-8-sig")
+    return csv_export.csv_bytes(rows, fields)
 
 
 def zip_bytes(result: dict) -> bytes:
@@ -417,137 +424,102 @@ def zip_bytes(result: dict) -> bytes:
 
 
 def xlsx_bytes(result: dict) -> bytes:
-    """Write a small, typed, filterable Excel workbook without extra runtime packages."""
+    """Build typed, filterable Excel sheets with the maintained openpyxl package."""
     datasets = result["datasets"]
     records = sum(map(len, datasets.values()))
     if records > XLSX_ROW_LIMIT:
-        raise DownloadError(f"Excel适合中小范围下载（最多{XLSX_ROW_LIMIT:,}条）；请用ZIP下载全量数据")
-    sheets = []
-    for kind, rows in datasets.items():
-        sheets.append(("港口日表" if kind == "ports" else "要道日表",
-                       columns(kind, result["manifest"]["derived"]), rows))
+        raise DownloadError(
+            f"Excel适合中小范围下载（最多{XLSX_ROW_LIMIT:,}条）；请用ZIP下载全量数据")
+
     manifest = result["manifest"]
-    about = [{"项目": "来源", "内容": manifest["source"]},
-             {"项目": "来源网址", "内容": manifest["source_url"]},
-             {"项目": "生成时间（UTC）", "内容": manifest["generated_at_utc"]},
-             {"项目": "时区", "内容": manifest["timezone"]},
-             {"项目": "时间模式", "内容": manifest["mode"]},
-             {"项目": "请求开始日（UTC）", "内容": manifest["requested_start_utc"]},
-             {"项目": "请求结束日（UTC）", "内容": manifest["requested_end_utc"]},
-             {"项目": "节点数", "内容": manifest["node_count"]},
-             {"项目": "来源取数校验", "内容": "通过" if manifest["fetch_complete"] else "未通过"}]
+    sheets = [
+        ("港口日表" if kind == "ports" else "要道日表",
+         columns(kind, manifest["derived"]), rows)
+        for kind, rows in datasets.items()
+    ]
+    about = [
+        {"项目": "来源", "内容": manifest["source"]},
+        {"项目": "来源网址", "内容": manifest["source_url"]},
+        {"项目": "生成时间（UTC）", "内容": manifest["generated_at_utc"]},
+        {"项目": "时区", "内容": manifest["timezone"]},
+        {"项目": "时间模式", "内容": manifest["mode"]},
+        {"项目": "请求开始日（UTC）", "内容": manifest["requested_start_utc"]},
+        {"项目": "请求结束日（UTC）", "内容": manifest["requested_end_utc"]},
+        {"项目": "节点数", "内容": manifest["node_count"]},
+        {"项目": "来源取数校验", "内容": "通过" if manifest["fetch_complete"] else "未通过"},
+    ]
     about.extend({"项目": f"说明 {index}", "内容": note}
                  for index, note in enumerate(manifest["notes"], 1))
-    queries = []
-    for query in manifest["queries"]:
-        queries.append({field: (json.dumps(query.get(field), ensure_ascii=False)
-                                if isinstance(query.get(field), (dict, list)) else query.get(field))
-                        for field in ("operation", "endpoint", "where", "retrieved_at_utc",
-                                      "source_count", "exported_query_rows", "count_verified",
-                                      "cache_hit", "out_fields")})
+    queries = [
+        {field: (json.dumps(query.get(field), ensure_ascii=False)
+                 if isinstance(query.get(field), (dict, list)) else query.get(field))
+         for field in ("operation", "endpoint", "where", "retrieved_at_utc",
+                       "source_count", "exported_query_rows", "count_verified",
+                       "cache_hit", "out_fields")}
+        for query in manifest["queries"]
+    ]
     sheets.extend([
         ("下载说明", ["项目", "内容"], about),
         ("节点目录", CATALOG_FIELDS, result["catalog"]),
         ("覆盖情况", COVERAGE_FIELDS, result["coverage"]),
         ("数据字典", ["dataset", "field", "meaning", "unit", "missing"], result["dictionary"]),
         ("来源查询", ["operation", "endpoint", "where", "retrieved_at_utc", "source_count",
-                      "exported_query_rows", "count_verified", "cache_hit", "out_fields"], queries),
+                    "exported_query_rows", "count_verified", "cache_hit", "out_fields"], queries),
     ])
 
-    def xlcol(index: int) -> str:
-        out = ""
-        while index:
-            index, remainder = divmod(index - 1, 26)
-            out = chr(65 + remainder) + out
-        return out
+    workbook = openpyxl.Workbook()
+    workbook.remove(workbook.active)
+    header_fill = PatternFill("solid", fgColor="29435C")
+    header_font = Font(color="FFFFFF", bold=True)
+    for sheet_index, (name, fields, rows) in enumerate(sheets, 1):
+        worksheet = workbook.create_sheet(name)
+        worksheet.freeze_panes = "A2"
+        worksheet.auto_filter.ref = f"A1:{get_column_letter(len(fields))}{max(1, len(rows) + 1)}"
+        worksheet.append(fields)
+        for cell in worksheet[1]:
+            cell.fill = header_fill
+            cell.font = header_font
+            cell.alignment = Alignment(vertical="center", wrap_text=True)
+        for row in rows:
+            values = []
+            for field in fields:
+                value = row.get(field)
+                if isinstance(value, str):
+                    # Keep untrusted text literal; openpyxl otherwise treats an
+                    # initial '=' as an executable formula.
+                    value = "".join(ch for ch in value if (
+                        ch in "\t\n\r" or 0x20 <= ord(ch) <= 0xD7FF
+                        or 0xE000 <= ord(ch) <= 0xFFFD
+                        or 0x10000 <= ord(ch) <= 0x10FFFF))
+                values.append(value)
+            worksheet.append(values)
+        for col_index, field in enumerate(fields, 1):
+            column = get_column_letter(col_index)
+            sample = [worksheet.cell(row, col_index).value
+                      for row in range(1, min(worksheet.max_row, 100) + 1)]
+            width = min(38, max(12, max((len(str(value)) for value in sample
+                                        if value is not None), default=10) + 2))
+            worksheet.column_dimensions[column].width = width
+            for row_index in range(2, worksheet.max_row + 1):
+                cell = worksheet.cell(row_index, col_index)
+                if field == "date" and isinstance(cell.value, str):
+                    try:
+                        cell.value = date.fromisoformat(cell.value)
+                        cell.number_format = "yyyy-mm-dd"
+                    except ValueError:
+                        pass
+                elif isinstance(cell.value, (int, float)) and not isinstance(cell.value, bool):
+                    cell.number_format = "#,##0.###"
+                if isinstance(cell.value, str):
+                    cell.data_type = "s"
+        if rows:
+            table = openpyxl.worksheet.table.Table(
+                displayName=f"Data{sheet_index}",
+                ref=f"A1:{get_column_letter(len(fields))}{len(rows) + 1}")
+            table.tableStyleInfo = openpyxl.worksheet.table.TableStyleInfo(
+                name="TableStyleMedium2", showRowStripes=True, showColumnStripes=False)
+            worksheet.add_table(table)
 
-    def xml_text(value) -> str:
-        text = str(value)
-        text = "".join(ch for ch in text if ch in "\t\n\r" or ord(ch) >= 32 and ord(ch) != 0xFFFE)
-        return (text.replace("&", "&amp;").replace("<", "&lt;").replace(">", "&gt;")
-                .replace('"', "&quot;").replace("'", "&apos;"))
-
-    def cell(value, address: str, style: int) -> str:
-        if value is None or value == "":
-            return f'<c r="{address}" s="{style}"/>'
-        if isinstance(value, bool):
-            return f'<c r="{address}" s="{style}" t="b"><v>{int(value)}</v></c>'
-        if isinstance(value, (int, float)) and math.isfinite(value):
-            return f'<c r="{address}" s="{style}"><v>{value}</v></c>'
-        if isinstance(value, str) and re.fullmatch(r"\d{4}-\d{2}-\d{2}", value):
-            try:
-                serial = (_day(value) - date(1899, 12, 30)).days
-                return f'<c r="{address}" s="2"><v>{serial}</v></c>'
-            except ValueError:
-                pass
-        return f'<c r="{address}" s="{style}" t="inlineStr"><is><t xml:space="preserve">{xml_text(value)}</t></is></c>'
-
-    files = {}
-    files["[Content_Types].xml"] = ('<?xml version="1.0" encoding="UTF-8" standalone="yes"?>'
-        '<Types xmlns="http://schemas.openxmlformats.org/package/2006/content-types">'
-        '<Default Extension="rels" ContentType="application/vnd.openxmlformats-package.relationships+xml"/>'
-        '<Default Extension="xml" ContentType="application/xml"/>'
-        '<Override PartName="/xl/workbook.xml" ContentType="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet.main+xml"/>'
-        '<Override PartName="/xl/styles.xml" ContentType="application/vnd.openxmlformats-officedocument.spreadsheetml.styles+xml"/>' +
-        "".join(f'<Override PartName="/xl/worksheets/sheet{i}.xml" ContentType="application/vnd.openxmlformats-officedocument.spreadsheetml.worksheet+xml"/>'
-                 for i in range(1, len(sheets) + 1)) + "</Types>")
-    files["_rels/.rels"] = ('<?xml version="1.0" encoding="UTF-8" standalone="yes"?>'
-        '<Relationships xmlns="http://schemas.openxmlformats.org/package/2006/relationships">'
-        '<Relationship Id="rId1" Type="http://schemas.openxmlformats.org/officeDocument/2006/relationships/officeDocument" Target="xl/workbook.xml"/>'
-        '</Relationships>')
-    workbook_sheets, relationships = [], []
-    for index, (name, fields, rows) in enumerate(sheets, 1):
-        esc_name = xml_text(name)
-        workbook_sheets.append(f'<sheet name="{esc_name}" sheetId="{index}" r:id="rId{index}"/>')
-        relationships.append(f'<Relationship Id="rId{index}" Type="http://schemas.openxmlformats.org/officeDocument/2006/relationships/worksheet" Target="worksheets/sheet{index}.xml"/>')
-        xml_rows = []
-        for rownum, values in enumerate([fields, *rows], 1):
-            cells = []
-            for col, field in enumerate(fields, 1):
-                val = field if rownum == 1 else values.get(field)
-                numeric_style = 4 if field.startswith("avg_") else 3 if (
-                    field in ("portcalls", "n_total", "capacity") or field.startswith(("portcalls_", "n_"))) else 5 if field in ("lat", "lon") else 0
-                cells.append(cell(val, f"{xlcol(col)}{rownum}", 1 if rownum == 1 else numeric_style))
-            xml_rows.append(f'<row r="{rownum}" spans="1:{max(1, len(fields))}">{"".join(cells)}</row>')
-        lastcell = f"{xlcol(len(fields))}{max(1, len(rows) + 1)}"
-        files[f"xl/worksheets/sheet{index}.xml"] = ('<?xml version="1.0" encoding="UTF-8" standalone="yes"?>'
-            '<worksheet xmlns="http://schemas.openxmlformats.org/spreadsheetml/2006/main">'
-            '<sheetViews><sheetView workbookViewId="0"><pane ySplit="1" topLeftCell="A2" activePane="bottomLeft" state="frozen"/></sheetView></sheetViews>'
-            '<cols>' + "".join(f'<col min="{i}" max="{i}" width="{min(38,max(12,len(field)+2))}" customWidth="1"/>'
-                                for i, field in enumerate(fields, 1)) + '</cols>'
-            + '<sheetData>' + "".join(xml_rows) + '</sheetData>'
-            + (f'<autoFilter ref="A1:{lastcell}"/>' if rows else '')
-            + '</worksheet>')
-    files["xl/workbook.xml"] = ('<?xml version="1.0" encoding="UTF-8" standalone="yes"?>'
-        '<workbook xmlns="http://schemas.openxmlformats.org/spreadsheetml/2006/main" '
-        'xmlns:r="http://schemas.openxmlformats.org/officeDocument/2006/relationships">'
-        '<bookViews><workbookView/></bookViews><sheets>' + "".join(workbook_sheets) + '</sheets></workbook>')
-    files["xl/_rels/workbook.xml.rels"] = ('<?xml version="1.0" encoding="UTF-8" standalone="yes"?>'
-        '<Relationships xmlns="http://schemas.openxmlformats.org/package/2006/relationships">'
-        + "".join(relationships) +
-        f'<Relationship Id="rId{len(sheets)+1}" Type="http://schemas.openxmlformats.org/officeDocument/2006/relationships/styles" Target="styles.xml"/>'
-        + '</Relationships>')
-    files["xl/styles.xml"] = ('<?xml version="1.0" encoding="UTF-8" standalone="yes"?>'
-        '<styleSheet xmlns="http://schemas.openxmlformats.org/spreadsheetml/2006/main">'
-        '<numFmts count="4"><numFmt numFmtId="164" formatCode="yyyy-mm-dd"/>'
-        '<numFmt numFmtId="165" formatCode="#,##0"/><numFmt numFmtId="166" formatCode="#,##0.000"/>'
-        '<numFmt numFmtId="167" formatCode="0.000000"/></numFmts>'
-        '<fonts count="2"><font><sz val="10"/><name val="Arial"/></font>'
-        '<font><b/><color rgb="FFFFFFFF"/><sz val="10"/><name val="Arial"/></font></fonts>'
-        '<fills count="3"><fill><patternFill patternType="none"/></fill><fill><patternFill patternType="gray125"/></fill>'
-        '<fill><patternFill patternType="solid"><fgColor rgb="FF29435C"/><bgColor indexed="64"/></patternFill></fill></fills>'
-        '<borders count="2"><border><left/><right/><top/><bottom/><diagonal/></border>'
-        '<border><left/><right/><top/><bottom style="thin"><color rgb="FFFFFFFF"/></bottom><diagonal/></border></borders>'
-        '<cellStyleXfs count="1"><xf numFmtId="0" fontId="0" fillId="0" borderId="0"/></cellStyleXfs>'
-        '<cellXfs count="6"><xf numFmtId="0" fontId="0" fillId="0" borderId="0" xfId="0"/>'
-        '<xf numFmtId="0" fontId="1" fillId="2" borderId="1" xfId="0" applyAlignment="1"><alignment vertical="center" wrapText="1"/></xf>'
-        '<xf numFmtId="164" fontId="0" fillId="0" borderId="0" xfId="0" applyNumberFormat="1"/>'
-        '<xf numFmtId="165" fontId="0" fillId="0" borderId="0" xfId="0" applyNumberFormat="1"/>'
-        '<xf numFmtId="166" fontId="0" fillId="0" borderId="0" xfId="0" applyNumberFormat="1"/>'
-        '<xf numFmtId="167" fontId="0" fillId="0" borderId="0" xfId="0" applyNumberFormat="1"/></cellXfs>'
-        '<cellStyles count="1"><cellStyle name="Normal" xfId="0" builtinId="0"/></cellStyles></styleSheet>')
     output = io.BytesIO()
-    with zipfile.ZipFile(output, "w", compression=zipfile.ZIP_DEFLATED, compresslevel=6) as archive:
-        for name, content in files.items():
-            archive.writestr(name, content)
+    workbook.save(output)
     return output.getvalue()

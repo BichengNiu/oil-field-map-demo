@@ -87,6 +87,9 @@ def build_map_html(assets: list[dict[str, object]], ports: list[dict],
     focus_json = json.dumps(focus_assets)
     visible_layers_json = json.dumps(sorted(visible_layers))
     screenshot_date_json = json.dumps(day if day != "无数据" else chokepoint_day)
+    screenshot_label_json = json.dumps(
+        f"港口数据日（UTC）：{day} · 咽喉点数据日（UTC）：{chokepoint_day} · 船舶：当前快照",
+        ensure_ascii=False)
     return f"""
     <!doctype html><html lang="zh-CN"><head>
     <meta charset="utf-8" />
@@ -123,6 +126,7 @@ def build_map_html(assets: list[dict[str, object]], ports: list[dict],
       .map-legend b {{ font-size: 13px; }}
       .map-legend span {{ display: block; margin-top: 4px; white-space: nowrap; }}
       .map-legend svg {{ display: inline-block; width: 10px; height: 10px; margin-right: 6px; vertical-align: -1px; }}
+      .map-date {{ background: rgba(255,255,255,.96); padding: 7px 9px; border-radius: 7px; box-shadow: 0 2px 10px #0f172a26; color: #172b4d; font-size: 11px; }}
       .asset-icon, .port-icon, .chokepoint-icon, .vessel-icon, .vessel-cluster {{ background: transparent; border: 0; }}
       .asset-icon svg, .port-icon svg, .chokepoint-icon svg, .vessel-icon svg, .vessel-cluster svg {{ display: block; filter: drop-shadow(0 1px 1px rgba(15,23,42,.45)); }}
       .leaflet-tooltip {{ border: 0; border-radius: 7px; padding: 5px 8px; box-shadow: 0 3px 12px rgba(15,23,42,.18); font-size: 11px; }}
@@ -151,6 +155,13 @@ def build_map_html(assets: list[dict[str, object]], ports: list[dict],
         return el;
       }};
       legend.addTo(map);
+      const dateControl = L.control({{position: 'bottomleft'}});
+      dateControl.onAdd = () => {{
+        const el = L.DomUtil.create('div', 'map-date');
+        el.textContent = {screenshot_label_json};
+        return el;
+      }};
+      dateControl.addTo(map);
       const assets = {marker_json};
       const ports = {port_json};
       const chokepoints = {chokepoint_json};

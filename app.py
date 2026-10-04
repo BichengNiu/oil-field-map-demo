@@ -4,10 +4,9 @@ from __future__ import annotations
 
 import html
 import json
-import csv
-import io
 import os
 import time
+import uuid
 from datetime import date, datetime, timedelta, timezone
 
 import streamlit as st
@@ -21,6 +20,9 @@ import portwatch_downloads
 import report_data
 import map_renderer
 import print_report
+import csv_export
+from dashboard_state import DashboardViewState
+from asset_values import display_value
 
 ASSETS = CATALOG.ASSETS
 
@@ -104,8 +106,11 @@ def _ais_api_key() -> str:
 def _refresh_portwatch_data() -> None:
     """Invalidate PortWatch data before Streamlit reruns the page."""
     PORTWATCH.clear_live_cache()
-    st.session_state["portwatch_report_revision"] = (
-        int(st.session_state.get("portwatch_report_revision", 0)) + 1)
+    _port_catalog_state.clear()
+    _chokepoint_catalog_state.clear()
+    _port_latest_date_state.clear()
+    _chokepoint_latest_date_state.clear()
+    st.session_state["portwatch_report_revision"] = uuid.uuid4().hex
 
 
 def _refresh_vessel_data() -> None:
@@ -113,7 +118,41 @@ def _refresh_vessel_data() -> None:
     _openwaters_snapshot.clear()
 
 
-@st.cache_resource(show_spinner=False)
+@st.cache_data(ttl=60, max_entries=2, show_spinner=False)
+def _port_catalog_state(catalog_version: int) -> tuple[list[dict], str | None]:
+    """Cache short-lived catalog failures so unrelated reruns do not retry."""
+    try:
+        return PORTWATCH.port_catalog(), None
+    except Exception as exc:
+        return [], f"{type(exc).__name__}: {exc}"
+
+
+@st.cache_data(ttl=60, max_entries=2, show_spinner=False)
+def _chokepoint_catalog_state(catalog_version: int) -> tuple[list[dict], str | None]:
+    try:
+        return PORTWATCH.chokepoint_catalog(), None
+    except Exception as exc:
+        return [], f"{type(exc).__name__}: {exc}"
+
+
+@st.cache_data(ttl=60, max_entries=2, show_spinner=False)
+def _port_latest_date_state(data_version: int) -> tuple[date | None, str | None]:
+    try:
+        return PORTWATCH.latest_date(), None
+    except Exception as exc:
+        return None, f"{type(exc).__name__}: {exc}"
+
+
+@st.cache_data(ttl=60, max_entries=2, show_spinner=False)
+def _chokepoint_latest_date_state(data_version: int) -> tuple[date | None, str | None]:
+    try:
+        return PORTWATCH.latest_chokepoint_date(), None
+    except Exception as exc:
+        return None, f"{type(exc).__name__}: {exc}"
+
+
+@st.cache_resource(max_entries=1, show_spinner=False,
+                   on_release=lambda collector: collector.stop())
 def _ais_collector(api_key: str, collector_version: int) -> AIS.AISCollector:
     return AIS.AISCollector(api_key).start()
 
@@ -155,13 +194,16 @@ def _render_portwatch_download_panel(selected_port_countries: list[str],
     default_last = max(latest) if latest else datetime.now(timezone.utc).date()
     last_downloadable = datetime.now(timezone.utc).date()
 
-    try:
-        all_ports = [portwatch_downloads.node("ports", row) for row in PORTWATCH.port_catalog()]
-        all_chokes = [portwatch_downloads.node("chokepoints", row)
-                      for row in PORTWATCH.chokepoint_catalog()]
-    except Exception as exc:
-        st.error(f"无法读取下载节点目录：{exc}")
+    port_catalog_rows, port_catalog_error = _port_catalog_state(PORTWATCH.MODULE_VERSION)
+    choke_catalog_rows, choke_catalog_error = _chokepoint_catalog_state(
+        PORTWATCH.MODULE_VERSION)
+    if port_catalog_error or choke_catalog_error:
+        st.error("无法读取下载节点目录：" + "；".join(
+            message for message in (port_catalog_error, choke_catalog_error) if message))
         return
+    all_ports = [portwatch_downloads.node("ports", row) for row in port_catalog_rows]
+    all_chokes = [portwatch_downloads.node("chokepoints", row)
+                  for row in choke_catalog_rows]
 
     kind_options = list(portwatch_downloads.KINDS)
     kinds_selection = _multiselect_with_all(
@@ -181,7 +223,10 @@ def _render_portwatch_download_panel(selected_port_countries: list[str],
         choke_ids = set(selected_chokepoint_ids)
         selected_nodes += [n for n in all_chokes if n["portid"] in choke_ids]
     else:
-        region_options = list(PORTWATCH.REGIONS)
+        region_options = sorted({
+            str(node.get("region")) for node in (*all_ports, *all_chokes)
+            if node.get("region")
+        })
         regions_selection = _multiselect_with_all(
             "水域", region_options, key="pw_download_regions",
             placeholder="全选或选择水域")
@@ -267,16 +312,8 @@ def _render_portwatch_download_panel(selected_port_countries: list[str],
             mode_key = {"最新数据": "latest", "历史区间": "history", "全部可用历史": "all"}[mode]
             result = portwatch_downloads.collect(selected_nodes, mode_key,
                 first=first, last=last, derived=derived, force=force, progress=progress)
-            exports = {
-                f"csv_{kind}": portwatch_downloads.csv_bytes(
-                    rows, portwatch_downloads.columns(kind, result["manifest"]["derived"]))
-                for kind, rows in result["datasets"].items()
-            }
-            exports["zip"] = portwatch_downloads.zip_bytes(result)
-            if sum(map(len, result["datasets"].values())) <= portwatch_downloads.XLSX_ROW_LIMIT:
-                exports["xlsx"] = portwatch_downloads.xlsx_bytes(result)
             st.session_state["pw_download_result"] = {
-                "signature": signature, "value": result, "exports": exports}
+                "signature": signature, "value": result}
             status.update(label="数据已生成并完成记录数校验", state="complete", expanded=False)
         except Exception as exc:
             st.session_state.pop("pw_download_result", None)
@@ -288,23 +325,25 @@ def _render_portwatch_download_panel(selected_port_countries: list[str],
         st.info("下载条件已更改。点击“生成下载数据”以刷新导出。")
         return
     result = saved["value"]
-    exports = saved["exports"]
     st.success("已完成来源记录数与分页校验。")
     summary = result["manifest"]["row_counts"]
     st.write(f"港口记录 {summary.get('ports', 0):,} 行；咽喉要道记录 "
              f"{summary.get('chokepoints', 0):,} 行；覆盖状态详见ZIP中的coverage.csv。")
     slug = "latest" if mode == "最新数据" else "all-history" if mode == "全部可用历史" else f"{first}_{last}"
     for kind, rows in result["datasets"].items():
-        data = exports[f"csv_{kind}"]
+        fields = portwatch_downloads.columns(kind, result["manifest"]["derived"])
         st.download_button(f"下载{portwatch_downloads.KINDS[kind]} CSV",
-            data, file_name=f"portwatch_{kind}_{slug}.csv", mime="text/csv",
+            lambda rows=rows, fields=fields: portwatch_downloads.csv_bytes(rows, fields),
+            file_name=f"portwatch_{kind}_{slug}.csv", mime="text/csv",
             key=f"pw_download_csv_{kind}_{signature[:12]}")
     st.download_button("下载完整 ZIP（CSV、节点目录、覆盖、字典、来源查询）",
-        exports["zip"], file_name=f"portwatch_{slug}.zip",
+        lambda result=result: portwatch_downloads.zip_bytes(result),
+        file_name=f"portwatch_{slug}.zip",
         mime="application/zip", key=f"pw_download_zip_{signature[:12]}")
     records = sum(map(len, result["datasets"].values()))
     if records <= portwatch_downloads.XLSX_ROW_LIMIT:
-        st.download_button("下载 Excel 工作簿", exports["xlsx"],
+        st.download_button("下载 Excel 工作簿",
+            lambda result=result: portwatch_downloads.xlsx_bytes(result),
             file_name=f"portwatch_{slug}.xlsx",
             mime="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
             key=f"pw_download_xlsx_{signature[:12]}")
@@ -391,22 +430,6 @@ STATUS_LABELS = CATALOG.OPERATING_STATUS_LABELS
 OUTPUT_METRIC_TYPES = CATALOG.OUTPUT_METRIC_TYPES
 MAP_LAYER_LABELS = map_renderer.MAP_LAYER_LABELS
 ASSET_INDEX = {(asset["country"], asset["name"]): asset for asset in ASSETS}
-
-
-def display_value(asset: dict[str, object]) -> str:
-    value = asset.get("value")
-    unit = asset.get("unit")
-    if value is None:
-        return "未披露"
-    if unit and str(unit).startswith("千桶/日"):
-        try:
-            ten_thousand_barrels = float(str(value).replace(",", "")) / 10
-            formatted = f"{ten_thousand_barrels:,.2f}".rstrip("0").rstrip(".")
-            suffix = str(unit)[len("千桶/日"):]
-            return f"{formatted} 万桶/日{suffix}"
-        except ValueError:
-            pass
-    return f"{value} {unit}" if unit else str(value)
 
 
 def extra_measurements(asset: dict) -> str:
@@ -704,9 +727,11 @@ def _vessel_popup(vessel: dict[str, object]) -> str:
         '<div class="row"><span>呼号 / 目的地</span>'
         f'<strong>{shown("call_sign")} / {shown("destination")}</strong></div>'
         '<div class="row"><span>AIS报告时间 UTC</span>'
+        f'<strong>{shown("observed_at")}</strong></div>'
+        '<div class="row"><span>本机接收时间 UTC</span>'
         f'<strong>{shown("received_at")}</strong></div>'
         '<div class="row"><span>数据年龄</span>'
-        f'<strong>{age_text}</strong></div>'
+        f'<strong>{age_text} · {shown("age_basis")}</strong></div>'
         '<div class="row"><span>数据源</span>'
         f'<strong>{shown("data_source")}</strong></div>'
         '<div class="basis">AIS船型为船载设备广播的基础分类；货船不能据此可靠细分为集装箱船或散货船。'
@@ -740,18 +765,9 @@ with st.sidebar:
         help="“全选”显示所有图层；清空选择时地图不显示任何图层。")
     selected_map_layers = _selected_values(map_layers_selection, list(MAP_LAYER_LABELS))
 
-    try:
-        available_ports = PORTWATCH.port_catalog()
-        port_catalog_error = None
-    except Exception as exc:
-        available_ports = []
-        port_catalog_error = str(exc)
-    try:
-        available_chokepoints = PORTWATCH.chokepoint_catalog()
-        chokepoint_catalog_error = None
-    except Exception as exc:
-        available_chokepoints = []
-        chokepoint_catalog_error = str(exc)
+    available_ports, port_catalog_error = _port_catalog_state(PORTWATCH.MODULE_VERSION)
+    available_chokepoints, chokepoint_catalog_error = _chokepoint_catalog_state(
+        PORTWATCH.MODULE_VERSION)
 
     with st.expander("港口筛选", expanded=False):
         port_country_options = sorted(
@@ -791,12 +807,10 @@ with st.sidebar:
             help="只显示在 PortWatch 最新观测日有日度记录的港口；不影响港口列表和统计。")
         if port_catalog_error:
             st.warning(f"港口目录暂时不可用：{port_catalog_error}")
-        try:
-            newest_day = PORTWATCH.latest_date()
-            selected_day = newest_day
-        except Exception as exc:
-            newest_day = selected_day = None
-            st.warning(f"PortWatch 暂时不可用：{exc}")
+        newest_day, port_latest_error = _port_latest_date_state(PORTWATCH.MODULE_VERSION)
+        selected_day = newest_day
+        if port_latest_error:
+            st.warning(f"PortWatch 暂时不可用：{port_latest_error}")
         rolling_days = 7
 
     with st.expander("咽喉点筛选", expanded=False):
@@ -814,11 +828,10 @@ with st.sidebar:
             help="此筛选独立于港口国家与港口筛选；清空选择时不显示咽喉点。")
         selected_chokepoint_ids = _selected_values(
             chokepoints_selection, chokepoint_id_options)
-        try:
-            newest_chokepoint_day = PORTWATCH.latest_chokepoint_date()
-        except Exception as exc:
-            newest_chokepoint_day = None
-            st.warning(f"咽喉点数据暂时不可用：{exc}")
+        newest_chokepoint_day, chokepoint_latest_error = (
+            _chokepoint_latest_date_state(PORTWATCH.MODULE_VERSION))
+        if chokepoint_latest_error:
+            st.warning(f"咽喉点数据暂时不可用：{chokepoint_latest_error}")
 
     st.button("刷新 PortWatch 数据", type="primary", width="stretch",
               on_click=_refresh_portwatch_data)
@@ -923,7 +936,7 @@ elif ais_enabled:
         st.caption("船位在地图显示船舶图层、打开船舶页或进入打印模式时读取。")
 
 ports: list[dict] = []
-port_error = port_catalog_error
+port_error = port_catalog_error or port_latest_error
 port_risk_error = None
 if need_port_data and selected_day is not None and not port_error:
     try:
@@ -959,7 +972,7 @@ if need_port_data and selected_day is not None and not port_error:
         port_error = str(exc)
 
 chokepoints: list[dict] = []
-chokepoint_error = chokepoint_catalog_error
+chokepoint_error = chokepoint_catalog_error or chokepoint_latest_error
 if need_chokepoint_data and selected_chokepoint_day is not None and not chokepoint_error:
     try:
         chosen_chokepoint_ids = set(selected_chokepoint_ids)
@@ -996,20 +1009,6 @@ if open_state.get("vessels"):
         _archive_public_snapshot(open_state["vessels"])
     except Exception as exc:
         archive_error = f"船位归档失败：{exc}"
-def current_vessels() -> list[dict]:
-    """Return one consistent, filtered snapshot; missing AIS is unavailable, not zero."""
-
-    if not selected_ais_categories:
-        return []
-    return AIS.filter_vessels(
-        live_positions,
-        regions=set(PORTWATCH.REGIONS),
-        categories=selected_ais_categories,
-        moving_only=ais_moving_only,
-        query=ais_search,
-    )
-
-
 def current_ais_status() -> dict:
     """Return the collector status with one stable shape when it is optional."""
 
@@ -1149,10 +1148,12 @@ def vessel_rows(vessels: list[dict]) -> list[dict]:
                    if vessel.get("course") is not None else None),
         "目的地": vessel.get("destination"),
         "吃水 米": vessel.get("draught"),
-        "AIS报告时间 UTC": vessel.get("received_at"),
-        "采集器接收时间 UTC": vessel.get("provider_received_at"),
+        "AIS报告时间 UTC": vessel.get("observed_at"),
+        "本机接收时间 UTC": vessel.get("received_at"),
+        "上游接收时间 UTC": vessel.get("provider_received_at"),
         "数据年龄 分钟": (round(vessel["age_minutes"], 1)
                          if vessel.get("age_minutes") is not None else None),
+        "数据年龄依据": vessel.get("age_basis"),
         "来源署名": vessel.get("source_attribution"),
         "纬度": vessel.get("lat"), "经度": vessel.get("lon"),
         "数据源": vessel.get("data_source"),
@@ -1160,31 +1161,61 @@ def vessel_rows(vessels: list[dict]) -> list[dict]:
     } for vessel in vessels]
 
 
-def render_map_panel() -> None:
-    all_positions = live_positions
-    filtered_vessels = current_vessels()
+filtered_vessels = AIS.filter_vessels(
+    live_positions,
+    regions=set(PORTWATCH.REGIONS),
+    categories=selected_ais_categories,
+    moving_only=ais_moving_only,
+    query=ais_search,
+) if selected_ais_categories else []
+
+view_state = DashboardViewState(
+    live_positions=live_positions,
+    filtered_vessels=filtered_vessels,
+    ais_status=current_ais_status(),
+    open_state=open_state,
+    ais_enabled=ais_enabled,
+    archive_error=archive_error,
+    port_error=port_error,
+    chokepoint_error=chokepoint_error,
+    map_assets=map_assets,
+    map_ports=map_ports,
+    map_chokepoints=map_chokepoints,
+    visible_map_layers=visible_map_layers,
+    selected_day=selected_day,
+    selected_chokepoint_day=selected_chokepoint_day,
+    focus_assets=bool(asset_search),
+    unlocated_asset_count=len(unlocated_map_assets),
+    unlocated_port_count=sum(
+        port["lat"] is None or port["lon"] is None for port in map_ports),
+)
+
+
+def render_map_panel(state: DashboardViewState) -> None:
+    all_positions = state.live_positions
+    filtered_vessels = state.filtered_vessels
     map_vessels = (
         filtered_vessels
-        if "vessels" in visible_map_layers
+        if "vessels" in state.visible_map_layers
         else []
     )
-    stream_state = current_ais_status()
-    if port_error:
-        st.error(f"港口数据加载失败：{port_error}")
-    if chokepoint_error:
-        st.error(f"咽喉点数据加载失败：{chokepoint_error}")
-    if archive_error:
-        st.warning(archive_error)
-    if not ais_enabled:
+    stream_state = state.ais_status
+    if state.port_error:
+        st.error(f"港口数据加载失败：{state.port_error}")
+    if state.chokepoint_error:
+        st.error(f"咽喉点数据加载失败：{state.chokepoint_error}")
+    if state.archive_error:
+        st.warning(state.archive_error)
+    if not state.ais_enabled:
         st.info("船舶图层已关闭。")
-    elif "vessels" in visible_map_layers:
+    elif "vessels" in state.visible_map_layers:
         if stream_state.get("last_error") and not all_positions:
             st.warning(f'AISStream 暂无可用船位，后台将自动重连：{stream_state["last_error"]}')
         if stream_state.get("archive_error"):
             st.warning(f'AISStream 船位归档失败：{stream_state["archive_error"]}')
-        if open_state.get("error"):
-            st.warning(f'Open Waters 免费数据暂不可用：{open_state["error"]}')
-        if not all_positions and not open_state.get("error"):
+        if state.open_state.get("error"):
+            st.warning(f'Open Waters 免费数据暂不可用：{state.open_state["error"]}')
+        if not all_positions and not state.open_state.get("error"):
             if stream_state.get("status") == "订阅已确认" and stream_state.get("raw_event_count", 0) == 0:
                 st.warning(
                     "AISStream 已确认订阅但未送达事件；Open Waters 当前快照也没有船位。"
@@ -1192,39 +1223,38 @@ def render_map_panel() -> None:
                 )
             else:
                 st.info("两处数据源尚未返回当前可用船位；不能据此判断水域内没有船舶。")
-    if unlocated_map_assets:
+    if state.unlocated_asset_count:
         st.info(
-            f"当前筛选有 {len(unlocated_map_assets)} 项仅列目录：既无可核验独立坐标，也无可用的"
+            f"当前筛选有 {state.unlocated_asset_count} 项仅列目录：既无可核验独立坐标，也无可用的"
             "上级资产代表点，因此不以猜测位置绘图。可在‘油气’表查看坐标证据。"
         )
-    unlocated_ports = sum(p["lat"] is None or p["lon"] is None for p in map_ports)
-    if unlocated_ports:
-        st.info(f"当前筛选有 {unlocated_ports} 个港口尚无可靠坐标，仅列于‘港口’目录。")
+    if state.unlocated_port_count:
+        st.info(f"当前筛选有 {state.unlocated_port_count} 个港口尚无可靠坐标，仅列于‘港口’目录。")
     st.iframe(
         map_renderer.build_map_html(
-            map_assets, map_ports, map_chokepoints, map_vessels,
-            selected_day.isoformat() if selected_day else "无数据",
-            selected_chokepoint_day.isoformat() if selected_chokepoint_day else "无数据",
-            focus_assets=bool(asset_search), ais_configured=bool(ais_enabled),
-            visible_layers=visible_map_layers,
+            state.map_assets, state.map_ports, state.map_chokepoints, map_vessels,
+            state.selected_day.isoformat() if state.selected_day else "无数据",
+            state.selected_chokepoint_day.isoformat() if state.selected_chokepoint_day else "无数据",
+            focus_assets=state.focus_assets, ais_configured=bool(state.ais_enabled),
+            visible_layers=state.visible_map_layers,
             asset_popup=_popup, port_popup=_port_popup,
             chokepoint_popup=_chokepoint_popup, vessel_popup=_vessel_popup),
         height=735,
     )
 
 
-def render_ais_panel() -> None:
+def render_ais_panel(state: DashboardViewState) -> None:
     st.subheader("船舶")
-    if not ais_enabled:
+    if not state.ais_enabled:
         st.info("船舶位置已关闭，可在左侧‘船舶’中启用。")
         return
-    all_positions = live_positions
-    vessels = current_vessels()
+    all_positions = state.live_positions
+    vessels = state.filtered_vessels
     rows = vessel_rows(vessels)
-    state = current_ais_status()
+    ais_status = state.ais_status
     has_position_data = bool(all_positions)
-    if archive_error:
-        st.warning(archive_error)
+    if state.archive_error:
+        st.warning(state.archive_error)
     vessel_metric = len(vessels) if has_position_data else "—"
     v1, v2, v3, v4, v5 = st.columns(5)
     v1.metric("筛选后船舶", vessel_metric)
@@ -1235,43 +1265,40 @@ def render_ais_panel() -> None:
               if has_position_data else "—")
     v5.metric("船型待识别", sum(v.get("category") == "unknown" for v in vessels)
               if has_position_data else "—")
-    if open_state.get("truncated"):
+    if state.open_state.get("truncated"):
         st.warning("Open Waters 返回结果达到该区域查询上限，较早船位可能未包含。")
-    if open_state.get("error"):
-        st.warning(f'Open Waters 快照错误：{open_state["error"]}')
-    if state.get("compression_enabled") is False:
+    if state.open_state.get("error"):
+        st.warning(f'Open Waters 快照错误：{state.open_state["error"]}')
+    if ais_status.get("compression_enabled") is False:
         st.warning("AISStream 未确认 WebSocket 压缩协商；未压缩连接可能受带宽限制。")
-    if state.get("last_error"):
-        st.warning(f'最近连接错误：{state["last_error"]}；采集器会自动指数退避重连。')
+    if ais_status.get("last_error"):
+        st.warning(f'最近连接错误：{ais_status["last_error"]}；采集器会自动指数退避重连。')
     if rows:
         st.dataframe(rows, width="stretch", hide_index=True, height=570,
                      column_config={"来源": st.column_config.LinkColumn("来源"),
                                         "状态证据": st.column_config.LinkColumn("状态证据")})
-        buffer = io.StringIO()
-        writer = csv.DictWriter(buffer, fieldnames=rows[0].keys())
-        writer.writeheader(); writer.writerows(rows)
         st.download_button(
             "下载当前船位快照 CSV",
-            buffer.getvalue().encode("utf-8-sig"),
+            csv_export.csv_bytes(rows, list(rows[0])),
             file_name="ais_vessel_snapshot.csv",
             mime="text/csv", type="primary")
     elif not all_positions:
-        if (state.get("status") == "订阅已确认"
-                and state.get("raw_event_count", 0) == 0
-                and not open_state.get("error")):
+        if (ais_status.get("status") == "订阅已确认"
+                and ais_status.get("raw_event_count", 0) == 0
+                and not state.open_state.get("error")):
             st.warning(
                 "AISStream 已确认订阅但尚未送达事件，Open Waters 当前快照也没有返回船位。"
                 "当前船位不可用，不能据此判断监测水域内没有船舶。"
             )
-        elif open_state.get("error"):
+        elif state.open_state.get("error"):
             st.warning("免费公共快照暂时不可用；可稍后刷新。没有报文不等于水域内没有船舶。")
         else:
             st.info("正在等待监测水域内的新 AIS 报文；当前船位尚不可用。")
     elif has_position_data:
         st.info("当前船型、水域、搜索和数据年龄筛选没有匹配船舶。")
-    elif state.get("position_message_count", 0) == 0:
+    elif ais_status.get("position_message_count", 0) == 0:
         st.info("已收到AIS事件，但尚未收到可绘制的位置报告。")
-    elif state.get("tracked_vessels", 0) == 0:
+    elif ais_status.get("tracked_vessels", 0) == 0:
         st.info("已收到位置报告，但当前数据年龄范围内没有可用的新鲜船位。")
     else:
         st.info("当前船型、水域、搜索和数据年龄筛选没有匹配船舶。")
@@ -1279,7 +1306,7 @@ def render_ais_panel() -> None:
 
 if tab_map.open:
     with tab_map:
-        render_map_panel()
+        render_map_panel(view_state)
 
 if tab_ports.open:
     with tab_ports:
@@ -1301,10 +1328,8 @@ if tab_ports.open:
                 st.caption(f"历史风险运力暂不可用：{port_risk_error}")
             st.dataframe(port_rows, width="stretch", hide_index=True, height=560,
                          column_config={"来源": st.column_config.LinkColumn("来源")})
-            buffer = io.StringIO()
-            writer = csv.DictWriter(buffer, fieldnames=port_rows[0].keys())
-            writer.writeheader(); writer.writerows(port_rows)
-            st.download_button("下载当前筛选结果 CSV", buffer.getvalue().encode("utf-8-sig"),
+            st.download_button("下载当前筛选结果 CSV",
+                               csv_export.csv_bytes(port_rows, list(port_rows[0])),
                                file_name=f"portwatch_ports_{selected_day.isoformat()}.csv",
                                mime="text/csv", type="primary")
             st.button("下载当前筛选港口历史", key="download_port_history",
@@ -1320,7 +1345,7 @@ if tab_download.open:
 
 if tab_vessels.open:
     with tab_vessels:
-        render_ais_panel()
+        render_ais_panel(view_state)
 
 if tab_assets.open:
     with tab_assets:
@@ -1348,10 +1373,10 @@ if tab_method.open:
         st.dataframe([
             {"数据": "港口 / 咽喉点日度记录", "当前更新": "使用短期缓存；可手动刷新", "进一步自动化": "已接入；源站发布时间决定最新观测日"},
             {"数据": "实时船位", "当前更新": "显示船舶图层、打开船舶页或打印时读取 Open Waters；可选 AISStream 后台持续接收", "进一步自动化": "AISStream 需配置服务端密钥；页面另有手动刷新"},
-            {"数据": "港口 / 咽喉点官方目录", "当前更新": "打开页面重读 PortWatch API", "进一步自动化": "已接入；补充 WPI / 运营商名录仍需版本核验"},
-            {"数据": "港口风险运力", "当前更新": "打开页面重读源 API", "进一步自动化": "源为历史航线模型；重新抓取不代表实时风险"},
+            {"数据": "港口 / 咽喉点官方目录", "当前更新": "使用24小时缓存；失败后60秒重试，手动刷新可提前重读", "进一步自动化": "已接入；补充 WPI / 运营商名录仍需版本核验"},
+            {"数据": "港口风险运力", "当前更新": "使用24小时缓存；打开港口页时按需读取", "进一步自动化": "源为历史航线模型；重新抓取不代表实时风险"},
             {"数据": "油气产量、产能、状态和坐标", "当前更新": "经核验的静态公开披露记录", "进一步自动化": "接运营商 / 监管机构 API 或公告抓取，校验资产、日期、单位、产量 / 产能后更新"},
-            {"数据": "船位归档", "当前更新": "运行期间自动归档当前快照及AISStream事件；地图与船舶页只展示当前船位", "进一步自动化": "设置持久AIS_ARCHIVE_PATH以跨重启保存；五水域完整历史需有授权的数据源"},
+            {"数据": "船位归档", "当前更新": "只归档有明确观测时间的上游快照；接收时间另存，地图与船舶页只展示当前船位", "进一步自动化": "设置持久AIS_ARCHIVE_PATH以跨重启保存；五水域完整历史需有授权的数据源"},
         ], hide_index=True, width="stretch")
         st.markdown("**地图与截图。** 港口和咽喉点分别使用源站最新观测日，船舶图层显示当前AIS快照；油气保留披露日期。地图右上角保存 PNG，包含当前视野、图例、日期、弹窗及底图署名。")
         st.markdown(
@@ -1395,7 +1420,7 @@ if tab_method.open:
             f"可选[AISStream WebSocket API]({AIS.SOURCE})在服务器端接收五个监测水域的船级广播；"
             "显示船舶图层、打开船舶页或打印报告时读取最新船位快照；停留期间可点击侧栏“刷新船舶数据”。"
             "浏览器只接收标准化的每船最新位置，不接收API Key。"
-            "多源位置按MMSI合并，航行阈值为0.5节，超过所选最大数据年龄的船位会被删除；"
+            "多源位置按MMSI合并，航行阈值为0.5节，超过所选最大数据年龄的船位只从当前显示中排除；"
             "上游来源署名随船舶表及弹窗显示。"
         )
         st.warning(
@@ -1444,7 +1469,8 @@ if print_mode:
         str(point["portid"]) for point in report_choke_catalog
     ))
     report_errors = []
-    report_revision = int(st.session_state.get("portwatch_report_revision", 0))
+    report_revision = st.session_state.setdefault(
+        "portwatch_report_revision", uuid.uuid4().hex)
     if port_error:
         report_errors.append(f"港口最新数据：{port_error}")
     if chokepoint_error:
@@ -1471,7 +1497,6 @@ if print_mode:
             report_errors.append(f"chokepoints 历史窗口：{type(exc).__name__}: {exc}")
 
     report_latest_ports = report_data.merge_latest_rows(report_port_catalog, report_port_history)
-    report_latest_chokes = report_data.merge_latest_rows(report_choke_catalog, report_choke_history)
 
     def _print_asset_record(asset: dict) -> dict:
         metric_type = str(asset.get("metric_type") or "")
@@ -1504,7 +1529,6 @@ if print_mode:
         port_catalog=report_port_catalog,
         choke_catalog=report_choke_catalog,
         latest_ports=report_latest_ports,
-        latest_chokes=report_latest_chokes,
         port_history=report_port_history,
         choke_history=report_choke_history,
         assets=report_assets,

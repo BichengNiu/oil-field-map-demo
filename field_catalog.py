@@ -8,6 +8,8 @@
 
 from __future__ import annotations
 
+import re
+from decimal import Decimal, InvalidOperation
 from typing import Any
 
 
@@ -1239,9 +1241,8 @@ for asset in ASSETS:
         asset["coordinate_source"] = coordinate["source"]
         asset["coordinate_source_url"] = coordinate["url"]
     elif asset["map_lat"] is not None and asset["map_lon"] is not None:
-        asset["coordinate_source"] = "原目录坐标记录"
-        asset["coordinate_source_url"] = None
         asset["coordinate_source"] = "继承目录近似坐标；独立坐标出处待核"
+        asset["coordinate_source_url"] = None
     else:
         asset["coordinate_source"] = "暂无可核验坐标"
         asset["coordinate_source_url"] = None
@@ -1551,3 +1552,36 @@ additional_measurements(ASSETS)
 CONTINUATION.finish_review(ASSETS)
 GULF_REVIEW.finish_review(ASSETS)
 FINAL_REVIEW.finish_review(ASSETS)
+
+
+def _numeric_value(value: Any) -> tuple[Decimal | None, str]:
+    """Separate a numeric amount from an approximate/bound qualifier."""
+    if value is None:
+        return None, ""
+    if isinstance(value, (int, float, Decimal)) and not isinstance(value, bool):
+        return Decimal(str(value)), ""
+    match = re.fullmatch(
+        r"\s*(约|~|≥|≤|>|<)?\s*([+-]?[\d,]+(?:\.\d+)?)\s*", str(value))
+    if not match:
+        return None, ""
+    try:
+        amount = Decimal(match.group(2).replace(",", ""))
+    except InvalidOperation:
+        return None, ""
+    qualifier = "约" if match.group(1) == "~" else (match.group(1) or "")
+    return amount, qualifier
+
+
+for asset in ASSETS:
+    raw_value = asset.get("value")
+    amount, qualifier = _numeric_value(raw_value)
+    asset["value_raw"] = raw_value
+    asset["value_numeric"] = amount
+    asset["value_qualifier"] = asset.get("value_qualifier") or qualifier
+    for measurement in asset.get("additional_measurements", []):
+        raw_measurement = measurement.get("value")
+        measurement_amount, measurement_qualifier = _numeric_value(raw_measurement)
+        measurement["value_raw"] = raw_measurement
+        measurement["value_numeric"] = measurement_amount
+        measurement["value_qualifier"] = (
+            measurement.get("value_qualifier") or measurement_qualifier)

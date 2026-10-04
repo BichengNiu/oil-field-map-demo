@@ -17,8 +17,12 @@ import ais
 
 
 def archive_path() -> Path:
-    return Path(os.environ.get("AIS_ARCHIVE_PATH") or
-                Path(__file__).with_name("runtime") / "ais-history.sqlite3")
+    configured = os.environ.get("AIS_ARCHIVE_PATH")
+    if configured:
+        return Path(configured)
+    state_home = Path(os.environ.get("XDG_STATE_HOME") or
+                      Path.home() / ".local" / "state")
+    return state_home / "oil-field-map-demo" / "ais-history.sqlite3"
 
 
 @contextmanager
@@ -36,24 +40,36 @@ def _connect():
         conn.close()
 
 
+def connect_archive():
+    """Open the shared archive transaction for related archive importers."""
+    return _connect()
+
+
 def normalize_report(row: dict) -> dict:
-    """Require explicit UTC observation time; never manufacture it from now."""
-    mmsi = ais._integer(row.get("mmsi", row.get("MMSI")))
-    observed = ais._parse_utc(row.get("received_at", row.get("AIS报告时间 UTC")))
-    lat = ais._number(row.get("lat", row.get("纬度")))
-    lon = ais._number(row.get("lon", row.get("经度")))
+    """Keep source observation time distinct from collector receipt time."""
+    mmsi = ais.parse_integer(row.get("mmsi", row.get("MMSI")))
+    observed = ais.parse_utc(
+        row.get("observed_at", row.get("AIS报告时间 UTC")))
+    # Preserve explicit historical imports; current live rows include a source
+    # label and therefore must provide an observed_at value.
+    if observed is None and not row.get("data_source"):
+        observed = ais.parse_utc(row.get("received_at"))
+    received = ais.parse_utc(
+        row.get("received_at", row.get("采集器接收时间 UTC"))) or ais.utc_now()
+    lat = ais.parse_number(row.get("lat", row.get("纬度")))
+    lon = ais.parse_number(row.get("lon", row.get("经度")))
     if mmsi is None or not 100000000 <= mmsi <= 999999999:
         raise ValueError("MMSI无效")
     if observed is None or observed > ais.utc_now() + timedelta(minutes=5):
         raise ValueError("AIS报告时间缺失、无效或在未来")
-    if not ais._valid_coordinate(lat, lon) or ais.region_for(lat, lon) is None:
+    if not ais.valid_coordinate(lat, lon) or ais.region_for(lat, lon) is None:
         raise ValueError("坐标无效或不在监测水域")
     category = row.get("category") or next((key for key, label in ais.VESSEL_TYPE_LABELS.items()
                                            if label == row.get("船型")), "unknown")
     if category not in ais.VESSEL_TYPE_LABELS:
         category = "unknown"
-    sog = ais._number(row.get("sog", row.get("航速 节")))
-    course = ais._number(row.get("course", row.get("航向 °")))
+    sog = ais.parse_number(row.get("sog", row.get("航速 节")))
+    course = ais.parse_number(row.get("course", row.get("航向 °")))
     if sog is not None and not 0 <= sog < 102.3:
         sog = None
     if course is not None and not 0 <= course < 360:
@@ -61,7 +77,8 @@ def normalize_report(row: dict) -> dict:
     source = row.get("source") or row.get("data_source") or row.get("数据源")
     if not source:
         raise ValueError("需要提供原始数据源")
-    return {**row, "mmsi": str(mmsi), "received_at": observed.isoformat(),
+    return {**row, "mmsi": str(mmsi), "observed_at": observed.isoformat(),
+            "received_at": received.isoformat(),
             "provider_received_at": row.get("provider_received_at", row.get("采集器接收时间 UTC")),
             "lat": lat, "lon": lon, "region": ais.region_for(lat, lon),
             "name": row.get("name", row.get("船名")),
@@ -77,13 +94,18 @@ def normalize_report(row: dict) -> dict:
 
 
 def archive_reports(rows: list[dict]) -> int:
-    normalized = [normalize_report(row) for row in rows]
+    rows_with_observation_time = [
+        row for row in rows
+        if row.get("observed_at") or row.get("AIS报告时间 UTC")
+        or not row.get("data_source")
+    ]
+    normalized = [normalize_report(row) for row in rows_with_observation_time]
     if not normalized:
         return 0
     with _connect() as conn:
         before = conn.total_changes
         conn.executemany("INSERT OR IGNORE INTO reports VALUES (?, ?, ?, ?)",
-                         [(row["mmsi"], row["received_at"], row["source"],
+                         [(row["mmsi"], row["observed_at"], row["source"],
                            json.dumps(row, ensure_ascii=False)) for row in normalized])
         return conn.total_changes - before
 
@@ -135,18 +157,19 @@ def track_reports(feature: dict, expected_mmsi: str, day: date) -> list[dict]:
     attribution = " · ".join(map(str, credit.values())) if isinstance(credit, dict) else str(credit)
     rows = []
     for index, coordinate in enumerate(coordinates):
-        observed = ais._parse_utc(times[index])
+        observed = ais.parse_utc(times[index])
         if observed is None or observed.date() != day:
             continue
         def value(key):
             values = properties.get(key) or []
             return values[index] if isinstance(values, list) and index < len(values) else None
-        category, label = ais.classify_ship_type(ais._integer(properties.get("type")))
-        heading = ais._number(value("heading"))
+        category, label = ais.classify_ship_type(ais.parse_integer(properties.get("type")))
+        heading = ais.parse_number(value("heading"))
         course = heading if heading is not None and 0 <= heading < 360 else value("cog")
         try:
             rows.append(normalize_report({
-                "mmsi": mmsi, "received_at": times[index], "lon": coordinate[0],
+                "mmsi": mmsi, "observed_at": times[index], "lon": coordinate[0],
+                "received_at": ais.utc_now().isoformat(),
                 "lat": coordinate[1], "name": properties.get("name"),
                 "sog": value("sog"), "course": course, "category": category,
                 "category_label": label,
