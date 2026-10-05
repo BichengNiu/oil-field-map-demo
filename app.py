@@ -128,11 +128,13 @@ def main() -> None:
                 port_id_options,
                 key="port_ids",
                 format_func=lambda port_id: port_labels.get(port_id, port_id),
-                placeholder="全选或选择港口",
+                placeholder="留空显示所选国家的全部港口",
                 disabled=not bool(selected_port_countries),
-                help="“全选”表示所选国家中的所有港口；清空选择时不显示港口。",
+                help="选择具体港口可缩小范围；留空或选“全选”时显示所选国家的全部港口。",
             )
             selected_port_ids = selected_values(port_ids_selection, port_id_options)
+            if not selected_port_ids:
+                selected_port_ids = port_id_options
             show_only_ports_with_data = st.checkbox(
                 "仅在地图上显示有最新数据的港口",
                 value=False,
@@ -282,7 +284,8 @@ def main() -> None:
             )
 
         st.caption(
-            "港口和咽喉点在独立筛选区选择；多选器中的“全选”与单项互斥，清空选择表示无匹配结果。"
+            "港口和咽喉点在独立筛选区选择；“全选”与单项互斥。港口筛选留空表示所选国家的全部港口；"
+            "咽喉点筛选留空表示无匹配结果。"
         )
 
     tab_map, tab_ports, tab_vessels, tab_assets, tab_download, tab_method = st.tabs(

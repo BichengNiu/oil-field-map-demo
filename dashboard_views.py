@@ -28,6 +28,11 @@ def render_map_panel(state: DashboardViewState) -> None:
     stream_state = state.ais_status
     if state.port_error:
         st.error(f"港口数据加载失败：{state.port_error}")
+    elif "ports" in state.visible_map_layers and not state.map_ports:
+        st.info(
+            "港口图层已开启，但当前没有可绘制点位。请检查国家筛选和数据状态；"
+            "港口筛选留空时显示所选国家的全部港口。"
+        )
     if state.chokepoint_error:
         st.error(f"咽喉点数据加载失败：{state.chokepoint_error}")
     if state.archive_error:
