@@ -1,4 +1,4 @@
-"""Data preparation for the on-demand full-project print report."""
+"""Cached data preparation for the full-project browser print report."""
 from __future__ import annotations
 
 from datetime import date, timedelta

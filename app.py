@@ -30,7 +30,7 @@ from dashboard_views import (
     render_map_panel,
     render_method_panel,
     render_ports_panel,
-    render_print_panel,
+    render_print_report,
 )
 from download_panel import render_download_panel
 from map_popups import METRIC_LABELS
@@ -73,12 +73,6 @@ def main() -> None:
     with st.sidebar:
         st.session_state.pop("monitor_regions", None)
         st.markdown("### 中东能源与战略通道运输监测")
-        print_mode = st.toggle(
-            "打印模式",
-            value=False,
-            key="print_mode",
-            help="开启后读取港口和咽喉点最近90天数据并生成全项目报告。可下载独立HTML报告，再打印或保存为PDF。",
-        )
         map_layers_selection = multiselect_with_all(
             "地图内容",
             list(MAP_LAYER_LABELS),
@@ -300,11 +294,9 @@ def main() -> None:
 
     need_port_data = (tab_map.open and "ports" in selected_map_layers) or tab_ports.open
     need_chokepoint_data = tab_map.open and "chokepoints" in selected_map_layers
-    need_ais_data = ais_enabled and (
-        (tab_map.open and "vessels" in selected_map_layers) or tab_vessels.open or print_mode
-    )
+    # The hidden print report is kept ready for Streamlit's native browser print.
     live_positions = []
-    if need_ais_data:
+    if ais_enabled:
         if ais_api_key:
             ais_collector_instance = ais_collector(ais_api_key, AIS.MODULE_VERSION)
             ais_state = ais_collector_instance.status()
@@ -328,10 +320,6 @@ def main() -> None:
             )
             if open_state.get("error"):
                 st.caption(f"Open Waters 错误：{open_state['error']}")
-    elif ais_enabled:
-        with vessel_status_panel:
-            st.caption("船位在地图显示船舶图层、打开船舶页或进入打印模式时读取。")
-
     ports: list[dict] = []
     port_error = port_catalog_error or port_latest_error
     port_risk_error = None
@@ -449,8 +437,7 @@ def main() -> None:
     if tab_method.open:
         with tab_method:
             render_method_panel()
-    if print_mode:
-        render_print_panel(available_ports, available_chokepoints, view_state)
+    render_print_report(available_ports, available_chokepoints, view_state)
 
 
 if __name__ == "__main__":

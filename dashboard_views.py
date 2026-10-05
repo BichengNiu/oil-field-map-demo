@@ -2,7 +2,6 @@
 
 from __future__ import annotations
 
-import uuid
 from datetime import date
 
 import streamlit as st
@@ -394,7 +393,7 @@ def render_method_panel() -> None:
     st.markdown(
         f"**船舶数据。** 免费快照来自[Open Waters开放AIS网络]({AIS.OPENWATERS_SOURCE})，"
         f"可选[AISStream WebSocket API]({AIS.SOURCE})在服务器端接收五个监测水域的船级广播；"
-        "显示船舶图层、打开船舶页或打印报告时读取最新船位快照；停留期间可点击侧栏“刷新船舶数据”。"
+        "船位快照用于地图、船舶页和后台打印报告；停留期间可点击侧栏“刷新船舶数据”。"
         "浏览器只接收标准化的每船最新位置，不接收API Key。"
         "多源位置按MMSI合并，航行阈值为0.5节，超过所选最大数据年龄的船位只从当前显示中排除；"
         "上游来源署名随船舶表及弹窗显示。"
@@ -431,7 +430,7 @@ def render_method_panel() -> None:
     )
 
 
-def render_print_panel(
+def render_print_report(
     available_ports: list[dict], available_chokepoints: list[dict], state: DashboardViewState
 ) -> None:
     selected_day = state.selected_day
@@ -455,7 +454,7 @@ def render_print_panel(
     )
     report_choke_ids = tuple(sorted(str(point["portid"]) for point in report_choke_catalog))
     report_errors = []
-    report_revision = st.session_state.setdefault("portwatch_report_revision", uuid.uuid4().hex)
+    report_revision = st.session_state.get("portwatch_report_revision", "initial")
     if port_error:
         report_errors.append(f"港口最新数据：{port_error}")
     if chokepoint_error:
@@ -513,17 +512,5 @@ def render_print_panel(
         ais_status=report_ais_status,
         ais_source_note=report_ais_note,
         errors=report_errors,
-    )
-    st.caption(
-        "此开关负责准备全项目报告数据。右上角 Streamlit Print 打印的是当前应用页面；"
-        "要打印独立报告，请下载下方 HTML，打开后点击报告顶部的按钮。"
-    )
-    st.download_button(
-        "下载可打印报告（HTML）",
-        data=print_report.build_standalone_document(report_html),
-        file_name="中东能源与战略通道运输监测.html",
-        mime="text/html",
-        type="primary",
-        width="stretch",
     )
     st.html(print_report.PRINT_CSS + report_html)
