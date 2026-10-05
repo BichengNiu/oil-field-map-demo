@@ -92,6 +92,21 @@ def render_ais_panel(state: DashboardViewState) -> None:
     rows = dashboard_rows.vessel_rows(vessels)
     ais_status = state.ais_status
     has_position_data = bool(all_positions)
+    region_counts = {
+        region: {
+            "open_waters": sum(
+                vessel.get("region") == region
+                and str(vessel.get("data_source") or "").startswith("Open Waters")
+                for vessel in all_positions
+            ),
+            "aisstream": sum(
+                vessel.get("region") == region
+                and vessel.get("data_source") == "AISStream"
+                for vessel in all_positions
+            ),
+        }
+        for region in AIS.REGIONS
+    }
     if state.archive_error:
         st.warning(state.archive_error)
     vessel_metric = len(vessels) if has_position_data else "—"
@@ -117,6 +132,26 @@ def render_ais_panel(state: DashboardViewState) -> None:
         st.warning("AISStream 未确认 WebSocket 压缩协商；未压缩连接可能受带宽限制。")
     if ais_status.get("last_error"):
         st.warning(f"最近连接错误：{ais_status['last_error']}；采集器会自动指数退避重连。")
+    st.markdown("**各监测水域当前船位**")
+    st.dataframe(
+        [
+            {
+                "水域": region,
+                "Open Waters": counts["open_waters"],
+                "AISStream": counts["aisstream"],
+                "合计": counts["open_waters"] + counts["aisstream"],
+            }
+            for region, counts in region_counts.items()
+        ],
+        width="stretch",
+        hide_index=True,
+    )
+    st.caption("这里统计当前快照中按 MMSI 合并后的船位；0 条表示当前数据源没有返回报文，不代表该水域没有船舶。")
+    if ais_status.get("status") == "未配置（可选）":
+        st.info(
+            "AISStream 尚未配置。Open Waters 的公开接收站覆盖并非全球连续覆盖；"
+            "若苏伊士运河或曼德海峡没有报文，可在部署环境配置 AISSTREAM_API_KEY 接入该区域广播。"
+        )
     if rows:
         st.dataframe(
             rows,
