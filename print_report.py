@@ -72,8 +72,8 @@ def _metric_cards(cards: list[tuple[str, str, str]]) -> str:
     ) + "</div>"
 
 
-def _line_chart(title: str, series: list[tuple[str, list[tuple[object, object]]]],
-                unit: str = "", height: int = 278) -> str:
+def _time_series_chart(title: str, series: list[tuple[str, list[tuple[object, object]]]],
+                      unit: str = "") -> str:
     parsed: dict[str, dict[date, float | None]] = {}
     all_dates: set[date] = set()
     for label, pairs in series:
@@ -88,63 +88,41 @@ def _line_chart(title: str, series: list[tuple[str, list[tuple[object, object]]]
     if not all_dates:
         return f'<div class="chart-card"><h3>{_esc(title)}</h3><p class="empty">历史记录不可用</p></div>'
 
-    first, last = min(all_dates), max(all_dates)
-    span = max(1, (last - first).days)
-    width = 820
-    left, right, top, bottom = 64, 20, 38, height - 44
-    plot_w, plot_h = width - left - right, bottom - top
+    dates = sorted(all_dates)
     valid_values = [value for values in parsed.values() for value in values.values()
                     if value is not None]
     maximum = max(valid_values, default=1.0)
-    y_max = maximum * 1.12 if maximum > 0 else 1.0
-    y_max = max(y_max, 1.0)
-    pieces = [
-        f'<div class="chart-card"><h3>{_esc(title)}</h3>',
-        f'<svg viewBox="0 0 {width} {height}" role="img" aria-label="{_esc(title)}" '
-        'xmlns="http://www.w3.org/2000/svg">',
-    ]
-    for tick in range(5):
-        y = top + plot_h * tick / 4
-        value = y_max * (1 - tick / 4)
-        pieces.append(f'<line x1="{left}" y1="{y:.1f}" x2="{width-right}" y2="{y:.1f}" class="grid"/>')
-        pieces.append(f'<text x="{left-8}" y="{y+4:.1f}" text-anchor="end" class="axis">{_fmt(value, 0)}</text>')
-    tick_count = min(6, max(2, len(all_dates)))
-    for tick in range(tick_count):
-        day = first + timedelta(days=round(span * tick / (tick_count - 1)))
-        x = left + plot_w * (day - first).days / span
-        pieces.append(f'<text x="{x:.1f}" y="{height-14}" text-anchor="middle" class="axis">{day.strftime("%m-%d")}</text>')
-    for index, (label, values) in enumerate(parsed.items()):
-        color = COLORS[index % len(COLORS)]
-        segments: list[list[tuple[float, float]]] = []
-        current: list[tuple[float, float]] = []
-        day = first
-        while day <= last:
-            value = values.get(day)
-            if value is None:
-                if current:
-                    segments.append(current)
-                    current = []
-            else:
-                x = left + plot_w * (day - first).days / span
-                y = top + plot_h * (1 - value / y_max)
-                current.append((x, y))
-            day += timedelta(days=1)
-        if current:
-            segments.append(current)
-        for segment in segments:
-            if len(segment) == 1:
-                x, y = segment[0]
-                pieces.append(f'<circle cx="{x:.1f}" cy="{y:.1f}" r="2.5" fill="{color}"/>')
-            else:
-                coords = " ".join(f"{x:.1f},{y:.1f}" for x, y in segment)
-                pieces.append(f'<polyline points="{coords}" fill="none" stroke="{color}" '
-                              'stroke-width="2.2" stroke-linejoin="round" stroke-linecap="round"/>')
-    pieces.append("</svg><div class=\"legend\">")
+    y_max = max(maximum * 1.12, 1.0)
+    tick_count = min(6, max(2, len(dates)))
+    label_indexes = sorted({round(index * (len(dates) - 1) / (tick_count - 1))
+                            for index in range(tick_count)})
+    pieces = [f'<div class="chart-card"><h3>{_esc(title)}</h3>', '<div class="chart-legend">']
     pieces.extend(
         f'<span><i style="background:{COLORS[index % len(COLORS)]}"></i>{_esc(label)}</span>'
-        for index, (label, _) in enumerate(series)
+        for index, label in enumerate(parsed)
     )
-    pieces.append(f'</div><small class="unit">{_esc(unit)} · 日期按 UTC；缺报保留为空</small></div>')
+    pieces.append(
+        f'</div><small class="chart-scale">纵轴范围：0–{_fmt(y_max, 1)} {_esc(unit)}</small>'
+        '<div class="chart-series">'
+    )
+    for index, (label, values) in enumerate(parsed.items()):
+        color = COLORS[index % len(COLORS)]
+        pieces.append(f'<div class="chart-series-row"><span class="chart-series-label">{_esc(label)}</span>')
+        pieces.append('<div class="chart-bars" role="img" aria-label="' + _esc(label) + '">')
+        for day in dates:
+            value = values.get(day)
+            if value is None:
+                pieces.append(f'<span class="chart-bar missing" title="{day.isoformat()}：无记录"></span>')
+                continue
+            bar_height = max(1.0, min(100.0, value / y_max * 100))
+            pieces.append(
+                f'<span class="chart-bar" style="height:{bar_height:.2f}%;background:{color}" '
+                f'title="{day.isoformat()}：{_fmt(value, 1)}"></span>'
+            )
+        pieces.append('</div></div>')
+    pieces.append('</div><div class="chart-date-labels">')
+    pieces.extend(f'<span>{dates[index].strftime("%m-%d")}</span>' for index in label_indexes)
+    pieces.append(f'</div><small class="unit">{_esc(unit)} · 按同一量程展示；日期按 UTC，缺报保留为空</small></div>')
     return "".join(pieces)
 
 
@@ -217,11 +195,10 @@ def _change_table(choke_rows: list[dict], choke_catalog: list[dict],
                    "最近7日均值（艘次/日）", "环比变化"], rows)
 
 
-def _overview_svg(ports: list[dict], chokes: list[dict], assets: list[dict],
+def _overview_map(ports: list[dict], chokes: list[dict], assets: list[dict],
                   regions: dict[str, tuple[float, float, float, float]],
                   vessels: list[dict] | None = None) -> str:
-    width, height = 860, 430
-    left, right, top, bottom = 72, 28, 28, 52
+    # st.html sanitizes SVG tags, so print graphics use HTML elements and CSS.
     coordinates = []
     for row in ports + chokes + (vessels or []):
         coordinates.append((_number(row.get("lat")), _number(row.get("lon"))))
@@ -244,61 +221,65 @@ def _overview_svg(ports: list[dict], chokes: list[dict], assets: list[dict],
         lon_min, lon_max = lon_min - lon_padding, lon_max + lon_padding
     else:
         lon_min, lon_max, lat_min, lat_max = 29.0, 64.0, 8.0, 34.0
-    plot_w, plot_h = width - left - right, height - top - bottom
+    lon_span, lat_span = lon_max - lon_min, lat_max - lat_min
+
     def xy(lat: object, lon: object) -> tuple[float, float] | None:
         yv, xv = _number(lat), _number(lon)
         if yv is None or xv is None or not (lat_min <= yv <= lat_max and lon_min <= xv <= lon_max):
             return None
-        return left + (xv - lon_min) / (lon_max - lon_min) * plot_w, top + (lat_max - yv) / (lat_max - lat_min) * plot_h
-    parts = [f'<svg viewBox="0 0 {width} {height}" role="img" aria-label="监测水域与节点空间分布示意" xmlns="http://www.w3.org/2000/svg">',
-             f'<rect x="{left}" y="{top}" width="{plot_w}" height="{plot_h}" fill="#f8fafc" stroke="#94a3b8"/>']
-    lon_span, lat_span = lon_max - lon_min, lat_max - lat_min
+        return (xv - lon_min) / lon_span * 100, (lat_max - yv) / lat_span * 100
+
     lon_step = 10 if lon_span > 40 else 5 if lon_span > 20 else 2 if lon_span > 10 else 1
     lat_step = 10 if lat_span > 40 else 5 if lat_span > 20 else 2 if lat_span > 10 else 1
     lon_start = math.ceil(lon_min / lon_step) * lon_step
     lat_start = math.ceil(lat_min / lat_step) * lat_step
+    parts = ['<div class="overview-map" role="img" aria-label="监测水域与节点空间分布示意">',
+             '<div class="overview-map-plot">']
     for lon in range(lon_start, math.floor(lon_max) + 1, lon_step):
-        x = left + (lon - lon_min) / (lon_max - lon_min) * plot_w
-        parts.append(f'<line x1="{x:.1f}" y1="{top}" x2="{x:.1f}" y2="{top+plot_h}" class="grid"/>')
-        parts.append(f'<text x="{x:.1f}" y="{height-25}" text-anchor="middle" class="axis">{lon}°E</text>')
+        x = (lon - lon_min) / lon_span * 100
+        parts.append(f'<span class="map-gridline vertical" style="left:{x:.3f}%"></span>')
+        parts.append(f'<span class="map-axis-label map-axis-x" style="left:{x:.3f}%">{lon}°E</span>')
     for lat in range(lat_start, math.floor(lat_max) + 1, lat_step):
-        y = top + (lat_max - lat) / (lat_max - lat_min) * plot_h
-        parts.append(f'<line x1="{left}" y1="{y:.1f}" x2="{left+plot_w}" y2="{y:.1f}" class="grid"/>')
-        parts.append(f'<text x="{left-8}" y="{y+4:.1f}" text-anchor="end" class="axis">{lat}°N</text>')
+        y = (lat_max - lat) / lat_span * 100
+        parts.append(f'<span class="map-gridline horizontal" style="top:{y:.3f}%"></span>')
+        parts.append(f'<span class="map-axis-label map-axis-y" style="top:{y:.3f}%">{lat}°N</span>')
     for region, bounds in regions.items():
         south, north, west, east = bounds
-        p1, p2 = xy(south, west), xy(north, east)
-        if p1 and p2:
-            x1, y1 = p1
-            x2, y2 = p2
-            parts.append(f'<rect x="{x1:.1f}" y="{y2:.1f}" width="{x2-x1:.1f}" height="{y1-y2:.1f}" '
-                         'fill="#bfdbfe" fill-opacity=".08" stroke="#64748b" stroke-dasharray="4 4"/>')
-            parts.append(f'<text x="{x1+4:.1f}" y="{y2+13:.1f}" class="zone-label">{_esc(region)}</text>')
-    for port in ports:
-        point = xy(port.get("lat"), port.get("lon"))
+        x1, y1 = xy(south, west) or (None, None)
+        x2, y2 = xy(north, east) or (None, None)
+        if x1 is not None and y1 is not None and x2 is not None and y2 is not None:
+            parts.append(
+                f'<div class="map-zone" title="{_esc(region)}" style="left:{x1:.3f}%;top:{y2:.3f}%;'
+                f'width:{x2-x1:.3f}%;height:{y1-y2:.3f}%"><span>{_esc(region)}</span></div>'
+            )
+
+    def append_point(kind: str, label: object, lat: object, lon: object,
+                     proxy: bool = False) -> None:
+        point = xy(lat, lon)
         if point:
             x, y = point
-            parts.append(f'<rect x="{x-3:.1f}" y="{y-3:.1f}" width="6" height="6" fill="#1769aa"/>')
+            proxy_class = " proxy" if proxy else ""
+            parts.append(
+                f'<span class="map-point {kind}{proxy_class}" title="{_esc(label)}" '
+                f'style="left:{x:.3f}%;top:{y:.3f}%"></span>'
+            )
+
+    for port in ports:
+        append_point("port", port.get("name_cn") or port.get("name") or port.get("portname") or "港口",
+                     port.get("lat"), port.get("lon"))
     for asset in assets:
         if not asset.get("map_drawable", True):
             continue
-        point = xy(asset.get("map_lat", asset.get("lat")),
-                   asset.get("map_lon", asset.get("lon")))
-        if point:
-            x, y = point
-            dash = ' stroke="#7c2d12" stroke-dasharray="2 2"' if asset.get("map_is_proxy") else ""
-            parts.append(f'<polygon points="{x:.1f},{y-4:.1f} {x+4:.1f},{y:.1f} {x:.1f},{y+4:.1f} {x-4:.1f},{y:.1f}" fill="#d97706"{dash}/>')
+        append_point("asset", asset.get("name_cn") or asset.get("name") or "油气资产",
+                     asset.get("map_lat", asset.get("lat")),
+                     asset.get("map_lon", asset.get("lon")), bool(asset.get("map_is_proxy")))
     for choke in chokes:
-        point = xy(choke.get("lat"), choke.get("lon"))
-        if point:
-            x, y = point
-            parts.append(f'<circle cx="{x:.1f}" cy="{y:.1f}" r="5" fill="#7c3aed"/>')
+        append_point("choke", choke.get("name_cn") or choke.get("name") or "咽喉点",
+                     choke.get("lat"), choke.get("lon"))
     for vessel in (vessels or []):
-        point = xy(vessel.get("lat"), vessel.get("lon"))
-        if point:
-            x, y = point
-            parts.append(f'<circle cx="{x:.1f}" cy="{y:.1f}" r="1.8" fill="#14866d" fill-opacity=".65"/>')
-    parts.append("</svg>")
+        append_point("vessel", vessel.get("name") or vessel.get("mmsi") or "AIS船位",
+                     vessel.get("lat"), vessel.get("lon"))
+    parts.append('</div></div>')
     return "".join(parts)
 
 
@@ -345,7 +326,7 @@ def build_report_html(
     dated_calls = [p for p in latest_ports if _number(p.get("portcalls")) is not None]
     catalog_chokes = len(choke_catalog)
     report_assets = list(assets)
-    map_html = _overview_svg(port_catalog, choke_catalog, report_assets, regions, vessels)
+    map_html = _overview_map(port_catalog, choke_catalog, report_assets, regions, vessels)
     cover_cards = _metric_cards([
         ("港口监测点", str(len(port_catalog)), f"其中独立统计点 {len(stat_ports)} 个"),
         ("战略通道", str(catalog_chokes), "逐节点分别报告，不合并解释"),
@@ -393,8 +374,8 @@ def build_report_html(
     choke_content = (
         '<p class="note">按通道分别呈现每日源站记录。不同通道的船次不相加；承载能力为 PortWatch 估算口径。</p>'
         + '<div class="chart-grid">'
-        + _line_chart("咽喉点每日通过船次", n_series, "艘次/日")
-        + _line_chart("咽喉点估算承载能力", capacity_series, "载重吨/日（源站口径）")
+        + _time_series_chart("咽喉点每日通过船次", n_series, "艘次/日")
+        + _time_series_chart("咽喉点估算承载能力", capacity_series, "载重吨/日（源站口径）")
         + '</div><h3>最近7日与前7日</h3>'
         + _change_table(choke_history, choke_catalog, choke_day)
     )
@@ -419,8 +400,8 @@ def build_report_html(
         '<p class="note">缺报日留空。进出口图按当日有源记录的点位合计，并在表中列出覆盖点位数；'
         '油气货量为 AIS 推算，不是海关实测。</p>'
         + '<div class="chart-grid">'
-        + _line_chart("重点港口每日有效进港艘次", port_series, "艘次/日")
-        + _line_chart("港口估算进出口货量", [
+        + _time_series_chart("重点港口每日有效进港艘次", port_series, "艘次/日")
+        + _time_series_chart("港口估算进出口货量", [
             ("进口", imports), ("出口", exports)], "万吨/日")
         + '</div><h3>港口记录覆盖与最新值</h3>'
     )
@@ -464,7 +445,7 @@ def build_report_html(
     oil_content = (
         '<p class="note">只列公开披露且可定位的战略节点；实际产量、产能、目标与历史值按资产逐项区分，'
         '不跨口径相加。虚线边框代理点的坐标仅用于定位。</p>'
-        + '<div class="map-frame">' + _overview_svg([], [], report_assets, regions) + '</div>'
+        + '<div class="map-frame">' + _overview_map([], [], report_assets, regions) + '</div>'
         + '<h3>战略油气资产（最多20项）</h3>'
         + _table(["资产", "国家", "状态", "产量／注明范围的合计参考", "其他指标", "披露日期", "合计／权益口径说明"], assets_table_rows)
         + '<h3>产量来源与检索结论（对应以上资产）</h3>'
@@ -497,7 +478,7 @@ def build_report_html(
             ("油轮/液货船", str(sum(row.get("category") == "tanker" for row in vessels)) if vessels else "—", "按AIS基础船型分类"),
             ("数据来源", ais_status, "以当前会话可用状态为准"),
         ])
-        + '<div class="map-frame">' + _overview_svg([], [], [], regions, vessels) + '</div>'
+        + '<div class="map-frame">' + _overview_map([], [], [], regions, vessels) + '</div>'
         + _distribution(vessels)
     )
 
@@ -530,8 +511,9 @@ def build_report_html(
 
 PRINT_CSS = """
 <style>
-.print-report { display: none; color: #17212b; background: #fff; font: 10pt/1.38 Arial, "Noto Sans CJK SC", sans-serif; }
+.print-report { display: none; color: #17212b; background: #fff; font: 10pt/1.38 Arial, "Noto Sans CJK SC", sans-serif; -webkit-print-color-adjust:exact; print-color-adjust:exact; }
 .print-report * { box-sizing: border-box; }
+@media print { .print-report { display: block !important; } }
 .print-report h1 { text-align: center; font-size: 22pt; margin: 0 0 4mm; line-height: 1.2; }
 .report-date-rule { position:relative; border-top:1px solid #9aa7b4; text-align:center; margin:0 0 3mm; height:4mm; }
 .report-date-rule span { position:relative; top:-.7em; padding:0 4mm; background:#fff; font-size:9pt; }
@@ -549,15 +531,34 @@ PRINT_CSS = """
 .chart-grid { display:grid; grid-template-columns:1fr 1fr; gap:4mm; align-items:start; }
 .chart-card { border:1px solid #d6dde5; padding:2mm; break-inside:avoid; page-break-inside:avoid; min-width:0; }
 .chart-card h3 { margin:1mm 1mm 0; }
-.chart-card svg, .map-frame svg { width:100%; height:auto; display:block; }
-.grid { stroke:#dce3e9; stroke-width:1; }
-.axis { fill:#52606d; font-size:11px; }
-.zone-label { fill:#435466; font-size:10px; }
-.legend { display:flex; flex-wrap:wrap; gap:2mm 4mm; font-size:8pt; margin:1mm 2mm; }
-.legend i { display:inline-block; width:3mm; height:1.5mm; margin-right:1mm; }
+.chart-legend { display:flex; flex-wrap:wrap; gap:1mm 3mm; margin:1mm; font-size:7pt; }
+.chart-legend i { display:inline-block; width:2mm; height:2mm; margin-right:1mm; }
+.chart-scale { display:block; margin:0 1mm; color:#52606d; font-size:6.5pt; }
+.chart-series-row { display:flex; align-items:center; gap:2mm; margin:1mm 0; }
+.chart-series-label { width:20%; min-width:0; overflow:hidden; text-overflow:ellipsis; white-space:nowrap; font-size:7pt; }
+.chart-bars { display:flex; align-items:flex-end; flex:1; height:16mm; min-width:0; border-bottom:1px solid #9aa7b4; background:repeating-linear-gradient(to bottom, transparent 0, transparent calc(25% - 1px), #e8edf2 25%); }
+.chart-bar { display:block; flex:1 1 0; min-width:0; margin-right:.35px; }
+.chart-bar.missing { height:1px; background:transparent !important; border-top:1px dotted #aab4be; }
+.chart-date-labels { display:flex; justify-content:space-between; margin-left:22%; color:#52606d; font-size:6.5pt; }
 .unit,.note,.empty { color:#52606d; font-size:8pt; }
 .note { margin:2mm 0; }
 .map-frame { border:1px solid #d6dde5; padding:2mm; break-inside:avoid; page-break-inside:avoid; }
+.overview-map { position:relative; width:100%; aspect-ratio:2/1; background:#f8fafc; border:1px solid #94a3b8; }
+.overview-map-plot { position:absolute; left:8.4%; right:3.3%; top:6.5%; bottom:12.1%; border:1px solid #94a3b8; }
+.map-gridline { position:absolute; display:block; z-index:0; }
+.map-gridline.vertical { top:0; bottom:0; border-left:1px solid #dce3e9; }
+.map-gridline.horizontal { left:0; right:0; border-top:1px solid #dce3e9; }
+.map-axis-label { position:absolute; color:#52606d; font-size:6.5pt; white-space:nowrap; }
+.map-axis-x { top:calc(100% + 2px); transform:translateX(-50%); }
+.map-axis-y { left:-3px; transform:translate(-100%,-50%); }
+.map-zone { position:absolute; z-index:1; border:1px dashed #64748b; background:rgba(191,219,254,.08); }
+.map-zone span { position:absolute; top:1px; left:2px; color:#435466; font-size:6.5pt; white-space:nowrap; }
+.map-point { position:absolute; z-index:2; display:block; transform:translate(-50%,-50%); }
+.map-point.port { width:1.5mm; height:1.5mm; border:.3mm solid #1769aa; background:#1769aa; }
+.map-point.asset { width:2mm; height:2mm; border:.3mm solid #d97706; background:#d97706; transform:translate(-50%,-50%) rotate(45deg); }
+.map-point.asset.proxy { border:1px dashed #7c2d12; }
+.map-point.choke { width:2.5mm; height:2.5mm; border:.4mm solid #7c3aed; border-radius:50%; background:#7c3aed; }
+.map-point.vessel { width:1mm; height:1mm; border:.3mm solid #14866d; border-radius:50%; background:#14866d; opacity:.7; }
 .table-wrap { overflow:visible; }
 .print-report table { width:100%; border-collapse:collapse; font-size:8pt; margin:2mm 0 4mm; }
 .print-report th,.print-report td { border:1px solid #cbd5df; padding:1.3mm 1.6mm; text-align:left; vertical-align:top; overflow-wrap:anywhere; }
