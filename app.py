@@ -192,7 +192,8 @@ def main() -> None:
                 list(AIS.VESSEL_TYPE_LABELS),
                 key="ais_categories",
                 format_func=lambda key: AIS.VESSEL_TYPE_LABELS[key],
-                placeholder="全选或选择船型",
+                placeholder="留空显示全部船型",
+                help="选择船型可缩小范围；留空或选“全选”时显示所有船型。",
             )
             selected_ais_categories = set(
                 selected_values(ais_categories_selection, list(AIS.VESSEL_TYPE_LABELS))
@@ -384,16 +385,12 @@ def main() -> None:
         map_ports = [port for port in map_ports if port.get("has_data")]
     map_chokepoints = chokepoints if "chokepoints" in visible_map_layers else []
 
-    filtered_vessels = (
-        AIS.filter_vessels(
-            live_positions,
-            regions=set(PORTWATCH.REGIONS),
-            categories=selected_ais_categories,
-            moving_only=ais_moving_only,
-            query=ais_search,
-        )
-        if selected_ais_categories
-        else []
+    filtered_vessels = AIS.filter_vessels(
+        live_positions,
+        regions=set(PORTWATCH.REGIONS),
+        categories=selected_ais_categories,
+        moving_only=ais_moving_only,
+        query=ais_search,
     )
 
     view_state = DashboardViewState(

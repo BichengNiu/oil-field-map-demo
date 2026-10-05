@@ -57,6 +57,16 @@ def render_map_panel(state: DashboardViewState) -> None:
                 )
             else:
                 st.info("两处数据源尚未返回当前可用船位；不能据此判断水域内没有船舶。")
+        elif all_positions and not map_vessels:
+            st.info(
+                f"已收到 {len(all_positions):,} 个船位，但船型、航行状态或搜索筛选没有匹配结果。"
+                "清空这些筛选即可恢复显示。"
+            )
+        elif map_vessels:
+            st.caption(
+                f"地图正在显示 {len(map_vessels):,} 个 AIS 船位；低缩放级别会聚合密集船位，"
+                "放大地图可查看单船图标。"
+            )
     if state.unlocated_asset_count:
         st.info(
             f"当前筛选有 {state.unlocated_asset_count} 项仅列目录：既无可核验独立坐标，也无可用的"
