@@ -304,6 +304,20 @@ def port_popup(port: dict, day: str) -> str:
         if port.get("risk_capacity") is not None
         else ""
     )
+    coordinate_source_url = port.get("coordinate_source_url")
+    coordinate_precision = port.get("coordinate_precision")
+    coordinate_block = (
+        '<div class="basis">地图坐标：'
+        f"{_esc(coordinate_precision)}"
+        + (
+            f' <a href="{_esc(coordinate_source_url)}" target="_blank" rel="noopener">坐标来源</a>'
+            if coordinate_source_url
+            else ""
+        )
+        + "</div>"
+        if coordinate_precision
+        else ""
+    )
     return (
         '<div class="popup-card">'
         f'<div class="field-name">⚓ {_esc(port["name"])}</div>'
@@ -332,6 +346,7 @@ def port_popup(port: dict, day: str) -> str:
         "负值偏进口、正值偏出口。风险运力来自2019—2024港口航线网络，是历史冲击暴露估算。"
         "“—”表示窗口不完整、基期为0或源数据不足，不按零处理。</div>"
         f'<div class="basis">统计覆盖：{_esc(port.get("coverage_note", ""))}</div>'
+        f"{coordinate_block}"
         f'<a class="source" href="{_esc(port.get("source_url", PORTWATCH.SOURCE))}" target="_blank" rel="noopener">港口目录/统计来源</a>'
         "</div>"
     )

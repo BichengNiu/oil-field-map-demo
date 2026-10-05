@@ -216,7 +216,10 @@ def render_ports_panel(
             width="stretch",
             hide_index=True,
             height=560,
-            column_config={"来源": st.column_config.LinkColumn("来源")},
+            column_config={
+                "来源": st.column_config.LinkColumn("来源"),
+                "坐标来源": st.column_config.LinkColumn("坐标来源"),
+            },
         )
         st.download_button(
             "下载当前筛选结果 CSV",

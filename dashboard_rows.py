@@ -48,6 +48,8 @@ def port_rows(ports: list[dict], selected_day: date | None, rolling_days: int) -
                 "PortWatch ID": port["portid"],
                 "日期 UTC": selected_day.isoformat(),
                 "当日有效进港 艘次": port.get("portcalls"),
+                "坐标精度": port.get("coordinate_precision", "未核验"),
+                "坐标来源": port.get("coordinate_source_url"),
                 "港口活动指数": _rounded(port.get("activity_index"), 1),
                 f"{rolling_days}天活跃天数率 %": _rounded(port.get("active_day_rate"), 1),
                 f"{rolling_days}天日均进港 艘次": _rounded(port.get("avg_calls"), 3),
