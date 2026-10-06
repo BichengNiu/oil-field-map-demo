@@ -17,7 +17,7 @@ from ui_controls import ALL_SELECTION, multiselect_with_all, selected_values
 
 
 def open_download_tab(kind: str | None = None, node_ids: tuple[str, ...] = ()) -> None:
-    """Open the downloader with either the map scope or a chosen node."""
+    """Open the downloader with all nodes or a chosen node set."""
     st.session_state["main_tabs"] = "数据下载"
     st.session_state["pw_download_mode"] = "全部可用历史"
     if node_ids:
@@ -26,22 +26,16 @@ def open_download_tab(kind: str | None = None, node_ids: tuple[str, ...] = ()) -
         st.session_state["pw_download_countries"] = [ALL_SELECTION]
         st.session_state["pw_download_nodes"] = [(kind, pid) for pid in node_ids]
     else:
-        st.session_state["pw_download_scope"] = "沿用地图筛选"
+        st.session_state["pw_download_scope"] = "全部项目节点"
         st.session_state.pop("pw_download_nodes", None)
     st.session_state["pw_download_kinds"] = [kind] if kind else [ALL_SELECTION]
 
 
 def render_download_panel(
-    selected_port_countries: list[str],
-    selected_port_ids: list[str],
-    selected_chokepoint_ids: list[str],
     newest_port_day: date | None,
     newest_choke_day: date | None,
 ) -> None:
     st.subheader("港口与咽喉要道数据")
-    st.caption(
-        "来源：IMF PortWatch。下载的是AIS推算的港口／要道日度汇总，不含逐船AIS航迹；日度数据从2019-01-01起，缺报不补零。"
-    )
     latest = [day for day in (newest_port_day, newest_choke_day) if day]
     default_last = max(latest) if latest else datetime.now(timezone.utc).date()
     last_downloadable = datetime.now(timezone.utc).date()
@@ -70,19 +64,13 @@ def render_download_panel(
         placeholder="全选或选择数据类型",
     )
     selected_kinds = set(selected_values(kinds_selection, kind_options))
-    scope_options = ["全部项目节点", "按条件筛选", "沿用地图筛选"]
+    scope_options = ["全部项目节点", "按条件筛选"]
+    if st.session_state.get("pw_download_scope") not in scope_options:
+        st.session_state["pw_download_scope"] = "全部项目节点"
     scope = st.radio("节点范围", scope_options, horizontal=True, key="pw_download_scope")
     selected_nodes = []
     if scope == "全部项目节点":
         selected_nodes = [*all_ports, *all_chokes]
-    elif scope == "沿用地图筛选":
-        selected_nodes = [
-            n
-            for n in all_ports
-            if n["country"] in selected_port_countries and n["portid"] in selected_port_ids
-        ]
-        choke_ids = set(selected_chokepoint_ids)
-        selected_nodes += [n for n in all_chokes if n["portid"] in choke_ids]
     else:
         region_options = sorted(
             {str(node.get("region")) for node in (*all_ports, *all_chokes) if node.get("region")}
@@ -122,10 +110,6 @@ def render_download_panel(
         selected_nodes += [n for n in choke_options if ("chokepoints", n["portid"]) in chosen_nodes]
 
     selected_nodes = [n for n in selected_nodes if n["node_kind"] in selected_kinds]
-    st.caption(
-        f"当前范围：{len(selected_nodes):,} 个节点，其中有独立活动统计的节点 "
-        f"{sum(n['statistics_available'] for n in selected_nodes):,} 个。"
-    )
 
     mode = st.radio(
         "时间范围",
@@ -170,7 +154,6 @@ def render_download_panel(
             )
     derived = st.checkbox("附加连续7日和30日均值", value=False, key="pw_download_derived")
     force = st.checkbox("重新读取源站（忽略24小时历史缓存）", value=False, key="pw_download_force")
-    st.caption("港口进口／出口为AIS推算货量；咽喉要道capacity为通行运力。两者口径不同。")
     if not selected_nodes:
         st.info("按条件选择至少一个数据类型与节点。")
         return

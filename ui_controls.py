@@ -1,4 +1,4 @@
-"""Selection controls shared by the sidebar and download page."""
+"""Selection controls used by the data download page."""
 
 from __future__ import annotations
 

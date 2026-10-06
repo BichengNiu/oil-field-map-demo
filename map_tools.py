@@ -12,13 +12,29 @@ screenshotControl.onAdd = () => {
   return el;
 };
 screenshotControl.addTo(map);
+function loadHtml2Canvas() {
+  if (typeof window.html2canvas === 'function') return Promise.resolve();
+  if (!window.html2canvasPromise) {
+    window.html2canvasPromise = new Promise((resolve, reject) => {
+      const script = document.createElement('script');
+      script.src = 'https://unpkg.com/html2canvas@1.4.1/dist/html2canvas.min.js';
+      script.onload = resolve;
+      script.onerror = () => {
+        window.html2canvasPromise = null;
+        reject(new Error('截图组件加载失败'));
+      };
+      document.head.appendChild(script);
+    });
+  }
+  return window.html2canvasPromise;
+}
 document.getElementById('save-map').addEventListener('click', async () => {
   const button = document.getElementById('save-map');
   const status = document.getElementById('save-status');
   button.disabled = true;
   status.textContent = '正在生成…';
   try {
-    if (typeof html2canvas !== 'function') throw new Error('截图组件未加载，请刷新页面');
+    await loadHtml2Canvas();
     await document.fonts.ready;
     await new Promise(resolve => requestAnimationFrame(() => requestAnimationFrame(resolve)));
     const tileImages = [...document.querySelectorAll('#map .leaflet-tile')];
@@ -29,7 +45,7 @@ document.getElementById('save-map').addEventListener('click', async () => {
     if (!tileImages.length || tileImages.some(img => !img.naturalWidth)) {
       throw new Error('底图未加载完成，请等待后重试');
     }
-    const canvas = await html2canvas(document.getElementById('map'), {
+    const canvas = await window.html2canvas(document.getElementById('map'), {
       useCORS: true, allowTaint: false, backgroundColor: '#e8eef4',
       scale: Math.min(window.devicePixelRatio || 1, 2), logging: false,
       imageTimeout: 15000

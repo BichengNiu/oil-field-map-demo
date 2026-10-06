@@ -32,7 +32,7 @@ def refresh_portwatch_data() -> None:
 
 def refresh_vessel_data() -> None:
     """Refresh the public snapshot without restarting the shared AISStream feed."""
-    openwaters_snapshot.clear()
+    _openwaters_base_snapshot.clear()
 
 
 @st.cache_resource(max_entries=1, show_spinner=False, on_release=lambda collector: collector.stop())
@@ -40,15 +40,37 @@ def ais_collector(api_key: str, collector_version: int) -> AIS.AISCollector:
     return AIS.AISCollector(api_key).start()
 
 
-@st.cache_data(ttl=15, show_spinner=False)
-def openwaters_snapshot(max_age_minutes: int, collector_version: int) -> dict:
-    return AIS.openwaters_snapshot(max_age_minutes=max_age_minutes)
+@st.cache_data(ttl=60, max_entries=1, show_spinner=False)
+def _openwaters_base_snapshot(collector_version: int) -> dict:
+    """Fetch and archive one shared two-hour Open Waters snapshot."""
+    snapshot = AIS.openwaters_snapshot(max_age_minutes=120)
+    snapshot["archive_error"] = None
+    try:
+        # Archive the source snapshot once; refreshing display ages must not
+        # trigger another SQLite write.
+        ais_history.archive_reports(snapshot.get("vessels", []))
+    except Exception as exc:
+        snapshot["archive_error"] = f"船位归档失败：{exc}"
+    return snapshot
 
 
-@st.cache_data(ttl=300, max_entries=12, show_spinner=False)
-def archive_public_snapshot(rows: list[dict]) -> int:
-    """Archive each identical polled snapshot at most once per five minutes."""
-    return ais_history.archive_reports(rows)
+def openwaters_snapshot(collector_version: int) -> dict:
+    """Refresh displayed ages on the shared source snapshot."""
+    snapshot = _openwaters_base_snapshot(collector_version)
+    now = AIS.utc_now()
+    vessels = []
+    for vessel in snapshot.get("vessels", []):
+        row = dict(vessel)
+        observed = AIS.parse_utc(row.get("observed_at"))
+        if observed is not None:
+            age_minutes = max(0.0, (now - observed).total_seconds() / 60)
+            row["age_minutes"] = age_minutes
+            row["age_basis"] = "源站观测时间"
+        else:
+            row["age_minutes"] = None
+            row["age_basis"] = None
+        vessels.append(row)
+    return {**snapshot, "vessels": vessels}
 
 
 @st.cache_data(ttl=60, max_entries=8, show_spinner=False)
@@ -90,8 +112,6 @@ def collector_status(collector: AIS.AISCollector | None) -> dict:
 def load_ports(
     available_ports: list[dict],
     selected_day: date,
-    selected_port_countries: list[str],
-    selected_port_ids: list[str],
     rolling_days: int,
     *,
     with_risk: bool = False,
@@ -99,15 +119,8 @@ def load_ports(
     ports = []
     port_error = None
     port_risk_error = None
-    countries = set(selected_port_countries)
-    chosen_ids = set(selected_port_ids)
     try:
-        catalog = [
-            port
-            for port in available_ports
-            if port["country"] in countries and port["portid"] in chosen_ids
-        ]
-        ids = tuple(p["portid"] for p in catalog)
+        ids = tuple(port["portid"] for port in available_ports)
         statistical_ids = tuple(
             sorted(
                 str(port["portid"])
@@ -139,7 +152,7 @@ def load_ports(
             risk_capacity = (
                 {port_id: risk_all.get(port_id) for port_id in ids} if with_risk else None
             )
-            ports = PORTWATCH.decorate(catalog, activity, rolling, risk_capacity)
+            ports = PORTWATCH.decorate(available_ports, activity, rolling, risk_capacity)
     except Exception as exc:
         port_error = str(exc)
 
@@ -149,23 +162,18 @@ def load_ports(
 def load_chokepoints(
     available_chokepoints: list[dict],
     selected_chokepoint_day: date,
-    selected_chokepoint_ids: list[str],
 ) -> tuple[list[dict], str | None]:
     chokepoints = []
     chokepoint_error = None
     try:
-        chosen_chokepoint_ids = set(selected_chokepoint_ids)
-        chokepoint_catalog = [
-            point
-            for point in available_chokepoints
-            if str(point["portid"]) in chosen_chokepoint_ids
-        ]
         chokepoint_ids = tuple(str(point["portid"]) for point in available_chokepoints)
         if chokepoint_ids:
             chokepoint_values_all = PORTWATCH.chokepoint_activity(
                 selected_chokepoint_day, chokepoint_ids
             )
-            chokepoints = PORTWATCH.decorate_chokepoints(chokepoint_catalog, chokepoint_values_all)
+            chokepoints = PORTWATCH.decorate_chokepoints(
+                available_chokepoints, chokepoint_values_all
+            )
     except Exception as exc:
         chokepoint_error = str(exc)
 

@@ -65,16 +65,16 @@ def _table(headers: list[str], rows: list[list[object]], empty: str = "当前范
     return f'<div class="table-wrap"><table><thead><tr>{head}</tr></thead><tbody>{body}</tbody></table></div>'
 
 
-def _metric_cards(cards: list[tuple[str, str, str]]) -> str:
+def _metric_cards(cards: list[tuple[str, str, str]], *, show_notes: bool = True) -> str:
     return '<div class="metric-grid">' + "".join(
         f'<div class="metric-card"><span>{_esc(label)}</span><strong>{_esc(value)}</strong>'
-        f'<small>{_esc(note)}</small></div>'
+        f'{f"<small>{_esc(note)}</small>" if show_notes else ""}</div>'
         for label, value, note in cards
     ) + "</div>"
 
 
-def _line_chart(title: str, series: list[tuple[str, list[tuple[object, object]]]],
-                unit: str = "", height: int = 278) -> str:
+def _time_series_chart(title: str, series: list[tuple[str, list[tuple[object, object]]]],
+                      unit: str = "") -> str:
     parsed: dict[str, dict[date, float | None]] = {}
     all_dates: set[date] = set()
     for label, pairs in series:
@@ -89,63 +89,41 @@ def _line_chart(title: str, series: list[tuple[str, list[tuple[object, object]]]
     if not all_dates:
         return f'<div class="chart-card"><h3>{_esc(title)}</h3><p class="empty">历史记录不可用</p></div>'
 
-    first, last = min(all_dates), max(all_dates)
-    span = max(1, (last - first).days)
-    width = 820
-    left, right, top, bottom = 64, 20, 38, height - 44
-    plot_w, plot_h = width - left - right, bottom - top
+    dates = sorted(all_dates)
     valid_values = [value for values in parsed.values() for value in values.values()
                     if value is not None]
     maximum = max(valid_values, default=1.0)
-    y_max = maximum * 1.12 if maximum > 0 else 1.0
-    y_max = max(y_max, 1.0)
-    pieces = [
-        f'<div class="chart-card"><h3>{_esc(title)}</h3>',
-        f'<svg viewBox="0 0 {width} {height}" role="img" aria-label="{_esc(title)}" '
-        'xmlns="http://www.w3.org/2000/svg">',
-    ]
-    for tick in range(5):
-        y = top + plot_h * tick / 4
-        value = y_max * (1 - tick / 4)
-        pieces.append(f'<line x1="{left}" y1="{y:.1f}" x2="{width-right}" y2="{y:.1f}" class="grid"/>')
-        pieces.append(f'<text x="{left-8}" y="{y+4:.1f}" text-anchor="end" class="axis">{_fmt(value, 0)}</text>')
-    tick_count = min(6, max(2, len(all_dates)))
-    for tick in range(tick_count):
-        day = first + timedelta(days=round(span * tick / (tick_count - 1)))
-        x = left + plot_w * (day - first).days / span
-        pieces.append(f'<text x="{x:.1f}" y="{height-14}" text-anchor="middle" class="axis">{day.strftime("%m-%d")}</text>')
-    for index, (label, values) in enumerate(parsed.items()):
-        color = COLORS[index % len(COLORS)]
-        segments: list[list[tuple[float, float]]] = []
-        current: list[tuple[float, float]] = []
-        day = first
-        while day <= last:
-            value = values.get(day)
-            if value is None:
-                if current:
-                    segments.append(current)
-                    current = []
-            else:
-                x = left + plot_w * (day - first).days / span
-                y = top + plot_h * (1 - value / y_max)
-                current.append((x, y))
-            day += timedelta(days=1)
-        if current:
-            segments.append(current)
-        for segment in segments:
-            if len(segment) == 1:
-                x, y = segment[0]
-                pieces.append(f'<circle cx="{x:.1f}" cy="{y:.1f}" r="2.5" fill="{color}"/>')
-            else:
-                coords = " ".join(f"{x:.1f},{y:.1f}" for x, y in segment)
-                pieces.append(f'<polyline points="{coords}" fill="none" stroke="{color}" '
-                              'stroke-width="2.2" stroke-linejoin="round" stroke-linecap="round"/>')
-    pieces.append("</svg><div class=\"legend\">")
+    y_max = max(maximum * 1.12, 1.0)
+    tick_count = min(6, max(2, len(dates)))
+    label_indexes = sorted({round(index * (len(dates) - 1) / (tick_count - 1))
+                            for index in range(tick_count)})
+    pieces = [f'<div class="chart-card"><h3>{_esc(title)}</h3>', '<div class="chart-legend">']
     pieces.extend(
         f'<span><i style="background:{COLORS[index % len(COLORS)]}"></i>{_esc(label)}</span>'
-        for index, (label, _) in enumerate(series)
+        for index, label in enumerate(parsed)
     )
-    pieces.append(f'</div><small class="unit">{_esc(unit)} · 日期按 UTC；缺报保留为空</small></div>')
+    pieces.append(
+        f'</div><small class="chart-scale">纵轴范围：0–{_fmt(y_max, 1)} {_esc(unit)}</small>'
+        '<div class="chart-series">'
+    )
+    for index, (label, values) in enumerate(parsed.items()):
+        color = COLORS[index % len(COLORS)]
+        pieces.append(f'<div class="chart-series-row"><span class="chart-series-label">{_esc(label)}</span>')
+        pieces.append('<div class="chart-bars" role="img" aria-label="' + _esc(label) + '">')
+        for day in dates:
+            value = values.get(day)
+            if value is None:
+                pieces.append(f'<span class="chart-bar missing" title="{day.isoformat()}：无记录"></span>')
+                continue
+            bar_height = max(1.0, min(100.0, value / y_max * 100))
+            pieces.append(
+                f'<span class="chart-bar" style="height:{bar_height:.2f}%;background:{color}" '
+                f'title="{day.isoformat()}：{_fmt(value, 1)}"></span>'
+            )
+        pieces.append('</div></div>')
+    pieces.append('</div><div class="chart-date-labels">')
+    pieces.extend(f'<span>{dates[index].strftime("%m-%d")}</span>' for index in label_indexes)
+    pieces.append(f'</div><small class="unit">{_esc(unit)} · 按同一量程展示；日期按 UTC，缺报保留为空</small></div>')
     return "".join(pieces)
 
 
@@ -218,11 +196,44 @@ def _change_table(choke_rows: list[dict], choke_catalog: list[dict],
                    "最近7日均值（艘次/日）", "环比变化"], rows)
 
 
-def _overview_svg(ports: list[dict], chokes: list[dict], assets: list[dict],
+def _mercator_pixel(lat: float, lon: float, zoom: int) -> tuple[float, float]:
+    lat = min(85.05112878, max(-85.05112878, lat))
+    scale = 256 * (2**zoom)
+    x = (lon + 180) / 360 * scale
+    sine = math.sin(math.radians(lat))
+    y = (0.5 - math.log((1 + sine) / (1 - sine)) / (4 * math.pi)) * scale
+    return x, y
+
+
+def _basemap_tiles(lon_min: float, lon_max: float, lat_min: float, lat_max: float) -> str:
+    """Place the same Esri street-map tiles as the interactive map in print HTML."""
+    zoom = 5
+    left, bottom = _mercator_pixel(lat_min, lon_min, zoom)
+    right, top = _mercator_pixel(lat_max, lon_max, zoom)
+    width, height = right - left, bottom - top
+    first_x, last_x = math.floor(left / 256), math.floor((right - 1) / 256)
+    first_y, last_y = math.floor(top / 256), math.floor((bottom - 1) / 256)
+    tiles = []
+    for tile_y in range(first_y, last_y + 1):
+        for tile_x in range(first_x, last_x + 1):
+            x = (tile_x * 256 - left) / width * 100
+            y = (tile_y * 256 - top) / height * 100
+            tile_width = 256 / width * 100
+            tile_height = 256 / height * 100
+            tiles.append(
+                f'<img class="map-tile" loading="eager" alt="" '
+                f'src="https://server.arcgisonline.com/ArcGIS/rest/services/World_Street_Map/'
+                f'MapServer/tile/{zoom}/{tile_y}/{tile_x}" '
+                f'style="left:{x:.4f}%;top:{y:.4f}%;width:{tile_width:.4f}%;'
+                f'height:{tile_height:.4f}%">'
+            )
+    return "".join(tiles)
+
+
+def _overview_map(ports: list[dict], chokes: list[dict], assets: list[dict],
                   regions: dict[str, tuple[float, float, float, float]],
-                  vessels: list[dict] | None = None) -> str:
-    width, height = 860, 430
-    left, right, top, bottom = 72, 28, 28, 52
+                  vessels: list[dict] | None = None,
+                  include_basemap: bool = False) -> str:
     coordinates = []
     for row in ports + chokes + (vessels or []):
         coordinates.append((_number(row.get("lat")), _number(row.get("lon"))))
@@ -245,61 +256,115 @@ def _overview_svg(ports: list[dict], chokes: list[dict], assets: list[dict],
         lon_min, lon_max = lon_min - lon_padding, lon_max + lon_padding
     else:
         lon_min, lon_max, lat_min, lat_max = 29.0, 64.0, 8.0, 34.0
-    plot_w, plot_h = width - left - right, height - top - bottom
+    lat_min = min(85.0, max(-85.0, lat_min))
+    lat_max = min(85.0, max(-85.0, lat_max))
+    # The cover map is printed on an A4 portrait page. Expand its longitude
+    # bounds to make a landscape frame while preserving the projected geometry.
+    if include_basemap:
+        vertical_span = (
+            math.log(math.tan(math.pi / 4 + math.radians(lat_max) / 2))
+            - math.log(math.tan(math.pi / 4 + math.radians(lat_min) / 2))
+        )
+        target_lon_span = math.degrees(vertical_span * 1.65)
+        if lon_max - lon_min < target_lon_span:
+            center = (lon_min + lon_max) / 2
+            lon_min, lon_max = center - target_lon_span / 2, center + target_lon_span / 2
+    lon_span = lon_max - lon_min
+    mercator_top = math.log(math.tan(math.pi / 4 + math.radians(lat_max) / 2))
+    mercator_bottom = math.log(math.tan(math.pi / 4 + math.radians(lat_min) / 2))
+    mercator_span = mercator_top - mercator_bottom
+    aspect = math.radians(lon_span) / mercator_span
+
     def xy(lat: object, lon: object) -> tuple[float, float] | None:
         yv, xv = _number(lat), _number(lon)
         if yv is None or xv is None or not (lat_min <= yv <= lat_max and lon_min <= xv <= lon_max):
             return None
-        return left + (xv - lon_min) / (lon_max - lon_min) * plot_w, top + (lat_max - yv) / (lat_max - lat_min) * plot_h
-    parts = [f'<svg viewBox="0 0 {width} {height}" role="img" aria-label="监测水域与节点空间分布示意" xmlns="http://www.w3.org/2000/svg">',
-             f'<rect x="{left}" y="{top}" width="{plot_w}" height="{plot_h}" fill="#f8fafc" stroke="#94a3b8"/>']
-    lon_span, lat_span = lon_max - lon_min, lat_max - lat_min
-    lon_step = 10 if lon_span > 40 else 5 if lon_span > 20 else 2 if lon_span > 10 else 1
-    lat_step = 10 if lat_span > 40 else 5 if lat_span > 20 else 2 if lat_span > 10 else 1
-    lon_start = math.ceil(lon_min / lon_step) * lon_step
-    lat_start = math.ceil(lat_min / lat_step) * lat_step
-    for lon in range(lon_start, math.floor(lon_max) + 1, lon_step):
-        x = left + (lon - lon_min) / (lon_max - lon_min) * plot_w
-        parts.append(f'<line x1="{x:.1f}" y1="{top}" x2="{x:.1f}" y2="{top+plot_h}" class="grid"/>')
-        parts.append(f'<text x="{x:.1f}" y="{height-25}" text-anchor="middle" class="axis">{lon}°E</text>')
-    for lat in range(lat_start, math.floor(lat_max) + 1, lat_step):
-        y = top + (lat_max - lat) / (lat_max - lat_min) * plot_h
-        parts.append(f'<line x1="{left}" y1="{y:.1f}" x2="{left+plot_w}" y2="{y:.1f}" class="grid"/>')
-        parts.append(f'<text x="{left-8}" y="{y+4:.1f}" text-anchor="end" class="axis">{lat}°N</text>')
-    for region, bounds in regions.items():
-        south, north, west, east = bounds
-        p1, p2 = xy(south, west), xy(north, east)
-        if p1 and p2:
-            x1, y1 = p1
-            x2, y2 = p2
-            parts.append(f'<rect x="{x1:.1f}" y="{y2:.1f}" width="{x2-x1:.1f}" height="{y1-y2:.1f}" '
-                         'fill="#bfdbfe" fill-opacity=".08" stroke="#64748b" stroke-dasharray="4 4"/>')
-            parts.append(f'<text x="{x1+4:.1f}" y="{y2+13:.1f}" class="zone-label">{_esc(region)}</text>')
-    for port in ports:
-        point = xy(port.get("lat"), port.get("lon"))
+        yv = min(85.0, max(-85.0, yv))
+        projected_y = math.log(math.tan(math.pi / 4 + math.radians(yv) / 2))
+        return (
+            (xv - lon_min) / lon_span * 100,
+            (mercator_top - projected_y) / mercator_span * 100,
+        )
+
+    parts = [
+        f'<div class="overview-map" role="img" aria-label="监测水域地图与监测对象位置" '
+        f'style="aspect-ratio:{aspect:.4f}/1"><div class="overview-map-plot">'
+    ]
+    if include_basemap:
+        parts.append(_basemap_tiles(lon_min, lon_max, lat_min, lat_max))
+    choke_leaders = []
+    choke_labels = []
+    for choke in chokes:
+        point = xy(choke.get("lat"), choke.get("lon"))
+        if not point:
+            continue
+        x, y = point
+        name = choke.get("name_cn") or choke.get("name") or choke.get("portname") or "咽喉点"
+        point_id = str(choke.get("portid", ""))
+        dx, dy, align = {
+            "chokepoint1": (5.5, -5.0, "left"),  # 苏伊士
+            "chokepoint4": (4.5, -7.0, "left"),  # 曼德
+            "chokepoint6": (-4.5, -5.5, "right"),  # 霍尔木兹
+        }.get(point_id, (5.0 if x < 58 else -5.0, -6.0, "left" if x < 58 else "right"))
+        elbow_x, elbow_y = x + dx * 0.55, y + dy * 0.35
+        end_x, end_y = x + dx, y + dy
+        choke_leaders.append(
+            f'<path d="M {x*10:.2f} {y*10:.2f} L {elbow_x*10:.2f} {elbow_y*10:.2f} '
+            f'L {end_x*10:.2f} {end_y*10:.2f}"/>'
+        )
+        choke_labels.append(
+            f'<span class="choke-label {align}" style="left:{end_x:.3f}%;top:{end_y:.3f}%">'
+            f'{_esc(name)}</span>'
+        )
+    if choke_leaders:
+        parts.append(
+            '<svg class="choke-leaders" viewBox="0 0 1000 1000" preserveAspectRatio="none" '
+            'aria-hidden="true">' + "".join(choke_leaders) + '</svg>'
+        )
+
+    def append_point(kind: str, label: object, lat: object, lon: object,
+                     count: int = 1) -> None:
+        point = xy(lat, lon)
         if point:
             x, y = point
-            parts.append(f'<rect x="{x-3:.1f}" y="{y-3:.1f}" width="6" height="6" fill="#1769aa"/>')
+            title = f"{count} 艘 AIS 船位" if kind == "vessel" else str(label)
+            parts.append(
+                f'<span class="map-point {kind}" title="{_esc(title)}" '
+                f'style="left:{x:.3f}%;top:{y:.3f}%"></span>'
+            )
+
+    for port in ports:
+        append_point("port", port.get("name_cn") or port.get("name") or port.get("portname") or "港口",
+                     port.get("lat"), port.get("lon"))
     for asset in assets:
         if not asset.get("map_drawable", True):
             continue
-        point = xy(asset.get("map_lat", asset.get("lat")),
-                   asset.get("map_lon", asset.get("lon")))
-        if point:
-            x, y = point
-            dash = ' stroke="#7c2d12" stroke-dasharray="2 2"' if asset.get("map_is_proxy") else ""
-            parts.append(f'<polygon points="{x:.1f},{y-4:.1f} {x+4:.1f},{y:.1f} {x:.1f},{y+4:.1f} {x-4:.1f},{y:.1f}" fill="#d97706"{dash}/>')
+        append_point("asset", asset.get("name_cn") or asset.get("name") or "油气资产",
+                     asset.get("map_lat", asset.get("lat")),
+                     asset.get("map_lon", asset.get("lon")))
     for choke in chokes:
-        point = xy(choke.get("lat"), choke.get("lon"))
-        if point:
-            x, y = point
-            parts.append(f'<circle cx="{x:.1f}" cy="{y:.1f}" r="5" fill="#7c3aed"/>')
-    for vessel in (vessels or []):
+        append_point("choke", choke.get("name_cn") or choke.get("name") or "咽喉点",
+                     choke.get("lat"), choke.get("lon"))
+    parts.extend(choke_labels)
+
+    vessel_cells: dict[tuple[int, int], list[float | int]] = {}
+    for vessel in vessels or []:
         point = xy(vessel.get("lat"), vessel.get("lon"))
         if point:
             x, y = point
-            parts.append(f'<circle cx="{x:.1f}" cy="{y:.1f}" r="1.8" fill="#14866d" fill-opacity=".65"/>')
-    parts.append("</svg>")
+            cell = (math.floor(x / 4), math.floor(y / 5))
+            bucket = vessel_cells.setdefault(cell, [0, 0.0, 0.0])
+            bucket[0] += 1
+            bucket[1] += x
+            bucket[2] += y
+    for count, x_sum, y_sum in vessel_cells.values():
+        avg_x, avg_y = x_sum / count, y_sum / count
+        projected_y = mercator_top - avg_y / 100 * mercator_span
+        avg_lat = math.degrees(2 * math.atan(math.exp(projected_y)) - math.pi / 2)
+        avg_lon = lon_min + avg_x / 100 * lon_span
+        append_point("vessel", "AIS船位", avg_lat, avg_lon, count=int(count))
+
+    parts.append('</div></div>')
     return "".join(parts)
 
 
@@ -347,7 +412,9 @@ def build_report_html(
     dated_calls = [p for p in latest_ports if _number(p.get("portcalls")) is not None]
     catalog_chokes = len(choke_catalog)
     report_assets = list(assets)
-    map_html = _overview_svg(port_catalog, choke_catalog, report_assets, regions, vessels)
+    map_html = _overview_map(
+        port_catalog, choke_catalog, report_assets, regions, vessels, include_basemap=True
+    )
     cover_cards = monitoring_cards.cards_html(monitoring_summary_cards or monitoring_cards.build_cards(
         port_catalog, choke_catalog, port_history, choke_history, vessels,
         _date(port_day), _date(choke_day), vessel_day=timestamp.date(), assets=report_assets,
@@ -362,20 +429,20 @@ def build_report_html(
         ],
     )
     overview = (
-        f'<div class="report-date-rule"><span>生成时间：{timestamp.strftime("%Y年%m月")}</span></div>'
-        + '<p class="report-sponsor">中国驻阿联酋大使馆、国家发改委国家信息中心</p>'
-        + f'<div class="report-meta"><span>报告范围：{_esc(scope_label)}</span></div>'
-        + '<h3>能源资产与战略通道监测范围</h3>'
+        '<div class="report-masthead">'
+        + '<span class="report-sponsor">中国驻阿联酋大使馆、国家发改委国家信息中心</span>'
+        + f'<span class="report-generated">生成时间：{timestamp.strftime("%Y年%m月")}</span>'
+        + '</div>'
+        + f'<h1 class="report-title">{_esc(TITLE)}</h1>'
+        + cover_cards
         + f'<div class="map-frame">{map_html}</div>'
         + '<div class="map-legend">'
-          '<span><i style="background:#1769aa"></i>港口</span>'
-          '<span><i style="background:#7c3aed"></i>咽喉点</span>'
-          '<span><i style="background:#d97706"></i>油气资产</span>'
-          '<span><i style="background:#14866d"></i>AIS船位</span>'
+          '<span><i class="legend-symbol port"></i>港口</span>'
+          '<span><i class="legend-symbol choke"></i>咽喉点</span>'
+          '<span><i class="legend-symbol asset"></i>油气资产</span>'
+          '<span><i class="legend-symbol vessel"></i>船舶（网格聚合点）</span>'
+          '<span>底图 Tiles © Esri</span>'
           '</div>'
-        + '<p class="note">点位按经纬度绘制，区域框为项目监测范围；'
-          '空间分布示意不代表海岸线或实际航迹。</p>'
-        + cover_cards
         + cover_table
     )
 
@@ -392,8 +459,8 @@ def build_report_html(
     choke_content = (
         '<p class="note">按通道分别呈现每日源站记录。不同通道的船次不相加；承载能力为 PortWatch 估算口径。</p>'
         + '<div class="chart-grid">'
-        + _line_chart("咽喉点每日通过船次", n_series, "艘次/日")
-        + _line_chart("咽喉点估算承载能力", capacity_series, "载重吨/日（源站口径）")
+        + _time_series_chart("咽喉点每日通过船次", n_series, "艘次/日")
+        + _time_series_chart("咽喉点估算承载能力", capacity_series, "载重吨/日（源站口径）")
         + '</div><h3>最近7日与前7日</h3>'
         + _change_table(choke_history, choke_catalog, choke_day)
     )
@@ -418,8 +485,8 @@ def build_report_html(
         '<p class="note">缺报日留空。进出口图按当日有源记录的点位合计，并在表中列出覆盖点位数；'
         '油气货量为 AIS 推算，不是海关实测。</p>'
         + '<div class="chart-grid">'
-        + _line_chart("重点港口每日有效进港艘次", port_series, "艘次/日")
-        + _line_chart("港口估算进出口货量", [
+        + _time_series_chart("重点港口每日有效进港艘次", port_series, "艘次/日")
+        + _time_series_chart("港口估算进出口货量", [
             ("进口", imports), ("出口", exports)], "万吨/日")
         + '</div><h3>港口记录覆盖与最新值</h3>'
     )
@@ -462,8 +529,8 @@ def build_report_html(
         ])
     oil_content = (
         '<p class="note">只列公开披露且可定位的战略节点；实际产量、产能、目标与历史值按资产逐项区分，'
-        '不跨口径相加。虚线边框代理点的坐标仅用于定位。</p>'
-        + '<div class="map-frame">' + _overview_svg([], [], report_assets, regions) + '</div>'
+        '不跨口径相加。坐标精度以来源标注为准；未核实独立位置的资产仅列目录。</p>'
+        + '<div class="map-frame">' + _overview_map([], [], report_assets, regions) + '</div>'
         + '<h3>战略油气资产（最多20项）</h3>'
         + _table(["资产", "国家", "状态", "产量／注明范围的合计参考", "其他指标", "披露日期", "合计／权益口径说明"], assets_table_rows)
         + '<h3>产量来源与检索结论（对应以上资产）</h3>'
@@ -496,7 +563,7 @@ def build_report_html(
             ("油轮/液货船", str(sum(row.get("category") == "tanker" for row in vessels)) if vessels else "—", "按AIS基础船型分类"),
             ("数据来源", ais_status, "以当前会话可用状态为准"),
         ])
-        + '<div class="map-frame">' + _overview_svg([], [], [], regions, vessels) + '</div>'
+        + '<div class="map-frame">' + _overview_map([], [], [], regions, vessels) + '</div>'
         + _distribution(vessels)
     )
 
@@ -524,50 +591,24 @@ def build_report_html(
         + _section("AIS 船位观测", ais_content, page=True)
         + _section("数据来源与口径", source_content, page=True)
     )
-    return f'<div class="print-report"><header><h1>{_esc(TITLE)}</h1>{body}</header></div>'
-
-
-def build_standalone_document(report_html: str) -> str:
-    """Wrap the report as a visible, browser-printable HTML document."""
-    standalone_css = PRINT_CSS.replace(
-        ".print-report { display: none;",
-        ".print-report { display: block;",
-        1,
-    )
-    standalone_css += """
-<style>
-body { margin: 0; padding: 18px; background: #eef2f6; }
-.print-report { max-width: 1100px; margin: 0 auto; padding: 28px; background: #fff; }
-.standalone-print-action { max-width: 1100px; margin: 0 auto 12px; text-align: right; }
-.standalone-print-action button { padding: 9px 14px; border: 0; border-radius: 6px;
-  color: #fff; background: #1769aa; font-size: 14px; cursor: pointer; }
-@media print {
-  body { padding: 0; background: #fff; }
-  .print-report { max-width: none; margin: 0; padding: 0; }
-  .standalone-print-action { display: none !important; }
-}
-</style>
-"""
-    return (
-        '<!doctype html><html lang="zh-CN"><head><meta charset="utf-8">'
-        '<meta name="viewport" content="width=device-width, initial-scale=1">'
-        f'<title>{_esc(TITLE)}</title>{standalone_css}</head><body>'
-        '<div class="standalone-print-action"><button type="button" '
-        'onclick="window.print()">打印 / 另存为 PDF</button></div>'
-        f'{report_html}</body></html>'
-    )
+    return f'<div class="print-report">{body}</div>'
 
 
 PRINT_CSS = """
 <style>
-.print-report { display: none; color: #17212b; background: #fff; font: 10pt/1.38 Arial, "Noto Sans CJK SC", sans-serif; }
+.print-report { display: none; color: #17212b; background: #fff; font: 10pt/1.38 Arial, "Noto Sans CJK SC", sans-serif; -webkit-print-color-adjust:exact; print-color-adjust:exact; }
 .print-report * { box-sizing: border-box; }
-.print-report h1 { text-align: center; font-size: 22pt; margin: 0 0 4mm; line-height: 1.2; }
-.report-date-rule { position:relative; border-top:1px solid #9aa7b4; text-align:center; margin:0 0 3mm; height:4mm; }
-.report-date-rule span { position:relative; top:-.7em; padding:0 4mm; background:#fff; font-size:9pt; }
-.report-sponsor { margin:0 0 3mm; text-align:center; font-size:10pt; font-weight:400!important; }
+@media print { .print-report { display: block !important; } }
+.report-masthead { display:flex; justify-content:space-between; align-items:baseline; gap:4mm; border-bottom:1px solid #9aa7b4; padding-bottom:2mm; margin-bottom:2mm; font-size:9pt; }
+.report-sponsor { text-align:left; font-size:9pt; font-weight:400!important; }
+.report-generated { text-align:right; white-space:nowrap; }
+.print-report h1.report-title { text-align:left; font-size:15pt; margin:0 0 2mm; line-height:1.15; }
 .map-legend { display:flex; justify-content:center; flex-wrap:wrap; gap:2mm 5mm; font-size:8pt; margin:1mm 0 2mm; }
-.map-legend i { display:inline-block; width:2.5mm; height:2.5mm; margin-right:1mm; vertical-align:middle; }
+.map-legend .legend-symbol { display:inline-flex; width:3mm; height:3mm; margin-right:1mm; vertical-align:middle; align-items:center; justify-content:center; }
+.legend-symbol.port { background:#7c3aed; clip-path:polygon(25% 0,75% 0,100% 50%,75% 100%,25% 100%,0 50%); }
+.legend-symbol.choke { border:0.45mm solid #7c3aed; border-radius:50%; background:#fff; }
+.legend-symbol.asset { background:#111; clip-path:polygon(50% 0,0 100%,100% 100%); }
+.legend-symbol.vessel { width:2mm; height:2mm; border-radius:50%; background:#dc2626; }
 .print-report h2 { font-size: 15pt; border-bottom: 1px solid #9aa7b4; padding-bottom: 2mm; margin: 0 0 4mm; }
 .print-report h3 { font-size: 10.5pt; margin: 4mm 0 2mm; }
 .report-page { break-before: page; page-break-before: always; }
@@ -575,40 +616,43 @@ PRINT_CSS = """
 .print-report .monitoring-card { border:1px solid #ccd5de; border-radius:2mm; padding:3mm; min-width:0; }
 .print-report .monitoring-card span, .print-report .monitoring-card small { display:block; color:#516171; font-size:8pt; overflow-wrap:anywhere; }
 .print-report .monitoring-card strong { display:block; font-size:14pt; margin:1.5mm 0; }
-.metric-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 3mm; margin: 4mm 0; }
-.metric-card { border: 1px solid #ccd5de; border-radius: 2mm; padding: 3mm; min-width: 0; }
+.metric-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 2mm; margin: 2mm 0 3mm; }
+.metric-card { border: 1px solid #ccd5de; border-radius: 2mm; padding: 2mm; min-width: 0; }
 .metric-card span, .metric-card small { display: block; color: #516171; font-size: 8pt; }
-.metric-card strong { display: block; font-size: 17pt; margin: 1.5mm 0; overflow-wrap: anywhere; }
-.report-meta { display:flex; justify-content:space-between; gap:4mm; margin-bottom:4mm; font-size:9pt; }
+.metric-card strong { display: block; font-size: 15pt; margin: .5mm 0 0; overflow-wrap: anywhere; }
 .chart-grid { display:grid; grid-template-columns:1fr 1fr; gap:4mm; align-items:start; }
 .chart-card { border:1px solid #d6dde5; padding:2mm; break-inside:avoid; page-break-inside:avoid; min-width:0; }
 .chart-card h3 { margin:1mm 1mm 0; }
-.chart-card svg, .map-frame svg { width:100%; height:auto; display:block; }
-.grid { stroke:#dce3e9; stroke-width:1; }
-.axis { fill:#52606d; font-size:11px; }
-.zone-label { fill:#435466; font-size:10px; }
-.legend { display:flex; flex-wrap:wrap; gap:2mm 4mm; font-size:8pt; margin:1mm 2mm; }
-.legend i { display:inline-block; width:3mm; height:1.5mm; margin-right:1mm; }
+.chart-legend { display:flex; flex-wrap:wrap; gap:1mm 3mm; margin:1mm; font-size:7pt; }
+.chart-legend i { display:inline-block; width:2mm; height:2mm; margin-right:1mm; }
+.chart-scale { display:block; margin:0 1mm; color:#52606d; font-size:6.5pt; }
+.chart-series-row { display:flex; align-items:center; gap:2mm; margin:1mm 0; }
+.chart-series-label { width:20%; min-width:0; overflow:hidden; text-overflow:ellipsis; white-space:nowrap; font-size:7pt; }
+.chart-bars { display:flex; align-items:flex-end; flex:1; height:16mm; min-width:0; border-bottom:1px solid #9aa7b4; background:repeating-linear-gradient(to bottom, transparent 0, transparent calc(25% - 1px), #e8edf2 25%); }
+.chart-bar { display:block; flex:1 1 0; min-width:0; margin-right:.35px; }
+.chart-bar.missing { height:1px; background:transparent !important; border-top:1px dotted #aab4be; }
+.chart-date-labels { display:flex; justify-content:space-between; margin-left:22%; color:#52606d; font-size:6.5pt; }
 .unit,.note,.empty { color:#52606d; font-size:8pt; }
 .note { margin:2mm 0; }
-.map-frame { border:1px solid #d6dde5; padding:2mm; break-inside:avoid; page-break-inside:avoid; }
+.map-frame { border:1px solid #d6dde5; padding:1mm; break-inside:avoid; page-break-inside:avoid; }
+.overview-map { position:relative; width:100%; background:#d6eef4; border:1px solid #94a3b8; }
+.overview-map-plot { position:absolute; inset:0; overflow:hidden; background:#d6eef4; }
+.map-tile { position:absolute; z-index:0; max-width:none; }
+.choke-leaders { position:absolute; inset:0; width:100%; height:100%; overflow:visible; z-index:2; pointer-events:none; }
+.choke-leaders path { fill:none; stroke:#475569; stroke-width:1.8; vector-effect:non-scaling-stroke; }
+.map-point { position:absolute; z-index:3; display:block; transform:translate(-50%,-50%); }
+.map-point.port { width:1.8mm; height:1.8mm; background:#7c3aed; clip-path:polygon(25% 0,75% 0,100% 50%,75% 100%,25% 100%,0 50%); }
+.map-point.asset { width:1.6mm; height:1.6mm; background:#111; clip-path:polygon(50% 0,0 100%,100% 100%); }
+.map-point.choke { width:2.1mm; height:2.1mm; border:.4mm solid #7c3aed; border-radius:50%; background:#fff; }
+.choke-label { position:absolute; z-index:4; transform:translateY(-100%); color:#1f2937; font-size:7.5pt; line-height:1.15; white-space:nowrap; font-weight:600; text-shadow:0 0 2px #fff,0 0 2px #fff,0 0 3px #fff; }
+.choke-label.left { transform:translate(0,-100%); }
+.choke-label.right { transform:translate(-100%,-100%); }
+.map-point.vessel { width:1.35mm; height:1.35mm; border-radius:50%; background:#dc2626; }
 .table-wrap { overflow:visible; }
 .print-report table { width:100%; border-collapse:collapse; font-size:8pt; margin:2mm 0 4mm; }
 .print-report th,.print-report td { border:1px solid #cbd5df; padding:1.3mm 1.6mm; text-align:left; vertical-align:top; overflow-wrap:anywhere; }
 .print-report th { background:#eef2f6; font-weight:700; }
 .print-report thead { display:table-header-group; }
 .print-report tr { break-inside:avoid; page-break-inside:avoid; }
-@page { size:A4 portrait; margin:10mm 10mm 14mm; }
-@media print {
-  @page { @bottom-center { content:"第 " counter(page) " 页"; color:#64748b; font-size:8pt; } }
-  [data-testid="stTabs"] { display:none!important; }
-  html,body,#root,.stApp,[data-testid="stAppViewContainer"],[data-testid="stMain"],[data-testid="stMainBlockContainer"] { height:auto!important; min-height:0!important; background:#fff!important; }
-  [data-testid="stSidebar"],[data-testid="stHeader"],[data-testid="stToolbar"],[data-testid="stDecoration"],[data-testid="stStatusWidget"],[data-testid="stToast"],[data-testid="stToastContainer"] { display:none!important; }
-  [data-testid="stMainBlockContainer"] > div[data-testid="stElementContainer"]:not(:has(.print-report)) { display:none!important; }
-  [data-testid="stMainBlockContainer"] > div[data-testid="stElementContainer"]:has(.print-report) { display:block!important; width:100%!important; max-width:none!important; margin:0!important; padding:0!important; }
-  .print-report { display:block!important; color:#17212b!important; width:100%!important; }
-  .stApp,[data-testid="stAppViewContainer"],[data-testid="stMainBlockContainer"] { overflow:visible!important; }
-  a { color:inherit!important; text-decoration:none!important; }
-}
 </style>
 """
