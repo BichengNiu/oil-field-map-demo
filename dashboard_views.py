@@ -12,6 +12,9 @@ import csv_export
 import dashboard_rows
 import field_catalog as CATALOG
 import map_renderer
+import monitoring_cards
+from zoneinfo import ZoneInfo
+from datetime import datetime
 import portwatch as PORTWATCH
 import print_report
 import report_data
@@ -22,7 +25,7 @@ from map_popups import asset_popup, chokepoint_popup, port_popup, vessel_popup
 ASSETS = CATALOG.ASSETS
 
 
-def render_map_panel(state: DashboardViewState) -> None:
+def render_map_panel(state: DashboardViewState):
     all_positions = state.live_positions
     filtered_vessels = state.filtered_vessels
     map_vessels = filtered_vessels if "vessels" in state.visible_map_layers else []
@@ -60,6 +63,7 @@ def render_map_panel(state: DashboardViewState) -> None:
         )
     if state.unlocated_port_count:
         st.info(f"当前筛选有 {state.unlocated_port_count} 个港口尚无可靠坐标，仅列于‘港口’目录。")
+    card_slot = st.empty()
     st.iframe(
         map_renderer.build_map_html(
             state.map_assets,
@@ -80,6 +84,8 @@ def render_map_panel(state: DashboardViewState) -> None:
         ),
         height=735,
     )
+
+    return card_slot
 
 
 def render_ais_panel(state: DashboardViewState) -> None:
@@ -397,7 +403,7 @@ def render_method_panel() -> None:
 
 
 def render_print_panel(
-    available_ports: list[dict], available_chokepoints: list[dict], state: DashboardViewState
+    available_ports: list[dict], available_chokepoints: list[dict], state: DashboardViewState, card_slot=None
 ) -> None:
     selected_day = state.selected_day
     selected_chokepoint_day = state.selected_chokepoint_day
@@ -449,6 +455,30 @@ def render_print_panel(
                 )
         except Exception as exc:
             report_errors.append(f"chokepoints 历史窗口：{type(exc).__name__}: {exc}")
+
+    comparison_ports, comparison_chokes = [], []
+    for kind, ids, day, target in (
+        ("ports", report_port_ids, selected_day, comparison_ports),
+        ("chokepoints", report_choke_ids, selected_chokepoint_day, comparison_chokes),
+    ):
+        if ids and day:
+            try:
+                target.extend(report_data.comparison_history(kind, ids, day.isoformat(), report_revision))
+            except Exception as exc:
+                report_errors.append(f"{kind} 同比记录：{type(exc).__name__}: {exc}")
+    try:
+        vessel_history = report_data.card_vessel_history()
+    except Exception as exc:
+        vessel_history = []
+        report_errors.append(f"AIS统计档案：{type(exc).__name__}: {exc}")
+    cards = monitoring_cards.build_cards(
+        report_port_catalog, report_choke_catalog,
+        report_port_history + comparison_ports, report_choke_history + comparison_chokes,
+        report_vessels, selected_day, selected_chokepoint_day, vessel_history,
+        datetime.now(ZoneInfo("Asia/Shanghai")).date(),
+    )
+    if card_slot is not None:
+        card_slot.html(monitoring_cards.cards_html(cards))
 
     report_latest_ports = report_data.merge_latest_rows(report_port_catalog, report_port_history)
 

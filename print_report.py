@@ -6,6 +6,7 @@ from collections import Counter, defaultdict
 from datetime import date, datetime, timedelta
 from html import escape
 import math
+import monitoring_cards
 from zoneinfo import ZoneInfo
 
 from portwatch_records import latest_by_node
@@ -333,6 +334,7 @@ def build_report_html(
     ais_status: str,
     ais_source_note: str,
     errors: list[str] | None = None,
+    monitoring_summary_cards: list | None = None,
 ) -> str:
     """Return self-contained HTML for browser preview and print/PDF."""
     timestamp = generated_at or datetime.now(ZoneInfo("Asia/Shanghai"))
@@ -346,13 +348,10 @@ def build_report_html(
     catalog_chokes = len(choke_catalog)
     report_assets = list(assets)
     map_html = _overview_svg(port_catalog, choke_catalog, report_assets, regions, vessels)
-    cover_cards = _metric_cards([
-        ("港口监测点", str(len(port_catalog)), f"其中独立统计点 {len(stat_ports)} 个"),
-        ("战略通道", str(catalog_chokes), "逐节点分别报告，不合并解释"),
-        ("AIS快照船位", str(len(vessels)) if vessels else "—",
-         "公开观测样本，不代表区域全量船舶"),
-        ("油气资产节点", str(len(report_assets)), "目录节点数，指标口径分别列示"),
-    ])
+    cover_cards = monitoring_cards.cards_html(monitoring_summary_cards or monitoring_cards.build_cards(
+        port_catalog, choke_catalog, port_history, choke_history, vessels,
+        _date(port_day), _date(choke_day), vessel_day=timestamp.date(),
+    ))
     cover_table = _table(
         ["数据", "源站观测日 / 状态", "说明"],
         [
@@ -572,6 +571,10 @@ PRINT_CSS = """
 .print-report h2 { font-size: 15pt; border-bottom: 1px solid #9aa7b4; padding-bottom: 2mm; margin: 0 0 4mm; }
 .print-report h3 { font-size: 10.5pt; margin: 4mm 0 2mm; }
 .report-page { break-before: page; page-break-before: always; }
+.print-report .monitoring-cards { display:grid; grid-template-columns:repeat(4,1fr); gap:3mm; margin:4mm 0; }
+.print-report .monitoring-card { border:1px solid #ccd5de; border-radius:2mm; padding:3mm; min-width:0; }
+.print-report .monitoring-card span, .print-report .monitoring-card small { display:block; color:#516171; font-size:8pt; overflow-wrap:anywhere; }
+.print-report .monitoring-card strong { display:block; font-size:14pt; margin:1.5mm 0; }
 .metric-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 3mm; margin: 4mm 0; }
 .metric-card { border: 1px solid #ccd5de; border-radius: 2mm; padding: 3mm; min-width: 0; }
 .metric-card span, .metric-card small { display: block; color: #516171; font-size: 8pt; }

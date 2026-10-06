@@ -425,9 +425,10 @@ def main() -> None:
         unlocated_port_count=sum(port["lat"] is None or port["lon"] is None for port in map_ports),
     )
 
+    card_slot = None
     if tab_map.open:
         with tab_map:
-            render_map_panel(view_state)
+            card_slot = render_map_panel(view_state)
     if tab_ports.open:
         with tab_ports:
             render_ports_panel(ports, selected_day, rolling_days, port_error, port_risk_error)
