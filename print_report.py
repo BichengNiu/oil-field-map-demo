@@ -296,14 +296,10 @@ def _overview_map(ports: list[dict], chokes: list[dict], assets: list[dict],
         if point:
             x, y = point
             proxy_class = " proxy" if proxy else ""
-            count_size = "4pt" if count < 100 else "3pt" if count < 1000 else "2.4pt"
-            count_text = (
-                f'<b style="font-size:{count_size}">{count}</b>' if kind == "vessel" else ""
-            )
             title = f"{count} 艘 AIS 船位" if kind == "vessel" else str(label)
             parts.append(
                 f'<span class="map-point {kind}{proxy_class}" title="{_esc(title)}" '
-                f'style="left:{x:.3f}%;top:{y:.3f}%">{count_text}</span>'
+                f'style="left:{x:.3f}%;top:{y:.3f}%"></span>'
             )
 
     for port in ports:
@@ -412,7 +408,7 @@ def build_report_html(
           '<span><i class="legend-symbol port"></i>港口</span>'
           '<span><i class="legend-symbol choke"></i>咽喉点</span>'
           '<span><i class="legend-symbol asset"></i>油气资产</span>'
-          '<span><i class="legend-symbol vessel">8</i>船舶（网格内合并计数）</span>'
+          '<span><i class="legend-symbol vessel"></i>船舶（网格聚合点）</span>'
           '<span>底图 Tiles © Esri</span>'
           '</div>'
         + cover_cards
@@ -578,13 +574,10 @@ PRINT_CSS = """
 .report-sponsor { margin:0 0 3mm; text-align:center; font-size:10pt; font-weight:400!important; }
 .map-legend { display:flex; justify-content:center; flex-wrap:wrap; gap:2mm 5mm; font-size:8pt; margin:1mm 0 2mm; }
 .map-legend .legend-symbol { display:inline-flex; width:3mm; height:3mm; margin-right:1mm; vertical-align:middle; align-items:center; justify-content:center; }
-.legend-symbol.port { border-radius:50%; background:#1769aa; }
+.legend-symbol.port { background:#7c3aed; clip-path:polygon(25% 0,75% 0,100% 50%,75% 100%,25% 100%,0 50%); }
 .legend-symbol.choke { border:0.45mm solid #7c3aed; border-radius:50%; background:#fff; }
-.legend-symbol.asset { position:relative; }
-.legend-symbol.asset::before,.legend-symbol.asset::after { content:""; position:absolute; width:3mm; height:.5mm; background:#d97706; }
-.legend-symbol.asset::before { transform:rotate(45deg); }
-.legend-symbol.asset::after { transform:rotate(-45deg); }
-.legend-symbol.vessel { width:4mm; height:5mm; background:#14866d; color:#fff; font-size:5pt; font-weight:700; clip-path:polygon(50% 0,100% 100%,50% 76%,0 100%); }
+.legend-symbol.asset { background:#111; clip-path:polygon(50% 0,0 100%,100% 100%); }
+.legend-symbol.vessel { width:2mm; height:2mm; border-radius:50%; background:#dc2626; }
 .print-report h2 { font-size: 15pt; border-bottom: 1px solid #9aa7b4; padding-bottom: 2mm; margin: 0 0 4mm; }
 .print-report h3 { font-size: 10.5pt; margin: 4mm 0 2mm; }
 .report-page { break-before: page; page-break-before: always; }
@@ -614,14 +607,10 @@ PRINT_CSS = """
 .map-zone { position:absolute; z-index:1; border:1px dashed #64748b; background:rgba(191,219,254,.08); }
 .map-zone span { position:absolute; top:1px; left:2px; color:#263746; font-size:6.5pt; white-space:nowrap; text-shadow:0 0 2px #fff,0 0 2px #fff; }
 .map-point { position:absolute; z-index:2; display:block; transform:translate(-50%,-50%); }
-.map-point.port { width:1.5mm; height:1.5mm; border:.25mm solid #fff; border-radius:50%; background:#1769aa; }
-.map-point.asset { width:2.5mm; height:2.5mm; }
-.map-point.asset::before,.map-point.asset::after { content:""; position:absolute; top:50%; left:50%; width:2.5mm; height:.45mm; background:#d97706; box-shadow:0 0 0 .2mm #fff; }
-.map-point.asset::before { transform:translate(-50%,-50%) rotate(45deg); }
-.map-point.asset::after { transform:translate(-50%,-50%) rotate(-45deg); }
+.map-point.port { width:1.8mm; height:1.8mm; background:#7c3aed; clip-path:polygon(25% 0,75% 0,100% 50%,75% 100%,25% 100%,0 50%); }
+.map-point.asset { width:1.6mm; height:1.6mm; background:#111; clip-path:polygon(50% 0,0 100%,100% 100%); }
 .map-point.choke { width:2.1mm; height:2.1mm; border:.4mm solid #7c3aed; border-radius:50%; background:#fff; }
-.map-point.vessel { width:6mm; height:7mm; display:flex; align-items:center; justify-content:center; color:#fff; font-size:4.4pt; font-weight:700; line-height:1; background:#14866d; clip-path:polygon(50% 0,100% 100%,50% 76%,0 100%); }
-.map-point.vessel b { font-weight:700; margin-top:1.2mm; }
+.map-point.vessel { width:1.35mm; height:1.35mm; border-radius:50%; background:#dc2626; }
 .table-wrap { overflow:visible; }
 .print-report table { width:100%; border-collapse:collapse; font-size:8pt; margin:2mm 0 4mm; }
 .print-report th,.print-report td { border:1px solid #cbd5df; padding:1.3mm 1.6mm; text-align:left; vertical-align:top; overflow-wrap:anywhere; }
