@@ -28,6 +28,7 @@ from dashboard_views import (
     render_ais_panel,
     render_assets_panel,
     render_map_panel,
+    prepare_monitoring_cards,
     render_method_panel,
     render_ports_panel,
     render_print_panel,
@@ -425,10 +426,14 @@ def main() -> None:
         unlocated_port_count=sum(port["lat"] is None or port["lon"] is None for port in map_ports),
     )
 
-    card_slot = None
     if tab_map.open:
         with tab_map:
-            card_slot = render_map_panel(view_state)
+            cards, card_errors = prepare_monitoring_cards(
+                available_ports, available_chokepoints, view_state
+            )
+            render_map_panel(view_state, cards)
+            for error in card_errors:
+                st.warning(f"监测卡部分指标不可用：{error}")
     if tab_ports.open:
         with tab_ports:
             render_ports_panel(ports, selected_day, rolling_days, port_error, port_risk_error)
