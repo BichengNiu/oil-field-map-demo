@@ -64,10 +64,10 @@ def _table(headers: list[str], rows: list[list[object]], empty: str = "当前范
     return f'<div class="table-wrap"><table><thead><tr>{head}</tr></thead><tbody>{body}</tbody></table></div>'
 
 
-def _metric_cards(cards: list[tuple[str, str, str]]) -> str:
+def _metric_cards(cards: list[tuple[str, str, str]], *, show_notes: bool = True) -> str:
     return '<div class="metric-grid">' + "".join(
         f'<div class="metric-card"><span>{_esc(label)}</span><strong>{_esc(value)}</strong>'
-        f'<small>{_esc(note)}</small></div>'
+        f'{f"<small>{_esc(note)}</small>" if show_notes else ""}</div>'
         for label, value, note in cards
     ) + "</div>"
 
@@ -257,6 +257,17 @@ def _overview_map(ports: list[dict], chokes: list[dict], assets: list[dict],
         lon_min, lon_max, lat_min, lat_max = 29.0, 64.0, 8.0, 34.0
     lat_min = min(85.0, max(-85.0, lat_min))
     lat_max = min(85.0, max(-85.0, lat_max))
+    # The cover map is printed on an A4 portrait page. Expand its longitude
+    # bounds to make a landscape frame while preserving the projected geometry.
+    if include_basemap:
+        vertical_span = (
+            math.log(math.tan(math.pi / 4 + math.radians(lat_max) / 2))
+            - math.log(math.tan(math.pi / 4 + math.radians(lat_min) / 2))
+        )
+        target_lon_span = math.degrees(vertical_span * 1.65)
+        if lon_max - lon_min < target_lon_span:
+            center = (lon_min + lon_max) / 2
+            lon_min, lon_max = center - target_lon_span / 2, center + target_lon_span / 2
     lon_span = lon_max - lon_min
     mercator_top = math.log(math.tan(math.pi / 4 + math.radians(lat_max) / 2))
     mercator_bottom = math.log(math.tan(math.pi / 4 + math.radians(lat_min) / 2))
@@ -387,7 +398,7 @@ def build_report_html(
         ("AIS快照船位", str(len(vessels)) if vessels else "—",
          "公开观测样本，不代表区域全量船舶"),
         ("油气资产节点", str(len(report_assets)), "目录节点数，指标口径分别列示"),
-    ])
+    ], show_notes=False)
     cover_table = _table(
         ["数据", "源站观测日 / 状态", "说明"],
         [
@@ -398,10 +409,12 @@ def build_report_html(
         ],
     )
     overview = (
-        f'<div class="report-date-rule"><span>生成时间：{timestamp.strftime("%Y年%m月")}</span></div>'
-        + '<p class="report-sponsor">中国驻阿联酋大使馆、国家发改委国家信息中心</p>'
-        + f'<div class="report-meta"><span>报告范围：{_esc(scope_label)}</span></div>'
-        + '<h3>能源资产与战略通道监测范围</h3>'
+        '<div class="report-masthead">'
+        + '<span class="report-sponsor">中国驻阿联酋大使馆、国家发改委国家信息中心</span>'
+        + f'<span class="report-generated">生成时间：{timestamp.strftime("%Y年%m月")}</span>'
+        + '</div>'
+        + f'<h1 class="report-title">{_esc(TITLE)}</h1>'
+        + cover_cards
         + f'<div class="map-frame">{map_html}</div>'
         + '<div class="map-legend">'
           '<span><i class="legend-symbol port"></i>港口</span>'
@@ -410,7 +423,6 @@ def build_report_html(
           '<span><i class="legend-symbol vessel"></i>船舶（网格聚合点）</span>'
           '<span>底图 Tiles © Esri</span>'
           '</div>'
-        + cover_cards
         + cover_table
     )
 
@@ -559,7 +571,7 @@ def build_report_html(
         + _section("AIS 船位观测", ais_content, page=True)
         + _section("数据来源与口径", source_content, page=True)
     )
-    return f'<div class="print-report"><header><h1>{_esc(TITLE)}</h1>{body}</header></div>'
+    return f'<div class="print-report">{body}</div>'
 
 
 PRINT_CSS = """
@@ -567,10 +579,10 @@ PRINT_CSS = """
 .print-report { display: none; color: #17212b; background: #fff; font: 10pt/1.38 Arial, "Noto Sans CJK SC", sans-serif; -webkit-print-color-adjust:exact; print-color-adjust:exact; }
 .print-report * { box-sizing: border-box; }
 @media print { .print-report { display: block !important; } }
-.print-report h1 { text-align: center; font-size: 22pt; margin: 0 0 4mm; line-height: 1.2; }
-.report-date-rule { position:relative; border-top:1px solid #9aa7b4; text-align:center; margin:0 0 3mm; height:4mm; }
-.report-date-rule span { position:relative; top:-.7em; padding:0 4mm; background:#fff; font-size:9pt; }
-.report-sponsor { margin:0 0 3mm; text-align:center; font-size:10pt; font-weight:400!important; }
+.report-masthead { display:flex; justify-content:space-between; align-items:baseline; gap:4mm; border-bottom:1px solid #9aa7b4; padding-bottom:2mm; margin-bottom:2mm; font-size:9pt; }
+.report-sponsor { text-align:left; font-size:9pt; font-weight:400!important; }
+.report-generated { text-align:right; white-space:nowrap; }
+.print-report h1.report-title { text-align:left; font-size:15pt; margin:0 0 2mm; line-height:1.15; }
 .map-legend { display:flex; justify-content:center; flex-wrap:wrap; gap:2mm 5mm; font-size:8pt; margin:1mm 0 2mm; }
 .map-legend .legend-symbol { display:inline-flex; width:3mm; height:3mm; margin-right:1mm; vertical-align:middle; align-items:center; justify-content:center; }
 .legend-symbol.port { background:#7c3aed; clip-path:polygon(25% 0,75% 0,100% 50%,75% 100%,25% 100%,0 50%); }
@@ -580,11 +592,10 @@ PRINT_CSS = """
 .print-report h2 { font-size: 15pt; border-bottom: 1px solid #9aa7b4; padding-bottom: 2mm; margin: 0 0 4mm; }
 .print-report h3 { font-size: 10.5pt; margin: 4mm 0 2mm; }
 .report-page { break-before: page; page-break-before: always; }
-.metric-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 3mm; margin: 4mm 0; }
-.metric-card { border: 1px solid #ccd5de; border-radius: 2mm; padding: 3mm; min-width: 0; }
+.metric-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 2mm; margin: 2mm 0 3mm; }
+.metric-card { border: 1px solid #ccd5de; border-radius: 2mm; padding: 2mm; min-width: 0; }
 .metric-card span, .metric-card small { display: block; color: #516171; font-size: 8pt; }
-.metric-card strong { display: block; font-size: 17pt; margin: 1.5mm 0; overflow-wrap: anywhere; }
-.report-meta { display:flex; justify-content:space-between; gap:4mm; margin-bottom:4mm; font-size:9pt; }
+.metric-card strong { display: block; font-size: 15pt; margin: .5mm 0 0; overflow-wrap: anywhere; }
 .chart-grid { display:grid; grid-template-columns:1fr 1fr; gap:4mm; align-items:start; }
 .chart-card { border:1px solid #d6dde5; padding:2mm; break-inside:avoid; page-break-inside:avoid; min-width:0; }
 .chart-card h3 { margin:1mm 1mm 0; }
@@ -599,7 +610,7 @@ PRINT_CSS = """
 .chart-date-labels { display:flex; justify-content:space-between; margin-left:22%; color:#52606d; font-size:6.5pt; }
 .unit,.note,.empty { color:#52606d; font-size:8pt; }
 .note { margin:2mm 0; }
-.map-frame { border:1px solid #d6dde5; padding:2mm; break-inside:avoid; page-break-inside:avoid; }
+.map-frame { border:1px solid #d6dde5; padding:1mm; break-inside:avoid; page-break-inside:avoid; }
 .overview-map { position:relative; width:100%; background:#d6eef4; border:1px solid #94a3b8; }
 .overview-map-plot { position:absolute; inset:0; overflow:hidden; background:#d6eef4; }
 .map-tile { position:absolute; z-index:0; max-width:none; }
