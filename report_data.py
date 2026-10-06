@@ -2,6 +2,7 @@
 from __future__ import annotations
 
 from datetime import date, timedelta
+import json
 
 import streamlit as st
 
@@ -32,7 +33,14 @@ def merge_latest_rows(catalog: list[dict], history: list[dict]) -> list[dict]:
     ]
 
 
-@st.cache_data(ttl=900, max_entries=8, show_spinner=False)
+@st.cache_data(
+    ttl=900, max_entries=8, show_spinner=False,
+    # Hash every input value using the C JSON encoder rather than recursively
+    # traversing thousands of history dictionaries in Streamlit's hasher.
+    # Dates and exact Decimal asset values retain their textual representation.
+    hash_funcs={dict: lambda value: json.dumps(
+        value, sort_keys=True, ensure_ascii=False, default=str)},
+)
 def cached_print_report(report_inputs: dict) -> str:
     """Reuse report HTML while its source data and report inputs are unchanged."""
     return print_report.build_report_html(**report_inputs)

@@ -2,9 +2,17 @@
 from __future__ import annotations
 
 import json
+from pathlib import Path
 
 import ais as AIS
 import map_tools
+
+# Bundle the fixed map dependencies so drawing ships does not wait for a CDN.
+_VENDOR = Path(__file__).with_name("vendor") / "leaflet"
+_MAP_STYLES = "\n".join((_VENDOR / name).read_text() for name in (
+    "leaflet.css", "MarkerCluster.css", "MarkerCluster.Default.css"))
+_MAP_SCRIPTS = "\n".join((_VENDOR / name).read_text() for name in (
+    "leaflet.js", "leaflet.markercluster.js"))
 
 MAP_LAYER_LABELS = {
     "vessels": "船舶",
@@ -104,9 +112,7 @@ def build_map_html(assets: list[dict[str, object]], ports: list[dict],
     return f"""
     <!doctype html><html lang="zh-CN"><head>
     <meta charset="utf-8" />
-    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
-    <link rel="stylesheet" href="https://unpkg.com/leaflet.markercluster@1.5.3/dist/MarkerCluster.css" />
-    <link rel="stylesheet" href="https://unpkg.com/leaflet.markercluster@1.5.3/dist/MarkerCluster.Default.css" />
+    <style>{_MAP_STYLES}</style>
     <style>
       html, body, #map {{ height: 100%; margin: 0; }}
       #map {{ background: #e8eef4; font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif; }}
@@ -150,13 +156,9 @@ def build_map_html(assets: list[dict[str, object]], ports: list[dict],
       .map-tools span {{ display: block; max-width: 230px; font-size: 11px; margin-top: 4px; }}
       .map-tools span:empty {{ display: none; }}
     </style></head><body><div id="map"></div>
-    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
-    <script src="https://unpkg.com/leaflet.markercluster@1.5.3/dist/leaflet.markercluster.js"></script>
+    <script>{_MAP_SCRIPTS}</script>
     <script>
       const map = L.map('map', {{zoomControl: true}}).setView([25.5, 48.5], 4);
-      L.tileLayer('https://server.arcgisonline.com/ArcGIS/rest/services/World_Street_Map/MapServer/tile/{{z}}/{{y}}/{{x}}', {{
-        attribution: 'Tiles &copy; Esri', maxZoom: 18, crossOrigin: true
-      }}).addTo(map);
       const screenshotDate = {screenshot_date_json};
       const legend = L.control({{position: 'bottomright'}});
       legend.onAdd = () => {{
@@ -211,13 +213,50 @@ def build_map_html(assets: list[dict[str, object]], ports: list[dict],
           <a class="source" href="${{escapeHTML(safeUrl)}}" target="_blank" rel="noopener">${{shown(attribution || dataSource || 'AIS数据来源')}}</a>
         </div>`;
       }};
+      const allPoints = ports.map((p) => [p.lat, p.lon])
+        .concat(chokepoints.map((p) => [p.lat, p.lon]))
+        .concat(assets.map((a) => [a.lat, a.lon]))
+        .concat(vessels.map((v) => [v[0], v[1]]));
+      const focusAssets = {focus_json};
+      const visibleLayers = {visible_layers_json};
+      if (focusAssets && assets.length === 1) {{
+        map.setView([assets[0].lat, assets[0].lon], 8, {{animate: false}});
+      }} else if (focusAssets && assets.length > 1) {{
+        map.fitBounds(L.latLngBounds(assets.map((a) => [a.lat, a.lon])),
+          {{padding: [42, 42], maxZoom: 7, animate: false}});
+      }} else if (allPoints.length) {{
+        map.fitBounds(L.latLngBounds(allPoints), {{padding: [36, 36], maxZoom: 5, animate: false}});
+      }}
+      // Keep the viewport only while the selected layers and marker locations match.
+      const pointSignature = allPoints
+        .map(([lat, lon]) => [Number(lat), Number(lon)])
+        .sort((left, right) => left[0] - right[0] || left[1] - right[1]);
+      const viewKey = 'energy-map-view';
+      const viewSignature = JSON.stringify([focusAssets, visibleLayers, pointSignature]);
+      try {{
+        const saved = JSON.parse(sessionStorage.getItem(viewKey));
+        if (saved && saved.signature === viewSignature) {{
+          map.setView(saved.center, saved.zoom, {{animate: false}});
+        }}
+      }} catch (error) {{ /* Storage can be disabled by the embedding browser. */ }}
+      map.on('moveend', () => {{
+        try {{ sessionStorage.setItem(viewKey, JSON.stringify({{
+          signature: viewSignature,
+          center: [map.getCenter().lat, map.getCenter().lng], zoom: map.getZoom()
+        }})); }} catch (error) {{ }}
+      }});
+      // Request tiles only for the final initial viewport.
+      L.tileLayer('https://server.arcgisonline.com/ArcGIS/rest/services/World_Street_Map/MapServer/tile/{{z}}/{{y}}/{{x}}', {{
+        attribution: 'Tiles &copy; Esri', maxZoom: 18, crossOrigin: true
+      }}).addTo(map);
       const assetLayer = L.markerClusterGroup({{showCoverageOnHover: false, maxClusterRadius: 34,
           disableClusteringAtZoom: 8, spiderfyOnMaxZoom: true}}).addTo(map);
       const portLayer = L.layerGroup().addTo(map);
       const chokepointLayer = L.layerGroup().addTo(map);
       const vesselLayer = L.markerClusterGroup({{
         showCoverageOnHover: false, maxClusterRadius: 24, disableClusteringAtZoom: 7,
-        spiderfyOnMaxZoom: true,
+        spiderfyOnMaxZoom: true, animate: false,
+        chunkedLoading: true, chunkInterval: 20, chunkDelay: 10,
         iconCreateFunction: (cluster) => {{
           const count = cluster.getChildCount();
           const label = count > 999 ? `${{Math.round(count / 100) / 10}}k` : String(count);
@@ -275,7 +314,7 @@ def build_map_html(assets: list[dict[str, object]], ports: list[dict],
       const vesselColors = {{
         tanker: '#ef4444', cargo: '#2563eb', other: '#64748b'
       }};
-      vessels.forEach((vessel) => {{
+      const vesselMarkers = vessels.map((vessel) => {{
         const [lat, lon, name, mmsi, region, categoryLabel, imo, sog, course,
           navigationStatus, callSign, destination, observedAt, receivedAt,
           dataSource, sourceUrl, attribution, category] = vessel;
@@ -289,38 +328,11 @@ def build_map_html(assets: list[dict[str, object]], ports: list[dict],
         }});
         const marker = L.marker([lat, lon], {{icon}});
         marker.bindTooltip(escapeHTML(name), {{direction: 'top', opacity: .95}})
-          .bindPopup(() => vesselPopup(vessel), {{maxWidth: 410}}).addTo(vesselLayer);
+          .bindPopup(() => vesselPopup(vessel), {{maxWidth: 410}});
+        return marker;
       }});
-      const allPoints = ports.map((p) => [p.lat, p.lon])
-        .concat(chokepoints.map((p) => [p.lat, p.lon]))
-        .concat(assets.map((a) => [a.lat, a.lon]))
-        .concat(vessels.map((v) => [v[0], v[1]]));
-      const focusAssets = {focus_json};
-      const visibleLayers = {visible_layers_json};
-      if (focusAssets && assets.length === 1) {{
-        map.setView([assets[0].lat, assets[0].lon], 8);
-      }} else if (focusAssets && assets.length > 1) {{
-        map.fitBounds(L.latLngBounds(assets.map((a) => [a.lat, a.lon])),
-          {{padding: [42, 42], maxZoom: 7}});
-      }} else if (allPoints.length) {{
-        map.fitBounds(L.latLngBounds(allPoints), {{padding: [36, 36], maxZoom: 5}});
-      }}
-      // Keep the viewport only while the selected layers and marker locations match.
-      const pointSignature = allPoints
-        .map(([lat, lon]) => [Number(lat), Number(lon)])
-        .sort((left, right) => left[0] - right[0] || left[1] - right[1]);
-      const viewKey = 'energy-map-view';
-      const viewSignature = JSON.stringify([focusAssets, visibleLayers, pointSignature]);
-      try {{
-        const saved = JSON.parse(sessionStorage.getItem(viewKey));
-        if (saved && saved.signature === viewSignature) map.setView(saved.center, saved.zoom);
-      }} catch (error) {{ /* Storage can be disabled by the embedding browser. */ }}
-      map.on('moveend', () => {{
-        try {{ sessionStorage.setItem(viewKey, JSON.stringify({{
-          signature: viewSignature,
-          center: [map.getCenter().lat, map.getCenter().lng], zoom: map.getZoom()
-        }})); }} catch (error) {{ }}
-      }});
+      // A single bulk update avoids reclustering and rewriting DOM per ship.
+      vesselLayer.addLayers(vesselMarkers);
       {map_tools.SCREENSHOT_SCRIPT}
     </script></body></html>
     """

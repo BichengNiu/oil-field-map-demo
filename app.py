@@ -13,7 +13,6 @@ import port_inventory
 import portwatch as PORTWATCH
 from dashboard_data import (
     ais_collector,
-    archive_public_snapshot,
     collector_status,
     load_chokepoints,
     load_ports,
@@ -354,14 +353,7 @@ def main() -> None:
             sorted(selected_chokepoint_id_set | contextual_chokepoint_ids),
         )
 
-    archive_error = None
-    if open_state.get("vessels"):
-        try:
-            # AISStream positions are archived by its collector; only persist the
-            # polled public snapshot here to avoid rewriting the same feed twice.
-            archive_public_snapshot(open_state["vessels"])
-        except Exception as exc:
-            archive_error = f"船位归档失败：{exc}"
+    archive_error = open_state.get("archive_error")
 
     selected_countries = set(selected_countries)
     selected_levels = set(selected_levels)

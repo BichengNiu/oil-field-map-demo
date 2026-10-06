@@ -43,7 +43,15 @@ def ais_collector(api_key: str, collector_version: int) -> AIS.AISCollector:
 @st.cache_data(ttl=60, max_entries=1, show_spinner=False)
 def _openwaters_base_snapshot(collector_version: int) -> dict:
     """Fetch one shared two-hour source snapshot for every user's age filter."""
-    return AIS.openwaters_snapshot(max_age_minutes=120)
+    snapshot = AIS.openwaters_snapshot(max_age_minutes=120)
+    snapshot["archive_error"] = None
+    try:
+        # Archive the source snapshot once, before per-user age filtering.
+        # Recomputed display ages must not trigger another SQLite write.
+        ais_history.archive_reports(snapshot.get("vessels", []))
+    except Exception as exc:
+        snapshot["archive_error"] = f"船位归档失败：{exc}"
+    return snapshot
 
 
 def openwaters_snapshot(max_age_minutes: int, collector_version: int) -> dict:
@@ -65,12 +73,6 @@ def openwaters_snapshot(max_age_minutes: int, collector_version: int) -> dict:
             row["age_basis"] = None
         vessels.append(row)
     return {**snapshot, "vessels": vessels}
-
-
-@st.cache_data(ttl=300, max_entries=12, show_spinner=False)
-def archive_public_snapshot(rows: list[dict]) -> int:
-    """Archive each identical polled snapshot at most once per five minutes."""
-    return ais_history.archive_reports(rows)
 
 
 @st.cache_data(ttl=60, max_entries=8, show_spinner=False)
