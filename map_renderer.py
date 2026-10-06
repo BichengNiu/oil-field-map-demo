@@ -1,39 +1,43 @@
 """Pure Leaflet map HTML renderer; UI state stays in the Streamlit page."""
 from __future__ import annotations
 
-import html
 import json
+from pathlib import Path
 
+import ais as AIS
 import map_tools
+from html_transport import compressed_document
 
-MAP_LAYER_LABELS = {
-    "vessels": "船舶",
-    "ports": "港口",
-    "assets": "油气",
-    "chokepoints": "咽喉点",
-}
+# Bundle the fixed map dependencies so drawing ships does not wait for a CDN.
+_VENDOR = Path(__file__).with_name("vendor") / "leaflet"
+_MAP_STYLES = "\n".join((_VENDOR / name).read_text() for name in (
+    "leaflet.css", "MarkerCluster.css", "MarkerCluster.Default.css"))
+_MAP_SCRIPTS = "\n".join((_VENDOR / name).read_text() for name in (
+    "leaflet.js", "leaflet.markercluster.js"))
 
-
-def build_map_html(assets: list[dict[str, object]], ports: list[dict],
-              chokepoints: list[dict], vessels: list[dict], day: str, chokepoint_day: str,
-              focus_assets: bool = False, ais_configured: bool = True,
-              visible_layers: set[str] | None = None, *,
-              asset_popup, port_popup, chokepoint_popup, vessel_popup) -> str:
-    visible_layers = set(MAP_LAYER_LABELS) if visible_layers is None else visible_layers
-    show_assets = "assets" in visible_layers
-    show_ports = "ports" in visible_layers
-    show_chokepoints = "chokepoints" in visible_layers
-    show_vessels = "vessels" in visible_layers and ais_configured
+def build_map_html(
+    assets: list[dict[str, object]],
+    ports: list[dict],
+    chokepoints: list[dict],
+    vessels: list[dict],
+    day: str,
+    chokepoint_day: str,
+    *,
+    visible_categories: set[str] | None = None,
+    asset_popup,
+    port_popup,
+    chokepoint_popup,
+    screenshot_requested: bool = False,
+) -> str:
     markers = [
         {
             "lat": asset["map_lat"],
             "lon": asset["map_lon"],
-            "is_proxy": asset.get("map_is_proxy", False),
             "name": f'{asset["name_cn"]} · {asset["name"]}',
             "popup": asset_popup(asset),
         }
         for asset in assets
-        if asset["map_drawable"]
+        if asset["map_drawable"] and not asset.get("map_is_proxy", False)
     ]
     marker_json = json.dumps(markers, ensure_ascii=False).replace("</", "<\\/")
     port_json = json.dumps([
@@ -50,52 +54,56 @@ def build_map_html(assets: list[dict[str, object]], ports: list[dict],
         for point in chokepoints
     ], ensure_ascii=False).replace("</", "<\\/")
     vessel_json = json.dumps([
-        {
-            "lat": vessel["lat"], "lon": vessel["lon"],
-            "name": html.escape(str(vessel.get("name") or f'MMSI {vessel["mmsi"]}')),
-            "category": vessel.get("category", "unknown"),
-            "course": vessel.get("course") or 0,
-            "popup": vessel_popup(vessel),
-        }
+        [
+            vessel["lat"], vessel["lon"],
+            vessel.get("name") or f'MMSI {vessel["mmsi"]}',
+            vessel["mmsi"], vessel.get("region"),
+            vessel.get("category_label"), vessel.get("imo"),
+            vessel.get("sog"), vessel.get("course"),
+            vessel.get("navigation_status"), vessel.get("call_sign"),
+            vessel.get("destination"), vessel.get("observed_at"),
+            vessel.get("received_at"),
+            vessel.get("data_source"),
+            vessel.get("source_url") or AIS.SOURCE,
+            vessel.get("source_attribution") or vessel.get("data_source") or "AIS数据来源",
+            vessel.get("category", "unknown"),
+        ]
         for vessel in vessels
     ], ensure_ascii=False).replace("</", "<\\/")
-    legend_lines = ["<b>地图符号</b>"]
-    def legend_icon(shape: str, color: str, proxy: bool = False) -> str:
+    legend_lines = ["<b>图例</b>"]
+
+    def legend_icon(shape: str, color: str) -> str:
         paths = {"asset": "M6 1 L11 6 L6 11 L1 6 Z",
                  "port": "M2 2 H10 V10 H2 Z",
                  "choke": "M3 1 H9 L12 6 L9 11 H3 L0 6 Z",
                  "vessel": "M6 0 L12 12 L6 9 L0 12 Z"}
-        stroke = 'stroke="#7c2d12" stroke-dasharray="2 2"' if proxy else ''
-        return f'<svg viewBox="0 0 12 12"><path d="{paths[shape]}" fill="{color}" {stroke}/></svg>'
+        return f'<svg viewBox="0 0 12 12"><path d="{paths[shape]}" fill="{color}"/></svg>'
 
-    if show_assets:
+    categories = {"assets", "ports", "vessels"} if visible_categories is None else visible_categories
+    if "assets" in categories:
         legend_lines.append(f'<span>{legend_icon("asset", "#ea580c")}油气：菱形</span>')
-    if show_ports:
-        legend_lines.append(f'<span>{legend_icon("port", "#2563eb")}港口：方形</span>')
-    if show_chokepoints:
-        legend_lines.append(f'<span>{legend_icon("choke", "#7c3aed")}咽喉点：六边形</span>')
-    if show_vessels:
-        legend_lines.append(f'<span>{legend_icon("vessel", "#64748b")}船舶：三角形</span>')
-    if show_assets:
-        legend_lines.append(f'<span>{legend_icon("asset", "#ea580c", proxy=True)}油气虚线边：近似坐标</span>')
-    if show_vessels:
+    if "ports" in categories:
         legend_lines.extend([
+            f'<span>{legend_icon("port", "#2563eb")}港口：方形</span>',
+            f'<span>{legend_icon("choke", "#7c3aed")}咽喉点：六边形（PortWatch日通过艘次）</span>',
+        ])
+    if "vessels" in categories:
+        legend_lines.extend([
+            f'<span>{legend_icon("vessel", "#64748b")}船舶：三角形</span>',
             f'<span>{legend_icon("vessel", "#ef4444")}油轮/液货船　{legend_icon("vessel", "#2563eb")}货船</span>',
             f'<span>{legend_icon("vessel", "#64748b")}其他船舶/船型未知</span>',
         ])
+    if not categories:
+        legend_lines.append('<span>未选择显示类别</span>')
     legend_json = json.dumps("".join(legend_lines), ensure_ascii=False).replace("</", "<\\/")
-    focus_json = json.dumps(focus_assets)
-    visible_layers_json = json.dumps(sorted(visible_layers))
     screenshot_date_json = json.dumps(day if day != "无数据" else chokepoint_day)
     screenshot_label_json = json.dumps(
         f"港口数据日（UTC）：{day} · 咽喉点数据日（UTC）：{chokepoint_day} · 船舶：当前快照",
         ensure_ascii=False)
-    return f"""
+    return compressed_document(f"""
     <!doctype html><html lang="zh-CN"><head>
     <meta charset="utf-8" />
-    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
-    <link rel="stylesheet" href="https://unpkg.com/leaflet.markercluster@1.5.3/dist/MarkerCluster.css" />
-    <link rel="stylesheet" href="https://unpkg.com/leaflet.markercluster@1.5.3/dist/MarkerCluster.Default.css" />
+    <style>{_MAP_STYLES}</style>
     <style>
       html, body, #map {{ height: 100%; margin: 0; }}
       #map {{ background: #e8eef4; font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif; }}
@@ -139,14 +147,9 @@ def build_map_html(assets: list[dict[str, object]], ports: list[dict],
       .map-tools span {{ display: block; max-width: 230px; font-size: 11px; margin-top: 4px; }}
       .map-tools span:empty {{ display: none; }}
     </style></head><body><div id="map"></div>
-    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
-    <script src="https://unpkg.com/leaflet.markercluster@1.5.3/dist/leaflet.markercluster.js"></script>
-    <script src="https://unpkg.com/html2canvas@1.4.1/dist/html2canvas.min.js"></script>
+    <script>{_MAP_SCRIPTS}</script>
     <script>
       const map = L.map('map', {{zoomControl: true}}).setView([25.5, 48.5], 4);
-      L.tileLayer('https://server.arcgisonline.com/ArcGIS/rest/services/World_Street_Map/MapServer/tile/{{z}}/{{y}}/{{x}}', {{
-        attribution: 'Tiles &copy; Esri', maxZoom: 18, crossOrigin: true
-      }}).addTo(map);
       const screenshotDate = {screenshot_date_json};
       const legend = L.control({{position: 'bottomright'}});
       legend.onAdd = () => {{
@@ -166,13 +169,73 @@ def build_map_html(assets: list[dict[str, object]], ports: list[dict],
       const ports = {port_json};
       const chokepoints = {chokepoint_json};
       const vessels = {vessel_json};
+      const escapeHTML = (value) => String(value ?? '—').replace(/[&<>"']/g, (char) => ({{
+        '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;'
+      }}[char]));
+      const shown = (value, suffix = '') => value == null || value === ''
+        ? '—' : `${{escapeHTML(value)}}${{suffix}}`;
+      const decimal = (value, suffix) => value == null
+        ? '—' : `${{Number(value).toFixed(1)}} ${{suffix}}`;
+      const vesselPopup = (vessel) => {{
+        const [lat, lon, name, mmsi, region, categoryLabel, imo, sog, course,
+          navigationStatus, callSign, destination, observedAt, receivedAt,
+          dataSource, sourceUrl, attribution] = vessel;
+        const ageAt = observedAt || receivedAt;
+        const ageTimestamp = ageAt ? Date.parse(ageAt) : NaN;
+        const ageMinutes = Number.isFinite(ageTimestamp)
+          ? Math.max(0, (Date.now() - ageTimestamp) / 60000) : null;
+        const ageBasis = observedAt ? '源站观测时间'
+          : receivedAt ? '本机接收时间' : '源站未提供观测时间';
+        const safeUrl = /^https?:\\/\\//i.test(sourceUrl || '')
+          ? sourceUrl : {json.dumps(AIS.SOURCE)};
+        return `<div class="popup-card">
+          <div class="field-name">${{escapeHTML(name || `MMSI ${{mmsi}}`)}}</div>
+          <div class="country">船舶 · ${{shown(region || '监测水域')}}</div>
+          <div class="row"><span>船型</span><strong>${{shown(categoryLabel)}}</strong></div>
+          <div class="row"><span>MMSI / IMO</span><strong>${{shown(mmsi)}} / ${{shown(imo)}}</strong></div>
+          <div class="row"><span>航速 / 航向</span><strong>${{decimal(sog, '节')}} / ${{decimal(course, '°')}}</strong></div>
+          <div class="row"><span>航行状态</span><strong>${{shown(navigationStatus)}}</strong></div>
+          <div class="row"><span>呼号 / 目的地</span><strong>${{shown(callSign)}} / ${{shown(destination)}}</strong></div>
+          <div class="row"><span>AIS报告时间 UTC</span><strong>${{shown(observedAt)}}</strong></div>
+          <div class="row"><span>本机接收时间 UTC</span><strong>${{shown(receivedAt)}}</strong></div>
+          <div class="row"><span>数据年龄</span><strong>${{ageMinutes == null ? '—' : `${{Number(ageMinutes).toFixed(1)}} 分钟`}} · ${{shown(ageBasis)}}</strong></div>
+          <div class="row"><span>数据源</span><strong>${{shown(dataSource)}}</strong></div>
+          <div class="basis">AIS船型为船载设备广播的基础分类；货船不能据此可靠细分为集装箱船或散货船。点位可能因岸基/卫星覆盖、设备关闭、延迟或错误广播而缺失。</div>
+          <a class="source" href="${{escapeHTML(safeUrl)}}" target="_blank" rel="noopener">${{shown(attribution || dataSource || 'AIS数据来源')}}</a>
+        </div>`;
+      }};
+      const allPoints = ports.map((p) => [p.lat, p.lon])
+        .concat(chokepoints.map((p) => [p.lat, p.lon]))
+        .concat(assets.map((a) => [a.lat, a.lon]))
+        .concat(vessels.map((v) => [v[0], v[1]]));
+      if (allPoints.length) {{
+        map.fitBounds(L.latLngBounds(allPoints), {{padding: [36, 36], maxZoom: 5, animate: false}});
+      }}
+      // Preserve the user's map view across Streamlit reruns.
+      const viewKey = 'energy-map-view-v2';
+      try {{
+        const saved = JSON.parse(sessionStorage.getItem(viewKey));
+        if (saved && Array.isArray(saved.center) && Number.isFinite(saved.zoom)) {{
+          map.setView(saved.center, saved.zoom, {{animate: false}});
+        }}
+      }} catch (error) {{ /* Storage can be disabled by the embedding browser. */ }}
+      map.on('moveend', () => {{
+        try {{ sessionStorage.setItem(viewKey, JSON.stringify({{
+          center: [map.getCenter().lat, map.getCenter().lng], zoom: map.getZoom()
+        }})); }} catch (error) {{ }}
+      }});
+      // Request tiles only for the final initial viewport.
+      L.tileLayer('https://server.arcgisonline.com/ArcGIS/rest/services/World_Street_Map/MapServer/tile/{{z}}/{{y}}/{{x}}', {{
+        attribution: 'Tiles &copy; Esri', maxZoom: 18, crossOrigin: true
+      }}).addTo(map);
       const assetLayer = L.markerClusterGroup({{showCoverageOnHover: false, maxClusterRadius: 34,
           disableClusteringAtZoom: 8, spiderfyOnMaxZoom: true}}).addTo(map);
       const portLayer = L.layerGroup().addTo(map);
       const chokepointLayer = L.layerGroup().addTo(map);
       const vesselLayer = L.markerClusterGroup({{
         showCoverageOnHover: false, maxClusterRadius: 24, disableClusteringAtZoom: 7,
-        spiderfyOnMaxZoom: true,
+        spiderfyOnMaxZoom: true, animate: false,
+        chunkedLoading: true, chunkInterval: 20, chunkDelay: 10,
         iconCreateFunction: (cluster) => {{
           const count = cluster.getChildCount();
           const label = count > 999 ? `${{Math.round(count / 100) / 10}}k` : String(count);
@@ -187,13 +250,12 @@ def build_map_html(assets: list[dict[str, object]], ports: list[dict],
       }}).addTo(map);
       assets.forEach((asset) => {{
         const size = 18;
-        const dash = asset.is_proxy ? '3 2' : 'none';
         const icon = L.divIcon({{
           className: 'asset-icon', iconSize: [size, size], iconAnchor: [size / 2, size / 2],
           html: `<svg width="${{size}}" height="${{size}}" viewBox="0 0 ${{size}} ${{size}}">
             <polygon points="${{size/2}},1 ${{size-1}},${{size/2}} ${{size/2}},${{size-1}} 1,${{size/2}}"
               fill="#ea580c" fill-opacity=".94" stroke="#7c2d12"
-              stroke-width="1.5" stroke-dasharray="${{dash}}"/>
+              stroke-width="1.5"/>
           </svg>`
         }});
         L.marker([asset.lat, asset.lon], {{icon}}).bindTooltip(asset.name, {{direction: 'top', opacity: .95}})
@@ -230,49 +292,28 @@ def build_map_html(assets: list[dict[str, object]], ports: list[dict],
       const vesselColors = {{
         tanker: '#ef4444', cargo: '#2563eb', other: '#64748b'
       }};
-      vessels.forEach((vessel) => {{
-        const color = vesselColors[vessel.category] || vesselColors.other;
-        const angle = Number.isFinite(Number(vessel.course)) ? Number(vessel.course) : 0;
+      const vesselMarkers = vessels.map((vessel) => {{
+        const [lat, lon, name, mmsi, region, categoryLabel, imo, sog, course,
+          navigationStatus, callSign, destination, observedAt, receivedAt,
+          dataSource, sourceUrl, attribution, category] = vessel;
+        const color = vesselColors[category] || vesselColors.other;
+        const angle = Number.isFinite(Number(course)) ? Number(course) : 0;
         const icon = L.divIcon({{
           className: 'vessel-icon', iconSize: [18, 18], iconAnchor: [9, 9],
           html: `<svg width="18" height="18" viewBox="0 0 18 18" style="transform:rotate(${{angle}}deg)">
             <path d="M9 1 L16 16 L9 12.8 L2 16 Z" fill="${{color}}" stroke="#ffffff" stroke-width="1.15"/>
           </svg>`
         }});
-        const marker = L.marker([vessel.lat, vessel.lon], {{icon}});
-        marker.bindTooltip(vessel.name, {{direction: 'top', opacity: .95}})
-          .bindPopup(vessel.popup, {{maxWidth: 410}}).addTo(vesselLayer);
+        const marker = L.marker([lat, lon], {{icon}});
+        marker.bindTooltip(escapeHTML(name), {{direction: 'top', opacity: .95}})
+          .bindPopup(() => vesselPopup(vessel), {{maxWidth: 410}});
+        return marker;
       }});
-      const allPoints = ports.map((p) => [p.lat, p.lon])
-        .concat(chokepoints.map((p) => [p.lat, p.lon]))
-        .concat(assets.map((a) => [a.lat, a.lon]))
-        .concat(vessels.map((v) => [v.lat, v.lon]));
-      const focusAssets = {focus_json};
-      const visibleLayers = {visible_layers_json};
-      if (focusAssets && assets.length === 1) {{
-        map.setView([assets[0].lat, assets[0].lon], 8);
-      }} else if (focusAssets && assets.length > 1) {{
-        map.fitBounds(L.latLngBounds(assets.map((a) => [a.lat, a.lon])),
-          {{padding: [42, 42], maxZoom: 7}});
-      }} else if (allPoints.length) {{
-        map.fitBounds(L.latLngBounds(allPoints), {{padding: [36, 36], maxZoom: 5}});
-      }}
-      // Keep the viewport only while the selected layers and marker locations match.
-      const pointSignature = allPoints
-        .map(([lat, lon]) => [Number(lat), Number(lon)])
-        .sort((left, right) => left[0] - right[0] || left[1] - right[1]);
-      const viewKey = 'energy-map-view';
-      const viewSignature = JSON.stringify([focusAssets, visibleLayers, pointSignature]);
-      try {{
-        const saved = JSON.parse(sessionStorage.getItem(viewKey));
-        if (saved && saved.signature === viewSignature) map.setView(saved.center, saved.zoom);
-      }} catch (error) {{ /* Storage can be disabled by the embedding browser. */ }}
-      map.on('moveend', () => {{
-        try {{ sessionStorage.setItem(viewKey, JSON.stringify({{
-          signature: viewSignature,
-          center: [map.getCenter().lat, map.getCenter().lng], zoom: map.getZoom()
-        }})); }} catch (error) {{ }}
-      }});
+      // A single bulk update avoids reclustering and rewriting DOM per ship.
+      vesselLayer.addLayers(vesselMarkers);
       {map_tools.SCREENSHOT_SCRIPT}
+      if ({str(screenshot_requested).lower()}) {{
+        setTimeout(() => window.saveMapPng(), 800);
+      }}
     </script></body></html>
-    """
+    """)

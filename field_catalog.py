@@ -8,7 +8,9 @@
 
 from __future__ import annotations
 
+import json
 import re
+from pathlib import Path
 from decimal import Decimal, InvalidOperation
 from typing import Any
 
@@ -664,8 +666,7 @@ NAMED_CONSTITUENTS = {
     ),
 }
 
-# 没有公开田级数值、但对区域供给具有代表性的独立资产。它们保留在默认战略视图，
-# 其余无指标的小型单田仍可在“完整资产目录”中查询。
+# 没有公开田级数值、但对区域供给具有代表性的独立资产，用于战略层级分类。
 STRATEGIC_STANDALONE_ASSETS = {
     ("沙特阿拉伯", name) for name in ("Qatif", "Abqaiq", "Khursaniyah", "Jafurah")
 } | {
@@ -1316,7 +1317,7 @@ for asset in ASSETS:
     asset["map_drawable"] = asset["map_lat"] is not None and asset["map_lon"] is not None
     if strategic_parent:
         asset["map_role"] = "component"
-        asset["map_role_label"] = f"组成资产（默认并入{strategic_parent['name']}）"
+        asset["map_role_label"] = f"组成资产（上级节点：{strategic_parent['name']}）"
         asset["rollup_policy"] = "上级直接披露值优先；本资产不重复计入地图汇总"
     elif asset["constituent_count"]:
         asset["map_role"] = "strategic_group"
@@ -1516,9 +1517,8 @@ for asset in ASSETS:
     )
 
 
-# 默认地图只保留可用于区域供给研判的层级：有直接数值的资产、油田群／区块等上级节点，
-# 以及少量已明确列出的主力独立田。完整目录仍保留全部记录；停产、仅发现及储存资产不进入
-# 默认战略视图。这里不要求有坐标，以便界面同时如实报告“战略节点但待定位”的数量。
+# 标记适合区域供给研判的战略资产层级；地图和目录仍完整展示所有公开资产记录。
+# 此标记不要求资产具备坐标，以便单独说明战略节点的定位状态。
 _STRATEGIC_STATUSES = {
     "producing", "restoration_unconfirmed", "partially_operating", "temporarily_suspended", "development",
     "historical_unverified", "unknown",
@@ -1536,7 +1536,7 @@ for asset in ASSETS:
     )
     if asset["map_role"] == "strategic_standalone" and not asset["strategic_default"]:
         asset["map_role"] = "catalog_detail"
-        asset["map_role_label"] = "完整目录资产（默认不展示）"
+        asset["map_role_label"] = "目录补充资产（战略层级外）"
 
 # 下载成功不等于数值已核验；审计日期不等于观测日期。
 for asset in ASSETS:
@@ -1560,6 +1560,30 @@ finish_reviews(ASSETS)
 attach_gem_production_candidates(ASSETS)
 apply_public_metadata(ASSETS)
 finish_production_recheck(ASSETS, OUTPUT_METRIC_TYPES)
+
+# Resolve the former dashed markers only from independently reviewed field/well
+# locations. Keep rejected proxy evidence in the dated audit, not in map exports.
+_coordinate_review = json.loads(
+    (Path(__file__).parent / "data" / "coordinate_recheck.json").read_text(encoding="utf-8")
+)
+for _row in _coordinate_review["records"]:
+    _asset = _asset_index[(_row["country"], _row["name"])]
+    _coordinate = _row["coordinate"]
+    _asset["coordinate_review_date"] = _coordinate_review["review_date"]
+    _asset["coordinate_review_reason"] = _row["reason"]
+    _asset["map_is_proxy"] = False
+    _asset["map_drawable"] = _coordinate is not None
+    if _coordinate:
+        _asset["map_lat"] = _coordinate["lat"]
+        _asset["map_lon"] = _coordinate["lon"]
+        _asset["map_coordinate_precision"] = _coordinate["precision"]
+        _asset["coordinate_source"] = _coordinate["source"]
+        _asset["coordinate_source_url"] = _coordinate["url"]
+    else:
+        _asset["map_lat"] = _asset["map_lon"] = None
+        _asset["map_coordinate_precision"] = "独立田级坐标待核；仅列目录"
+        _asset["coordinate_source"] = "2026-10-06再次检索未确认独立位置；原代理点已撤回"
+        _asset["coordinate_source_url"] = None
 
 
 def _numeric_value(value: Any) -> tuple[Decimal | None, str]:

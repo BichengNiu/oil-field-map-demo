@@ -4,7 +4,6 @@ from __future__ import annotations
 
 import html
 
-import ais as AIS
 import field_catalog as CATALOG
 import portwatch as PORTWATCH
 from asset_values import display_value
@@ -304,6 +303,20 @@ def port_popup(port: dict, day: str) -> str:
         if port.get("risk_capacity") is not None
         else ""
     )
+    coordinate_source_url = port.get("coordinate_source_url")
+    coordinate_precision = port.get("coordinate_precision")
+    coordinate_block = (
+        '<div class="basis">地图坐标：'
+        f"{_esc(coordinate_precision)}"
+        + (
+            f' <a href="{_esc(coordinate_source_url)}" target="_blank" rel="noopener">坐标来源</a>'
+            if coordinate_source_url
+            else ""
+        )
+        + "</div>"
+        if coordinate_precision
+        else ""
+    )
     return (
         '<div class="popup-card">'
         f'<div class="field-name">⚓ {_esc(port["name"])}</div>'
@@ -332,6 +345,7 @@ def port_popup(port: dict, day: str) -> str:
         "负值偏进口、正值偏出口。风险运力来自2019—2024港口航线网络，是历史冲击暴露估算。"
         "“—”表示窗口不完整、基期为0或源数据不足，不按零处理。</div>"
         f'<div class="basis">统计覆盖：{_esc(port.get("coverage_note", ""))}</div>'
+        f"{coordinate_block}"
         f'<a class="source" href="{_esc(port.get("source_url", PORTWATCH.SOURCE))}" target="_blank" rel="noopener">港口目录/统计来源</a>'
         "</div>"
     )
@@ -361,47 +375,5 @@ def chokepoint_popup(point: dict, day: str) -> str:
         '<div class="basis">PortWatch按船舶穿越咽喉点边界计数；跨越多日的同一次通行只计一次，'
         "48小时内同船再次出现不重复计数。货量由AIS、吃水与载重能力估算。</div>"
         f'<a class="source" href="{_esc(PORTWATCH.SOURCE)}" target="_blank" rel="noopener">IMF PortWatch 数据与方法</a>'
-        "</div>"
-    )
-
-
-def vessel_popup(vessel: dict[str, object]) -> str:
-    def shown(key: str, suffix: str = "") -> str:
-        value = vessel.get(key)
-        return "—" if value in (None, "") else f"{_esc(value)}{suffix}"
-
-    name = vessel.get("name") or f"MMSI {vessel['mmsi']}"
-    age = vessel.get("age_minutes")
-    age_text = "—" if age is None else f"{float(age):.1f} 分钟"
-    speed = vessel.get("sog")
-    speed_text = "—" if speed is None else f"{float(speed):.1f} 节"
-    course = vessel.get("course")
-    course_text = "—" if course is None else f"{float(course):.1f}°"
-    return (
-        '<div class="popup-card">'
-        f'<div class="field-name">{_esc(name)}</div>'
-        f'<div class="country">船舶 · {_esc(vessel.get("region") or "监测水域")}</div>'
-        '<div class="row"><span>船型</span>'
-        f"<strong>{shown('category_label')}</strong></div>"
-        '<div class="row"><span>MMSI / IMO</span>'
-        f"<strong>{shown('mmsi')} / {shown('imo')}</strong></div>"
-        '<div class="row"><span>航速 / 航向</span>'
-        f"<strong>{speed_text} / {course_text}</strong></div>"
-        '<div class="row"><span>航行状态</span>'
-        f"<strong>{shown('navigation_status')}</strong></div>"
-        '<div class="row"><span>呼号 / 目的地</span>'
-        f"<strong>{shown('call_sign')} / {shown('destination')}</strong></div>"
-        '<div class="row"><span>AIS报告时间 UTC</span>'
-        f"<strong>{shown('observed_at')}</strong></div>"
-        '<div class="row"><span>本机接收时间 UTC</span>'
-        f"<strong>{shown('received_at')}</strong></div>"
-        '<div class="row"><span>数据年龄</span>'
-        f"<strong>{age_text} · {shown('age_basis')}</strong></div>"
-        '<div class="row"><span>数据源</span>'
-        f"<strong>{shown('data_source')}</strong></div>"
-        '<div class="basis">AIS船型为船载设备广播的基础分类；货船不能据此可靠细分为集装箱船或散货船。'
-        "点位可能因岸基/卫星覆盖、设备关闭、延迟或错误广播而缺失。</div>"
-        f'<a class="source" href="{_esc(vessel.get("source_url") or AIS.SOURCE)}" target="_blank" rel="noopener">'
-        f"{_esc(vessel.get('source_attribution') or vessel.get('data_source') or 'AIS数据来源')}</a>"
         "</div>"
     )

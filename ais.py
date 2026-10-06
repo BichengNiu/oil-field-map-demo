@@ -20,7 +20,7 @@ from typing import Any, Callable
 from urllib.parse import urlencode
 from urllib.request import Request, urlopen
 
-from regions import MONITORED_REGIONS, region_for
+from regions import AIS_REGIONS, region_for as geographic_region_for
 
 try:
     from websockets.sync.client import connect as websocket_connect
@@ -32,20 +32,21 @@ SOURCE = "https://aisstream.io/documentation"
 STREAM_URL = "wss://stream.aisstream.io/v0/stream"
 OPENWATERS_SOURCE = "https://openwaters.io/ais/"
 OPENWATERS_API = "https://ais.openwaters.io/v1/vessels"
-MODULE_VERSION = 6
+MODULE_VERSION = 7
 POSITION_RETENTION_SECONDS = 2 * 60 * 60
 MAX_TRACKED_VESSELS = 20_000
 MAX_ARCHIVE_BUFFER = 2_000
 ARCHIVE_BATCH_SIZE = 50
 
-# south, north, west, east.  Keep aligned with portwatch.REGIONS.
-REGIONS = MONITORED_REGIONS
+# south, north, west, east. AIS covers the Red Sea corridor as well as PortWatch's waters.
+REGIONS = AIS_REGIONS
 
 # Open Waters' anonymous API allows 100 square degrees per request. Keep the
-# complete five-region coverage in two requests while respecting that limit.
+# complete corridor coverage in three requests while respecting that limit.
 OPENWATERS_REGION_GROUPS = (
     ("波斯湾", "霍尔木兹海峡", "苏伊士运河"),
-    ("阿曼湾", "曼德海峡"),
+    ("阿曼湾", "红海北段"),
+    ("曼德海峡", "红海南段"),
 )
 
 POSITION_MESSAGE_TYPES = (
@@ -85,6 +86,11 @@ NAVIGATION_STATUS_LABELS = {
 
 def utc_now() -> datetime:
     return datetime.now(timezone.utc)
+
+
+def region_for(lat: float, lon: float) -> str | None:
+    """Assign an AIS position to the monitored waters or the Red Sea corridor."""
+    return geographic_region_for(lat, lon, REGIONS)
 
 
 def openwaters_bbox_groups() -> tuple[tuple[tuple[float, float, float, float], ...], ...]:
@@ -207,7 +213,7 @@ def _fetch_openwaters_group(
 
 
 def openwaters_snapshot(max_age_minutes: int = 30) -> dict[str, Any]:
-    """Fetch a free, two-request Open Waters snapshot for all monitored areas."""
+    """Fetch a free Open Waters snapshot for all monitored areas."""
 
     groups = openwaters_bbox_groups()
     results: list[dict[str, Any]] = []
@@ -241,8 +247,7 @@ def openwaters_snapshot(max_age_minutes: int = 30) -> dict[str, Any]:
             if previous is None or _snapshot_is_newer(vessel, previous):
                 by_mmsi[vessel["mmsi"]] = vessel
 
-    # Resolve attribution after combining both area responses, since one source
-    # may appear only in the second response.
+    # Resolve attribution after combining all area responses.
     for vessel in by_mmsi.values():
         vessel["source_attribution"] = attribution.get(vessel["source"])
     return {
@@ -325,28 +330,6 @@ def _snapshot_timestamp(vessel: dict[str, Any]) -> float:
     received = parse_utc(vessel.get("received_at"))
     timestamp = observed or received
     return timestamp.timestamp() if timestamp else float("-inf")
-
-
-def filter_vessels(
-    vessels: list[dict[str, Any]],
-    *,
-    regions: set[str],
-    categories: set[str],
-    moving_only: bool,
-    query: str,
-) -> list[dict[str, Any]]:
-    """Apply the map's vessel filters to one consistent snapshot."""
-
-    return [
-        vessel for vessel in vessels
-        if vessel.get("region") in regions
-        and (not categories or vessel.get("category") in categories)
-        and (not moving_only or vessel.get("moving"))
-        and (not query
-             or query in str(vessel.get("name") or "").lower()
-             or query in str(vessel.get("mmsi") or "").lower()
-             or query in str(vessel.get("imo") or "").lower())
-    ]
 
 
 def parse_number(value: Any) -> float | None:
