@@ -3,6 +3,7 @@ from __future__ import annotations
 
 from datetime import date, timedelta
 import json
+import os
 
 import streamlit as st
 
@@ -69,3 +70,29 @@ def card_vessel_history() -> list[dict]:
         return [json.loads(row[0]) for row in conn.execute(
             'SELECT payload FROM reports WHERE observed >= ?',
             ((date.today() - timedelta(days=400)).isoformat(),))]
+
+
+def sea_history_config() -> dict:
+    config = {}
+    for key in ("SEA_HISTORY_ARCHIVE_PATH", "SEA_HISTORY_BUNDLE_PATH",
+                "SEA_HISTORY_BUNDLE_URL", "SEA_HISTORY_BEARER_TOKEN", "SEA_HISTORY_IMPORT_TOKEN"):
+        try:
+            secret = st.secrets.get(key)
+        except Exception:
+            secret = None
+        config[key] = str(secret or os.environ.get(key) or "").strip()
+    return config
+
+
+@st.cache_data(ttl=900, show_spinner=False)
+def card_sea_history() -> dict:
+    """Synchronize configured authorized delivery and read the shared event archive."""
+    import sea_history
+    config = sea_history_config()
+    error = None
+    try:
+        sea_history.sync_source(config)
+    except Exception as exc:
+        error = f"海域历史更新失败：{exc}"
+    result = sea_history.read_history(sea_history.archive_path(config))
+    return {**result, "error": error}

@@ -61,8 +61,23 @@ def sea_activity_card(history, day):
     """
     rows = [{'portid': row.get('sea'), 'date': row.get('date'),
              'passages': row.get('passages')} for row in history]
-    values = [total(rows, set(SEA_MONITORING_AREAS), 'passages', *window)
-              for window in windows(day)] if day else [None] * 5
+    values = [None] * 5
+    if day:
+        periods = windows(day)
+        values[:2] = [total(rows, set(SEA_MONITORING_AREAS), 'passages', *window)
+                      for window in periods[:2]]
+        # Provider history consists of completed natural days. Use the latest
+        # common completed day within THIS month, without moving the week anchor
+        # backwards on Monday or silently presenting a previous month as current.
+        coverage = {sea: {str(r.get('date'))[:10] for r in history
+                          if r.get('sea') == sea and number(r.get('passages')) is not None}
+                    for sea in SEA_MONITORING_AREAS}
+        common = set.intersection(*coverage.values())
+        current = sorted(d for d in common if day.replace(day=1).isoformat() <= d <= day.isoformat())
+        if current:
+            month_day = date.fromisoformat(current[-1])
+            values[2:] = [total(rows, set(SEA_MONITORING_AREAS), 'passages', *window)
+                          for window in windows(month_day)[2:]]
     week, prior_week, month, prior_month, prior_year = values
     return ('海域监测', f'{len(SEA_MONITORING_AREAS)}个',
             f'上周累计通过{fmt(week)}艘次（环比 {change(week, prior_week)}）',

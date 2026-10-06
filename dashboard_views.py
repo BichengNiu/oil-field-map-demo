@@ -432,11 +432,20 @@ def prepare_monitoring_cards(available_ports, available_chokepoints, state,
                 target.extend(report_data.comparison_history(kind, ids, day.isoformat(), revision))
             except Exception as exc:
                 errors.append(f"{kind} 同比记录：{type(exc).__name__}: {exc}")
+    sea_history = []
+    try:
+        sea_state = report_data.card_sea_history()
+        sea_history = sea_state["rows"]
+        if sea_state.get("error"):
+            errors.append(sea_state["error"])
+    except Exception as exc:
+        errors.append(f"海域历史记录：{type(exc).__name__}: {exc}")
     cards = monitoring_cards.build_cards(
         available_ports, available_chokepoints,
         port_history + comparison_ports, choke_history + comparison_chokes,
         state.live_positions, state.selected_day, state.selected_chokepoint_day,
         vessel_day=datetime.now(ZoneInfo("Asia/Shanghai")).date(), assets=ASSETS,
+        sea_passage_history=sea_history,
     )
     return cards, errors
 

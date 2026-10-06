@@ -54,7 +54,7 @@ class MonitoringCardsTest(unittest.TestCase):
         ns = {'st': SimpleNamespace(session_state={}), 'uuid': uuid,
               'PORTWATCH': SimpleNamespace(has_independent_statistics=lambda p: True),
               'report_data': SimpleNamespace(history_window=fail, comparison_history=fail,
-                                            card_vessel_history=fail),
+                                            card_vessel_history=fail, card_sea_history=fail),
               'monitoring_cards': monitoring_cards, 'datetime': datetime,
               'ZoneInfo': ZoneInfo, 'ASSETS': []}
         state = SimpleNamespace(selected_day=datetime(2026, 10, 6).date(),
@@ -62,7 +62,7 @@ class MonitoringCardsTest(unittest.TestCase):
         prepare = view_function('prepare_monitoring_cards', ns)
         cards, errors = prepare([{'portid': 'p'}], [{'portid': 'c'}], state)
         self.assertEqual(len(cards), 4)
-        self.assertEqual(len(errors), 4)
+        self.assertEqual(len(errors), 5)
 
     def test_map_call_is_outside_print_mode(self):
         tree = ast.parse((ROOT / 'app.py').read_text())

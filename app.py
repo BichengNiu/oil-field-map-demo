@@ -29,6 +29,7 @@ from dashboard_views import (
     render_print_report,
 )
 from download_panel import render_download_panel
+from sea_history_panel import render_sea_history_panel
 
 ASSETS = CATALOG.ASSETS
 APP_STYLE = Path(__file__).with_name("dashboard.css").read_text()
@@ -147,6 +148,7 @@ def main() -> None:
             )
     if tab_download.open:
         with tab_download:
+            render_sea_history_panel()
             render_download_panel(newest_day, newest_chokepoint_day)
     if tab_vessels.open:
         with tab_vessels:
