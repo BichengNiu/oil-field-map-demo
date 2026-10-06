@@ -332,28 +332,6 @@ def _snapshot_timestamp(vessel: dict[str, Any]) -> float:
     return timestamp.timestamp() if timestamp else float("-inf")
 
 
-def filter_vessels(
-    vessels: list[dict[str, Any]],
-    *,
-    regions: set[str],
-    categories: set[str],
-    moving_only: bool,
-    query: str,
-) -> list[dict[str, Any]]:
-    """Apply the map's vessel filters to one consistent snapshot."""
-
-    return [
-        vessel for vessel in vessels
-        if vessel.get("region") in regions
-        and (not categories or vessel.get("category") in categories)
-        and (not moving_only or vessel.get("moving"))
-        and (not query
-             or query in str(vessel.get("name") or "").lower()
-             or query in str(vessel.get("mmsi") or "").lower()
-             or query in str(vessel.get("imo") or "").lower())
-    ]
-
-
 def parse_number(value: Any) -> float | None:
     """Parse a numeric AIS field without inventing a value on failure."""
     try:

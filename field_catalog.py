@@ -664,8 +664,7 @@ NAMED_CONSTITUENTS = {
     ),
 }
 
-# 没有公开田级数值、但对区域供给具有代表性的独立资产。它们保留在默认战略视图，
-# 其余无指标的小型单田仍可在“完整资产目录”中查询。
+# 没有公开田级数值、但对区域供给具有代表性的独立资产，用于战略层级分类。
 STRATEGIC_STANDALONE_ASSETS = {
     ("沙特阿拉伯", name) for name in ("Qatif", "Abqaiq", "Khursaniyah", "Jafurah")
 } | {
@@ -1316,7 +1315,7 @@ for asset in ASSETS:
     asset["map_drawable"] = asset["map_lat"] is not None and asset["map_lon"] is not None
     if strategic_parent:
         asset["map_role"] = "component"
-        asset["map_role_label"] = f"组成资产（默认并入{strategic_parent['name']}）"
+        asset["map_role_label"] = f"组成资产（上级节点：{strategic_parent['name']}）"
         asset["rollup_policy"] = "上级直接披露值优先；本资产不重复计入地图汇总"
     elif asset["constituent_count"]:
         asset["map_role"] = "strategic_group"
@@ -1516,9 +1515,8 @@ for asset in ASSETS:
     )
 
 
-# 默认地图只保留可用于区域供给研判的层级：有直接数值的资产、油田群／区块等上级节点，
-# 以及少量已明确列出的主力独立田。完整目录仍保留全部记录；停产、仅发现及储存资产不进入
-# 默认战略视图。这里不要求有坐标，以便界面同时如实报告“战略节点但待定位”的数量。
+# 标记适合区域供给研判的战略资产层级；地图和目录仍完整展示所有公开资产记录。
+# 此标记不要求资产具备坐标，以便单独说明战略节点的定位状态。
 _STRATEGIC_STATUSES = {
     "producing", "restoration_unconfirmed", "partially_operating", "temporarily_suspended", "development",
     "historical_unverified", "unknown",
@@ -1536,7 +1534,7 @@ for asset in ASSETS:
     )
     if asset["map_role"] == "strategic_standalone" and not asset["strategic_default"]:
         asset["map_role"] = "catalog_detail"
-        asset["map_role_label"] = "完整目录资产（默认不展示）"
+        asset["map_role_label"] = "目录补充资产（战略层级外）"
 
 # 下载成功不等于数值已核验；审计日期不等于观测日期。
 for asset in ASSETS:

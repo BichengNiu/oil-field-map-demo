@@ -139,7 +139,7 @@ def asset_rows(assets: list[dict]) -> list[dict]:
             "定位属性": "区域/设施代理点" if asset.get("map_is_proxy") else "资产点位",
             "坐标来源": asset["coordinate_source"],
             "坐标来源链接": asset["coordinate_source_url"],
-            "默认战略节点": "是" if asset["strategic_default"] else "否",
+            "战略层级标签": "是" if asset["strategic_default"] else "否",
             "来源": asset["source"],
             "来源链接": asset["source_url"],
             "说明": asset["note"],

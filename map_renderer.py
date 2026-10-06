@@ -15,26 +15,18 @@ _MAP_STYLES = "\n".join((_VENDOR / name).read_text() for name in (
 _MAP_SCRIPTS = "\n".join((_VENDOR / name).read_text() for name in (
     "leaflet.js", "leaflet.markercluster.js"))
 
-MAP_LAYER_LABELS = {
-    "vessels": "船舶",
-    "ports": "港口",
-    "assets": "油气",
-    "chokepoints": "咽喉点",
-}
-
-
-def build_map_html(assets: list[dict[str, object]], ports: list[dict],
-              chokepoints: list[dict], vessels: list[dict], day: str, chokepoint_day: str,
-              focus_assets: bool = False, ais_configured: bool = True,
-              visible_layers: set[str] | None = None, *,
-              asset_popup, port_popup, chokepoint_popup) -> str:
-    visible_layers = set(MAP_LAYER_LABELS) if visible_layers is None else visible_layers
-    show_assets = "assets" in visible_layers
-    show_ports = "ports" in visible_layers
-    show_chokepoints = bool(chokepoints) and bool(
-        {"chokepoints", "vessels"}.intersection(visible_layers)
-    )
-    show_vessels = "vessels" in visible_layers and ais_configured
+def build_map_html(
+    assets: list[dict[str, object]],
+    ports: list[dict],
+    chokepoints: list[dict],
+    vessels: list[dict],
+    day: str,
+    chokepoint_day: str,
+    *,
+    asset_popup,
+    port_popup,
+    chokepoint_popup,
+) -> str:
     markers = [
         {
             "lat": asset["map_lat"],
@@ -78,6 +70,7 @@ def build_map_html(assets: list[dict[str, object]], ports: list[dict],
         for vessel in vessels
     ], ensure_ascii=False).replace("</", "<\\/")
     legend_lines = ["<b>地图符号</b>"]
+
     def legend_icon(shape: str, color: str, proxy: bool = False) -> str:
         paths = {"asset": "M6 1 L11 6 L6 11 L1 6 Z",
                  "port": "M2 2 H10 V10 H2 Z",
@@ -86,26 +79,16 @@ def build_map_html(assets: list[dict[str, object]], ports: list[dict],
         stroke = 'stroke="#7c2d12" stroke-dasharray="2 2"' if proxy else ''
         return f'<svg viewBox="0 0 12 12"><path d="{paths[shape]}" fill="{color}" {stroke}/></svg>'
 
-    if show_assets:
-        legend_lines.append(f'<span>{legend_icon("asset", "#ea580c")}油气：菱形</span>')
-    if show_ports:
-        legend_lines.append(f'<span>{legend_icon("port", "#2563eb")}港口：方形</span>')
-    if show_chokepoints:
-        legend_lines.append(
-            f'<span>{legend_icon("choke", "#7c3aed")}咽喉点：六边形（PortWatch日通过艘次）</span>'
-        )
-    if show_vessels:
-        legend_lines.append(f'<span>{legend_icon("vessel", "#64748b")}船舶：三角形</span>')
-    if show_assets:
-        legend_lines.append(f'<span>{legend_icon("asset", "#ea580c", proxy=True)}油气虚线边：近似坐标</span>')
-    if show_vessels:
-        legend_lines.extend([
-            f'<span>{legend_icon("vessel", "#ef4444")}油轮/液货船　{legend_icon("vessel", "#2563eb")}货船</span>',
-            f'<span>{legend_icon("vessel", "#64748b")}其他船舶/船型未知</span>',
-        ])
+    legend_lines.extend([
+        f'<span>{legend_icon("asset", "#ea580c")}油气：菱形</span>',
+        f'<span>{legend_icon("port", "#2563eb")}港口：方形</span>',
+        f'<span>{legend_icon("choke", "#7c3aed")}咽喉点：六边形（PortWatch日通过艘次）</span>',
+        f'<span>{legend_icon("vessel", "#64748b")}船舶：三角形</span>',
+        f'<span>{legend_icon("asset", "#ea580c", proxy=True)}油气虚线边：近似坐标</span>',
+        f'<span>{legend_icon("vessel", "#ef4444")}油轮/液货船　{legend_icon("vessel", "#2563eb")}货船</span>',
+        f'<span>{legend_icon("vessel", "#64748b")}其他船舶/船型未知</span>',
+    ])
     legend_json = json.dumps("".join(legend_lines), ensure_ascii=False).replace("</", "<\\/")
-    focus_json = json.dumps(focus_assets)
-    visible_layers_json = json.dumps(sorted(visible_layers))
     screenshot_date_json = json.dumps(day if day != "无数据" else chokepoint_day)
     screenshot_label_json = json.dumps(
         f"港口数据日（UTC）：{day} · 咽喉点数据日（UTC）：{chokepoint_day} · 船舶：当前快照",
@@ -218,31 +201,19 @@ def build_map_html(assets: list[dict[str, object]], ports: list[dict],
         .concat(chokepoints.map((p) => [p.lat, p.lon]))
         .concat(assets.map((a) => [a.lat, a.lon]))
         .concat(vessels.map((v) => [v[0], v[1]]));
-      const focusAssets = {focus_json};
-      const visibleLayers = {visible_layers_json};
-      if (focusAssets && assets.length === 1) {{
-        map.setView([assets[0].lat, assets[0].lon], 8, {{animate: false}});
-      }} else if (focusAssets && assets.length > 1) {{
-        map.fitBounds(L.latLngBounds(assets.map((a) => [a.lat, a.lon])),
-          {{padding: [42, 42], maxZoom: 7, animate: false}});
-      }} else if (allPoints.length) {{
+      if (allPoints.length) {{
         map.fitBounds(L.latLngBounds(allPoints), {{padding: [36, 36], maxZoom: 5, animate: false}});
       }}
-      // Keep the viewport only while the selected layers and marker locations match.
-      const pointSignature = allPoints
-        .map(([lat, lon]) => [Number(lat), Number(lon)])
-        .sort((left, right) => left[0] - right[0] || left[1] - right[1]);
-      const viewKey = 'energy-map-view';
-      const viewSignature = JSON.stringify([focusAssets, visibleLayers, pointSignature]);
+      // Preserve the user's map view across Streamlit reruns.
+      const viewKey = 'energy-map-view-v2';
       try {{
         const saved = JSON.parse(sessionStorage.getItem(viewKey));
-        if (saved && saved.signature === viewSignature) {{
+        if (saved && Array.isArray(saved.center) && Number.isFinite(saved.zoom)) {{
           map.setView(saved.center, saved.zoom, {{animate: false}});
         }}
       }} catch (error) {{ /* Storage can be disabled by the embedding browser. */ }}
       map.on('moveend', () => {{
         try {{ sessionStorage.setItem(viewKey, JSON.stringify({{
-          signature: viewSignature,
           center: [map.getCenter().lat, map.getCenter().lng], zoom: map.getZoom()
         }})); }} catch (error) {{ }}
       }});

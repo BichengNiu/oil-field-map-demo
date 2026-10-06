@@ -195,10 +195,44 @@ def _change_table(choke_rows: list[dict], choke_catalog: list[dict],
                    "最近7日均值（艘次/日）", "环比变化"], rows)
 
 
+def _mercator_pixel(lat: float, lon: float, zoom: int) -> tuple[float, float]:
+    lat = min(85.05112878, max(-85.05112878, lat))
+    scale = 256 * (2**zoom)
+    x = (lon + 180) / 360 * scale
+    sine = math.sin(math.radians(lat))
+    y = (0.5 - math.log((1 + sine) / (1 - sine)) / (4 * math.pi)) * scale
+    return x, y
+
+
+def _basemap_tiles(lon_min: float, lon_max: float, lat_min: float, lat_max: float) -> str:
+    """Place the same Esri street-map tiles as the interactive map in print HTML."""
+    zoom = 5
+    left, bottom = _mercator_pixel(lat_min, lon_min, zoom)
+    right, top = _mercator_pixel(lat_max, lon_max, zoom)
+    width, height = right - left, bottom - top
+    first_x, last_x = math.floor(left / 256), math.floor((right - 1) / 256)
+    first_y, last_y = math.floor(top / 256), math.floor((bottom - 1) / 256)
+    tiles = []
+    for tile_y in range(first_y, last_y + 1):
+        for tile_x in range(first_x, last_x + 1):
+            x = (tile_x * 256 - left) / width * 100
+            y = (tile_y * 256 - top) / height * 100
+            tile_width = 256 / width * 100
+            tile_height = 256 / height * 100
+            tiles.append(
+                f'<img class="map-tile" loading="eager" alt="" '
+                f'src="https://server.arcgisonline.com/ArcGIS/rest/services/World_Street_Map/'
+                f'MapServer/tile/{zoom}/{tile_y}/{tile_x}" '
+                f'style="left:{x:.4f}%;top:{y:.4f}%;width:{tile_width:.4f}%;'
+                f'height:{tile_height:.4f}%">'
+            )
+    return "".join(tiles)
+
+
 def _overview_map(ports: list[dict], chokes: list[dict], assets: list[dict],
                   regions: dict[str, tuple[float, float, float, float]],
-                  vessels: list[dict] | None = None) -> str:
-    # st.html sanitizes SVG tags, so print graphics use HTML elements and CSS.
+                  vessels: list[dict] | None = None,
+                  include_basemap: bool = False) -> str:
     coordinates = []
     for row in ports + chokes + (vessels or []):
         coordinates.append((_number(row.get("lat")), _number(row.get("lon"))))
@@ -221,28 +255,31 @@ def _overview_map(ports: list[dict], chokes: list[dict], assets: list[dict],
         lon_min, lon_max = lon_min - lon_padding, lon_max + lon_padding
     else:
         lon_min, lon_max, lat_min, lat_max = 29.0, 64.0, 8.0, 34.0
-    lon_span, lat_span = lon_max - lon_min, lat_max - lat_min
+    lat_min = min(85.0, max(-85.0, lat_min))
+    lat_max = min(85.0, max(-85.0, lat_max))
+    lon_span = lon_max - lon_min
+    mercator_top = math.log(math.tan(math.pi / 4 + math.radians(lat_max) / 2))
+    mercator_bottom = math.log(math.tan(math.pi / 4 + math.radians(lat_min) / 2))
+    mercator_span = mercator_top - mercator_bottom
+    aspect = math.radians(lon_span) / mercator_span
 
     def xy(lat: object, lon: object) -> tuple[float, float] | None:
         yv, xv = _number(lat), _number(lon)
         if yv is None or xv is None or not (lat_min <= yv <= lat_max and lon_min <= xv <= lon_max):
             return None
-        return (xv - lon_min) / lon_span * 100, (lat_max - yv) / lat_span * 100
+        yv = min(85.0, max(-85.0, yv))
+        projected_y = math.log(math.tan(math.pi / 4 + math.radians(yv) / 2))
+        return (
+            (xv - lon_min) / lon_span * 100,
+            (mercator_top - projected_y) / mercator_span * 100,
+        )
 
-    lon_step = 10 if lon_span > 40 else 5 if lon_span > 20 else 2 if lon_span > 10 else 1
-    lat_step = 10 if lat_span > 40 else 5 if lat_span > 20 else 2 if lat_span > 10 else 1
-    lon_start = math.ceil(lon_min / lon_step) * lon_step
-    lat_start = math.ceil(lat_min / lat_step) * lat_step
-    parts = ['<div class="overview-map" role="img" aria-label="监测水域与节点空间分布示意">',
-             '<div class="overview-map-plot">']
-    for lon in range(lon_start, math.floor(lon_max) + 1, lon_step):
-        x = (lon - lon_min) / lon_span * 100
-        parts.append(f'<span class="map-gridline vertical" style="left:{x:.3f}%"></span>')
-        parts.append(f'<span class="map-axis-label map-axis-x" style="left:{x:.3f}%">{lon}°E</span>')
-    for lat in range(lat_start, math.floor(lat_max) + 1, lat_step):
-        y = (lat_max - lat) / lat_span * 100
-        parts.append(f'<span class="map-gridline horizontal" style="top:{y:.3f}%"></span>')
-        parts.append(f'<span class="map-axis-label map-axis-y" style="top:{y:.3f}%">{lat}°N</span>')
+    parts = [
+        f'<div class="overview-map" role="img" aria-label="监测水域地图与监测对象位置" '
+        f'style="aspect-ratio:{aspect:.4f}/1"><div class="overview-map-plot">'
+    ]
+    if include_basemap:
+        parts.append(_basemap_tiles(lon_min, lon_max, lat_min, lat_max))
     for region, bounds in regions.items():
         south, north, west, east = bounds
         x1, y1 = xy(south, west) or (None, None)
@@ -254,14 +291,19 @@ def _overview_map(ports: list[dict], chokes: list[dict], assets: list[dict],
             )
 
     def append_point(kind: str, label: object, lat: object, lon: object,
-                     proxy: bool = False) -> None:
+                     proxy: bool = False, count: int = 1) -> None:
         point = xy(lat, lon)
         if point:
             x, y = point
             proxy_class = " proxy" if proxy else ""
+            count_size = "4pt" if count < 100 else "3pt" if count < 1000 else "2.4pt"
+            count_text = (
+                f'<b style="font-size:{count_size}">{count}</b>' if kind == "vessel" else ""
+            )
+            title = f"{count} 艘 AIS 船位" if kind == "vessel" else str(label)
             parts.append(
-                f'<span class="map-point {kind}{proxy_class}" title="{_esc(label)}" '
-                f'style="left:{x:.3f}%;top:{y:.3f}%"></span>'
+                f'<span class="map-point {kind}{proxy_class}" title="{_esc(title)}" '
+                f'style="left:{x:.3f}%;top:{y:.3f}%">{count_text}</span>'
             )
 
     for port in ports:
@@ -276,9 +318,24 @@ def _overview_map(ports: list[dict], chokes: list[dict], assets: list[dict],
     for choke in chokes:
         append_point("choke", choke.get("name_cn") or choke.get("name") or "咽喉点",
                      choke.get("lat"), choke.get("lon"))
-    for vessel in (vessels or []):
-        append_point("vessel", vessel.get("name") or vessel.get("mmsi") or "AIS船位",
-                     vessel.get("lat"), vessel.get("lon"))
+
+    vessel_cells: dict[tuple[int, int], list[float | int]] = {}
+    for vessel in vessels or []:
+        point = xy(vessel.get("lat"), vessel.get("lon"))
+        if point:
+            x, y = point
+            cell = (math.floor(x / 4), math.floor(y / 5))
+            bucket = vessel_cells.setdefault(cell, [0, 0.0, 0.0])
+            bucket[0] += 1
+            bucket[1] += x
+            bucket[2] += y
+    for count, x_sum, y_sum in vessel_cells.values():
+        avg_x, avg_y = x_sum / count, y_sum / count
+        projected_y = mercator_top - avg_y / 100 * mercator_span
+        avg_lat = math.degrees(2 * math.atan(math.exp(projected_y)) - math.pi / 2)
+        avg_lon = lon_min + avg_x / 100 * lon_span
+        append_point("vessel", "AIS船位", avg_lat, avg_lon, count=int(count))
+
     parts.append('</div></div>')
     return "".join(parts)
 
@@ -326,7 +383,9 @@ def build_report_html(
     dated_calls = [p for p in latest_ports if _number(p.get("portcalls")) is not None]
     catalog_chokes = len(choke_catalog)
     report_assets = list(assets)
-    map_html = _overview_map(port_catalog, choke_catalog, report_assets, regions, vessels)
+    map_html = _overview_map(
+        port_catalog, choke_catalog, report_assets, regions, vessels, include_basemap=True
+    )
     cover_cards = _metric_cards([
         ("港口监测点", str(len(port_catalog)), f"其中独立统计点 {len(stat_ports)} 个"),
         ("战略通道", str(catalog_chokes), "逐节点分别报告，不合并解释"),
@@ -350,13 +409,12 @@ def build_report_html(
         + '<h3>能源资产与战略通道监测范围</h3>'
         + f'<div class="map-frame">{map_html}</div>'
         + '<div class="map-legend">'
-          '<span><i style="background:#1769aa"></i>港口</span>'
-          '<span><i style="background:#7c3aed"></i>咽喉点</span>'
-          '<span><i style="background:#d97706"></i>油气资产</span>'
-          '<span><i style="background:#14866d"></i>AIS船位</span>'
+          '<span><i class="legend-symbol port"></i>港口</span>'
+          '<span><i class="legend-symbol choke"></i>咽喉点</span>'
+          '<span><i class="legend-symbol asset"></i>油气资产</span>'
+          '<span><i class="legend-symbol vessel">8</i>船舶（网格内合并计数）</span>'
+          '<span>底图 Tiles © Esri</span>'
           '</div>'
-        + '<p class="note">点位按经纬度绘制，区域框为项目监测范围；'
-          '空间分布示意不代表海岸线或实际航迹。</p>'
         + cover_cards
         + cover_table
     )
@@ -519,7 +577,14 @@ PRINT_CSS = """
 .report-date-rule span { position:relative; top:-.7em; padding:0 4mm; background:#fff; font-size:9pt; }
 .report-sponsor { margin:0 0 3mm; text-align:center; font-size:10pt; font-weight:400!important; }
 .map-legend { display:flex; justify-content:center; flex-wrap:wrap; gap:2mm 5mm; font-size:8pt; margin:1mm 0 2mm; }
-.map-legend i { display:inline-block; width:2.5mm; height:2.5mm; margin-right:1mm; vertical-align:middle; }
+.map-legend .legend-symbol { display:inline-flex; width:3mm; height:3mm; margin-right:1mm; vertical-align:middle; align-items:center; justify-content:center; }
+.legend-symbol.port { border-radius:50%; background:#1769aa; }
+.legend-symbol.choke { border:0.45mm solid #7c3aed; border-radius:50%; background:#fff; }
+.legend-symbol.asset { position:relative; }
+.legend-symbol.asset::before,.legend-symbol.asset::after { content:""; position:absolute; width:3mm; height:.5mm; background:#d97706; }
+.legend-symbol.asset::before { transform:rotate(45deg); }
+.legend-symbol.asset::after { transform:rotate(-45deg); }
+.legend-symbol.vessel { width:4mm; height:5mm; background:#14866d; color:#fff; font-size:5pt; font-weight:700; clip-path:polygon(50% 0,100% 100%,50% 76%,0 100%); }
 .print-report h2 { font-size: 15pt; border-bottom: 1px solid #9aa7b4; padding-bottom: 2mm; margin: 0 0 4mm; }
 .print-report h3 { font-size: 10.5pt; margin: 4mm 0 2mm; }
 .report-page { break-before: page; page-break-before: always; }
@@ -543,22 +608,20 @@ PRINT_CSS = """
 .unit,.note,.empty { color:#52606d; font-size:8pt; }
 .note { margin:2mm 0; }
 .map-frame { border:1px solid #d6dde5; padding:2mm; break-inside:avoid; page-break-inside:avoid; }
-.overview-map { position:relative; width:100%; aspect-ratio:2/1; background:#f8fafc; border:1px solid #94a3b8; }
-.overview-map-plot { position:absolute; left:8.4%; right:3.3%; top:6.5%; bottom:12.1%; border:1px solid #94a3b8; }
-.map-gridline { position:absolute; display:block; z-index:0; }
-.map-gridline.vertical { top:0; bottom:0; border-left:1px solid #dce3e9; }
-.map-gridline.horizontal { left:0; right:0; border-top:1px solid #dce3e9; }
-.map-axis-label { position:absolute; color:#52606d; font-size:6.5pt; white-space:nowrap; }
-.map-axis-x { top:calc(100% + 2px); transform:translateX(-50%); }
-.map-axis-y { left:-3px; transform:translate(-100%,-50%); }
+.overview-map { position:relative; width:100%; background:#d6eef4; border:1px solid #94a3b8; }
+.overview-map-plot { position:absolute; inset:0; overflow:hidden; background:#d6eef4; }
+.map-tile { position:absolute; z-index:0; max-width:none; }
 .map-zone { position:absolute; z-index:1; border:1px dashed #64748b; background:rgba(191,219,254,.08); }
-.map-zone span { position:absolute; top:1px; left:2px; color:#435466; font-size:6.5pt; white-space:nowrap; }
+.map-zone span { position:absolute; top:1px; left:2px; color:#263746; font-size:6.5pt; white-space:nowrap; text-shadow:0 0 2px #fff,0 0 2px #fff; }
 .map-point { position:absolute; z-index:2; display:block; transform:translate(-50%,-50%); }
-.map-point.port { width:1.5mm; height:1.5mm; border:.3mm solid #1769aa; background:#1769aa; }
-.map-point.asset { width:2mm; height:2mm; border:.3mm solid #d97706; background:#d97706; transform:translate(-50%,-50%) rotate(45deg); }
-.map-point.asset.proxy { border:1px dashed #7c2d12; }
-.map-point.choke { width:2.5mm; height:2.5mm; border:.4mm solid #7c3aed; border-radius:50%; background:#7c3aed; }
-.map-point.vessel { width:1mm; height:1mm; border:.3mm solid #14866d; border-radius:50%; background:#14866d; opacity:.7; }
+.map-point.port { width:1.5mm; height:1.5mm; border:.25mm solid #fff; border-radius:50%; background:#1769aa; }
+.map-point.asset { width:2.5mm; height:2.5mm; }
+.map-point.asset::before,.map-point.asset::after { content:""; position:absolute; top:50%; left:50%; width:2.5mm; height:.45mm; background:#d97706; box-shadow:0 0 0 .2mm #fff; }
+.map-point.asset::before { transform:translate(-50%,-50%) rotate(45deg); }
+.map-point.asset::after { transform:translate(-50%,-50%) rotate(-45deg); }
+.map-point.choke { width:2.1mm; height:2.1mm; border:.4mm solid #7c3aed; border-radius:50%; background:#fff; }
+.map-point.vessel { width:6mm; height:7mm; display:flex; align-items:center; justify-content:center; color:#fff; font-size:4.4pt; font-weight:700; line-height:1; background:#14866d; clip-path:polygon(50% 0,100% 100%,50% 76%,0 100%); }
+.map-point.vessel b { font-weight:700; margin-top:1.2mm; }
 .table-wrap { overflow:visible; }
 .print-report table { width:100%; border-collapse:collapse; font-size:8pt; margin:2mm 0 4mm; }
 .print-report th,.print-report td { border:1px solid #cbd5df; padding:1.3mm 1.6mm; text-align:left; vertical-align:top; overflow-wrap:anywhere; }

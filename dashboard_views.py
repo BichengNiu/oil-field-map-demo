@@ -2,7 +2,6 @@
 
 from __future__ import annotations
 
-from collections import Counter
 from datetime import date
 
 import streamlit as st
@@ -23,110 +22,27 @@ ASSETS = CATALOG.ASSETS
 
 
 def render_map_panel(state: DashboardViewState) -> None:
-    all_positions = state.live_positions
-    filtered_vessels = state.filtered_vessels
-    map_vessels = filtered_vessels if "vessels" in state.visible_map_layers else []
     stream_state = state.ais_status
     if state.port_error:
         st.error(f"港口数据加载失败：{state.port_error}")
-    elif "ports" in state.visible_map_layers and not state.map_ports:
-        st.info(
-            "港口图层已开启，但当前没有可绘制点位。请检查国家筛选和数据状态；"
-            "港口筛选留空时显示所选国家的全部港口。"
-        )
     if state.chokepoint_error:
         st.error(f"咽喉点数据加载失败：{state.chokepoint_error}")
     if state.archive_error:
-        st.warning(state.archive_error)
-    if state.map_chokepoints and "vessels" in state.visible_map_layers:
-        st.info(
-            f"同时显示 PortWatch 最新日度通行量（{state.selected_chokepoint_day or '日期未知'} UTC）："
-            "霍尔木兹、曼德海峡与苏伊士运河的紫色六边形是当日通过艘次；"
-            "红海没有单列的 PortWatch 总量，苏伊士与曼德分别显示其两端统计。"
-        )
-    if not state.ais_enabled:
-        st.info("船舶图层已关闭。")
-    elif "vessels" in state.visible_map_layers:
-        if stream_state.get("last_error") and not all_positions:
-            st.warning(f"AISStream 暂无可用船位，后台将自动重连：{stream_state['last_error']}")
-        if stream_state.get("archive_error"):
-            st.warning(f"AISStream 船位归档失败：{stream_state['archive_error']}")
-        if state.open_state.get("error"):
-            st.warning(f"Open Waters 免费数据暂不可用：{state.open_state['error']}")
-        if not all_positions and not state.open_state.get("error"):
-            if (
-                stream_state.get("status") == "订阅已确认"
-                and stream_state.get("raw_event_count", 0) == 0
-            ):
-                st.warning(
-                    "AISStream 已确认订阅但未送达事件；Open Waters 当前快照也没有船位。"
-                    "这不代表监测水域内没有船舶。"
-                )
-            else:
-                st.info("两处数据源尚未返回当前可用船位；不能据此判断水域内没有船舶。")
-        elif all_positions and not map_vessels:
-            st.info(
-                f"已收到 {len(all_positions):,} 个船位，但船型、航行状态或搜索筛选没有匹配结果。"
-                "清空这些筛选即可恢复显示。"
-            )
-        elif map_vessels:
-            st.caption(
-                f"地图正在显示 {len(map_vessels):,} 个 AIS 船位；低缩放级别会聚合密集船位，"
-                "放大地图可查看单船图标。"
-            )
-        if all_positions:
-            region_counts = Counter(vessel.get("region") for vessel in all_positions)
-            open_waters_counts = Counter(
-                vessel.get("region")
-                for vessel in all_positions
-                if str(vessel.get("data_source") or "").startswith("Open Waters")
-            )
-            aisstream_counts = Counter(
-                vessel.get("region")
-                for vessel in all_positions
-                if vessel.get("data_source") == "AISStream"
-            )
-            empty_regions = [region for region in AIS.REGIONS if not region_counts[region]]
-            if empty_regions:
-                gaps = []
-                for region in empty_regions:
-                    open_waters = (
-                        "不可用"
-                        if state.open_state.get("error")
-                        else str(open_waters_counts[region])
-                    )
-                    aisstream = (
-                        "未配置"
-                        if stream_state.get("status") == "未配置（可选）"
-                        else str(aisstream_counts[region])
-                    )
-                    gaps.append(
-                        f"{region}（Open Waters {open_waters}，AISStream {aisstream}）"
-                    )
-                st.warning(
-                    f"当前船位快照在{'、'.join(gaps)}没有可显示的船位。"
-                    "地图只绘制数据源收到的位置；0 条表示当前数据源没有报文，不代表水域内没有船舶。"
-                )
-    if state.unlocated_asset_count:
-        st.info(
-            f"当前筛选有 {state.unlocated_asset_count} 项仅列目录：既无可核验独立坐标，也无可用的"
-            "上级资产代表点，因此不以猜测位置绘图。可在‘油气’表查看坐标证据。"
-        )
-    if state.unlocated_port_count:
-        st.info(f"当前筛选有 {state.unlocated_port_count} 个港口尚无可靠坐标，仅列于‘港口’目录。")
+        st.error(state.archive_error)
+    if state.open_state.get("error"):
+        st.error(f"Open Waters 快照加载失败：{state.open_state['error']}")
+    if stream_state.get("last_error") and not state.live_positions:
+        st.error(f"AISStream 暂无可用船位：{stream_state['last_error']}")
     st.iframe(
         map_renderer.build_map_html(
             state.map_assets,
             state.map_ports,
             state.map_chokepoints,
-            map_vessels,
+            state.live_positions,
             state.selected_day.isoformat() if state.selected_day else "无数据",
             state.selected_chokepoint_day.isoformat()
             if state.selected_chokepoint_day
             else "无数据",
-            focus_assets=state.focus_assets,
-            ais_configured=bool(state.ais_enabled),
-            visible_layers=state.visible_map_layers,
             asset_popup=asset_popup,
             port_popup=port_popup,
             chokepoint_popup=chokepoint_popup,
@@ -137,11 +53,8 @@ def render_map_panel(state: DashboardViewState) -> None:
 
 def render_ais_panel(state: DashboardViewState) -> None:
     st.subheader("船舶")
-    if not state.ais_enabled:
-        st.info("船舶位置已关闭，可在左侧‘船舶’中启用。")
-        return
     all_positions = state.live_positions
-    vessels = state.filtered_vessels
+    vessels = all_positions
     rows = dashboard_rows.vessel_rows(vessels)
     ais_status = state.ais_status
     has_position_data = bool(all_positions)
@@ -161,10 +74,10 @@ def render_ais_panel(state: DashboardViewState) -> None:
         for region in AIS.REGIONS
     }
     if state.archive_error:
-        st.warning(state.archive_error)
+        st.error(state.archive_error)
     vessel_metric = len(vessels) if has_position_data else "—"
     v1, v2, v3, v4, v5 = st.columns(5)
-    v1.metric("筛选后船舶", vessel_metric)
+    v1.metric("当前船位", vessel_metric)
     v2.metric("航行中", sum(bool(v.get("moving")) for v in vessels) if has_position_data else "—")
     v3.metric(
         "油轮/液货船",
@@ -177,35 +90,42 @@ def render_ais_panel(state: DashboardViewState) -> None:
         "船型待识别",
         sum(v.get("category") == "unknown" for v in vessels) if has_position_data else "—",
     )
-    if state.open_state.get("truncated"):
-        st.warning("Open Waters 返回结果达到该区域查询上限，较早船位可能未包含。")
     if state.open_state.get("error"):
-        st.warning(f"Open Waters 快照错误：{state.open_state['error']}")
-    if ais_status.get("compression_enabled") is False:
-        st.warning("AISStream 未确认 WebSocket 压缩协商；未压缩连接可能受带宽限制。")
+        st.error(f"Open Waters 快照错误：{state.open_state['error']}")
     if ais_status.get("last_error"):
-        st.warning(f"最近连接错误：{ais_status['last_error']}；采集器会自动指数退避重连。")
+        st.error(f"最近连接错误：{ais_status['last_error']}")
     st.markdown("**各监测水域当前船位**")
-    st.dataframe(
-        [
+    region_rows = []
+    for region, counts in region_counts.items():
+        if has_position_data:
+            open_waters_count = (
+                "不可用" if state.open_state.get("error") else counts["open_waters"]
+            )
+            aisstream_count = (
+                "未配置"
+                if ais_status.get("status") == "未配置（可选）"
+                else counts["aisstream"]
+            )
+            total_count = counts["open_waters"] + counts["aisstream"]
+        else:
+            open_waters_count = "不可用" if state.open_state.get("error") else "—"
+            aisstream_count = (
+                "未配置" if ais_status.get("status") == "未配置（可选）" else "—"
+            )
+            total_count = "—"
+        region_rows.append(
             {
                 "水域": region,
-                "Open Waters": counts["open_waters"],
-                "AISStream": counts["aisstream"],
-                "合计": counts["open_waters"] + counts["aisstream"],
+                "Open Waters": open_waters_count,
+                "AISStream": aisstream_count,
+                "合计": total_count,
             }
-            for region, counts in region_counts.items()
-        ],
+        )
+    st.dataframe(
+        region_rows,
         width="stretch",
         hide_index=True,
     )
-    st.caption("这里统计当前快照中按 MMSI 合并后的船位；0 条表示当前数据源没有返回报文，不代表该水域没有船舶。")
-    if ais_status.get("status") == "未配置（可选）":
-        st.info(
-            "AISStream 尚未配置。Open Waters 的公开接收站覆盖并非全球连续覆盖；"
-            "可在部署环境配置 AISSTREAM_API_KEY 接入另一 AIS 数据源；"
-            "红海、苏伊士运河和曼德海峡的实际覆盖仍取决于该源收到的报文。"
-        )
     if rows:
         st.dataframe(
             rows,
@@ -221,22 +141,6 @@ def render_ais_panel(state: DashboardViewState) -> None:
             mime="text/csv",
             type="primary",
         )
-    elif not all_positions:
-        if (
-            ais_status.get("status") == "订阅已确认"
-            and ais_status.get("raw_event_count", 0) == 0
-            and not state.open_state.get("error")
-        ):
-            st.warning(
-                "AISStream 已确认订阅但尚未送达事件，Open Waters 当前快照也没有返回船位。"
-                "当前船位不可用，不能据此判断监测水域内没有船舶。"
-            )
-        elif state.open_state.get("error"):
-            st.warning("免费公共快照暂时不可用；可稍后刷新。没有报文不等于水域内没有船舶。")
-        else:
-            st.info("正在等待监测水域内的新 AIS 报文；当前船位尚不可用。")
-    else:
-        st.info("当前船型、水域、搜索和数据年龄筛选没有匹配船舶。")
 
 
 def render_ports_panel(
@@ -252,7 +156,7 @@ def render_ports_panel(
         st.error(f"港口数据加载失败：{port_error}")
     elif port_rows:
         p1, p2, p3, p4 = st.columns(4)
-        p1.metric("筛选后港口", len(port_rows))
+        p1.metric("港口总数", len(port_rows))
         p2.metric("当日有进港", sum((p.get("portcalls") or 0) > 0 for p in ports))
         p3.metric(
             f"{rolling_days}天持续活跃", sum((p.get("active_day_rate") or 0) >= 50 for p in ports)
@@ -265,7 +169,7 @@ def render_ports_panel(
             else f"{sum(risk_values) / 10000:,.1f} 万吨/日",
         )
         if port_risk_error:
-            st.caption(f"历史风险运力暂不可用：{port_risk_error}")
+            st.error(f"历史风险运力暂不可用：{port_risk_error}")
         st.dataframe(
             port_rows,
             width="stretch",
@@ -277,49 +181,31 @@ def render_ports_panel(
             },
         )
         st.download_button(
-            "下载当前筛选结果 CSV",
+            "下载港口列表 CSV",
             csv_export.csv_bytes(port_rows, list(port_rows[0])),
             file_name=f"portwatch_ports_{selected_day.isoformat()}.csv",
             mime="text/csv",
             type="primary",
         )
         st.button(
-            "下载当前筛选港口历史",
+            "下载所列港口历史",
             key="download_port_history",
             on_click=open_download_tab,
             args=("ports", tuple(p["portid"] for p in ports)),
         )
-    else:
-        st.info("当前筛选没有匹配港口。选择“全选”可恢复全部港口。")
 
 
-def render_assets_panel(filtered: list[dict], asset_view: str) -> None:
-    asset_rows = dashboard_rows.asset_rows(filtered)
-    st.subheader(f"油气目录 · {asset_view}")
+def render_assets_panel(assets: list[dict]) -> None:
+    asset_rows = dashboard_rows.asset_rows(assets)
+    st.subheader("油气资产目录")
     a1, a2, a3, a4, a5 = st.columns(5)
-    a1.metric("当前视图", len(filtered))
-    a2.metric("可绘制", sum(bool(a["map_drawable"]) for a in filtered))
-    a3.metric("有产量记录", sum(bool(a["is_daily_output"]) for a in filtered))
+    a1.metric("资产总数", len(assets))
+    a2.metric("可绘制", sum(bool(a["map_drawable"]) for a in assets))
+    a3.metric("有产量记录", sum(bool(a["is_daily_output"]) for a in assets))
     a4.metric(
-        "产能／目标", sum(a["value"] is not None and not a["is_daily_output"] for a in filtered)
+        "产能／目标", sum(a["value"] is not None and not a["is_daily_output"] for a in assets)
     )
-    a5.metric("底层目录", len(ASSETS))
-    st.info(
-        "上级节点有直接披露值时优先采用该值，组成资产不重复计入；"
-        "逐田产量缺失时，“产量显示”可列注明所属范围的合计参考；参考值不分配到单田、不重复计入。"
-        "不同日期、商品或口径的子项不会自动相加。搜索可临时显示完整目录中的匹配资产。"
-    )
-    aggregate_count = sum(
-        not asset["is_daily_output"] and bool(asset.get("aggregate_references"))
-        for asset in filtered
-    )
-    st.caption(f"其中 {aggregate_count} 项逐田产量未确认，显示注明范围的合计参考；产量记录包含历史期间。")
-    reference_count = sum(bool(asset.get("public_metadata")) for asset in filtered)
-    if reference_count:
-        st.caption(
-            f"本视图 {reference_count} 项补有 Global Energy Monitor 2026-03公开目录参考（CC BY 4.0）；"
-            "运营商、权益和投产年有版本限制，不证明当前在产。未披露日产量继续留空。"
-        )
+    a5.metric("含公开目录参考", sum(bool(a.get("public_metadata")) for a in assets))
     st.dataframe(
         asset_rows,
         width="stretch",
@@ -340,7 +226,7 @@ def render_assets_panel(filtered: list[dict], asset_view: str) -> None:
 def render_method_panel() -> None:
     st.subheader("范围、口径与数据限制")
     st.markdown(
-        "**更新方式。** 动态数据和目录使用进程级短期缓存；切换筛选时复用已读取数据。点击侧栏“刷新 PortWatch 数据”可清除 PortWatch 实时缓存并重读；源站未发布新记录时，观测日期不会改变；请求失败明确显示不可用。"
+        "**更新方式。** 动态数据和目录使用短期缓存；页面上方的按钮可分别刷新 PortWatch 和船舶数据。"
     )
     st.dataframe(
         [
@@ -351,8 +237,8 @@ def render_method_panel() -> None:
             },
             {
                 "数据": "实时船位",
-                "当前更新": "显示船舶图层、打开船舶页或打印时读取 Open Waters；可选 AISStream 后台持续接收",
-                "进一步自动化": "AISStream 需配置服务端密钥；页面另有手动刷新",
+                "当前更新": "每次页面运行读取 Open Waters 当前快照；可选 AISStream 后台持续接收",
+                "进一步自动化": "AISStream 需配置服务端密钥；页面上方可手动刷新",
             },
             {
                 "数据": "港口 / 咽喉点官方目录",
@@ -406,7 +292,7 @@ def render_method_panel() -> None:
         "[每日咽喉点 API](https://services9.arcgis.com/weJ1QsnbMYJlCHdG/arcgis/rest/services/Daily_Chokepoints_Data/FeatureServer/0) · "
         "[风险运力网络 API](https://services9.arcgis.com/weJ1QsnbMYJlCHdG/arcgis/rest/services/spillovers_port_level_impact/FeatureServer/0)"
     )
-    st.markdown("**港口派生指标。** 所有窗口指标固定使用所选观测日及此前6个日历日；缺报不补零。")
+    st.markdown("**港口派生指标。** 所有窗口指标固定使用最新观测日及此前6个日历日；缺报不补零。")
     st.dataframe(
         [
             {
@@ -443,36 +329,34 @@ def render_method_panel() -> None:
         hide_index=True,
         width="stretch",
     )
-    st.warning(
-        "PortWatch 的portcalls是进入港界并通过贸易挂靠筛选的有效进港艘次，不是在港船舶存量。"
-        "货量根据AIS、载重和吃水估算。单日0只表示源表当日为0；窗口不完整或比较基期为0时，"
-        "派生指标保持为空，不以0替代。tanker可能包含原油、成品油及其他液体货物。"
+    st.markdown(
+        "PortWatch 的 portcalls 是进入港界并通过贸易挂靠筛选的有效进港艘次，不是在港船舶存量；"
+        "货量根据 AIS、载重和吃水估算。单日 0 只表示源表当日为 0；窗口不完整或比较基期为 0 时，"
+        "派生指标保持为空，不以 0 替代。tanker 可能包含原油、成品油及其他液体货物。"
     )
     st.markdown(
         f"**船舶数据。** 免费快照来自[Open Waters开放AIS网络]({AIS.OPENWATERS_SOURCE})，"
         f"可选[AISStream WebSocket API]({AIS.SOURCE})在服务器端接收五个监测水域及红海北、南段的船级广播；"
-        "船位快照用于地图、船舶页和后台打印报告；停留期间可点击侧栏“刷新船舶数据”。"
+        "船位快照用于地图、船舶页和后台打印报告；仅显示两小时内有时间戳的报文，可点击页面上方按钮刷新。"
         "浏览器只接收标准化的每船最新位置，不接收API Key。"
-        "多源位置按MMSI合并，航行阈值为0.5节，超过所选最大数据年龄的船位只从当前显示中排除；"
+        "多源位置按MMSI合并，航行阈值为0.5节；"
         "上游来源署名随船舶表及弹窗显示。"
     )
-    st.warning(
-        "AIS基础船型只能可靠区分油轮／液货船、货船、客船等大类，不能直接识别集装箱船、"
-        "干散货船、原油油轮或成品油轮。AIS是事件驱动广播，覆盖中断、设备关闭、错误MMSI、"
-        "延迟或位置欺骗都会造成缺失；未收到报文不等于水域内船舶数为0。实时船位不能替代"
-        "PortWatch经港界和贸易规则处理后的日度挂靠指标。"
+    st.markdown(
+        "AIS 基础船型只能可靠区分油轮／液货船、货船、客船等大类，不能直接识别集装箱船、干散货船、"
+        "原油油轮或成品油轮。AIS 是事件驱动广播，覆盖中断、设备关闭、错误 MMSI、延迟或位置欺骗都会造成缺失；"
+        "未收到报文不等于水域内船舶数为 0。实时船位不能替代 PortWatch 按港界和贸易规则处理的日度挂靠指标。"
     )
     st.markdown(
-        "**咽喉点。** 地图紫色六边形显示所选水域内咽喉点的日度记录。"
+        "**咽喉点。** 打印地图的空心紫色圆点标示全部监测咽喉点。"
         "popup列示总通过船数、估算承载货量及五类船型分解；港口和咽喉点分别使用源站最新观测日，缺报不补零。"
     )
     st.markdown(
-        f"**资产覆盖与战略层级（公开目录，非全量保证）。** 底层目录保留全部{len(ASSETS)}项公开命名的生产、开发、发现或历史资产；"
-        f"默认地图仅显示{sum(a['strategic_default'] for a in ASSETS)}个战略生产节点，其中"
-        f"{sum(a['strategic_default'] and a['map_drawable'] for a in ASSETS)}个具备可绘制坐标。"
+        f"**资产覆盖与战略层级（公开目录，非全量保证）。** 目录保留全部{len(ASSETS)}项公开命名的生产、开发、发现或历史资产；"
+        f"地图显示其中{sum(a['map_drawable'] for a in ASSETS)}个具备可绘制坐标的资产。"
         "上级油田群、区块或特许区有"
-        "直接披露值时，地图使用上级值并隐藏组成资产，避免双重计算；上级缺坐标时可使用已定位组成"
-        "资产的几何中心，并在popup中明确标注。没有可靠数值的小型单田仍可在“完整资产目录”中查询。"
+        "直接披露值时，地图和目录按资产层级分别列示；上级缺坐标时可使用已定位组成"
+        "资产的几何中心，并在弹窗中明确标注。"
     )
     st.markdown(
         "**坐标质量。** 地图优先使用资产级公开WGS84点位；区块缺少直接点位时，可使用组成油田"
@@ -481,7 +365,7 @@ def render_method_panel() -> None:
         "popup和资产表中追溯。"
     )
     st.markdown(
-        "**产量与产能。** 油气统一使用橙色实心菱形；指标性质、数据日期和披露情况在弹窗及表格中列明。"
+        "**产量与产能。** 油气统一使用橙色叉号；指标性质、数据日期和披露情况在弹窗及表格中列明。"
         "实际产量、历史产量、产能、目标和规划增量分别标注；未披露数值不视为零。不同日期、商品和权益口径"
         "不得相加。来源为千桶/日的油品数值在界面统一换算为万桶/日；生产状态带证据时点，"
         "不等于实时遥测。"
@@ -494,13 +378,12 @@ def render_print_report(
     selected_day = state.selected_day
     selected_chokepoint_day = state.selected_chokepoint_day
     live_positions = state.live_positions
-    ais_enabled = state.ais_enabled
     port_error = state.port_error
     chokepoint_error = state.chokepoint_error
     open_state = state.open_state
     report_port_catalog = list(available_ports)
     report_choke_catalog = list(available_chokepoints)
-    report_assets = [asset for asset in ASSETS if asset.get("strategic_default")]
+    report_assets = list(ASSETS)
     report_vessels = [
         {
             key: vessel.get(key)
@@ -554,15 +437,13 @@ def render_print_report(
 
     report_asset_table = [dashboard_rows.print_asset_record(asset) for asset in report_assets]
     report_ais_state = state.ais_status
-    report_ais_status = (
-        "已关闭" if not ais_enabled else str(report_ais_state.get("status") or "等待数据")
-    )
+    report_ais_status = str(report_ais_state.get("status") or "等待数据")
     report_ais_note = (
         f"Open Waters 快照 {len(open_state.get('vessels') or [])} 艘；"
         f"AISStream 状态：{report_ais_status}"
     )
     report_html = report_data.cached_print_report({
-        "scope_label": "全项目",
+        "scope_label": "全部监测对象",
         "generated_at": None,
         "port_catalog": report_port_catalog,
         "choke_catalog": report_choke_catalog,

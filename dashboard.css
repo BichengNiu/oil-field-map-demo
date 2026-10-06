@@ -1,37 +1,6 @@
 .stApp { background: #f5f7fb; }
   .block-container { padding-top: 4rem; padding-bottom: 2.5rem; max-width: 1680px; }
-  [data-testid="stSidebar"] {
-      background: #f1f5f9;
-      border-right: 1px solid #dbe4ee;
-  }
-  [data-testid="stSidebar"] * { color: #172b4d; }
-  [data-testid="stSidebar"] div[data-baseweb="select"] > div,
-  [data-testid="stSidebar"] input,
-  [data-testid="stSidebar"] textarea,
-  [data-testid="stSidebar"] [data-testid="stDateInput"] button {
-      background: #ffffff;
-      color: #172b4d;
-      border-color: #cbd5e1;
-  }
-  [data-testid="stSidebar"] input::placeholder,
-  [data-testid="stSidebar"] textarea::placeholder {
-      color: #64748b;
-      opacity: 1;
-  }
-  [data-testid="stSidebar"] [data-baseweb="select"] span,
-  [data-testid="stSidebar"] [data-baseweb="select"] svg {
-      color: #172b4d;
-      fill: #475569;
-  }
-  [data-testid="stSidebar"] [data-baseweb="tag"] {
-      background: #dbeafe;
-      border-color: #bfdbfe;
-  }
-  [data-testid="stSidebar"] .stCaption,
-  [data-testid="stSidebar"] [data-testid="stCaption"] {
-      color: #52667d !important;
-  }
-  [data-testid="stSidebar"] hr { border-color: #dbe4ee; }
+  [data-testid="stSidebar"], [data-testid="collapsedControl"] { display: none !important; }
   [data-testid="stMetric"] { background: white; border: 1px solid #dfe7ef; border-radius: 14px;
       padding: 13px 16px; box-shadow: 0 3px 12px rgba(25, 49, 74, .05); }
   [data-testid="stMetricLabel"] { color: #557085; }
