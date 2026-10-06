@@ -26,7 +26,7 @@ def view_function(name, namespace):
 class MonitoringCardsTest(unittest.TestCase):
     def test_normal_map_renders_four_cards_before_map(self):
         calls = []
-        st = SimpleNamespace(html=lambda html: calls.append(('cards', html)),
+        st = SimpleNamespace(session_state={}, html=lambda html: calls.append(('cards', html)),
                              iframe=lambda html, **kwargs: calls.append(('map', html)),
                              container=lambda **kwargs: nullcontext(),
                              checkbox=lambda *args, **kwargs: calls.append(('checkbox', args[0])) or True,
@@ -39,13 +39,13 @@ class MonitoringCardsTest(unittest.TestCase):
                                 selected_day=None, selected_chokepoint_day=None, focus_assets=False)
         ns = {'st': st, 'monitoring_cards': monitoring_cards,
               'map_renderer': SimpleNamespace(build_map_html=lambda *args, **kwargs: 'map')}
-        ns.update({name: None for name in ('asset_popup', 'port_popup', 'chokepoint_popup', 'vessel_popup', 'refresh_portwatch_data', 'refresh_vessel_data')})
+        ns.update({name: None for name in ('asset_popup', 'port_popup', 'chokepoint_popup', 'vessel_popup', 'refresh_portwatch_data', 'refresh_vessel_data', 'queue_map_screenshot')})
         render = view_function('render_map_panel', ns)
         cards = monitoring_cards.build_cards([], [], [], [], [], None, None)
         render(state, cards)
         self.assertEqual([call[0] for call in calls], ['cards', 'checkbox', 'checkbox', 'checkbox', 'map'])
         self.assertEqual(calls[0][1].count('class="monitoring-card"'), 4)
-        for label in ('港口监测', '通道监测', '船只监测', '油田监测'):
+        for label in ('港口监测', '通道监测', '海域监测', '油田监测'):
             self.assertIn(label, calls[0][1])
 
     def test_source_failure_still_returns_four_cards(self):
@@ -62,7 +62,7 @@ class MonitoringCardsTest(unittest.TestCase):
         prepare = view_function('prepare_monitoring_cards', ns)
         cards, errors = prepare([{'portid': 'p'}], [{'portid': 'c'}], state)
         self.assertEqual(len(cards), 4)
-        self.assertEqual(len(errors), 5)
+        self.assertEqual(len(errors), 4)
 
     def test_map_call_is_outside_print_mode(self):
         tree = ast.parse((ROOT / 'app.py').read_text())
