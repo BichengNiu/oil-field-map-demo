@@ -2,6 +2,7 @@
 
 from __future__ import annotations
 
+from collections import Counter
 from datetime import date
 
 import streamlit as st
@@ -67,6 +68,39 @@ def render_map_panel(state: DashboardViewState) -> None:
                 f"地图正在显示 {len(map_vessels):,} 个 AIS 船位；低缩放级别会聚合密集船位，"
                 "放大地图可查看单船图标。"
             )
+        if all_positions:
+            region_counts = Counter(vessel.get("region") for vessel in all_positions)
+            open_waters_counts = Counter(
+                vessel.get("region")
+                for vessel in all_positions
+                if str(vessel.get("data_source") or "").startswith("Open Waters")
+            )
+            aisstream_counts = Counter(
+                vessel.get("region")
+                for vessel in all_positions
+                if vessel.get("data_source") == "AISStream"
+            )
+            empty_regions = [region for region in AIS.REGIONS if not region_counts[region]]
+            if empty_regions:
+                gaps = []
+                for region in empty_regions:
+                    open_waters = (
+                        "不可用"
+                        if state.open_state.get("error")
+                        else str(open_waters_counts[region])
+                    )
+                    aisstream = (
+                        "未配置"
+                        if stream_state.get("status") == "未配置（可选）"
+                        else str(aisstream_counts[region])
+                    )
+                    gaps.append(
+                        f"{region}（Open Waters {open_waters}，AISStream {aisstream}）"
+                    )
+                st.warning(
+                    f"当前船位快照在{'、'.join(gaps)}没有可显示的船位。"
+                    "地图只绘制数据源收到的位置；0 条表示当前数据源没有报文，不代表水域内没有船舶。"
+                )
     if state.unlocated_asset_count:
         st.info(
             f"当前筛选有 {state.unlocated_asset_count} 项仅列目录：既无可核验独立坐标，也无可用的"
