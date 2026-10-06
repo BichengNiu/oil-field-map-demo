@@ -234,6 +234,22 @@ def _insert_local_documents(connection, documents: list[dict]) -> int:
     return len(values)
 
 
+def _prune_removed_local_documents(connection, documents: list[dict]) -> int:
+    """Drop archived files no longer present in the managed source folders."""
+    paths = sorted({document["source_path"] for document in documents})
+    before = connection.execute("SELECT count(*) FROM source_documents").fetchone()[0]
+    if not paths:
+        connection.execute("DELETE FROM source_documents")
+    else:
+        placeholders = ",".join("?" for _ in paths)
+        connection.execute(
+            f"DELETE FROM source_documents WHERE source_path NOT IN ({placeholders})",
+            paths,
+        )
+    after = connection.execute("SELECT count(*) FROM source_documents").fetchone()[0]
+    return before - after
+
+
 def _insert_portwatch_snapshots(connection, documents: list[dict]) -> int:
     rows_before = connection.execute("SELECT count(*) FROM portwatch_daily").fetchone()[0]
     for document in sorted(
@@ -841,6 +857,8 @@ def build_database(destination: Path | None = None, *, offline: bool = False) ->
                 );
             """)
             _carry_forward_live_data(connection, previous)
+            counts["removed_obsolete_source_document_versions"] = _prune_removed_local_documents(
+                connection, documents)
             counts["local_source_documents"] = _insert_local_documents(connection, documents)
             counts["portwatch_snapshot_rows"] = _insert_portwatch_snapshots(connection, documents)
 

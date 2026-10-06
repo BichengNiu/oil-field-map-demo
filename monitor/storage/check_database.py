@@ -80,13 +80,23 @@ def inspect_database(database: Path) -> dict:
             "SELECT source_path, sha256 FROM source_documents"
         ).fetchall())
         missing_documents = sorted(expected_sources - stored_documents)
+        expected_paths = {path for path, _ in expected_sources}
+        orphaned_document_paths = sorted(
+            {path for path, _ in stored_documents} - expected_paths
+        )
         report["coverage"]["local_structured_files"] = len(expected_documents)
         report["coverage"]["source_document_versions"] = _count(connection, "source_documents")
         report["coverage"]["missing_local_documents"] = len(missing_documents)
+        report["coverage"]["orphaned_source_document_paths"] = len(orphaned_document_paths)
         if missing_documents:
             preview = ", ".join(path for path, _ in missing_documents[:8])
             report["errors"].append(
                 f"source_documents 漏了 {len(missing_documents)} 个当前本地文件版本：{preview}"
+            )
+        if orphaned_document_paths:
+            report["errors"].append(
+                f"source_documents 遗留 {len(orphaned_document_paths)} 个已删除源文件路径："
+                + ", ".join(orphaned_document_paths[:8])
             )
 
         source_rows = connection.execute(
