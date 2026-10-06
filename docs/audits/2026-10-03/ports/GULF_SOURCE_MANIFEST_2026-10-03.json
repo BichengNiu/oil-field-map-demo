@@ -1,0 +1,77 @@
+{
+  "review_date": "2026-10-03",
+  "downloaded_original_documents": [
+    {
+      "file": "aramco2025.pdf",
+      "url": "https://www.aramco.com/-/media/publications/corporate-reports/reports-and-presentations/2025/fy/saudi-aramco-ara-2025-english.pdf",
+      "final_url": "https://www.aramco.com/-/media/publications/corporate-reports/reports-and-presentations/2025/fy/saudi-aramco-ara-2025-english.pdf",
+      "status": 200,
+      "bytes": 17683967,
+      "sha256": "78bb678e8e45f5c58fa1b2402ab5a29c5ad10adfda8ba5e7ee5f4d1ad76cd227"
+    },
+    {
+      "file": "koc2025.pdf",
+      "url": "https://www.kockw.com/sites/EN/Annual%20Reports/2024-2025%20English.pdf",
+      "final_url": "https://www.kockw.com/sites/EN/Annual%20Reports/2024-2025%20English.pdf",
+      "status": 200,
+      "bytes": 3895544,
+      "sha256": "7bb17bdf69ea5cf7a5e03a0487e16c6e586338ee9053d1122ed89c81690250c8"
+    },
+    {
+      "file": "qatar2025.pdf",
+      "url": "https://www.qatarenergy.qa/en/MediaCenter/Publications/QatarEnergy_Investors_Presentation_November_2025.pdf",
+      "final_url": "https://www.qatarenergy.qa/en/MediaCenter/Publications/QatarEnergy_Investors_Presentation_November_2025.pdf",
+      "status": 200,
+      "bytes": 5032257,
+      "sha256": "c548d703dc46dfb89e7453e8c02aa20d43b6601bee164afe2c5d97da0e983f8a"
+    },
+    {
+      "file": "bahrain2025.pdf",
+      "url": "https://www.rns-pdf.londonstockexchange.com/rns/7260H_2-2025-5-7.pdf",
+      "final_url": "https://www.rns-pdf.londonstockexchange.com/rns/7260H_2-2025-5-7.pdf",
+      "status": 200,
+      "bytes": 1761513,
+      "sha256": "ea188f6bd7c4de880c3c93ac622f7182b9cccb983922ec2107d2f3f1199dec8e"
+    },
+    {
+      "file": "tethys2024.pdf",
+      "url": "https://www.tethysoil.com/en/wp-content/uploads/sites/2/2025/04/tethys-oil-ab-publ-annual-report-2024-250408.pdf",
+      "final_url": "https://www.tethysoil.com/en/wp-content/uploads/sites/2/2025/04/tethys-oil-ab-publ-annual-report-2024-250408.pdf",
+      "status": 200,
+      "bytes": 13002683,
+      "sha256": "290010fa38b3d7af8024f3dd0ead90598d752f5d4b2be3fe57cabb2960a59d95"
+    },
+    {
+      "file": "dno2026q2.pdf",
+      "url": "https://www.dno.no/media/ezuglbal/q2-2026-interim-results-report.pdf",
+      "final_url": "https://www.dno.no/media/ezuglbal/q2-2026-interim-results-report.pdf",
+      "status": 200,
+      "bytes": 2570274,
+      "sha256": "5f32f1475dba0f0230c7f57dfebd3f696356316c96999fd0a7c04da34a771e22"
+    },
+    {
+      "file": "iraqeiti2021.pdf",
+      "url": "https://eiti.org/sites/default/files/2024-01/Iraq%202021%20EITI%20Report.pdf",
+      "final_url": "https://eiti.org/sites/default/files/2024-01/Iraq%202021%20EITI%20Report.pdf",
+      "status": 200,
+      "bytes": 5889835,
+      "sha256": "57f1268210a696b892a609865d323ae593e935cdd2699693720a3f8d62b6183e"
+    }
+  ],
+  "wpi_mirror": {
+    "source_url": "https://arcgis.netl.doe.gov/server/rest/services/Hosted/CCS_EJ_SJ_Data/FeatureServer/17",
+    "file": "snapshots/ports/WPI_GULF_GOVERNMENT_MIRROR_2026-10-03.json",
+    "sha256": "230e3fb206dc9623f4d7f51986e8689f8afb198b680baf1d8da565fa6a70be43",
+    "rows": 83,
+    "query_scope": "country names of the eight Gulf producers; outSR=4326; no exceededTransferLimit",
+    "source_vintage": "unknown; not claimed to be latest NGA edition"
+  },
+  "unavailable": [
+    {
+      "file": "wpi.csv",
+      "url": "https://msi.nga.mil/api/publications/download?key=16694622%2FSFH00000%2FUpdatedPub150.csv",
+      "error": "HTTP Error 403: Forbidden"
+    }
+  ],
+  "limitations": "下载成功只确认可访问，事实逐条阅读后纳入GULF_REVIEW；不把抓取日期当观测日。IRIB的Shadegan验收结果是转引，SHANA原稿未取得。"
+}

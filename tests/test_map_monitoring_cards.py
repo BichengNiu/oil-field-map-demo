@@ -8,18 +8,18 @@ import unittest
 import uuid
 from zoneinfo import ZoneInfo
 
-import monitoring_cards
+import monitor.common.monitoring_cards as monitoring_cards
 
 ROOT = Path(__file__).resolve().parents[1]
 
 
 def view_function(name, namespace):
-    tree = ast.parse((ROOT / 'dashboard_views.py').read_text())
+    tree = ast.parse((ROOT / 'monitor/ui/dashboard_views.py').read_text())
     fn = next(node for node in tree.body if isinstance(node, ast.FunctionDef) and node.name == name)
     for argument in fn.args.args:
         argument.annotation = None
     fn.returns = None
-    exec(compile(ast.Module(body=[fn], type_ignores=[]), str(ROOT / 'dashboard_views.py'), 'exec'), namespace)
+    exec(compile(ast.Module(body=[fn], type_ignores=[]), str(ROOT / 'monitor/ui/dashboard_views.py'), 'exec'), namespace)
     return namespace[name]
 
 

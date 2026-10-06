@@ -8,8 +8,8 @@ import tempfile
 import unittest
 from zipfile import ZipFile
 
-import monitoring_cards
-import sea_history
+import monitor.common.monitoring_cards as monitoring_cards
+import monitor.vessels.sea_history as sea_history
 
 
 def bundle(events, coverage, definition="test-boundaries-v1", source="test-provider"):
