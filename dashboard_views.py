@@ -15,6 +15,7 @@ import portwatch as PORTWATCH
 import print_report
 import report_data
 from dashboard_state import DashboardViewState
+from dashboard_data import refresh_portwatch_data, refresh_vessel_data
 from download_panel import open_download_tab
 from map_popups import asset_popup, chokepoint_popup, port_popup
 
@@ -22,6 +23,11 @@ ASSETS = CATALOG.ASSETS
 
 
 def render_map_panel(state: DashboardViewState) -> None:
+    with st.container(horizontal=True, key="map_layer_filters"):
+        show_assets = st.checkbox("油气", value=True, key="map_show_assets")
+        show_ports = st.checkbox("港口", value=True, key="map_show_ports",
+                                 help="同时显示港口与咽喉点")
+        show_vessels = st.checkbox("船舶", value=True, key="map_show_vessels")
     stream_state = state.ais_status
     if state.port_error:
         st.error(f"港口数据加载失败：{state.port_error}")
@@ -35,20 +41,28 @@ def render_map_panel(state: DashboardViewState) -> None:
         st.error(f"AISStream 暂无可用船位：{stream_state['last_error']}")
     st.iframe(
         map_renderer.build_map_html(
-            state.map_assets,
-            state.map_ports,
-            state.map_chokepoints,
-            state.live_positions,
+            state.map_assets if show_assets else [],
+            state.map_ports if show_ports else [],
+            state.map_chokepoints if show_ports else [],
+            state.live_positions if show_vessels else [],
             state.selected_day.isoformat() if state.selected_day else "无数据",
             state.selected_chokepoint_day.isoformat()
             if state.selected_chokepoint_day
             else "无数据",
+            visible_categories={name for name, selected in (
+                ("assets", show_assets), ("ports", show_ports), ("vessels", show_vessels)
+            ) if selected},
             asset_popup=asset_popup,
             port_popup=port_popup,
             chokepoint_popup=chokepoint_popup,
         ),
         height=735,
     )
+    with st.container(horizontal=True, key="map_refresh_actions"):
+        st.button("刷新 PortWatch 数据", type="primary", width="content",
+                  on_click=refresh_portwatch_data)
+        st.button("刷新船舶数据", type="primary", width="content",
+                  on_click=refresh_vessel_data)
 
 
 def render_ais_panel(state: DashboardViewState) -> None:
@@ -226,7 +240,7 @@ def render_assets_panel(assets: list[dict]) -> None:
 def render_method_panel() -> None:
     st.subheader("范围、口径与数据限制")
     st.markdown(
-        "**更新方式。** 动态数据和目录使用短期缓存；页面上方的按钮可分别刷新 PortWatch 和船舶数据。"
+        "**更新方式。** 动态数据和目录使用短期缓存；地图下方的按钮可分别刷新 PortWatch 和船舶数据。"
     )
     st.dataframe(
         [
@@ -238,7 +252,7 @@ def render_method_panel() -> None:
             {
                 "数据": "实时船位",
                 "当前更新": "每次页面运行读取 Open Waters 当前快照；可选 AISStream 后台持续接收",
-                "进一步自动化": "AISStream 需配置服务端密钥；页面上方可手动刷新",
+                "进一步自动化": "AISStream 需配置服务端密钥；地图下方可手动刷新",
             },
             {
                 "数据": "港口 / 咽喉点官方目录",
@@ -337,7 +351,7 @@ def render_method_panel() -> None:
     st.markdown(
         f"**船舶数据。** 免费快照来自[Open Waters开放AIS网络]({AIS.OPENWATERS_SOURCE})，"
         f"可选[AISStream WebSocket API]({AIS.SOURCE})在服务器端接收五个监测水域及红海北、南段的船级广播；"
-        "船位快照用于地图、船舶页和后台打印报告；仅显示两小时内有时间戳的报文，可点击页面上方按钮刷新。"
+        "船位快照用于地图、船舶页和后台打印报告；仅显示两小时内有时间戳的报文，可点击地图下方按钮刷新。"
         "浏览器只接收标准化的每船最新位置，不接收API Key。"
         "多源位置按MMSI合并，航行阈值为0.5节；"
         "上游来源署名随船舶表及弹窗显示。"

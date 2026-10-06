@@ -8,7 +8,9 @@
 
 from __future__ import annotations
 
+import json
 import re
+from pathlib import Path
 from decimal import Decimal, InvalidOperation
 from typing import Any
 
@@ -1558,6 +1560,30 @@ finish_reviews(ASSETS)
 attach_gem_production_candidates(ASSETS)
 apply_public_metadata(ASSETS)
 finish_production_recheck(ASSETS, OUTPUT_METRIC_TYPES)
+
+# Resolve the former dashed markers only from independently reviewed field/well
+# locations. Keep rejected proxy evidence in the dated audit, not in map exports.
+_coordinate_review = json.loads(
+    (Path(__file__).parent / "data" / "coordinate_recheck.json").read_text(encoding="utf-8")
+)
+for _row in _coordinate_review["records"]:
+    _asset = _asset_index[(_row["country"], _row["name"])]
+    _coordinate = _row["coordinate"]
+    _asset["coordinate_review_date"] = _coordinate_review["review_date"]
+    _asset["coordinate_review_reason"] = _row["reason"]
+    _asset["map_is_proxy"] = False
+    _asset["map_drawable"] = _coordinate is not None
+    if _coordinate:
+        _asset["map_lat"] = _coordinate["lat"]
+        _asset["map_lon"] = _coordinate["lon"]
+        _asset["map_coordinate_precision"] = _coordinate["precision"]
+        _asset["coordinate_source"] = _coordinate["source"]
+        _asset["coordinate_source_url"] = _coordinate["url"]
+    else:
+        _asset["map_lat"] = _asset["map_lon"] = None
+        _asset["map_coordinate_precision"] = "独立田级坐标待核；仅列目录"
+        _asset["coordinate_source"] = "2026-10-06再次检索未确认独立位置；原代理点已撤回"
+        _asset["coordinate_source_url"] = None
 
 
 def _numeric_value(value: Any) -> tuple[Decimal | None, str]:

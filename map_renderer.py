@@ -23,6 +23,7 @@ def build_map_html(
     day: str,
     chokepoint_day: str,
     *,
+    visible_categories: set[str] | None = None,
     asset_popup,
     port_popup,
     chokepoint_popup,
@@ -31,12 +32,11 @@ def build_map_html(
         {
             "lat": asset["map_lat"],
             "lon": asset["map_lon"],
-            "is_proxy": asset.get("map_is_proxy", False),
             "name": f'{asset["name_cn"]} · {asset["name"]}',
             "popup": asset_popup(asset),
         }
         for asset in assets
-        if asset["map_drawable"]
+        if asset["map_drawable"] and not asset.get("map_is_proxy", False)
     ]
     marker_json = json.dumps(markers, ensure_ascii=False).replace("</", "<\\/")
     port_json = json.dumps([
@@ -69,25 +69,31 @@ def build_map_html(
         ]
         for vessel in vessels
     ], ensure_ascii=False).replace("</", "<\\/")
-    legend_lines = ["<b>地图符号</b>"]
+    legend_lines = ["<b>图例</b>"]
 
-    def legend_icon(shape: str, color: str, proxy: bool = False) -> str:
+    def legend_icon(shape: str, color: str) -> str:
         paths = {"asset": "M6 1 L11 6 L6 11 L1 6 Z",
                  "port": "M2 2 H10 V10 H2 Z",
                  "choke": "M3 1 H9 L12 6 L9 11 H3 L0 6 Z",
                  "vessel": "M6 0 L12 12 L6 9 L0 12 Z"}
-        stroke = 'stroke="#7c2d12" stroke-dasharray="2 2"' if proxy else ''
-        return f'<svg viewBox="0 0 12 12"><path d="{paths[shape]}" fill="{color}" {stroke}/></svg>'
+        return f'<svg viewBox="0 0 12 12"><path d="{paths[shape]}" fill="{color}"/></svg>'
 
-    legend_lines.extend([
-        f'<span>{legend_icon("asset", "#ea580c")}油气：菱形</span>',
-        f'<span>{legend_icon("port", "#2563eb")}港口：方形</span>',
-        f'<span>{legend_icon("choke", "#7c3aed")}咽喉点：六边形（PortWatch日通过艘次）</span>',
-        f'<span>{legend_icon("vessel", "#64748b")}船舶：三角形</span>',
-        f'<span>{legend_icon("asset", "#ea580c", proxy=True)}油气虚线边：近似坐标</span>',
-        f'<span>{legend_icon("vessel", "#ef4444")}油轮/液货船　{legend_icon("vessel", "#2563eb")}货船</span>',
-        f'<span>{legend_icon("vessel", "#64748b")}其他船舶/船型未知</span>',
-    ])
+    categories = {"assets", "ports", "vessels"} if visible_categories is None else visible_categories
+    if "assets" in categories:
+        legend_lines.append(f'<span>{legend_icon("asset", "#ea580c")}油气：菱形</span>')
+    if "ports" in categories:
+        legend_lines.extend([
+            f'<span>{legend_icon("port", "#2563eb")}港口：方形</span>',
+            f'<span>{legend_icon("choke", "#7c3aed")}咽喉点：六边形（PortWatch日通过艘次）</span>',
+        ])
+    if "vessels" in categories:
+        legend_lines.extend([
+            f'<span>{legend_icon("vessel", "#64748b")}船舶：三角形</span>',
+            f'<span>{legend_icon("vessel", "#ef4444")}油轮/液货船　{legend_icon("vessel", "#2563eb")}货船</span>',
+            f'<span>{legend_icon("vessel", "#64748b")}其他船舶/船型未知</span>',
+        ])
+    if not categories:
+        legend_lines.append('<span>未选择显示类别</span>')
     legend_json = json.dumps("".join(legend_lines), ensure_ascii=False).replace("</", "<\\/")
     screenshot_date_json = json.dumps(day if day != "无数据" else chokepoint_day)
     screenshot_label_json = json.dumps(
@@ -243,13 +249,12 @@ def build_map_html(
       }}).addTo(map);
       assets.forEach((asset) => {{
         const size = 18;
-        const dash = asset.is_proxy ? '3 2' : 'none';
         const icon = L.divIcon({{
           className: 'asset-icon', iconSize: [size, size], iconAnchor: [size / 2, size / 2],
           html: `<svg width="${{size}}" height="${{size}}" viewBox="0 0 ${{size}} ${{size}}">
             <polygon points="${{size/2}},1 ${{size-1}},${{size/2}} ${{size/2}},${{size-1}} 1,${{size/2}}"
               fill="#ea580c" fill-opacity=".94" stroke="#7c2d12"
-              stroke-width="1.5" stroke-dasharray="${{dash}}"/>
+              stroke-width="1.5"/>
           </svg>`
         }});
         L.marker([asset.lat, asset.lon], {{icon}}).bindTooltip(asset.name, {{direction: 'top', opacity: .95}})

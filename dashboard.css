@@ -1,4 +1,6 @@
 .stApp { background: #f5f7fb; }
+.st-key-map_refresh_actions button { min-height: 1.9rem; padding: .2rem .65rem; }
+.st-key-map_refresh_actions button p { font-size: .8rem; }
   .block-container { padding-top: 4rem; padding-bottom: 2.5rem; max-width: 1680px; }
   [data-testid="stSidebar"], [data-testid="collapsedControl"] { display: none !important; }
   [data-testid="stMetric"] { background: white; border: 1px solid #dfe7ef; border-radius: 14px;

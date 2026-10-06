@@ -291,18 +291,17 @@ def _overview_map(ports: list[dict], chokes: list[dict], assets: list[dict],
             )
 
     def append_point(kind: str, label: object, lat: object, lon: object,
-                     proxy: bool = False, count: int = 1) -> None:
+                     count: int = 1) -> None:
         point = xy(lat, lon)
         if point:
             x, y = point
-            proxy_class = " proxy" if proxy else ""
             count_size = "4pt" if count < 100 else "3pt" if count < 1000 else "2.4pt"
             count_text = (
                 f'<b style="font-size:{count_size}">{count}</b>' if kind == "vessel" else ""
             )
             title = f"{count} 艘 AIS 船位" if kind == "vessel" else str(label)
             parts.append(
-                f'<span class="map-point {kind}{proxy_class}" title="{_esc(title)}" '
+                f'<span class="map-point {kind}" title="{_esc(title)}" '
                 f'style="left:{x:.3f}%;top:{y:.3f}%">{count_text}</span>'
             )
 
@@ -314,7 +313,7 @@ def _overview_map(ports: list[dict], chokes: list[dict], assets: list[dict],
             continue
         append_point("asset", asset.get("name_cn") or asset.get("name") or "油气资产",
                      asset.get("map_lat", asset.get("lat")),
-                     asset.get("map_lon", asset.get("lon")), bool(asset.get("map_is_proxy")))
+                     asset.get("map_lon", asset.get("lon")))
     for choke in chokes:
         append_point("choke", choke.get("name_cn") or choke.get("name") or "咽喉点",
                      choke.get("lat"), choke.get("lon"))
@@ -502,7 +501,7 @@ def build_report_html(
         ])
     oil_content = (
         '<p class="note">只列公开披露且可定位的战略节点；实际产量、产能、目标与历史值按资产逐项区分，'
-        '不跨口径相加。虚线边框代理点的坐标仅用于定位。</p>'
+        '不跨口径相加。坐标精度以来源标注为准；未核实独立位置的资产仅列目录。</p>'
         + '<div class="map-frame">' + _overview_map([], [], report_assets, regions) + '</div>'
         + '<h3>战略油气资产（最多20项）</h3>'
         + _table(["资产", "国家", "状态", "产量／注明范围的合计参考", "其他指标", "披露日期", "合计／权益口径说明"], assets_table_rows)

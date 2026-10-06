@@ -17,8 +17,6 @@ from dashboard_data import (
     openwaters_snapshot,
     portwatch_state,
     read_ais_api_key,
-    refresh_portwatch_data,
-    refresh_vessel_data,
 )
 from dashboard_state import DashboardViewState
 from dashboard_views import (
@@ -53,17 +51,6 @@ def main() -> None:
 
     st.markdown(f"<style>{APP_STYLE}</style>", unsafe_allow_html=True)
     st.title("中东能源与战略通道运输监测")
-    refresh_portwatch, refresh_vessels = st.columns(2)
-    refresh_portwatch.button(
-        "刷新 PortWatch 数据",
-        width="stretch",
-        on_click=refresh_portwatch_data,
-    )
-    refresh_vessels.button(
-        "刷新船舶数据",
-        width="stretch",
-        on_click=refresh_vessel_data,
-    )
 
     available_ports, port_catalog_error = portwatch_state(
         "ports", "catalog", PORTWATCH.MODULE_VERSION

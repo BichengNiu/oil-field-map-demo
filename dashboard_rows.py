@@ -136,7 +136,7 @@ def asset_rows(assets: list[dict]) -> list[dict]:
             "地图坐标精度": asset["map_coordinate_precision"],
             "地图参考纬度": asset["map_lat"],
             "地图参考经度": asset["map_lon"],
-            "定位属性": "区域/设施代理点" if asset.get("map_is_proxy") else "资产点位",
+            "定位属性": "资产点位" if asset.get("map_drawable") else "仅列目录；坐标待核",
             "坐标来源": asset["coordinate_source"],
             "坐标来源链接": asset["coordinate_source_url"],
             "战略层级标签": "是" if asset["strategic_default"] else "否",
