@@ -58,14 +58,6 @@
 
 设置服务器环境变量 `AIS_ARCHIVE_PATH` 可将档案写入持久磁盘。未设置路径时，档案保存在 `$XDG_STATE_HOME/oil-field-map-demo/ais-history.sqlite3`（默认 `~/.local/state`）；历史数据不写入项目目录。部署环境应设置持久的 `AIS_ARCHIVE_PATH` 并备份。只有上游提供明确观测时间的船位会进入历史档案；接收时间单独保存，缺少观测时间的报文不伪造报告时间。没有AISStream时，公开快照只在页面读取时留存，不能补回未采集时段。
 
-另有一份[公开岸基AIS档案](https://huggingface.co/datasets/yasumorishima/hormuz-ais)，覆盖2026-03-14至2026-04-11，样本主要来自迪拜附近，并非霍尔木兹或五水域全量历史，也不用于计算通行总量。源数据审计见 [docs/audits/2026-10-06/vessels/AIS_HISTORY_SOURCE_AUDIT.json](docs/audits/2026-10-06/vessels/AIS_HISTORY_SOURCE_AUDIT.json)。
-
-`timestamp` 是上游历史报告时间（原文件为无时区UTC），用于选日；原文件 `received_at` 是采集器接收时间，另存 `provider_received_at`，不会拿下载时间或采集时间替代报告日。静态字段仅采用对应历史行，不借用今天资料。下载固定版本和内容散列，字段、坐标、时间或校验失败不标记成功。
-
-原数据许可标为 `other/see-source-terms`，发布者并未授予无条件再分发许可；原文件、数据库和逐条数据不提交公开仓库，使用及再分发须遵守AISStream来源条款。
-
-如需更完整的指定区域历史，应索取实际日期和水域的覆盖样本及授权：[VesselFinder](https://www.vesselfinder.com/historical-ais-data)提供2009年以来自定义区域的卫星/岸基历史CSV；[Datalastic](https://datalastic.com/historical-location-ais-data-api/)提供按地点、半径和历史时段枚举船舶的报告API（须密钥/订阅）。单船轨迹API无法发现所有历史过境船舶，应优先区域查询，核查缺报及卫星覆盖，不能把供应商“全球”营销文案当成具体海峡完整性保证。
-
 ## 2026-10-04 公开目录资料补充
 
 本轮为 **404 项已有资产** 补充 Global Energy Monitor 2026-03目录参考：375项运营商、352项权益持有人、338项发现年、219项商业投产年；27项完全缺少地图点位的资产补公开参考坐标。参考资料在油气表、地图弹窗和打印报告中保留版本、固定来源及限制。当前692项资产中574项可绘制，118项仍缺地图位置。
@@ -112,11 +104,7 @@
 
 ## DuckDB 分析库
 
-DuckDB 同时保存项目本地资料与实时来源数据。默认构建会抓取 PortWatch 当前港口/咽喉点目录、最新可用日期前90天的区域节点日度数据、历史路线风险容量及 Open Waters 当前 AIS 船位。港口数据按20个节点分组，并逐组核验源站记录数；咽喉点窗口也核验分页记录数。真实缺报保留为空，不补造零值。已配置 `AISSTREAM_API_KEY` 时，构建还会短时采集 AISStream 船位；已配置授权海域历史 ZIP 或本机历史归档时会一并导入。没有凭据或交付文件的可选来源会记为 `skipped`，失败会保留来源状态和错误信息。首次生成或刷新时，在项目根目录运行：
-
-```bash
-python -m monitor.storage.build_database
-```
+DuckDB 同时保存项目本地资料与实时来源数据。默认构建会抓取 PortWatch 当前港口/咽喉点目录、最新可用日期前90天的区域节点日度数据、历史路线风险容量及 Open Waters 当前 AIS 船位。港口数据按20个节点分组，并逐组核验源站记录数；咽喉点窗口也核验分页记录数。真实缺报保留为空，不补造零值。已配置 `AISSTREAM_API_KEY` 时，构建还会短时采集 AISStream 船位；已配置授权海域历史 ZIP 或本机历史归档时会一并导入。没有凭据或交付文件的可选来源会记为 `skipped`，失败会保留来源状态和错误信息。
 
 数据库和抓取缓存写入 `runtime/`。主要数据表包括 `oilgas_assets`、`oilgas_asset_audits`、`port_activity_audits`、`port_catalog`、`portwatch_catalog`、`portwatch_daily`、`portwatch_risk_capacity`、`vessel_positions`、`ais_reports` 和 `sea_history_events`；`source_fetch_runs` 记录每次来源采集的时间、状态、行数、覆盖及错误，`source_payloads` 逐次保留 PortWatch 目录、风险运力及覆盖快照和 Open Waters 原始响应。`source_documents` 按相对路径与 SHA-256 版本化保存 `data/`、`snapshots/`、`docs/audits/` 下的结构化 JSON、JSON.GZ 和 CSV 原文，`data_sources` 记录其路径、行数和 SHA-256。原始 PortWatch 日度快照同时写入 `portwatch_daily`；相同节点/日期只保留一行，较新的抓取值按键更新。油气与港口审计表每次从当前本地源重建。港口进口/出口估算以公吨保存，咽喉点通行量和 capacity（载重吨）使用独立字段。
 
@@ -183,7 +171,7 @@ PortWatch 的 `portcalls` 是进入港界并满足其贸易挂靠筛选的有效
 
 PortWatch 方法说明：[Data and Methodology](https://portwatch.imf.org/pages/data-and-methodology)。
 
-本轮保留590行历史审计快照，并逐条记录合并去向；最新19条历史名称线索全部完成对账，页面显示零条待核；`docs/audits/2026-10-01/oilgas/PENDING_ASSET_CLUES_2026-10-01.csv` 保留表头、零数据行，09-30的19条历史清单另行保留。Gabar、Sakarya上半年日均按政府总量与公布份额计算，并明确标为近似估计；所有无值指标保持未知。完整修正、口径、来源和限制见 [2026-09-30审计](docs/audits/2026-09-30/oilgas/AUDIT_2026-09-30.md)及[2026-10-01续查](docs/audits/2026-10-01/oilgas/AUDIT_2026-10-01.md)。
+本轮保留590行历史审计快照，并逐条记录合并去向；最新19条历史名称线索全部完成对账，页面显示零条待核，09-30的19条历史清单作为审计历史保留。Gabar、Sakarya上半年日均按政府总量与公布份额计算，并明确标为近似估计；所有无值指标保持未知。完整修正、口径、来源和限制见 [2026-09-30审计](docs/audits/2026-09-30/oilgas/AUDIT_2026-09-30.md)及[2026-10-01续查](docs/audits/2026-10-01/oilgas/AUDIT_2026-10-01.md)。
 
 
 地图与报告的第三张摘要卡为“海域监测：4个”，合并波斯湾、红海、阿曼湾及亚丁湾。确认进入一个海域计1艘次，同一MMSI再次进入另计；上周采用完整自然周，本月采用四海域共同的最新完整日，与上月及去年同月的相同日数比较。现已接入授权历史事件ZIP导入、持久事件库、服务器交付源同步及地图/报告共享读取路径；真实四海域授权历史尚未交付，缺报仍为空。来源、文件字段及部署配置见 [四海域历史接入](docs/integrations/SEA_HISTORY_INTEGRATION.md)。

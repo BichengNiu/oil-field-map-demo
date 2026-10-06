@@ -282,50 +282,6 @@ def _store_fetch_run(connection, run_id, source, started, status, rows, details,
     )
 
 
-def _archive_carried_portwatch_state(connection, run_id):
-    """Seed append-only snapshots from legacy current-state tables once."""
-    snapshots = (
-        ("portwatch.catalog_snapshot", "portwatch_catalog", "current",
-         "node_kind, portid, name, country, region, latitude, longitude, "
-         "statistics_available, fetched_at, payload"),
-        ("portwatch.risk_snapshot", "portwatch_risk_capacity", "all_ports",
-         "portid, fetched_at, daily_capacity_at_risk, payload"),
-    )
-    for source_name, table, partition, columns in snapshots:
-        already_archived = connection.execute(
-            "SELECT 1 FROM source_payloads WHERE source_name = ? LIMIT 1",
-            [source_name],
-        ).fetchone()
-        if already_archived:
-            continue
-        rows = connection.execute(f'SELECT {columns} FROM "{table}"').fetchall()
-        if not rows:
-            continue
-        records = []
-        source_times = []
-        for row in rows:
-            payload = row[-1]
-            if isinstance(payload, str):
-                try:
-                    payload = json.loads(payload)
-                except json.JSONDecodeError:
-                    pass
-            records.append(payload)
-            if len(row) >= 2:
-                timestamp = row[-2] if table == "portwatch_catalog" else row[1]
-                if isinstance(timestamp, datetime):
-                    source_times.append(timestamp)
-        captured_at = datetime.now(timezone.utc)
-        snapshot = {
-            "snapshot_kind": "recovered_current_state",
-            "source_table": table,
-            "source_as_of": max(source_times).isoformat() if source_times else None,
-            "records": records,
-        }
-        connection.execute("INSERT INTO source_payloads VALUES (?, ?, ?, ?, ?)",
-                           (run_id, source_name, captured_at, partition, _json(snapshot)))
-
-
 def _load_live_modules():
     # The same checked source readers used by the dashboard keep API rules,
     # validation and geographic coverage consistent with the product.
@@ -929,7 +885,6 @@ def build_database(destination: Path | None = None, *, offline: bool = False) ->
             )
             connection.executemany("INSERT INTO database_info VALUES (?, ?)", info)
             _collect_live_sources(connection, run_id, offline=offline)
-            _archive_carried_portwatch_state(connection, run_id)
             connection.execute("""
                 CREATE OR REPLACE VIEW latest_vessel_positions AS
                 SELECT * EXCLUDE (position_rank) FROM (

@@ -58,20 +58,6 @@ def comparison_history(kind: str, node_ids: tuple[str, ...], end_day: str,
     return rows
 
 
-@st.cache_data(ttl=60, show_spinner=False)
-def card_vessel_history() -> list[dict]:
-    """Read the existing local archive without creating or backfilling it."""
-    import sqlite3
-    import monitor.vessels.ais_history as ais_history
-    path = ais_history.archive_path()
-    if not path.exists():
-        return []
-    with sqlite3.connect(path.as_uri() + '?mode=ro', uri=True) as conn:
-        return [json.loads(row[0]) for row in conn.execute(
-            'SELECT payload FROM reports WHERE observed >= ?',
-            ((date.today() - timedelta(days=400)).isoformat(),))]
-
-
 def sea_history_config() -> dict:
     config = {}
     for key in ("SEA_HISTORY_ARCHIVE_PATH", "SEA_HISTORY_BUNDLE_PATH",

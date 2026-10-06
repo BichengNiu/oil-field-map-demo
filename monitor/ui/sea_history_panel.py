@@ -35,7 +35,7 @@ def render_sea_history_panel():
         )
         st.caption("ZIP包含manifest.json、events.csv及供应商确认完整日的coverage.csv。"
                    "需要固定海域边界，并包含上周、前周、本月、上月同期和去年同期。"
-                   "字段转换与服务器交付源配置见项目SEA_HISTORY_INTEGRATION.md。")
+                   "字段转换与服务器交付源配置见 docs/integrations/SEA_HISTORY_INTEGRATION.md。")
         st.download_button("下载历史导入模板", sea_history.template_bundle(),
                            file_name="sea_history_template.zip", mime="application/zip")
         import_token = config.get("SEA_HISTORY_IMPORT_TOKEN")

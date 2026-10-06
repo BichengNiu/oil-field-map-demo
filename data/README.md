@@ -47,7 +47,7 @@
 
 EITI 2023表18明确公布实际年产量，按国营自营／许可项目分列；本轮增加的公司分组参考不分摊为单田值。表57合同成本分母包括争议量和减产补偿量，已排除。原始DOCX使用本会话早前下载的同一文档，记录文件散列和本轮重取失败状态。Kirkuk参考仅为2021年Baba、Avana两圆顶之和，不包括Khurmala，不代表全田。Qayyarah原始2021报告的NOC、PCLD两表量值不同，主值标明NOC口径，PCLD另列，保留未解释的差异；Nassiriya与Nasiriyah名称变体已对应到同一DQOC油田，采用明确的2025报道量。Abuzar仅采用2020报道的日产区间，不取中点或假设当前量。
 
-旧日期报告及`../docs/audits/2026-10-04/oilgas/ASSET_DATA_AUDIT_2026-10-04.csv`保留当时快照；当前检索结论以本文件和`oilgas/production_recheck.json`为准。暂存抓取页和验证脚本留在`/tmp`，不提交项目。
+旧日期报告及`../docs/audits/2026-10-04/oilgas/ASSET_DATA_AUDIT_2026-10-04.csv`保留当时快照；当前检索结论以本文件和`oilgas/production_recheck.json`为准。
 
 ## GEM 2026-03目录背景
 
