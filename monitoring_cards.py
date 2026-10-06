@@ -51,11 +51,12 @@ def activity_card(label, catalog, rows, metric, verb, day, statistical=False):
 
 
 def build_cards(port_catalog, choke_catalog, port_history, choke_history, vessels,
-                port_day, choke_day, vessel_history=(), vessel_day=None):
+                port_day, choke_day, vessel_history=(), vessel_day=None, assets=()):
     cards = [activity_card('港口监测', port_catalog, port_history, 'portcalls', '停泊', port_day, True),
              activity_card('通道监测', choke_catalog, choke_history, 'n_total', '通过', choke_day)]
     day = vessel_day or date.today()
     region_groups = [('波斯湾', {'波斯湾'}), ('红海', {'红海', '红海北段', '红海南段', '苏伊士运河', '曼德海峡'})]
+    vessel_lines = []
     for label, regions in region_groups:
         current = {str(v['mmsi']) for v in vessels if v.get('region') in regions and v.get('mmsi')}
         def sample(start, end):
@@ -65,15 +66,25 @@ def build_cards(port_catalog, choke_catalog, port_history, choke_history, vessel
         month, prior_month, prior_year = [sample(*w) for w in windows(day)[2:]]
         previous = sample(day - timedelta(days=7), day - timedelta(days=7))
         count = len(current) if vessels else None
-        cards.append((f'船只监测 · {label}', f'{label} {fmt(count)}艘',
-                      f'环比 {change(count, previous)}',
-                      f'本月累计{fmt(month)}艘（环比 {change(month, prior_month)}，同比 {change(month, prior_year)}）',
-                      f'AIS观测样本；截至 {day}；月累计按MMSI去重；当前环比对比7日前样本，缺报为—'))
+        vessel_lines.extend([
+            f'{label} {fmt(count)}艘（环比 {change(count, previous)}）',
+            f'本月累计{fmt(month)}艘（环比 {change(month, prior_month)}，同比 {change(month, prior_year)}）',
+        ])
+    cards.append(('船只监测', '', *vessel_lines,
+                  f'AIS观测样本；截至 {day}；月累计按MMSI去重；当前环比对比7日前样本，缺报为—'))
+    oil_fields = {(asset.get('country'), asset.get('name')) for asset in assets
+                  if asset.get('asset_level') == 'field'
+                  and asset.get('commodity') in {'crude_oil', 'oil_and_gas'}}
+    cards.append(('油田监测', f'{len(oil_fields):,}个',
+                  '上周产量 —万桶（环比 —）',
+                  '本月累计 —万桶（环比 —，同比 —）',
+                  '含油田及油气田；暂无完整周/月实际产量记录'))
     return cards
 
 
 def cards_html(cards, css_class='monitoring-cards'):
     return f'<div class="{css_class}">' + ''.join(
-        '<div class="monitoring-card">' + f'<span>{escape(label)}</span><strong>{escape(value)}</strong>'
+        '<div class="monitoring-card">' + f'<span>{escape(label)}</span>'
+        + (f'<strong>{escape(value)}</strong>' if value else '')
         + ''.join(f'<small>{escape(line)}</small>' for line in lines) + '</div>'
         for label, value, *lines in cards) + '</div>'

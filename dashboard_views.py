@@ -475,7 +475,7 @@ def render_print_panel(
         report_port_catalog, report_choke_catalog,
         report_port_history + comparison_ports, report_choke_history + comparison_chokes,
         report_vessels, selected_day, selected_chokepoint_day, vessel_history,
-        datetime.now(ZoneInfo("Asia/Shanghai")).date(),
+        datetime.now(ZoneInfo("Asia/Shanghai")).date(), assets=report_assets,
     )
     if card_slot is not None:
         card_slot.html(monitoring_cards.cards_html(cards))
