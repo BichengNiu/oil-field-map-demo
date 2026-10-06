@@ -45,9 +45,8 @@ def activity_card(label, catalog, rows, metric, verb, day, statistical=False):
     values = [total(rows, ids, metric, *window) for window in windows(day)] if day else [None] * 5
     week, prior_week, month, prior_month, prior_year = values
     return (label, f'{len(catalog):,}个',
-            f'上周船只累计{verb}{fmt(week)}艘（环比 {change(week, prior_week)}）',
-            f'本月船只累计{verb}{fmt(month)}艘（环比 {change(month, prior_month)}，同比 {change(month, prior_year)}）',
-            f'统计截至 {day or "—"}；上周为完整自然周，本月与同期比较；港口/通道按日船次累计')
+            f'上周累计{verb}{fmt(week)}艘（环比 {change(week, prior_week)}）',
+            f'本月累计{verb}{fmt(month)}艘（环比 {change(month, prior_month)}，同比 {change(month, prior_year)}）')
 
 
 def build_cards(port_catalog, choke_catalog, port_history, choke_history, vessels,
@@ -70,15 +69,13 @@ def build_cards(port_catalog, choke_catalog, port_history, choke_history, vessel
             f'{label} {fmt(count)}艘（环比 {change(count, previous)}）',
             f'本月累计{fmt(month)}艘（环比 {change(month, prior_month)}，同比 {change(month, prior_year)}）',
         ])
-    cards.append(('船只监测', '', *vessel_lines,
-                  f'AIS观测样本；截至 {day}；月累计按MMSI去重；当前环比对比7日前样本，缺报为—'))
+    cards.append(('船只监测', '', *vessel_lines))
     oil_fields = {(asset.get('country'), asset.get('name')) for asset in assets
                   if asset.get('asset_level') == 'field'
                   and asset.get('commodity') in {'crude_oil', 'oil_and_gas'}}
     cards.append(('油田监测', f'{len(oil_fields):,}个',
                   '上周产量 —万桶（环比 —）',
-                  '本月累计 —万桶（环比 —，同比 —）',
-                  '含油田及油气田；暂无完整周/月实际产量记录'))
+                  '本月累计 —万桶（环比 —，同比 —）'))
     return cards
 
 
