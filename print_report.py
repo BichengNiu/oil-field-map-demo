@@ -291,15 +291,35 @@ def _overview_map(ports: list[dict], chokes: list[dict], assets: list[dict],
     ]
     if include_basemap:
         parts.append(_basemap_tiles(lon_min, lon_max, lat_min, lat_max))
-    for region, bounds in regions.items():
-        south, north, west, east = bounds
-        x1, y1 = xy(south, west) or (None, None)
-        x2, y2 = xy(north, east) or (None, None)
-        if x1 is not None and y1 is not None and x2 is not None and y2 is not None:
-            parts.append(
-                f'<div class="map-zone" title="{_esc(region)}" style="left:{x1:.3f}%;top:{y2:.3f}%;'
-                f'width:{x2-x1:.3f}%;height:{y1-y2:.3f}%"><span>{_esc(region)}</span></div>'
-            )
+    choke_leaders = []
+    choke_labels = []
+    for choke in chokes:
+        point = xy(choke.get("lat"), choke.get("lon"))
+        if not point:
+            continue
+        x, y = point
+        name = choke.get("name_cn") or choke.get("name") or choke.get("portname") or "咽喉点"
+        point_id = str(choke.get("portid", ""))
+        dx, dy, align = {
+            "chokepoint1": (5.5, -5.0, "left"),  # 苏伊士
+            "chokepoint4": (4.5, -7.0, "left"),  # 曼德
+            "chokepoint6": (-4.5, -5.5, "right"),  # 霍尔木兹
+        }.get(point_id, (5.0 if x < 58 else -5.0, -6.0, "left" if x < 58 else "right"))
+        elbow_x, elbow_y = x + dx * 0.55, y + dy * 0.35
+        end_x, end_y = x + dx, y + dy
+        choke_leaders.append(
+            f'<path d="M {x*10:.2f} {y*10:.2f} L {elbow_x*10:.2f} {elbow_y*10:.2f} '
+            f'L {end_x*10:.2f} {end_y*10:.2f}"/>'
+        )
+        choke_labels.append(
+            f'<span class="choke-label {align}" style="left:{end_x:.3f}%;top:{end_y:.3f}%">'
+            f'{_esc(name)}</span>'
+        )
+    if choke_leaders:
+        parts.append(
+            '<svg class="choke-leaders" viewBox="0 0 1000 1000" preserveAspectRatio="none" '
+            'aria-hidden="true">' + "".join(choke_leaders) + '</svg>'
+        )
 
     def append_point(kind: str, label: object, lat: object, lon: object,
                      count: int = 1) -> None:
@@ -324,6 +344,7 @@ def _overview_map(ports: list[dict], chokes: list[dict], assets: list[dict],
     for choke in chokes:
         append_point("choke", choke.get("name_cn") or choke.get("name") or "咽喉点",
                      choke.get("lat"), choke.get("lon"))
+    parts.extend(choke_labels)
 
     vessel_cells: dict[tuple[int, int], list[float | int]] = {}
     for vessel in vessels or []:
@@ -614,12 +635,15 @@ PRINT_CSS = """
 .overview-map { position:relative; width:100%; background:#d6eef4; border:1px solid #94a3b8; }
 .overview-map-plot { position:absolute; inset:0; overflow:hidden; background:#d6eef4; }
 .map-tile { position:absolute; z-index:0; max-width:none; }
-.map-zone { position:absolute; z-index:1; border:1px dashed #64748b; background:rgba(191,219,254,.08); }
-.map-zone span { position:absolute; top:1px; left:2px; color:#263746; font-size:6.5pt; white-space:nowrap; text-shadow:0 0 2px #fff,0 0 2px #fff; }
-.map-point { position:absolute; z-index:2; display:block; transform:translate(-50%,-50%); }
+.choke-leaders { position:absolute; inset:0; width:100%; height:100%; overflow:visible; z-index:2; pointer-events:none; }
+.choke-leaders path { fill:none; stroke:#475569; stroke-width:1.8; vector-effect:non-scaling-stroke; }
+.map-point { position:absolute; z-index:3; display:block; transform:translate(-50%,-50%); }
 .map-point.port { width:1.8mm; height:1.8mm; background:#7c3aed; clip-path:polygon(25% 0,75% 0,100% 50%,75% 100%,25% 100%,0 50%); }
 .map-point.asset { width:1.6mm; height:1.6mm; background:#111; clip-path:polygon(50% 0,0 100%,100% 100%); }
 .map-point.choke { width:2.1mm; height:2.1mm; border:.4mm solid #7c3aed; border-radius:50%; background:#fff; }
+.choke-label { position:absolute; z-index:4; transform:translateY(-100%); color:#1f2937; font-size:7.5pt; line-height:1.15; white-space:nowrap; font-weight:600; text-shadow:0 0 2px #fff,0 0 2px #fff,0 0 3px #fff; }
+.choke-label.left { transform:translate(0,-100%); }
+.choke-label.right { transform:translate(-100%,-100%); }
 .map-point.vessel { width:1.35mm; height:1.35mm; border-radius:50%; background:#dc2626; }
 .table-wrap { overflow:visible; }
 .print-report table { width:100%; border-collapse:collapse; font-size:8pt; margin:2mm 0 4mm; }
