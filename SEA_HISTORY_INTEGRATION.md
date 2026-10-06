@@ -4,7 +4,7 @@
 
 2026-10-06 查阅 [VesselFinder 官方历史服务](https://www.vesselfinder.com/historical-ais-data)：历史 AIS 自 2009 年起；支持自定义区域的轨迹及基于地理多边形的进出事件 CSV/XLS 交付，须询价并由供应商确认实际可用性。公开示例只是图片，不是可下载的完整历史数据。目前本项目没有商业历史凭据，也没有收到四海域授权事件文件，**尚未导入真实四海域历史**。
 
-本次实现的是授权交付文件到事件库、地图卡和报告卡的完整接入路径。`SEA_HISTORY_BUNDLE_URL` 是用户或供应商提供的交付 ZIP 地址，不是 VesselFinder 官方 API；不能仅配置 AISStream 实时密钥就获得历史数据。不能以示例、公开局部样本或海峡计数填补四海域统计。
+现已从真实启动时间起连续积累本地观测，使用同一个DuckDB保存来源文件、位置和进入事件，详见 [统一存储说明](DUCKDB_STORAGE.md)。本页的授权交付文件是可选历史补充，仍可接到地图和报告。`SEA_HISTORY_BUNDLE_URL` 是用户或供应商提供的交付 ZIP 地址，不是 VesselFinder 官方 API；不能仅配置 AISStream 实时密钥就获得过去的完整历史数据。不能以示例、公开局部样本或海峡计数填补四海域统计。
 
 请向供应商申请：波斯湾、红海、阿曼湾、亚丁湾四个固定地理多边形的**所有确认进入事件**，包括同船重复进入；需要卫星与岸基覆盖说明、事件检测规则、边界版本，以及逐海域逐日的完整性声明和独立事件总数。第一批建议包含 2025-09-01 至最新完整日的历史，之后每日更新。四个区域的实际数据覆盖、事件识别质量和授权使用范围均需供应商确认；供应商网页的全球历史介绍不是四海域无缺报保证。
 
@@ -38,17 +38,17 @@
 
 服务器环境变量或 Streamlit Secrets 中配置：
 
-- `SEA_HISTORY_ARCHIVE_PATH`：持久磁盘上的 SQLite 路径。缺省为项目下 `runtime/sea-history.sqlite3`；无持久盘的部署重启会丢失此库，应保存原始授权 ZIP 并通过交付源重新导入。初次文件要包括所需全部比较历史。
+- `MONITORING_DB_PATH`：持久磁盘上的统一DuckDB路径。缺省为项目下 `runtime/monitoring.duckdb`；无持久盘的容器重建会丢失新增数据，应持续备份。旧 `SEA_HISTORY_ARCHIVE_PATH` 仅用于选择迁移来源，不再写入。
 - `SEA_HISTORY_BUNDLE_PATH`：授权 ZIP 本地路径；或 `SEA_HISTORY_BUNDLE_URL`：授权交付 ZIP 的 HTTPS 地址，二者只选一个。
 - `SEA_HISTORY_BEARER_TOKEN`：交付地址需要 Bearer 授权时配置。带签名 URL 本身也属于秘密。密钥不会发给浏览器或写入版本库；不跟随 HTTP 跳转。
 - `SEA_HISTORY_IMPORT_TOKEN`：可选的网页管理员导入口令。未配置时网页不允许写入共享档案；服务器交付源仍可读取。
 
-地图/报告读取时最多每 15 分钟同步配置交付并共用事件库；“数据下载”页可立即刷新。更新失败会保留原档案并显示错误，不把旧数据改为零。单次 ZIP 及解压后的三个文件总计最大 50MB，大文件按完整海域日拆分批次。
+地图/报告读取时最多每分钟同步配置交付并共用事件库；“数据下载”页可立即刷新。更新失败会保留原档案并显示错误，不把旧数据改为零。单次 ZIP 及解压后的三个文件总计最大 50MB，大文件按完整海域日拆分批次。
 
 也可在服务器手动导入：
 
 ```bash
-python sea_history.py /path/to/authorized-delivery.zip --database /persistent-data/sea-history.sqlite3
+python sea_history.py /path/to/authorized-delivery.zip --database /persistent-data/monitoring.duckdb
 ```
 
 网页导入在“数据下载 → 海域历史数据 → 接入历史进出事件”，输入管理员导入口令并上传 ZIP。成功后清除卡片缓存；地图及报告立即共用该档案。月份比较取本月四海域共同的最新完整日；自然周始终以当前日期为锚，周一不会因日资料只到周日而错退一周。完整日期覆盖可在此页查看，卡片不添加长口径说明。

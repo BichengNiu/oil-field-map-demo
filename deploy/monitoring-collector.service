@@ -1,0 +1,18 @@
+[Unit]
+Description=Maritime monitoring collector (single DuckDB)
+After=network-online.target
+Wants=network-online.target
+
+[Service]
+Type=simple
+# Override these paths and MONITORING_DB_PATH for the actual server installation.
+WorkingDirectory=/opt/oil-field-map-demo
+EnvironmentFile=/etc/monitoring-collector.env
+ExecStart=/opt/oil-field-map-demo/.venv/bin/python collector.py --with-portwatch --poll-seconds 60
+Restart=on-failure
+RestartSec=10
+KillSignal=SIGINT
+TimeoutStopSec=20
+
+[Install]
+WantedBy=multi-user.target

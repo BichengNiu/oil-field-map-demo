@@ -14,6 +14,19 @@ AIS_REGIONS = {
     **MONITORED_REGIONS,
     "红海北段": (21.0, 30.0, 32.0, 40.0),
     "红海南段": (12.0, 21.0, 36.0, 44.0),
+    "亚丁湾": (10.3781, 15.2197, 42.5134, 51.2867),
+}
+
+# Include positions on BOTH sides of the published four-sea boundaries. These
+# collection boxes are query limits, never the event-counting boundaries.
+AIS_COLLECTION_REGIONS = {
+    "波斯湾": (23.6590, 31.4859, 47.4024, 57.6400),
+    "阿曼湾": (22.1749, 26.2435, 55.9680, 62.0825),
+    "亚丁湾": (10.0780, 15.5197, 42.2134, 51.5867),
+    "红海北段": (20.3, 28.4396, 33.3393, 43.8056),
+    "红海南段": (12.1562, 20.3, 33.3393, 43.8056),
+    "苏伊士运河": MONITORED_REGIONS["苏伊士运河"],
+    "曼德海峡": MONITORED_REGIONS["曼德海峡"],
 }
 
 

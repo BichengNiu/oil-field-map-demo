@@ -15,12 +15,12 @@ import json
 import os
 from pathlib import Path
 import re
-import sqlite3
 from urllib.parse import urlparse
 from zipfile import ZipFile
 from zoneinfo import ZoneInfo
 
 from monitoring_cards import SEA_MONITORING_AREAS
+import data_store
 
 MAX_BYTES = 50 * 1024 * 1024
 TZ = ZoneInfo("Asia/Shanghai")
@@ -29,8 +29,7 @@ COVERAGE_COLUMNS = ("sea", "date", "status", "event_count")
 
 
 def archive_path(config=None):
-    value = (config or {}).get("SEA_HISTORY_ARCHIVE_PATH") or os.environ.get("SEA_HISTORY_ARCHIVE_PATH")
-    return Path(value).expanduser().resolve() if value else Path(__file__).parent / "runtime" / "sea-history.sqlite3"
+    return data_store.database_path()
 
 
 def _csv(data, columns):
@@ -62,6 +61,8 @@ def parse_bundle(data):
             raise ValueError(f"manifest缺少{key}，须注明供应商及固定海域边界版本")
     if urlparse(manifest["source_url"]).scheme != "https":
         raise ValueError("source_url必须为供应商的HTTPS来源页")
+    if manifest["source"] == "local-ais":
+        raise ValueError("local-ais是本地观测保留名称，不能作为交付供应商")
     today = datetime.now(TZ).date()
     cells = {}
     for row in coverage:
@@ -97,19 +98,9 @@ def parse_bundle(data):
 def import_bundle(data, path=None):
     manifest, events, cells = parse_bundle(data)
     path = Path(path) if path is not None else archive_path()
-    path.parent.mkdir(parents=True, exist_ok=True)
-    with sqlite3.connect(path, timeout=30) as conn:
-        conn.executescript("""
-            CREATE TABLE IF NOT EXISTS metadata (id INTEGER PRIMARY KEY CHECK(id=1), manifest TEXT);
-            CREATE TABLE IF NOT EXISTS entries (
-                sea TEXT, mmsi TEXT, entered_at TEXT, day TEXT,
-                PRIMARY KEY(sea,mmsi,entered_at));
-            CREATE INDEX IF NOT EXISTS entries_day ON entries(sea,day);
-            CREATE TABLE IF NOT EXISTS coverage (
-                sea TEXT, day TEXT, event_count INTEGER, PRIMARY KEY(sea,day));
-        """)
-        conn.execute("BEGIN IMMEDIATE")
-        previous = conn.execute("SELECT manifest FROM metadata WHERE id=1").fetchone()
+    provider, definition = manifest["source"], manifest["definition_id"]
+    with data_store.connect(path) as conn:
+        previous = conn.execute("SELECT manifest FROM sea_manifests WHERE provider=?", (provider,)).fetchone()
         if previous:
             old = json.loads(previous[0])
             if any(old[key] != manifest[key] for key in ("source", "definition_id", "timezone", "event_basis")):
@@ -117,12 +108,18 @@ def import_bundle(data, path=None):
         # Each validated day replaces the earlier delivery atomically; corrected
         # provider reports and repeated uploads do not accumulate duplicates.
         for sea, day in cells:
-            conn.execute("DELETE FROM entries WHERE sea=? AND day=?", (sea, day))
-        conn.executemany("INSERT INTO entries VALUES (?,?,?,?)", events)
-        conn.executemany("INSERT OR REPLACE INTO coverage VALUES (?,?,?)",
-                         [(sea, day, count) for (sea, day), count in cells.items()])
-        conn.execute("INSERT OR REPLACE INTO metadata VALUES (1,?)",
-                     (json.dumps(manifest, ensure_ascii=False),))
+            conn.execute("DELETE FROM sea_entries WHERE provider=? AND definition=? AND sea=? AND day=?",
+                         (provider, definition, sea, day))
+        if events:
+            conn.executemany("INSERT INTO sea_entries VALUES (?,?,?,?,?,?,?)",
+                             [(provider, definition, sea, mmsi, stamp, day, '{}') for sea, mmsi, stamp, day in events])
+        conn.executemany("INSERT OR REPLACE INTO sea_coverage VALUES (?,?,?,?,?,?)",
+                         [(provider, definition, sea, day, 'complete', count) for (sea, day), count in cells.items()])
+        conn.execute("INSERT OR REPLACE INTO sea_manifests VALUES (?,?)",
+                     (provider, json.dumps(manifest, ensure_ascii=False)))
+        data_store.set_meta("selected_sea_history_provider", provider, conn)
+        data_store.put_binary_document("deliveries/sea-" + hashlib.sha256(data).hexdigest() + ".zip", data,
+                                       "application/zip", conn)
     return {"events": len(events), "days": len(cells), "source": manifest["source"],
             "sha256": hashlib.sha256(data).hexdigest()}
 
@@ -131,13 +128,17 @@ def read_history(path=None):
     path = Path(path) if path is not None else archive_path()
     if not path.exists():
         return {"rows": [], "source": None, "definition_id": None}
-    with sqlite3.connect(path.resolve().as_uri() + "?mode=ro", uri=True) as conn:
-        metadata = conn.execute("SELECT manifest FROM metadata WHERE id=1").fetchone()
+    with data_store.connect(path) as conn:
+        provider = data_store.meta("selected_sea_history_provider", conn=conn)
+        if not provider:
+            return {"rows": [], "source": None, "definition_id": None}
+        metadata = conn.execute("SELECT manifest FROM sea_manifests WHERE provider=?", (provider,)).fetchone()
         manifest = json.loads(metadata[0]) if metadata else {}
-        rows = [{"sea": sea, "date": day, "passages": count} for sea, day, count in conn.execute(
-            "SELECT c.sea,c.day,COUNT(e.entered_at) FROM coverage c "
-            "LEFT JOIN entries e ON e.sea=c.sea AND e.day=c.day "
-            "GROUP BY c.sea,c.day HAVING COUNT(e.entered_at)=c.event_count ORDER BY c.day,c.sea")]
+        rows = [{"sea": sea, "date": day.isoformat(), "passages": count} for sea, day, count in conn.execute(
+            "SELECT c.sea,c.day,COUNT(e.entered_at) FROM sea_coverage c "
+            "LEFT JOIN sea_entries e ON e.provider=c.provider AND e.definition=c.definition AND e.sea=c.sea AND e.day=c.day "
+            "WHERE c.provider=? AND c.status='complete' "
+            "GROUP BY c.sea,c.day,c.event_count HAVING COUNT(e.entered_at)=c.event_count ORDER BY c.day,c.sea", (provider,)).fetchall()]
     return {"rows": rows, "source": manifest.get("source"), "definition_id": manifest.get("definition_id")}
 
 

@@ -20,7 +20,8 @@ from typing import Any, Callable
 from urllib.parse import urlencode
 from urllib.request import Request, urlopen
 
-from regions import AIS_REGIONS, region_for as geographic_region_for
+from regions import AIS_REGIONS, AIS_COLLECTION_REGIONS, region_for as geographic_region_for
+import data_store
 
 try:
     from websockets.sync.client import connect as websocket_connect
@@ -32,7 +33,7 @@ SOURCE = "https://aisstream.io/documentation"
 STREAM_URL = "wss://stream.aisstream.io/v0/stream"
 OPENWATERS_SOURCE = "https://openwaters.io/ais/"
 OPENWATERS_API = "https://ais.openwaters.io/v1/vessels"
-MODULE_VERSION = 7
+MODULE_VERSION = 8
 POSITION_RETENTION_SECONDS = 2 * 60 * 60
 MAX_TRACKED_VESSELS = 20_000
 MAX_ARCHIVE_BUFFER = 2_000
@@ -44,9 +45,10 @@ REGIONS = AIS_REGIONS
 # Open Waters' anonymous API allows 100 square degrees per request. Keep the
 # complete corridor coverage in three requests while respecting that limit.
 OPENWATERS_REGION_GROUPS = (
-    ("波斯湾", "霍尔木兹海峡", "苏伊士运河"),
-    ("阿曼湾", "红海北段"),
-    ("曼德海峡", "红海南段"),
+    ("波斯湾", "苏伊士运河"),
+    ("阿曼湾", "亚丁湾", "曼德海峡"),
+    ("红海北段",),
+    ("红海南段",),
 )
 
 POSITION_MESSAGE_TYPES = (
@@ -93,11 +95,15 @@ def region_for(lat: float, lon: float) -> str | None:
     return geographic_region_for(lat, lon, REGIONS)
 
 
+def in_collection_area(lat, lon):
+    return geographic_region_for(lat, lon, AIS_COLLECTION_REGIONS) is not None
+
+
 def openwaters_bbox_groups() -> tuple[tuple[tuple[float, float, float, float], ...], ...]:
     """Return south/north/west/east boxes grouped below Open Waters' free cap."""
 
     return tuple(
-        tuple(REGIONS[name] for name in group)
+        tuple(AIS_COLLECTION_REGIONS[name] for name in group)
         for group in OPENWATERS_REGION_GROUPS
     )
 
@@ -132,7 +138,7 @@ def openwaters_feature_to_vessel(
         return None
     assert lat is not None and lon is not None
     region = region_for(lat, lon)
-    if region is None:
+    if not in_collection_area(lat, lon):
         return None
 
     mmsi = parse_integer(properties.get("mmsi", feature.get("id")))
@@ -205,6 +211,7 @@ def _fetch_openwaters_group(
     )
     with urlopen(request, timeout=8) as response:
         result = json.load(response)
+    data_store.save_query(OPENWATERS_API, {"query_parameters": params}, result)
     if not isinstance(result, dict) or result.get("type") != "FeatureCollection":
         raise ValueError("Open Waters返回了无法识别的船位快照")
     if result.get("error"):
@@ -230,6 +237,7 @@ def openwaters_snapshot(max_age_minutes: int = 30) -> dict[str, Any]:
     received_at = utc_now()
     attribution: dict[str, str] = {}
     by_mmsi: dict[str, dict[str, Any]] = {}
+    reports = []
     truncated = False
     for result in results:
         source_attribution = result.get("attribution") or {}
@@ -243,6 +251,7 @@ def openwaters_snapshot(max_age_minutes: int = 30) -> dict[str, Any]:
             vessel = openwaters_feature_to_vessel(feature, attribution, received_at)
             if vessel is None:
                 continue
+            reports.append(vessel)
             previous = by_mmsi.get(vessel["mmsi"])
             if previous is None or _snapshot_is_newer(vessel, previous):
                 by_mmsi[vessel["mmsi"]] = vessel
@@ -257,6 +266,9 @@ def openwaters_snapshot(max_age_minutes: int = 30) -> dict[str, Any]:
         "truncated": truncated,
         "fetched_at": received_at.isoformat(),
         "error": "; ".join(errors) if errors else None,
+        "reports": reports,
+        "requested_groups": len(groups),
+        "successful_groups": len(results),
     }
 
 
@@ -267,7 +279,7 @@ def subscription(api_key: str) -> dict[str, Any]:
         "APIKey": api_key,
         "BoundingBoxes": [
             [[north, west], [south, east]]
-            for south, north, west, east in REGIONS.values()
+            for south, north, west, east in AIS_COLLECTION_REGIONS.values()
         ],
         "FilterMessageTypes": list(FILTER_MESSAGE_TYPES),
     }
@@ -688,7 +700,7 @@ class AISCollector:
                 received_utc = parse_utc(received.isoformat())
                 self._prune_state_locked(received_utc.timestamp() if received_utc else 0)
                 self._ingest_since_prune = 0
-        if normalized["kind"] == "position" and normalized.get("region"):
+        if normalized["kind"] == "position" and in_collection_area(normalized["lat"], normalized["lon"]):
             with self._lock:
                 if normalized.get("observed_at"):
                     static = self._static.get(mmsi, {})

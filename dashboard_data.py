@@ -10,6 +10,8 @@ import streamlit as st
 
 import ais as AIS
 import ais_history
+import collector as history_collector
+import data_store
 import portwatch as PORTWATCH
 
 
@@ -33,6 +35,7 @@ def refresh_portwatch_data() -> None:
 def refresh_vessel_data() -> None:
     """Refresh the public snapshot without restarting the shared AISStream feed."""
     _openwaters_base_snapshot.clear()
+    continuous_collection().refresh()
 
 
 @st.cache_resource(max_entries=1, show_spinner=False, on_release=lambda collector: collector.stop())
@@ -43,15 +46,17 @@ def ais_collector(api_key: str, collector_version: int) -> AIS.AISCollector:
 @st.cache_data(ttl=60, max_entries=1, show_spinner=False)
 def _openwaters_base_snapshot(collector_version: int) -> dict:
     """Fetch and archive one shared two-hour Open Waters snapshot."""
-    snapshot = AIS.openwaters_snapshot(max_age_minutes=120)
-    snapshot["archive_error"] = None
-    try:
-        # Archive the source snapshot once; refreshing display ages must not
-        # trigger another SQLite write.
-        ais_history.archive_reports(snapshot.get("vessels", []))
-    except Exception as exc:
-        snapshot["archive_error"] = f"船位归档失败：{exc}"
-    return snapshot
+    return continuous_collection().snapshot()
+
+
+@st.cache_resource(max_entries=1, show_spinner=False, on_release=lambda service: service.stop())
+def continuous_collection():
+    return history_collector.CollectionService().start()
+
+
+@st.cache_resource(show_spinner=False)
+def initialize_storage():
+    return data_store.initialize()
 
 
 def openwaters_snapshot(collector_version: int) -> dict:

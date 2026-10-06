@@ -10,11 +10,11 @@ import logging
 import math
 import os
 from pathlib import Path
-import sqlite3
 import zipfile
 import zlib
 
 import portwatch as pw
+import data_store
 from csv_export import csv_bytes
 from portwatch_records import PORT_METRICS, CHOKE_METRICS, EXPORT_SHIP_LABELS as TYPES
 
@@ -103,11 +103,7 @@ def bounds(kind: str, ids: tuple[str, ...]) -> tuple[dict, list[dict]]:
 
 
 def _cache_path() -> Path:
-    configured = os.environ.get("PORTWATCH_DOWNLOAD_CACHE")
-    if configured:
-        return Path(configured)
-    cache_home = Path(os.environ.get("XDG_CACHE_HOME") or Path.home() / ".cache")
-    return cache_home / "oil-field-map-demo" / "portwatch-download-cache.sqlite3"
+    return data_store.database_path()
 
 
 def _cache(key: str, payload: dict | None = None,
@@ -115,19 +111,17 @@ def _cache(key: str, payload: dict | None = None,
     """Cache only a validated complete query; a broken cache never hides source errors."""
     path = _cache_path()
     try:
-        path.parent.mkdir(parents=True, exist_ok=True)
-        with sqlite3.connect(path, timeout=10) as conn:
-            conn.execute("CREATE TABLE IF NOT EXISTS queries (key TEXT PRIMARY KEY, saved REAL, payload BLOB)")
+        with data_store.connect(path) as conn:
             if payload is not None:
-                conn.execute("INSERT OR REPLACE INTO queries VALUES (?, ?, ?)",
+                conn.execute("INSERT OR REPLACE INTO portwatch_cache VALUES (?, ?, ?)",
                              (key, datetime.now(timezone.utc).timestamp(),
                               zlib.compress(json.dumps(payload, ensure_ascii=False, allow_nan=False).encode())))
-                conn.execute("DELETE FROM queries WHERE saved < ?", (datetime.now(timezone.utc).timestamp() - 7 * 86400,))
+                conn.execute("DELETE FROM portwatch_cache WHERE saved < ?", (datetime.now(timezone.utc).timestamp() - 7 * 86400,))
                 return None
-            row = conn.execute("SELECT saved,payload FROM queries WHERE key=?", (key,)).fetchone()
+            row = conn.execute("SELECT saved,payload FROM portwatch_cache WHERE key=?", (key,)).fetchone()
         if row and datetime.now(timezone.utc).timestamp() - row[0] < max_age_seconds:
             return json.loads(zlib.decompress(row[1]))
-    except (OSError, sqlite3.Error, ValueError, zlib.error) as exc:
+    except (OSError, data_store.duckdb.Error, ValueError, zlib.error) as exc:
         logger.warning("PortWatch history cache unavailable (%s); continuing without it",
                        type(exc).__name__)
         pass
@@ -189,6 +183,7 @@ def fetch_window(kind: str, ids: tuple[str, ...], first: date, last: date,
     query = {"endpoint": endpoint, "where": where, "out_fields": source_fields,
              "retrieved_at_utc": _now(), "cache_hit": False, "source_count": expected,
              "exported_query_rows": len(rows), "count_verified": True}
+    data_store.save_portwatch(kind, rows, endpoint)
     _cache(key, {"rows": rows, "query": query})
     return rows, query
 

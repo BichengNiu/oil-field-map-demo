@@ -85,10 +85,10 @@ def sea_activity_card(history, day):
 
 
 def build_cards(port_catalog, choke_catalog, port_history, choke_history, vessels,
-                port_day, choke_day, vessel_day=None, assets=(), sea_passage_history=()):
+                port_day, choke_day, vessel_day=None, assets=(), sea_passage_history=(), sea_observation_card=None):
     cards = [activity_card('港口监测', port_catalog, port_history, 'portcalls', '停泊', port_day, True),
              activity_card('通道监测', choke_catalog, choke_history, 'n_total', '通过', choke_day)]
-    cards.append(sea_activity_card(sea_passage_history, vessel_day or date.today()))
+    cards.append(sea_observation_card or sea_activity_card(sea_passage_history, vessel_day or date.today()))
     oil_fields = {(asset.get('country'), asset.get('name')) for asset in assets
                   if asset.get('asset_level') == 'field'
                   and asset.get('commodity') in {'crude_oil', 'oil_and_gas'}}

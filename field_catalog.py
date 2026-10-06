@@ -9,6 +9,7 @@
 from __future__ import annotations
 
 import json
+import data_store
 import re
 from pathlib import Path
 from decimal import Decimal, InvalidOperation
@@ -1563,9 +1564,7 @@ finish_production_recheck(ASSETS, OUTPUT_METRIC_TYPES)
 
 # Resolve the former dashed markers only from independently reviewed field/well
 # locations. Keep rejected proxy evidence in the dated audit, not in map exports.
-_coordinate_review = json.loads(
-    (Path(__file__).parent / "data" / "coordinate_recheck.json").read_text(encoding="utf-8")
-)
+_coordinate_review = data_store.read_json("data/coordinate_recheck.json")
 for _row in _coordinate_review["records"]:
     _asset = _asset_index[(_row["country"], _row["name"])]
     _coordinate = _row["coordinate"]
@@ -1617,3 +1616,8 @@ for asset in ASSETS:
         measurement["value_numeric"] = measurement_amount
         measurement["value_qualifier"] = (
             measurement.get("value_qualifier") or measurement_qualifier)
+
+# Versioned Python rules build the seed; the app and report consume the same
+# persisted catalog, including source dates and exact decimal measurements.
+data_store.save_catalog("assets", ASSETS)
+ASSETS = data_store.load_catalog("assets")

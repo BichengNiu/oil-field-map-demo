@@ -4,8 +4,6 @@ from __future__ import annotations
 import csv
 import io
 import json
-import os
-import sqlite3
 from concurrent.futures import ThreadPoolExecutor, as_completed
 from contextlib import contextmanager
 from datetime import date, datetime, time, timedelta, timezone
@@ -14,31 +12,18 @@ from urllib.parse import urlencode
 from urllib.request import Request, urlopen
 
 import ais
+import data_store
 
 
 def archive_path() -> Path:
-    configured = os.environ.get("AIS_ARCHIVE_PATH")
-    if configured:
-        return Path(configured)
-    state_home = Path(os.environ.get("XDG_STATE_HOME") or
-                      Path.home() / ".local" / "state")
-    return state_home / "oil-field-map-demo" / "ais-history.sqlite3"
+    return data_store.database_path()
 
 
 @contextmanager
 def connect_archive():
-    """Open and close the shared archive transaction, including schema setup."""
-    path = archive_path()
-    path.parent.mkdir(parents=True, exist_ok=True)
-    conn = sqlite3.connect(path, timeout=10)
-    try:
-        with conn:
-            conn.execute("CREATE TABLE IF NOT EXISTS reports (mmsi TEXT, observed TEXT, source TEXT, "
-                         "payload TEXT NOT NULL, PRIMARY KEY (mmsi, observed, source))")
-            conn.execute("CREATE INDEX IF NOT EXISTS reports_time ON reports(observed)")
-            yield conn
-    finally:
-        conn.close()
+    """All AIS reads and writes share the project's one DuckDB transaction."""
+    with data_store.connect() as conn:
+        yield conn
 
 
 def normalize_report(row: dict) -> dict:
@@ -58,8 +43,8 @@ def normalize_report(row: dict) -> dict:
         raise ValueError("MMSI无效")
     if observed is None or observed > ais.utc_now() + timedelta(minutes=5):
         raise ValueError("AIS报告时间缺失、无效或在未来")
-    if not ais.valid_coordinate(lat, lon) or ais.region_for(lat, lon) is None:
-        raise ValueError("坐标无效或不在监测水域")
+    if not ais.valid_coordinate(lat, lon) or not ais.in_collection_area(lat, lon):
+        raise ValueError("坐标无效或不在监测水域及边界观测带")
     category = row.get("category") or next((key for key, label in ais.VESSEL_TYPE_LABELS.items()
                                            if label == row.get("船型")), "unknown")
     if category not in ais.VESSEL_TYPE_LABELS:
@@ -99,11 +84,21 @@ def archive_reports(rows: list[dict]) -> int:
     if not normalized:
         return 0
     with connect_archive() as conn:
-        before = conn.total_changes
-        conn.executemany("INSERT OR IGNORE INTO reports VALUES (?, ?, ?, ?)",
+        conn.execute("CREATE TEMP TABLE incoming_reports AS SELECT * FROM ais_reports LIMIT 0")
+        conn.executemany("INSERT INTO incoming_reports VALUES (?, ?, ?, ?)",
                          [(row["mmsi"], row["observed_at"], row["source"],
                            json.dumps(row, ensure_ascii=False)) for row in normalized])
-        return conn.total_changes - before
+        inserted_rows = conn.execute("INSERT OR IGNORE INTO ais_reports SELECT * FROM incoming_reports "
+                                     "RETURNING mmsi,observed").fetchall()
+        conn.execute("DROP TABLE incoming_reports")
+        inserted = len(inserted_rows)
+        if inserted:
+            from sea_tracking import update_events
+            changed = {}
+            for mmsi, observed in inserted_rows:
+                changed[mmsi] = min(observed, changed.get(mmsi, observed))
+            update_events(conn, changed)
+        return inserted
 
 
 def import_csv(data: bytes) -> int:
@@ -118,15 +113,15 @@ def day_reports(day: date) -> list[dict]:
     start = datetime.combine(day, time.min, timezone.utc)
     end = start + timedelta(days=1)
     with connect_archive() as conn:
-        rows = conn.execute("SELECT payload FROM reports WHERE observed >= ? AND observed < ? "
+        rows = conn.execute("SELECT payload FROM ais_reports WHERE observed >= ? AND observed < ? "
                             "ORDER BY observed", (start.isoformat(), end.isoformat())).fetchall()
     return [json.loads(row[0]) for row in rows]
 
 
 def known_mmsis() -> list[str]:
     with connect_archive() as conn:
-        return [row[0] for row in conn.execute("SELECT mmsi FROM reports GROUP BY mmsi "
-                                              "ORDER BY MAX(observed) DESC LIMIT 1000")]
+        return [row[0] for row in conn.execute("SELECT mmsi FROM ais_reports GROUP BY mmsi "
+                                              "ORDER BY MAX(observed) DESC LIMIT 1000").fetchall()]
 
 
 def track_reports(feature: dict, expected_mmsi: str, day: date) -> list[dict]:

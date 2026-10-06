@@ -8,12 +8,16 @@ from __future__ import annotations
 
 import json
 import re
+import threading
+import time
 from datetime import date, timedelta
 from urllib.parse import urlencode
 from urllib.request import Request, urlopen
+from urllib.error import HTTPError
 
 import streamlit as st
 import port_inventory
+import data_store
 from regions import MONITORED_REGIONS, region_for
 from portwatch_records import SHIP_TYPES, PORT_METRICS, CHOKE_METRICS
 
@@ -25,6 +29,8 @@ CHOKEPOINT_DAILY = f"{ROOT}/Daily_Chokepoints_Data/FeatureServer/0/query"
 SPILLOVERS = f"{ROOT}/spillovers_port_level_impact/FeatureServer/0/query"
 SOURCE = "https://portwatch.imf.org/pages/data-and-methodology"
 MODULE_VERSION = 7
+_REQUEST_LOCK = threading.Lock()
+_LAST_REQUEST = 0.0
 
 FOCUS_CHOKEPOINT_IDS = ("chokepoint1", "chokepoint4", "chokepoint6")
 CHOKEPOINT_LABELS = {
@@ -75,11 +81,30 @@ def query(url: str, **params: object) -> dict:
     """Read one ArcGIS response and surface source-reported errors."""
     request = Request(f"{url}?{urlencode({**params, 'f': 'json'})}",
                       headers={"User-Agent": "oil-field-map-demo/1.0"})
-    with urlopen(request, timeout=35) as response:
-        result = json.load(response)
-    if "error" in result:
-        raise ValueError(f"PortWatch API: {result['error'].get('message', result['error'])}")
-    return result
+    global _LAST_REQUEST
+    for attempt in range(3):
+        with _REQUEST_LOCK:
+            remaining = 0.5 - (time.monotonic() - _LAST_REQUEST)
+            if remaining > 0:
+                time.sleep(remaining)
+            try:
+                with urlopen(request, timeout=35) as response:
+                    result = json.load(response)
+            except HTTPError as exc:
+                if exc.code != 429 or attempt == 2:
+                    raise
+                result = {"error": {"message": "Too many requests", "code": 429}}
+            finally:
+                _LAST_REQUEST = time.monotonic()
+        data_store.save_query(url, params, result)
+        error = result.get("error")
+        if not error:
+            return result
+        message = str(error.get("message", error))
+        if "too many requests" not in message.lower() or attempt == 2:
+            raise ValueError(f"PortWatch API: {message}")
+        time.sleep((5, 15)[attempt])
+    raise ValueError("PortWatch请求未完成")
 
 
 def endpoint_for(kind: str) -> str:
@@ -143,7 +168,9 @@ def port_catalog() -> list[dict]:
             ports.append({"portid": item["portid"], "name": item["portname"],
                           "country": item["country"], "lat": item["lat"],
                           "lon": item["lon"], "region": region})
-    return port_inventory.enrich(ports)
+    enriched = port_inventory.enrich(ports)
+    data_store.save_catalog("ports", enriched)
+    return data_store.load_catalog("ports")
 
 
 def _latest_day(endpoint: str, missing_message: str) -> date:
@@ -209,6 +236,7 @@ def _activity_rows(day: date, port_ids: tuple[str, ...], calendar_days: int) -> 
         if fetched_count != expected_count or count_after != expected_count:
             raise ValueError(
                 f"PortWatch活动数据分页不完整或源记录变化：{fetched_count}/{expected_count}")
+    data_store.save_portwatch("ports", [row for rows in grouped.values() for row in rows.values()], DAILY)
     return grouped
 
 
@@ -337,7 +365,8 @@ def chokepoint_catalog() -> list[dict]:
             row = dict(found[point_id])
             row["name_cn"] = CHOKEPOINT_LABELS[point_id]
             output.append(row)
-    return output
+    data_store.save_catalog("chokepoints", output)
+    return data_store.load_catalog("chokepoints")
 
 
 @st.cache_data(ttl=3600, show_spinner=False)
@@ -363,6 +392,7 @@ def chokepoint_activity(day: date, chokepoint_ids: tuple[str, ...]) -> dict[str,
         if value["portid"] in result:
             raise ValueError(f"PortWatch 咽喉点日活动出现重复记录：{value['portid']}")
         result[value["portid"]] = value
+    data_store.save_portwatch("chokepoints", list(result.values()), CHOKEPOINT_DAILY)
     return result
 
 

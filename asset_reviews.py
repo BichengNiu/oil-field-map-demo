@@ -5,6 +5,7 @@ from __future__ import annotations
 import json
 from dataclasses import dataclass
 from pathlib import Path
+from data_store import read_json
 
 
 def _key(row: dict) -> tuple[str, str]:
@@ -78,22 +79,16 @@ class AssetReview:
 
 
 def _load(date: str, filename: str) -> AssetReview:
-    return AssetReview(date, json.loads(Path(__file__).with_name(filename).read_text()))
+    return AssetReview(date, read_json(filename))
 
 
 GULF = _load("2026-10-03", "GULF_REVIEW_2026-10-03.json")
 FOLLOWUP = _load("2026-10-04", "FINAL_REVIEW_2026-10-04.json")
 REVIEWS = (GULF, FOLLOWUP)
 
-PUBLIC_METADATA = json.loads(
-    (Path(__file__).parent / "data" / "asset_public_metadata.json").read_text(encoding="utf-8")
-)
-GEM_HISTORICAL_PRODUCTION = json.loads(
-    (Path(__file__).parent / "data" / "gem_historical_production.json").read_text(encoding="utf-8")
-)
-PRODUCTION_RECHECK = json.loads(
-    (Path(__file__).parent / "data" / "production_recheck.json").read_text(encoding="utf-8")
-)
+PUBLIC_METADATA = read_json("data/asset_public_metadata.json")
+GEM_HISTORICAL_PRODUCTION = read_json("data/gem_historical_production.json")
+PRODUCTION_RECHECK = read_json("data/production_recheck.json")
 
 
 def public_reference_coordinates() -> dict:

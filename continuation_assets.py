@@ -5,9 +5,10 @@ Source access, name confirmation, flow, capacity and map position stay separate.
 """
 import json
 from pathlib import Path
+from data_store import read_json
 
 REVIEW_DATE = "2026-10-01"
-EVIDENCE = json.loads(Path(__file__).with_name("CONTINUATION_EVIDENCE_2026-10-01.json").read_text())
+EVIDENCE = read_json("CONTINUATION_EVIDENCE_2026-10-01.json")
 RESOLVED = {(r["country"], r["name"]) for r in EVIDENCE["additions"]}
 UPDATED = RESOLVED | {(r["country"], r["name"]) for r in EVIDENCE["measurements"]}
 UPDATED |= {(r["country"], r["name"]) for r in EVIDENCE["coordinates"]}

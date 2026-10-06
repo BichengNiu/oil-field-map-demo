@@ -290,7 +290,7 @@ def render_method_panel() -> None:
             {
                 "数据": "船位归档",
                 "当前更新": "只归档有明确观测时间的上游快照；接收时间另存，地图与船舶页只展示当前船位",
-                "进一步自动化": "设置持久AIS_ARCHIVE_PATH以跨重启保存；全部监测水域的完整历史需有授权的数据源",
+                "进一步自动化": "统一MONITORING_DB_PATH持久盘；四海域后台持续积累，全天采集需常驻服务；免费AIS仅为观测覆盖",
             },
         ],
         hide_index=True,
@@ -433,9 +433,11 @@ def prepare_monitoring_cards(available_ports, available_chokepoints, state,
             except Exception as exc:
                 errors.append(f"{kind} 同比记录：{type(exc).__name__}: {exc}")
     sea_history = []
+    sea_observation_card = None
     try:
         sea_state = report_data.card_sea_history()
         sea_history = sea_state["rows"]
+        sea_observation_card = sea_state.get("card")
         if sea_state.get("error"):
             errors.append(sea_state["error"])
     except Exception as exc:
@@ -446,6 +448,7 @@ def prepare_monitoring_cards(available_ports, available_chokepoints, state,
         state.live_positions, state.selected_day, state.selected_chokepoint_day,
         vessel_day=datetime.now(ZoneInfo("Asia/Shanghai")).date(), assets=ASSETS,
         sea_passage_history=sea_history,
+        sea_observation_card=sea_observation_card,
     )
     return cards, errors
 

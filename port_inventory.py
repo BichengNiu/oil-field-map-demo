@@ -1,17 +1,18 @@
 """Supplement PortWatch coverage without inventing PortWatch observations."""
 import json
 from pathlib import Path
+from data_store import read_json
 
 WPI_SOURCE = "https://msi.nga.mil/api/publications/download?key=16694622%2FSFH00000%2FUpdatedPub150.csv"
-WPI_ROWS = json.loads(Path(__file__).with_name("port_inventory_wpi_2026-09-30.json").read_text())
+WPI_ROWS = read_json("port_inventory_wpi_2026-09-30.json")
 NGA_SAILING = "https://msi.nga.mil/api/publications/download?key=16694491%2FSFH00000%2FPub172bk.pdf"
 
 
 # Chinese labels used in the country and port selectors. Source catalog values
 # remain unchanged for filtering and API requests.
-PORT_REVIEW = json.loads(Path(__file__).with_name("PORT_REVIEW_2026-10-03.json").read_text())
+PORT_REVIEW = read_json("PORT_REVIEW_2026-10-03.json")
 
-PORT_FOLLOWUP = json.loads(Path(__file__).with_name("PORT_REVIEW_2026-10-04.json").read_text())
+PORT_FOLLOWUP = read_json("PORT_REVIEW_2026-10-04.json")
 _FOLLOWUP_IDS = {row["portid"] for kind in ("additions", "status_decisions")
                  for row in PORT_FOLLOWUP[kind]}
 

@@ -8,9 +8,11 @@ import json
 import math
 from pathlib import Path
 import threading
+from io import BytesIO
 
 import ais
 import ais_history
+import data_store
 
 SOURCE_URL = "https://huggingface.co/datasets/yasumorishima/hormuz-ais"
 REVISION = "eef53f9bb006e3cf026824fa1f54ab6d3404468f"
@@ -22,34 +24,35 @@ MAX_BYTES = 15 * 1024 * 1024
 _LOCK = threading.Lock()
 
 
-def _verify(path: Path) -> None:
-    if path.stat().st_size > MAX_BYTES or hashlib.sha256(path.read_bytes()).hexdigest() != SHA256:
+def _verify(data: bytes) -> None:
+    if len(data) > MAX_BYTES or hashlib.sha256(data).hexdigest() != SHA256:
         raise ValueError("公开AIS档案校验失败；不导入与已核查版本不同的内容")
 
 
-def download_archive() -> Path:
+def download_archive() -> BytesIO:
     import requests
-    path = ais_history.archive_path().parent / f"hormuz-{SHA256[:12]}.parquet"
-    if path.exists():
-        _verify(path)
-        return path
-    path.parent.mkdir(parents=True, exist_ok=True)
-    temporary = path.with_suffix(".part")
-    try:
-        with requests.get(DOWNLOAD_URL, stream=True, timeout=(15, 20)) as response:
-            response.raise_for_status()
-            size = 0
-            with temporary.open("wb") as output:
+    logical_name = f"archives/hormuz-{SHA256[:12]}.parquet"
+    data = data_store.binary_document(logical_name)
+    if data is None:
+        # Reuse an older deployment's original file if it exists; future reads
+        # use the exact source bytes stored inside DuckDB.
+        legacy = data_store._legacy_paths()["ais"].parent / f"hormuz-{SHA256[:12]}.parquet"
+        if legacy.exists():
+            data = legacy.read_bytes()
+        else:
+            with requests.get(DOWNLOAD_URL, stream=True, timeout=(15, 20)) as response:
+                response.raise_for_status()
+                pieces, size = [], 0
                 for chunk in response.iter_content(256 * 1024):
                     size += len(chunk)
                     if size > MAX_BYTES:
                         raise ValueError("公开AIS档案超出预期大小")
-                    output.write(chunk)
-        _verify(temporary)
-        temporary.replace(path)
-    finally:
-        temporary.unlink(missing_ok=True)
-    return path
+                    pieces.append(chunk)
+                data = b"".join(pieces)
+        _verify(data)
+        data_store.put_binary_document(logical_name, data, "application/vnd.apache.parquet")
+    _verify(data)
+    return BytesIO(data)
 
 
 def _value(value):
@@ -92,11 +95,12 @@ def convert_report(row: dict) -> tuple[dict | None, str | None]:
     return report, None
 
 
-def import_archive(path: Path) -> dict:
+def import_archive(path) -> dict:
     """Import reports and completion marker atomically into the same database."""
     import pyarrow.parquet as parquet
-    _verify(path)
-    table = parquet.read_table(path)
+    data = path.read_bytes() if isinstance(path, Path) else path.getvalue()
+    _verify(data)
+    table = parquet.read_table(BytesIO(data))
     required = {"mmsi", "timestamp", "latitude", "longitude", "speed"}
     if not required <= set(table.column_names):
         raise ValueError("公开AIS档案缺少必要列")
@@ -129,9 +133,10 @@ def import_archive(path: Path) -> dict:
                 day_counts[report["observed_at"][:10]] += 1
                 payloads.append((report["mmsi"], report["observed_at"], SOURCE,
                                  json.dumps(report, ensure_ascii=False, allow_nan=False)))
-            before = conn.total_changes
-            conn.executemany("INSERT OR IGNORE INTO reports VALUES (?, ?, ?, ?)", payloads)
-            inserted += conn.total_changes - before
+            before = conn.execute("SELECT COUNT(*) FROM ais_reports").fetchone()[0]
+            if payloads:
+                conn.executemany("INSERT OR IGNORE INTO ais_reports VALUES (?, ?, ?, ?)", payloads)
+            inserted += conn.execute("SELECT COUNT(*) FROM ais_reports").fetchone()[0] - before
         metadata = {
             "source_url": SOURCE_URL, "revision": REVISION, "sha256": SHA256,
             "raw_rows": table.num_rows, "accepted_rows": accepted, "inserted_rows": inserted,

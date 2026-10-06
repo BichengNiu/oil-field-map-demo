@@ -4,10 +4,13 @@ import streamlit as st
 
 import report_data
 import sea_history
+import data_store
 
 
 def render_sea_history_panel():
     st.subheader("海域历史数据")
+    state = data_store.status()
+    st.caption(f"统一DuckDB：AIS观测 {state['counts']['ais_reports']:,} 条；进入事件 {state['counts']['sea_entries']:,} 条。")
     config = report_data.sea_history_config()
     try:
         result = report_data.card_sea_history()
@@ -16,7 +19,11 @@ def render_sea_history_panel():
         if result["rows"]:
             days = [row["date"] for row in result["rows"]]
             st.write(f"已接入 {result['source']}；历史范围 {min(days)} 至 {max(days)}。")
-            st.caption("各海域完整日期覆盖见下表；当前月累计采用四海域共同的最新完整日。")
+            if result.get("started_at"):
+                st.caption(f"持续观测始于 {result['started_at']}。首次出现作基线，不计进入；已记录艘次不代表全部实际船流。"
+                           "观测窗口不完整时不计算环比、同比。")
+            else:
+                st.caption("各海域完整日期覆盖见下表；当前月累计采用四海域共同的最新完整日。")
             st.dataframe(result["rows"], hide_index=True, width="stretch", height=200)
         else:
             st.info("尚未导入完整海域历史事件。实时船位不能用于通过艘次、环比和同比。")
@@ -44,6 +51,9 @@ def render_sea_history_panel():
             return
         supplied_token = st.text_input("管理员导入口令", type="password", key="sea_history_import_token")
         allowed = bool(supplied_token) and hmac.compare_digest(supplied_token.encode(), import_token.encode())
+        if allowed:
+            st.download_button("备份统一DuckDB", data_store.backup_bytes, file_name="monitoring.duckdb",
+                               mime="application/octet-stream", key="monitoring_db_backup")
         uploaded = st.file_uploader("历史海域事件ZIP", type=["zip"], key="sea_history_upload", disabled=not allowed)
         if st.button("导入历史数据", disabled=uploaded is None or not allowed, key="sea_history_import"):
             try:

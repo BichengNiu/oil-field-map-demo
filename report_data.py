@@ -61,15 +61,14 @@ def comparison_history(kind: str, node_ids: tuple[str, ...], end_day: str,
 @st.cache_data(ttl=60, show_spinner=False)
 def card_vessel_history() -> list[dict]:
     """Read the existing local archive without creating or backfilling it."""
-    import sqlite3
     import ais_history
     path = ais_history.archive_path()
     if not path.exists():
         return []
-    with sqlite3.connect(path.as_uri() + '?mode=ro', uri=True) as conn:
+    with ais_history.connect_archive() as conn:
         return [json.loads(row[0]) for row in conn.execute(
-            'SELECT payload FROM reports WHERE observed >= ?',
-            ((date.today() - timedelta(days=400)).isoformat(),))]
+            'SELECT payload FROM ais_reports WHERE observed >= ?',
+            ((date.today() - timedelta(days=400)).isoformat(),)).fetchall()]
 
 
 def sea_history_config() -> dict:
@@ -84,7 +83,7 @@ def sea_history_config() -> dict:
     return config
 
 
-@st.cache_data(ttl=900, show_spinner=False)
+@st.cache_data(ttl=60, show_spinner=False)
 def card_sea_history() -> dict:
     """Synchronize configured authorized delivery and read the shared event archive."""
     import sea_history
@@ -95,4 +94,7 @@ def card_sea_history() -> dict:
     except Exception as exc:
         error = f"海域历史更新失败：{exc}"
     result = sea_history.read_history(sea_history.archive_path(config))
+    if not result["source"]:
+        import sea_tracking
+        result = sea_tracking.observation_summary()
     return {**result, "error": error}

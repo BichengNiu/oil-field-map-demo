@@ -6,8 +6,9 @@ Only confirmed names enter the live catalogue. Unread clues remain in the ledger
 import json
 from decimal import Decimal, ROUND_HALF_UP
 from pathlib import Path
+from data_store import read_json
 
-GEM_ROWS = json.loads(Path(__file__).with_name("GEM_RECONCILIATION_2026-09-30.json").read_text())
+GEM_ROWS = read_json("GEM_RECONCILIATION_2026-09-30.json")
 TURKEY_URL = "https://enerji.gov.tr/haber-detay?id=31903"
 DANA_URL = "https://www.danagas.com/wp-content/uploads/2026/02/20260204-Dana-Gas-FY-2025-Press-Release-En.pdf"
 DANA_STATUS_URL = "https://www.danagas.com/media/press-releases/?cat=2026"
