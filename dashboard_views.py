@@ -26,7 +26,12 @@ from map_popups import asset_popup, chokepoint_popup, port_popup
 ASSETS = CATALOG.ASSETS
 
 
+def queue_map_screenshot() -> None:
+    st.session_state["map_screenshot_requested"] = True
+
+
 def render_map_panel(state: DashboardViewState, summary_cards: list) -> None:
+    screenshot_requested = st.session_state.pop("map_screenshot_requested", False)
     st.html(monitoring_cards.cards_html(summary_cards))
     with st.container(horizontal=True, key="map_layer_filters"):
         show_assets = st.checkbox("油气", value=True, key="map_show_assets")
@@ -60,14 +65,17 @@ def render_map_panel(state: DashboardViewState, summary_cards: list) -> None:
             asset_popup=asset_popup,
             port_popup=port_popup,
             chokepoint_popup=chokepoint_popup,
+            screenshot_requested=screenshot_requested,
         ),
         height=735,
     )
     with st.container(horizontal=True, key="map_refresh_actions"):
-        st.button("刷新 PortWatch 数据", type="primary", width="content",
+        st.button("刷新港口数据", type="primary", width="content",
                   on_click=refresh_portwatch_data)
         st.button("刷新船舶数据", type="primary", width="content",
                   on_click=refresh_vessel_data)
+        st.button("保存地图PNG", type="primary", width="content",
+                  on_click=queue_map_screenshot)
 
 
 def render_ais_panel(state: DashboardViewState) -> None:
@@ -289,7 +297,7 @@ def render_method_panel() -> None:
         width="stretch",
     )
     st.markdown(
-        "**地图与截图。** 港口和咽喉点分别使用源站最新观测日，船舶图层显示当前AIS快照；油气保留披露日期。地图右上角保存 PNG，包含当前视野、图例、日期、弹窗及底图署名。"
+        "**地图与截图。** 港口和咽喉点分别使用源站最新观测日，船舶图层显示当前AIS快照；油气保留披露日期。地图下方的“保存地图PNG”按钮可导出当前视野、图例、日期、弹窗及底图署名。"
     )
     st.markdown(
         "**港口覆盖。** 地图读取 IMF 当前维护的 PortWatch 港口点位数据库，"

@@ -1,17 +1,6 @@
 """Browser controls for the embedded Leaflet map (no server credentials)."""
 
 SCREENSHOT_SCRIPT = r"""
-const screenshotControl = L.control({position: 'topright'});
-screenshotControl.onAdd = () => {
-  const el = L.DomUtil.create('div', 'map-tools');
-  el.setAttribute('data-html2canvas-ignore', 'true');
-  el.innerHTML = '<button type="button" id="save-map">保存地图 PNG</button>' +
-    '<span id="save-status" role="status" aria-live="polite"></span>';
-  L.DomEvent.disableClickPropagation(el);
-  L.DomEvent.disableScrollPropagation(el);
-  return el;
-};
-screenshotControl.addTo(map);
 function loadHtml2Canvas() {
   if (typeof window.html2canvas === 'function') return Promise.resolve();
   if (!window.html2canvasPromise) {
@@ -28,10 +17,19 @@ function loadHtml2Canvas() {
   }
   return window.html2canvasPromise;
 }
-document.getElementById('save-map').addEventListener('click', async () => {
-  const button = document.getElementById('save-map');
-  const status = document.getElementById('save-status');
-  button.disabled = true;
+window.saveMapPng = async () => {
+  let status = document.getElementById('save-status');
+  if (!status) {
+    const screenshotControl = L.control({position: 'topright'});
+    screenshotControl.onAdd = () => {
+      const el = L.DomUtil.create('div', 'map-tools');
+      el.setAttribute('data-html2canvas-ignore', 'true');
+      el.innerHTML = '<span id="save-status" role="status" aria-live="polite"></span>';
+      return el;
+    };
+    screenshotControl.addTo(map);
+    status = document.getElementById('save-status');
+  }
   status.textContent = '正在生成…';
   try {
     await loadHtml2Canvas();
@@ -63,8 +61,6 @@ document.getElementById('save-map').addEventListener('click', async () => {
     status.textContent = 'PNG 已生成';
   } catch (error) {
     status.textContent = `保存失败：${error.message || error}。可使用浏览器截图。`;
-  } finally {
-    button.disabled = false;
   }
-});
+};
 """

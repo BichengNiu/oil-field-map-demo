@@ -27,6 +27,7 @@ def build_map_html(
     asset_popup,
     port_popup,
     chokepoint_popup,
+    screenshot_requested: bool = False,
 ) -> str:
     markers = [
         {
@@ -311,5 +312,8 @@ def build_map_html(
       // A single bulk update avoids reclustering and rewriting DOM per ship.
       vesselLayer.addLayers(vesselMarkers);
       {map_tools.SCREENSHOT_SCRIPT}
+      if ({str(screenshot_requested).lower()}) {{
+        setTimeout(() => window.saveMapPng(), 800);
+      }}
     </script></body></html>
     """)
