@@ -6,6 +6,7 @@ from pathlib import Path
 
 import ais as AIS
 import map_tools
+from html_transport import compressed_document
 
 # Bundle the fixed map dependencies so drawing ships does not wait for a CDN.
 _VENDOR = Path(__file__).with_name("vendor") / "leaflet"
@@ -109,7 +110,7 @@ def build_map_html(assets: list[dict[str, object]], ports: list[dict],
     screenshot_label_json = json.dumps(
         f"港口数据日（UTC）：{day} · 咽喉点数据日（UTC）：{chokepoint_day} · 船舶：当前快照",
         ensure_ascii=False)
-    return f"""
+    return compressed_document(f"""
     <!doctype html><html lang="zh-CN"><head>
     <meta charset="utf-8" />
     <style>{_MAP_STYLES}</style>
@@ -335,4 +336,4 @@ def build_map_html(assets: list[dict[str, object]], ports: list[dict],
       vesselLayer.addLayers(vesselMarkers);
       {map_tools.SCREENSHOT_SCRIPT}
     </script></body></html>
-    """
+    """)

@@ -3,6 +3,7 @@
 运行：`pip install -r requirements.txt && streamlit run app.py`
 
 项目配置开启 Streamlit WebSocket 压缩，减少地图与打印报告 HTML 的传输量；修改此服务端配置后须重启应用进程才能生效。
+地图文档也以 gzip 压缩包传输，浏览器使用随项目提供的解码器同步还原，避免大段 HTML 排队传输；点位、弹窗和原生打印内容保持一致。
 
 ## 2026-10-05逐资产产量复核
 
