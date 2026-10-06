@@ -32,7 +32,7 @@ def refresh_portwatch_data() -> None:
 
 def refresh_vessel_data() -> None:
     """Refresh the public snapshot without restarting the shared AISStream feed."""
-    openwaters_snapshot.clear()
+    _openwaters_base_snapshot.clear()
 
 
 @st.cache_resource(max_entries=1, show_spinner=False, on_release=lambda collector: collector.stop())
@@ -40,9 +40,31 @@ def ais_collector(api_key: str, collector_version: int) -> AIS.AISCollector:
     return AIS.AISCollector(api_key).start()
 
 
-@st.cache_data(ttl=15, show_spinner=False)
+@st.cache_data(ttl=60, max_entries=1, show_spinner=False)
+def _openwaters_base_snapshot(collector_version: int) -> dict:
+    """Fetch one shared two-hour source snapshot for every user's age filter."""
+    return AIS.openwaters_snapshot(max_age_minutes=120)
+
+
 def openwaters_snapshot(max_age_minutes: int, collector_version: int) -> dict:
-    return AIS.openwaters_snapshot(max_age_minutes=max_age_minutes)
+    """Filter the shared source snapshot locally and refresh its displayed ages."""
+    snapshot = _openwaters_base_snapshot(collector_version)
+    now = AIS.utc_now()
+    vessels = []
+    for vessel in snapshot.get("vessels", []):
+        row = dict(vessel)
+        observed = AIS.parse_utc(row.get("observed_at"))
+        if observed is not None:
+            age_minutes = max(0.0, (now - observed).total_seconds() / 60)
+            if age_minutes > max_age_minutes:
+                continue
+            row["age_minutes"] = age_minutes
+            row["age_basis"] = "源站观测时间"
+        else:
+            row["age_minutes"] = None
+            row["age_basis"] = None
+        vessels.append(row)
+    return {**snapshot, "vessels": vessels}
 
 
 @st.cache_data(ttl=300, max_entries=12, show_spinner=False)

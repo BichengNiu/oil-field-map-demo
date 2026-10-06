@@ -6,6 +6,7 @@ from datetime import date, timedelta
 import streamlit as st
 
 import portwatch_downloads
+import print_report
 from portwatch_records import latest_by_node
 
 
@@ -29,3 +30,9 @@ def merge_latest_rows(catalog: list[dict], history: list[dict]) -> list[dict]:
         {**point, **latest.get(str(point.get("portid")), {})}
         for point in catalog
     ]
+
+
+@st.cache_data(ttl=900, max_entries=8, show_spinner=False)
+def cached_print_report(report_inputs: dict) -> str:
+    """Reuse report HTML while its source data and report inputs are unchanged."""
+    return print_report.build_report_html(**report_inputs)

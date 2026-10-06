@@ -17,7 +17,7 @@ import print_report
 import report_data
 from dashboard_state import DashboardViewState
 from download_panel import open_download_tab
-from map_popups import asset_popup, chokepoint_popup, port_popup, vessel_popup
+from map_popups import asset_popup, chokepoint_popup, port_popup
 
 ASSETS = CATALOG.ASSETS
 
@@ -130,7 +130,6 @@ def render_map_panel(state: DashboardViewState) -> None:
             asset_popup=asset_popup,
             port_popup=port_popup,
             chokepoint_popup=chokepoint_popup,
-            vessel_popup=vessel_popup,
         ),
         height=735,
     )
@@ -502,7 +501,15 @@ def render_print_report(
     report_port_catalog = list(available_ports)
     report_choke_catalog = list(available_chokepoints)
     report_assets = [asset for asset in ASSETS if asset.get("strategic_default")]
-    report_vessels = list(live_positions)
+    report_vessels = [
+        {
+            key: vessel.get(key)
+            for key in (
+                "mmsi", "name", "lat", "lon", "region", "category", "category_label", "moving"
+            )
+        }
+        for vessel in live_positions
+    ]
 
     report_port_ids = tuple(
         sorted(
@@ -554,22 +561,22 @@ def render_print_report(
         f"Open Waters 快照 {len(open_state.get('vessels') or [])} 艘；"
         f"AISStream 状态：{report_ais_status}"
     )
-    report_html = print_report.build_report_html(
-        scope_label="全项目",
-        generated_at=None,
-        port_catalog=report_port_catalog,
-        choke_catalog=report_choke_catalog,
-        latest_ports=report_latest_ports,
-        port_history=report_port_history,
-        choke_history=report_choke_history,
-        assets=report_assets,
-        asset_table=report_asset_table,
-        vessels=report_vessels,
-        regions=PORTWATCH.REGIONS,
-        port_day=selected_day,
-        choke_day=selected_chokepoint_day,
-        ais_status=report_ais_status,
-        ais_source_note=report_ais_note,
-        errors=report_errors,
-    )
+    report_html = report_data.cached_print_report({
+        "scope_label": "全项目",
+        "generated_at": None,
+        "port_catalog": report_port_catalog,
+        "choke_catalog": report_choke_catalog,
+        "latest_ports": report_latest_ports,
+        "port_history": report_port_history,
+        "choke_history": report_choke_history,
+        "assets": report_assets,
+        "asset_table": report_asset_table,
+        "vessels": report_vessels,
+        "regions": PORTWATCH.REGIONS,
+        "port_day": selected_day,
+        "choke_day": selected_chokepoint_day,
+        "ais_status": report_ais_status,
+        "ais_source_note": report_ais_note,
+        "errors": report_errors,
+    })
     st.html(print_report.PRINT_CSS + report_html)

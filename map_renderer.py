@@ -1,9 +1,9 @@
 """Pure Leaflet map HTML renderer; UI state stays in the Streamlit page."""
 from __future__ import annotations
 
-import html
 import json
 
+import ais as AIS
 import map_tools
 
 MAP_LAYER_LABELS = {
@@ -18,7 +18,7 @@ def build_map_html(assets: list[dict[str, object]], ports: list[dict],
               chokepoints: list[dict], vessels: list[dict], day: str, chokepoint_day: str,
               focus_assets: bool = False, ais_configured: bool = True,
               visible_layers: set[str] | None = None, *,
-              asset_popup, port_popup, chokepoint_popup, vessel_popup) -> str:
+              asset_popup, port_popup, chokepoint_popup) -> str:
     visible_layers = set(MAP_LAYER_LABELS) if visible_layers is None else visible_layers
     show_assets = "assets" in visible_layers
     show_ports = "ports" in visible_layers
@@ -52,13 +52,20 @@ def build_map_html(assets: list[dict[str, object]], ports: list[dict],
         for point in chokepoints
     ], ensure_ascii=False).replace("</", "<\\/")
     vessel_json = json.dumps([
-        {
-            "lat": vessel["lat"], "lon": vessel["lon"],
-            "name": html.escape(str(vessel.get("name") or f'MMSI {vessel["mmsi"]}')),
-            "category": vessel.get("category", "unknown"),
-            "course": vessel.get("course") or 0,
-            "popup": vessel_popup(vessel),
-        }
+        [
+            vessel["lat"], vessel["lon"],
+            vessel.get("name") or f'MMSI {vessel["mmsi"]}',
+            vessel["mmsi"], vessel.get("region"),
+            vessel.get("category_label"), vessel.get("imo"),
+            vessel.get("sog"), vessel.get("course"),
+            vessel.get("navigation_status"), vessel.get("call_sign"),
+            vessel.get("destination"), vessel.get("observed_at"),
+            vessel.get("received_at"),
+            vessel.get("data_source"),
+            vessel.get("source_url") or AIS.SOURCE,
+            vessel.get("source_attribution") or vessel.get("data_source") or "AIS数据来源",
+            vessel.get("category", "unknown"),
+        ]
         for vessel in vessels
     ], ensure_ascii=False).replace("</", "<\\/")
     legend_lines = ["<b>地图符号</b>"]
@@ -145,7 +152,6 @@ def build_map_html(assets: list[dict[str, object]], ports: list[dict],
     </style></head><body><div id="map"></div>
     <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
     <script src="https://unpkg.com/leaflet.markercluster@1.5.3/dist/leaflet.markercluster.js"></script>
-    <script src="https://unpkg.com/html2canvas@1.4.1/dist/html2canvas.min.js"></script>
     <script>
       const map = L.map('map', {{zoomControl: true}}).setView([25.5, 48.5], 4);
       L.tileLayer('https://server.arcgisonline.com/ArcGIS/rest/services/World_Street_Map/MapServer/tile/{{z}}/{{y}}/{{x}}', {{
@@ -170,6 +176,41 @@ def build_map_html(assets: list[dict[str, object]], ports: list[dict],
       const ports = {port_json};
       const chokepoints = {chokepoint_json};
       const vessels = {vessel_json};
+      const escapeHTML = (value) => String(value ?? '—').replace(/[&<>"']/g, (char) => ({{
+        '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;'
+      }}[char]));
+      const shown = (value, suffix = '') => value == null || value === ''
+        ? '—' : `${{escapeHTML(value)}}${{suffix}}`;
+      const decimal = (value, suffix) => value == null
+        ? '—' : `${{Number(value).toFixed(1)}} ${{suffix}}`;
+      const vesselPopup = (vessel) => {{
+        const [lat, lon, name, mmsi, region, categoryLabel, imo, sog, course,
+          navigationStatus, callSign, destination, observedAt, receivedAt,
+          dataSource, sourceUrl, attribution] = vessel;
+        const ageAt = observedAt || receivedAt;
+        const ageTimestamp = ageAt ? Date.parse(ageAt) : NaN;
+        const ageMinutes = Number.isFinite(ageTimestamp)
+          ? Math.max(0, (Date.now() - ageTimestamp) / 60000) : null;
+        const ageBasis = observedAt ? '源站观测时间'
+          : receivedAt ? '本机接收时间' : '源站未提供观测时间';
+        const safeUrl = /^https?:\\/\\//i.test(sourceUrl || '')
+          ? sourceUrl : {json.dumps(AIS.SOURCE)};
+        return `<div class="popup-card">
+          <div class="field-name">${{escapeHTML(name || `MMSI ${{mmsi}}`)}}</div>
+          <div class="country">船舶 · ${{shown(region || '监测水域')}}</div>
+          <div class="row"><span>船型</span><strong>${{shown(categoryLabel)}}</strong></div>
+          <div class="row"><span>MMSI / IMO</span><strong>${{shown(mmsi)}} / ${{shown(imo)}}</strong></div>
+          <div class="row"><span>航速 / 航向</span><strong>${{decimal(sog, '节')}} / ${{decimal(course, '°')}}</strong></div>
+          <div class="row"><span>航行状态</span><strong>${{shown(navigationStatus)}}</strong></div>
+          <div class="row"><span>呼号 / 目的地</span><strong>${{shown(callSign)}} / ${{shown(destination)}}</strong></div>
+          <div class="row"><span>AIS报告时间 UTC</span><strong>${{shown(observedAt)}}</strong></div>
+          <div class="row"><span>本机接收时间 UTC</span><strong>${{shown(receivedAt)}}</strong></div>
+          <div class="row"><span>数据年龄</span><strong>${{ageMinutes == null ? '—' : `${{Number(ageMinutes).toFixed(1)}} 分钟`}} · ${{shown(ageBasis)}}</strong></div>
+          <div class="row"><span>数据源</span><strong>${{shown(dataSource)}}</strong></div>
+          <div class="basis">AIS船型为船载设备广播的基础分类；货船不能据此可靠细分为集装箱船或散货船。点位可能因岸基/卫星覆盖、设备关闭、延迟或错误广播而缺失。</div>
+          <a class="source" href="${{escapeHTML(safeUrl)}}" target="_blank" rel="noopener">${{shown(attribution || dataSource || 'AIS数据来源')}}</a>
+        </div>`;
+      }};
       const assetLayer = L.markerClusterGroup({{showCoverageOnHover: false, maxClusterRadius: 34,
           disableClusteringAtZoom: 8, spiderfyOnMaxZoom: true}}).addTo(map);
       const portLayer = L.layerGroup().addTo(map);
@@ -235,22 +276,25 @@ def build_map_html(assets: list[dict[str, object]], ports: list[dict],
         tanker: '#ef4444', cargo: '#2563eb', other: '#64748b'
       }};
       vessels.forEach((vessel) => {{
-        const color = vesselColors[vessel.category] || vesselColors.other;
-        const angle = Number.isFinite(Number(vessel.course)) ? Number(vessel.course) : 0;
+        const [lat, lon, name, mmsi, region, categoryLabel, imo, sog, course,
+          navigationStatus, callSign, destination, observedAt, receivedAt,
+          dataSource, sourceUrl, attribution, category] = vessel;
+        const color = vesselColors[category] || vesselColors.other;
+        const angle = Number.isFinite(Number(course)) ? Number(course) : 0;
         const icon = L.divIcon({{
           className: 'vessel-icon', iconSize: [18, 18], iconAnchor: [9, 9],
           html: `<svg width="18" height="18" viewBox="0 0 18 18" style="transform:rotate(${{angle}}deg)">
             <path d="M9 1 L16 16 L9 12.8 L2 16 Z" fill="${{color}}" stroke="#ffffff" stroke-width="1.15"/>
           </svg>`
         }});
-        const marker = L.marker([vessel.lat, vessel.lon], {{icon}});
-        marker.bindTooltip(vessel.name, {{direction: 'top', opacity: .95}})
-          .bindPopup(vessel.popup, {{maxWidth: 410}}).addTo(vesselLayer);
+        const marker = L.marker([lat, lon], {{icon}});
+        marker.bindTooltip(escapeHTML(name), {{direction: 'top', opacity: .95}})
+          .bindPopup(() => vesselPopup(vessel), {{maxWidth: 410}}).addTo(vesselLayer);
       }});
       const allPoints = ports.map((p) => [p.lat, p.lon])
         .concat(chokepoints.map((p) => [p.lat, p.lon]))
         .concat(assets.map((a) => [a.lat, a.lon]))
-        .concat(vessels.map((v) => [v.lat, v.lon]));
+        .concat(vessels.map((v) => [v[0], v[1]]));
       const focusAssets = {focus_json};
       const visibleLayers = {visible_layers_json};
       if (focusAssets && assets.length === 1) {{
