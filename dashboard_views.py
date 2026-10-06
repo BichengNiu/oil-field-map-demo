@@ -198,7 +198,8 @@ def render_ais_panel(state: DashboardViewState) -> None:
     if ais_status.get("status") == "未配置（可选）":
         st.info(
             "AISStream 尚未配置。Open Waters 的公开接收站覆盖并非全球连续覆盖；"
-            "若苏伊士运河或曼德海峡没有报文，可在部署环境配置 AISSTREAM_API_KEY 接入该区域广播。"
+            "可在部署环境配置 AISSTREAM_API_KEY 接入另一 AIS 数据源；"
+            "红海、苏伊士运河和曼德海峡的实际覆盖仍取决于该源收到的报文。"
         )
     if rows:
         st.dataframe(
@@ -371,7 +372,7 @@ def render_method_panel() -> None:
             {
                 "数据": "船位归档",
                 "当前更新": "只归档有明确观测时间的上游快照；接收时间另存，地图与船舶页只展示当前船位",
-                "进一步自动化": "设置持久AIS_ARCHIVE_PATH以跨重启保存；五水域完整历史需有授权的数据源",
+                "进一步自动化": "设置持久AIS_ARCHIVE_PATH以跨重启保存；全部监测水域的完整历史需有授权的数据源",
             },
         ],
         hide_index=True,
@@ -444,7 +445,7 @@ def render_method_panel() -> None:
     )
     st.markdown(
         f"**船舶数据。** 免费快照来自[Open Waters开放AIS网络]({AIS.OPENWATERS_SOURCE})，"
-        f"可选[AISStream WebSocket API]({AIS.SOURCE})在服务器端接收五个监测水域的船级广播；"
+        f"可选[AISStream WebSocket API]({AIS.SOURCE})在服务器端接收五个监测水域及红海北、南段的船级广播；"
         "船位快照用于地图、船舶页和后台打印报告；停留期间可点击侧栏“刷新船舶数据”。"
         "浏览器只接收标准化的每船最新位置，不接收API Key。"
         "多源位置按MMSI合并，航行阈值为0.5节，超过所选最大数据年龄的船位只从当前显示中排除；"

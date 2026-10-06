@@ -387,7 +387,7 @@ def main() -> None:
 
     filtered_vessels = AIS.filter_vessels(
         live_positions,
-        regions=set(PORTWATCH.REGIONS),
+        regions=set(AIS.REGIONS),
         categories=selected_ais_categories,
         moving_only=ais_moving_only,
         query=ais_search,

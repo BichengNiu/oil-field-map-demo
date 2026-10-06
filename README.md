@@ -114,7 +114,7 @@
 
 ## 实时 AIS 配置
 
-实时船位默认尝试无需密钥的 [Open Waters 开放 AIS 网络](https://openwaters.io/ais/)，覆盖受公开 feed 和接收站分布影响；项目按其免费额度将五个监测区拆成两组查询，并在表格／船舶弹窗显示上游来源及署名。该网络包含 AISHub 和国家级公开 AIS feed，数据按各上游来源自己的许可条件提供。若希望再接入 [AISStream](https://aisstream.io/)，可创建 API Key，然后复制示例文件并填入真实密钥：
+实时船位默认尝试无需密钥的 [Open Waters 开放 AIS 网络](https://openwaters.io/ais/)，覆盖受公开 feed 和接收站分布影响；项目查询五个监测水域及连接苏伊士和曼德海峡的红海北、南段，按免费额度拆成三组请求，并在表格／船舶弹窗显示上游来源及署名。红海北段为21–30°N、32–40°E，南段为12–21°N、36–44°E；交叠位置优先归属苏伊士运河或曼德海峡。扩大查询范围不保证上游存在接收站或近期报文。该网络包含 AISHub 和国家级公开 AIS feed，数据按各上游来源自己的许可条件提供。若希望再接入 [AISStream](https://aisstream.io/)，可创建 API Key，然后复制示例文件并填入真实密钥：
 
 ```bash
 cp .streamlit/secrets.toml.example .streamlit/secrets.toml
@@ -122,7 +122,7 @@ cp .streamlit/secrets.toml.example .streamlit/secrets.toml
 
 也可以在 Streamlit 部署设置中添加 `AISSTREAM_API_KEY`，或在服务器环境变量中配置同名变量。真实密钥文件已被 `.gitignore` 排除，不要提交到 GitHub。未配置密钥时，应用仍尝试 Open Waters 公共快照；如果该源无数据，页面会明确显示状态，不能把未收到船位解释为0艘。油气、PortWatch 港口和咽喉点仍可正常使用。
 
-配置 AISStream 后，`ais.py` 在服务器后台维持一条 WebSocket 连接，订阅五个监测水域的位置和静态船舶消息，以 MMSI 合并资料，并在连接中断后采用指数退避自动重连。需要显示船位时读取当前服务端快照；手动刷新只刷新 Open Waters 快照，不重启 AISStream 连接。两个区域请求合计覆盖五个监测框；船位按 MMSI 与 AISStream 结果合并，优先比较双方都有的源站观测时间，否则比较本机接收时间。超过用户选择的数据年龄后只从当前视图排除记录，不清除共享采集状态；不把缺报解释为0艘或静止。Open Waters 达到查询上限时页面会提示可能截断；来源署名会保留在船舶表、弹窗和数据源说明中。
+配置 AISStream 后，`ais.py` 在服务器后台维持一条 WebSocket 连接，订阅五个监测水域及红海北、南段的位置和静态船舶消息，以 MMSI 合并资料，并在连接中断后采用指数退避自动重连；实际覆盖以该源收到的报文为准。需要显示船位时读取当前服务端快照；手动刷新只刷新 Open Waters 快照，不重启 AISStream 连接。船位按 MMSI 与 AISStream 结果合并，优先比较双方都有的源站观测时间，否则比较本机接收时间。超过用户选择的数据年龄后只从当前视图排除记录，不清除共享采集状态；不把缺报解释为0艘或静止。Open Waters 达到查询上限时页面会提示可能截断；来源署名会保留在船舶表、弹窗和数据源说明中。
 
 ## 数据范围
 
@@ -147,7 +147,7 @@ PortWatch 的 `portcalls` 是进入港界并满足其贸易挂靠筛选的有效
 
 ## AIS 口径与限制
 
-- 实时位置、航速和方向来自 [Open Waters AIS 聚合网络](https://openwaters.io/ais/)及可选的 [AISStream WebSocket API](https://aisstream.io/documentation)，与 PortWatch 日度汇总是独立数据源，不能用实时地图点数反推 PortWatch 的港口挂靠指标。船舶页按五个监测水域分别列出两路来源的当前船位数；上游未返回报文不代表该水域没有船舶。Open Waters 按每条上游 feed 的许可条件提供数据，因此界面保留 API 返回的来源署名。
+- 实时位置、航速和方向来自 [Open Waters AIS 聚合网络](https://openwaters.io/ais/)及可选的 [AISStream WebSocket API](https://aisstream.io/documentation)，与 PortWatch 日度汇总是独立数据源，不能用实时地图点数反推 PortWatch 的港口挂靠指标。船舶页按五个监测水域及红海北、南段分别列出两路来源的当前船位数；上游未返回报文不代表该水域没有船舶。Open Waters 按每条上游 feed 的许可条件提供数据，因此界面保留 API 返回的来源署名。
 - 动态位置消息与静态船舶资料按 MMSI 合并。基础 AIS 船型代码可识别油轮／液货船、货船、客船等大类，但不能可靠区分集装箱船、干散货船、原油油轮和成品油轮；这些细分类需要商业船舶主数据补充。
 - 表中的 AIS 报告时间来自上游报文或 Open Waters 的最近报告时间（UTC），不是 PortWatch 日度统计时间。AIS 是事件驱动广播，点位可能受岸基／卫星覆盖、网络延迟、设备关闭、错误 MMSI 或位置欺骗影响；它不是全部船舶的完整普查。
 - 应用只把筛选后的标准化最新快照发送给浏览器，不发送 API Key 或原始 WebSocket 流。AISStream 当前不提供 SLA 或历史重放，重要研究需要自行持久化原始报文或改用带历史服务的商业数据源。
