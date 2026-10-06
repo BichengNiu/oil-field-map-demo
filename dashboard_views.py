@@ -38,6 +38,12 @@ def render_map_panel(state: DashboardViewState) -> None:
         st.error(f"咽喉点数据加载失败：{state.chokepoint_error}")
     if state.archive_error:
         st.warning(state.archive_error)
+    if state.map_chokepoints and "vessels" in state.visible_map_layers:
+        st.info(
+            f"同时显示 PortWatch 最新日度通行量（{state.selected_chokepoint_day or '日期未知'} UTC）："
+            "霍尔木兹、曼德海峡与苏伊士运河的紫色六边形是当日通过艘次；"
+            "红海没有单列的 PortWatch 总量，苏伊士与曼德分别显示其两端统计。"
+        )
     if not state.ais_enabled:
         st.info("船舶图层已关闭。")
     elif "vessels" in state.visible_map_layers:

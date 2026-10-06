@@ -22,7 +22,9 @@ def build_map_html(assets: list[dict[str, object]], ports: list[dict],
     visible_layers = set(MAP_LAYER_LABELS) if visible_layers is None else visible_layers
     show_assets = "assets" in visible_layers
     show_ports = "ports" in visible_layers
-    show_chokepoints = "chokepoints" in visible_layers
+    show_chokepoints = bool(chokepoints) and bool(
+        {"chokepoints", "vessels"}.intersection(visible_layers)
+    )
     show_vessels = "vessels" in visible_layers and ais_configured
     markers = [
         {
@@ -73,7 +75,9 @@ def build_map_html(assets: list[dict[str, object]], ports: list[dict],
     if show_ports:
         legend_lines.append(f'<span>{legend_icon("port", "#2563eb")}港口：方形</span>')
     if show_chokepoints:
-        legend_lines.append(f'<span>{legend_icon("choke", "#7c3aed")}咽喉点：六边形</span>')
+        legend_lines.append(
+            f'<span>{legend_icon("choke", "#7c3aed")}咽喉点：六边形（PortWatch日通过艘次）</span>'
+        )
     if show_vessels:
         legend_lines.append(f'<span>{legend_icon("vessel", "#64748b")}船舶：三角形</span>')
     if show_assets:

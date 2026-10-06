@@ -295,9 +295,12 @@ def main() -> None:
         on_change="rerun",
     )
     selected_chokepoint_day = newest_chokepoint_day
+    selected_chokepoint_id_set = set(selected_chokepoint_ids)
 
     need_port_data = (tab_map.open and "ports" in selected_map_layers) or tab_ports.open
-    need_chokepoint_data = tab_map.open and "chokepoints" in selected_map_layers
+    need_chokepoint_data = tab_map.open and bool(
+        {"chokepoints", "vessels"}.intersection(selected_map_layers)
+    )
     # The hidden print report is kept ready for Streamlit's native browser print.
     live_positions = []
     if ais_enabled:
@@ -339,9 +342,16 @@ def main() -> None:
 
     chokepoints: list[dict] = []
     chokepoint_error = chokepoint_catalog_error or chokepoint_latest_error
+    contextual_chokepoint_ids = (
+        set(PORTWATCH.FOCUS_CHOKEPOINT_IDS)
+        if "vessels" in selected_map_layers and "chokepoints" not in selected_map_layers
+        else set()
+    )
     if need_chokepoint_data and selected_chokepoint_day is not None and not chokepoint_error:
         chokepoints, chokepoint_error = load_chokepoints(
-            available_chokepoints, selected_chokepoint_day, selected_chokepoint_ids
+            available_chokepoints,
+            selected_chokepoint_day,
+            sorted(selected_chokepoint_id_set | contextual_chokepoint_ids),
         )
 
     archive_error = None
@@ -383,7 +393,18 @@ def main() -> None:
     map_ports = ports if "ports" in visible_map_layers else []
     if show_only_ports_with_data:
         map_ports = [port for port in map_ports if port.get("has_data")]
-    map_chokepoints = chokepoints if "chokepoints" in visible_map_layers else []
+    if "chokepoints" in visible_map_layers:
+        map_chokepoints = [
+            point for point in chokepoints
+            if str(point["portid"]) in selected_chokepoint_id_set
+        ]
+    elif "vessels" in visible_map_layers:
+        map_chokepoints = [
+            point for point in chokepoints
+            if str(point["portid"]) in contextual_chokepoint_ids
+        ]
+    else:
+        map_chokepoints = []
 
     filtered_vessels = AIS.filter_vessels(
         live_positions,
