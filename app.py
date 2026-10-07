@@ -2,6 +2,8 @@
 
 from __future__ import annotations
 
+import hashlib
+import importlib
 from pathlib import Path
 
 import streamlit as st
@@ -9,6 +11,13 @@ import streamlit as st
 import ais as AIS
 import field_catalog as CATALOG
 import portwatch as PORTWATCH
+import collector as _collector_module
+import data_store as _data_store_module
+import dashboard_data as _dashboard_data_module
+import dashboard_views as _dashboard_views_module
+import download_panel as _download_panel_module
+import portwatch_downloads as _portwatch_downloads_module
+import report_data as _report_data_module
 from dashboard_data import (
     ais_collector,
     collector_status,
@@ -35,6 +44,62 @@ from sea_history_panel import render_sea_history_panel
 
 ASSETS = CATALOG.ASSETS
 APP_STYLE = Path(__file__).with_name("dashboard.css").read_text()
+_RUNTIME_SOURCE_FILES = (
+    "app.py",
+    "collector.py",
+    "data_store.py",
+    "dashboard_data.py",
+    "dashboard_views.py",
+    "download_panel.py",
+    "portwatch.py",
+    "portwatch_downloads.py",
+    "report_data.py",
+)
+
+
+def _runtime_source_fingerprint() -> str:
+    digest = hashlib.sha256()
+    root = Path(__file__).resolve().parent
+    for name in _RUNTIME_SOURCE_FILES:
+        digest.update(name.encode())
+        digest.update((root / name).read_bytes())
+    return digest.hexdigest()
+
+
+@st.cache_resource(max_entries=2, show_spinner=False)
+def _load_runtime_modules(source_fingerprint: str) -> dict[str, object]:
+    """Reload helper modules together when Streamlit reruns a changed entrypoint."""
+    for module in (
+        _data_store_module,
+        PORTWATCH,
+        _portwatch_downloads_module,
+        _collector_module,
+        _report_data_module,
+        _dashboard_data_module,
+        _dashboard_views_module,
+        _download_panel_module,
+    ):
+        importlib.reload(module)
+
+    return {
+        "ais_collector": _dashboard_data_module.ais_collector,
+        "collector_status": _dashboard_data_module.collector_status,
+        "load_chokepoints": _dashboard_data_module.load_chokepoints,
+        "load_ports": _dashboard_data_module.load_ports,
+        "openwaters_snapshot": _dashboard_data_module.openwaters_snapshot,
+        "portwatch_state": _dashboard_data_module.portwatch_state,
+        "read_ais_api_key": _dashboard_data_module.read_ais_api_key,
+        "initialize_storage": _dashboard_data_module.initialize_storage,
+        "continuous_collection": _dashboard_data_module.continuous_collection,
+        "render_ais_panel": _dashboard_views_module.render_ais_panel,
+        "render_assets_panel": _dashboard_views_module.render_assets_panel,
+        "render_map_panel": _dashboard_views_module.render_map_panel,
+        "prepare_monitoring_cards": _dashboard_views_module.prepare_monitoring_cards,
+        "render_method_panel": _dashboard_views_module.render_method_panel,
+        "render_ports_panel": _dashboard_views_module.render_ports_panel,
+        "render_print_report": _dashboard_views_module.render_print_report,
+        "render_download_panel": _download_panel_module.render_download_panel,
+    }
 
 
 def main() -> None:
@@ -43,6 +108,7 @@ def main() -> None:
         page_icon="◉",
         layout="wide",
     )
+    globals().update(_load_runtime_modules(_runtime_source_fingerprint()))
 
     if (
         getattr(PORTWATCH, "MODULE_VERSION", 0) < 5
