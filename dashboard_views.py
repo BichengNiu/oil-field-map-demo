@@ -417,8 +417,9 @@ def prepare_monitoring_cards(available_ports, available_chokepoints, state,
                              refresh_revision=None):
     """Prepare the same summary independently of the optional print panel."""
     errors = []
-    revision = refresh_revision or st.session_state.setdefault(
-        "portwatch_report_revision", "initial")
+    # The map should never initiate a 90-day download. Use only validated local
+    # history here; explicit report preparation may fetch its own history.
+    revision = refresh_revision or "initial"
     port_ids = tuple(sorted(str(p["portid"]) for p in available_ports
                             if PORTWATCH.has_independent_statistics(p)))
     choke_ids = tuple(sorted(str(p["portid"]) for p in available_chokepoints))

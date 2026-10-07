@@ -69,10 +69,12 @@ class MonitoringCardsTest(unittest.TestCase):
         self.assertEqual(len(errors), 5)
 
     def test_expected_history_cache_miss_does_not_render_as_warning(self):
+        revisions = []
         def missing(*args, **kwargs):
+            revisions.append(args[3])
             raise portwatch_downloads.CacheMiss('local cache is empty')
 
-        ns = {'st': SimpleNamespace(session_state={}), 'uuid': uuid,
+        ns = {'st': SimpleNamespace(session_state={'portwatch_report_revision': 'manual-refresh'}), 'uuid': uuid,
               'PORTWATCH': SimpleNamespace(has_independent_statistics=lambda p: True),
               'report_data': SimpleNamespace(history_window=missing, comparison_history=missing,
                                             card_vessel_history=lambda: [],
@@ -88,6 +90,7 @@ class MonitoringCardsTest(unittest.TestCase):
 
         self.assertEqual(len(cards), 4)
         self.assertEqual(errors, [])
+        self.assertEqual(revisions, ['initial'] * 4)
 
     def test_map_call_is_outside_print_mode(self):
         tree = ast.parse((ROOT / 'app.py').read_text())
