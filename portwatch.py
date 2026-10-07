@@ -192,6 +192,8 @@ def latest_date() -> date:
 def _activity_rows(day: date, port_ids: tuple[str, ...], calendar_days: int,
                    refresh_revision: str = "initial") -> dict[str, dict[date, dict]]:
     """Fetch one validated daily window for reuse by latest-day and rolling indicators."""
+    if refresh_revision == "initial":
+        refresh_revision = st.session_state.get("portwatch_report_revision", "initial")
     grouped: dict[str, dict[date, dict]] = {port_id: {} for port_id in port_ids}
     port_ids = tuple(sorted(set(_activity_ids(port_ids))))
     if calendar_days < 1:
@@ -386,6 +388,8 @@ def latest_chokepoint_date() -> date:
 @st.cache_data(ttl=3600, show_spinner=False)
 def chokepoint_activity(day: date, chokepoint_ids: tuple[str, ...],
                         refresh_revision: str = "initial") -> dict[str, dict]:
+    if refresh_revision == "initial":
+        refresh_revision = st.session_state.get("portwatch_report_revision", "initial")
     if not valid_chokepoint_ids(chokepoint_ids):
         raise ValueError("无效的 PortWatch 咽喉点编号")
     if refresh_revision == "initial":

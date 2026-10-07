@@ -79,9 +79,9 @@ def openwaters_snapshot(collector_version: int) -> dict:
 
 
 @st.cache_data(ttl=60, max_entries=12, show_spinner=False)
-def portwatch_state(kind: str, resource: str, module_version: int,
-                    refresh_revision: str = "initial"):
+def portwatch_state(kind: str, resource: str, module_version: int):
     """Cache both source values and short-lived failures across page reruns."""
+    refresh_revision = st.session_state.get("portwatch_report_revision", "initial")
     readers = {
         ("ports", "catalog"): PORTWATCH.port_catalog,
         ("chokepoints", "catalog"): PORTWATCH.chokepoint_catalog,
@@ -133,7 +133,6 @@ def load_ports(
     rolling_days: int,
     *,
     with_risk: bool = False,
-    refresh_revision: str = "initial",
 ) -> tuple[list[dict], str | None, str | None]:
     ports = []
     port_error = None
@@ -149,13 +148,11 @@ def load_ports(
         )
         if ids:
             activity_all = (
-                PORTWATCH.daily_activity(selected_day, statistical_ids, refresh_revision)
+                PORTWATCH.daily_activity(selected_day, statistical_ids)
                 if statistical_ids else {}
             )
             rolling_all = (
-                PORTWATCH.rolling_activity(
-                    selected_day, statistical_ids, rolling_days, refresh_revision
-                )
+                PORTWATCH.rolling_activity(selected_day, statistical_ids, rolling_days)
                 if statistical_ids
                 else {}
             )
@@ -184,7 +181,6 @@ def load_ports(
 def load_chokepoints(
     available_chokepoints: list[dict],
     selected_chokepoint_day: date,
-    refresh_revision: str = "initial",
 ) -> tuple[list[dict], str | None]:
     chokepoints = []
     chokepoint_error = None
@@ -192,7 +188,7 @@ def load_chokepoints(
         chokepoint_ids = tuple(str(point["portid"]) for point in available_chokepoints)
         if chokepoint_ids:
             chokepoint_values_all = PORTWATCH.chokepoint_activity(
-                selected_chokepoint_day, chokepoint_ids, refresh_revision
+                selected_chokepoint_day, chokepoint_ids
             )
             chokepoints = PORTWATCH.decorate_chokepoints(
                 available_chokepoints, chokepoint_values_all

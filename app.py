@@ -59,20 +59,16 @@ def main() -> None:
     continuous_collection()
 
     available_ports, port_catalog_error = portwatch_state(
-        "ports", "catalog", PORTWATCH.MODULE_VERSION,
-        st.session_state.get("portwatch_report_revision", "initial"),
+        "ports", "catalog", PORTWATCH.MODULE_VERSION
     )
     available_chokepoints, chokepoint_catalog_error = portwatch_state(
-        "chokepoints", "catalog", PORTWATCH.MODULE_VERSION,
-        st.session_state.get("portwatch_report_revision", "initial"),
+        "chokepoints", "catalog", PORTWATCH.MODULE_VERSION
     )
     newest_day, port_latest_error = portwatch_state(
-        "ports", "latest_date", PORTWATCH.MODULE_VERSION,
-        st.session_state.get("portwatch_report_revision", "initial"),
+        "ports", "latest_date", PORTWATCH.MODULE_VERSION
     )
     newest_chokepoint_day, chokepoint_latest_error = portwatch_state(
-        "chokepoints", "latest_date", PORTWATCH.MODULE_VERSION,
-        st.session_state.get("portwatch_report_revision", "initial"),
+        "chokepoints", "latest_date", PORTWATCH.MODULE_VERSION
     )
 
     tab_map, tab_ports, tab_vessels, tab_assets, tab_download, tab_method = st.tabs(
@@ -113,7 +109,6 @@ def main() -> None:
             selected_day,
             rolling_days=7,
             with_risk=tab_ports.open,
-            refresh_revision=refresh_revision,
         )
 
     chokepoint_error = chokepoint_catalog_error or chokepoint_latest_error
@@ -122,7 +117,6 @@ def main() -> None:
         chokepoints, chokepoint_error = load_chokepoints(
             available_chokepoints,
             selected_chokepoint_day,
-            refresh_revision,
         )
 
     map_assets = [asset for asset in ASSETS if asset.get("map_drawable")]
@@ -144,8 +138,7 @@ def main() -> None:
     if tab_map.open:
         with tab_map:
             cards, card_errors = prepare_monitoring_cards(
-                available_ports, available_chokepoints, view_state,
-                refresh_revision=refresh_revision,
+                available_ports, available_chokepoints, view_state
             )
             prepare_report = render_map_panel(view_state, cards)
             for error in card_errors:
