@@ -102,5 +102,5 @@ def cards_html(cards, css_class='monitoring-cards'):
     return f'<div class="{css_class}">' + ''.join(
         '<div class="monitoring-card">' + f'<span>{escape(label)}</span>'
         + (f'<strong>{escape(value)}</strong>' if value else '')
-        + ''.join(f'<small>{escape(line)}</small>' for line in lines) + '</div>'
+        + ''.join(f'<div class="monitoring-card-detail">{escape(line)}</div>' for line in lines) + '</div>'
         for label, value, *lines in cards) + '</div>'

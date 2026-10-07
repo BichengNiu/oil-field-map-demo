@@ -14,7 +14,6 @@ import field_catalog as CATALOG
 import map_renderer
 import monitoring_cards
 import portwatch_downloads
-import data_store
 from datetime import datetime
 from zoneinfo import ZoneInfo
 import portwatch as PORTWATCH
@@ -32,14 +31,12 @@ def queue_map_screenshot() -> None:
     st.session_state["map_screenshot_requested"] = True
 
 
-def render_map_panel(state: DashboardViewState, summary_cards: list) -> bool:
+def render_map_panel(state: DashboardViewState, summary_cards: list) -> None:
     screenshot_requested = st.session_state.pop("map_screenshot_requested", False)
     st.html(monitoring_cards.cards_html(summary_cards))
-    st.caption("周、月及同比指标只按本地完整日记录计算；历史缺口由“准备打印报告”按需读取，不随页面载入联网。")
     with st.container(horizontal=True, key="map_layer_filters"):
         show_assets = st.checkbox("油气", value=True, key="map_show_assets")
-        show_ports = st.checkbox("港口", value=True, key="map_show_ports",
-                                 help="同时显示港口与咽喉点")
+        show_ports = st.checkbox("港口", value=True, key="map_show_ports")
         show_vessels = st.checkbox("船舶", value=True, key="map_show_vessels")
     stream_state = state.ais_status
     if state.port_error:
@@ -50,13 +47,6 @@ def render_map_panel(state: DashboardViewState, summary_cards: list) -> bool:
         st.error(state.archive_error)
     if state.open_state.get("error"):
         st.error(f"Open Waters 快照加载失败：{state.open_state['error']}")
-    elif not state.live_positions:
-        st.caption("暂无最近两小时的本地船位；点击“刷新船舶数据”读取一次上游快照。")
-    if summary := state.open_state.get("refresh_summary"):
-        st.caption(
-            f"最近一次手动船位刷新：读取 {summary['fetched']:,} 条有效报告，"
-            f"新增归档 {summary['inserted']:,} 条。"
-        )
     if stream_state.get("last_error") and not state.live_positions:
         st.error(f"AISStream 暂无可用船位：{stream_state['last_error']}")
     st.iframe(
@@ -86,8 +76,6 @@ def render_map_panel(state: DashboardViewState, summary_cards: list) -> bool:
                   on_click=refresh_vessel_data)
         st.button("保存地图PNG", type="primary", width="content",
                   on_click=queue_map_screenshot)
-        prepare_report = st.button("准备打印报告", width="content")
-    return prepare_report
 
 
 def render_ais_panel(state: DashboardViewState) -> None:
@@ -180,8 +168,6 @@ def render_ais_panel(state: DashboardViewState) -> None:
             mime="text/csv",
             type="primary",
         )
-    else:
-        st.caption("暂无最近两小时的本地船位；可在地图页点击“刷新船舶数据”读取一次上游快照。")
 
 
 def render_ports_panel(
@@ -193,8 +179,7 @@ def render_ports_panel(
 ) -> None:
     port_rows = dashboard_rows.port_rows(ports, selected_day, rolling_days)
     st.subheader("港口日活动")
-    st.button("刷新风险运力", key="refresh_port_risk", on_click=refresh_portwatch_risk,
-              help="仅在点击时请求历史航线风险运力模型。")
+    st.button("刷新风险运力", key="refresh_port_risk", on_click=refresh_portwatch_risk)
     if port_error:
         st.error(f"港口数据加载失败：{port_error}")
     elif port_rows:
@@ -213,8 +198,6 @@ def render_ports_panel(
         )
         if port_risk_error:
             st.error(f"历史风险运力暂不可用：{port_risk_error}")
-        if risk_snapshot := st.session_state.get("port_risk_values"):
-            st.caption(f"风险运力最近成功读取：{risk_snapshot.get('updated_at', '时间未知')} UTC")
         st.dataframe(
             port_rows,
             width="stretch",
@@ -470,8 +453,7 @@ def prepare_monitoring_cards(available_ports, available_chokepoints, state,
 def _budget_report_history(function):
     @wraps(function)
     def wrapped(*args, **kwargs):
-        budget = 120 if kwargs.get("prepare", True) else None
-        with PORTWATCH.request_budget(budget):
+        with PORTWATCH.request_budget(120):
             return function(*args, **kwargs)
 
     return wrapped
@@ -480,16 +462,8 @@ def _budget_report_history(function):
 @_budget_report_history
 def render_print_report(
     available_ports: list[dict], available_chokepoints: list[dict], state: DashboardViewState,
-    *, prepare: bool = True, data_revisions: dict[str, int] | None = None,
+    *, data_revisions: dict[str, int] | None = None,
 ) -> None:
-    if not prepare:
-        saved_report = st.session_state.get("prepared_print_report")
-        if saved_report and saved_report.get("data_revisions") == dict(data_revisions or {}):
-            st.html(print_report.PRINT_CSS + saved_report["html"])
-        elif saved_report:
-            st.info("监测数据已更新，已准备的打印报告不再匹配当前档案；请回地图页重新准备报告。")
-        return
-
     selected_day = state.selected_day
     selected_chokepoint_day = state.selected_chokepoint_day
     live_positions = state.live_positions
@@ -601,9 +575,4 @@ def render_print_report(
         "ais_source_note": report_ais_note,
         "errors": report_errors,
     })
-    st.session_state["prepared_print_report"] = {
-        "html": report_html,
-        "data_revisions": data_store.revisions(("ports", "chokepoints", "ais", "sea")),
-        "prepared_at": datetime.now().astimezone().isoformat(),
-    }
     st.html(print_report.PRINT_CSS + report_html)

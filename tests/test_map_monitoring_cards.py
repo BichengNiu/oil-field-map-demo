@@ -130,15 +130,13 @@ class MonitoringCardsTest(unittest.TestCase):
         self.assertIn('prepare_monitoring_cards', calls)
         self.assertIn('render_map_panel', calls)
 
-    def test_print_report_is_created_only_when_requested(self):
+    def test_print_report_is_always_available_for_streamlit_print(self):
         tree = ast.parse((ROOT / 'app.py').read_text())
         main = next(node for node in tree.body if isinstance(node, ast.FunctionDef) and node.name == '_render_dashboard')
-        guarded = [node for node in main.body if isinstance(node, ast.If)
-                   and ast.unparse(node.test) == "prepare_report or st.session_state.get('prepared_print_report')"]
-        self.assertEqual(len(guarded), 1)
-        calls = [node.func.id for node in ast.walk(guarded[0]) if isinstance(node, ast.Call)
+        calls = [node.func.id for node in ast.walk(main) if isinstance(node, ast.Call)
                  and isinstance(node.func, ast.Name)]
         self.assertIn('render_print_report', calls)
+        self.assertNotIn('prepare_report', ast.unparse(main))
 
 
 if __name__ == '__main__':

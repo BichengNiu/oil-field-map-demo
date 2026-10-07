@@ -12,7 +12,6 @@ from zoneinfo import ZoneInfo
 from portwatch_records import latest_by_node
 
 
-TITLE = "中东能源与战略通道运输监测"
 COLORS = ("#1769aa", "#d97706", "#7c3aed", "#14866d", "#dc4b4b", "#64748b")
 
 
@@ -433,7 +432,6 @@ def build_report_html(
         + '<span class="report-sponsor">中国驻阿联酋大使馆、国家发改委国家信息中心</span>'
         + f'<span class="report-generated">生成时间：{timestamp.strftime("%Y年%m月")}</span>'
         + '</div>'
-        + f'<h1 class="report-title">{_esc(TITLE)}</h1>'
         + cover_cards
         + f'<div class="map-frame">{map_html}</div>'
         + '<div class="map-legend">'
@@ -614,7 +612,7 @@ PRINT_CSS = """
 .report-page { break-before: page; page-break-before: always; }
 .print-report .monitoring-cards { display:grid; grid-template-columns:repeat(4,1fr); gap:3mm; margin:4mm 0; }
 .print-report .monitoring-card { border:1px solid #ccd5de; border-radius:2mm; padding:3mm; min-width:0; }
-.print-report .monitoring-card span, .print-report .monitoring-card small { display:block; color:#516171; font-size:8pt; overflow-wrap:anywhere; }
+.print-report .monitoring-card span, .print-report .monitoring-card-detail { display:block; color:#334155; font-size:10pt; overflow-wrap:anywhere; }
 .print-report .monitoring-card strong { display:block; font-size:14pt; margin:1.5mm 0; }
 .metric-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 2mm; margin: 2mm 0 3mm; }
 .metric-card { border: 1px solid #ccd5de; border-radius: 2mm; padding: 2mm; min-width: 0; }

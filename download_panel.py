@@ -236,7 +236,6 @@ def render_download_panel(
                 mime="application/zip",
                 key=f"pw_download_zip_{signature[:12]}",
             )
-        st.caption("本次结果已按节点和日期分块写入文件，避免将全量历史行留在会话内存；解压后合并各分块 CSV。")
         return
     for kind, rows in result["datasets"].items():
         fields = portwatch_downloads.columns(kind, result["manifest"]["derived"])

@@ -151,7 +151,6 @@ def _render_dashboard(refresh_revision: str) -> None:
     st.markdown(f"<style>{APP_STYLE}</style>", unsafe_allow_html=True)
     st.title("中东能源与战略通道运输监测")
     initialize_storage()
-    st.caption("页面载入仅读取本地档案；PortWatch、船位快照、报告历史和下载数据均由各自按钮手动触发。")
 
     revisions = data_store.revisions(("ports", "chokepoints"))
     state_requests = {
@@ -238,14 +237,13 @@ def _render_dashboard(refresh_revision: str) -> None:
         selected_chokepoint_day=selected_chokepoint_day,
     )
 
-    prepare_report = False
     if tab_map.open:
         with tab_map:
             cards, card_errors = prepare_monitoring_cards(
                 available_ports, available_chokepoints, view_state,
                 data_revisions=display_revisions,
             )
-            prepare_report = render_map_panel(view_state, cards)
+            render_map_panel(view_state, cards)
             for error in card_errors:
                 st.warning(f"监测卡部分指标不可用：{error}")
     if tab_ports.open:
@@ -275,11 +273,10 @@ def _render_dashboard(refresh_revision: str) -> None:
         with tab_method:
             render_method_panel()
 
-    if prepare_report or st.session_state.get("prepared_print_report"):
-        render_print_report(
-            available_ports, available_chokepoints, view_state,
-            prepare=prepare_report, data_revisions=display_revisions,
-        )
+    render_print_report(
+        available_ports, available_chokepoints, view_state,
+        data_revisions=display_revisions,
+    )
 
 
 if __name__ == "__main__":

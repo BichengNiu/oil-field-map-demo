@@ -114,41 +114,41 @@ def build_map_html(
       .leaflet-popup-content-wrapper {{ border-radius: 10px; box-shadow: 0 8px 24px rgba(15, 23, 42, .25); }}
       .leaflet-popup-content {{ margin: 13px 15px; min-width: 300px; max-width: 360px; }}
       .field-name {{ font-weight: 750; color: #0f172a; font-size: 14px; line-height: 1.35; margin-bottom: 3px; }}
-      .country {{ color: #64748b; font-size: 12px; margin-bottom: 10px; }}
-      .row {{ display: flex; justify-content: space-between; gap: 14px; padding: 5px 0; border-top: 1px solid #e2e8f0; font-size: 12px; }}
+      .country {{ color: #64748b; font-size: 14px; margin-bottom: 10px; }}
+      .row {{ display: flex; justify-content: space-between; gap: 14px; padding: 5px 0; border-top: 1px solid #e2e8f0; font-size: 14px; }}
       .row span, .basis, .status {{ color: #64748b; }}
       .row strong {{ color: #0f172a; text-align: right; }}
-      .hierarchy-title {{ margin-top: 10px; padding-top: 8px; border-top: 2px solid #cbd5e1; color: #334155; font-size: 12px; font-weight: 700; }}
+      .hierarchy-title {{ margin-top: 10px; padding-top: 8px; border-top: 2px solid #cbd5e1; color: #334155; font-size: 14px; font-weight: 700; }}
       .level-metric {{ padding: 7px 8px; margin-top: 6px; background: #f8fafc; border: 1px solid #e2e8f0; border-radius: 7px; }}
-      .level-head, .output-line {{ display: flex; justify-content: space-between; gap: 10px; font-size: 11px; }}
+      .level-head, .output-line {{ display: flex; justify-content: space-between; gap: 10px; font-size: 14px; }}
       .level-head span, .output-line span, .metric-detail {{ color: #64748b; }}
       .level-head b {{ color: #334155; text-align: right; }}
       .output-line {{ margin-top: 4px; align-items: baseline; }}
-      .output-line strong {{ color: #991b1b; font-size: 13px; }}
-      .metric-detail, .other-metric {{ font-size: 10px; margin-top: 2px; line-height: 1.35; }}
+      .output-line strong {{ color: #991b1b; font-size: 14px; }}
+      .metric-detail, .other-metric {{ font-size: 14px; margin-top: 2px; line-height: 1.35; }}
       .other-metric {{ color: #92400e; }}
-      .mix-row {{ display: grid; grid-template-columns: 72px 1fr 92px; gap: 7px; align-items: center; margin-top: 6px; font-size: 10px; }}
+      .mix-row {{ display: grid; grid-template-columns: 90px 1fr 110px; gap: 8px; align-items: center; margin-top: 6px; font-size: 14px; }}
       .mix-row span {{ color: #475569; }}
       .mix-row b {{ color: #334155; text-align: right; font-weight: 600; }}
       .mix-track {{ height: 6px; border-radius: 999px; background: #e2e8f0; overflow: hidden; }}
       .mix-track i {{ display: block; height: 100%; border-radius: 999px; }}
-      .status, .basis {{ font-size: 11px; margin-top: 8px; line-height: 1.4; }}
-      .source {{ display: block; color: #2563eb; font-size: 11px; margin-top: 8px; text-decoration: none; }}
-      .map-legend {{ background: rgba(255,255,255,.95); padding: 9px 11px; border-radius: 8px; box-shadow: 0 2px 10px rgba(15,23,42,.15); color: #0f172a; font-size: 11px; line-height: 1.45; }}
-      .map-legend b {{ font-size: 13px; }}
+      .status, .basis {{ font-size: 14px; margin-top: 8px; line-height: 1.4; }}
+      .source {{ display: block; color: #2563eb; font-size: 14px; margin-top: 8px; text-decoration: none; }}
+      .map-legend {{ background: rgba(255,255,255,.95); padding: 9px 11px; border-radius: 8px; box-shadow: 0 2px 10px rgba(15,23,42,.15); color: #0f172a; font-size: 14px; line-height: 1.45; }}
+      .map-legend b {{ font-size: 14px; }}
       .map-legend span {{ display: block; margin-top: 4px; white-space: nowrap; }}
       .map-legend svg {{ display: inline-block; width: 10px; height: 10px; margin-right: 6px; vertical-align: -1px; }}
-      .map-date {{ background: rgba(255,255,255,.96); padding: 7px 9px; border-radius: 7px; box-shadow: 0 2px 10px #0f172a26; color: #172b4d; font-size: 11px; }}
+      .map-date {{ background: rgba(255,255,255,.96); padding: 7px 9px; border-radius: 7px; box-shadow: 0 2px 10px #0f172a26; color: #172b4d; font-size: 14px; }}
       .asset-icon, .port-icon, .chokepoint-icon, .vessel-icon, .vessel-cluster {{ background: transparent; border: 0; }}
       .asset-icon svg, .port-icon svg, .chokepoint-icon svg, .vessel-icon svg, .vessel-cluster svg {{ display: block; filter: drop-shadow(0 1px 1px rgba(15,23,42,.45)); }}
-      .leaflet-tooltip {{ border: 0; border-radius: 7px; padding: 5px 8px; box-shadow: 0 3px 12px rgba(15,23,42,.18); font-size: 11px; }}
+      .leaflet-tooltip {{ border: 0; border-radius: 7px; padding: 5px 8px; box-shadow: 0 3px 12px rgba(15,23,42,.18); font-size: 14px; }}
       .marker-cluster-small, .marker-cluster-medium, .marker-cluster-large {{ background: transparent; }}
       .marker-cluster-small div, .marker-cluster-medium div, .marker-cluster-large div {{ background: #ea580c; color: white; font-weight: 700; border-radius: 7px; transform: rotate(45deg); box-shadow: 0 0 0 5px rgba(234,88,12,.22); }}
       .marker-cluster-small span, .marker-cluster-medium span, .marker-cluster-large span {{ display: block; transform: rotate(-45deg); }}
       .map-tools {{ background: rgba(255,255,255,.96); border-radius: 8px; padding: 8px 10px; color: #172b4d; box-shadow: 0 2px 10px #0f172a26; }}
-      .map-tools button {{ background: #0e5570; color: white; border: 0; border-radius: 5px; padding: 8px 12px; cursor: pointer; font-size: 13px; }}
+      .map-tools button {{ background: #0e5570; color: white; border: 0; border-radius: 5px; padding: 8px 12px; cursor: pointer; font-size: 14px; }}
       .map-tools button:disabled {{ opacity: .6; cursor: wait; }}
-      .map-tools span {{ display: block; max-width: 230px; font-size: 11px; margin-top: 4px; }}
+      .map-tools span {{ display: block; max-width: 280px; font-size: 14px; margin-top: 4px; }}
       .map-tools span:empty {{ display: none; }}
     </style></head><body><div id="map"></div>
     <script>{_MAP_SCRIPTS}</script>
