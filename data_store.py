@@ -8,7 +8,7 @@ from __future__ import annotations
 
 from contextlib import contextmanager
 import csv
-from datetime import datetime, timezone
+from datetime import datetime, timedelta, timezone
 import hashlib
 import io
 import json
@@ -259,6 +259,20 @@ def load_catalog(kind):
     return rows
 
 
+def cached_catalog(kind, max_age_seconds=86_400):
+    """Return a recent persisted catalog, or None when it should be refreshed."""
+    with connect() as conn:
+        rows = conn.execute(
+            "SELECT payload, updated_at FROM catalogs WHERE kind=? ORDER BY id", (kind,)
+        ).fetchall()
+    if not rows:
+        return None
+    updated_at = min(row[1] for row in rows)
+    if (datetime.now(timezone.utc) - updated_at).total_seconds() > max_age_seconds:
+        return None
+    return [json.loads(row[0]) for row in rows]
+
+
 def put_binary_document(relative, content, media, conn=None):
     if conn is None:
         with connect() as handle:
@@ -278,8 +292,80 @@ def save_portwatch(kind, rows, source_url, conn=None):
         with connect() as handle:
             return save_portwatch(kind, rows, source_url, handle)
     if rows:
-        conn.executemany("INSERT OR REPLACE INTO portwatch_daily(kind,node_id,day,payload,source_url) VALUES (?,?,?,?,?)",
-                         [(kind, str(r["portid"]), str(r["date"])[:10], encode(r), source_url) for r in rows])
+        statement = "INSERT OR REPLACE INTO portwatch_daily(kind,node_id,day,payload,source_url) VALUES (?,?,?,?,?)"
+        for start in range(0, len(rows), 500):
+            batch = rows[start:start + 500]
+            conn.executemany(
+                statement,
+                [(kind, str(row["portid"]), str(row["date"])[:10], encode(row), source_url)
+                 for row in batch],
+            )
+
+
+def cached_portwatch_window(kind, node_ids, first, last, max_age_seconds=86_400,
+                            with_metadata=False):
+    """Read a fully populated node/day window from the persistent fact table.
+
+    A partially stored window is not a cache hit: missing days must remain
+    distinguishable from zero-valued observations, so callers can fetch and
+    verify the complete source window instead.
+    """
+    node_ids = tuple(sorted(set(str(node_id) for node_id in node_ids)))
+    if kind not in ("ports", "chokepoints") or not node_ids or first > last:
+        return None
+
+    placeholders = ",".join("?" for _ in node_ids)
+    with connect() as conn:
+        result = conn.execute(
+            f"""SELECT node_id, day, payload, fetched_at FROM portwatch_daily
+                WHERE kind=? AND node_id IN ({placeholders})
+                  AND day BETWEEN ? AND ? ORDER BY day, node_id""",
+            [kind, *node_ids, first, last],
+        ).fetchall()
+
+    expected = {
+        (node_id, (first + timedelta(days=offset)).isoformat())
+        for node_id in node_ids
+        for offset in range((last - first).days + 1)
+    }
+    rows_by_key = {}
+    last_day_fetched = []
+    for node_id, day, payload, fetched_at in result:
+        key = (str(node_id), day.isoformat())
+        row = json.loads(payload) if isinstance(payload, str) else dict(payload)
+        row.setdefault("portid", str(node_id))
+        row.setdefault("date", key[1])
+        rows_by_key[key] = row
+        if day == last:
+            last_day_fetched.append(fetched_at)
+    if rows_by_key.keys() != expected:
+        return None
+    if not last_day_fetched or (
+        datetime.now(timezone.utc) - min(last_day_fetched)
+    ).total_seconds() > max_age_seconds:
+        return None
+    rows = [rows_by_key[key] for key in sorted(expected)]
+    if with_metadata:
+        return rows, min(row[3] for row in result)
+    return rows
+
+
+def cached_portwatch_latest_day(kind, max_age_seconds=86_400):
+    """Return a recent source day from the persisted PortWatch facts."""
+    if kind not in ("ports", "chokepoints"):
+        return None
+    with connect() as conn:
+        result = conn.execute(
+            """SELECT MAX(day), MIN(fetched_at) FROM portwatch_daily
+               WHERE kind=? AND day=(SELECT MAX(day) FROM portwatch_daily WHERE kind=?)""",
+            [kind, kind],
+        ).fetchone()
+    day, fetched_at = result
+    if day is None or fetched_at is None:
+        return None
+    if (datetime.now(timezone.utc) - fetched_at).total_seconds() > max_age_seconds:
+        return None
+    return day
 
 
 def save_query(endpoint, params, response):

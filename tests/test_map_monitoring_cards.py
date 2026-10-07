@@ -74,6 +74,16 @@ class MonitoringCardsTest(unittest.TestCase):
         self.assertIn('prepare_monitoring_cards', calls)
         self.assertIn('render_map_panel', calls)
 
+    def test_print_report_is_created_only_when_requested(self):
+        tree = ast.parse((ROOT / 'app.py').read_text())
+        main = next(node for node in tree.body if isinstance(node, ast.FunctionDef) and node.name == 'main')
+        guarded = [node for node in main.body if isinstance(node, ast.If)
+                   and ast.unparse(node.test) == 'prepare_report']
+        self.assertEqual(len(guarded), 1)
+        calls = [node.func.id for node in ast.walk(guarded[0]) if isinstance(node, ast.Call)
+                 and isinstance(node.func, ast.Name)]
+        self.assertIn('render_print_report', calls)
+
 
 if __name__ == '__main__':
     unittest.main()

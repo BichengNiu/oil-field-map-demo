@@ -143,6 +143,23 @@ def fetch_window(kind: str, ids: tuple[str, ...], first: date, last: date,
     if cached:
         return cached["rows"], {**cached["query"], "cache_hit": True}
 
+    if not force:
+        cached_rows = data_store.cached_portwatch_window(
+            kind, ids, first, last, max_age_seconds=max(cache_ttl_seconds, 86_400),
+            with_metadata=True)
+        if cached_rows is not None:
+            local_rows, retrieved_at = cached_rows
+            return local_rows, {
+                "endpoint": endpoint,
+                "where": where,
+                "retrieved_at_utc": retrieved_at.isoformat(),
+                "cache_hit": True,
+                "cache_source": "DuckDB verified daily facts",
+                "source_count": len(local_rows),
+                "exported_query_rows": len(local_rows),
+                "count_verified": True,
+            }
+
     def count():
         value = pw.query(endpoint, where=where, returnGeometry="false", returnCountOnly="true")
         if "count" not in value:

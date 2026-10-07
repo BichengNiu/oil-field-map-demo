@@ -78,8 +78,9 @@ def openwaters_snapshot(collector_version: int) -> dict:
     return {**snapshot, "vessels": vessels}
 
 
-@st.cache_data(ttl=60, max_entries=8, show_spinner=False)
-def portwatch_state(kind: str, resource: str, module_version: int):
+@st.cache_data(ttl=60, max_entries=12, show_spinner=False)
+def portwatch_state(kind: str, resource: str, module_version: int,
+                    refresh_revision: str = "initial"):
     """Cache both source values and short-lived failures across page reruns."""
     readers = {
         ("ports", "catalog"): PORTWATCH.port_catalog,
@@ -88,6 +89,18 @@ def portwatch_state(kind: str, resource: str, module_version: int):
         ("chokepoints", "latest_date"): PORTWATCH.latest_chokepoint_date,
     }
     reader = readers[kind, resource]
+    if refresh_revision == "initial":
+        try:
+            if resource == "catalog":
+                cached = data_store.cached_catalog(kind)
+            elif resource == "latest_date":
+                cached = data_store.cached_portwatch_latest_day(kind)
+            else:
+                cached = None
+            if cached is not None:
+                return cached, None
+        except Exception:
+            pass
     try:
         return reader(), None
     except Exception as exc:
@@ -120,6 +133,7 @@ def load_ports(
     rolling_days: int,
     *,
     with_risk: bool = False,
+    refresh_revision: str = "initial",
 ) -> tuple[list[dict], str | None, str | None]:
     ports = []
     port_error = None
@@ -135,10 +149,13 @@ def load_ports(
         )
         if ids:
             activity_all = (
-                PORTWATCH.daily_activity(selected_day, statistical_ids) if statistical_ids else {}
+                PORTWATCH.daily_activity(selected_day, statistical_ids, refresh_revision)
+                if statistical_ids else {}
             )
             rolling_all = (
-                PORTWATCH.rolling_activity(selected_day, statistical_ids, rolling_days)
+                PORTWATCH.rolling_activity(
+                    selected_day, statistical_ids, rolling_days, refresh_revision
+                )
                 if statistical_ids
                 else {}
             )
@@ -167,6 +184,7 @@ def load_ports(
 def load_chokepoints(
     available_chokepoints: list[dict],
     selected_chokepoint_day: date,
+    refresh_revision: str = "initial",
 ) -> tuple[list[dict], str | None]:
     chokepoints = []
     chokepoint_error = None
@@ -174,7 +192,7 @@ def load_chokepoints(
         chokepoint_ids = tuple(str(point["portid"]) for point in available_chokepoints)
         if chokepoint_ids:
             chokepoint_values_all = PORTWATCH.chokepoint_activity(
-                selected_chokepoint_day, chokepoint_ids
+                selected_chokepoint_day, chokepoint_ids, refresh_revision
             )
             chokepoints = PORTWATCH.decorate_chokepoints(
                 available_chokepoints, chokepoint_values_all

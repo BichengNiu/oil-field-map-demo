@@ -79,6 +79,10 @@ class CollectionService:
         return self
 
     def _run_ports(self):
+        # Give the first page a chance to render from persisted facts before
+        # this worker competes for the shared PortWatch request lock.
+        if self._stop.wait(30):
+            return
         while not self._stop.is_set():
             collect_portwatch_run()
             self._stop.wait(3600)

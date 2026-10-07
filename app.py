@@ -59,16 +59,20 @@ def main() -> None:
     continuous_collection()
 
     available_ports, port_catalog_error = portwatch_state(
-        "ports", "catalog", PORTWATCH.MODULE_VERSION
+        "ports", "catalog", PORTWATCH.MODULE_VERSION,
+        st.session_state.get("portwatch_report_revision", "initial"),
     )
     available_chokepoints, chokepoint_catalog_error = portwatch_state(
-        "chokepoints", "catalog", PORTWATCH.MODULE_VERSION
+        "chokepoints", "catalog", PORTWATCH.MODULE_VERSION,
+        st.session_state.get("portwatch_report_revision", "initial"),
     )
     newest_day, port_latest_error = portwatch_state(
-        "ports", "latest_date", PORTWATCH.MODULE_VERSION
+        "ports", "latest_date", PORTWATCH.MODULE_VERSION,
+        st.session_state.get("portwatch_report_revision", "initial"),
     )
     newest_chokepoint_day, chokepoint_latest_error = portwatch_state(
-        "chokepoints", "latest_date", PORTWATCH.MODULE_VERSION
+        "chokepoints", "latest_date", PORTWATCH.MODULE_VERSION,
+        st.session_state.get("portwatch_report_revision", "initial"),
     )
 
     tab_map, tab_ports, tab_vessels, tab_assets, tab_download, tab_method = st.tabs(
@@ -77,6 +81,7 @@ def main() -> None:
         on_change="rerun",
     )
 
+    refresh_revision = st.session_state.setdefault("portwatch_report_revision", "initial")
     selected_day = newest_day
     selected_chokepoint_day = newest_chokepoint_day
     ais_api_key = read_ais_api_key()
@@ -108,6 +113,7 @@ def main() -> None:
             selected_day,
             rolling_days=7,
             with_risk=tab_ports.open,
+            refresh_revision=refresh_revision,
         )
 
     chokepoint_error = chokepoint_catalog_error or chokepoint_latest_error
@@ -116,6 +122,7 @@ def main() -> None:
         chokepoints, chokepoint_error = load_chokepoints(
             available_chokepoints,
             selected_chokepoint_day,
+            refresh_revision,
         )
 
     map_assets = [asset for asset in ASSETS if asset.get("map_drawable")]
@@ -133,12 +140,14 @@ def main() -> None:
         selected_chokepoint_day=selected_chokepoint_day,
     )
 
+    prepare_report = False
     if tab_map.open:
         with tab_map:
             cards, card_errors = prepare_monitoring_cards(
-                available_ports, available_chokepoints, view_state
+                available_ports, available_chokepoints, view_state,
+                refresh_revision=refresh_revision,
             )
-            render_map_panel(view_state, cards)
+            prepare_report = render_map_panel(view_state, cards)
             for error in card_errors:
                 st.warning(f"监测卡部分指标不可用：{error}")
     if tab_ports.open:
@@ -164,7 +173,8 @@ def main() -> None:
         with tab_method:
             render_method_panel()
 
-    render_print_report(available_ports, available_chokepoints, view_state)
+    if prepare_report:
+        render_print_report(available_ports, available_chokepoints, view_state)
 
 
 if __name__ == "__main__":

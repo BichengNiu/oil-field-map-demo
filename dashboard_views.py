@@ -12,7 +12,6 @@ import dashboard_rows
 import field_catalog as CATALOG
 import map_renderer
 import monitoring_cards
-import uuid
 from datetime import datetime
 from zoneinfo import ZoneInfo
 import portwatch as PORTWATCH
@@ -30,7 +29,7 @@ def queue_map_screenshot() -> None:
     st.session_state["map_screenshot_requested"] = True
 
 
-def render_map_panel(state: DashboardViewState, summary_cards: list) -> None:
+def render_map_panel(state: DashboardViewState, summary_cards: list) -> bool:
     screenshot_requested = st.session_state.pop("map_screenshot_requested", False)
     st.html(monitoring_cards.cards_html(summary_cards))
     with st.container(horizontal=True, key="map_layer_filters"):
@@ -76,6 +75,8 @@ def render_map_panel(state: DashboardViewState, summary_cards: list) -> None:
                   on_click=refresh_vessel_data)
         st.button("保存地图PNG", type="primary", width="content",
                   on_click=queue_map_screenshot)
+        prepare_report = st.button("准备打印报告", width="content")
+    return prepare_report
 
 
 def render_ais_panel(state: DashboardViewState) -> None:
@@ -400,10 +401,12 @@ def render_method_panel() -> None:
 
 
 def prepare_monitoring_cards(available_ports, available_chokepoints, state,
-                             port_history=None, choke_history=None):
+                             port_history=None, choke_history=None,
+                             refresh_revision=None):
     """Prepare the same summary independently of the optional print panel."""
     errors = []
-    revision = st.session_state.setdefault("portwatch_report_revision", uuid.uuid4().hex)
+    revision = refresh_revision or st.session_state.setdefault(
+        "portwatch_report_revision", "initial")
     port_ids = tuple(sorted(str(p["portid"]) for p in available_ports
                             if PORTWATCH.has_independent_statistics(p)))
     choke_ids = tuple(sorted(str(p["portid"]) for p in available_chokepoints))

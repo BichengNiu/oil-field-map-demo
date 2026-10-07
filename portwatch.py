@@ -189,13 +189,20 @@ def latest_date() -> date:
 
 
 @st.cache_data(ttl=3600, show_spinner=False)
-def _activity_rows(day: date, port_ids: tuple[str, ...], calendar_days: int) -> dict[str, dict[date, dict]]:
+def _activity_rows(day: date, port_ids: tuple[str, ...], calendar_days: int,
+                   refresh_revision: str = "initial") -> dict[str, dict[date, dict]]:
     """Fetch one validated daily window for reuse by latest-day and rolling indicators."""
     grouped: dict[str, dict[date, dict]] = {port_id: {} for port_id in port_ids}
     port_ids = tuple(sorted(set(_activity_ids(port_ids))))
     if calendar_days < 1:
         raise ValueError("活动数据窗口天数无效")
     first_day = day - timedelta(days=calendar_days - 1)
+    if refresh_revision == "initial":
+        cached_rows = data_store.cached_portwatch_window("ports", port_ids, first_day, day)
+        if cached_rows is not None:
+            for values in cached_rows:
+                grouped[values["portid"]][date.fromisoformat(values["date"])] = values
+            return grouped
     for start in range(0, len(port_ids), 80):
         ids = port_ids[start:start + 80]
         if not valid_port_ids(ids):
@@ -241,9 +248,10 @@ def _activity_rows(day: date, port_ids: tuple[str, ...], calendar_days: int) -> 
 
 
 @st.cache_data(ttl=3600, show_spinner=False)
-def daily_activity(day: date, port_ids: tuple[str, ...]) -> dict[str, dict]:
+def daily_activity(day: date, port_ids: tuple[str, ...],
+                   refresh_revision: str = "initial") -> dict[str, dict]:
     # Reuse the same two-week response as the default rolling indicators.
-    rows = _activity_rows(day, port_ids, 14)
+    rows = _activity_rows(day, port_ids, 14, refresh_revision)
     return {port_id: values[day] for port_id, values in rows.items() if day in values}
 
 
@@ -255,7 +263,8 @@ def _complete_sum(rows: list[dict], days: int, *fields: str) -> float | None:
 
 
 @st.cache_data(ttl=3600, show_spinner=False)
-def rolling_activity(day: date, port_ids: tuple[str, ...], days: int = 7) -> dict[str, dict]:
+def rolling_activity(day: date, port_ids: tuple[str, ...], days: int = 7,
+                     refresh_revision: str = "initial") -> dict[str, dict]:
     """Return complete-window port indicators and the preceding-window baseline.
 
     Do not turn missing days into zeros; keep raw zero-valued source records.
@@ -267,7 +276,7 @@ def rolling_activity(day: date, port_ids: tuple[str, ...], days: int = 7) -> dic
     current_first = day - timedelta(days=days - 1)
     previous_first = day - timedelta(days=2 * days - 1)
     previous_last = current_first - timedelta(days=1)
-    grouped = _activity_rows(day, port_ids, 2 * days)
+    grouped = _activity_rows(day, port_ids, 2 * days, refresh_revision)
     for port_id in requested_ids:
         grouped.setdefault(port_id, {})
     summary = {}
@@ -375,9 +384,15 @@ def latest_chokepoint_date() -> date:
 
 
 @st.cache_data(ttl=3600, show_spinner=False)
-def chokepoint_activity(day: date, chokepoint_ids: tuple[str, ...]) -> dict[str, dict]:
+def chokepoint_activity(day: date, chokepoint_ids: tuple[str, ...],
+                        refresh_revision: str = "initial") -> dict[str, dict]:
     if not valid_chokepoint_ids(chokepoint_ids):
         raise ValueError("无效的 PortWatch 咽喉点编号")
+    if refresh_revision == "initial":
+        cached_rows = data_store.cached_portwatch_window(
+            "chokepoints", chokepoint_ids, day, day)
+        if cached_rows is not None:
+            return {row["portid"]: row for row in cached_rows}
     quoted = ",".join(f"'{point_id}'" for point_id in chokepoint_ids)
     where = f"date = DATE '{day.isoformat()}' AND portid IN ({quoted})"
     page = query(
