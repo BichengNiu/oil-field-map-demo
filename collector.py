@@ -1,7 +1,7 @@
-"""Continuous collection independent of page refresh; CLI works without Streamlit.
+"""Optional continuous collection worker; the Streamlit app only calls collect_once on click.
 
-Run as a supervised service on persistent storage for collection during app sleep.
-The Streamlit process also starts one shared worker while it is running.
+Run this as a supervised service only when continuous sampling is intended.
+The command line works without Streamlit.
 """
 from __future__ import annotations
 
@@ -53,6 +53,12 @@ def collect_once():
         snapshot["archive_error"] = None
     # The map receives only the latest display positions, not an archive-sized payload.
     snapshot.pop("reports", None)
+    snapshot["refresh_summary"] = {
+        "fetched": len(rows),
+        "inserted": inserted,
+        "rejected": details.get("rejected_reports", 0),
+        "truncated": bool(details.get("truncated")),
+    }
     return snapshot
 
 

@@ -9,6 +9,7 @@ from pathlib import Path
 import streamlit as st
 
 import ais as AIS
+import ais_history as _ais_history_module
 import field_catalog as CATALOG
 import portwatch as PORTWATCH
 import collector as _collector_module
@@ -18,16 +19,14 @@ import dashboard_views as _dashboard_views_module
 import download_panel as _download_panel_module
 import portwatch_downloads as _portwatch_downloads_module
 import report_data as _report_data_module
+import sea_history_panel as _sea_history_panel_module
 from dashboard_data import (
-    ais_collector,
     collector_status,
     load_chokepoints,
     load_ports,
     openwaters_snapshot,
     portwatch_state,
-    read_ais_api_key,
     initialize_storage,
-    continuous_collection,
 )
 from dashboard_state import DashboardViewState
 from dashboard_views import (
@@ -46,6 +45,7 @@ ASSETS = CATALOG.ASSETS
 APP_STYLE = Path(__file__).with_name("dashboard.css").read_text()
 _RUNTIME_SOURCE_FILES = (
     "app.py",
+    "ais_history.py",
     "collector.py",
     "data_store.py",
     "dashboard_data.py",
@@ -54,6 +54,7 @@ _RUNTIME_SOURCE_FILES = (
     "portwatch.py",
     "portwatch_downloads.py",
     "report_data.py",
+    "sea_history_panel.py",
 )
 
 
@@ -71,6 +72,7 @@ def _load_runtime_modules(source_fingerprint: str) -> dict[str, object]:
     """Reload helper modules together when Streamlit reruns a changed entrypoint."""
     for module in (
         _data_store_module,
+        _ais_history_module,
         PORTWATCH,
         _portwatch_downloads_module,
         _collector_module,
@@ -78,19 +80,17 @@ def _load_runtime_modules(source_fingerprint: str) -> dict[str, object]:
         _dashboard_data_module,
         _dashboard_views_module,
         _download_panel_module,
+        _sea_history_panel_module,
     ):
         importlib.reload(module)
 
     return {
-        "ais_collector": _dashboard_data_module.ais_collector,
         "collector_status": _dashboard_data_module.collector_status,
         "load_chokepoints": _dashboard_data_module.load_chokepoints,
         "load_ports": _dashboard_data_module.load_ports,
         "openwaters_snapshot": _dashboard_data_module.openwaters_snapshot,
         "portwatch_state": _dashboard_data_module.portwatch_state,
-        "read_ais_api_key": _dashboard_data_module.read_ais_api_key,
         "initialize_storage": _dashboard_data_module.initialize_storage,
-        "continuous_collection": _dashboard_data_module.continuous_collection,
         "render_ais_panel": _dashboard_views_module.render_ais_panel,
         "render_assets_panel": _dashboard_views_module.render_assets_panel,
         "render_map_panel": _dashboard_views_module.render_map_panel,
@@ -122,7 +122,7 @@ def main() -> None:
     st.markdown(f"<style>{APP_STYLE}</style>", unsafe_allow_html=True)
     st.title("中东能源与战略通道运输监测")
     initialize_storage()
-    continuous_collection()
+    st.caption("数据仅在点击刷新按钮时从上游更新；页面载入仅读取本地缓存和档案。")
 
     available_ports, port_catalog_error = portwatch_state(
         "ports", "catalog", PORTWATCH.MODULE_VERSION
@@ -143,24 +143,12 @@ def main() -> None:
         on_change="rerun",
     )
 
-    refresh_revision = st.session_state.setdefault("portwatch_report_revision", "initial")
+    st.session_state.setdefault("portwatch_report_revision", "initial")
     selected_day = newest_day
     selected_chokepoint_day = newest_chokepoint_day
-    ais_api_key = read_ais_api_key()
-    ais_collector_instance: AIS.AISCollector | None = None
-    if ais_api_key:
-        ais_collector_instance = ais_collector(ais_api_key, AIS.MODULE_VERSION)
-
     open_state = openwaters_snapshot(AIS.MODULE_VERSION)
-    stream_rows = (
-        ais_collector_instance.snapshot(max_age_minutes=120)
-        if ais_collector_instance is not None
-        else []
-    )
-    live_positions = AIS.merge_vessel_snapshots(
-        stream_rows, open_state.get("vessels", [])
-    )
-    ais_status = collector_status(ais_collector_instance)
+    live_positions = open_state.get("vessels", [])
+    ais_status = collector_status()
 
     port_error = port_catalog_error or port_latest_error
     port_risk_error = None

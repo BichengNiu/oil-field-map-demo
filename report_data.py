@@ -23,7 +23,8 @@ def history_window(kind: str, node_ids: tuple[str, ...], end_day: str,
         kind, node_ids, end - timedelta(days=89), end,
         force=refresh_revision != "initial",
         cache_revision=refresh_revision, cache_ttl_seconds=86_400,
-        allow_stale=refresh_revision == "initial")
+        allow_stale=refresh_revision == "initial",
+        cache_only=refresh_revision == "initial")
     return rows
 
 
@@ -58,7 +59,8 @@ def comparison_history(kind: str, node_ids: tuple[str, ...], end_day: str,
     rows, _ = portwatch_downloads.fetch_window(
         kind, node_ids, start, end, force=refresh_revision != "initial",
         cache_revision=refresh_revision, cache_ttl_seconds=86_400,
-        allow_stale=refresh_revision == "initial")
+        allow_stale=refresh_revision == "initial",
+        cache_only=refresh_revision == "initial")
     return rows
 
 
@@ -89,16 +91,11 @@ def sea_history_config() -> dict:
 
 @st.cache_data(ttl=60, show_spinner=False)
 def card_sea_history() -> dict:
-    """Synchronize configured authorized delivery and read the shared event archive."""
+    """Read the shared event archive without synchronizing its delivery source."""
     import sea_history
     config = sea_history_config()
-    error = None
-    try:
-        sea_history.sync_source(config)
-    except Exception as exc:
-        error = f"海域历史更新失败：{exc}"
     result = sea_history.read_history(sea_history.archive_path(config))
     if not result["source"]:
         import sea_tracking
         result = sea_tracking.observation_summary()
-    return {**result, "error": error}
+    return {**result, "error": None}

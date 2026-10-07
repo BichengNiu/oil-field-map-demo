@@ -30,9 +30,23 @@ def render_sea_history_panel():
     except Exception as exc:
         st.error(f"海域历史档案读取失败：{exc}")
     if st.button("刷新海域历史数据", key="sea_history_sync"):
+        try:
+            with st.spinner("正在读取已配置的海域历史交付源…"):
+                synced = sea_history.sync_source(config)
+            st.session_state["sea_history_sync_error"] = None
+            st.session_state["sea_history_sync_message"] = (
+                "海域历史数据已更新。" if synced else "未配置远端交付源；已显示本地档案。")
+        except Exception as exc:
+            st.session_state["sea_history_sync_error"] = f"海域历史更新失败：{exc}"
+            st.session_state["sea_history_sync_message"] = None
         report_data.card_sea_history.clear()
         st.session_state.pop("sea_history_import_result", None)
         st.rerun()
+    if message := st.session_state.get("sea_history_sync_message"):
+        st.success(message)
+        st.session_state.pop("sea_history_sync_message", None)
+    if error := st.session_state.get("sea_history_sync_error"):
+        st.warning(error)
     with st.expander("接入历史进出事件"):
         st.markdown(
             "需要波斯湾、红海、阿曼湾、亚丁湾的**自定义海域进入事件**，"

@@ -18,7 +18,7 @@ import portwatch as PORTWATCH
 import print_report
 import report_data
 from dashboard_state import DashboardViewState
-from dashboard_data import refresh_portwatch_data, refresh_vessel_data
+from dashboard_data import refresh_portwatch_data, refresh_portwatch_risk, refresh_vessel_data
 from download_panel import open_download_tab
 from map_popups import asset_popup, chokepoint_popup, port_popup
 
@@ -46,6 +46,13 @@ def render_map_panel(state: DashboardViewState, summary_cards: list) -> bool:
         st.error(state.archive_error)
     if state.open_state.get("error"):
         st.error(f"Open Waters 快照加载失败：{state.open_state['error']}")
+    elif not state.live_positions:
+        st.info("本地档案中没有最近两小时的船位；点击“刷新船舶数据”读取一次上游快照。")
+    if summary := state.open_state.get("refresh_summary"):
+        st.caption(
+            f"最近一次手动船位刷新：读取 {summary['fetched']:,} 条有效报告，"
+            f"新增归档 {summary['inserted']:,} 条。"
+        )
     if stream_state.get("last_error") and not state.live_positions:
         st.error(f"AISStream 暂无可用船位：{stream_state['last_error']}")
     st.iframe(
@@ -130,15 +137,15 @@ def render_ais_panel(state: DashboardViewState) -> None:
                 "不可用" if state.open_state.get("error") else counts["open_waters"]
             )
             aisstream_count = (
-                "未配置"
-                if ais_status.get("status") == "未配置（可选）"
+                "已暂停"
+                if ais_status.get("status") == "已暂停（手动刷新模式）"
                 else counts["aisstream"]
             )
             total_count = counts["open_waters"] + counts["aisstream"]
         else:
             open_waters_count = "不可用" if state.open_state.get("error") else "—"
             aisstream_count = (
-                "未配置" if ais_status.get("status") == "未配置（可选）" else "—"
+                "已暂停" if ais_status.get("status") == "已暂停（手动刷新模式）" else "—"
             )
             total_count = "—"
         region_rows.append(
@@ -169,6 +176,8 @@ def render_ais_panel(state: DashboardViewState) -> None:
             mime="text/csv",
             type="primary",
         )
+    else:
+        st.info("本地档案中没有最近两小时的船位；可在地图页点击“刷新船舶数据”读取一次上游快照。")
 
 
 def render_ports_panel(
@@ -180,6 +189,8 @@ def render_ports_panel(
 ) -> None:
     port_rows = dashboard_rows.port_rows(ports, selected_day, rolling_days)
     st.subheader("港口日活动")
+    st.button("刷新风险运力", key="refresh_port_risk", on_click=refresh_portwatch_risk,
+              help="仅在点击时请求历史航线风险运力模型。")
     if port_error:
         st.error(f"港口数据加载失败：{port_error}")
     elif port_rows:
@@ -254,28 +265,28 @@ def render_assets_panel(assets: list[dict]) -> None:
 def render_method_panel() -> None:
     st.subheader("范围、口径与数据限制")
     st.markdown(
-        "**更新方式。** 动态数据和目录使用短期缓存；地图下方的按钮可分别刷新 PortWatch 和船舶数据。"
+        "**更新方式。** 页面载入只读本地缓存；地图下方按钮手动刷新 PortWatch 和船舶数据，港口页按钮单独刷新风险运力。"
     )
     st.dataframe(
         [
             {
                 "数据": "港口 / 咽喉点日度记录",
-                "当前更新": "使用短期缓存；可手动刷新",
-                "进一步自动化": "已接入；源站发布时间决定最新观测日",
+                "当前更新": "页面只读本地缓存；点击地图刷新按钮时拉取一次",
+                "进一步自动化": "源站发布时间决定最新观测日；缺失仍保持未知",
             },
             {
                 "数据": "实时船位",
-                "当前更新": "每次页面运行读取 Open Waters 当前快照；可选 AISStream 后台持续接收",
-                "进一步自动化": "AISStream 需配置服务端密钥；地图下方可手动刷新",
+                "当前更新": "只读本地最近两小时档案；点击地图刷新按钮时查询一次 Open Waters",
+                "进一步自动化": "AISStream 当前暂停；单独运行采集服务才会持续采集",
             },
             {
                 "数据": "港口 / 咽喉点官方目录",
-                "当前更新": "使用24小时缓存；失败后60秒重试，手动刷新可提前重读",
-                "进一步自动化": "已接入；补充 WPI / 运营商名录仍需版本核验",
+                "当前更新": "本地缓存；点击地图刷新按钮更新",
+                "进一步自动化": "补充 WPI / 运营商名录仍需版本核验",
             },
             {
                 "数据": "港口风险运力",
-                "当前更新": "使用24小时缓存；打开港口页时按需读取",
+                "当前更新": "点击港口页“刷新风险运力”按钮时读取",
                 "进一步自动化": "源为历史航线模型；重新抓取不代表实时风险",
             },
             {
@@ -291,7 +302,7 @@ def render_method_panel() -> None:
             {
                 "数据": "船位归档",
                 "当前更新": "只归档有明确观测时间的上游快照；接收时间另存，地图与船舶页只展示当前船位",
-                "进一步自动化": "统一MONITORING_DB_PATH持久盘；四海域后台持续积累，全天采集需常驻服务；免费AIS仅为观测覆盖",
+                "进一步自动化": "统一MONITORING_DB_PATH持久盘；需要连续采样时显式运行独立服务；免费AIS仅为观测覆盖",
             },
         ],
         hide_index=True,

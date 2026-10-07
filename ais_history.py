@@ -118,6 +118,21 @@ def day_reports(day: date) -> list[dict]:
     return [json.loads(row[0]) for row in rows]
 
 
+def latest_snapshot(max_age_minutes: int = 120) -> list[dict]:
+    """Read the newest recent local report per vessel without network access."""
+    cutoff = (ais.utc_now() - timedelta(minutes=max(0, max_age_minutes))).isoformat()
+    with connect_archive() as conn:
+        rows = conn.execute(
+            """SELECT r.payload FROM ais_reports r
+               JOIN (SELECT mmsi, MAX(observed) AS observed FROM ais_reports
+                     WHERE observed >= ? GROUP BY mmsi) latest
+                 ON r.mmsi=latest.mmsi AND r.observed=latest.observed
+               ORDER BY r.observed DESC""",
+            (cutoff,),
+        ).fetchall()
+    return [json.loads(row[0]) for row in rows]
+
+
 def known_mmsis() -> list[str]:
     with connect_archive() as conn:
         return [row[0] for row in conn.execute("SELECT mmsi FROM ais_reports GROUP BY mmsi "

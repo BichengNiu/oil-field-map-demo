@@ -2,7 +2,6 @@
 
 from __future__ import annotations
 
-import os
 import uuid
 from datetime import date
 
@@ -15,16 +14,6 @@ import data_store
 import portwatch as PORTWATCH
 
 
-def read_ais_api_key() -> str:
-    """Read the key server-side without requiring or exposing it in the UI."""
-
-    try:
-        secret = st.secrets.get("AISSTREAM_API_KEY")
-    except Exception:
-        secret = None
-    return str(secret or os.environ.get("AISSTREAM_API_KEY") or "").strip()
-
-
 def refresh_portwatch_data() -> None:
     """Invalidate PortWatch data before Streamlit reruns the page."""
     PORTWATCH.clear_live_cache()
@@ -32,26 +21,22 @@ def refresh_portwatch_data() -> None:
     st.session_state["portwatch_report_revision"] = uuid.uuid4().hex
 
 
+def refresh_portwatch_risk() -> None:
+    """Request risk capacity only from its explicit control on the ports page."""
+    PORTWATCH.port_risk_capacity.clear()
+    st.session_state["port_risk_refresh_revision"] = uuid.uuid4().hex
+
+
 def refresh_vessel_data() -> None:
-    """Refresh the public snapshot without restarting the shared AISStream feed."""
-    _openwaters_base_snapshot.clear()
-    continuous_collection().refresh()
-
-
-@st.cache_resource(max_entries=1, show_spinner=False, on_release=lambda collector: collector.stop())
-def ais_collector(api_key: str, collector_version: int) -> AIS.AISCollector:
-    return AIS.AISCollector(api_key).start()
-
-
-@st.cache_data(ttl=60, max_entries=1, show_spinner=False)
-def _openwaters_base_snapshot(collector_version: int) -> dict:
-    """Fetch and archive one shared two-hour Open Waters snapshot."""
-    return continuous_collection().snapshot()
-
-
-@st.cache_resource(max_entries=1, show_spinner=False, on_release=lambda service: service.stop())
-def continuous_collection():
-    return history_collector.CollectionService().start()
+    """Fetch and archive one Open Waters snapshot only after a button click."""
+    try:
+        snapshot = history_collector.collect_once()
+        st.session_state["manual_openwaters_refresh_error"] = snapshot.get("archive_error")
+        st.session_state["manual_openwaters_refresh_summary"] = snapshot.get("refresh_summary")
+    except Exception as exc:
+        st.session_state["manual_openwaters_refresh_error"] = (
+            f"{type(exc).__name__}: {exc}")
+        st.session_state["manual_openwaters_refresh_summary"] = None
 
 
 @st.cache_resource(show_spinner=False)
@@ -60,11 +45,11 @@ def initialize_storage():
 
 
 def openwaters_snapshot(collector_version: int) -> dict:
-    """Refresh displayed ages on the shared source snapshot."""
-    snapshot = _openwaters_base_snapshot(collector_version)
+    """Read recent persisted AIS positions without contacting an upstream source."""
+    rows = ais_history.latest_snapshot(max_age_minutes=120)
     now = AIS.utc_now()
     vessels = []
-    for vessel in snapshot.get("vessels", []):
+    for vessel in rows:
         row = dict(vessel)
         observed = AIS.parse_utc(row.get("observed_at"))
         if observed is not None:
@@ -75,7 +60,15 @@ def openwaters_snapshot(collector_version: int) -> dict:
             row["age_minutes"] = None
             row["age_basis"] = None
         vessels.append(row)
-    return {**snapshot, "vessels": vessels}
+    refresh_error = st.session_state.get("manual_openwaters_refresh_error")
+    newest = max((row.get("received_at") or row.get("observed_at") or "" for row in rows), default=None)
+    return {
+        "vessels": vessels,
+        "error": None,
+        "archive_error": refresh_error,
+        "fetched_at": newest,
+        "refresh_summary": st.session_state.get("manual_openwaters_refresh_summary"),
+    }
 
 
 @st.cache_data(ttl=60, max_entries=12, show_spinner=False)
@@ -92,28 +85,32 @@ def portwatch_state(kind: str, resource: str, module_version: int):
     if refresh_revision == "initial":
         try:
             if resource == "catalog":
-                cached = data_store.cached_catalog(kind)
+                cached = data_store.cached_catalog(kind, allow_stale=True)
             elif resource == "latest_date":
-                cached = data_store.cached_portwatch_latest_day(kind)
+                cached = data_store.cached_portwatch_latest_day(kind, allow_stale=True)
             else:
                 cached = None
             if cached is not None:
                 return cached, None
         except Exception:
             pass
+        label = "港口" if kind == "ports" else "咽喉点"
+        return ([] if resource == "catalog" else None), (
+            f"本地没有{label}目录/日期缓存，请点击“刷新港口数据”"
+        )
     try:
         return reader(), None
     except Exception as exc:
         return ([] if resource == "catalog" else None), f"{type(exc).__name__}: {exc}"
 
 
-def collector_status(collector: AIS.AISCollector | None) -> dict:
-    """Return the collector status with one stable shape when it is optional."""
+def collector_status(collector: AIS.AISCollector | None = None) -> dict:
+    """Return the collector status shape; app mode intentionally has no worker."""
 
     if collector is not None:
         return collector.status()
     return {
-        "status": "未配置（可选）",
+        "status": "已暂停（手动刷新模式）",
         "last_error": None,
         "last_message_at": None,
         "last_position_message_at": None,
@@ -159,11 +156,16 @@ def load_ports(
             # The historical route-risk model is slower and is only used in
             # the detailed port table; do not block the default map on it.
             risk_all = {}
-            if with_risk and statistical_ids:
+            risk_revision = st.session_state.get("port_risk_refresh_revision", "initial")
+            if with_risk and statistical_ids and risk_revision != "initial":
                 try:
                     risk_all = PORTWATCH.port_risk_capacity(statistical_ids)
                 except Exception as exc:
                     port_risk_error = str(exc)
+                finally:
+                    st.session_state["port_risk_refresh_revision"] = "initial"
+            elif with_risk and statistical_ids:
+                port_risk_error = "点击“刷新风险运力”后读取"
             activity = {
                 port_id: activity_all[port_id] for port_id in ids if port_id in activity_all
             }

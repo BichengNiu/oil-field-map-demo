@@ -259,8 +259,8 @@ def load_catalog(kind):
     return rows
 
 
-def cached_catalog(kind, max_age_seconds=86_400):
-    """Return a recent persisted catalog, or None when it should be refreshed."""
+def cached_catalog(kind, max_age_seconds=86_400, allow_stale=False):
+    """Return a persisted catalog, optionally regardless of its age."""
     with connect() as conn:
         rows = conn.execute(
             "SELECT payload, updated_at FROM catalogs WHERE kind=? ORDER BY id", (kind,)
@@ -268,7 +268,7 @@ def cached_catalog(kind, max_age_seconds=86_400):
     if not rows:
         return None
     updated_at = min(row[1] for row in rows)
-    if (datetime.now(timezone.utc) - updated_at).total_seconds() > max_age_seconds:
+    if not allow_stale and (datetime.now(timezone.utc) - updated_at).total_seconds() > max_age_seconds:
         return None
     return [json.loads(row[0]) for row in rows]
 
@@ -350,8 +350,34 @@ def cached_portwatch_window(kind, node_ids, first, last, max_age_seconds=86_400,
     return rows
 
 
-def cached_portwatch_latest_day(kind, max_age_seconds=86_400):
-    """Return a recent source day from the persisted PortWatch facts."""
+def cached_portwatch_observations(kind, node_ids, first, last):
+    """Return whatever local daily facts exist in a date window, including gaps.
+
+    This is for read-only initial page rendering. Missing days remain missing;
+    callers must not interpret them as zero or fall back to the network.
+    """
+    node_ids = tuple(sorted(set(str(node_id) for node_id in node_ids)))
+    if kind not in ("ports", "chokepoints") or not node_ids or first > last:
+        return []
+    placeholders = ",".join("?" for _ in node_ids)
+    with connect() as conn:
+        result = conn.execute(
+            f"""SELECT node_id, day, payload FROM portwatch_daily
+                WHERE kind=? AND node_id IN ({placeholders})
+                  AND day BETWEEN ? AND ? ORDER BY day, node_id""",
+            [kind, *node_ids, first, last],
+        ).fetchall()
+    rows = []
+    for node_id, day, payload in result:
+        row = json.loads(payload) if isinstance(payload, str) else dict(payload)
+        row.setdefault("portid", str(node_id))
+        row.setdefault("date", day.isoformat())
+        rows.append(row)
+    return rows
+
+
+def cached_portwatch_latest_day(kind, max_age_seconds=86_400, allow_stale=False):
+    """Return the latest persisted source day, optionally regardless of age."""
     if kind not in ("ports", "chokepoints"):
         return None
     with connect() as conn:
@@ -363,7 +389,7 @@ def cached_portwatch_latest_day(kind, max_age_seconds=86_400):
     day, fetched_at = result
     if day is None or fetched_at is None:
         return None
-    if (datetime.now(timezone.utc) - fetched_at).total_seconds() > max_age_seconds:
+    if not allow_stale and (datetime.now(timezone.utc) - fetched_at).total_seconds() > max_age_seconds:
         return None
     return day
 

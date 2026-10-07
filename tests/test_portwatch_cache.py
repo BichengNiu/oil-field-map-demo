@@ -102,6 +102,31 @@ class PortWatchCacheTest(unittest.TestCase):
         self.assertFalse(metadata["cache_hit"])
         self.assertGreaterEqual(len(calls), 3)
 
+    def test_cache_only_history_miss_never_contacts_portwatch(self):
+        first = date(2026, 10, 1)
+        ids = ("port105",)
+        with patch("portwatch_downloads._cache", return_value=None), \
+             patch("portwatch_downloads.pw.query", side_effect=AssertionError("unexpected network request")):
+            with self.assertRaisesRegex(portwatch_downloads.DownloadError, "本地PortWatch历史缓存"):
+                portwatch_downloads.fetch_window(
+                    "ports", ids, first, first + timedelta(days=2),
+                    allow_stale=True, cache_only=True)
+
+    def test_partial_local_window_is_available_without_filling_missing_days(self):
+        first = date(2026, 10, 1)
+        rows = [
+            {"portid": "port105", "date": first.isoformat(), "portcalls": 0},
+            {"portid": "port105", "date": (first + timedelta(days=2)).isoformat(), "portcalls": 3},
+        ]
+        data_store.save_portwatch("ports", rows, "test-source")
+
+        observed = data_store.cached_portwatch_observations(
+            "ports", ("port105",), first, first + timedelta(days=2))
+
+        self.assertEqual([row["date"] for row in observed], [
+            first.isoformat(), (first + timedelta(days=2)).isoformat()])
+        self.assertNotIn(first + timedelta(days=1), [date.fromisoformat(row["date"]) for row in observed])
+
     def test_incomplete_persistent_window_falls_back_to_source(self):
         first = date(2026, 10, 1)
         ids = ("port105", "port106")

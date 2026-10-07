@@ -12,7 +12,7 @@ import streamlit as st
 import port_inventory
 import portwatch as PORTWATCH
 import portwatch_downloads
-from dashboard_data import portwatch_state
+from dashboard_data import portwatch_state, refresh_portwatch_data
 from ui_controls import ALL_SELECTION, multiselect_with_all, selected_values
 
 
@@ -51,6 +51,8 @@ def render_download_panel(
             "无法读取下载节点目录："
             + "；".join(message for message in (port_catalog_error, choke_catalog_error) if message)
         )
+        st.button("刷新 PortWatch 数据", key="pw_download_catalog_refresh",
+                  on_click=refresh_portwatch_data)
         return
     all_ports = [portwatch_downloads.node("ports", row) for row in port_catalog_rows]
     all_chokes = [portwatch_downloads.node("chokepoints", row) for row in choke_catalog_rows]

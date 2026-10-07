@@ -28,6 +28,7 @@ class MonitoringCardsTest(unittest.TestCase):
         calls = []
         st = SimpleNamespace(session_state={}, html=lambda html: calls.append(('cards', html)),
                              iframe=lambda html, **kwargs: calls.append(('map', html)),
+                             info=lambda message: calls.append(('info', message)),
                              container=lambda **kwargs: nullcontext(),
                              checkbox=lambda *args, **kwargs: calls.append(('checkbox', args[0])) or True,
                              button=lambda *args, **kwargs: None)
@@ -43,7 +44,8 @@ class MonitoringCardsTest(unittest.TestCase):
         render = view_function('render_map_panel', ns)
         cards = monitoring_cards.build_cards([], [], [], [], [], None, None)
         render(state, cards)
-        self.assertEqual([call[0] for call in calls], ['cards', 'checkbox', 'checkbox', 'checkbox', 'map'])
+        self.assertEqual([call[0] for call in calls], [
+            'cards', 'checkbox', 'checkbox', 'checkbox', 'info', 'map'])
         self.assertEqual(calls[0][1].count('class="monitoring-card"'), 4)
         for label in ('港口监测', '通道监测', '海域监测', '油田监测'):
             self.assertIn(label, calls[0][1])

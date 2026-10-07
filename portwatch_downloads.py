@@ -132,7 +132,8 @@ def fetch_window(kind: str, ids: tuple[str, ...], first: date, last: date,
                  force: bool = False, progress=None,
                  cache_revision: int | str = 0,
                  cache_ttl_seconds: int = 86400,
-                 allow_stale: bool = False) -> tuple[list[dict], dict]:
+                 allow_stale: bool = False,
+                 cache_only: bool = False) -> tuple[list[dict], dict]:
     where = f"{_ids_where(ids, kind)} AND date >= DATE '{first}' AND date <= DATE '{last}'"
     endpoint = pw.endpoint_for(kind)
     metrics = PORT_METRICS if kind == "ports" else CHOKE_METRICS
@@ -161,6 +162,9 @@ def fetch_window(kind: str, ids: tuple[str, ...], first: date, last: date,
                 "exported_query_rows": len(local_rows),
                 "count_verified": True,
             }
+
+    if cache_only:
+        raise DownloadError("本地PortWatch历史缓存缺失或不完整，请点击“刷新港口数据”后重试")
 
     def count():
         value = pw.query(endpoint, where=where, returnGeometry="false", returnCountOnly="true")

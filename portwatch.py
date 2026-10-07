@@ -200,11 +200,11 @@ def _activity_rows(day: date, port_ids: tuple[str, ...], calendar_days: int,
         raise ValueError("活动数据窗口天数无效")
     first_day = day - timedelta(days=calendar_days - 1)
     if refresh_revision == "initial":
-        cached_rows = data_store.cached_portwatch_window("ports", port_ids, first_day, day)
-        if cached_rows is not None:
-            for values in cached_rows:
-                grouped[values["portid"]][date.fromisoformat(values["date"])] = values
-            return grouped
+        cached_rows = data_store.cached_portwatch_observations(
+            "ports", port_ids, first_day, day)
+        for values in cached_rows:
+            grouped[values["portid"]][date.fromisoformat(values["date"])] = values
+        return grouped
     for start in range(0, len(port_ids), 80):
         ids = port_ids[start:start + 80]
         if not valid_port_ids(ids):
@@ -393,10 +393,9 @@ def chokepoint_activity(day: date, chokepoint_ids: tuple[str, ...],
     if not valid_chokepoint_ids(chokepoint_ids):
         raise ValueError("无效的 PortWatch 咽喉点编号")
     if refresh_revision == "initial":
-        cached_rows = data_store.cached_portwatch_window(
+        cached_rows = data_store.cached_portwatch_observations(
             "chokepoints", chokepoint_ids, day, day)
-        if cached_rows is not None:
-            return {row["portid"]: row for row in cached_rows}
+        return {row["portid"]: row for row in cached_rows}
     quoted = ",".join(f"'{point_id}'" for point_id in chokepoint_ids)
     where = f"date = DATE '{day.isoformat()}' AND portid IN ({quoted})"
     page = query(
