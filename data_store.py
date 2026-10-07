@@ -253,9 +253,9 @@ def ingest_document(relative, path=None, conn=None):
 def read_json(relative):
     # Re-bootstrap changed version-controlled evidence, never overwrite live facts.
     original = ROOT / relative
-    if original.exists():
-        ingest_document(relative)
     with connect() as conn:
+        if original.exists():
+            ingest_document(relative, conn=conn)
         row = conn.execute("SELECT content FROM documents WHERE path=?", (relative,)).fetchone()
     if row is None:
         raise FileNotFoundError(relative)
@@ -592,6 +592,20 @@ def initialize():
         for original in files:
             ingest_document(original.relative_to(ROOT).as_posix(), conn=conn)
     return {"source_files": len(files), "legacy": counts, "database": str(database_path())}
+
+
+def initialize_runtime():
+    """Migrate user data without scanning every version-controlled evidence file.
+
+    Runtime modules ingest the source documents they actually read through
+    ``read_json``. The full corpus import remains available to the operator's
+    explicit ``manage_data.py migrate`` command.
+    """
+    counts = migrate_legacy()
+    with connect():
+        pass
+    return {"source_files": 0, "source_files_deferred": True,
+            "legacy": counts, "database": str(database_path())}
 
 
 def status():

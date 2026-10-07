@@ -1,7 +1,7 @@
 """Exercise the map rendering path without remote data or Streamlit installed."""
 import ast
 from contextlib import nullcontext
-from datetime import datetime
+from datetime import datetime, timedelta
 from pathlib import Path
 from types import SimpleNamespace
 import unittest
@@ -25,6 +25,32 @@ def view_function(name, namespace):
 
 
 class MonitoringCardsTest(unittest.TestCase):
+    def test_missing_old_history_does_not_hide_complete_week_and_month(self):
+        anchor = datetime(2026, 10, 7).date()
+        week_start = anchor - timedelta(days=anchor.weekday() + 7)
+        rows = [
+            {"portid": "port105", "date": (week_start + timedelta(days=i)).isoformat(),
+             "portcalls": 1}
+            for i in range(7)
+        ]
+        rows.extend(
+            {"portid": "port105", "date": (anchor.replace(day=1) + timedelta(days=i)).isoformat(),
+             "portcalls": 1}
+            for i in range((anchor - anchor.replace(day=1)).days + 1)
+        )
+        rows.extend(
+            {"portid": "port105", "date": f"2025-10-{day:02d}", "portcalls": 1}
+            for day in range(1, 7)
+        )
+
+        cards = monitoring_cards.build_cards(
+            [{"portid": "port105", "statistics_available": True}], [], rows, [], anchor, None,
+            vessel_day=anchor,
+        )
+
+        self.assertIn("上周累计进港7艘次", cards[0][2])
+        self.assertIn("本月累计进港7艘次", cards[0][3])
+
     def test_normal_map_renders_four_cards_before_map(self):
         calls = []
         st = SimpleNamespace(session_state={}, html=lambda html: calls.append(('cards', html)),
@@ -56,8 +82,7 @@ class MonitoringCardsTest(unittest.TestCase):
             raise RuntimeError('source unavailable')
         ns = {'st': SimpleNamespace(session_state={}), 'uuid': uuid,
               'PORTWATCH': SimpleNamespace(has_independent_statistics=lambda p: True),
-              'report_data': SimpleNamespace(card_activity_history=fail,
-                                            card_vessel_history=fail, card_sea_history=fail),
+              'report_data': SimpleNamespace(card_activity_history=fail, card_sea_history=fail),
               'monitoring_cards': monitoring_cards, 'portwatch_downloads': portwatch_downloads,
               'datetime': datetime,
               'ZoneInfo': ZoneInfo, 'ASSETS': []}
@@ -77,7 +102,6 @@ class MonitoringCardsTest(unittest.TestCase):
         ns = {'st': SimpleNamespace(session_state={}), 'uuid': uuid,
               'PORTWATCH': SimpleNamespace(has_independent_statistics=lambda p: True),
               'report_data': SimpleNamespace(card_activity_history=local_rows,
-                                            card_vessel_history=lambda: [],
                                             card_sea_history=lambda revision=0: {'rows': [], 'card': None}),
               'monitoring_cards': monitoring_cards, 'portwatch_downloads': portwatch_downloads,
               'datetime': datetime, 'ZoneInfo': ZoneInfo, 'ASSETS': []}

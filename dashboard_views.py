@@ -3,6 +3,7 @@
 from __future__ import annotations
 
 from datetime import date
+from functools import wraps
 
 import streamlit as st
 
@@ -466,6 +467,17 @@ def prepare_monitoring_cards(available_ports, available_chokepoints, state,
     return cards, errors
 
 
+def _budget_report_history(function):
+    @wraps(function)
+    def wrapped(*args, **kwargs):
+        budget = 120 if kwargs.get("prepare", True) else None
+        with PORTWATCH.request_budget(budget):
+            return function(*args, **kwargs)
+
+    return wrapped
+
+
+@_budget_report_history
 def render_print_report(
     available_ports: list[dict], available_chokepoints: list[dict], state: DashboardViewState,
     *, prepare: bool = True, data_revisions: dict[str, int] | None = None,

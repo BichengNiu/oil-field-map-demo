@@ -164,7 +164,7 @@ if __name__ == "__main__":
     parser.add_argument("--poll-seconds", type=int, default=60)
     parser.add_argument("--with-portwatch", action="store_true")
     args = parser.parse_args()
-    data_store.initialize()
+    data_store.initialize_runtime()
     # This service can also maintain AISStream without a browser session.
     key = data_store.setting("AISSTREAM_API_KEY")
     stream = ais.AISCollector(key).start() if key else None

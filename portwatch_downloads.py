@@ -262,6 +262,19 @@ def _years(first: date, last: date):
         current = end + timedelta(days=1)
 
 
+def _refresh_segments(first: date, last: date, force: bool):
+    """Split history into a cached stable range and exactly seven recent days."""
+    if force:
+        yield first, last, True
+        return
+    recent_start = datetime.now(timezone.utc).date() - timedelta(days=6)
+    stable_end = recent_start - timedelta(days=1)
+    if first <= min(last, stable_end):
+        yield first, min(last, stable_end), False
+    if last >= recent_start:
+        yield max(first, recent_start), last, True
+
+
 def _missing_intervals(first: date, last: date, days: set[date]) -> str:
     intervals, beginning = [], None
     current = first
@@ -386,17 +399,11 @@ def _collect_streaming(prepared: dict, mode: str, first: date | None, last: date
                 fetch_last = min(_day(limit["last"]), end)
                 if fetch_first > fetch_last:
                     continue
-                refresh_cutoff = datetime.now(timezone.utc).date() - timedelta(days=6)
                 for segment_first, segment_last in _years(fetch_first, fetch_last):
-                    if force or mode == "latest":
-                        periods[(segment_first, segment_last, True)].append(pid)
-                    else:
-                        old_last = min(segment_last, refresh_cutoff)
-                        if segment_first <= old_last:
-                            periods[(segment_first, old_last, False)].append(pid)
-                        new_first = max(segment_first, refresh_cutoff + timedelta(days=1))
-                        if new_first <= segment_last:
-                            periods[(new_first, segment_last, True)].append(pid)
+                    for part_first, part_last, part_force in _refresh_segments(
+                        segment_first, segment_last, force or mode == "latest"
+                    ):
+                        periods[(part_first, part_last, part_force)].append(pid)
 
             wrote_dataset = False
             chunk_number = 0
@@ -590,16 +597,10 @@ def collect(nodes: list[dict], mode: str, first: date | None = None, last: date 
             if fetch_first <= fetch_last:
                 # Calendar years bound query size and make repeat downloads reusable.
                 for a, b in _years(fetch_first, fetch_last):
-                    refresh_cutoff = datetime.now(timezone.utc).date() - timedelta(days=6)
-                    if force or mode == "latest":
-                        periods[(a, b, True)].append(n["portid"])
-                    else:
-                        if a <= min(b, refresh_cutoff):
-                            periods[(a, min(b, refresh_cutoff), False)].append(n["portid"])
-                        if b > refresh_cutoff:
-                            periods[(max(a, refresh_cutoff + timedelta(days=1)), b, True)].append(
-                                n["portid"]
-                            )
+                    for part_first, part_last, part_force in _refresh_segments(
+                        a, b, force or mode == "latest"
+                    ):
+                        periods[(part_first, part_last, part_force)].append(n["portid"])
         reports, all_keys = [], set()
         for (begin, end, period_force), pids in sorted(periods.items()):
             for offset in range(0, len(pids), BATCH_SIZE):

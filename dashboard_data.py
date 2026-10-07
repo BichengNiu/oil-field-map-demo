@@ -38,7 +38,7 @@ def refresh_vessel_data() -> None:
 
 @st.cache_resource(show_spinner=False)
 def initialize_storage():
-    return data_store.initialize()
+    return data_store.initialize_runtime()
 
 
 def openwaters_snapshot(collector_version: int) -> dict:

@@ -105,6 +105,15 @@ class DataStoreTest(unittest.TestCase):
                 self.assertEqual(data_store.meta("test", conn=inner), 1)
             self.assertEqual(data_store.read_json("PORT_REVIEW_2026-10-04.json")["review_date"], "2026-10-04")
 
+    def test_runtime_initialization_defers_unreferenced_source_imports(self):
+        with patch("data_store.migrate_legacy", return_value={}), \
+             patch("data_store.ingest_document", side_effect=AssertionError("full corpus scan")):
+            result = data_store.initialize_runtime()
+
+        self.assertTrue(result["source_files_deferred"])
+        with data_store.connect() as conn:
+            self.assertEqual(conn.execute("SELECT COUNT(*) FROM documents").fetchone()[0], 0)
+
 
 if __name__ == "__main__":
     unittest.main()

@@ -4,6 +4,7 @@ from __future__ import annotations
 
 import hashlib
 import importlib
+from functools import wraps
 from concurrent.futures import ThreadPoolExecutor
 from contextvars import copy_context
 from pathlib import Path
@@ -134,6 +135,17 @@ def main() -> None:
     _render_dashboard(refresh_revision)
 
 
+def _budget_manual_refresh(function):
+    @wraps(function)
+    def wrapped(refresh_revision: str) -> None:
+        budget = 90 if refresh_revision != "initial" else None
+        with PORTWATCH.request_budget(budget):
+            return function(refresh_revision)
+
+    return wrapped
+
+
+@_budget_manual_refresh
 def _render_dashboard(refresh_revision: str) -> None:
 
     st.markdown(f"<style>{APP_STYLE}</style>", unsafe_allow_html=True)

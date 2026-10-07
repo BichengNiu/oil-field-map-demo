@@ -10,6 +10,8 @@ import json
 import re
 import threading
 import time
+from contextlib import contextmanager
+from contextvars import ContextVar
 from datetime import date, timedelta
 from urllib.parse import urlencode
 from urllib.request import Request, urlopen
@@ -31,6 +33,43 @@ SOURCE = "https://portwatch.imf.org/pages/data-and-methodology"
 MODULE_VERSION = 8
 _REQUEST_LOCK = threading.Lock()
 _LAST_REQUEST = 0.0
+_REQUEST_DEADLINE = ContextVar("portwatch_request_deadline", default=None)
+
+
+class RequestBudgetExceeded(TimeoutError):
+    """A caller-wide deadline expired while fetching a PortWatch snapshot."""
+
+
+@contextmanager
+def request_budget(seconds: float | None):
+    """Apply one wall-clock budget across every query in the current operation."""
+    current = _REQUEST_DEADLINE.get()
+    deadline = current
+    if seconds is not None:
+        candidate = time.monotonic() + max(0.0, float(seconds))
+        deadline = candidate if current is None else min(current, candidate)
+    token = _REQUEST_DEADLINE.set(deadline)
+    try:
+        yield
+    finally:
+        _REQUEST_DEADLINE.reset(token)
+
+
+def _remaining_budget() -> float | None:
+    deadline = _REQUEST_DEADLINE.get()
+    if deadline is None:
+        return None
+    remaining = deadline - time.monotonic()
+    if remaining <= 0:
+        raise RequestBudgetExceeded("PortWatch请求超过本次操作总时限")
+    return remaining
+
+
+def _budget_sleep(seconds: float) -> None:
+    remaining = _remaining_budget()
+    if remaining is not None and seconds >= remaining:
+        raise RequestBudgetExceeded("PortWatch请求超过本次操作总时限")
+    time.sleep(seconds)
 
 FOCUS_CHOKEPOINT_IDS = ("chokepoint1", "chokepoint4", "chokepoint6")
 CHOKEPOINT_LABELS = {
@@ -76,12 +115,17 @@ def query(url: str, **params: object) -> dict:
     global _LAST_REQUEST
     for attempt in range(3):
         with _REQUEST_LOCK:
+            remaining_budget = _remaining_budget()
             remaining = 0.5 - (time.monotonic() - _LAST_REQUEST)
             if remaining > 0:
+                if remaining_budget is not None and remaining >= remaining_budget:
+                    raise RequestBudgetExceeded("PortWatch请求超过本次操作总时限")
                 time.sleep(remaining)
+            remaining_budget = _remaining_budget()
             _LAST_REQUEST = time.monotonic()
         try:
-            with urlopen(request, timeout=35) as response:
+            timeout = 35 if remaining_budget is None else min(35, remaining_budget)
+            with urlopen(request, timeout=timeout) as response:
                 result = json.load(response)
         except HTTPError as exc:
             if exc.code != 429 or attempt == 2:
@@ -93,7 +137,7 @@ def query(url: str, **params: object) -> dict:
         message = str(error.get("message", error))
         if "too many requests" not in message.lower() or attempt == 2:
             raise ValueError(f"PortWatch API: {message}")
-        time.sleep((5, 15)[attempt])
+        _budget_sleep((5, 15)[attempt])
     raise ValueError("PortWatch请求未完成")
 
 

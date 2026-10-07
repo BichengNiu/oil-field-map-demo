@@ -164,7 +164,7 @@ class PortWatchCacheTest(unittest.TestCase):
         self.addCleanup(lambda: os.path.exists(artifact) and os.unlink(artifact))
         with zipfile.ZipFile(artifact) as bundle:
             data_names = [name for name in bundle.namelist() if name.endswith(".csv") and "daily" in name]
-            self.assertEqual(len(data_names), 2)
+            self.assertEqual(len(data_names), 1)
             rows = [row for name in data_names for row in csv.DictReader(
                 io.StringIO(bundle.read(name).decode("utf-8-sig")))]
         self.assertEqual([row["date"] for row in rows], [first.isoformat(), last.isoformat()])
@@ -216,6 +216,35 @@ class PortWatchCacheTest(unittest.TestCase):
             actual = streamed_by_date[last.isoformat()][field]
             self.assertEqual(float(actual), float(expected))
 
+    def test_history_export_force_refreshes_exactly_the_latest_seven_days(self):
+        today = datetime.now(timezone.utc).date()
+        first, last = today - timedelta(days=10), today
+        node = {"node_kind": "ports", "portid": "port105", "node_name": "Test port",
+                "region": "Gulf", "country": "Test", "lat": 25.0, "lon": 56.0,
+                "statistics_available": True}
+        all_rows = [{"portid": "port105", "date": (first + timedelta(days=i)).isoformat(),
+                     "portname": "Test port", "portcalls": i}
+                    for i in range((last - first).days + 1)]
+        calls = []
+
+        def fetch(kind, ids, begin, end, force=False, **kwargs):
+            calls.append((begin, end, force))
+            rows = [row.copy() for row in all_rows
+                    if begin <= date.fromisoformat(row["date"]) <= end]
+            return rows, {"endpoint": "test-source", "retrieved_at_utc": "2026-10-07T00:00:00+00:00",
+                          "source_count": len(rows), "count_verified": True}
+
+        with patch("portwatch_downloads.bounds", return_value=({
+            "port105": {"first": first.isoformat(), "last": last.isoformat(), "records": len(all_rows)}
+        }, [])), patch("portwatch_downloads.fetch_window", side_effect=fetch):
+            result = portwatch_downloads.collect([node], "history", first, last)
+
+        self.assertEqual(len(result["datasets"]["ports"]), len(all_rows))
+        forced = [(begin, end) for begin, end, force in calls if force]
+        cached = [(begin, end) for begin, end, force in calls if not force]
+        self.assertEqual(forced, [(today - timedelta(days=6), today)])
+        self.assertEqual(cached, [(first, today - timedelta(days=7))])
+
     def test_partial_local_window_is_available_without_filling_missing_days(self):
         first = date(2026, 10, 1)
         rows = [
@@ -230,6 +259,22 @@ class PortWatchCacheTest(unittest.TestCase):
         self.assertEqual([row["date"] for row in observed], [
             first.isoformat(), (first + timedelta(days=2)).isoformat()])
         self.assertNotIn(first + timedelta(days=1), [date.fromisoformat(row["date"]) for row in observed])
+
+    def test_bulk_history_write_accepts_7110_rows_under_duckdb_memory_limit(self):
+        first = date(2020, 1, 1)
+        rows = [
+            {"portid": f"port{index % 30}",
+             "date": (first + timedelta(days=index // 30)).isoformat(),
+             "portcalls": index, "import": index * 2, "export": index * 3}
+            for index in range(7_110)
+        ]
+
+        data_store.save_portwatch("ports", rows, "test-source")
+
+        with data_store.connect() as conn:
+            count = conn.execute("SELECT COUNT(*) FROM portwatch_daily").fetchone()[0]
+        self.assertEqual(count, 7_110)
+        self.assertEqual(data_store.revision("ports"), 1)
 
     def test_incomplete_persistent_window_falls_back_to_source(self):
         first = date(2026, 10, 1)
