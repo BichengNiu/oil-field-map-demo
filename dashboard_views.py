@@ -3,7 +3,6 @@
 from __future__ import annotations
 
 from datetime import date
-from functools import wraps
 
 import streamlit as st
 
@@ -13,7 +12,6 @@ import dashboard_rows
 import field_catalog as CATALOG
 import map_renderer
 import monitoring_cards
-import portwatch_downloads
 from datetime import datetime
 from zoneinfo import ZoneInfo
 import portwatch as PORTWATCH
@@ -450,16 +448,6 @@ def prepare_monitoring_cards(available_ports, available_chokepoints, state,
     return cards, errors
 
 
-def _budget_report_history(function):
-    @wraps(function)
-    def wrapped(*args, **kwargs):
-        with PORTWATCH.request_budget(120):
-            return function(*args, **kwargs)
-
-    return wrapped
-
-
-@_budget_report_history
 def render_print_report(
     available_ports: list[dict], available_chokepoints: list[dict], state: DashboardViewState,
     *, data_revisions: dict[str, int] | None = None,
@@ -504,22 +492,20 @@ def render_print_report(
     report_choke_history = []
     if selected_day is not None and report_port_ids:
         try:
-            with st.spinner("准备打印报告：读取最近90天港口记录…"):
-                report_port_history = report_data.history_window(
-                    "ports", report_port_ids, selected_day.isoformat(),
-                    revisions.get("ports", 0), allow_network=True,
-                )
+            report_port_history = report_data.history_window(
+                "ports", report_port_ids, selected_day.isoformat(),
+                revisions.get("ports", 0), allow_network=False,
+            )
         except Exception as exc:
             report_errors.append(f"ports 历史窗口：{type(exc).__name__}: {exc}")
     if selected_chokepoint_day is not None and report_choke_ids:
         try:
-            with st.spinner("准备打印报告：读取最近90天咽喉点记录…"):
-                report_choke_history = report_data.history_window(
-                    "chokepoints",
-                    report_choke_ids,
-                    selected_chokepoint_day.isoformat(),
-                    revisions.get("chokepoints", 0), allow_network=True,
-                )
+            report_choke_history = report_data.history_window(
+                "chokepoints",
+                report_choke_ids,
+                selected_chokepoint_day.isoformat(),
+                revisions.get("chokepoints", 0), allow_network=False,
+            )
         except Exception as exc:
             report_errors.append(f"chokepoints 历史窗口：{type(exc).__name__}: {exc}")
 
@@ -531,10 +517,9 @@ def render_print_report(
         if day is None or not ids:
             continue
         try:
-            with st.spinner(f"准备打印报告：读取{portwatch_downloads.KINDS[kind]}同比窗口…"):
-                target.extend(report_data.comparison_history(
-                    kind, ids, day.isoformat(), revisions.get(kind, 0), allow_network=True
-                ))
+            target.extend(report_data.comparison_history(
+                kind, ids, day.isoformat(), revisions.get(kind, 0), allow_network=False
+            ))
         except Exception as exc:
             report_errors.append(f"{kind} 同比记录：{type(exc).__name__}: {exc}")
 

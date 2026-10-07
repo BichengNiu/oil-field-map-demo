@@ -22,13 +22,8 @@
   [data-testid="stSidebar"], [data-testid="stHeader"], [data-testid="stToolbar"],
   [data-testid="stDecoration"], [data-testid="stStatusWidget"], [data-testid="stToast"],
   [data-testid="stToastContainer"] { display: none !important; }
-  [data-testid="stMainBlockContainer"] > div[data-testid="stElementContainer"]:not(:has(.print-report)) {
-    display: none !important;
-  }
-  [data-testid="stMainBlockContainer"] > div[data-testid="stElementContainer"]:has(.print-report) {
-    display: block !important; width: 100% !important; max-width: none !important;
-    margin: 0 !important; padding: 0 !important;
-  }
+  body * { visibility: hidden !important; }
+  .print-report, .print-report * { visibility: visible !important; }
   .print-report { display: block !important; color: #17212b !important; width: 100% !important; }
   .stApp, [data-testid="stAppViewContainer"], [data-testid="stMainBlockContainer"] {
     overflow: visible !important;

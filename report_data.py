@@ -17,7 +17,7 @@ from monitoring_cards import windows
 @st.cache_data(ttl=900, max_entries=12, show_spinner=False)
 def history_window(kind: str, node_ids: tuple[str, ...], end_day: str,
                    data_revision: int = 0, allow_network: bool = False) -> list[dict]:
-    """Return a verified 90-day report window after an explicit report request."""
+    """Return cached report history, using the upstream only when explicitly enabled."""
     if not node_ids:
         return []
     end = date.fromisoformat(end_day)
