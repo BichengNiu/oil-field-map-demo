@@ -96,7 +96,7 @@ class SeaHistoryTest(unittest.TestCase):
                 events.append((sea, "123456789", day.isoformat() + "T01:00:00Z"))
         sea_history.import_bundle(bundle(events, coverage), self.path)
         rows = sea_history.read_history(self.path)["rows"]
-        cards = monitoring_cards.build_cards([], [], [], [], [], None, None,
+        cards = monitoring_cards.build_cards([], [], [], [], None, None,
                                             vessel_day=anchor, sea_passage_history=rows)
         self.assertIn("通过28艘次（环比 +0.0%）", cards[2][2])
         self.assertIn("通过20艘次（环比 +0.0%，同比 +0.0%）", cards[2][3])

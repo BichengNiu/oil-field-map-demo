@@ -416,7 +416,7 @@ def build_report_html(
         port_catalog, choke_catalog, report_assets, regions, vessels, include_basemap=True
     )
     cover_cards = monitoring_cards.cards_html(monitoring_summary_cards or monitoring_cards.build_cards(
-        port_catalog, choke_catalog, port_history, choke_history, vessels,
+        port_catalog, choke_catalog, port_history, choke_history,
         _date(port_day), _date(choke_day), vessel_day=timestamp.date(), assets=report_assets,
     ))
     cover_table = _table(

@@ -4,12 +4,15 @@ from __future__ import annotations
 
 import hashlib
 import importlib
+from concurrent.futures import ThreadPoolExecutor
+from contextvars import copy_context
 from pathlib import Path
 
 import streamlit as st
 
 import ais as AIS
 import ais_history as _ais_history_module
+import data_store
 import field_catalog as CATALOG
 import portwatch as PORTWATCH
 import collector as _collector_module
@@ -51,9 +54,13 @@ _RUNTIME_SOURCE_FILES = (
     "dashboard_data.py",
     "dashboard_views.py",
     "download_panel.py",
+    "map_renderer.py",
+    "monitoring_cards.py",
     "portwatch.py",
     "portwatch_downloads.py",
+    "print_report.py",
     "report_data.py",
+    "sea_history.py",
     "sea_history_panel.py",
 )
 
@@ -76,6 +83,10 @@ def _load_runtime_modules(source_fingerprint: str) -> dict[str, object]:
         PORTWATCH,
         _portwatch_downloads_module,
         _collector_module,
+        importlib.import_module("map_renderer"),
+        importlib.import_module("monitoring_cards"),
+        importlib.import_module("sea_history"),
+        importlib.import_module("print_report"),
         _report_data_module,
         _dashboard_data_module,
         _dashboard_views_module,
@@ -111,7 +122,7 @@ def main() -> None:
     globals().update(_load_runtime_modules(_runtime_source_fingerprint()))
 
     if (
-        getattr(PORTWATCH, "MODULE_VERSION", 0) < 5
+        getattr(PORTWATCH, "MODULE_VERSION", 0) < 8
         or not hasattr(PORTWATCH, "has_independent_statistics")
         or not hasattr(PORTWATCH, "chokepoint_activity")
         or not hasattr(PORTWATCH, "port_risk_capacity")
@@ -119,23 +130,41 @@ def main() -> None:
         st.error("港口数据模块版本未同步。请在 Streamlit 管理页重启应用后重试。")
         st.stop()
 
+    refresh_revision = st.session_state.pop("portwatch_refresh_revision", "initial")
+    _render_dashboard(refresh_revision)
+
+
+def _render_dashboard(refresh_revision: str) -> None:
+
     st.markdown(f"<style>{APP_STYLE}</style>", unsafe_allow_html=True)
     st.title("中东能源与战略通道运输监测")
     initialize_storage()
-    st.caption("数据仅在点击刷新按钮时从上游更新；页面载入仅读取本地缓存和档案。")
+    st.caption("页面载入仅读取本地档案；PortWatch、船位快照、报告历史和下载数据均由各自按钮手动触发。")
 
-    available_ports, port_catalog_error = portwatch_state(
-        "ports", "catalog", PORTWATCH.MODULE_VERSION
-    )
-    available_chokepoints, chokepoint_catalog_error = portwatch_state(
-        "chokepoints", "catalog", PORTWATCH.MODULE_VERSION
-    )
-    newest_day, port_latest_error = portwatch_state(
-        "ports", "latest_date", PORTWATCH.MODULE_VERSION
-    )
-    newest_chokepoint_day, chokepoint_latest_error = portwatch_state(
-        "chokepoints", "latest_date", PORTWATCH.MODULE_VERSION
-    )
+    revisions = data_store.revisions(("ports", "chokepoints"))
+    state_requests = {
+        "ports_catalog": ("ports", "catalog", PORTWATCH.MODULE_VERSION,
+                          revisions["ports"], refresh_revision),
+        "chokes_catalog": ("chokepoints", "catalog", PORTWATCH.MODULE_VERSION,
+                           revisions["chokepoints"], refresh_revision),
+        "ports_day": ("ports", "latest_date", PORTWATCH.MODULE_VERSION,
+                      revisions["ports"], refresh_revision),
+        "chokes_day": ("chokepoints", "latest_date", PORTWATCH.MODULE_VERSION,
+                       revisions["chokepoints"], refresh_revision),
+    }
+    if refresh_revision == "initial":
+        loaded = {key: portwatch_state(*args) for key, args in state_requests.items()}
+    else:
+        with ThreadPoolExecutor(max_workers=2) as pool:
+            futures = {
+                pool.submit(copy_context().run, portwatch_state, *args): key
+                for key, args in state_requests.items()
+            }
+            loaded = {futures[future]: future.result() for future in futures}
+    available_ports, port_catalog_error = loaded["ports_catalog"]
+    available_chokepoints, chokepoint_catalog_error = loaded["chokes_catalog"]
+    newest_day, port_latest_error = loaded["ports_day"]
+    newest_chokepoint_day, chokepoint_latest_error = loaded["chokes_day"]
 
     tab_map, tab_ports, tab_vessels, tab_assets, tab_download, tab_method = st.tabs(
         ["地图", "港口", "船舶", "油气", "数据下载", "数据与方法"],
@@ -143,7 +172,6 @@ def main() -> None:
         on_change="rerun",
     )
 
-    st.session_state.setdefault("portwatch_report_revision", "initial")
     selected_day = newest_day
     selected_chokepoint_day = newest_chokepoint_day
     open_state = openwaters_snapshot(AIS.MODULE_VERSION)
@@ -155,23 +183,33 @@ def main() -> None:
     ports: list[dict] = []
     if (
         (tab_map.open or tab_ports.open)
-        and selected_day is not None
-        and not port_error
     ):
-        ports, port_error, port_risk_error = load_ports(
-            available_ports,
-            selected_day,
-            rolling_days=7,
-            with_risk=tab_ports.open,
-        )
+        if selected_day is not None and not port_catalog_error and not port_latest_error:
+            ports, port_error, port_risk_error = load_ports(
+                available_ports,
+                selected_day,
+                rolling_days=7,
+                with_risk=tab_ports.open,
+                refresh_revision=refresh_revision,
+                stored_revision=revisions["ports"],
+            )
+        else:
+            ports = PORTWATCH.decorate(available_ports, {}, {}, None)
 
     chokepoint_error = chokepoint_catalog_error or chokepoint_latest_error
     chokepoints: list[dict] = []
-    if tab_map.open and selected_chokepoint_day is not None and not chokepoint_error:
-        chokepoints, chokepoint_error = load_chokepoints(
-            available_chokepoints,
-            selected_chokepoint_day,
-        )
+    if tab_map.open:
+        if selected_chokepoint_day is not None and not chokepoint_catalog_error and not chokepoint_latest_error:
+            chokepoints, chokepoint_error = load_chokepoints(
+                available_chokepoints,
+                selected_chokepoint_day,
+                refresh_revision,
+                revisions["chokepoints"],
+            )
+        else:
+            chokepoints = PORTWATCH.decorate_chokepoints(available_chokepoints, {})
+
+    display_revisions = data_store.revisions(("ports", "chokepoints", "ais", "sea"))
 
     map_assets = [asset for asset in ASSETS if asset.get("map_drawable")]
     view_state = DashboardViewState(
@@ -192,7 +230,8 @@ def main() -> None:
     if tab_map.open:
         with tab_map:
             cards, card_errors = prepare_monitoring_cards(
-                available_ports, available_chokepoints, view_state
+                available_ports, available_chokepoints, view_state,
+                data_revisions=display_revisions,
             )
             prepare_report = render_map_panel(view_state, cards)
             for error in card_errors:
@@ -209,7 +248,11 @@ def main() -> None:
     if tab_download.open:
         with tab_download:
             render_sea_history_panel()
-            render_download_panel(newest_day, newest_chokepoint_day)
+            render_download_panel(
+                newest_day, newest_chokepoint_day,
+                data_revisions=display_revisions,
+                refresh_revision=refresh_revision,
+            )
     if tab_vessels.open:
         with tab_vessels:
             render_ais_panel(view_state)
@@ -220,8 +263,11 @@ def main() -> None:
         with tab_method:
             render_method_panel()
 
-    if prepare_report:
-        render_print_report(available_ports, available_chokepoints, view_state)
+    if prepare_report or st.session_state.get("prepared_print_report"):
+        render_print_report(
+            available_ports, available_chokepoints, view_state,
+            prepare=prepare_report, data_revisions=display_revisions,
+        )
 
 
 if __name__ == "__main__":

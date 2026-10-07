@@ -46,6 +46,8 @@ def collect_once():
     with data_store.connect() as conn:
         conn.execute("INSERT INTO collection_runs VALUES (?,?,?,?,?,?,?)",
                      (uuid.uuid4().hex, "Open Waters", started, finished, status, len(rows), data_store.encode(details)))
+        if not inserted:
+            data_store.bump_revision("sea", conn)
     snapshot = snapshot or {"vessels": [], "error": details.get("error"), "fetched_at": finished.isoformat()}
     if status != "ok":
         snapshot["archive_error"] = details.get("error") or details.get("source_error") or "上游截断或报告未通过校验"

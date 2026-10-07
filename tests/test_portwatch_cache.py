@@ -1,9 +1,12 @@
 """Ensure complete persisted PortWatch facts serve history without network I/O."""
-from datetime import date, timedelta
+from datetime import date, datetime, timedelta, timezone
+import csv
+import io
 import os
 import tempfile
 import unittest
 from unittest.mock import patch
+import zipfile
 
 import data_store
 import portwatch_downloads
@@ -111,6 +114,107 @@ class PortWatchCacheTest(unittest.TestCase):
                 portwatch_downloads.fetch_window(
                     "ports", ids, first, first + timedelta(days=2),
                     allow_stale=True, cache_only=True)
+
+    def test_compressed_history_cache_merges_newer_daily_facts(self):
+        first = date(2026, 10, 1)
+        cached_at = "2026-10-03T00:00:00+00:00"
+        cached = {"rows": [
+            {"portid": "port105", "date": first.isoformat(), "portcalls": 1},
+            {"portid": "port105", "date": (first + timedelta(days=1)).isoformat(), "portcalls": 2},
+        ], "query": {"retrieved_at_utc": cached_at, "source_count": 2}}
+        updated = {"portid": "port105", "date": (first + timedelta(days=1)).isoformat(),
+                   "portcalls": 8}
+        with patch("portwatch_downloads._cache", return_value=cached), \
+             patch("portwatch_downloads.data_store.portwatch_window_latest_fetch",
+                   return_value=datetime(2026, 10, 4, tzinfo=timezone.utc)), \
+             patch("portwatch_downloads.data_store.cached_portwatch_rows_since",
+                   return_value=[updated]), \
+             patch("portwatch_downloads.pw.query",
+                   side_effect=AssertionError("new local facts should avoid a full history fetch")):
+            rows, metadata = portwatch_downloads.fetch_window(
+                "ports", ("port105",), first, first + timedelta(days=1)
+            )
+        self.assertEqual([row["portcalls"] for row in rows], [1, 8])
+        self.assertEqual(metadata["updated_local_rows"], 1)
+
+    def test_large_export_streams_chunk_csv_to_zip_without_session_rows(self):
+        first = datetime.now(timezone.utc).date() - timedelta(days=6)
+        last = first + timedelta(days=1)
+        node = {"node_kind": "ports", "portid": "port105", "node_name": "Test port",
+                "region": "Gulf", "country": "Test", "lat": 25.0, "lon": 56.0,
+                "statistics_available": True}
+        def fetch(kind, ids, begin, end, **kwargs):
+            return ([{"portid": "port105", "date": day.isoformat(),
+                      "portname": "Test port", "portcalls": index}
+                     for index, day in enumerate((first, last), 1) if begin <= day <= end],
+                    {"endpoint": "test-source", "retrieved_at_utc": "2026-10-07T00:00:00+00:00",
+                     "source_count": (end - begin).days + 1, "count_verified": True})
+
+        with patch("portwatch_downloads.INLINE_EXPORT_ROW_LIMIT", 1), \
+             patch("portwatch_downloads.bounds", return_value=(
+                 {"port105": {"first": first.isoformat(), "last": last.isoformat(), "records": 2}}, []
+             )), \
+             patch("portwatch_downloads.fetch_window", side_effect=fetch):
+            result = portwatch_downloads.collect([node], "history", first, last)
+
+        self.assertNotIn("port105", result["datasets"])
+        self.assertEqual(result["manifest"]["row_counts"]["ports"], 2)
+        self.assertEqual(result["coverage"][0]["records"], 2)
+        artifact = result["artifact_path"]
+        self.addCleanup(lambda: os.path.exists(artifact) and os.unlink(artifact))
+        with zipfile.ZipFile(artifact) as bundle:
+            data_names = [name for name in bundle.namelist() if name.endswith(".csv") and "daily" in name]
+            self.assertEqual(len(data_names), 2)
+            rows = [row for name in data_names for row in csv.DictReader(
+                io.StringIO(bundle.read(name).decode("utf-8-sig")))]
+        self.assertEqual([row["date"] for row in rows], [first.isoformat(), last.isoformat()])
+
+    def test_streamed_derived_windows_match_inline_export_across_refresh_cutoff(self):
+        today = datetime.now(timezone.utc).date()
+        first, last = today - timedelta(days=32), today - timedelta(days=1)
+        node = {"node_kind": "ports", "portid": "port105", "node_name": "Test port",
+                "region": "Gulf", "country": "Test", "lat": 25.0, "lon": 56.0,
+                "statistics_available": True}
+        all_rows = []
+        for offset in range((last - first).days + 1):
+            day = first + timedelta(days=offset)
+            row = {metric: 1.0 for metric in portwatch_downloads.PORT_METRICS}
+            row.update({"portid": "port105", "date": day.isoformat(), "portname": "Test port",
+                        "portcalls": float(offset), "import": float(offset), "export": float(offset * 2)})
+            all_rows.append(row)
+
+        def fetch(kind, ids, begin, end, **kwargs):
+            rows = [row.copy() for row in all_rows if begin <= date.fromisoformat(row["date"]) <= end]
+            return rows, {"endpoint": "test-source", "retrieved_at_utc": "2026-10-07T00:00:00+00:00",
+                          "source_count": len(rows), "count_verified": True}
+
+        limits = {"port105": {"first": first.isoformat(), "last": last.isoformat(),
+                               "records": len(all_rows)}}
+        with patch("portwatch_downloads.bounds", return_value=(limits, [])), \
+             patch("portwatch_downloads.fetch_window", side_effect=fetch), \
+             patch("portwatch_downloads.INLINE_EXPORT_ROW_LIMIT", 1):
+            streamed = portwatch_downloads.collect([node], "history", first, last, derived=True)
+        self.addCleanup(lambda: os.path.exists(streamed["artifact_path"])
+                        and os.unlink(streamed["artifact_path"]))
+        with patch("portwatch_downloads.bounds", return_value=(limits, [])), \
+             patch("portwatch_downloads.fetch_window", side_effect=fetch), \
+             patch("portwatch_downloads.INLINE_EXPORT_ROW_LIMIT", 100_000):
+            inline = portwatch_downloads.collect([node], "history", first, last, derived=True)
+
+        streamed_rows = []
+        with zipfile.ZipFile(streamed["artifact_path"]) as bundle:
+            for name in bundle.namelist():
+                if "_daily_" in name and name.endswith(".csv"):
+                    streamed_rows.extend(csv.DictReader(io.StringIO(
+                        bundle.read(name).decode("utf-8-sig"))))
+        inline_by_date = {row["date"]: row for row in inline["datasets"]["ports"]}
+        streamed_by_date = {row["date"]: row for row in streamed_rows}
+        self.assertEqual(set(streamed_by_date), set(inline_by_date))
+        for field in ("observed_days_7d", "avg_portcalls_7d", "avg_import_7d",
+                      "avg_export_30d", "observed_days_30d"):
+            expected = inline_by_date[last.isoformat()][field]
+            actual = streamed_by_date[last.isoformat()][field]
+            self.assertEqual(float(actual), float(expected))
 
     def test_partial_local_window_is_available_without_filling_missing_days(self):
         first = date(2026, 10, 1)

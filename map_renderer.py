@@ -33,6 +33,7 @@ def build_map_html(
         {
             "lat": asset["map_lat"],
             "lon": asset["map_lon"],
+            "popupKey": f'asset:{asset.get("country", "")}\x1f{asset["name"]}',
             "name": f'{asset["name_cn"]} · {asset["name"]}',
             "popup": asset_popup(asset),
         }
@@ -41,14 +42,17 @@ def build_map_html(
     ]
     marker_json = json.dumps(markers, ensure_ascii=False).replace("</", "<\\/")
     port_json = json.dumps([
-        {"lat": port["lat"], "lon": port["lon"], "name": port["name"],
+        {"lat": port["lat"], "lon": port["lon"], "popupKey": f'port:{port["portid"]}',
+         "name": port["name"],
          "calls": port.get("portcalls"),
          "popup": port_popup(port, day)}
         for port in ports
         if port["lat"] is not None and port["lon"] is not None
     ], ensure_ascii=False).replace("</", "<\\/")
     chokepoint_json = json.dumps([
-        {"lat": point["lat"], "lon": point["lon"], "name": point.get("name_cn", point["portname"]),
+        {"lat": point["lat"], "lon": point["lon"],
+         "popupKey": f'chokepoint:{point["portid"]}',
+         "name": point.get("name_cn", point["portname"]),
          "calls": point.get("n_total"),
          "popup": chokepoint_popup(point, chokepoint_day)}
         for point in chokepoints
@@ -169,6 +173,18 @@ def build_map_html(
       const ports = {port_json};
       const chokepoints = {chokepoint_json};
       const vessels = {vessel_json};
+      const popupStateKey = 'energy-map-popup-v1';
+      const markerByPopupKey = new Map();
+      const clusterByPopupKey = new Map();
+      map.on('popupopen', (event) => {{
+        const key = event.popup?._source?.options?.popupKey;
+        if (key) {{ try {{ sessionStorage.setItem(popupStateKey, key); }} catch (error) {{ }} }}
+      }});
+      map.on('popupclose', (event) => {{
+        const key = event.popup?._source?.options?.popupKey;
+        try {{ if (key && sessionStorage.getItem(popupStateKey) === key) sessionStorage.removeItem(popupStateKey); }}
+        catch (error) {{ }}
+      }});
       const escapeHTML = (value) => String(value ?? '—').replace(/[&<>"']/g, (char) => ({{
         '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;'
       }}[char]));
@@ -258,8 +274,11 @@ def build_map_html(
               stroke-width="1.5"/>
           </svg>`
         }});
-        L.marker([asset.lat, asset.lon], {{icon}}).bindTooltip(asset.name, {{direction: 'top', opacity: .95}})
+        const marker = L.marker([asset.lat, asset.lon], {{icon, popupKey: asset.popupKey}})
+          .bindTooltip(asset.name, {{direction: 'top', opacity: .95}})
           .bindPopup(asset.popup, {{maxWidth: 390}}).addTo(assetLayer);
+        markerByPopupKey.set(asset.popupKey, marker);
+        clusterByPopupKey.set(asset.popupKey, assetLayer);
       }});
       ports.forEach((port) => {{
         const size = 16;
@@ -272,8 +291,10 @@ def build_map_html(
         }});
         const label = document.createElement('div');
         label.textContent = `${{port.name}} · ${{port.calls == null ? '无日度记录' : port.calls + ' 艘次进港'}}`;
-        L.marker([port.lat, port.lon], {{icon}}).bindTooltip(label, {{direction: 'top', opacity: .95}})
+        const marker = L.marker([port.lat, port.lon], {{icon, popupKey: port.popupKey}})
+          .bindTooltip(label, {{direction: 'top', opacity: .95}})
           .bindPopup(port.popup, {{maxWidth: 410}}).addTo(portLayer);
+        markerByPopupKey.set(port.popupKey, marker);
       }});
       chokepoints.forEach((point) => {{
         const size = 22;
@@ -286,8 +307,10 @@ def build_map_html(
         }});
         const label = document.createElement('div');
         label.textContent = `${{point.name}} · ${{point.calls == null ? '无日度记录' : point.calls + ' 艘通过'}}`;
-        L.marker([point.lat, point.lon], {{icon}}).bindTooltip(label, {{direction: 'top', opacity: .95, permanent: true}})
+        const marker = L.marker([point.lat, point.lon], {{icon, popupKey: point.popupKey}})
+          .bindTooltip(label, {{direction: 'top', opacity: .95, permanent: true}})
           .bindPopup(point.popup, {{maxWidth: 410}}).addTo(chokepointLayer);
+        markerByPopupKey.set(point.popupKey, marker);
       }});
       const vesselColors = {{
         tanker: '#ef4444', cargo: '#2563eb', other: '#64748b'
@@ -305,12 +328,24 @@ def build_map_html(
           </svg>`
         }});
         const marker = L.marker([lat, lon], {{icon}});
+        marker.options.popupKey = `vessel:${{mmsi}}`;
         marker.bindTooltip(escapeHTML(name), {{direction: 'top', opacity: .95}})
           .bindPopup(() => vesselPopup(vessel), {{maxWidth: 410}});
+        markerByPopupKey.set(marker.options.popupKey, marker);
+        clusterByPopupKey.set(marker.options.popupKey, vesselLayer);
         return marker;
       }});
       // A single bulk update avoids reclustering and rewriting DOM per ship.
       vesselLayer.addLayers(vesselMarkers);
+      try {{
+        const savedPopupKey = sessionStorage.getItem(popupStateKey);
+        const marker = savedPopupKey && markerByPopupKey.get(savedPopupKey);
+        if (marker) {{
+          const cluster = clusterByPopupKey.get(savedPopupKey);
+          if (cluster) cluster.zoomToShowLayer(marker, () => marker.openPopup());
+          else marker.openPopup();
+        }}
+      }} catch (error) {{ }}
       {map_tools.SCREENSHOT_SCRIPT}
       if ({str(screenshot_requested).lower()}) {{
         setTimeout(() => window.saveMapPng(), 800);

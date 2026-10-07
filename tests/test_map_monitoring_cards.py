@@ -43,10 +43,10 @@ class MonitoringCardsTest(unittest.TestCase):
               'map_renderer': SimpleNamespace(build_map_html=lambda *args, **kwargs: 'map')}
         ns.update({name: None for name in ('asset_popup', 'port_popup', 'chokepoint_popup', 'vessel_popup', 'refresh_portwatch_data', 'refresh_vessel_data', 'queue_map_screenshot')})
         render = view_function('render_map_panel', ns)
-        cards = monitoring_cards.build_cards([], [], [], [], [], None, None)
+        cards = monitoring_cards.build_cards([], [], [], [], None, None)
         render(state, cards)
         self.assertEqual([call[0] for call in calls], [
-            'cards', 'checkbox', 'checkbox', 'checkbox', 'caption', 'map'])
+            'cards', 'caption', 'checkbox', 'checkbox', 'checkbox', 'caption', 'map'])
         self.assertEqual(calls[0][1].count('class="monitoring-card"'), 4)
         for label in ('港口监测', '通道监测', '海域监测', '油田监测'):
             self.assertIn(label, calls[0][1])
@@ -56,7 +56,7 @@ class MonitoringCardsTest(unittest.TestCase):
             raise RuntimeError('source unavailable')
         ns = {'st': SimpleNamespace(session_state={}), 'uuid': uuid,
               'PORTWATCH': SimpleNamespace(has_independent_statistics=lambda p: True),
-              'report_data': SimpleNamespace(history_window=fail, comparison_history=fail,
+              'report_data': SimpleNamespace(card_activity_history=fail,
                                             card_vessel_history=fail, card_sea_history=fail),
               'monitoring_cards': monitoring_cards, 'portwatch_downloads': portwatch_downloads,
               'datetime': datetime,
@@ -66,19 +66,19 @@ class MonitoringCardsTest(unittest.TestCase):
         prepare = view_function('prepare_monitoring_cards', ns)
         cards, errors = prepare([{'portid': 'p'}], [{'portid': 'c'}], state)
         self.assertEqual(len(cards), 4)
-        self.assertEqual(len(errors), 5)
+        self.assertEqual(len(errors), 3)
 
     def test_expected_history_cache_miss_does_not_render_as_warning(self):
         revisions = []
-        def missing(*args, **kwargs):
+        def local_rows(*args, **kwargs):
             revisions.append(args[3])
-            raise portwatch_downloads.CacheMiss('local cache is empty')
+            return []
 
-        ns = {'st': SimpleNamespace(session_state={'portwatch_report_revision': 'manual-refresh'}), 'uuid': uuid,
+        ns = {'st': SimpleNamespace(session_state={}), 'uuid': uuid,
               'PORTWATCH': SimpleNamespace(has_independent_statistics=lambda p: True),
-              'report_data': SimpleNamespace(history_window=missing, comparison_history=missing,
+              'report_data': SimpleNamespace(card_activity_history=local_rows,
                                             card_vessel_history=lambda: [],
-                                            card_sea_history=lambda: {'rows': [], 'card': None}),
+                                            card_sea_history=lambda revision=0: {'rows': [], 'card': None}),
               'monitoring_cards': monitoring_cards, 'portwatch_downloads': portwatch_downloads,
               'datetime': datetime, 'ZoneInfo': ZoneInfo, 'ASSETS': []}
         state = SimpleNamespace(selected_day=datetime(2026, 10, 6).date(),
@@ -90,13 +90,17 @@ class MonitoringCardsTest(unittest.TestCase):
 
         self.assertEqual(len(cards), 4)
         self.assertEqual(errors, [])
-        self.assertEqual(revisions, ['initial'] * 4)
+        self.assertEqual(revisions, [0, 0])
 
     def test_map_call_is_outside_print_mode(self):
         tree = ast.parse((ROOT / 'app.py').read_text())
-        main = next(node for node in tree.body if isinstance(node, ast.FunctionDef) and node.name == 'main')
+        main = next(node for node in tree.body if isinstance(node, ast.FunctionDef) and node.name == '_render_dashboard')
         map_branch = next(node for node in main.body if isinstance(node, ast.If)
-                          and ast.unparse(node.test) == 'tab_map.open')
+                          and ast.unparse(node.test) == 'tab_map.open'
+                          and any(isinstance(child, ast.Call)
+                                  and isinstance(child.func, ast.Name)
+                                  and child.func.id == 'prepare_monitoring_cards'
+                                  for child in ast.walk(node)))
         calls = [node.func.id for node in ast.walk(map_branch) if isinstance(node, ast.Call)
                  and isinstance(node.func, ast.Name)]
         self.assertIn('prepare_monitoring_cards', calls)
@@ -104,9 +108,9 @@ class MonitoringCardsTest(unittest.TestCase):
 
     def test_print_report_is_created_only_when_requested(self):
         tree = ast.parse((ROOT / 'app.py').read_text())
-        main = next(node for node in tree.body if isinstance(node, ast.FunctionDef) and node.name == 'main')
+        main = next(node for node in tree.body if isinstance(node, ast.FunctionDef) and node.name == '_render_dashboard')
         guarded = [node for node in main.body if isinstance(node, ast.If)
-                   and ast.unparse(node.test) == 'prepare_report']
+                   and ast.unparse(node.test) == "prepare_report or st.session_state.get('prepared_print_report')"]
         self.assertEqual(len(guarded), 1)
         calls = [node.func.id for node in ast.walk(guarded[0]) if isinstance(node, ast.Call)
                  and isinstance(node.func, ast.Name)]

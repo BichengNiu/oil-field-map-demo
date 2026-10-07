@@ -13,6 +13,7 @@ import field_catalog as CATALOG
 import map_renderer
 import monitoring_cards
 import portwatch_downloads
+import data_store
 from datetime import datetime
 from zoneinfo import ZoneInfo
 import portwatch as PORTWATCH
@@ -33,6 +34,7 @@ def queue_map_screenshot() -> None:
 def render_map_panel(state: DashboardViewState, summary_cards: list) -> bool:
     screenshot_requested = st.session_state.pop("map_screenshot_requested", False)
     st.html(monitoring_cards.cards_html(summary_cards))
+    st.caption("周、月及同比指标只按本地完整日记录计算；历史缺口由“准备打印报告”按需读取，不随页面载入联网。")
     with st.container(horizontal=True, key="map_layer_filters"):
         show_assets = st.checkbox("油气", value=True, key="map_show_assets")
         show_ports = st.checkbox("港口", value=True, key="map_show_ports",
@@ -205,11 +207,13 @@ def render_ports_panel(
         p4.metric(
             "风险运力合计",
             "—"
-            if port_risk_error or not risk_values
+            if not risk_values
             else f"{sum(risk_values) / 10000:,.1f} 万吨/日",
         )
         if port_risk_error:
             st.error(f"历史风险运力暂不可用：{port_risk_error}")
+        if risk_snapshot := st.session_state.get("port_risk_values"):
+            st.caption(f"风险运力最近成功读取：{risk_snapshot.get('updated_at', '时间未知')} UTC")
         st.dataframe(
             port_rows,
             width="stretch",
@@ -414,12 +418,11 @@ def render_method_panel() -> None:
 
 def prepare_monitoring_cards(available_ports, available_chokepoints, state,
                              port_history=None, choke_history=None,
-                             refresh_revision=None):
-    """Prepare the same summary independently of the optional print panel."""
+                             data_revisions=None, port_comparison=None,
+                             choke_comparison=None):
+    """Prepare summary cards from local data or explicitly supplied report data."""
     errors = []
-    # The map should never initiate a 90-day download. Use only validated local
-    # history here; explicit report preparation may fetch its own history.
-    revision = refresh_revision or "initial"
+    revisions = data_revisions or {}
     port_ids = tuple(sorted(str(p["portid"]) for p in available_ports
                             if PORTWATCH.has_independent_statistics(p)))
     choke_ids = tuple(sorted(str(p["portid"]) for p in available_chokepoints))
@@ -433,29 +436,19 @@ def prepare_monitoring_cards(available_ports, available_chokepoints, state,
             rows = []
             if ids and day:
                 try:
-                    rows = report_data.history_window(kind, ids, day.isoformat(), revision)
-                except portwatch_downloads.CacheMiss:
-                    pass
+                    rows = report_data.card_activity_history(
+                        kind, ids, day.isoformat(), revisions.get(kind, 0)
+                    )
                 except Exception as exc:
-                    errors.append(f"{kind} 历史窗口：{type(exc).__name__}: {exc}")
+                    errors.append(f"{kind} 本地历史窗口：{type(exc).__name__}: {exc}")
         histories.append(rows)
     port_history, choke_history = histories
-    comparison_ports, comparison_chokes = [], []
-    for kind, ids, day, target in (
-        ("ports", port_ids, state.selected_day, comparison_ports),
-        ("chokepoints", choke_ids, state.selected_chokepoint_day, comparison_chokes),
-    ):
-        if ids and day:
-            try:
-                target.extend(report_data.comparison_history(kind, ids, day.isoformat(), revision))
-            except portwatch_downloads.CacheMiss:
-                pass
-            except Exception as exc:
-                errors.append(f"{kind} 同比记录：{type(exc).__name__}: {exc}")
+    comparison_ports = port_comparison or []
+    comparison_chokes = choke_comparison or []
     sea_history = []
     sea_observation_card = None
     try:
-        sea_state = report_data.card_sea_history()
+        sea_state = report_data.card_sea_history(revisions.get("sea", 0))
         sea_history = sea_state["rows"]
         sea_observation_card = sea_state.get("card")
         if sea_state.get("error"):
@@ -465,7 +458,7 @@ def prepare_monitoring_cards(available_ports, available_chokepoints, state,
     cards = monitoring_cards.build_cards(
         available_ports, available_chokepoints,
         port_history + comparison_ports, choke_history + comparison_chokes,
-        state.live_positions, state.selected_day, state.selected_chokepoint_day,
+        state.selected_day, state.selected_chokepoint_day,
         vessel_day=datetime.now(ZoneInfo("Asia/Shanghai")).date(), assets=ASSETS,
         sea_passage_history=sea_history,
         sea_observation_card=sea_observation_card,
@@ -474,8 +467,17 @@ def prepare_monitoring_cards(available_ports, available_chokepoints, state,
 
 
 def render_print_report(
-    available_ports: list[dict], available_chokepoints: list[dict], state: DashboardViewState
+    available_ports: list[dict], available_chokepoints: list[dict], state: DashboardViewState,
+    *, prepare: bool = True, data_revisions: dict[str, int] | None = None,
 ) -> None:
+    if not prepare:
+        saved_report = st.session_state.get("prepared_print_report")
+        if saved_report and saved_report.get("data_revisions") == dict(data_revisions or {}):
+            st.html(print_report.PRINT_CSS + saved_report["html"])
+        elif saved_report:
+            st.info("监测数据已更新，已准备的打印报告不再匹配当前档案；请回地图页重新准备报告。")
+        return
+
     selected_day = state.selected_day
     selected_chokepoint_day = state.selected_chokepoint_day
     live_positions = state.live_positions
@@ -504,7 +506,7 @@ def render_print_report(
     )
     report_choke_ids = tuple(sorted(str(point["portid"]) for point in report_choke_catalog))
     report_errors = []
-    report_revision = st.session_state.get("portwatch_report_revision", "initial")
+    revisions = data_revisions or {}
     if port_error:
         report_errors.append(f"港口最新数据：{port_error}")
     if chokepoint_error:
@@ -518,7 +520,8 @@ def render_print_report(
         try:
             with st.spinner("准备打印报告：读取最近90天港口记录…"):
                 report_port_history = report_data.history_window(
-                    "ports", report_port_ids, selected_day.isoformat(), report_revision
+                    "ports", report_port_ids, selected_day.isoformat(),
+                    revisions.get("ports", 0), allow_network=True,
                 )
         except Exception as exc:
             report_errors.append(f"ports 历史窗口：{type(exc).__name__}: {exc}")
@@ -529,13 +532,32 @@ def render_print_report(
                     "chokepoints",
                     report_choke_ids,
                     selected_chokepoint_day.isoformat(),
-                    report_revision,
+                    revisions.get("chokepoints", 0), allow_network=True,
                 )
         except Exception as exc:
             report_errors.append(f"chokepoints 历史窗口：{type(exc).__name__}: {exc}")
 
+    report_port_comparison, report_choke_comparison = [], []
+    for kind, ids, day, target in (
+        ("ports", report_port_ids, selected_day, report_port_comparison),
+        ("chokepoints", report_choke_ids, selected_chokepoint_day, report_choke_comparison),
+    ):
+        if day is None or not ids:
+            continue
+        try:
+            with st.spinner(f"准备打印报告：读取{portwatch_downloads.KINDS[kind]}同比窗口…"):
+                target.extend(report_data.comparison_history(
+                    kind, ids, day.isoformat(), revisions.get(kind, 0), allow_network=True
+                ))
+        except Exception as exc:
+            report_errors.append(f"{kind} 同比记录：{type(exc).__name__}: {exc}")
+
     cards, card_errors = prepare_monitoring_cards(
-        report_port_catalog, report_choke_catalog, state, report_port_history, report_choke_history
+        report_port_catalog, report_choke_catalog, state,
+        report_port_history, report_choke_history,
+        data_revisions=revisions,
+        port_comparison=report_port_comparison,
+        choke_comparison=report_choke_comparison,
     )
     report_errors.extend(card_errors)
 
@@ -567,4 +589,9 @@ def render_print_report(
         "ais_source_note": report_ais_note,
         "errors": report_errors,
     })
+    st.session_state["prepared_print_report"] = {
+        "html": report_html,
+        "data_revisions": data_store.revisions(("ports", "chokepoints", "ais", "sea")),
+        "prepared_at": datetime.now().astimezone().isoformat(),
+    }
     st.html(print_report.PRINT_CSS + report_html)

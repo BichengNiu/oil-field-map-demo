@@ -87,6 +87,16 @@ class DataStoreTest(unittest.TestCase):
         data_store.save_catalog("assets", original)
         self.assertEqual(data_store.load_catalog("assets"), original)
 
+    def test_portwatch_fact_revisions_advance_only_when_source_values_change(self):
+        row = {"portid": "port105", "date": "2026-10-06", "portcalls": 7}
+        self.assertEqual(data_store.revision("ports"), 0)
+        data_store.save_portwatch("ports", [row], "test-source")
+        self.assertEqual(data_store.revision("ports"), 1)
+        data_store.save_portwatch("ports", [row], "test-source")
+        self.assertEqual(data_store.revision("ports"), 1)
+        data_store.save_portwatch("ports", [{**row, "portcalls": 8}], "test-source")
+        self.assertEqual(data_store.revision("ports"), 2)
+
     def test_lazy_nested_reads_reuse_the_same_transaction(self):
         with data_store.connect() as outer:
             data_store.set_meta("test", 1, outer)

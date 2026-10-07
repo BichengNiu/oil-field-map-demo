@@ -10,21 +10,34 @@ import streamlit as st
 import portwatch_downloads
 import print_report
 from portwatch_records import latest_by_node
+import data_store
+from monitoring_cards import windows
 
 
 @st.cache_data(ttl=900, max_entries=12, show_spinner=False)
 def history_window(kind: str, node_ids: tuple[str, ...], end_day: str,
-                   refresh_revision: str = "initial") -> list[dict]:
-    """Return a verified 90-day window; failed reads are not cached."""
+                   data_revision: int = 0, allow_network: bool = False) -> list[dict]:
+    """Return a verified 90-day report window after an explicit report request."""
     if not node_ids:
         return []
     end = date.fromisoformat(end_day)
     rows, _ = portwatch_downloads.fetch_window(
         kind, node_ids, end - timedelta(days=89), end,
-        force=refresh_revision != "initial",
-        cache_revision=refresh_revision, cache_ttl_seconds=86_400,
-        allow_stale=refresh_revision == "initial",
-        cache_only=refresh_revision == "initial")
+        cache_revision=0, cache_ttl_seconds=86_400,
+        allow_stale=True, cache_only=not allow_network)
+    return rows
+
+
+@st.cache_data(ttl=900, max_entries=24, show_spinner=False)
+def card_activity_history(kind: str, node_ids: tuple[str, ...], end_day: str,
+                          data_revision: int = 0) -> list[dict]:
+    """Read only locally present rows for the card's five indicator windows."""
+    if not node_ids:
+        return []
+    selected = date.fromisoformat(end_day)
+    rows = data_store.cached_portwatch_periods(
+        kind, node_ids, windows(selected)
+    )
     return rows
 
 
@@ -52,29 +65,13 @@ def cached_print_report(report_inputs: dict) -> str:
 
 @st.cache_data(ttl=900, max_entries=12, show_spinner=False)
 def comparison_history(kind: str, node_ids: tuple[str, ...], end_day: str,
-                       refresh_revision: str = "initial") -> list[dict]:
+                       data_revision: int = 0, allow_network: bool = False) -> list[dict]:
     """Read last year's matching month for the cover card year-on-year comparison."""
-    from monitoring_cards import windows
     start, end = windows(date.fromisoformat(end_day))[-1]
     rows, _ = portwatch_downloads.fetch_window(
-        kind, node_ids, start, end, force=refresh_revision != "initial",
-        cache_revision=refresh_revision, cache_ttl_seconds=86_400,
-        allow_stale=refresh_revision == "initial",
-        cache_only=refresh_revision == "initial")
+        kind, node_ids, start, end, cache_revision=0, cache_ttl_seconds=86_400,
+        allow_stale=True, cache_only=not allow_network)
     return rows
-
-
-@st.cache_data(ttl=60, show_spinner=False)
-def card_vessel_history() -> list[dict]:
-    """Read the existing local archive without creating or backfilling it."""
-    import ais_history
-    path = ais_history.archive_path()
-    if not path.exists():
-        return []
-    with ais_history.connect_archive() as conn:
-        return [json.loads(row[0]) for row in conn.execute(
-            'SELECT payload FROM ais_reports WHERE observed >= ?',
-            ((date.today() - timedelta(days=400)).isoformat(),)).fetchall()]
 
 
 def sea_history_config() -> dict:
@@ -90,7 +87,7 @@ def sea_history_config() -> dict:
 
 
 @st.cache_data(ttl=60, show_spinner=False)
-def card_sea_history() -> dict:
+def card_sea_history(data_revision: int = 0) -> dict:
     """Read the shared event archive without synchronizing its delivery source."""
     import sea_history
     config = sea_history_config()

@@ -118,6 +118,7 @@ def import_bundle(data, path=None):
         conn.execute("INSERT OR REPLACE INTO sea_manifests VALUES (?,?)",
                      (provider, json.dumps(manifest, ensure_ascii=False)))
         data_store.set_meta("selected_sea_history_provider", provider, conn)
+        data_store.bump_revision("sea", conn)
         data_store.put_binary_document("deliveries/sea-" + hashlib.sha256(data).hexdigest() + ".zip", data,
                                        "application/zip", conn)
     return {"events": len(events), "days": len(cells), "source": manifest["source"],

@@ -7,6 +7,7 @@ No connection is held while fetching network data.
 from __future__ import annotations
 
 from contextlib import contextmanager
+from itertools import count
 import csv
 from datetime import datetime, timedelta, timezone
 import hashlib
@@ -26,6 +27,7 @@ ROOT = Path(__file__).resolve().parent
 _LOCK = threading.RLock()
 _LOCAL = threading.local()
 _READY = set()
+_PORTWATCH_BATCH_IDS = count()
 
 
 def setting(key, default=""):
@@ -179,6 +181,37 @@ def set_meta(key, value, conn=None):
     conn.execute("INSERT OR REPLACE INTO app_meta VALUES (?,?)", (key, encode(value)))
 
 
+def revision(kind, conn=None):
+    """Read the current version of one persisted data family."""
+    return meta(f"data_revision:{kind}", 0, conn)
+
+
+def revisions(kinds, conn=None):
+    """Read several data versions in one short transaction."""
+    if conn is None:
+        with connect() as handle:
+            return revisions(kinds, handle)
+    keys = [f"data_revision:{kind}" for kind in kinds]
+    if not keys:
+        return {}
+    rows = conn.execute(
+        "SELECT key,value FROM app_meta WHERE key IN (" + ",".join("?" for _ in keys) + ")",
+        keys,
+    ).fetchall()
+    found = {key: json.loads(value) for key, value in rows}
+    return {kind: found.get(f"data_revision:{kind}", 0) for kind in kinds}
+
+
+def bump_revision(kind, conn=None):
+    """Advance a data version in the same transaction as its facts."""
+    if conn is None:
+        with connect() as handle:
+            return bump_revision(kind, handle)
+    value = revision(kind, conn) + 1
+    set_meta(f"data_revision:{kind}", value, conn)
+    return value
+
+
 def _rows(value, section="$"):
     if isinstance(value, list):
         for i, item in enumerate(value):
@@ -189,30 +222,32 @@ def _rows(value, section="$"):
                 yield from _rows(item, section + "." + str(key))
 
 
-def ingest_document(relative, path=None):
+def ingest_document(relative, path=None, conn=None):
     """Versioned source files are bootstrap evidence; runtime reads use DuckDB."""
     original = ROOT / relative
     content = original.read_bytes()
     digest = hashlib.sha256(content).hexdigest()
-    with connect(path) as conn:
-        old = conn.execute("SELECT sha256 FROM documents WHERE path=?", (relative,)).fetchone()
-        if old and old[0] == digest:
-            return
-        suffix = original.suffix.lower()
-        if suffix in (".json", ".geojson"):
-            values = list(_rows(json.loads(content.decode("utf-8-sig"))))
-            media = "application/json"
-        elif suffix == ".csv":
-            values = [("$", i, row) for i, row in enumerate(csv.DictReader(io.StringIO(content.decode("utf-8-sig"))))]
-            media = "text/csv"
-        else:
-            values, media = [], "application/octet-stream"
-        conn.execute("DELETE FROM document_rows WHERE path=?", (relative,))
-        if values:
-            conn.executemany("INSERT INTO document_rows VALUES (?,?,?,?)",
-                             [(relative, section, i, encode(row)) for section, i, row in values])
-        conn.execute("INSERT OR REPLACE INTO documents(path,sha256,media_type,content,row_count) VALUES (?,?,?,?,?)",
-                     (relative, digest, media, content, len(values)))
+    if conn is None:
+        with connect(path) as handle:
+            return ingest_document(relative, path, handle)
+    old = conn.execute("SELECT sha256 FROM documents WHERE path=?", (relative,)).fetchone()
+    if old and old[0] == digest:
+        return
+    suffix = original.suffix.lower()
+    if suffix in (".json", ".geojson"):
+        values = list(_rows(json.loads(content.decode("utf-8-sig"))))
+        media = "application/json"
+    elif suffix == ".csv":
+        values = [("$", i, row) for i, row in enumerate(csv.DictReader(io.StringIO(content.decode("utf-8-sig"))))]
+        media = "text/csv"
+    else:
+        values, media = [], "application/octet-stream"
+    conn.execute("DELETE FROM document_rows WHERE path=?", (relative,))
+    if values:
+        conn.executemany("INSERT INTO document_rows VALUES (?,?,?,?)",
+                         [(relative, section, i, encode(row)) for section, i, row in values])
+    conn.execute("INSERT OR REPLACE INTO documents(path,sha256,media_type,content,row_count) VALUES (?,?,?,?,?)",
+                 (relative, digest, media, content, len(values)))
 
 
 def read_json(relative):
@@ -235,10 +270,17 @@ def save_catalog(kind, rows, key="portid"):
             pairs = [(str(row[key]), row) for row in rows]
         if len({pid for pid, _ in pairs}) != len(pairs):
             raise ValueError("目录主键重复：" + kind)
+        encoded = [(kind, pid, encode(row)) for pid, row in pairs]
+        existing = conn.execute(
+            "SELECT kind,id,payload FROM catalogs WHERE kind=? ORDER BY id", (kind,)
+        ).fetchall()
+        if existing == sorted(encoded, key=lambda row: row[1]):
+            return
         conn.execute("DELETE FROM catalogs WHERE kind=?", (kind,))
-        if pairs:
-            conn.executemany("INSERT INTO catalogs(kind,id,payload) VALUES (?,?,?)",
-                             [(kind, pid, encode(row)) for pid, row in pairs])
+        if encoded:
+            conn.executemany("INSERT INTO catalogs(kind,id,payload) VALUES (?,?,?)", encoded)
+        if kind in {"ports", "chokepoints", "assets"}:
+            bump_revision("ports" if kind == "ports" else "chokepoints" if kind == "chokepoints" else "assets", conn)
 
 
 def load_catalog(kind):
@@ -292,14 +334,70 @@ def save_portwatch(kind, rows, source_url, conn=None):
         with connect() as handle:
             return save_portwatch(kind, rows, source_url, handle)
     if rows:
-        statement = "INSERT OR REPLACE INTO portwatch_daily(kind,node_id,day,payload,source_url) VALUES (?,?,?,?,?)"
-        for start in range(0, len(rows), 500):
-            batch = rows[start:start + 500]
-            conn.executemany(
-                statement,
-                [(kind, str(row["portid"]), str(row["date"])[:10], encode(row), source_url)
-                 for row in batch],
+        import pyarrow as pa
+
+        batch_name = f"portwatch_incoming_{next(_PORTWATCH_BATCH_IDS)}"
+        incoming = pa.Table.from_pylist([
+            {"kind": kind, "node_id": str(row["portid"]),
+             "day": str(row["date"])[:10], "payload": encode(row), "source_url": source_url}
+            for row in rows
+        ])
+        conn.register(batch_name, incoming)
+        try:
+            changed = conn.execute(
+                f"""SELECT EXISTS(
+                    SELECT 1 FROM {batch_name} incoming
+                    LEFT JOIN portwatch_daily facts
+                      ON facts.kind=incoming.kind AND facts.node_id=incoming.node_id
+                     AND facts.day=CAST(incoming.day AS DATE)
+                    WHERE facts.node_id IS NULL OR facts.payload IS DISTINCT FROM incoming.payload
+                       OR facts.source_url IS DISTINCT FROM incoming.source_url
+                )"""
+            ).fetchone()[0]
+            conn.execute(
+                "INSERT OR REPLACE INTO portwatch_daily(kind,node_id,day,payload,source_url) "
+                f"SELECT kind,node_id,CAST(day AS DATE),payload,source_url FROM {batch_name}"
             )
+        finally:
+            conn.unregister(batch_name)
+        if changed:
+            bump_revision(kind, conn)
+
+
+def portwatch_window_latest_fetch(kind, node_ids, first, last):
+    node_ids = tuple(sorted(set(str(node_id) for node_id in node_ids)))
+    if kind not in ("ports", "chokepoints") or not node_ids:
+        return None
+    placeholders = ",".join("?" for _ in node_ids)
+    with connect() as conn:
+        return conn.execute(
+            f"""SELECT MAX(fetched_at) FROM portwatch_daily
+                WHERE kind=? AND node_id IN ({placeholders}) AND day BETWEEN ? AND ?""",
+            [kind, *node_ids, first, last],
+        ).fetchone()[0]
+
+
+def cached_portwatch_rows_since(kind, node_ids, first, last, since):
+    """Return validated facts fetched after a compressed window snapshot."""
+    node_ids = tuple(sorted(set(str(node_id) for node_id in node_ids)))
+    if kind not in ("ports", "chokepoints") or not node_ids:
+        return []
+    placeholders = ",".join("?" for _ in node_ids)
+    with connect() as conn:
+        result = conn.execute(
+            f"""SELECT node_id,day,payload FROM portwatch_daily
+                WHERE kind=? AND node_id IN ({placeholders})
+                  AND day BETWEEN ? AND ? AND fetched_at > ?
+                ORDER BY day,node_id""",
+            [kind, *node_ids, first, last, since],
+        ).fetchall()
+    rows = []
+    for node_id, day, payload in result:
+        row = json.loads(payload) if isinstance(payload, str) else dict(payload)
+        row.setdefault("portid", str(node_id))
+        row.setdefault("date", day.isoformat())
+        rows.append(row)
+    return rows
 
 
 def cached_portwatch_window(kind, node_ids, first, last, max_age_seconds=86_400,
@@ -376,6 +474,29 @@ def cached_portwatch_observations(kind, node_ids, first, last):
     return rows
 
 
+def cached_portwatch_periods(kind, node_ids, periods):
+    """Read sparse local facts across several disjoint indicator windows."""
+    node_ids = tuple(sorted(set(str(node_id) for node_id in node_ids)))
+    periods = tuple((start, end) for start, end in periods if start <= end)
+    if kind not in ("ports", "chokepoints") or not node_ids or not periods:
+        return []
+    placeholders = ",".join("?" for _ in node_ids)
+    clauses = " OR ".join("(day BETWEEN ? AND ?)" for _ in periods)
+    args = [kind, *node_ids, *(value for pair in periods for value in pair)]
+    with connect() as conn:
+        result = conn.execute(
+            f"SELECT node_id,day,payload FROM portwatch_daily WHERE kind=? "
+            f"AND node_id IN ({placeholders}) AND ({clauses}) ORDER BY day,node_id", args
+        ).fetchall()
+    rows = []
+    for node_id, day, payload in result:
+        row = json.loads(payload) if isinstance(payload, str) else dict(payload)
+        row.setdefault("portid", str(node_id))
+        row.setdefault("date", day.isoformat())
+        rows.append(row)
+    return rows
+
+
 def cached_portwatch_latest_day(kind, max_age_seconds=86_400, allow_stale=False):
     """Return the latest persisted source day, optionally regardless of age."""
     if kind not in ("ports", "chokepoints"):
@@ -392,13 +513,6 @@ def cached_portwatch_latest_day(kind, max_age_seconds=86_400, allow_stale=False)
     if not allow_stale and (datetime.now(timezone.utc) - fetched_at).total_seconds() > max_age_seconds:
         return None
     return day
-
-
-def save_query(endpoint, params, response):
-    key = hashlib.sha256(encode([endpoint, params, response]).encode()).hexdigest()
-    with connect() as conn:
-        conn.execute("INSERT OR IGNORE INTO source_queries(id,endpoint,params,response) VALUES (?,?,?,?)",
-                     (key, endpoint, encode(params), encode(response)))
 
 
 def _legacy_paths():
@@ -474,8 +588,9 @@ def initialize():
     files = [p for p in ROOT.iterdir() if p.is_file() and p.suffix in (".json", ".csv")]
     if (ROOT / "data").exists():
         files += [p for p in (ROOT / "data").iterdir() if p.is_file() and p.suffix in (".json", ".csv", ".geojson")]
-    for original in files:
-        ingest_document(original.relative_to(ROOT).as_posix())
+    with connect() as conn:
+        for original in files:
+            ingest_document(original.relative_to(ROOT).as_posix(), conn=conn)
     return {"source_files": len(files), "legacy": counts, "database": str(database_path())}
 
 

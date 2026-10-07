@@ -28,7 +28,7 @@ CHOKEPOINTS = f"{ROOT}/PortWatch_chokepoints_database/FeatureServer/0/query"
 CHOKEPOINT_DAILY = f"{ROOT}/Daily_Chokepoints_Data/FeatureServer/0/query"
 SPILLOVERS = f"{ROOT}/spillovers_port_level_impact/FeatureServer/0/query"
 SOURCE = "https://portwatch.imf.org/pages/data-and-methodology"
-MODULE_VERSION = 7
+MODULE_VERSION = 8
 _REQUEST_LOCK = threading.Lock()
 _LAST_REQUEST = 0.0
 
@@ -38,14 +38,6 @@ CHOKEPOINT_LABELS = {
     "chokepoint4": "曼德海峡",
     "chokepoint6": "霍尔木兹海峡",
 }
-
-
-def clear_live_cache() -> None:
-    """Refresh current PortWatch data while retaining the historical risk model."""
-    for reader in (port_catalog, latest_date, _activity_rows, daily_activity,
-                   rolling_activity, chokepoint_catalog,
-                   latest_chokepoint_date, chokepoint_activity):
-        reader.clear()
 
 
 def valid_port_ids(ids: tuple[str, ...]) -> bool:
@@ -87,16 +79,14 @@ def query(url: str, **params: object) -> dict:
             remaining = 0.5 - (time.monotonic() - _LAST_REQUEST)
             if remaining > 0:
                 time.sleep(remaining)
-            try:
-                with urlopen(request, timeout=35) as response:
-                    result = json.load(response)
-            except HTTPError as exc:
-                if exc.code != 429 or attempt == 2:
-                    raise
-                result = {"error": {"message": "Too many requests", "code": 429}}
-            finally:
-                _LAST_REQUEST = time.monotonic()
-        data_store.save_query(url, params, result)
+            _LAST_REQUEST = time.monotonic()
+        try:
+            with urlopen(request, timeout=35) as response:
+                result = json.load(response)
+        except HTTPError as exc:
+            if exc.code != 429 or attempt == 2:
+                raise
+            result = {"error": {"message": "Too many requests", "code": 429}}
         error = result.get("error")
         if not error:
             return result
@@ -133,7 +123,7 @@ def port_region_for(lat: float, lon: float) -> str | None:
 
 
 @st.cache_data(ttl=24 * 3600, show_spinner=False)
-def port_catalog() -> list[dict]:
+def port_catalog(refresh_revision: str = "initial") -> list[dict]:
     # Retain the five waters and all ports of the Gulf producers.
     where = " OR ".join(
         f"(lat >= {south} AND lat <= {north} AND lon >= {west} AND lon <= {east})"
@@ -184,16 +174,15 @@ def _latest_day(endpoint: str, missing_message: str) -> date:
 
 
 @st.cache_data(ttl=3600, show_spinner=False)
-def latest_date() -> date:
+def latest_date(refresh_revision: str = "initial") -> date:
     return _latest_day(DAILY, "PortWatch 尚无可用日期")
 
 
 @st.cache_data(ttl=3600, show_spinner=False)
 def _activity_rows(day: date, port_ids: tuple[str, ...], calendar_days: int,
-                   refresh_revision: str = "initial") -> dict[str, dict[date, dict]]:
+                   refresh_revision: str = "initial",
+                   data_revision: int = 0) -> dict[str, dict[date, dict]]:
     """Fetch one validated daily window for reuse by latest-day and rolling indicators."""
-    if refresh_revision == "initial":
-        refresh_revision = st.session_state.get("portwatch_report_revision", "initial")
     grouped: dict[str, dict[date, dict]] = {port_id: {} for port_id in port_ids}
     port_ids = tuple(sorted(set(_activity_ids(port_ids))))
     if calendar_days < 1:
@@ -251,9 +240,10 @@ def _activity_rows(day: date, port_ids: tuple[str, ...], calendar_days: int,
 
 @st.cache_data(ttl=3600, show_spinner=False)
 def daily_activity(day: date, port_ids: tuple[str, ...],
-                   refresh_revision: str = "initial") -> dict[str, dict]:
+                   refresh_revision: str = "initial",
+                   data_revision: int = 0) -> dict[str, dict]:
     # Reuse the same two-week response as the default rolling indicators.
-    rows = _activity_rows(day, port_ids, 14, refresh_revision)
+    rows = _activity_rows(day, port_ids, 14, refresh_revision, data_revision)
     return {port_id: values[day] for port_id, values in rows.items() if day in values}
 
 
@@ -266,7 +256,8 @@ def _complete_sum(rows: list[dict], days: int, *fields: str) -> float | None:
 
 @st.cache_data(ttl=3600, show_spinner=False)
 def rolling_activity(day: date, port_ids: tuple[str, ...], days: int = 7,
-                     refresh_revision: str = "initial") -> dict[str, dict]:
+                     refresh_revision: str = "initial",
+                     data_revision: int = 0) -> dict[str, dict]:
     """Return complete-window port indicators and the preceding-window baseline.
 
     Do not turn missing days into zeros; keep raw zero-valued source records.
@@ -278,7 +269,7 @@ def rolling_activity(day: date, port_ids: tuple[str, ...], days: int = 7,
     current_first = day - timedelta(days=days - 1)
     previous_first = day - timedelta(days=2 * days - 1)
     previous_last = current_first - timedelta(days=1)
-    grouped = _activity_rows(day, port_ids, 2 * days, refresh_revision)
+    grouped = _activity_rows(day, port_ids, 2 * days, refresh_revision, data_revision)
     for port_id in requested_ids:
         grouped.setdefault(port_id, {})
     summary = {}
@@ -338,7 +329,7 @@ def rolling_activity(day: date, port_ids: tuple[str, ...], days: int = 7,
 
 
 @st.cache_data(ttl=24 * 3600, show_spinner=False)
-def port_risk_capacity(port_ids: tuple[str, ...]) -> dict[str, float | None]:
+def port_risk_capacity(port_ids: tuple[str, ...], refresh_revision: str = "initial") -> dict[str, float | None]:
     """Aggregate historical daily at-risk capacity over each port's outbound routes."""
     totals: dict[str, float | None] = {port_id: None for port_id in port_ids}
     port_ids = _activity_ids(port_ids)
@@ -363,7 +354,7 @@ def port_risk_capacity(port_ids: tuple[str, ...]) -> dict[str, float | None]:
 
 
 @st.cache_data(ttl=24 * 3600, show_spinner=False)
-def chokepoint_catalog() -> list[dict]:
+def chokepoint_catalog(refresh_revision: str = "initial") -> list[dict]:
     ids = FOCUS_CHOKEPOINT_IDS
     quoted = ",".join(f"'{point_id}'" for point_id in ids)
     page = query(CHOKEPOINTS, where=f"portid IN ({quoted})", returnGeometry="false",
@@ -381,15 +372,14 @@ def chokepoint_catalog() -> list[dict]:
 
 
 @st.cache_data(ttl=3600, show_spinner=False)
-def latest_chokepoint_date() -> date:
+def latest_chokepoint_date(refresh_revision: str = "initial") -> date:
     return _latest_day(CHOKEPOINT_DAILY, "PortWatch 尚无可用咽喉点日期")
 
 
 @st.cache_data(ttl=3600, show_spinner=False)
 def chokepoint_activity(day: date, chokepoint_ids: tuple[str, ...],
-                        refresh_revision: str = "initial") -> dict[str, dict]:
-    if refresh_revision == "initial":
-        refresh_revision = st.session_state.get("portwatch_report_revision", "initial")
+                        refresh_revision: str = "initial",
+                        data_revision: int = 0) -> dict[str, dict]:
     if not valid_chokepoint_ids(chokepoint_ids):
         raise ValueError("无效的 PortWatch 咽喉点编号")
     if refresh_revision == "initial":

@@ -6,6 +6,7 @@ import hashlib
 import json
 import time
 from datetime import date, datetime, timedelta, timezone
+from pathlib import Path
 
 import streamlit as st
 
@@ -34,6 +35,9 @@ def open_download_tab(kind: str | None = None, node_ids: tuple[str, ...] = ()) -
 def render_download_panel(
     newest_port_day: date | None,
     newest_choke_day: date | None,
+    *,
+    data_revisions: dict[str, int] | None = None,
+    refresh_revision: str = "initial",
 ) -> None:
     st.subheader("港口与咽喉要道数据")
     latest = [day for day in (newest_port_day, newest_choke_day) if day]
@@ -41,10 +45,12 @@ def render_download_panel(
     last_downloadable = datetime.now(timezone.utc).date()
 
     port_catalog_rows, port_catalog_error = portwatch_state(
-        "ports", "catalog", PORTWATCH.MODULE_VERSION
+        "ports", "catalog", PORTWATCH.MODULE_VERSION,
+        (data_revisions or {}).get("ports", 0), refresh_revision,
     )
     choke_catalog_rows, choke_catalog_error = portwatch_state(
-        "chokepoints", "catalog", PORTWATCH.MODULE_VERSION
+        "chokepoints", "catalog", PORTWATCH.MODULE_VERSION,
+        (data_revisions or {}).get("chokepoints", 0), refresh_revision,
     )
     if port_catalog_error or choke_catalog_error:
         st.error(
@@ -218,6 +224,20 @@ def render_download_panel(
         if mode == "全部可用历史"
         else f"{first}_{last}"
     )
+    if artifact_path := result.get("artifact_path"):
+        if not Path(artifact_path).is_file():
+            st.warning("分块下载文件已过期；请再次点击“生成下载数据”。")
+            return
+        with open(artifact_path, "rb") as archive_file:
+            st.download_button(
+                "下载完整 ZIP（分块 CSV、节点目录、覆盖、字典、来源查询）",
+                archive_file,
+                file_name=f"portwatch_{slug}.zip",
+                mime="application/zip",
+                key=f"pw_download_zip_{signature[:12]}",
+            )
+        st.caption("本次结果已按节点和日期分块写入文件，避免将全量历史行留在会话内存；解压后合并各分块 CSV。")
+        return
     for kind, rows in result["datasets"].items():
         fields = portwatch_downloads.columns(kind, result["manifest"]["derived"])
         st.download_button(

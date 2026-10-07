@@ -15,15 +15,12 @@ import portwatch as PORTWATCH
 
 
 def refresh_portwatch_data() -> None:
-    """Invalidate PortWatch data before Streamlit reruns the page."""
-    PORTWATCH.clear_live_cache()
-    portwatch_state.clear()
-    st.session_state["portwatch_report_revision"] = uuid.uuid4().hex
+    """Authorize one explicit source refresh on the next page run."""
+    st.session_state["portwatch_refresh_revision"] = uuid.uuid4().hex
 
 
 def refresh_portwatch_risk() -> None:
     """Request risk capacity only from its explicit control on the ports page."""
-    PORTWATCH.port_risk_capacity.clear()
     st.session_state["port_risk_refresh_revision"] = uuid.uuid4().hex
 
 
@@ -72,9 +69,9 @@ def openwaters_snapshot(collector_version: int) -> dict:
 
 
 @st.cache_data(ttl=60, max_entries=12, show_spinner=False)
-def portwatch_state(kind: str, resource: str, module_version: int):
+def portwatch_state(kind: str, resource: str, module_version: int,
+                    stored_revision: int = 0, refresh_revision: str = "initial"):
     """Cache both source values and short-lived failures across page reruns."""
-    refresh_revision = st.session_state.get("portwatch_report_revision", "initial")
     readers = {
         ("ports", "catalog"): PORTWATCH.port_catalog,
         ("chokepoints", "catalog"): PORTWATCH.chokepoint_catalog,
@@ -99,7 +96,7 @@ def portwatch_state(kind: str, resource: str, module_version: int):
             f"本地没有{label}目录/日期缓存，请点击“刷新港口数据”"
         )
     try:
-        return reader(), None
+        return reader(refresh_revision), None
     except Exception as exc:
         return ([] if resource == "catalog" else None), f"{type(exc).__name__}: {exc}"
 
@@ -130,52 +127,76 @@ def load_ports(
     rolling_days: int,
     *,
     with_risk: bool = False,
+    refresh_revision: str = "initial",
+    stored_revision: int = 0,
 ) -> tuple[list[dict], str | None, str | None]:
-    ports = []
     port_error = None
     port_risk_error = None
-    try:
-        ids = tuple(port["portid"] for port in available_ports)
-        statistical_ids = tuple(
-            sorted(
-                str(port["portid"])
-                for port in available_ports
-                if PORTWATCH.has_independent_statistics(port)
+    ids = tuple(port["portid"] for port in available_ports)
+    statistical_ids = tuple(sorted(
+        str(port["portid"])
+        for port in available_ports
+        if PORTWATCH.has_independent_statistics(port)
+    ))
+    activity_all, rolling_all = {}, {}
+    if statistical_ids:
+        try:
+            activity_all = PORTWATCH.daily_activity(
+                selected_day, statistical_ids, refresh_revision, stored_revision
             )
-        )
-        if ids:
-            activity_all = (
-                PORTWATCH.daily_activity(selected_day, statistical_ids)
-                if statistical_ids else {}
+        except Exception as exc:
+            port_error = f"日活动：{type(exc).__name__}: {exc}"
+            try:
+                activity_all = PORTWATCH.daily_activity(
+                    selected_day, statistical_ids, "initial", stored_revision
+                )
+            except Exception:
+                pass
+        try:
+            rolling_all = PORTWATCH.rolling_activity(
+                selected_day, statistical_ids, rolling_days, refresh_revision, stored_revision
             )
-            rolling_all = (
-                PORTWATCH.rolling_activity(selected_day, statistical_ids, rolling_days)
-                if statistical_ids
-                else {}
-            )
-            # The historical route-risk model is slower and is only used in
-            # the detailed port table; do not block the default map on it.
-            risk_all = {}
-            risk_revision = st.session_state.get("port_risk_refresh_revision", "initial")
-            if with_risk and statistical_ids and risk_revision != "initial":
-                try:
-                    risk_all = PORTWATCH.port_risk_capacity(statistical_ids)
-                except Exception as exc:
-                    port_risk_error = str(exc)
-                finally:
-                    st.session_state["port_risk_refresh_revision"] = "initial"
-            elif with_risk and statistical_ids:
-                port_risk_error = "点击“刷新风险运力”后读取"
-            activity = {
-                port_id: activity_all[port_id] for port_id in ids if port_id in activity_all
-            }
-            rolling = {port_id: rolling_all[port_id] for port_id in ids if port_id in rolling_all}
-            risk_capacity = (
-                {port_id: risk_all.get(port_id) for port_id in ids} if with_risk else None
-            )
-            ports = PORTWATCH.decorate(available_ports, activity, rolling, risk_capacity)
-    except Exception as exc:
-        port_error = str(exc)
+        except Exception as exc:
+            rolling_error = f"窗口指标：{type(exc).__name__}: {exc}"
+            port_error = f"{port_error}；{rolling_error}" if port_error else rolling_error
+            try:
+                rolling_all = PORTWATCH.rolling_activity(
+                    selected_day, statistical_ids, rolling_days, "initial", stored_revision
+                )
+            except Exception:
+                pass
+    activity = {port_id: activity_all[port_id] for port_id in ids if port_id in activity_all}
+    rolling = {port_id: rolling_all[port_id] for port_id in ids if port_id in rolling_all}
+
+    risk_capacity = None
+    if with_risk:
+        saved_risk = st.session_state.get("port_risk_values")
+        if saved_risk is None:
+            saved_risk = data_store.meta("port_risk_capacity_snapshot")
+        saved_ids = tuple((saved_risk or {}).get("port_ids", ()))
+        pending_revision = st.session_state.pop("port_risk_refresh_revision", None)
+        if pending_revision and statistical_ids:
+            try:
+                values = PORTWATCH.port_risk_capacity(statistical_ids, pending_revision)
+                saved_risk = {
+                    "port_ids": statistical_ids,
+                    "values": values,
+                    "updated_at": AIS.utc_now().isoformat(),
+                }
+                st.session_state["port_risk_values"] = saved_risk
+                with data_store.connect() as conn:
+                    data_store.set_meta("port_risk_capacity_snapshot", saved_risk, conn)
+                st.session_state.pop("port_risk_error", None)
+            except Exception as exc:
+                port_risk_error = f"{type(exc).__name__}: {exc}"
+                st.session_state["port_risk_error"] = port_risk_error
+        if saved_risk and tuple(saved_risk.get("port_ids", ())) == statistical_ids:
+            risk_capacity = saved_risk.get("values", {})
+            port_risk_error = port_risk_error or st.session_state.get("port_risk_error")
+        elif statistical_ids and not pending_revision:
+            port_risk_error = "点击“刷新风险运力”后读取"
+
+    ports = PORTWATCH.decorate(available_ports, activity, rolling, risk_capacity)
 
     return ports, port_error, port_risk_error
 
@@ -183,19 +204,25 @@ def load_ports(
 def load_chokepoints(
     available_chokepoints: list[dict],
     selected_chokepoint_day: date,
+    refresh_revision: str = "initial",
+    stored_revision: int = 0,
 ) -> tuple[list[dict], str | None]:
-    chokepoints = []
     chokepoint_error = None
+    values = {}
+    chokepoint_ids = tuple(str(point["portid"]) for point in available_chokepoints)
     try:
-        chokepoint_ids = tuple(str(point["portid"]) for point in available_chokepoints)
         if chokepoint_ids:
-            chokepoint_values_all = PORTWATCH.chokepoint_activity(
-                selected_chokepoint_day, chokepoint_ids
-            )
-            chokepoints = PORTWATCH.decorate_chokepoints(
-                available_chokepoints, chokepoint_values_all
+            values = PORTWATCH.chokepoint_activity(
+                selected_chokepoint_day, chokepoint_ids, refresh_revision, stored_revision
             )
     except Exception as exc:
-        chokepoint_error = str(exc)
+        chokepoint_error = f"{type(exc).__name__}: {exc}"
+        try:
+            values = PORTWATCH.chokepoint_activity(
+                selected_chokepoint_day, chokepoint_ids, "initial", stored_revision
+            )
+        except Exception:
+            pass
 
+    chokepoints = PORTWATCH.decorate_chokepoints(available_chokepoints, values)
     return chokepoints, chokepoint_error

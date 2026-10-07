@@ -48,8 +48,8 @@ def activity_card(label, catalog, rows, metric, verb, day, statistical=False):
     values = [total(rows, ids, metric, *window) for window in windows(day)] if day else [None] * 5
     week, prior_week, month, prior_month, prior_year = values
     return (label, f'{len(catalog):,}个',
-            f'上周累计{verb}{fmt(week)}艘（环比 {change(week, prior_week)}）',
-            f'本月累计{verb}{fmt(month)}艘（环比 {change(month, prior_month)}，同比 {change(month, prior_year)}）')
+            f'上周累计{verb}{fmt(week)}艘次（环比 {change(week, prior_week)}）',
+            f'本月累计{verb}{fmt(month)}艘次（环比 {change(month, prior_month)}，同比 {change(month, prior_year)}）')
 
 
 def sea_activity_card(history, day):
@@ -84,17 +84,17 @@ def sea_activity_card(history, day):
             f'本月累计通过{fmt(month)}艘次（环比 {change(month, prior_month)}，同比 {change(month, prior_year)}）')
 
 
-def build_cards(port_catalog, choke_catalog, port_history, choke_history, vessels,
+def build_cards(port_catalog, choke_catalog, port_history, choke_history,
                 port_day, choke_day, vessel_day=None, assets=(), sea_passage_history=(), sea_observation_card=None):
-    cards = [activity_card('港口监测', port_catalog, port_history, 'portcalls', '停泊', port_day, True),
+    cards = [activity_card('港口监测', port_catalog, port_history, 'portcalls', '进港', port_day, True),
              activity_card('通道监测', choke_catalog, choke_history, 'n_total', '通过', choke_day)]
     cards.append(sea_observation_card or sea_activity_card(sea_passage_history, vessel_day or date.today()))
     oil_fields = {(asset.get('country'), asset.get('name')) for asset in assets
                   if asset.get('asset_level') == 'field'
                   and asset.get('commodity') in {'crude_oil', 'oil_and_gas'}}
     cards.append(('油田监测', f'{len(oil_fields):,}个',
-                  '上周产量 —万桶（环比 —）',
-                  '本月累计 —万桶（环比 —，同比 —）'))
+                  '上周产量时间序列未接入',
+                  '本月产量时间序列未接入'))
     return cards
 
 

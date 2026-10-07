@@ -93,11 +93,13 @@ def archive_reports(rows: list[dict]) -> int:
         conn.execute("DROP TABLE incoming_reports")
         inserted = len(inserted_rows)
         if inserted:
+            data_store.bump_revision("ais", conn)
             from sea_tracking import update_events
             changed = {}
             for mmsi, observed in inserted_rows:
                 changed[mmsi] = min(observed, changed.get(mmsi, observed))
             update_events(conn, changed)
+            data_store.bump_revision("sea", conn)
         return inserted
 
 
@@ -123,11 +125,18 @@ def latest_snapshot(max_age_minutes: int = 120) -> list[dict]:
     cutoff = (ais.utc_now() - timedelta(minutes=max(0, max_age_minutes))).isoformat()
     with connect_archive() as conn:
         rows = conn.execute(
-            """SELECT r.payload FROM ais_reports r
-               JOIN (SELECT mmsi, MAX(observed) AS observed FROM ais_reports
-                     WHERE observed >= ? GROUP BY mmsi) latest
-                 ON r.mmsi=latest.mmsi AND r.observed=latest.observed
-               ORDER BY r.observed DESC""",
+            """SELECT payload FROM (
+                   SELECT payload, observed,
+                          ROW_NUMBER() OVER (
+                              PARTITION BY mmsi
+                              ORDER BY observed DESC,
+                                       TRY_CAST(json_extract_string(payload,'$.received_at') AS TIMESTAMPTZ) DESC NULLS LAST,
+                                       source ASC
+                          ) AS source_rank
+                   FROM ais_reports WHERE observed >= ?
+               ) ranked
+               WHERE source_rank=1
+               ORDER BY observed DESC""",
             (cutoff,),
         ).fetchall()
     return [json.loads(row[0]) for row in rows]
