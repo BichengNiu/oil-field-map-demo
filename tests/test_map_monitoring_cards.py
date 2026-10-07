@@ -8,18 +8,18 @@ import unittest
 import uuid
 from zoneinfo import ZoneInfo
 
-import monitor.common.monitoring_cards as monitoring_cards
+import monitoring_cards
 
 ROOT = Path(__file__).resolve().parents[1]
 
 
 def view_function(name, namespace):
-    tree = ast.parse((ROOT / 'monitor/ui/dashboard_views.py').read_text())
+    tree = ast.parse((ROOT / 'dashboard_views.py').read_text())
     fn = next(node for node in tree.body if isinstance(node, ast.FunctionDef) and node.name == name)
     for argument in fn.args.args:
         argument.annotation = None
     fn.returns = None
-    exec(compile(ast.Module(body=[fn], type_ignores=[]), str(ROOT / 'monitor/ui/dashboard_views.py'), 'exec'), namespace)
+    exec(compile(ast.Module(body=[fn], type_ignores=[]), str(ROOT / 'dashboard_views.py'), 'exec'), namespace)
     return namespace[name]
 
 
@@ -54,7 +54,7 @@ class MonitoringCardsTest(unittest.TestCase):
         ns = {'st': SimpleNamespace(session_state={}), 'uuid': uuid,
               'PORTWATCH': SimpleNamespace(has_independent_statistics=lambda p: True),
               'report_data': SimpleNamespace(history_window=fail, comparison_history=fail,
-                                            card_sea_history=fail),
+                                            card_vessel_history=fail, card_sea_history=fail),
               'monitoring_cards': monitoring_cards, 'datetime': datetime,
               'ZoneInfo': ZoneInfo, 'ASSETS': []}
         state = SimpleNamespace(selected_day=datetime(2026, 10, 6).date(),

@@ -1,0 +1,73 @@
+{
+  "source_url": "https://huggingface.co/datasets/yasumorishima/hormuz-ais",
+  "revision": "eef53f9bb006e3cf026824fa1f54ab6d3404468f",
+  "sha256": "9eb4bc1bc9250721f30554cf8a24d5487ea2dbedad5759982ef7c962c866473c",
+  "raw_rows": 175773,
+  "accepted_rows": 159386,
+  "inserted_rows": 159386,
+  "duplicate_or_existing_rows": 0,
+  "accepted_mmsis": 587,
+  "first_report_utc": "2026-03-14T06:57:51.594510+00:00",
+  "last_report_utc": "2026-04-11T10:38:16.984877+00:00",
+  "rejected": {
+    "speed_screen_ge40_or_negative": 16386,
+    "invalid_mmsi": 1
+  },
+  "reports_per_utc_day": {
+    "2026-03-14": 153,
+    "2026-03-15": 7993,
+    "2026-03-16": 11413,
+    "2026-03-17": 11084,
+    "2026-03-18": 10493,
+    "2026-03-19": 13422,
+    "2026-03-20": 17609,
+    "2026-03-21": 11171,
+    "2026-03-22": 10017,
+    "2026-03-23": 4230,
+    "2026-03-24": 3362,
+    "2026-03-25": 9717,
+    "2026-03-26": 9505,
+    "2026-03-27": 7165,
+    "2026-03-28": 4902,
+    "2026-03-29": 1531,
+    "2026-03-30": 646,
+    "2026-03-31": 3077,
+    "2026-04-01": 2379,
+    "2026-04-02": 413,
+    "2026-04-03": 690,
+    "2026-04-04": 2477,
+    "2026-04-05": 1662,
+    "2026-04-06": 8362,
+    "2026-04-07": 753,
+    "2026-04-08": 1849,
+    "2026-04-09": 2889,
+    "2026-04-10": 305,
+    "2026-04-11": 117
+  },
+  "regions": {
+    "霍尔木兹海峡": {
+      "reports": 7,
+      "mmsis": 4
+    },
+    "阿曼湾": {
+      "reports": 65,
+      "mmsis": 12
+    },
+    "波斯湾": {
+      "reports": 159314,
+      "mmsis": 584
+    },
+    "苏伊士运河": {
+      "reports": 0,
+      "mmsis": 0
+    },
+    "曼德海峡": {
+      "reports": 0,
+      "mmsis": 0
+    }
+  },
+  "imported_at_utc": "2026-10-01T12:47:45.500822+00:00",
+  "coverage": "岸基两分钟采样，主要在迪拜附近；霍尔木兹仅7条合格报告；苏伊士和曼德无覆盖。不是全量船舶普查，不可推算通行总量。",
+  "terms": "Dataset license is other/see-source-terms, not a redistribution grant. Check AISStream terms before redistributing.",
+  "filters": "Valid nine-digit MMSI, source UTC timestamp within published dates, valid coordinates in project regions, speed <40 knots when present; >=40 is a conservative heuristic. Original file retained."
+}

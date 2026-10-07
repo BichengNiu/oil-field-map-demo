@@ -8,8 +8,8 @@ import tempfile
 import unittest
 from zipfile import ZipFile
 
-import monitor.common.monitoring_cards as monitoring_cards
-import monitor.vessels.sea_history as sea_history
+import monitoring_cards
+import sea_history
 
 
 def bundle(events, coverage, definition="test-boundaries-v1", source="test-provider"):
@@ -33,7 +33,7 @@ class SeaHistoryTest(unittest.TestCase):
     def setUp(self):
         self.temp = tempfile.TemporaryDirectory()
         self.addCleanup(self.temp.cleanup)
-        self.path = Path(self.temp.name) / "history.sqlite3"
+        self.path = Path(self.temp.name) / "monitoring.duckdb"
 
     def test_reentries_distinct_seas_and_duplicate_imports(self):
         events = [("波斯湾", "123456789", "2020-10-05T01:00:00Z"),
