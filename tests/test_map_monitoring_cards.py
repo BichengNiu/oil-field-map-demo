@@ -9,6 +9,7 @@ import uuid
 from zoneinfo import ZoneInfo
 
 import monitoring_cards
+import portwatch_downloads
 
 ROOT = Path(__file__).resolve().parents[1]
 
@@ -28,7 +29,7 @@ class MonitoringCardsTest(unittest.TestCase):
         calls = []
         st = SimpleNamespace(session_state={}, html=lambda html: calls.append(('cards', html)),
                              iframe=lambda html, **kwargs: calls.append(('map', html)),
-                             info=lambda message: calls.append(('info', message)),
+                             caption=lambda message: calls.append(('caption', message)),
                              container=lambda **kwargs: nullcontext(),
                              checkbox=lambda *args, **kwargs: calls.append(('checkbox', args[0])) or True,
                              button=lambda *args, **kwargs: None)
@@ -45,7 +46,7 @@ class MonitoringCardsTest(unittest.TestCase):
         cards = monitoring_cards.build_cards([], [], [], [], [], None, None)
         render(state, cards)
         self.assertEqual([call[0] for call in calls], [
-            'cards', 'checkbox', 'checkbox', 'checkbox', 'info', 'map'])
+            'cards', 'checkbox', 'checkbox', 'checkbox', 'caption', 'map'])
         self.assertEqual(calls[0][1].count('class="monitoring-card"'), 4)
         for label in ('港口监测', '通道监测', '海域监测', '油田监测'):
             self.assertIn(label, calls[0][1])
@@ -57,7 +58,8 @@ class MonitoringCardsTest(unittest.TestCase):
               'PORTWATCH': SimpleNamespace(has_independent_statistics=lambda p: True),
               'report_data': SimpleNamespace(history_window=fail, comparison_history=fail,
                                             card_vessel_history=fail, card_sea_history=fail),
-              'monitoring_cards': monitoring_cards, 'datetime': datetime,
+              'monitoring_cards': monitoring_cards, 'portwatch_downloads': portwatch_downloads,
+              'datetime': datetime,
               'ZoneInfo': ZoneInfo, 'ASSETS': []}
         state = SimpleNamespace(selected_day=datetime(2026, 10, 6).date(),
                                 selected_chokepoint_day=datetime(2026, 10, 6).date(), live_positions=[])
@@ -65,6 +67,27 @@ class MonitoringCardsTest(unittest.TestCase):
         cards, errors = prepare([{'portid': 'p'}], [{'portid': 'c'}], state)
         self.assertEqual(len(cards), 4)
         self.assertEqual(len(errors), 5)
+
+    def test_expected_history_cache_miss_does_not_render_as_warning(self):
+        def missing(*args, **kwargs):
+            raise portwatch_downloads.CacheMiss('local cache is empty')
+
+        ns = {'st': SimpleNamespace(session_state={}), 'uuid': uuid,
+              'PORTWATCH': SimpleNamespace(has_independent_statistics=lambda p: True),
+              'report_data': SimpleNamespace(history_window=missing, comparison_history=missing,
+                                            card_vessel_history=lambda: [],
+                                            card_sea_history=lambda: {'rows': [], 'card': None}),
+              'monitoring_cards': monitoring_cards, 'portwatch_downloads': portwatch_downloads,
+              'datetime': datetime, 'ZoneInfo': ZoneInfo, 'ASSETS': []}
+        state = SimpleNamespace(selected_day=datetime(2026, 10, 6).date(),
+                                selected_chokepoint_day=datetime(2026, 10, 6).date(),
+                                live_positions=[])
+
+        cards, errors = view_function('prepare_monitoring_cards', ns)(
+            [{'portid': 'p'}], [{'portid': 'c'}], state)
+
+        self.assertEqual(len(cards), 4)
+        self.assertEqual(errors, [])
 
     def test_map_call_is_outside_print_mode(self):
         tree = ast.parse((ROOT / 'app.py').read_text())

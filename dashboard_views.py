@@ -12,6 +12,7 @@ import dashboard_rows
 import field_catalog as CATALOG
 import map_renderer
 import monitoring_cards
+import portwatch_downloads
 from datetime import datetime
 from zoneinfo import ZoneInfo
 import portwatch as PORTWATCH
@@ -47,7 +48,7 @@ def render_map_panel(state: DashboardViewState, summary_cards: list) -> bool:
     if state.open_state.get("error"):
         st.error(f"Open Waters 快照加载失败：{state.open_state['error']}")
     elif not state.live_positions:
-        st.info("本地档案中没有最近两小时的船位；点击“刷新船舶数据”读取一次上游快照。")
+        st.caption("暂无最近两小时的本地船位；点击“刷新船舶数据”读取一次上游快照。")
     if summary := state.open_state.get("refresh_summary"):
         st.caption(
             f"最近一次手动船位刷新：读取 {summary['fetched']:,} 条有效报告，"
@@ -177,7 +178,7 @@ def render_ais_panel(state: DashboardViewState) -> None:
             type="primary",
         )
     else:
-        st.info("本地档案中没有最近两小时的船位；可在地图页点击“刷新船舶数据”读取一次上游快照。")
+        st.caption("暂无最近两小时的本地船位；可在地图页点击“刷新船舶数据”读取一次上游快照。")
 
 
 def render_ports_panel(
@@ -432,6 +433,8 @@ def prepare_monitoring_cards(available_ports, available_chokepoints, state,
             if ids and day:
                 try:
                     rows = report_data.history_window(kind, ids, day.isoformat(), revision)
+                except portwatch_downloads.CacheMiss:
+                    pass
                 except Exception as exc:
                     errors.append(f"{kind} 历史窗口：{type(exc).__name__}: {exc}")
         histories.append(rows)
@@ -444,6 +447,8 @@ def prepare_monitoring_cards(available_ports, available_chokepoints, state,
         if ids and day:
             try:
                 target.extend(report_data.comparison_history(kind, ids, day.isoformat(), revision))
+            except portwatch_downloads.CacheMiss:
+                pass
             except Exception as exc:
                 errors.append(f"{kind} 同比记录：{type(exc).__name__}: {exc}")
     sea_history = []

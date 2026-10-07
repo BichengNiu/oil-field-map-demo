@@ -38,6 +38,10 @@ class DownloadError(ValueError):
     pass
 
 
+class CacheMiss(DownloadError):
+    """A read-only page requested data that is not present in local cache."""
+
+
 def _now() -> str:
     return datetime.now(timezone.utc).isoformat()
 
@@ -164,7 +168,7 @@ def fetch_window(kind: str, ids: tuple[str, ...], first: date, last: date,
             }
 
     if cache_only:
-        raise DownloadError("本地PortWatch历史缓存缺失或不完整，请点击“刷新港口数据”后重试")
+        raise CacheMiss("本地PortWatch历史缓存缺失或不完整")
 
     def count():
         value = pw.query(endpoint, where=where, returnGeometry="false", returnCountOnly="true")
