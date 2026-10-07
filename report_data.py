@@ -22,7 +22,8 @@ def history_window(kind: str, node_ids: tuple[str, ...], end_day: str,
     rows, _ = portwatch_downloads.fetch_window(
         kind, node_ids, end - timedelta(days=89), end,
         force=refresh_revision != "initial",
-        cache_revision=refresh_revision, cache_ttl_seconds=86_400)
+        cache_revision=refresh_revision, cache_ttl_seconds=86_400,
+        allow_stale=refresh_revision == "initial")
     return rows
 
 
@@ -56,7 +57,8 @@ def comparison_history(kind: str, node_ids: tuple[str, ...], end_day: str,
     start, end = windows(date.fromisoformat(end_day))[-1]
     rows, _ = portwatch_downloads.fetch_window(
         kind, node_ids, start, end, force=refresh_revision != "initial",
-        cache_revision=refresh_revision, cache_ttl_seconds=86_400)
+        cache_revision=refresh_revision, cache_ttl_seconds=86_400,
+        allow_stale=refresh_revision == "initial")
     return rows
 
 

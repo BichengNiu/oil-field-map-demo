@@ -44,6 +44,31 @@ class PortWatchCacheTest(unittest.TestCase):
         self.assertTrue(again_metadata["cache_hit"])
         self.assertEqual(metadata["cache_source"], "DuckDB verified daily facts")
 
+    def test_complete_stale_history_window_serves_initial_page(self):
+        first = date(2026, 10, 1)
+        ids = ("port105", "port106")
+        rows = [
+            {"portid": node_id, "date": (first + timedelta(days=offset)).isoformat(),
+             "portcalls": offset}
+            for offset in range(3)
+            for node_id in ids
+        ]
+        data_store.save_portwatch("ports", rows, "test-source")
+        with data_store.connect() as conn:
+            conn.execute(
+                "UPDATE portwatch_daily SET fetched_at=current_timestamp - INTERVAL '2 days'"
+            )
+
+        with patch("portwatch_downloads._cache", return_value=None), \
+             patch("portwatch_downloads.pw.query", side_effect=AssertionError("unexpected network request")):
+            result, metadata = portwatch_downloads.fetch_window(
+                "ports", ids, first, first + timedelta(days=2),
+                cache_revision="initial", allow_stale=True)
+
+        self.assertEqual(len(result), len(rows))
+        self.assertTrue(metadata["cache_hit"])
+        self.assertEqual(metadata["cache_source"], "DuckDB verified daily facts")
+
     def test_explicit_force_refresh_bypasses_persistent_facts(self):
         first = date(2026, 10, 1)
         ids = ("port105", "port106")

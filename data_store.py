@@ -303,7 +303,7 @@ def save_portwatch(kind, rows, source_url, conn=None):
 
 
 def cached_portwatch_window(kind, node_ids, first, last, max_age_seconds=86_400,
-                            with_metadata=False):
+                            with_metadata=False, allow_stale=False):
     """Read a fully populated node/day window from the persistent fact table.
 
     A partially stored window is not a cache hit: missing days must remain
@@ -340,9 +340,9 @@ def cached_portwatch_window(kind, node_ids, first, last, max_age_seconds=86_400,
             last_day_fetched.append(fetched_at)
     if rows_by_key.keys() != expected:
         return None
-    if not last_day_fetched or (
+    if not last_day_fetched or (not allow_stale and (
         datetime.now(timezone.utc) - min(last_day_fetched)
-    ).total_seconds() > max_age_seconds:
+    ).total_seconds() > max_age_seconds):
         return None
     rows = [rows_by_key[key] for key in sorted(expected)]
     if with_metadata:

@@ -131,7 +131,8 @@ def _cache(key: str, payload: dict | None = None,
 def fetch_window(kind: str, ids: tuple[str, ...], first: date, last: date,
                  force: bool = False, progress=None,
                  cache_revision: int | str = 0,
-                 cache_ttl_seconds: int = 86400) -> tuple[list[dict], dict]:
+                 cache_ttl_seconds: int = 86400,
+                 allow_stale: bool = False) -> tuple[list[dict], dict]:
     where = f"{_ids_where(ids, kind)} AND date >= DATE '{first}' AND date <= DATE '{last}'"
     endpoint = pw.endpoint_for(kind)
     metrics = PORT_METRICS if kind == "ports" else CHOKE_METRICS
@@ -139,14 +140,15 @@ def fetch_window(kind: str, ids: tuple[str, ...], first: date, last: date,
     key = hashlib.sha256(json.dumps(
         [VERSION, endpoint, where, source_fields, cache_revision,
          cache_ttl_seconds]).encode()).hexdigest()
-    cached = None if force else _cache(key, max_age_seconds=cache_ttl_seconds)
+    cache_age = 7 * 86400 if allow_stale else cache_ttl_seconds
+    cached = None if force else _cache(key, max_age_seconds=cache_age)
     if cached:
         return cached["rows"], {**cached["query"], "cache_hit": True}
 
     if not force:
         cached_rows = data_store.cached_portwatch_window(
             kind, ids, first, last, max_age_seconds=max(cache_ttl_seconds, 86_400),
-            with_metadata=True)
+            with_metadata=True, allow_stale=allow_stale)
         if cached_rows is not None:
             local_rows, retrieved_at = cached_rows
             return local_rows, {
