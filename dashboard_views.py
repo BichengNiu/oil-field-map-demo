@@ -7,9 +7,9 @@ from datetime import date
 import streamlit as st
 
 import ais as AIS
+import data_store
 import csv_export
 import dashboard_rows
-import field_catalog as CATALOG
 import map_renderer
 import monitoring_cards
 from datetime import datetime
@@ -18,11 +18,10 @@ import portwatch as PORTWATCH
 import print_report
 import report_data
 from dashboard_state import DashboardViewState
-from dashboard_data import refresh_portwatch_risk
 from download_panel import open_download_tab
 from map_popups import asset_popup, chokepoint_popup, port_popup
 
-ASSETS = CATALOG.ASSETS
+ASSETS = data_store.load_catalog("assets")
 
 
 def queue_map_screenshot() -> None:
@@ -173,7 +172,6 @@ def render_ports_panel(
 ) -> None:
     port_rows = dashboard_rows.port_rows(ports, selected_day, rolling_days)
     st.subheader("港口日活动")
-    st.button("刷新风险运力", key="refresh_port_risk", on_click=refresh_portwatch_risk)
     if port_error:
         st.error(f"港口数据加载失败：{port_error}")
     elif port_rows:

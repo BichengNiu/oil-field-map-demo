@@ -126,27 +126,57 @@ class CollectionService:
             self._thread.join(timeout=3)
 
 
-def collect_portwatch():
+def collect_portwatch(*, force=False, include_history=False):
     """Archive latest validated daily facts, with source-dated backfill windows."""
     import portwatch
     import portwatch_downloads
+    revision = uuid.uuid4().hex
+    summaries = {}
     for kind, catalog_reader, latest_reader in (
         ("ports", portwatch.port_catalog, portwatch.latest_date),
         ("chokepoints", portwatch.chokepoint_catalog, portwatch.latest_chokepoint_date),
     ):
-        catalog = catalog_reader()
+        catalog = catalog_reader(revision)
         ids = tuple(sorted(str(row["portid"]) for row in catalog
                            if kind == "chokepoints" or portwatch.has_independent_statistics(row)))
-        end = latest_reader()
+        end = latest_reader(revision)
         from datetime import timedelta
-        portwatch_downloads.fetch_window(kind, ids, end - timedelta(days=13), end)
+        if not ids or end is None:
+            raise ValueError(f"{kind} 上游目录或日期为空")
+        periods = [(end - timedelta(days=13), end, force)]
+        if include_history:
+            from monitoring_cards import windows
+            periods = [(end - timedelta(days=89), end - timedelta(days=14), False),
+                       (*windows(end)[-1], False), *periods]
+        total = 0
+        for first, last, refresh in periods:
+            for offset in range(0, len(ids), portwatch_downloads.BATCH_SIZE):
+                rows, _ = portwatch_downloads.fetch_window(
+                    kind, ids[offset:offset + portwatch_downloads.BATCH_SIZE], first, last,
+                    force=refresh, cache_ttl_seconds=365 * 86400 if not refresh else 86400,
+                )
+                total += len(rows)
+                if refresh and not rows:
+                    raise ValueError(f"{kind} 最新窗口未返回记录")
+        summaries[kind] = {"latest_day": end.isoformat(), "queried_rows": total}
+        if include_history and kind == "ports":
+            try:
+                values = portwatch.port_risk_capacity(ids, revision)
+                data_store.set_meta("port_risk_capacity_snapshot", {
+                    "port_ids": ids, "values": values,
+                    "updated_at": datetime.now(timezone.utc).isoformat(),
+                })
+            except Exception as exc:
+                # A secondary model must not discard validated daily facts.
+                summaries[kind]["risk_error"] = f"{type(exc).__name__}: {exc}"
+    return summaries
 
 
-def collect_portwatch_run():
+def collect_portwatch_run(*, strict=False, force=False, include_history=False):
     started = datetime.now(timezone.utc)
     status, details = "ok", {}
     try:
-        collect_portwatch()
+        details["sources"] = collect_portwatch(force=force, include_history=include_history)
     except Exception as exc:
         status = "error"
         details["error"] = str(exc)
@@ -154,6 +184,9 @@ def collect_portwatch_run():
     with data_store.connect() as conn:
         conn.execute("INSERT INTO collection_runs VALUES (?,?,?,?,?,?,?)",
                      (uuid.uuid4().hex, "PortWatch", started, datetime.now(timezone.utc), status, 0, data_store.encode(details)))
+    if strict and status != "ok":
+        raise RuntimeError(details["error"])
+    return {"status": status, **details}
 
 
 if __name__ == "__main__":
@@ -175,8 +208,12 @@ if __name__ == "__main__":
             print(data_store.encode({"vessels": len(snapshot.get("vessels", [])), "error": snapshot.get("error"),
                                      "archive_error": snapshot.get("archive_error"), "storage": data_store.status()}), flush=True)
             if args.once and args.with_portwatch:
-                collect_portwatch_run()
+                ports = collect_portwatch_run()
+                if ports["status"] != "ok":
+                    raise SystemExit(1)
             if args.once:
+                if snapshot.get("error") or snapshot.get("archive_error") or not snapshot.get("vessels"):
+                    raise SystemExit(1)
                 break
             time.sleep(max(60, args.poll_seconds))
     except KeyboardInterrupt:

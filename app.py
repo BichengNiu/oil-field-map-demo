@@ -4,10 +4,6 @@ from __future__ import annotations
 
 import hashlib
 import importlib
-import uuid
-from functools import wraps
-from concurrent.futures import ThreadPoolExecutor
-from contextvars import copy_context
 from pathlib import Path
 
 import streamlit as st
@@ -15,9 +11,16 @@ import streamlit as st
 import ais as AIS
 import ais_history as _ais_history_module
 import data_store
-import field_catalog as CATALOG
+from snapshot_store import configure_app_snapshot
+
+# Establish the immutable snapshot before any catalog module is imported.
+try:
+    configure_app_snapshot()
+except Exception as exc:
+    st.error(f"数据库快照载入失败：{exc}")
+    st.stop()
+
 import portwatch as PORTWATCH
-import collector as _collector_module
 import data_store as _data_store_module
 import dashboard_data as _dashboard_data_module
 import dashboard_views as _dashboard_views_module
@@ -46,7 +49,7 @@ from dashboard_views import (
 from download_panel import render_download_panel
 from sea_history_panel import render_sea_history_panel
 
-ASSETS = CATALOG.ASSETS
+ASSETS = data_store.load_catalog("assets")
 APP_STYLE = Path(__file__).with_name("dashboard.css").read_text()
 _RUNTIME_SOURCE_FILES = (
     "app.py",
@@ -84,7 +87,6 @@ def _load_runtime_modules(source_fingerprint: str) -> dict[str, object]:
         _ais_history_module,
         PORTWATCH,
         _portwatch_downloads_module,
-        _collector_module,
         importlib.import_module("map_renderer"),
         importlib.import_module("monitoring_cards"),
         importlib.import_module("sea_history"),
@@ -132,19 +134,9 @@ def main() -> None:
         st.error("港口数据模块版本未同步。请在 Streamlit 管理页重启应用后重试。")
         st.stop()
 
-    _render_dashboard(uuid.uuid4().hex)
+    _render_dashboard("initial")
 
 
-def _budget_portwatch_refresh(function):
-    @wraps(function)
-    def wrapped(refresh_revision: str) -> None:
-        with PORTWATCH.request_budget(90):
-            return function(refresh_revision)
-
-    return wrapped
-
-
-@_budget_portwatch_refresh
 def _render_dashboard(refresh_revision: str) -> None:
 
     st.markdown(f"<style>{APP_STYLE}</style>", unsafe_allow_html=True)
@@ -162,12 +154,7 @@ def _render_dashboard(refresh_revision: str) -> None:
         "chokes_day": ("chokepoints", "latest_date", PORTWATCH.MODULE_VERSION,
                        revisions["chokepoints"], refresh_revision),
     }
-    with ThreadPoolExecutor(max_workers=2) as pool:
-        futures = {
-            pool.submit(copy_context().run, portwatch_state, *args): key
-            for key, args in state_requests.items()
-        }
-        loaded = {futures[future]: future.result() for future in futures}
+    loaded = {key: portwatch_state(*args) for key, args in state_requests.items()}
     available_ports, port_catalog_error = loaded["ports_catalog"]
     available_chokepoints, chokepoint_catalog_error = loaded["chokes_catalog"]
     newest_day, port_latest_error = loaded["ports_day"]

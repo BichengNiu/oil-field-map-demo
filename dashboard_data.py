@@ -2,21 +2,14 @@
 
 from __future__ import annotations
 
-import uuid
 from datetime import date
 
 import streamlit as st
 
 import ais as AIS
 import ais_history
-import collector as history_collector
 import data_store
 import portwatch as PORTWATCH
-
-
-def refresh_portwatch_risk() -> None:
-    """Request risk capacity only from its explicit control on the ports page."""
-    st.session_state["port_risk_refresh_revision"] = uuid.uuid4().hex
 
 
 @st.cache_resource(show_spinner=False)
@@ -25,14 +18,7 @@ def initialize_storage():
 
 
 def openwaters_snapshot(collector_version: int) -> dict:
-    """Refresh once per app run, then display persisted positions with a fallback."""
-    snapshot = {}
-    refresh_error = None
-    try:
-        snapshot = history_collector.collect_once()
-        refresh_error = snapshot.get("archive_error") or snapshot.get("error")
-    except Exception as exc:
-        refresh_error = f"{type(exc).__name__}: {exc}"
+    """Display source-dated positions from the published snapshot only."""
     rows = ais_history.latest_snapshot(max_age_minutes=120, fallback_to_latest=True)
     now = AIS.utc_now()
     vessels = []
@@ -51,9 +37,9 @@ def openwaters_snapshot(collector_version: int) -> dict:
     return {
         "vessels": vessels,
         "error": None,
-        "archive_error": refresh_error,
+        "archive_error": None,
         "fetched_at": newest,
-        "refresh_summary": snapshot.get("refresh_summary"),
+        "refresh_summary": None,
     }
 
 
@@ -69,7 +55,7 @@ def portwatch_state(kind: str, resource: str, module_version: int,
     }
     reader = readers[kind, resource]
     source_error = None
-    if refresh_revision != "initial":
+    if refresh_revision != "initial" and not data_store.read_only():
         try:
             return reader(refresh_revision), None
         except Exception as exc:
@@ -158,31 +144,9 @@ def load_ports(
 
     risk_capacity = None
     if with_risk:
-        saved_risk = st.session_state.get("port_risk_values")
-        if saved_risk is None:
-            saved_risk = data_store.meta("port_risk_capacity_snapshot")
-        saved_ids = tuple((saved_risk or {}).get("port_ids", ()))
-        pending_revision = st.session_state.pop("port_risk_refresh_revision", None)
-        if pending_revision and statistical_ids:
-            try:
-                values = PORTWATCH.port_risk_capacity(statistical_ids, pending_revision)
-                saved_risk = {
-                    "port_ids": statistical_ids,
-                    "values": values,
-                    "updated_at": AIS.utc_now().isoformat(),
-                }
-                st.session_state["port_risk_values"] = saved_risk
-                with data_store.connect() as conn:
-                    data_store.set_meta("port_risk_capacity_snapshot", saved_risk, conn)
-                st.session_state.pop("port_risk_error", None)
-            except Exception as exc:
-                port_risk_error = f"{type(exc).__name__}: {exc}"
-                st.session_state["port_risk_error"] = port_risk_error
+        saved_risk = data_store.meta("port_risk_capacity_snapshot")
         if saved_risk and tuple(saved_risk.get("port_ids", ())) == statistical_ids:
             risk_capacity = saved_risk.get("values", {})
-            port_risk_error = port_risk_error or st.session_state.get("port_risk_error")
-        elif statistical_ids and not pending_revision:
-            port_risk_error = "点击“刷新风险运力”后读取"
 
     ports = PORTWATCH.decorate(available_ports, activity, rolling, risk_capacity)
 

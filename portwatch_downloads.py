@@ -81,6 +81,18 @@ def _ids_where(ids: tuple[str, ...], kind: str) -> str:
 
 
 def bounds(kind: str, ids: tuple[str, ...]) -> tuple[dict, list[dict]]:
+    if data_store.read_only():
+        if not ids:
+            return {}, []
+        _ids_where(ids, kind)
+        with data_store.connect() as conn:
+            rows = conn.execute(
+                "SELECT node_id,MIN(day),MAX(day),COUNT(*) FROM portwatch_daily "
+                "WHERE kind=? AND node_id IN (" + ",".join("?" for _ in ids) + ") GROUP BY node_id",
+                [kind, *ids],
+            ).fetchall()
+        return {pid: {"first": first.isoformat(), "last": last.isoformat(), "records": count}
+                for pid, first, last, count in rows}, [{"operation": "snapshot_node_date_bounds"}]
     output, queries = {}, []
     for offset in range(0, len(ids), BATCH_SIZE):
         batch = ids[offset:offset + BATCH_SIZE]
@@ -142,6 +154,12 @@ def fetch_window(kind: str, ids: tuple[str, ...], first: date, last: date,
                  cache_ttl_seconds: int = 86400,
                  allow_stale: bool = False,
                  cache_only: bool = False) -> tuple[list[dict], dict]:
+    if data_store.read_only():
+        _ids_where(ids, kind)
+        rows = data_store.cached_portwatch_observations(kind, ids, first, last)
+        return rows, {"cache_hit": True, "cache_source": "published DuckDB snapshot",
+                      "exported_query_rows": len(rows), "where": f"{first}/{last}",
+                      "scope": "local observations only; missing dates remain missing"}
     where = f"{_ids_where(ids, kind)} AND date >= DATE '{first}' AND date <= DATE '{last}'"
     endpoint = pw.endpoint_for(kind)
     metrics = PORT_METRICS if kind == "ports" else CHOKE_METRICS
@@ -654,6 +672,7 @@ def collect(nodes: list[dict], mode: str, first: date | None = None, last: date 
         datasets[kind] = exported
     manifest = {"schema_version": VERSION, "source": "IMF PortWatch / UN Global Platform",
                 "source_url": pw.SOURCE, "generated_at_utc": _now(), "timezone": "UTC",
+                "data_scope": "published_snapshot" if data_store.read_only() else "upstream",
                 "mode": mode, "requested_start_utc": first.isoformat() if first else None,
                 "requested_end_utc": last.isoformat() if last else None, "derived": derived,
                 "node_count": len(nodes), "row_counts": {k: len(v) for k, v in datasets.items()},

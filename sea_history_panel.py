@@ -22,6 +22,10 @@ def render_sea_history_panel():
             st.info("尚未导入完整海域历史事件。实时船位不能用于通过艘次、环比和同比。")
     except Exception as exc:
         st.error(f"海域历史档案读取失败：{exc}")
+    if data_store.read_only():
+        st.download_button("下载统一DuckDB", data_store.backup_bytes,
+                           file_name="monitoring.duckdb", mime="application/octet-stream")
+        return
     if st.button("刷新海域历史数据", key="sea_history_sync"):
         try:
             with st.spinner("正在读取已配置的海域历史交付源…"):

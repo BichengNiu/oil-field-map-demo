@@ -1,4 +1,4 @@
-# 统一数据存储与可选采集
+# 统一数据存储与只读快照
 
 ## 本次整理的结果
 
@@ -16,7 +16,7 @@ Git 中的原始 JSON/CSV 是版本化的启动种子及迁移备份，不继续
 | document_rows | 来源路径、JSON 章节、行号唯一，保留 CSV/JSON 的原始记录 |
 | catalogs / asset_catalog | 油气/港口/通道目录；资产按国家及名称唯一，目录与观测不混合 |
 | portwatch_daily / portwatch_metrics | 来源类型、节点、UTC 自然日唯一；真实零与空值区分 |
-| portwatch_cache / source_queries | 已校验查询缓存、去重的源站原始响应及查询条件 |
+| portwatch_cache / source_queries | 已校验查询缓存、带请求标识的源站原始响应及查询条件 |
 | ais_reports / ais_positions | MMSI、真实观测时间、来源唯一；源时间与接收时间分开 |
 | sea_entries / sea_daily_observed | 来源、固定边界版本、海域、MMSI、进入时间唯一；同船多次进入另计 |
 | sea_vessel_checkpoints | 每船每 UTC 日保留最新识别状态；迟到报告触发有界复算 |
@@ -41,7 +41,7 @@ python manage_data.py backup /backup/monitoring.duckdb
 
 采集起点以服务第一次启动时的真实时间保存；2026-10-06 的本地验证采集起点为 11:55:59 UTC（19:55:59 上海时间），不能声称覆盖了当天此前时段。部署环境也会保存其真实启动时间，旧 AIS 档案自动迁移，不把旧样本回填为完整覆盖。
 
-Streamlit 页面每次运行自动更新 PortWatch 目录、最新日期和日度活动，并发起一次 Open Waters 四组查询；船位查询均不超过 100 平方度免费查询上限，包含亚丁湾及四海域边界两侧约 0.3° 的观测带。页面不会自动连接 AISStream，也不启动定时轮询。独立采集服务仍可按下方命令显式启用周期轮询和 AISStream 订阅；原始消息的 API Key 不入库、不发给浏览器。源站日期与本机采集时间分开，限流采用退避重试。
+Streamlit 严格只读 GitHub 发布的 DuckDB 快照，载入、控件、报告、下载不采集、不写库。Codex 是唯一发布端，每小时采集船位、每个 UTC 自然日更新一次港口与咽喉点。完整流程见 [定时采集与发布](SCHEDULED_COLLECTION.md)。
 
 进入事件使用 Marine Regions/IHO 四个固定多边形，不能用查询矩形或 MMSI 月去重代替。一条船首次出现只建立基线。海域内侧及外侧各约 0.01° 的缓冲区用于抑制边界抖动，连续两次稳定位置确认状态改变；外→内产生一艘次，内→外只更新状态，离开后再进入可再产生一艘次。观测间隔超过 30 分钟、推算航速超过 60 节时重新建立基线，不据此推断进出；同船同观测时间的多源位置显著冲突时该时间点不用于推断。同一事件跨页刷新、重复采集、进程重启不增计。
 
@@ -53,15 +53,15 @@ Streamlit 页面每次运行自动更新 PortWatch 目录、最新日期和日�
 
 ## 迁移、持久性与后台服务
 
-应用启动会把旧 `AIS_ARCHIVE_PATH`、`PORTWATCH_DOWNLOAD_CACHE`、`SEA_HISTORY_ARCHIVE_PATH` 的 SQLite 数据只读迁入新库，成功后记录迁移标记，重复启动不重复导入；原库保留作回退备份。三个旧变量只选择迁移来源，**运行数据路径统一用 `MONITORING_DB_PATH`**。
+旧 SQLite 只由运维命令 `python manage_data.py migrate` 或采集端初始化迁入；Streamlit 不执行迁移、建表、重建目录或导入。三个旧路径变量仅选择迁移来源，主路径仍为 `MONITORING_DB_PATH`。
 
 ```toml
 MONITORING_DB_PATH = "/persistent-data/monitoring.duckdb"
 ```
 
-默认项目下 `runtime/monitoring.duckdb` 适合开发；正式部署应指向持久磁盘并定时备份。无持久盘的云容器重建会丢失新增数据，Git 内的种子只能恢复原始材料，不能恢复之后的 AIS 观测。“数据下载”页的管理员导入口令通过验证后可下载统一数据库备份；凭据只放服务端 Secrets 或环境变量。
+默认 `runtime/monitoring.duckdb` 经 Git LFS 发布。Streamlit 按只读模式打开；若平台只检出 LFS 指针，`snapshot_store.py` 下载当前提交对应对象并核对大小与 SHA256，再打开本地不可变副本。已成功发布的数据不依赖 Streamlit 临时磁盘保留。
 
-Streamlit 页面每次运行自动查询船位并归档，上游失败时保留已存最新快照；浏览器刷新和控件引发的重跑都会重新查询。页面不启动定时采集。需要连续采样时，才显式启动独立采集服务；**托管平台休眠、停机或容器终止会中断采集**。已提供独立采集入口及 `deploy/monitoring-collector.service`；服务环境与 APP 配置相同的持久数据库路径，在同一主机使用文件锁协作。
+当前只启用 Codex 快照发布任务。下面的常驻服务命令属于未来切换采集架构时的运维选项，不能与 Codex 任务同时运行。小时采样缺少连续观测，海域周/月比较继续保持完整性门槛。
 
 ```bash
 python collector.py --with-portwatch --poll-seconds 60

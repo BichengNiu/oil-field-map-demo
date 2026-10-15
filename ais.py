@@ -202,6 +202,8 @@ def openwaters_feature_to_vessel(
 def _fetch_openwaters_group(
     boxes: tuple[tuple[float, float, float, float], ...], max_age_minutes: int,
 ) -> dict[str, Any]:
+    if data_store.read_only():
+        raise RuntimeError("只读展示端不允许采集船位")
     params = [("bbox", f"{south},{west},{north},{east}")
               for south, north, west, east in boxes]
     params.append(("max_age", f"{max_age_minutes}m"))

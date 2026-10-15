@@ -1619,5 +1619,6 @@ for asset in ASSETS:
 
 # Versioned Python rules build the seed; the app and report consume the same
 # persisted catalog, including source dates and exact decimal measurements.
-data_store.save_catalog("assets", ASSETS)
+if not data_store.read_only():
+    data_store.save_catalog("assets", ASSETS)
 ASSETS = data_store.load_catalog("assets")

@@ -10,6 +10,7 @@ from unittest.mock import patch
 
 import ais
 import ais_history
+import collector
 import dashboard_data
 import data_store
 
@@ -38,12 +39,13 @@ class VesselRefreshTest(unittest.TestCase):
             path = Path(temporary) / "monitoring.duckdb"
             with patch.dict(os.environ, {"MONITORING_DB_PATH": str(path)}), \
                  patch("ais.urlopen", side_effect=lambda *a, **kw: io.BytesIO(encoded)) as upstream:
+                collected = collector.collect_once()
                 snapshot = dashboard_data.openwaters_snapshot(ais.MODULE_VERSION)
 
                 self.assertIsNone(snapshot["archive_error"])
                 self.assertEqual(len(snapshot["vessels"]), 1)
                 self.assertEqual(snapshot["vessels"][0]["mmsi"], "123456789")
-                self.assertEqual(snapshot["refresh_summary"]["inserted"], 1)
+                self.assertEqual(collected["refresh_summary"]["inserted"], 1)
                 self.assertEqual(upstream.call_count, len(ais.openwaters_bbox_groups()))
                 with data_store.connect() as conn:
                     queries = conn.execute(
@@ -62,9 +64,11 @@ class VesselRefreshTest(unittest.TestCase):
             path = Path(temporary) / "monitoring.duckdb"
             with patch.dict(os.environ, {"MONITORING_DB_PATH": str(path)}):
                 with patch("ais.urlopen", side_effect=lambda *a, **kw: io.BytesIO(json.dumps(response).encode())) as upstream:
+                    collector.collect_once()
                     first = dashboard_data.openwaters_snapshot(ais.MODULE_VERSION)
                     newer = observed + timedelta(minutes=1)
                     response = vessel_response(newer, longitude=53.1)
+                    collector.collect_once()
                     second = dashboard_data.openwaters_snapshot(ais.MODULE_VERSION)
                     self.assertEqual(upstream.call_count, 2 * len(ais.openwaters_bbox_groups()))
                 self.assertEqual(first["vessels"][0]["lon"], 53.0)
@@ -73,10 +77,12 @@ class VesselRefreshTest(unittest.TestCase):
 
                 with patch("ais.urlopen", side_effect=TimeoutError("source timed out")) as failed, \
                      patch("ais.utc_now", return_value=newer + timedelta(days=1)):
+                    failed_collection = collector.collect_once()
                     cached = dashboard_data.openwaters_snapshot(ais.MODULE_VERSION)
                     self.assertEqual(ais_history.latest_snapshot(), [])
                 self.assertEqual(failed.call_count, len(ais.openwaters_bbox_groups()))
-                self.assertIn("TimeoutError", cached["archive_error"])
+                self.assertIn("TimeoutError", failed_collection["archive_error"])
+                self.assertIsNone(cached["archive_error"])
                 self.assertEqual(len(cached["vessels"]), 1)
                 self.assertEqual(cached["vessels"][0]["lon"], 53.1)
                 self.assertEqual(cached["vessels"][0]["observed_at"], newer.isoformat())

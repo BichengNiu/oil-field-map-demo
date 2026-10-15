@@ -110,6 +110,8 @@ REGIONS = MONITORED_REGIONS
 
 def query(url: str, **params: object) -> dict:
     """Read one ArcGIS response and surface source-reported errors."""
+    if data_store.read_only():
+        raise RuntimeError("只读展示端不允许请求 PortWatch；请由采集任务更新快照")
     request = Request(f"{url}?{urlencode({**params, 'f': 'json'})}",
                       headers={"User-Agent": "oil-field-map-demo/1.0"})
     global _LAST_REQUEST

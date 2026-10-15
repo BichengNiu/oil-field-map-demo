@@ -160,7 +160,7 @@ def render_download_panel(
                 else max(portwatch_downloads.FIRST_DAY, last - timedelta(days=days - 1))
             )
     derived = st.checkbox("附加连续7日和30日均值", value=False, key="pw_download_derived")
-    force = st.checkbox("重新读取源站（忽略24小时历史缓存）", value=False, key="pw_download_force")
+    force = False
     if not selected_nodes:
         st.info("按条件选择至少一个数据类型与节点。")
         return
@@ -179,7 +179,7 @@ def render_download_panel(
     signature = selection_signature()
     if st.button("生成下载数据", type="primary", key="pw_download_generate"):
         try:
-            status = st.status("正在查询PortWatch历史…", expanded=True)
+            status = st.status("正在读取数据库…", expanded=True)
             last_notice = [0.0]
 
             def progress(message: str):
@@ -199,7 +199,7 @@ def render_download_panel(
                 progress=progress,
             )
             st.session_state["pw_download_result"] = {"signature": signature, "value": result}
-            status.update(label="数据已生成并完成记录数校验", state="complete", expanded=False)
+            status.update(label="数据库导出已完成", state="complete", expanded=False)
         except Exception as exc:
             st.session_state.pop("pw_download_result", None)
             st.error(f"数据下载准备失败：{exc}")
@@ -210,7 +210,7 @@ def render_download_panel(
         st.info("下载条件已更改。点击“生成下载数据”以刷新导出。")
         return
     result = saved["value"]
-    st.success("已完成来源记录数与分页校验。")
+    st.success("已按数据库记录完成导出。")
     summary = result["manifest"]["row_counts"]
     st.write(
         f"港口记录 {summary.get('ports', 0):,} 行；咽喉要道记录 "

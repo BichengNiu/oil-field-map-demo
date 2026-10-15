@@ -31,6 +31,10 @@ _READY = set()
 _PORTWATCH_BATCH_IDS = count()
 
 
+def read_only():
+    return setting("MONITORING_READ_ONLY", "false").lower() in {"1", "true", "yes"}
+
+
 def setting(key, default=""):
     value = os.environ.get(key)
     if not value and "streamlit" in sys.modules:
@@ -122,6 +126,20 @@ def connect(path=None):
         # Reuse the existing transaction; opening another OS-lock descriptor in
         # this same thread would block itself during lazy boundary/catalog reads.
         yield nested[str(path)]
+        return
+    if read_only():
+        # A deployed snapshot is immutable: never create schemas, locks or WALs.
+        with _LOCK:
+            conn = duckdb.connect(str(path), read_only=True,
+                                  config={"threads": 2, "memory_limit": "256MB"})
+            if not hasattr(_LOCAL, "connections"):
+                _LOCAL.connections = {}
+            _LOCAL.connections[str(path)] = conn
+            try:
+                yield conn
+            finally:
+                _LOCAL.connections.pop(str(path), None)
+                conn.close()
         return
     path.parent.mkdir(parents=True, exist_ok=True)
     with _LOCK:
@@ -268,7 +286,7 @@ def read_json(relative):
     # Re-bootstrap changed version-controlled evidence, never overwrite live facts.
     original = ROOT / relative
     with connect() as conn:
-        if original.exists():
+        if original.exists() and not read_only():
             ingest_document(relative, conn=conn)
         row = conn.execute("SELECT content FROM documents WHERE path=?", (relative,)).fetchone()
     if row is None:
@@ -615,6 +633,10 @@ def initialize_runtime():
     ``read_json``. The full corpus import remains available to the operator's
     explicit ``manage_data.py migrate`` command.
     """
+    if read_only():
+        with connect() as conn:
+            conn.execute("SELECT key FROM app_meta LIMIT 1")
+        return {"database": str(database_path()), "read_only": True}
     counts = migrate_legacy()
     with connect():
         pass
@@ -633,6 +655,8 @@ def status():
 
 def backup_bytes():
     """Consistent portable database snapshot under the same reader/writer lock."""
+    if read_only():
+        return database_path().read_bytes()
     with connect() as conn:
         conn.execute("CHECKPOINT")
         return database_path().read_bytes()
