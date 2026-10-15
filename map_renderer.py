@@ -6,6 +6,7 @@ from pathlib import Path
 
 import ais as AIS
 import map_tools
+import pipeline_catalog
 from html_transport import compressed_document
 
 # Bundle the fixed map dependencies so drawing ships does not wait for a CDN.
@@ -28,7 +29,13 @@ def build_map_html(
     port_popup,
     chokepoint_popup,
     screenshot_requested: bool = False,
+    pipelines: dict | None = None,
 ) -> str:
+    pipeline_features = []
+    for feature in (pipelines or {}).get("features", []):
+        properties = {**feature["properties"], "popup": pipeline_catalog.popup(feature["properties"])}
+        pipeline_features.append({**feature, "properties": properties})
+    pipeline_json = json.dumps({"type": "FeatureCollection", "features": pipeline_features}, ensure_ascii=False).replace("</", "<\\/")
     markers = [
         {
             "lat": asset["map_lat"],
@@ -95,7 +102,11 @@ def build_map_html(
             f'<span>{legend_icon("choke", "#7c3aed")}咽喉点</span>',
         ])
     if location_items:
+        if pipeline_features:
+            location_items.append('<span><svg viewBox="0 0 12 12"><path d="M0 6 H12" stroke="#78350f" stroke-width="3"/></svg>输油管线</span>')
         legend_lines.append('<div class="legend-row">' + "".join(location_items) + '</div>')
+    elif pipeline_features:
+        legend_lines.append('<div class="legend-row"><span><svg viewBox="0 0 12 12"><path d="M0 6 H12" stroke="#78350f" stroke-width="3"/></svg>输油管线</span></div>')
     if "vessels" in categories:
         legend_lines.append(
             '<div class="legend-row">'
@@ -104,7 +115,7 @@ def build_map_html(
             f'<span>{legend_icon("vessel", "#64748b")}其他船舶/船型未知</span>'
             '</div>'
         )
-    if not categories:
+    if not categories and not pipeline_features:
         legend_lines.append('<span>未选择显示类别</span>')
     legend_json = json.dumps("".join(legend_lines), ensure_ascii=False).replace("</", "<\\/")
     screenshot_date_json = json.dumps(day if day != "无数据" else chokepoint_day)
@@ -185,6 +196,7 @@ def build_map_html(
       const ports = {port_json};
       const chokepoints = {chokepoint_json};
       const vessels = {vessel_json};
+      const pipelines = {pipeline_json};
       const popupStateKey = 'energy-map-popup-v1';
       const markerByPopupKey = new Map();
       const clusterByPopupKey = new Map();
@@ -262,6 +274,29 @@ def build_map_html(
           disableClusteringAtZoom: 8, spiderfyOnMaxZoom: true}}).addTo(map);
       const portLayer = L.layerGroup().addTo(map);
       const chokepointLayer = L.layerGroup().addTo(map);
+      map.createPane('pipelinePane');
+      map.getPane('pipelinePane').style.zIndex = 350;
+      const pipelineStyle = (feature) => {{
+        const p = feature.properties;
+        const planned = ['construction', 'proposed'].includes(p.status);
+        const operating = p.status === 'operating';
+        const schematic = ['low', 'very low (straight line/schematic)'].includes(p.route_accuracy);
+        return {{color: operating ? '#78350f' : planned ? '#a16207' : '#64748b',
+          weight: 3, opacity: operating ? .85 : .65,
+          dashArray: planned ? '9 5' : !operating ? '3 7' : schematic ? '5 5' : null}};
+      }};
+      const pipelineLayer = L.geoJSON(pipelines, {{
+        pane: 'pipelinePane', style: pipelineStyle,
+        onEachFeature: (feature, layer) => {{
+          const p = feature.properties;
+          layer.options.popupKey = `pipeline:${{p.project_id}}`;
+          layer.bindTooltip(escapeHTML(p.name + (p.segment ? ' · ' + p.segment : '')), {{sticky: true}})
+            .bindPopup(p.popup, {{maxWidth: 410}});
+          layer.on('mouseover', () => layer.setStyle({{weight: 5, opacity: 1}}));
+          layer.on('mouseout', () => pipelineLayer.resetStyle(layer));
+          markerByPopupKey.set(layer.options.popupKey, layer);
+        }}
+      }}).addTo(map);
       const vesselLayer = L.markerClusterGroup({{
         showCoverageOnHover: false, maxClusterRadius: 24, disableClusteringAtZoom: 7,
         spiderfyOnMaxZoom: true, animate: false,

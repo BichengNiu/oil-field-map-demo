@@ -89,6 +89,8 @@ def collect_candidate(original: Path, candidate: Path, *, force_ports=False, now
         import portwatch
         import portwatch_history
         data_store.initialize()
+        import pipeline_catalog
+        pipelines = pipeline_catalog.load()
         # Persist code-defined asset rules into the same candidate.
         import importlib
         import field_catalog
@@ -124,6 +126,7 @@ def collect_candidate(original: Path, candidate: Path, *, force_ports=False, now
         if not after["counts"]["catalogs"] or not after["counts"]["documents"]:
             raise RuntimeError("数据库目录或来源材料为空")
         summary = {"completed_at": now.isoformat(), "portwatch_updated": due,
+                   "pipelines": {"segments": len(pipelines["features"]), "source": pipelines["metadata"]},
                    "portwatch": port_result, "history_coverage": history_coverage,
                    "before": before, "after": after}
         data_store.set_meta("published_snapshot", summary)

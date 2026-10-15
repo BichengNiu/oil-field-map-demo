@@ -8,6 +8,7 @@ import sys
 import tempfile
 import textwrap
 import unittest
+from unittest.mock import patch
 
 
 ROOT = Path(__file__).resolve().parents[1]
@@ -18,6 +19,12 @@ class AppStartupTest(unittest.TestCase):
         with tempfile.TemporaryDirectory() as temporary:
             database = Path(temporary) / "monitoring.duckdb"
             shutil.copy2(ROOT / "runtime" / "monitoring.duckdb", database)
+            # Model the candidate published with this code version, including
+            # the new source document; the app itself must never import it.
+            import data_store
+            with patch.dict(os.environ, {"MONITORING_DB_PATH": str(database), "MONITORING_READ_ONLY": "false"}):
+                data_store.ingest_document("data/oil_pipelines.geojson")
+            database.with_suffix(".duckdb.lock").unlink(missing_ok=True)
             env = {**os.environ,
                    "MONITORING_DB_PATH": str(database),
                    "XDG_CACHE_HOME": str(Path(temporary) / "cache"),
@@ -31,6 +38,8 @@ class AppStartupTest(unittest.TestCase):
                     app = AppTest.from_file('app.py').run(timeout=30)
                     assert not app.exception, [str(error.value) for error in app.exception]
                     assert len(app.checkbox) >= 3
+                    assert any(element.label == '输油管线' for element in app.checkbox)
+                    assert not app.error, [str(error.value) for error in app.error]
                     assert any(element.label == '保存地图PNG' for element in app.button)
                     assert not any(element.label in ('刷新港口数据', '刷新船舶数据') for element in app.button)
                     app.session_state['main_tabs'] = '船舶'

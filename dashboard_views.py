@@ -11,6 +11,7 @@ import data_store
 import csv_export
 import dashboard_rows
 import map_renderer
+import pipeline_catalog
 import monitoring_cards
 from datetime import datetime
 from zoneinfo import ZoneInfo
@@ -35,6 +36,13 @@ def render_map_panel(state: DashboardViewState, summary_cards: list) -> None:
         show_assets = st.checkbox("油气", value=True, key="map_show_assets")
         show_ports = st.checkbox("港口", value=True, key="map_show_ports")
         show_vessels = st.checkbox("船舶", value=True, key="map_show_vessels")
+        show_pipelines = st.checkbox("输油管线", value=True, key="map_show_pipelines")
+    pipelines = None
+    if show_pipelines:
+        try:
+            pipelines = pipeline_catalog.load()
+        except (FileNotFoundError, ValueError) as exc:
+            st.error(f"输油管线快照不可用：{exc}")
     stream_state = state.ais_status
     if state.port_error:
         st.error(f"港口数据加载失败：{state.port_error}")
@@ -63,6 +71,7 @@ def render_map_panel(state: DashboardViewState, summary_cards: list) -> None:
             port_popup=port_popup,
             chokepoint_popup=chokepoint_popup,
             screenshot_requested=screenshot_requested,
+            pipelines=pipelines,
         ),
         height=735,
     )
