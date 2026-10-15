@@ -144,10 +144,6 @@ def collect_portwatch(*, force=False, include_history=False):
         if not ids or end is None:
             raise ValueError(f"{kind} 上游目录或日期为空")
         periods = [(end - timedelta(days=13), end, force)]
-        if include_history:
-            from monitoring_cards import windows
-            periods = [(end - timedelta(days=89), end - timedelta(days=14), False),
-                       (*windows(end)[-1], False), *periods]
         total = 0
         for first, last, refresh in periods:
             for offset in range(0, len(ids), portwatch_downloads.BATCH_SIZE):
@@ -159,6 +155,9 @@ def collect_portwatch(*, force=False, include_history=False):
                 if refresh and not rows:
                     raise ValueError(f"{kind} 最新窗口未返回记录")
         summaries[kind] = {"latest_day": end.isoformat(), "queried_rows": total}
+        if include_history:
+            import portwatch_history
+            summaries[kind]["history"] = portwatch_history.repair(kind, ids, end)
         if include_history and kind == "ports":
             try:
                 values = portwatch.port_risk_capacity(ids, revision)

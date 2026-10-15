@@ -27,6 +27,13 @@ class SnapshotUpdateTest(unittest.TestCase):
         shutil.copy2(snapshot_update.DATABASE, self.original)
         self.candidate = self.directory / "candidate.duckdb"
         self.now = datetime.now(timezone.utc)
+        # These tests mock the entire PortWatch boundary. Real node/day audit
+        # contracts are exercised against DuckDB in test_portwatch_history.py.
+        for target, value in (("portwatch_history.needs_repair", False),
+                              ("portwatch_history.validate_all", {})):
+            mocked = patch(target, return_value=value)
+            mocked.start()
+            self.addCleanup(mocked.stop)
 
     def response(self, *args, **kwargs):
         value = {"type": "FeatureCollection", "features": [{
@@ -63,6 +70,25 @@ class SnapshotUpdateTest(unittest.TestCase):
         with patch("ais.urlopen", side_effect=TimeoutError("offline")):
             with self.assertRaisesRegex(RuntimeError, "船位采集未完整成功"):
                 snapshot_update.collect_candidate(self.original, self.candidate, now=self.now)
+        self.assertEqual(hashlib.sha256(self.original.read_bytes()).hexdigest(), digest)
+
+    def test_new_gap_triggers_portwatch_again_even_after_success_on_same_day(self):
+        with patch("ais.urlopen", side_effect=self.response), \
+             patch("collector.collect_portwatch_run", side_effect=self.ports) as ports, \
+             patch("portwatch_history.needs_repair", side_effect=[False, True]):
+            snapshot_update.collect_candidate(self.original, self.candidate, now=self.now, force_ports=True)
+            result = snapshot_update.collect_candidate(
+                self.candidate, self.directory / "second.duckdb", now=self.now)
+        self.assertEqual(ports.call_count, 2)
+        self.assertTrue(result["portwatch_updated"])
+
+    def test_unverified_history_gap_rejects_candidate_and_preserves_original(self):
+        digest = hashlib.sha256(self.original.read_bytes()).hexdigest()
+        with patch("ais.urlopen", side_effect=self.response), \
+             patch("collector.collect_portwatch_run", side_effect=self.ports), \
+             patch("portwatch_history.validate_all", side_effect=ValueError("历史完整性校验失败")):
+            with self.assertRaisesRegex(ValueError, "历史完整性校验失败"):
+                snapshot_update.collect_candidate(self.original, self.candidate, now=self.now, force_ports=True)
         self.assertEqual(hashlib.sha256(self.original.read_bytes()).hexdigest(), digest)
 
     def test_portwatch_error_is_reported_to_scheduler(self):

@@ -64,6 +64,7 @@ def collect_candidate(original: Path, candidate: Path, *, force_ports=False, now
         import ais
         import collector
         import portwatch
+        import portwatch_history
         data_store.initialize()
         # Persist code-defined asset rules into the same candidate.
         import importlib
@@ -76,12 +77,14 @@ def collect_candidate(original: Path, candidate: Path, *, force_ports=False, now
         if not any(value and now - timedelta(hours=2) <= value <= now + timedelta(minutes=5) for value in observed):
             raise RuntimeError("未取得最近两小时的有效船位")
         last_ports = data_store.meta("snapshot_portwatch_completed_at", "")
-        due = force_ports or not last_ports or datetime.fromisoformat(last_ports).date() < now.date()
+        history_due = portwatch_history.needs_repair(now)
+        due = force_ports or history_due or not last_ports or datetime.fromisoformat(last_ports).date() < now.date()
         port_result = None
         if due:
-            with portwatch.request_budget(240):
+            with portwatch.request_budget(600 if history_due else 240):
                 port_result = collector.collect_portwatch_run(strict=True, force=True, include_history=True)
             data_store.set_meta("snapshot_portwatch_completed_at", now.isoformat())
+        history_coverage = portwatch_history.validate_all()
         # Only expendable raw responses/caches expire. Facts and events accumulate.
         with data_store.connect() as conn:
             conn.execute("DELETE FROM source_queries WHERE retrieved_at < ?", [now - timedelta(days=7)])
@@ -98,7 +101,8 @@ def collect_candidate(original: Path, candidate: Path, *, force_ports=False, now
         if not after["counts"]["catalogs"] or not after["counts"]["documents"]:
             raise RuntimeError("数据库目录或来源材料为空")
         summary = {"completed_at": now.isoformat(), "portwatch_updated": due,
-                   "portwatch": port_result, "before": before, "after": after}
+                   "portwatch": port_result, "history_coverage": history_coverage,
+                   "before": before, "after": after}
         data_store.set_meta("published_snapshot", summary)
         # Every connection has closed: the file is checkpointed and portable.
         inspect(candidate)
