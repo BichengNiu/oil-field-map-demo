@@ -22,7 +22,9 @@ DATABASE = ROOT / "runtime" / "monitoring.duckdb"
 
 
 def git(*args):
-    result = subprocess.run(["git", *args], cwd=ROOT, check=True, capture_output=True, text=True)
+    result = subprocess.run(["git", *args], cwd=ROOT, capture_output=True, text=True)
+    if result.returncode:
+        raise RuntimeError(f"Git {args[0]} 失败：{result.stderr.strip()}")
     return result.stdout.strip()
 
 
@@ -132,7 +134,8 @@ def run(*, publish=False, force_ports=False):
                 if base != git("rev-parse", "HEAD") or git("status", "--porcelain"):
                     raise RuntimeError("采集期间工作区发生变化，拒绝覆盖或提交")
                 os.replace(candidate, DATABASE)
-                git("add", "--", "runtime/monitoring.duckdb")
+                # The database is already tracked inside an ignored directory.
+                git("add", "-u", "--", "runtime/monitoring.duckdb")
                 git("commit", "-m", "Update validated monitoring snapshot")
                 git("push", "origin", "main")
             # Dry runs validate source data without changing the published file.

@@ -48,7 +48,7 @@ class SnapshotUpdateTest(unittest.TestCase):
         original_digest = hashlib.sha256(self.original.read_bytes()).hexdigest()
         with patch("ais.urlopen", side_effect=self.response), \
              patch("collector.collect_portwatch_run", side_effect=self.ports) as ports:
-            first = snapshot_update.collect_candidate(self.original, self.candidate, now=self.now)
+            first = snapshot_update.collect_candidate(self.original, self.candidate, now=self.now, force_ports=True)
             second = self.directory / "second.duckdb"
             result = snapshot_update.collect_candidate(self.candidate, second, now=self.now)
         self.assertEqual(ports.call_count, 1)
