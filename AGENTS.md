@@ -8,6 +8,7 @@
 
 - Do not add captions, gray subtitles, small explanatory lines, or control help tooltips to the app UI.
 - Keep necessary metric details and map labels at a standard readable size (at least 14 px in the app).
+- Exception requested by the user: show basemap attribution at the map's bottom right in gray 11 px text.
 
 # Data publication
 

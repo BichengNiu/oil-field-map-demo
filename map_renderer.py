@@ -88,7 +88,7 @@ def build_map_html(
     categories = {"assets", "ports", "vessels"} if visible_categories is None else visible_categories
     location_items = []
     if "assets" in categories:
-        location_items.append(f'<span>{legend_icon("asset", "#ea580c")}油气</span>')
+        location_items.append(f'<span>{legend_icon("asset", "#000000")}油气</span>')
     if "ports" in categories:
         location_items.extend([
             f'<span>{legend_icon("port", "#2563eb")}港口</span>',
@@ -153,8 +153,9 @@ def build_map_html(
       .asset-icon, .port-icon, .chokepoint-icon, .vessel-icon, .vessel-cluster {{ background: transparent; border: 0; }}
       .asset-icon svg, .port-icon svg, .chokepoint-icon svg, .vessel-icon svg, .vessel-cluster svg {{ display: block; filter: drop-shadow(0 1px 1px rgba(15,23,42,.45)); }}
       .leaflet-tooltip {{ border: 0; border-radius: 7px; padding: 5px 8px; box-shadow: 0 3px 12px rgba(15,23,42,.18); font-size: 14px; }}
+      .leaflet-control-attribution, .leaflet-control-attribution a {{ color: #6b7280; font-size: 11px; }}
       .marker-cluster-small, .marker-cluster-medium, .marker-cluster-large {{ background: transparent; }}
-      .marker-cluster-small div, .marker-cluster-medium div, .marker-cluster-large div {{ background: #ea580c; color: white; font-weight: 700; border-radius: 7px; transform: rotate(45deg); box-shadow: 0 0 0 5px rgba(234,88,12,.22); }}
+      .marker-cluster-small div, .marker-cluster-medium div, .marker-cluster-large div {{ background: #000000; color: white; font-weight: 700; border-radius: 7px; transform: rotate(45deg); box-shadow: 0 0 0 5px rgba(0,0,0,.22); }}
       .marker-cluster-small span, .marker-cluster-medium span, .marker-cluster-large span {{ display: block; transform: rotate(-45deg); }}
       .map-tools {{ background: rgba(255,255,255,.96); border-radius: 8px; padding: 8px 10px; color: #172b4d; box-shadow: 0 2px 10px #0f172a26; }}
       .map-tools button {{ background: #0e5570; color: white; border: 0; border-radius: 5px; padding: 8px 12px; cursor: pointer; font-size: 14px; }}
@@ -254,7 +255,8 @@ def build_map_html(
       }});
       // Request tiles only for the final initial viewport.
       L.tileLayer('https://server.arcgisonline.com/ArcGIS/rest/services/World_Street_Map/MapServer/tile/{{z}}/{{y}}/{{x}}', {{
-        attribution: 'Tiles &copy; Esri', maxZoom: 18, crossOrigin: true
+        attribution: '地图来源：<a href="https://server.arcgisonline.com/ArcGIS/rest/services/World_Street_Map/MapServer" target="_blank" rel="noopener">Esri World Street Map</a> &copy; Esri 及数据提供方',
+        maxZoom: 18, crossOrigin: true
       }}).addTo(map);
       const assetLayer = L.markerClusterGroup({{showCoverageOnHover: false, maxClusterRadius: 34,
           disableClusteringAtZoom: 8, spiderfyOnMaxZoom: true}}).addTo(map);
@@ -284,7 +286,7 @@ def build_map_html(
           className: 'asset-icon', iconSize: [size, size], iconAnchor: [size / 2, size / 2],
           html: `<svg width="${{size}}" height="${{size}}" viewBox="0 0 ${{size}} ${{size}}">
             <polygon points="${{size/2}},1 ${{size-1}},${{size/2}} ${{size/2}},${{size-1}} 1,${{size/2}}"
-              fill="#ea580c" fill-opacity=".94" stroke="#7c2d12"
+              fill="#000000" fill-opacity="1" stroke="#000000"
               stroke-width="1.5"/>
           </svg>`
         }});
