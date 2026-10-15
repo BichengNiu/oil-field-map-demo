@@ -18,6 +18,7 @@ from pathlib import Path
 import sqlite3
 import sys
 import threading
+import uuid
 import zlib
 from decimal import Decimal
 
@@ -179,6 +180,19 @@ def set_meta(key, value, conn=None):
         with connect() as handle:
             return set_meta(key, value, handle)
     conn.execute("INSERT OR REPLACE INTO app_meta VALUES (?,?)", (key, encode(value)))
+
+
+def save_query(endpoint, params, response, conn=None):
+    """Retain an upstream response and its request parameters as source evidence."""
+    if conn is None:
+        with connect() as handle:
+            return save_query(endpoint, params, response, handle)
+    query_id = uuid.uuid4().hex
+    conn.execute(
+        "INSERT INTO source_queries (id,endpoint,params,response) VALUES (?,?,?,?)",
+        (query_id, endpoint, encode(params), encode(response)),
+    )
+    return query_id
 
 
 def revision(kind, conn=None):

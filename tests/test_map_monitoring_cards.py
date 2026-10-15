@@ -72,7 +72,7 @@ class MonitoringCardsTest(unittest.TestCase):
         cards = monitoring_cards.build_cards([], [], [], [], None, None)
         render(state, cards)
         self.assertEqual([call[0] for call in calls], [
-            'cards', 'caption', 'checkbox', 'checkbox', 'checkbox', 'caption', 'map'])
+            'cards', 'checkbox', 'checkbox', 'checkbox', 'map'])
         self.assertEqual(calls[0][1].count('class="monitoring-card"'), 4)
         for label in ('港口监测', '通道监测', '海域监测', '油田监测'):
             self.assertIn(label, calls[0][1])
