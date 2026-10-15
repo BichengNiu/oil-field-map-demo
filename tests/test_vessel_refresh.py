@@ -81,6 +81,11 @@ class VesselRefreshTest(unittest.TestCase):
                 self.assertEqual(cached["vessels"][0]["lon"], 53.1)
                 self.assertEqual(cached["vessels"][0]["observed_at"], newer.isoformat())
                 self.assertEqual(cached["vessels"][0]["age_minutes"], 1440)
+                with data_store.connect() as conn:
+                    self.assertEqual(conn.execute("SELECT COUNT(*) FROM ais_reports").fetchone()[0], 2)
+                    self.assertEqual(conn.execute("SELECT COUNT(*) FROM collection_runs").fetchone()[0], 3)
+                    self.assertEqual(conn.execute("SELECT COUNT(*) FROM source_queries").fetchone()[0],
+                                     2 * len(ais.openwaters_bbox_groups()))
 
 
 if __name__ == "__main__":

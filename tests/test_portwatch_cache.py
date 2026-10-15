@@ -2,6 +2,7 @@
 from datetime import date, datetime, timedelta, timezone
 import csv
 import io
+import json
 import os
 import tempfile
 import unittest
@@ -9,6 +10,8 @@ from unittest.mock import patch
 import zipfile
 
 import data_store
+import dashboard_data
+import portwatch
 import portwatch_downloads
 
 
@@ -22,6 +25,62 @@ class PortWatchCacheTest(unittest.TestCase):
         })
         self.env.start()
         self.addCleanup(self.env.stop)
+
+    def test_auto_runs_accumulate_dates_and_update_revisions_without_duplicate_rows(self):
+        first = date(2026, 10, 6)
+        second = first + timedelta(days=1)
+        source_rows = [{"portid": "port105", "date": first.isoformat(), "portcalls": 7}]
+
+        def response(endpoint, **params):
+            if params.get("returnCountOnly") == "true":
+                return {"count": len(source_rows)}
+            return {"features": [{"attributes": dict(row)} for row in source_rows]}
+
+        with patch("portwatch.query", side_effect=response):
+            portwatch.daily_activity(first, ("port105",), "accumulation-first")
+            source_rows.append({"portid": "port105", "date": second.isoformat(), "portcalls": 8})
+            portwatch.daily_activity(second, ("port105",), "accumulation-second")
+            portwatch.daily_activity(second, ("port105",), "accumulation-repeat")
+            source_rows[-1]["portcalls"] = 9
+            portwatch.daily_activity(second, ("port105",), "accumulation-correction")
+
+        with data_store.connect() as conn:
+            rows = conn.execute("SELECT day,payload FROM portwatch_daily WHERE kind='ports' ORDER BY day").fetchall()
+        self.assertEqual([row[0] for row in rows], [first, second])
+        self.assertEqual([json.loads(row[1])["portcalls"] for row in rows], [7, 9])
+
+    def test_chokepoint_auto_runs_preserve_previous_days(self):
+        first = date(2026, 10, 6)
+        second = first + timedelta(days=1)
+        source_row = {"portid": "chokepoint1", "date": first.isoformat(), "n_total": 5}
+        with patch("portwatch.query", side_effect=lambda *a, **kw: {"features": [{"attributes": dict(source_row)}]}):
+            portwatch.chokepoint_activity(first, ("chokepoint1",), "choke-accumulation-first")
+            source_row.update(date=second.isoformat(), n_total=6)
+            portwatch.chokepoint_activity(second, ("chokepoint1",), "choke-accumulation-second")
+            portwatch.chokepoint_activity(second, ("chokepoint1",), "choke-accumulation-repeat")
+        with data_store.connect() as conn:
+            rows = conn.execute("SELECT day,payload FROM portwatch_daily WHERE kind='chokepoints' ORDER BY day").fetchall()
+        self.assertEqual([row[0] for row in rows], [first, second])
+        self.assertEqual([json.loads(row[1])["n_total"] for row in rows], [5, 6])
+
+    def test_failed_auto_catalog_and_date_requests_keep_saved_state(self):
+        day = date(2026, 10, 6)
+        for kind, node_id in (("ports", "port105"), ("chokepoints", "chokepoint1")):
+            catalog = [{"portid": node_id, "name": "Saved node"}]
+            data_store.save_catalog(kind, catalog)
+            data_store.save_portwatch(kind, [{"portid": node_id, "date": day.isoformat()}], "test-source")
+            catalog_reader = "port_catalog" if kind == "ports" else "chokepoint_catalog"
+            date_reader = "latest_date" if kind == "ports" else "latest_chokepoint_date"
+            with patch.object(portwatch, catalog_reader, side_effect=TimeoutError("upstream timed out")), \
+                 patch.object(portwatch, date_reader, side_effect=TimeoutError("upstream timed out")):
+                saved_catalog, catalog_error = dashboard_data.portwatch_state(
+                    kind, "catalog", portwatch.MODULE_VERSION, refresh_revision="failed-auto-state")
+                saved_date, date_error = dashboard_data.portwatch_state(
+                    kind, "latest_date", portwatch.MODULE_VERSION, refresh_revision="failed-auto-state")
+            self.assertEqual(saved_catalog, catalog)
+            self.assertEqual(saved_date, day)
+            self.assertIn("TimeoutError", catalog_error)
+            self.assertIn("TimeoutError", date_error)
 
     def test_complete_persistent_window_avoids_portwatch_requests(self):
         first = date(2026, 10, 1)

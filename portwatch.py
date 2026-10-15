@@ -166,7 +166,7 @@ def port_region_for(lat: float, lon: float) -> str | None:
     return region_for(lat, lon, GULF_PORT_REGIONS)
 
 
-@st.cache_data(ttl=24 * 3600, show_spinner=False)
+@st.cache_data(ttl=24 * 3600, max_entries=12, show_spinner=False)
 def port_catalog(refresh_revision: str = "initial") -> list[dict]:
     # Retain the five waters and all ports of the Gulf producers.
     where = " OR ".join(
@@ -217,12 +217,12 @@ def _latest_day(endpoint: str, missing_message: str) -> date:
     return date.fromisoformat(value)
 
 
-@st.cache_data(ttl=3600, show_spinner=False)
+@st.cache_data(ttl=3600, max_entries=12, show_spinner=False)
 def latest_date(refresh_revision: str = "initial") -> date:
     return _latest_day(DAILY, "PortWatch 尚无可用日期")
 
 
-@st.cache_data(ttl=3600, show_spinner=False)
+@st.cache_data(ttl=3600, max_entries=12, show_spinner=False)
 def _activity_rows(day: date, port_ids: tuple[str, ...], calendar_days: int,
                    refresh_revision: str = "initial",
                    data_revision: int = 0) -> dict[str, dict[date, dict]]:
@@ -282,7 +282,7 @@ def _activity_rows(day: date, port_ids: tuple[str, ...], calendar_days: int,
     return grouped
 
 
-@st.cache_data(ttl=3600, show_spinner=False)
+@st.cache_data(ttl=3600, max_entries=12, show_spinner=False)
 def daily_activity(day: date, port_ids: tuple[str, ...],
                    refresh_revision: str = "initial",
                    data_revision: int = 0) -> dict[str, dict]:
@@ -298,7 +298,7 @@ def _complete_sum(rows: list[dict], days: int, *fields: str) -> float | None:
     return sum(sum(row[field] for field in fields) for row in rows)
 
 
-@st.cache_data(ttl=3600, show_spinner=False)
+@st.cache_data(ttl=3600, max_entries=12, show_spinner=False)
 def rolling_activity(day: date, port_ids: tuple[str, ...], days: int = 7,
                      refresh_revision: str = "initial",
                      data_revision: int = 0) -> dict[str, dict]:
@@ -397,7 +397,7 @@ def port_risk_capacity(port_ids: tuple[str, ...], refresh_revision: str = "initi
     return totals
 
 
-@st.cache_data(ttl=24 * 3600, show_spinner=False)
+@st.cache_data(ttl=24 * 3600, max_entries=12, show_spinner=False)
 def chokepoint_catalog(refresh_revision: str = "initial") -> list[dict]:
     ids = FOCUS_CHOKEPOINT_IDS
     quoted = ",".join(f"'{point_id}'" for point_id in ids)
@@ -415,12 +415,12 @@ def chokepoint_catalog(refresh_revision: str = "initial") -> list[dict]:
     return data_store.load_catalog("chokepoints")
 
 
-@st.cache_data(ttl=3600, show_spinner=False)
+@st.cache_data(ttl=3600, max_entries=12, show_spinner=False)
 def latest_chokepoint_date(refresh_revision: str = "initial") -> date:
     return _latest_day(CHOKEPOINT_DAILY, "PortWatch 尚无可用咽喉点日期")
 
 
-@st.cache_data(ttl=3600, show_spinner=False)
+@st.cache_data(ttl=3600, max_entries=12, show_spinner=False)
 def chokepoint_activity(day: date, chokepoint_ids: tuple[str, ...],
                         refresh_revision: str = "initial",
                         data_revision: int = 0) -> dict[str, dict]:

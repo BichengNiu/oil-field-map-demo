@@ -465,7 +465,7 @@ def cached_portwatch_window(kind, node_ids, first, last, max_age_seconds=86_400,
 def cached_portwatch_observations(kind, node_ids, first, last):
     """Return whatever local daily facts exist in a date window, including gaps.
 
-    This is for read-only initial page rendering. Missing days remain missing;
+    This serves offline reads and failed-refresh fallbacks. Missing days remain missing;
     callers must not interpret them as zero or fall back to the network.
     """
     node_ids = tuple(sorted(set(str(node_id) for node_id in node_ids)))

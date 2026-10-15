@@ -14,11 +14,6 @@ import data_store
 import portwatch as PORTWATCH
 
 
-def refresh_portwatch_data() -> None:
-    """Authorize one explicit source refresh on the next page run."""
-    st.session_state["portwatch_refresh_revision"] = uuid.uuid4().hex
-
-
 def refresh_portwatch_risk() -> None:
     """Request risk capacity only from its explicit control on the ports page."""
     st.session_state["port_risk_refresh_revision"] = uuid.uuid4().hex
@@ -73,26 +68,25 @@ def portwatch_state(kind: str, resource: str, module_version: int,
         ("chokepoints", "latest_date"): PORTWATCH.latest_chokepoint_date,
     }
     reader = readers[kind, resource]
-    if refresh_revision == "initial":
+    source_error = None
+    if refresh_revision != "initial":
         try:
-            if resource == "catalog":
-                cached = data_store.cached_catalog(kind, allow_stale=True)
-            elif resource == "latest_date":
-                cached = data_store.cached_portwatch_latest_day(kind, allow_stale=True)
-            else:
-                cached = None
-            if cached is not None:
-                return cached, None
-        except Exception:
-            pass
-        label = "港口" if kind == "ports" else "咽喉点"
-        return ([] if resource == "catalog" else None), (
-            f"本地没有{label}目录/日期缓存，请点击“刷新港口数据”"
-        )
+            return reader(refresh_revision), None
+        except Exception as exc:
+            source_error = f"{type(exc).__name__}: {exc}"
     try:
-        return reader(refresh_revision), None
-    except Exception as exc:
-        return ([] if resource == "catalog" else None), f"{type(exc).__name__}: {exc}"
+        if resource == "catalog":
+            cached = data_store.cached_catalog(kind, allow_stale=True)
+        elif resource == "latest_date":
+            cached = data_store.cached_portwatch_latest_day(kind, allow_stale=True)
+        else:
+            cached = None
+        if cached is not None:
+            return cached, source_error
+    except Exception:
+        pass
+    label = "港口" if kind == "ports" else "咽喉点"
+    return ([] if resource == "catalog" else None), source_error or f"本地暂无{label}目录/日期缓存"
 
 
 def collector_status(collector: AIS.AISCollector | None = None) -> dict:

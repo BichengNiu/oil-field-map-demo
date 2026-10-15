@@ -68,7 +68,7 @@ class MonitoringCardsTest(unittest.TestCase):
                                 selected_day=None, selected_chokepoint_day=None, focus_assets=False)
         ns = {'st': st, 'monitoring_cards': monitoring_cards,
               'map_renderer': SimpleNamespace(build_map_html=lambda *args, **kwargs: 'map')}
-        ns.update({name: None for name in ('asset_popup', 'port_popup', 'chokepoint_popup', 'vessel_popup', 'refresh_portwatch_data', 'queue_map_screenshot')})
+        ns.update({name: None for name in ('asset_popup', 'port_popup', 'chokepoint_popup', 'vessel_popup', 'queue_map_screenshot')})
         render = view_function('render_map_panel', ns)
         cards = monitoring_cards.build_cards([], [], [], [], None, None)
         render(state, cards)
@@ -76,6 +76,7 @@ class MonitoringCardsTest(unittest.TestCase):
             'cards', 'checkbox', 'checkbox', 'checkbox', 'map'])
         self.assertEqual(calls[0][1].count('class="monitoring-card"'), 4)
         self.assertNotIn('刷新船舶数据', buttons)
+        self.assertNotIn('刷新港口数据', buttons)
         for label in ('港口监测', '通道监测', '海域监测', '油田监测'):
             self.assertIn(label, calls[0][1])
 

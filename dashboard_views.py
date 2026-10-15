@@ -18,7 +18,7 @@ import portwatch as PORTWATCH
 import print_report
 import report_data
 from dashboard_state import DashboardViewState
-from dashboard_data import refresh_portwatch_data, refresh_portwatch_risk
+from dashboard_data import refresh_portwatch_risk
 from download_panel import open_download_tab
 from map_popups import asset_popup, chokepoint_popup, port_popup
 
@@ -68,8 +68,6 @@ def render_map_panel(state: DashboardViewState, summary_cards: list) -> None:
         height=735,
     )
     with st.container(horizontal=True, key="map_refresh_actions"):
-        st.button("刷新港口数据", type="primary", width="content",
-                  on_click=refresh_portwatch_data)
         st.button("保存地图PNG", type="primary", width="content",
                   on_click=queue_map_screenshot)
 
@@ -250,13 +248,13 @@ def render_assets_panel(assets: list[dict]) -> None:
 def render_method_panel() -> None:
     st.subheader("范围、口径与数据限制")
     st.markdown(
-        "**更新方式。** 每次运行自动获取船位；地图下方按钮刷新 PortWatch，港口页按钮刷新风险运力。"
+        "**更新方式。** 每次运行自动获取港口、咽喉点和船位数据并保存历史；港口页按钮刷新风险运力。"
     )
     st.dataframe(
         [
             {
                 "数据": "港口 / 咽喉点日度记录",
-                "当前更新": "页面只读本地缓存；点击地图刷新按钮时拉取一次",
+                "当前更新": "每次运行自动获取并保存日度记录，同一节点同一天去重更新",
                 "进一步自动化": "源站发布时间决定最新观测日；缺失仍保持未知",
             },
             {
@@ -266,7 +264,7 @@ def render_method_panel() -> None:
             },
             {
                 "数据": "港口 / 咽喉点官方目录",
-                "当前更新": "本地缓存；点击地图刷新按钮更新",
+                "当前更新": "每次运行自动获取目录并更新本地缓存",
                 "进一步自动化": "补充 WPI / 运营商名录仍需版本核验",
             },
             {

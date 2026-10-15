@@ -4,6 +4,7 @@ from __future__ import annotations
 
 import hashlib
 import importlib
+import uuid
 from functools import wraps
 from concurrent.futures import ThreadPoolExecutor
 from contextvars import copy_context
@@ -131,21 +132,19 @@ def main() -> None:
         st.error("港口数据模块版本未同步。请在 Streamlit 管理页重启应用后重试。")
         st.stop()
 
-    refresh_revision = st.session_state.pop("portwatch_refresh_revision", "initial")
-    _render_dashboard(refresh_revision)
+    _render_dashboard(uuid.uuid4().hex)
 
 
-def _budget_manual_refresh(function):
+def _budget_portwatch_refresh(function):
     @wraps(function)
     def wrapped(refresh_revision: str) -> None:
-        budget = 90 if refresh_revision != "initial" else None
-        with PORTWATCH.request_budget(budget):
+        with PORTWATCH.request_budget(90):
             return function(refresh_revision)
 
     return wrapped
 
 
-@_budget_manual_refresh
+@_budget_portwatch_refresh
 def _render_dashboard(refresh_revision: str) -> None:
 
     st.markdown(f"<style>{APP_STYLE}</style>", unsafe_allow_html=True)
@@ -163,15 +162,12 @@ def _render_dashboard(refresh_revision: str) -> None:
         "chokes_day": ("chokepoints", "latest_date", PORTWATCH.MODULE_VERSION,
                        revisions["chokepoints"], refresh_revision),
     }
-    if refresh_revision == "initial":
-        loaded = {key: portwatch_state(*args) for key, args in state_requests.items()}
-    else:
-        with ThreadPoolExecutor(max_workers=2) as pool:
-            futures = {
-                pool.submit(copy_context().run, portwatch_state, *args): key
-                for key, args in state_requests.items()
-            }
-            loaded = {futures[future]: future.result() for future in futures}
+    with ThreadPoolExecutor(max_workers=2) as pool:
+        futures = {
+            pool.submit(copy_context().run, portwatch_state, *args): key
+            for key, args in state_requests.items()
+        }
+        loaded = {futures[future]: future.result() for future in futures}
     available_ports, port_catalog_error = loaded["ports_catalog"]
     available_chokepoints, chokepoint_catalog_error = loaded["chokes_catalog"]
     newest_day, port_latest_error = loaded["ports_day"]
@@ -192,33 +188,31 @@ def _render_dashboard(refresh_revision: str) -> None:
     port_error = port_catalog_error or port_latest_error
     port_risk_error = None
     ports: list[dict] = []
-    if (
-        (tab_map.open or tab_ports.open)
-    ):
-        if selected_day is not None and not port_catalog_error and not port_latest_error:
-            ports, port_error, port_risk_error = load_ports(
-                available_ports,
-                selected_day,
-                rolling_days=7,
-                with_risk=tab_ports.open,
-                refresh_revision=refresh_revision,
-                stored_revision=revisions["ports"],
-            )
-        else:
-            ports = PORTWATCH.decorate(available_ports, {}, {}, None)
+    if selected_day is not None and available_ports:
+        ports, activity_error, port_risk_error = load_ports(
+            available_ports,
+            selected_day,
+            rolling_days=7,
+            with_risk=tab_ports.open,
+            refresh_revision=refresh_revision,
+            stored_revision=revisions["ports"],
+        )
+        port_error = "；".join(error for error in (port_error, activity_error) if error) or None
+    else:
+        ports = PORTWATCH.decorate(available_ports, {}, {}, None)
 
     chokepoint_error = chokepoint_catalog_error or chokepoint_latest_error
     chokepoints: list[dict] = []
-    if tab_map.open:
-        if selected_chokepoint_day is not None and not chokepoint_catalog_error and not chokepoint_latest_error:
-            chokepoints, chokepoint_error = load_chokepoints(
-                available_chokepoints,
-                selected_chokepoint_day,
-                refresh_revision,
-                revisions["chokepoints"],
-            )
-        else:
-            chokepoints = PORTWATCH.decorate_chokepoints(available_chokepoints, {})
+    if selected_chokepoint_day is not None and available_chokepoints:
+        chokepoints, activity_error = load_chokepoints(
+            available_chokepoints,
+            selected_chokepoint_day,
+            refresh_revision,
+            revisions["chokepoints"],
+        )
+        chokepoint_error = "；".join(error for error in (chokepoint_error, activity_error) if error) or None
+    else:
+        chokepoints = PORTWATCH.decorate_chokepoints(available_chokepoints, {})
 
     display_revisions = data_store.revisions(("ports", "chokepoints", "ais", "sea"))
 
