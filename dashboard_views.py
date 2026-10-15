@@ -18,7 +18,7 @@ import portwatch as PORTWATCH
 import print_report
 import report_data
 from dashboard_state import DashboardViewState
-from dashboard_data import refresh_portwatch_data, refresh_portwatch_risk, refresh_vessel_data
+from dashboard_data import refresh_portwatch_data, refresh_portwatch_risk
 from download_panel import open_download_tab
 from map_popups import asset_popup, chokepoint_popup, port_popup
 
@@ -70,8 +70,6 @@ def render_map_panel(state: DashboardViewState, summary_cards: list) -> None:
     with st.container(horizontal=True, key="map_refresh_actions"):
         st.button("刷新港口数据", type="primary", width="content",
                   on_click=refresh_portwatch_data)
-        st.button("刷新船舶数据", type="primary", width="content",
-                  on_click=refresh_vessel_data)
         st.button("保存地图PNG", type="primary", width="content",
                   on_click=queue_map_screenshot)
 
@@ -128,14 +126,14 @@ def render_ais_panel(state: DashboardViewState) -> None:
             )
             aisstream_count = (
                 "已暂停"
-                if ais_status.get("status") == "已暂停（手动刷新模式）"
+                if ais_status.get("status") == "已暂停（未启用AISStream）"
                 else counts["aisstream"]
             )
             total_count = counts["open_waters"] + counts["aisstream"]
         else:
             open_waters_count = "不可用" if state.open_state.get("error") else "—"
             aisstream_count = (
-                "已暂停" if ais_status.get("status") == "已暂停（手动刷新模式）" else "—"
+                "已暂停" if ais_status.get("status") == "已暂停（未启用AISStream）" else "—"
             )
             total_count = "—"
         region_rows.append(
@@ -252,7 +250,7 @@ def render_assets_panel(assets: list[dict]) -> None:
 def render_method_panel() -> None:
     st.subheader("范围、口径与数据限制")
     st.markdown(
-        "**更新方式。** 页面载入只读本地缓存；地图下方按钮手动刷新 PortWatch 和船舶数据，港口页按钮单独刷新风险运力。"
+        "**更新方式。** 每次运行自动获取船位；地图下方按钮刷新 PortWatch，港口页按钮刷新风险运力。"
     )
     st.dataframe(
         [
@@ -263,7 +261,7 @@ def render_method_panel() -> None:
             },
             {
                 "数据": "实时船位",
-                "当前更新": "直接显示本地最新快照；点击刷新船舶数据时查询一次 Open Waters",
+                "当前更新": "每次运行自动查询一次 Open Waters，失败时沿用本地最新快照",
                 "进一步自动化": "AISStream 当前暂停；单独运行采集服务才会持续采集",
             },
             {
@@ -363,7 +361,7 @@ def render_method_panel() -> None:
     st.markdown(
         f"**船舶数据。** 免费快照来自[Open Waters开放AIS网络]({AIS.OPENWATERS_SOURCE})，"
         f"可选[AISStream WebSocket API]({AIS.SOURCE})在服务器端接收五个监测水域及红海北、南段的船级广播；"
-        "船位快照用于地图、船舶页和后台打印报告；打开页面直接显示本地最新快照，保留实际观测时间，点击地图下方按钮更新。"
+        "船位快照用于地图、船舶页和后台打印报告；每次运行自动获取并保存最新船位，保留实际观测时间，获取失败时沿用已存快照。"
         "浏览器只接收标准化的每船最新位置，不接收API Key。"
         "多源位置按MMSI合并，航行阈值为0.5节；"
         "上游来源署名随船舶表及弹窗显示。"

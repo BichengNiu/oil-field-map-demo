@@ -1,4 +1,4 @@
-"""Optional continuous collection worker; the Streamlit app only calls collect_once on click.
+"""Optional continuous collection worker; Streamlit calls collect_once on each run.
 
 Run this as a supervised service only when continuous sampling is intended.
 The command line works without Streamlit.

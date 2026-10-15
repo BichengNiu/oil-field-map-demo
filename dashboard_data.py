@@ -24,25 +24,20 @@ def refresh_portwatch_risk() -> None:
     st.session_state["port_risk_refresh_revision"] = uuid.uuid4().hex
 
 
-def refresh_vessel_data() -> None:
-    """Fetch and archive one Open Waters snapshot only after a button click."""
-    try:
-        snapshot = history_collector.collect_once()
-        st.session_state["manual_openwaters_refresh_error"] = snapshot.get("archive_error")
-        st.session_state["manual_openwaters_refresh_summary"] = snapshot.get("refresh_summary")
-    except Exception as exc:
-        st.session_state["manual_openwaters_refresh_error"] = (
-            f"{type(exc).__name__}: {exc}")
-        st.session_state["manual_openwaters_refresh_summary"] = None
-
-
 @st.cache_resource(show_spinner=False)
 def initialize_storage():
     return data_store.initialize_runtime()
 
 
 def openwaters_snapshot(collector_version: int) -> dict:
-    """Display the last available local snapshot without an upstream request."""
+    """Refresh once per app run, then display persisted positions with a fallback."""
+    snapshot = {}
+    refresh_error = None
+    try:
+        snapshot = history_collector.collect_once()
+        refresh_error = snapshot.get("archive_error") or snapshot.get("error")
+    except Exception as exc:
+        refresh_error = f"{type(exc).__name__}: {exc}"
     rows = ais_history.latest_snapshot(max_age_minutes=120, fallback_to_latest=True)
     now = AIS.utc_now()
     vessels = []
@@ -57,14 +52,13 @@ def openwaters_snapshot(collector_version: int) -> dict:
             row["age_minutes"] = None
             row["age_basis"] = None
         vessels.append(row)
-    refresh_error = st.session_state.get("manual_openwaters_refresh_error")
     newest = max((row.get("received_at") or row.get("observed_at") or "" for row in rows), default=None)
     return {
         "vessels": vessels,
         "error": None,
         "archive_error": refresh_error,
         "fetched_at": newest,
-        "refresh_summary": st.session_state.get("manual_openwaters_refresh_summary"),
+        "refresh_summary": snapshot.get("refresh_summary"),
     }
 
 
@@ -107,7 +101,7 @@ def collector_status(collector: AIS.AISCollector | None = None) -> dict:
     if collector is not None:
         return collector.status()
     return {
-        "status": "已暂停（手动刷新模式）",
+        "status": "已暂停（未启用AISStream）",
         "last_error": None,
         "last_message_at": None,
         "last_position_message_at": None,
