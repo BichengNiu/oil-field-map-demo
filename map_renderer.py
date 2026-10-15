@@ -72,6 +72,7 @@ def build_map_html(
             vessel.get("source_attribution") or vessel.get("data_source") or "AIS数据来源",
             vessel.get("category", "unknown"),
             vessel.get("flag_country") or vessel.get("flag"),
+            str(vessel.get("flag") or "").strip().upper() == "CN",
         ]
         for vessel in vessels
     ], ensure_ascii=False).replace("</", "<\\/")
@@ -265,11 +266,13 @@ def build_map_html(
         chunkedLoading: true, chunkInterval: 20, chunkDelay: 10,
         iconCreateFunction: (cluster) => {{
           const count = cluster.getChildCount();
+          const hasChineseFlag = cluster.getAllChildMarkers().some(marker => marker.options.chineseFlag);
           const label = count > 999 ? `${{Math.round(count / 100) / 10}}k` : String(count);
           return L.divIcon({{
             className: 'vessel-cluster', iconSize: [38, 34], iconAnchor: [19, 17],
             html: `<svg width="38" height="34" viewBox="0 0 38 34">
-              <path d="M19 1 L37 32 L19 26 L1 32 Z" fill="#334155" stroke="#ffffff" stroke-width="1.4"/>
+              <path d="M19 1 L37 32 L19 26 L1 32 Z" fill="${{hasChineseFlag ? '#334155' : '#94a3b8'}}"
+                stroke="${{hasChineseFlag ? '#f59e0b' : '#ffffff'}}" stroke-width="${{hasChineseFlag ? 2.2 : 1.4}}"/>
               <text x="19" y="22" text-anchor="middle" fill="#ffffff" font-size="10" font-weight="700">${{label}}</text>
             </svg>`
           }});
@@ -326,19 +329,24 @@ def build_map_html(
       const vesselColors = {{
         tanker: '#ef4444', cargo: '#2563eb', other: '#64748b'
       }};
+      const mutedVesselColors = {{
+        tanker: '#fca5a5', cargo: '#a5b4fc', other: '#cbd5e1'
+      }};
       const vesselMarkers = vessels.map((vessel) => {{
         const [lat, lon, name, mmsi, region, categoryLabel, imo, sog, course,
           navigationStatus, callSign, destination, observedAt, receivedAt,
-          dataSource, sourceUrl, attribution, category] = vessel;
-        const color = vesselColors[category] || vesselColors.other;
+          dataSource, sourceUrl, attribution, category, flagCountry, chineseFlag] = vessel;
+        const palette = chineseFlag ? vesselColors : mutedVesselColors;
+        const color = palette[category] || palette.other;
         const angle = Number.isFinite(Number(course)) ? Number(course) : 0;
         const icon = L.divIcon({{
           className: 'vessel-icon', iconSize: [18, 18], iconAnchor: [9, 9],
           html: `<svg width="18" height="18" viewBox="0 0 18 18" style="transform:rotate(${{angle}}deg)">
-            <path d="M9 1 L16 16 L9 12.8 L2 16 Z" fill="${{color}}" stroke="#ffffff" stroke-width="1.15"/>
+            <path d="M9 1 L16 16 L9 12.8 L2 16 Z" fill="${{color}}"
+              stroke="${{chineseFlag ? '#f59e0b' : '#ffffff'}}" stroke-width="${{chineseFlag ? 2.2 : 1.15}}"/>
           </svg>`
         }});
-        const marker = L.marker([lat, lon], {{icon}});
+        const marker = L.marker([lat, lon], {{icon, chineseFlag, zIndexOffset: chineseFlag ? 500 : 0}});
         marker.options.popupKey = `vessel:${{mmsi}}`;
         marker.bindTooltip(escapeHTML(name), {{direction: 'top', opacity: .95}})
           .bindPopup(() => vesselPopup(vessel), {{maxWidth: 410}});
