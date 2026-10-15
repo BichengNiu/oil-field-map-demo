@@ -219,6 +219,7 @@ def openwaters_feature_to_vessel(
 
 def _fetch_openwaters_group(
     boxes: tuple[tuple[float, float, float, float], ...], max_age_minutes: int,
+    *, split_depth: int = 0,
 ) -> dict[str, Any]:
     if data_store.read_only():
         raise RuntimeError("只读展示端不允许采集船位")
@@ -236,6 +237,27 @@ def _fetch_openwaters_group(
         raise ValueError("Open Waters返回了无法识别的船位快照")
     if result.get("error"):
         raise ValueError(f"Open Waters API：{result['error']}")
+    if result.get("truncated") and split_depth < 3:
+        # Dense areas may hit the provider's response cap even below its area
+        # limit. Retry smaller areas; never relabel the partial parent as full.
+        if len(boxes) > 1:
+            parts = [(box,) for box in boxes]
+        else:
+            south, north, west, east = boxes[0]
+            if east - west >= north - south:
+                middle = (west + east) / 2
+                parts = [((south, north, west, middle),), ((south, north, middle, east),)]
+            else:
+                middle = (south + north) / 2
+                parts = [((south, middle, west, east),), ((middle, north, west, east),)]
+        children = [_fetch_openwaters_group(part, max_age_minutes, split_depth=split_depth + 1)
+                    for part in parts]
+        result = {
+            "type": "FeatureCollection",
+            "features": [feature for child in children for feature in child.get("features", [])],
+            "attribution": {key: value for child in children for key, value in (child.get("attribution") or {}).items()},
+            "truncated": any(bool(child.get("truncated")) for child in children),
+        }
     return result
 
 
