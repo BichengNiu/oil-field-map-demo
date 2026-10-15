@@ -58,7 +58,7 @@
 
 ### AIS船位归档
 
-Streamlit页面不会后台轮询Open Waters，也不会自动连接AISStream。点击“刷新船舶数据”时查询Open Waters一次，将有效报告归档到统一DuckDB；地图、船舶表和CSV显示本地最近两小时的船位快照。海域卡只读取本地确认的进入事件累计。
+Streamlit页面不会后台轮询Open Waters，也不会自动连接AISStream。点击“刷新船舶数据”时查询Open Waters一次，将有效报告归档到统一DuckDB；地图、船舶表和CSV直接显示本地最新快照。最近两小时没有船位时，沿用最近归档时点的两小时窗口，保留原始观测时间，不会混入全部历史船位。海域卡只读取本地确认的进入事件累计。
 
 设置服务器环境变量或Secrets的 `MONITORING_DB_PATH` 可将统一数据库写入持久磁盘；默认项目下 `runtime/monitoring.duckdb`。旧 `AIS_ARCHIVE_PATH` 仅用于只读迁移原档案。只有明确观测时间的船位进入档案，接收时间单独保存，不伪造报告时间。项目内的独立 `collector.py` 服务仍支持显式持续采集；手动刷新部署不要运行它。
 
@@ -138,7 +138,7 @@ cp .streamlit/secrets.toml.example .streamlit/secrets.toml
 
 真实密钥文件已被 `.gitignore` 排除，不要提交到 GitHub。页面未配置密钥也会在手动刷新时尝试Open Waters；如果该源无数据，页面会显示状态，不能把未收到船位解释为0艘。油气、PortWatch港口和咽喉点仍可正常使用。
 
-当前Streamlit页面不会运行AISStream WebSocket连接。若单独运行 `collector.py` 常驻采集服务，AISStream才会按配置建立连接和重连；这不属于页面手动刷新模式。页面只展示最近两小时的本地有效船位；不把缺报解释为0艘或静止。Open Waters的免费查询结果可能受区域额度影响；来源署名会保留在船舶表、弹窗和数据源说明中。
+当前Streamlit页面不会运行AISStream WebSocket连接。若单独运行 `collector.py` 常驻采集服务，AISStream才会按配置建立连接和重连；这不属于页面手动刷新模式。页面直接展示已存最新船位快照，原始观测时间与数据年龄保留在船舶表和弹窗；不把缺报解释为0艘或静止。Open Waters的免费查询结果可能受区域额度影响；来源署名会保留在船舶表、弹窗和数据源说明中。
 
 ## 数据范围
 

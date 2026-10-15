@@ -556,7 +556,7 @@ def build_report_html(
         '<p class="note">AIS 是事件驱动的公开/订阅观测快照，不是监测水域内全部船舶的普查；'
         '点位可能受接收站覆盖和报文年龄影响。</p>'
         + _metric_cards([
-            ("当前可用船位", str(len(vessels)) if vessels else "—", ais_source_note),
+            ("快照船位", str(len(vessels)) if vessels else "—", ais_source_note),
             ("航行中", str(sum(bool(row.get("moving")) for row in vessels)) if vessels else "—", "航速至少0.5节"),
             ("油轮/液货船", str(sum(row.get("category") == "tanker" for row in vessels)) if vessels else "—", "按AIS基础船型分类"),
             ("数据来源", ais_status, "以当前会话可用状态为准"),

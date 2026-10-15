@@ -9,6 +9,7 @@ import unittest
 from unittest.mock import patch
 
 import ais
+import ais_history
 import dashboard_data
 import data_store
 
@@ -41,6 +42,13 @@ class VesselRefreshTest(unittest.TestCase):
                 self.assertEqual(len(snapshot["vessels"]), 1)
                 self.assertEqual(snapshot["vessels"][0]["mmsi"], "123456789")
                 self.assertEqual(snapshot["refresh_summary"]["inserted"], 1)
+                self.assertEqual(upstream.call_count, len(ais.openwaters_bbox_groups()))
+                with patch("ais.utc_now", return_value=observed + timedelta(days=1)):
+                    cached = dashboard_data.openwaters_snapshot(ais.MODULE_VERSION)
+                    self.assertEqual(ais_history.latest_snapshot(), [])
+                self.assertEqual(len(cached["vessels"]), 1)
+                self.assertEqual(cached["vessels"][0]["observed_at"], observed.isoformat())
+                self.assertEqual(cached["vessels"][0]["age_minutes"], 1440)
                 self.assertEqual(upstream.call_count, len(ais.openwaters_bbox_groups()))
                 with data_store.connect() as conn:
                     queries = conn.execute(

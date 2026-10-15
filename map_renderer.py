@@ -101,8 +101,12 @@ def build_map_html(
         legend_lines.append('<span>未选择显示类别</span>')
     legend_json = json.dumps("".join(legend_lines), ensure_ascii=False).replace("</", "<\\/")
     screenshot_date_json = json.dumps(day if day != "无数据" else chokepoint_day)
+    latest_vessel_time = AIS.parse_utc(max(
+        (vessel.get("observed_at") or "" for vessel in vessels), default=""
+    ))
+    vessel_time_label = latest_vessel_time.strftime("%Y-%m-%d %H:%M") if latest_vessel_time else "无数据"
     screenshot_label_json = json.dumps(
-        f"港口数据日（UTC）：{day} · 咽喉点数据日（UTC）：{chokepoint_day} · 船舶：当前快照",
+        f"港口数据日（UTC）：{day} · 咽喉点数据日（UTC）：{chokepoint_day} · 船位快照（UTC）：{vessel_time_label}",
         ensure_ascii=False)
     return compressed_document(f"""
     <!doctype html><html lang="zh-CN"><head>

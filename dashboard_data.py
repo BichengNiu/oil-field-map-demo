@@ -42,8 +42,8 @@ def initialize_storage():
 
 
 def openwaters_snapshot(collector_version: int) -> dict:
-    """Read recent persisted AIS positions without contacting an upstream source."""
-    rows = ais_history.latest_snapshot(max_age_minutes=120)
+    """Display the last available local snapshot without an upstream request."""
+    rows = ais_history.latest_snapshot(max_age_minutes=120, fallback_to_latest=True)
     now = AIS.utc_now()
     vessels = []
     for vessel in rows:

@@ -102,7 +102,7 @@ def render_ais_panel(state: DashboardViewState) -> None:
         st.error(state.archive_error)
     vessel_metric = len(vessels) if has_position_data else "—"
     v1, v2, v3, v4, v5 = st.columns(5)
-    v1.metric("当前船位", vessel_metric)
+    v1.metric("船位快照", vessel_metric)
     v2.metric("航行中", sum(bool(v.get("moving")) for v in vessels) if has_position_data else "—")
     v3.metric(
         "油轮/液货船",
@@ -119,7 +119,7 @@ def render_ais_panel(state: DashboardViewState) -> None:
         st.error(f"Open Waters 快照错误：{state.open_state['error']}")
     if ais_status.get("last_error"):
         st.error(f"最近连接错误：{ais_status['last_error']}")
-    st.markdown("**各监测水域当前船位**")
+    st.markdown("**各监测水域船位快照**")
     region_rows = []
     for region, counts in region_counts.items():
         if has_position_data:
@@ -160,7 +160,7 @@ def render_ais_panel(state: DashboardViewState) -> None:
             column_config={"来源": st.column_config.LinkColumn("来源")},
         )
         st.download_button(
-            "下载当前船位快照 CSV",
+            "下载船位快照 CSV",
             csv_export.csv_bytes(rows, list(rows[0])),
             file_name="ais_vessel_snapshot.csv",
             mime="text/csv",
@@ -263,7 +263,7 @@ def render_method_panel() -> None:
             },
             {
                 "数据": "实时船位",
-                "当前更新": "只读本地最近两小时档案；点击地图刷新按钮时查询一次 Open Waters",
+                "当前更新": "直接显示本地最新快照；点击刷新船舶数据时查询一次 Open Waters",
                 "进一步自动化": "AISStream 当前暂停；单独运行采集服务才会持续采集",
             },
             {
@@ -288,7 +288,7 @@ def render_method_panel() -> None:
             },
             {
                 "数据": "船位归档",
-                "当前更新": "只归档有明确观测时间的上游快照；接收时间另存，地图与船舶页只展示当前船位",
+                "当前更新": "归档有明确观测时间的上游快照；接收时间另存，地图与船舶页展示已存最新快照",
                 "进一步自动化": "统一MONITORING_DB_PATH持久盘；需要连续采样时显式运行独立服务；免费AIS仅为观测覆盖",
             },
         ],
@@ -363,7 +363,7 @@ def render_method_panel() -> None:
     st.markdown(
         f"**船舶数据。** 免费快照来自[Open Waters开放AIS网络]({AIS.OPENWATERS_SOURCE})，"
         f"可选[AISStream WebSocket API]({AIS.SOURCE})在服务器端接收五个监测水域及红海北、南段的船级广播；"
-        "船位快照用于地图、船舶页和后台打印报告；仅显示两小时内有时间戳的报文，可点击地图下方按钮刷新。"
+        "船位快照用于地图、船舶页和后台打印报告；打开页面直接显示本地最新快照，保留实际观测时间，点击地图下方按钮更新。"
         "浏览器只接收标准化的每船最新位置，不接收API Key。"
         "多源位置按MMSI合并，航行阈值为0.5节；"
         "上游来源署名随船舶表及弹窗显示。"
@@ -465,7 +465,8 @@ def render_print_report(
         {
             key: vessel.get(key)
             for key in (
-                "mmsi", "name", "lat", "lon", "region", "category", "category_label", "moving"
+                "mmsi", "name", "lat", "lon", "region", "category", "category_label", "moving",
+                "observed_at", "received_at",
             )
         }
         for vessel in live_positions
@@ -537,8 +538,10 @@ def render_print_report(
     report_asset_table = [dashboard_rows.print_asset_record(asset) for asset in report_assets]
     report_ais_state = state.ais_status
     report_ais_status = str(report_ais_state.get("status") or "等待数据")
+    report_observed_at = max((vessel.get("observed_at") or "" for vessel in live_positions), default="")
     report_ais_note = (
         f"Open Waters 快照 {len(open_state.get('vessels') or [])} 艘；"
+        f"观测截至 {report_observed_at or '未提供'}；"
         f"AISStream 状态：{report_ais_status}"
     )
     report_html = report_data.cached_print_report({

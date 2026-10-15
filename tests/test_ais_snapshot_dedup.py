@@ -46,6 +46,38 @@ class AISSnapshotDedupTest(unittest.TestCase):
         self.assertEqual(rows[0]["source"], "Open Waters")
         self.assertEqual(rows[0]["lon"], 56.1)
 
+    def test_fallback_keeps_only_the_last_available_time_window(self):
+        self.assertEqual(ais_history.latest_snapshot(fallback_to_latest=True), [])
+        now = datetime.now(timezone.utc)
+        positions = (("123456789", now - timedelta(days=1)),
+                     ("223456789", now - timedelta(days=1, minutes=30)),
+                     ("323456789", now - timedelta(days=10)))
+        with data_store.connect() as conn:
+            for mmsi, observed in positions:
+                conn.execute("INSERT INTO ais_reports VALUES (?,?,?,?)", (
+                    mmsi, observed.isoformat(), "test", json.dumps({
+                        "mmsi": mmsi, "observed_at": observed.isoformat(),
+                        "lat": 26.0, "lon": 53.0,
+                    }),
+                ))
+
+        self.assertEqual(ais_history.latest_snapshot(), [])
+        rows = ais_history.latest_snapshot(fallback_to_latest=True)
+        self.assertEqual({row["mmsi"] for row in rows}, {"123456789", "223456789"})
+        self.assertEqual(rows[0]["observed_at"], positions[0][1].isoformat())
+
+    def test_fallback_does_not_mix_old_positions_into_a_recent_snapshot(self):
+        now = datetime.now(timezone.utc)
+        with data_store.connect() as conn:
+            for mmsi, observed in (("123456789", now - timedelta(minutes=1)),
+                                   ("223456789", now - timedelta(days=1))):
+                conn.execute("INSERT INTO ais_reports VALUES (?,?,?,?)", (
+                    mmsi, observed.isoformat(), "test", json.dumps({"mmsi": mmsi}),
+                ))
+
+        rows = ais_history.latest_snapshot(fallback_to_latest=True)
+        self.assertEqual([row["mmsi"] for row in rows], ["123456789"])
+
 
 if __name__ == "__main__":
     unittest.main()

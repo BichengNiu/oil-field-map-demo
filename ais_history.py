@@ -120,10 +120,15 @@ def day_reports(day: date) -> list[dict]:
     return [json.loads(row[0]) for row in rows]
 
 
-def latest_snapshot(max_age_minutes: int = 120) -> list[dict]:
-    """Read the newest recent local report per vessel without network access."""
-    cutoff = (ais.utc_now() - timedelta(minutes=max(0, max_age_minutes))).isoformat()
+def latest_snapshot(max_age_minutes: int = 120, *, fallback_to_latest: bool = False) -> list[dict]:
+    """Read recent positions, optionally retaining the last available local window."""
+    window = timedelta(minutes=max(0, max_age_minutes))
+    cutoff = ais.utc_now() - window
     with connect_archive() as conn:
+        if fallback_to_latest:
+            newest = conn.execute("SELECT MAX(observed) FROM ais_reports").fetchone()[0]
+            if newest is not None and newest < cutoff:
+                cutoff = newest - window
         rows = conn.execute(
             """SELECT payload FROM (
                    SELECT payload, observed,
@@ -137,7 +142,7 @@ def latest_snapshot(max_age_minutes: int = 120) -> list[dict]:
                ) ranked
                WHERE source_rank=1
                ORDER BY observed DESC""",
-            (cutoff,),
+            (cutoff.isoformat(),),
         ).fetchall()
     return [json.loads(row[0]) for row in rows]
 
