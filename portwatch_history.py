@@ -3,14 +3,19 @@
 Only verified empty upstream results may remain missing; never manufacture zeros.
 """
 from collections import defaultdict
+from concurrent.futures import ThreadPoolExecutor, as_completed
+from contextvars import copy_context
 from datetime import date, datetime, timedelta, timezone
 import re
+import logging
 
 import data_store
 
 AUDIT_PREFIX = "portwatch_history_coverage:"
 SOURCE_GAP_TTL = timedelta(days=7)
 MAX_CHUNK_DAYS = 90
+ARCHIVE_START = date(2019, 1, 1)
+logger = logging.getLogger(__name__)
 
 
 def _dates(first, last):
@@ -49,7 +54,7 @@ def _state(kind, ids=None, end=None):
                                     if audit.get("last_day") else None)), default=None)
         if not ids or end is None:
             raise ValueError(f"{kind} 缺少历史范围或统计节点")
-        first = min(filter(None, (earliest, end.replace(year=end.year - 1, day=1),
+        first = min(filter(None, (earliest, ARCHIVE_START,
                                   date.fromisoformat(audit["first_day"])
                                   if audit.get("first_day") else None)))
         stored = set(conn.execute(
@@ -111,25 +116,43 @@ def repair(kind, ids, end, now=None):
                 stop = min(last, first + timedelta(days=MAX_CHUNK_DAYS - 1))
                 batches[first, stop].append(node)
                 first = stop + timedelta(days=1)
-    queries, returned = [], set()
+    def download(first, last, chunk):
+        rows, query = portwatch_downloads.fetch_window(kind, chunk, first, last, force=True)
+        if not query.get("count_verified"):
+            raise ValueError(f"{kind} 历史补缺未完成上游记录数校验")
+        keys = {(str(row["portid"]), date.fromisoformat(str(row["date"])[:10])) for row in rows}
+        if len(keys) != len(rows) or any(node not in chunk or not first <= day <= last for node, day in keys):
+            raise ValueError(f"{kind} 历史补缺返回重复或越界记录")
+        with data_store.connect() as conn:
+            stored = set(conn.execute(
+                "SELECT node_id,day FROM portwatch_daily WHERE kind=? AND day BETWEEN ? AND ? "
+                "AND node_id IN (" + ",".join("?" for _ in chunk) + ")",
+                [kind, first, last, *chunk],
+            ).fetchall())
+        if not keys <= stored:
+            raise ValueError(f"{kind} 上游已返回记录但未成功入库")
+        logger.info("%s 历史回补 %s 至 %s，%s 个节点，%s 条", kind, first, last, len(chunk), len(rows))
+        return query
+
+    jobs = []
     for (first, last), nodes in sorted(batches.items()):
         nodes.sort()
         for offset in range(0, len(nodes), portwatch_downloads.BATCH_SIZE):
             chunk = tuple(nodes[offset:offset + portwatch_downloads.BATCH_SIZE])
-            rows, query = portwatch_downloads.fetch_window(kind, chunk, first, last, force=True)
-            if not query.get("count_verified"):
-                raise ValueError(f"{kind} 历史补缺未完成上游记录数校验")
-            requested = {(node, day) for node in chunk for day in _dates(first, last)}
-            keys = {(str(row["portid"]), date.fromisoformat(str(row["date"])[:10])) for row in rows}
-            if not keys <= requested or len(keys) != len(rows):
-                raise ValueError(f"{kind} 历史补缺返回重复或越界记录")
-            returned.update(keys)
-            for key in requested:
-                verified[key] = now
-            queries.append(query)
+            jobs.append((first, last, chunk))
+    queries = []
+    pool = ThreadPoolExecutor(max_workers=3)
+    futures = {pool.submit(copy_context().run, download, *job): job for job in jobs}
+    try:
+        for future in as_completed(futures):
+            first, last, chunk = futures[future]
+            queries.append(future.result())
+            for node in chunk:
+                for day in _dates(first, last):
+                    verified[node, day] = now
+    finally:
+        pool.shutdown(wait=True, cancel_futures=True)
     after = _state(kind, ids, end)
-    if returned & after["missing"]:
-        raise ValueError(f"{kind} 上游已返回记录但未成功入库")
     report = _report(after, verified)
     if report["unverified_missing_records"]:
         raise ValueError(f"{kind} 仍有未校验的历史日期缺口")

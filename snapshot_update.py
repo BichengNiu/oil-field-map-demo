@@ -8,6 +8,8 @@ import argparse
 from contextlib import contextmanager
 from datetime import datetime, timedelta, timezone
 import json
+import hashlib
+import logging
 import os
 from pathlib import Path
 import shutil
@@ -19,6 +21,27 @@ import data_store
 
 ROOT = Path(__file__).resolve().parent
 DATABASE = ROOT / "runtime" / "monitoring.duckdb"
+STAGING = ROOT / "runtime" / "history-staging.duckdb"
+STAGING_META = ROOT / "runtime" / "history-staging.json"
+
+
+def file_digest(path):
+    digest = hashlib.sha256()
+    with Path(path).open("rb") as handle:
+        for chunk in iter(lambda: handle.read(1024 * 1024), b""):
+            digest.update(chunk)
+    return digest.hexdigest()
+
+
+def resumable_seed(original):
+    if not STAGING.exists() or not STAGING_META.exists():
+        return None
+    metadata = json.loads(STAGING_META.read_text())
+    if metadata.get("base_sha256") != file_digest(original):
+        return None
+    if metadata.get("candidate_sha256") != file_digest(STAGING):
+        raise ValueError("未发布回补进度校验失败，保留文件供检查")
+    return STAGING
 
 
 def git(*args):
@@ -52,10 +75,10 @@ def inspect(path):
     return {"counts": counts, "latest_days": latest, "latest_vessel": vessel}
 
 
-def collect_candidate(original: Path, candidate: Path, *, force_ports=False, now=None):
+def collect_candidate(original: Path, candidate: Path, *, force_ports=False, now=None, seed=None):
     now = now or datetime.now(timezone.utc)
     before = inspect(original)
-    shutil.copy2(original, candidate)
+    shutil.copy2(seed or original, candidate)
     previous_path = os.environ.get("MONITORING_DB_PATH")
     previous_mode = os.environ.get("MONITORING_READ_ONLY")
     os.environ["MONITORING_DB_PATH"] = str(candidate)
@@ -81,7 +104,7 @@ def collect_candidate(original: Path, candidate: Path, *, force_ports=False, now
         due = force_ports or history_due or not last_ports or datetime.fromisoformat(last_ports).date() < now.date()
         port_result = None
         if due:
-            with portwatch.request_budget(600 if history_due else 240):
+            with portwatch.request_budget(3600 if history_due else 240):
                 port_result = collector.collect_portwatch_run(strict=True, force=True, include_history=True)
             data_store.set_meta("snapshot_portwatch_completed_at", now.isoformat())
         history_coverage = portwatch_history.validate_all()
@@ -130,7 +153,23 @@ def run(*, publish=False, force_ports=False):
         original = materialize(DATABASE)
         with tempfile.TemporaryDirectory(prefix="monitoring-update-", dir=DATABASE.parent) as temporary:
             candidate = Path(temporary) / "monitoring.duckdb"
-            summary = collect_candidate(original, candidate, force_ports=force_ports)
+            seed = resumable_seed(original) if publish else None
+            try:
+                options = {"force_ports": force_ports}
+                if seed is not None:
+                    options["seed"] = seed
+                summary = collect_candidate(original, candidate, **options)
+            except Exception:
+                if publish and candidate.exists():
+                    # Connections and worker threads are closed before copying.
+                    inspect(candidate)
+                    shutil.copy2(candidate, STAGING)
+                    STAGING_META.write_text(json.dumps({
+                        "base_sha256": file_digest(original),
+                        "candidate_sha256": file_digest(STAGING),
+                    }))
+                    logging.warning("已保留未发布的回补进度，下次从同一基线继续")
+                raise
             if publish:
                 git("fetch", "origin", "main")
                 if base != git("rev-parse", "origin/main"):
@@ -142,11 +181,14 @@ def run(*, publish=False, force_ports=False):
                 git("add", "-u", "--", "runtime/monitoring.duckdb")
                 git("commit", "-m", "Update validated monitoring snapshot")
                 git("push", "origin", "main")
+                STAGING.unlink(missing_ok=True)
+                STAGING_META.unlink(missing_ok=True)
             # Dry runs validate source data without changing the published file.
         return summary
 
 
 def main():
+    logging.basicConfig(level=logging.INFO, format="%(asctime)s %(levelname)s %(message)s")
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("--publish", action="store_true")
     parser.add_argument("--force-ports", action="store_true")

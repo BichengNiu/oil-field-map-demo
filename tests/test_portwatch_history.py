@@ -20,6 +20,9 @@ class HistoryRepairTest(unittest.TestCase):
         })
         environment.start()
         self.addCleanup(environment.stop)
+        scope = patch.object(history, "ARCHIVE_START", date(2025, 10, 1))
+        scope.start()
+        self.addCleanup(scope.stop)
         self.now = datetime(2026, 10, 15, tzinfo=timezone.utc)
         self.ids = {"ports": ("port105", "port106"), "chokepoints": ("chokepoint1",)}
         self.ends = {"ports": date(2026, 10, 9), "chokepoints": date(2026, 10, 11)}
@@ -59,6 +62,25 @@ class HistoryRepairTest(unittest.TestCase):
         self.assertEqual(reports["chokepoints"]["stored_records"], 376)
         self.assertTrue(all(report["status"] == "complete" for report in reports.values()))
         self.assertFalse(history.needs_repair(self.now))
+
+    def test_2019_origin_overrides_a_complete_2025_audit(self):
+        with patch("portwatch_downloads.fetch_window", side_effect=self.fetch):
+            self.repair_all()
+        with patch.object(history, "ARCHIVE_START", date(2019, 1, 1)):
+            self.assertTrue(history.needs_repair(self.now))
+            state = history._state("ports")
+            self.assertEqual(state["first"], date(2019, 1, 1))
+            self.assertEqual(len(state["missing"]), 2465 * 2)
+            with self.assertRaisesRegex(ValueError, "历史完整性"):
+                history.validate_all(self.now)
+
+    def test_parallel_requests_keep_the_parent_network_deadline(self):
+        import portwatch
+        def fetch(*args, **kwargs):
+            self.assertIsNotNone(portwatch._remaining_budget())
+            return self.fetch(*args, **kwargs)
+        with portwatch.request_budget(60), patch("portwatch_downloads.fetch_window", side_effect=fetch):
+            self.repair_all()
 
     def test_node_specific_hole_is_detected_even_when_total_count_does_not_fall(self):
         with patch("portwatch_downloads.fetch_window", side_effect=self.fetch):

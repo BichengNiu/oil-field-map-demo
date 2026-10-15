@@ -153,5 +153,27 @@ class LfsMaterializationTest(unittest.TestCase):
             self.assertFalse(list((Path(temporary) / "oil-field-map-snapshots").glob("*.duckdb")))
 
 
+class HistoryStagingTest(unittest.TestCase):
+    def test_resume_requires_matching_base_and_verified_candidate_bytes(self):
+        with tempfile.TemporaryDirectory() as temporary:
+            original = Path(temporary) / "base.duckdb"
+            candidate = Path(temporary) / "staging.duckdb"
+            metadata = Path(temporary) / "staging.json"
+            original.write_bytes(b"baseline")
+            candidate.write_bytes(b"verified progress")
+            metadata.write_text(json.dumps({
+                "base_sha256": snapshot_update.file_digest(original),
+                "candidate_sha256": snapshot_update.file_digest(candidate),
+            }))
+            with patch("snapshot_update.STAGING", candidate), patch("snapshot_update.STAGING_META", metadata):
+                self.assertEqual(snapshot_update.resumable_seed(original), candidate)
+                original.write_bytes(b"new remote baseline")
+                self.assertIsNone(snapshot_update.resumable_seed(original))
+                original.write_bytes(b"baseline")
+                candidate.write_bytes(b"corrupt progress")
+                with self.assertRaisesRegex(ValueError, "回补进度校验失败"):
+                    snapshot_update.resumable_seed(original)
+
+
 if __name__ == "__main__":
     unittest.main()
