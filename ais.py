@@ -16,6 +16,7 @@ from collections import deque
 from concurrent.futures import ThreadPoolExecutor, as_completed
 from copy import deepcopy
 from datetime import datetime, timezone
+from functools import lru_cache
 from typing import Any, Callable
 from urllib.parse import urlencode
 from urllib.request import Request, urlopen
@@ -33,7 +34,7 @@ SOURCE = "https://aisstream.io/documentation"
 STREAM_URL = "wss://stream.aisstream.io/v0/stream"
 OPENWATERS_SOURCE = "https://openwaters.io/ais/"
 OPENWATERS_API = "https://ais.openwaters.io/v1/vessels"
-MODULE_VERSION = 8
+MODULE_VERSION = 9
 POSITION_RETENTION_SECONDS = 2 * 60 * 60
 MAX_TRACKED_VESSELS = 20_000
 MAX_ARCHIVE_BUFFER = 2_000
@@ -43,11 +44,11 @@ ARCHIVE_BATCH_SIZE = 50
 REGIONS = AIS_REGIONS
 
 # Open Waters' anonymous API allows 100 square degrees per request. Keep the
-# complete corridor coverage in three requests while respecting that limit.
+# complete corridor coverage in four requests while respecting that limit.
 OPENWATERS_REGION_GROUPS = (
     ("波斯湾", "苏伊士运河"),
     ("阿曼湾", "亚丁湾", "曼德海峡"),
-    ("红海北段",),
+    ("红海北段", "红海北部两湾"),
     ("红海南段",),
 )
 
@@ -108,6 +109,19 @@ def openwaters_bbox_groups() -> tuple[tuple[tuple[float, float, float, float], .
     )
 
 
+@lru_cache(maxsize=1)
+def _flag_names():
+    return data_store.read_json("data/vessel_flag_names.json")["countries"]
+
+
+def source_flag(value):
+    """Retain source flag ISO codes; never infer registration from position."""
+    code = str(value or "").strip().upper()
+    if not re.fullmatch(r"[A-Z]{2}", code) or code in {"ZZ", "XX"}:
+        return None, None
+    return code, _flag_names().get(code, code)
+
+
 def parse_utc(value: Any) -> datetime | None:
     """Normalize source timestamps to UTC, retaining missing or invalid values."""
     if not value:
@@ -163,10 +177,14 @@ def openwaters_feature_to_vessel(
     attribution_text = (attribution or {}).get(source)
     source_url_match = re.search(r"https?://[^\s)]+", str(attribution_text or ""))
     source_url = source_url_match.group(0).rstrip(".,") if source_url_match else OPENWATERS_SOURCE
+    flag, flag_country = source_flag(properties.get("flag"))
     age_minutes = (max(0.0, (utc_now() - observed).total_seconds() / 60)
                    if observed else None)
     return {
         "mmsi": str(mmsi),
+        "flag": flag,
+        "flag_country": flag_country,
+        "flag_source": OPENWATERS_API if flag else None,
         "observed_at": observed.isoformat() if observed else None,
         "received_at": received.isoformat(),
         "message_type": _clean_text(properties.get("msg_type")) or "PositionReport",

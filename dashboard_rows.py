@@ -153,6 +153,7 @@ def vessel_rows(vessels: list[dict]) -> list[dict]:
         {
             "水域": vessel.get("region"),
             "船名": vessel.get("name") or "—",
+            "船籍": vessel.get("flag_country") or vessel.get("flag") or "—",
             "船型": vessel.get("category_label"),
             "MMSI": vessel.get("mmsi"),
             "IMO": vessel.get("imo"),

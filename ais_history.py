@@ -90,10 +90,29 @@ def archive_reports(rows: list[dict]) -> int:
                            json.dumps(row, ensure_ascii=False)) for row in normalized])
         inserted_rows = conn.execute("INSERT OR IGNORE INTO ais_reports SELECT * FROM incoming_reports "
                                      "RETURNING mmsi,observed").fetchall()
+        # Static metadata can arrive again with the same observation key. Enrich
+        # those reports without inventing new positions or increasing counts.
+        updated = conn.execute("""
+            UPDATE ais_reports AS stored
+            SET payload=json_merge_patch(stored.payload, json_object(
+                'flag',json_extract_string(incoming.payload,'$.flag'),
+                'flag_country',json_extract_string(incoming.payload,'$.flag_country'),
+                'flag_source',json_extract_string(incoming.payload,'$.flag_source')))
+            FROM incoming_reports AS incoming
+            WHERE stored.mmsi=incoming.mmsi AND stored.observed=incoming.observed
+              AND stored.source=incoming.source
+              AND json_extract_string(incoming.payload,'$.flag') IS NOT NULL
+              AND (json_extract_string(stored.payload,'$.flag') IS DISTINCT FROM
+                   json_extract_string(incoming.payload,'$.flag') OR
+                   json_extract_string(stored.payload,'$.flag_country') IS DISTINCT FROM
+                   json_extract_string(incoming.payload,'$.flag_country'))
+            RETURNING stored.mmsi
+        """).fetchall()
         conn.execute("DROP TABLE incoming_reports")
         inserted = len(inserted_rows)
-        if inserted:
+        if inserted or updated:
             data_store.bump_revision("ais", conn)
+        if inserted:
             from sea_tracking import update_events
             changed = {}
             for mmsi, observed in inserted_rows:

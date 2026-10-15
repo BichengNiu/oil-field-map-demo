@@ -71,6 +71,7 @@ def build_map_html(
             vessel.get("source_url") or AIS.SOURCE,
             vessel.get("source_attribution") or vessel.get("data_source") or "AIS数据来源",
             vessel.get("category", "unknown"),
+            vessel.get("flag_country") or vessel.get("flag"),
         ]
         for vessel in vessels
     ], ensure_ascii=False).replace("</", "<\\/")
@@ -198,7 +199,7 @@ def build_map_html(
       const vesselPopup = (vessel) => {{
         const [lat, lon, name, mmsi, region, categoryLabel, imo, sog, course,
           navigationStatus, callSign, destination, observedAt, receivedAt,
-          dataSource, sourceUrl, attribution] = vessel;
+          dataSource, sourceUrl, attribution, category, flagCountry] = vessel;
         const ageAt = observedAt || receivedAt;
         const ageTimestamp = ageAt ? Date.parse(ageAt) : NaN;
         const ageMinutes = Number.isFinite(ageTimestamp)
@@ -211,6 +212,7 @@ def build_map_html(
           <div class="field-name">${{escapeHTML(name || `MMSI ${{mmsi}}`)}}</div>
           <div class="country">船舶 · ${{shown(region || '监测水域')}}</div>
           <div class="row"><span>船型</span><strong>${{shown(categoryLabel)}}</strong></div>
+          <div class="row"><span>船籍</span><strong>${{shown(flagCountry)}}</strong></div>
           <div class="row"><span>MMSI / IMO</span><strong>${{shown(mmsi)}} / ${{shown(imo)}}</strong></div>
           <div class="row"><span>航速 / 航向</span><strong>${{decimal(sog, '节')}} / ${{decimal(course, '°')}}</strong></div>
           <div class="row"><span>航行状态</span><strong>${{shown(navigationStatus)}}</strong></div>
