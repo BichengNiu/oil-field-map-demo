@@ -147,12 +147,16 @@ def render_ais_panel(state: DashboardViewState) -> None:
         hide_index=True,
     )
     if rows:
+        table_columns = {
+            "船名": "船名", "船型": "船型", "船籍": "船籍",
+            "航行状态": "航行状态", "目的地": "目的地", "吃水": "吃水 米",
+            "纬度": "纬度", "经度": "经度", "数据源": "数据源",
+        }
         st.dataframe(
-            rows,
+            [{label: row.get(key) for label, key in table_columns.items()} for row in rows],
             width="stretch",
             hide_index=True,
             height=570,
-            column_config={"来源": st.column_config.LinkColumn("来源")},
         )
         st.download_button(
             "下载船位快照 CSV",

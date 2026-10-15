@@ -85,19 +85,24 @@ def build_map_html(
         return f'<svg viewBox="0 0 12 12"><path d="{paths[shape]}" fill="{color}"/></svg>'
 
     categories = {"assets", "ports", "vessels"} if visible_categories is None else visible_categories
+    location_items = []
     if "assets" in categories:
-        legend_lines.append(f'<span>{legend_icon("asset", "#ea580c")}油气：菱形</span>')
+        location_items.append(f'<span>{legend_icon("asset", "#ea580c")}油气</span>')
     if "ports" in categories:
-        legend_lines.extend([
-            f'<span>{legend_icon("port", "#2563eb")}港口：方形</span>',
-            f'<span>{legend_icon("choke", "#7c3aed")}咽喉点：六边形（PortWatch日通过艘次）</span>',
+        location_items.extend([
+            f'<span>{legend_icon("port", "#2563eb")}港口</span>',
+            f'<span>{legend_icon("choke", "#7c3aed")}咽喉点</span>',
         ])
+    if location_items:
+        legend_lines.append('<div class="legend-row">' + "".join(location_items) + '</div>')
     if "vessels" in categories:
-        legend_lines.extend([
-            f'<span>{legend_icon("vessel", "#64748b")}船舶：三角形</span>',
-            f'<span>{legend_icon("vessel", "#ef4444")}油轮/液货船　{legend_icon("vessel", "#2563eb")}货船</span>',
-            f'<span>{legend_icon("vessel", "#64748b")}其他船舶/船型未知</span>',
-        ])
+        legend_lines.append(
+            '<div class="legend-row">'
+            f'<span>{legend_icon("vessel", "#ef4444")}油轮/液货船</span>'
+            f'<span>{legend_icon("vessel", "#2563eb")}货船</span>'
+            f'<span>{legend_icon("vessel", "#64748b")}其他船舶/船型未知</span>'
+            '</div>'
+        )
     if not categories:
         legend_lines.append('<span>未选择显示类别</span>')
     legend_json = json.dumps("".join(legend_lines), ensure_ascii=False).replace("</", "<\\/")
@@ -140,7 +145,8 @@ def build_map_html(
       .source {{ display: block; color: #2563eb; font-size: 14px; margin-top: 8px; text-decoration: none; }}
       .map-legend {{ background: rgba(255,255,255,.95); padding: 9px 11px; border-radius: 8px; box-shadow: 0 2px 10px rgba(15,23,42,.15); color: #0f172a; font-size: 14px; line-height: 1.45; }}
       .map-legend b {{ font-size: 14px; }}
-      .map-legend span {{ display: block; margin-top: 4px; white-space: nowrap; }}
+      .map-legend .legend-row {{ display: flex; gap: 14px; margin-top: 4px; }}
+      .map-legend span {{ white-space: nowrap; }}
       .map-legend svg {{ display: inline-block; width: 10px; height: 10px; margin-right: 6px; vertical-align: -1px; }}
       .map-date {{ background: rgba(255,255,255,.96); padding: 7px 9px; border-radius: 7px; box-shadow: 0 2px 10px #0f172a26; color: #172b4d; font-size: 14px; }}
       .asset-icon, .port-icon, .chokepoint-icon, .vessel-icon, .vessel-cluster {{ background: transparent; border: 0; }}
