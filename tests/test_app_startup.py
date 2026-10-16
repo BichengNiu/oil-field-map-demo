@@ -75,6 +75,9 @@ class AppStartupTest(unittest.TestCase):
                     assert app.metric[2].label.startswith('本周累计艘次（')
                     assert not any(h.value == '港口日活动' for h in app.subheader)
                     assert len(app.image) == 6  # Titles are inside the Ts figures.
+                    chart_downloads = [b for b in app.get('download_button') if b.label == '下载数据']
+                    assert len(chart_downloads) == 6
+                    assert all(b.proto.type == 'primary' for b in chart_downloads)
                     assert app.selectbox(key='port_chart_period').value == '近一年'
                     assert list(app.dataframe[0].value.columns)[:8] == ['港口名','港口类型','国家','水域','日期','经营状态','当日进港艘次','本周累计艘次']
                     assert len(app.dataframe[0].value.columns) == 22

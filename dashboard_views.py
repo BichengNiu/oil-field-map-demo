@@ -22,6 +22,7 @@ import print_report
 import report_data
 from dashboard_state import DashboardViewState
 from map_popups import asset_popup, chokepoint_popup, port_popup
+from portwatch_records import SHIP_TYPE_LABELS
 
 ASSETS = data_store.load_catalog("assets")
 
@@ -209,10 +210,27 @@ def render_ports_panel(ports: list[dict], selected_day: date | None, port_error:
             first = max(history[0]["date"], selected_day-timedelta(days=89 if period=="近90天" else 364)) if period!="全部历史" else history[0]["date"]
             fields = ["date", "portcalls", *(f"portcalls_{kind}" for kind in PORTWATCH.SHIP_TYPES)]
             images = port_charts.chart_images(tuple(tuple(row[field] for field in fields) for row in history), first)
+            series = [("portcalls", "每日进港艘次"), *(
+                (f"portcalls_{kind}", f"{label}每日进港艘次")
+                for kind, label in SHIP_TYPE_LABELS.items()
+            )]
+            visible_history = [row for row in history if row["date"] >= first]
             for start in (0, 3):
-                for column, image in zip(st.columns(3), images[start:start+3]):
+                for column, image, (field, title) in zip(st.columns(3), images[start:start+3], series[start:start+3]):
                     with column:
                         st.image(image, width="stretch")
+                        st.download_button(
+                            "下载数据",
+                            data=csv_export.csv_bytes(
+                                [{"日期": row["date"], title: row[field]} for row in visible_history],
+                                ["日期", title],
+                            ),
+                            file_name=f"{title.replace('/', '_')}.csv",
+                            mime="text/csv",
+                            key=f"port_chart_download_{field}",
+                            type="primary",
+                            on_click="ignore",
+                        )
     if port_rows:
         st.dataframe(
             port_rows,
