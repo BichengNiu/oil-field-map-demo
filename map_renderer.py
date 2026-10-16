@@ -105,11 +105,14 @@ def build_map_html(
             f'<span>{legend_icon("port", "#2563eb")}港口</span>',
             f'<span>{legend_icon("choke", "#7c3aed")}咽喉点</span>',
         ])
-    for fuel, color, label in (("Oil", "#8b2635", "输油管线"), ("Gas", "#416b86", "输气联络")):
-        if any(f["properties"].get("fuel") == fuel for f in pipeline_features):
-            location_items.append(f'<span><svg viewBox="0 0 12 12"><path d="M0 6 H12" stroke="{color}" stroke-width="3"/></svg>{label}</span>')
     if location_items:
         legend_lines.append('<div class="legend-row">' + "".join(location_items) + '</div>')
+    pipeline_items = []
+    for fuel, color, label in (("Oil", "#8b2635", "输油管线"), ("Gas", "#416b86", "输气联络")):
+        if any(f["properties"].get("fuel") == fuel for f in pipeline_features):
+            pipeline_items.append(f'<span><svg viewBox="0 0 12 12"><path d="M0 6 H12" stroke="{color}" stroke-width="3"/></svg>{label}</span>')
+    if pipeline_items:
+        legend_lines.append('<div class="legend-row">' + "".join(pipeline_items) + '</div>')
     if "vessels" in categories:
         legend_lines.append(
             '<div class="legend-row">'
