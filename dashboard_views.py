@@ -10,6 +10,8 @@ import ais as AIS
 import data_store
 import csv_export
 import dashboard_rows
+import dashboard_data
+import port_charts
 import map_renderer
 import pipeline_catalog
 import monitoring_cards
@@ -193,10 +195,23 @@ def render_ports_panel(ports: list[dict], selected_day: date | None, port_error:
     port_rows = dashboard_rows.port_rows(ports, selected_day)
     if port_error:
         st.error(f"港口数据加载失败：{port_error}")
-    metrics = dashboard_rows.port_metrics(ports)
+    metrics = dashboard_rows.port_metrics(ports, selected_day)
     for start in range(0, len(metrics), 4):
         for column, (label, value) in zip(st.columns(4), metrics[start:start+4]):
             column.metric(label, value)
+    if selected_day:
+        port_ids = tuple(sorted(str(p["portid"]) for p in ports if PORTWATCH.has_independent_statistics(p)))
+        path = data_store.database_path()
+        history = dashboard_data.port_time_series(port_ids, selected_day, (str(path), path.stat().st_mtime_ns))
+        if history:
+            period = st.selectbox("时间范围", ["近90天", "近一年", "全部历史"], index=1, key="port_chart_period")
+            from datetime import timedelta
+            first = max(history[0]["date"], selected_day-timedelta(days=89 if period=="近90天" else 364)) if period!="全部历史" else history[0]["date"]
+            fields = ["date", "portcalls", *(f"portcalls_{kind}" for kind in PORTWATCH.SHIP_TYPES)]
+            images = port_charts.chart_images(tuple(tuple(row[field] for field in fields) for row in history), first)
+            for title, image in zip(("每日进港艘次", "各类型船每日进港艘次"), images):
+                st.subheader(title)
+                st.image(image, width="stretch")
     if port_rows:
         st.dataframe(
             port_rows,
@@ -205,6 +220,7 @@ def render_ports_panel(ports: list[dict], selected_day: date | None, port_error:
             height=560,
             column_config={
                 "来源": st.column_config.LinkColumn("来源"),
+                "港口类型": st.column_config.TextColumn("港口类型", width=520),
                 **{name: st.column_config.NumberColumn(format="%d") for name in port_rows[0] if name.endswith("艘次")},
             },
         )

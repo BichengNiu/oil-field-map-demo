@@ -70,10 +70,14 @@ class AppStartupTest(unittest.TestCase):
                     app.run(timeout=30)
                     assert not app.exception, [str(error.value) for error in app.exception]
                     assert len(app.metric) == 8
-                    assert [m.label for m in app.metric][:3] == ['港口总数','当日进港艘次','本周累计艘次']
+                    assert app.metric[0].label == '港口总数'
+                    assert app.metric[1].label.startswith('当日进港艘次（')
+                    assert app.metric[2].label.startswith('本周累计艘次（')
                     assert not any(h.value == '港口日活动' for h in app.subheader)
-                    assert list(app.dataframe[0].value.columns)[:7] == ['港口名','国家','水域','日期','经营状态','当日进港艘次','本周累计艘次']
-                    assert len(app.dataframe[0].value.columns) == 21
+                    assert {'每日进港艘次', '各类型船每日进港艘次'} <= {h.value for h in app.subheader}
+                    assert app.selectbox(key='port_chart_period').value == '近一年'
+                    assert list(app.dataframe[0].value.columns)[:8] == ['港口名','港口类型','国家','水域','日期','经营状态','当日进港艘次','本周累计艘次']
+                    assert len(app.dataframe[0].value.columns) == 22
                     assert '本月累计艘次' in app.dataframe[0].value.columns
                     assert '本月油轮/液货船累计艘次' in app.dataframe[0].value.columns
                     assert any(b.label == '下载列表' for b in app.get('download_button'))

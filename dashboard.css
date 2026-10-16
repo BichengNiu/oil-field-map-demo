@@ -6,6 +6,7 @@
   [data-testid="stMetric"] { background: white; border: 1px solid #dfe7ef; border-radius: 14px;
       padding: 13px 16px; box-shadow: 0 3px 12px rgba(25, 49, 74, .05); }
   [data-testid="stMetricLabel"] { color: #557085; }
+  [data-testid="stMetricLabel"] p { white-space: normal; overflow-wrap: anywhere; font-size: 14px; }
   [data-testid="stMetricValue"] { color: #102a43; }
   div[data-testid="stTabs"] button { font-weight: 650; }
   div[data-testid="stDataFrame"] { border: 1px solid #dfe7ef; border-radius: 12px; overflow: hidden; }

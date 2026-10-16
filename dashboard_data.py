@@ -112,6 +112,11 @@ def portwatch_state(kind: str, resource: str, module_version: int,
     return ([] if resource == "catalog" else None), source_error or f"本地暂无{label}目录/日期缓存"
 
 
+@st.cache_data(max_entries=8, show_spinner=False)
+def port_time_series(node_ids: tuple[str, ...], selected_day: date, snapshot_identity: tuple) -> list[dict]:
+    return data_store.portwatch_daily_totals(node_ids, selected_day)
+
+
 def collector_status(collector: AIS.AISCollector | None = None) -> dict:
     """Return the collector status shape; app mode intentionally has no worker."""
 

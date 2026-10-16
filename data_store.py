@@ -509,6 +509,35 @@ def cached_portwatch_observations(kind, node_ids, first, last):
     return rows
 
 
+def portwatch_daily_totals(node_ids, last):
+    """Aggregate local daily calls, preserving a gap if any covered port is missing."""
+    from portwatch_records import SHIP_TYPES
+    node_ids = tuple(sorted(set(str(value) for value in node_ids)))
+    if not node_ids or last is None:
+        return []
+    fields = ["portcalls", *(f"portcalls_{kind}" for kind in SHIP_TYPES)]
+    values = ",".join(
+        f"TRY_CAST(json_extract_string(payload, '$.{field}') AS DOUBLE) AS {field}"
+        for field in fields
+    )
+    sums = ",".join(
+        f"CASE WHEN COUNT(*) FILTER (WHERE {field} >= 0 AND isfinite({field})) = {len(node_ids)} "
+        f"THEN SUM({field}) END AS {field}" for field in fields
+    )
+    placeholders = ",".join("?" for _ in node_ids)
+    with connect() as conn:
+        rows = conn.execute(f"""
+            WITH observations AS (
+                SELECT day, {values} FROM portwatch_daily
+                WHERE kind='ports' AND node_id IN ({placeholders}) AND day <= ?
+            ), daily AS (SELECT day, {sums} FROM observations GROUP BY day)
+            SELECT CAST(calendar.day AS DATE), {','.join('daily.'+field for field in fields)}
+            FROM generate_series((SELECT MIN(day) FROM observations), CAST(? AS DATE), INTERVAL 1 DAY) AS calendar(day)
+            LEFT JOIN daily ON daily.day=calendar.day ORDER BY calendar.day
+        """, [*node_ids, last, last]).fetchall()
+    return [dict(zip(["date", *fields], row)) for row in rows]
+
+
 def cached_portwatch_periods(kind, node_ids, periods):
     """Read sparse local facts across several disjoint indicator windows."""
     node_ids = tuple(sorted(set(str(node_id) for node_id in node_ids)))

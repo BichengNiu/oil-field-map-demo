@@ -58,12 +58,27 @@ class PortPopupTest(unittest.TestCase):
         self.assertEqual(metrics['本周累计艘次'],'100')
         self.assertEqual(metrics['本周油轮/液货船艘次/占比'],'9（9.0%）')
         rows=dashboard_rows.port_rows([{**one,'name':'Dubai','name_cn':'迪拜港','country':'United Arab Emirates'}],date(2026,10,9))
-        self.assertEqual(list(rows[0]),['港口名','国家','水域','日期','经营状态','当日进港艘次','本周累计艘次',
+        self.assertEqual(list(rows[0]),['港口名','港口类型','国家','水域','日期','经营状态','当日进港艘次','本周累计艘次',
             '本周集装箱船累计艘次','本周干散货船累计艘次','本周普通货船累计艘次','本周滚装船累计艘次','本周油轮/液货船累计艘次','本月累计艘次','本月集装箱船累计艘次','本月干散货船累计艘次','本月普通货船累计艘次','本月滚装船累计艘次','本月油轮/液货船累计艘次','纬度','经度','来源'])
         self.assertEqual(rows[0]['国家'],'阿联酋')
         self.assertEqual(rows[0]['经营状态'],'未知')
         self.assertEqual(rows[0]['港口名'],'迪拜港（Dubai）')
 
+
+    def test_metric_labels_use_actual_day_and_calendar_week(self):
+        labels = [label for label, _ in dashboard_rows.port_metrics([], date(2026, 1, 1))]
+        self.assertEqual(labels[1], "当日进港艘次（2026年01月01日）")
+        self.assertEqual(labels[2], "本周累计艘次（2025年12月29日-2026年01月01日）")
+        self.assertTrue(all(label.endswith("（2025年12月29日-2026年01月01日）") for label in labels[2:]))
+
+    def test_types_use_reviewed_facilities_not_observed_traffic(self):
+        from port_types import port_type_label
+        self.assertIn("综合港 / 油品枢纽", port_type_label({'portid':'port362'}))
+        self.assertIn("综合港 / 集装箱枢纽", port_type_label({'portid':'port744'}))
+        self.assertEqual(port_type_label({'wpi_names':['Khawr Al Zubair Lng Terminal']}), '液化天然气码头')
+        self.assertEqual(port_type_label({'name':'Al Hamriyah LPG Terminal'}), '液化石油气码头')
+        self.assertEqual(port_type_label({'name':'Fateh Oil Terminal'}), '油品码头')
+        self.assertEqual(port_type_label({'name':'Unknown', 'week_calls_tanker':100}), '待核实')
 
     def test_month_cumulative_and_seven_daily_positive_reports_establish_normal(self):
         from portwatch_records import port_status_label

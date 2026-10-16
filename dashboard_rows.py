@@ -5,11 +5,12 @@ from __future__ import annotations
 from entity_names import display_name
 
 import json
-from datetime import date
+from datetime import date, timedelta
 
 import ais as AIS
 import portwatch as PORTWATCH
 from port_inventory import country_label
+from port_types import port_type_label
 from portwatch_records import SHIP_TYPE_LABELS, port_status_label
 from map_popups import (
     METRIC_LABELS,
@@ -35,6 +36,7 @@ def port_rows(ports: list[dict], selected_day: date | None) -> list[dict]:
     ordered = sorted(ports, key=lambda port: (not bool(port.get("has_data")), -(port.get("portcalls") or 0), display_name(port)))
     return [{
         "港口名": display_name(port),
+        "港口类型": port_type_label(port),
         "国家": country_label(port.get("country")),
         "水域": port.get("region"),
         "日期": selected_day.isoformat() if selected_day else None,
@@ -49,21 +51,26 @@ def port_rows(ports: list[dict], selected_day: date | None) -> list[dict]:
     } for port in ordered]
 
 
-def port_metrics(ports: list[dict]) -> list[tuple[str, object]]:
+def port_metrics(ports: list[dict], selected_day: date | None = None) -> list[tuple[str, object]]:
     covered = [p for p in ports if PORTWATCH.has_independent_statistics(p)]
     def total(key, daily=False):
         values = [p.get(key) if not daily or p.get("has_data") else None for p in covered]
         return sum(values) if values and all(v is not None for v in values) else None
     def count(value):
         return "—" if value is None else f"{value:,.0f}"
+    def chinese_day(day):
+        return day.strftime("%Y年%m月%d日")
+    day_suffix = f"（{chinese_day(selected_day)}）" if selected_day else ""
+    week_suffix = (f"（{chinese_day(selected_day - timedelta(days=selected_day.weekday()))}-"
+                   f"{chinese_day(selected_day)}）") if selected_day else ""
     week_total = total("week_calls")
-    metrics = [("港口总数", len(ports)), ("当日进港艘次", count(total("portcalls", True))),
-               ("本周累计艘次", count(week_total))]
+    metrics = [("港口总数", len(ports)), ("当日进港艘次" + day_suffix, count(total("portcalls", True))),
+               ("本周累计艘次" + week_suffix, count(week_total))]
     for kind, label in SHIP_TYPE_LABELS.items():
         calls = total(f"week_calls_{kind}")
         share = calls / week_total * 100 if calls is not None and week_total else None
         value = f"{count(calls)}（{share:.1f}%）" if share is not None else f"{count(calls)}（—）"
-        metrics.append((f"本周{label}艘次/占比", value))
+        metrics.append((f"本周{label}艘次/占比{week_suffix}", value))
     return metrics
 
 
