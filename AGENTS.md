@@ -20,3 +20,8 @@
 - Streamlit is a read-only consumer of the GitHub DuckDB snapshot. Do not add upstream collection, database initialization writes, import controls, or refresh buttons to the app.
 - Scheduled collection publishes through `python snapshot_update.py --publish` on `main`. Keep one publisher, validate a candidate before replacement, and never force-push or merge DuckDB binaries.
 - Do not enable another scheduled writer (including GitHub Actions) alongside the Codex task.
+
+# Deployment compatibility
+
+- When changing Python dependency pins, check the Python version configured on Streamlit Cloud (3.14 as of 2026-10-16). Validate a clean requirements installation and app startup with that version, in addition to development-environment checks.
+- Do not rely on packages already installed in the development environment as proof that a new Cloud deployment can install requirements.
