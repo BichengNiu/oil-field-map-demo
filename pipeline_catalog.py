@@ -14,6 +14,7 @@ STATUSES = {
     "operating": "运行中", "construction": "建设中", "proposed": "规划中",
     "idle": "闲置", "mothballed": "封存", "retired": "退役",
     "cancelled": "取消", "shelved": "搁置",
+    "unknown": "当前状态待核实",
 }
 COUNTRY_NAMES = {
     "Saudi Arabia": "沙特阿拉伯", "Iraq": "伊拉克", "Iran": "伊朗",
@@ -53,6 +54,7 @@ def unmapped_popup(p):
     fields = [
         ("国家", "、".join(COUNTRY_NAMES.get(c, c) for c in p["countries"])),
         ("资料记载状态", STATUSES[p["status"]]),
+        *([("状态依据", p["status_note"])] if p.get("status_note") else []),
         ("预计投产", p.get("expected_start_year") or "未公布"),
         ("原油运力", "未公布独立数值（百万桶/日）"),
         ("项目目标", p.get("purpose") or "—"),

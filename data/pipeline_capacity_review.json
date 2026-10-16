@@ -387,11 +387,11 @@
       "segment": "",
       "original_capacity": "5,000,000.00",
       "original_unit": "bpd",
-      "capacity_million_bpd": "5",
-      "capacity_display_label": "基准标称运力",
-      "capacity_basis": "EIA记载5；2019年曾临时扩至7，不能将临时最大值当作当前可用值",
-      "capacity_reference_url": "https://www.eia.gov/todayinenergy/detail.php?id=65504",
-      "capacity_reference_date": "2025-06-16",
+      "capacity_million_bpd": "7",
+      "capacity_display_label": "运营商披露最大运力",
+      "capacity_basis": "Aramco 2026年一季度公告披露达到7.0百万桶/日；为系统能力，非实时流量或新增独立平行线路",
+      "capacity_reference_url": "https://www.aramco.com/en/news-media/news/2026/aramco-announces-first-quarter-2026-results",
+      "capacity_reference_date": "2026-05-10",
       "wiki_url": "https://www.gem.wiki/East-West_Crude_Oil_Pipeline",
       "wiki_http_status": 200,
       "wiki_sha256": "39541174a2ae72737aad30c7821b7dd748e0248083e20a1ba279f859e88a5cfa",
@@ -401,18 +401,28 @@
         "5,000,000 barrels per day",
         "2,000,000 barrels per day[3]"
       ],
-      "capacity_extra": [
-        {
-          "label": "2019年临时扩容最大值",
-          "value_million_bpd": "7",
-          "note": "历史临时值，不代表当前可用运力"
-        }
-      ],
+      "capacity_extra": [],
       "capacity_review_status": "primary_capacity_confirmed",
-      "capacity_reference_sha256": "34db5d1510af9878d7f89c56984cf677f45c516af2fde0fa87ddda90525ed6b9",
+      "capacity_reference_sha256": "a1e6d4a433a1fec870f35392cf7c6489bd75536df35e8866757afcb0c5f191ef",
       "pipeline_source": "East-West Crude Oil Pipeline",
       "name_cn": "沙特东西原油管线",
-      "name_en": "East-West Crude Oil Pipeline"
+      "name_en": "East-West Crude Oil Pipeline",
+      "previous_capacity_review": {
+        "capacity_million_bpd": "5",
+        "capacity_display_label": "基准标称运力",
+        "capacity_basis": "EIA记载5；2019年曾临时扩至7，不能将临时最大值当作当前可用值",
+        "capacity_reference_url": "https://www.eia.gov/todayinenergy/detail.php?id=65504",
+        "capacity_reference_date": "2025-06-16",
+        "capacity_extra": [
+          {
+            "label": "2019年临时扩容最大值",
+            "value_million_bpd": "7",
+            "note": "历史临时值，不代表当前可用运力"
+          }
+        ],
+        "capacity_review_status": "primary_capacity_confirmed",
+        "capacity_reference_sha256": "34db5d1510af9878d7f89c56984cf677f45c516af2fde0fa87ddda90525ed6b9"
+      }
     },
     {
       "project_id": "P0552",

@@ -1,0 +1,878 @@
+{
+  "reviewed_at": "2026-10-17",
+  "baseline_commit": "aebc18f48e1bd01cf0e11cd7e053d86a169f5b5e",
+  "added_ports": [
+    {
+      "portid": "facility_dibba_uae",
+      "name": "Dibba Port",
+      "name_cn": "迪巴港",
+      "name_en": "Dibba Port",
+      "display_name": "迪巴港（Dibba Port）",
+      "country": "United Arab Emirates",
+      "region": "阿曼湾",
+      "lat": 25.6166667,
+      "lon": 56.3,
+      "statistics_available": false,
+      "wpi_ids": [],
+      "wpi_names": [],
+      "source_url": "https://fujairahport.ae/port-overview/dibba-port/",
+      "inventory_source_url": "https://fujairahport.ae/port-overview/dibba-port/",
+      "coordinate_source_url": "https://msi.nga.mil/api/publications/download?key=16694491%2FSFH00000%2FPub172bk.pdf#page=252",
+      "coordinate_precision": "NGA §13.3 Diba Harbor 分钟精度代表点；非泊位边界",
+      "reviewed_port_type": "干货港",
+      "reviewed_business": "石灰石、骨料及熟料散货出口；深水散货终端于2024年3月开始商业作业",
+      "business_source_urls": [
+        "https://fujairahport.ae/port-overview/dibba-port/"
+      ],
+      "port_addition_review": "2026-10-16",
+      "reviewed_at": "2026-10-17",
+      "activity_source": "无独立PortWatch统计",
+      "coverage_note": "已核实具名设施；没有独立进港统计，不借用邻港、不拆分父港艘次、不补零。",
+      "coordinate_status": "verified_representative"
+    },
+    {
+      "portid": "facility_farasan",
+      "name": "Farasan Ferry Terminal",
+      "name_cn": "法拉桑客运港",
+      "name_en": "Farasan Ferry Terminal",
+      "display_name": "法拉桑客运港（Farasan Ferry Terminal）",
+      "country": "Saudi Arabia",
+      "region": "红海",
+      "lat": 16.7099276,
+      "lon": 42.1851997,
+      "statistics_available": false,
+      "wpi_ids": [],
+      "wpi_names": [],
+      "source_url": "https://www.spa.gov.sa/en/N2163485",
+      "inventory_source_url": "https://www.spa.gov.sa/en/N2163485",
+      "coordinate_source_url": "https://www.openstreetmap.org/node/8270722588",
+      "coordinate_precision": "OpenStreetMap具名渡轮设施/已核实航线端点代表点；非官方测量泊位边界",
+      "reviewed_port_type": "客运旅游港",
+      "reviewed_business": "吉赞—法拉桑渡轮客运及车辆运输",
+      "business_source_urls": [
+        "https://www.spa.gov.sa/en/N2163485"
+      ],
+      "port_addition_review": "2026-10-16",
+      "reviewed_at": "2026-10-17",
+      "activity_source": "无独立PortWatch统计",
+      "coverage_note": "已核实具名设施；没有独立进港统计，不借用邻港、不拆分父港艘次、不补零。",
+      "coordinate_status": "verified_osm_representative",
+      "coordinate_license": "ODbL 1.0 / OpenStreetMap contributors"
+    },
+    {
+      "portid": "facility_bandar_lengeh",
+      "name": "Bandar Lengeh",
+      "name_cn": "伦格港",
+      "name_en": "Bandar Lengeh",
+      "display_name": "伦格港（Bandar Lengeh）",
+      "country": "Iran",
+      "region": "波斯湾",
+      "lat": 26.55,
+      "lon": 54.8833333,
+      "statistics_available": false,
+      "wpi_ids": [],
+      "wpi_names": [],
+      "source_url": "https://www.iaphworldports.org/iaph-md/directory/port_details/61",
+      "inventory_source_url": "https://www.iaphworldports.org/iaph-md/directory/port_details/61",
+      "coordinate_source_url": "https://msi.nga.mil/api/publications/download?key=16694491%2FSFH00000%2FPub172bk.pdf#page=267",
+      "coordinate_precision": "NGA §13.38 Bandar-e Lengeh 港口所在地分钟精度代表点；非泊位边界",
+      "reviewed_port_type": "综合商港",
+      "reviewed_business": "PMO管理的商用港口，服务区域贸易；不据邻港推定具体船型进港量",
+      "business_source_urls": [
+        "https://www.iaphworldports.org/iaph-md/directory/port_details/61"
+      ],
+      "port_addition_review": "2026-10-16",
+      "reviewed_at": "2026-10-17",
+      "activity_source": "无独立PortWatch统计",
+      "coverage_note": "已核实具名设施；没有独立进港统计，不借用邻港、不拆分父港艘次、不补零。",
+      "coordinate_status": "verified_representative"
+    },
+    {
+      "portid": "facility_dibba_oman",
+      "name": "Dibba Ferry Terminal",
+      "name_cn": "迪巴渡轮港",
+      "name_en": "Dibba Ferry Terminal",
+      "display_name": "迪巴渡轮港（Dibba Ferry Terminal）",
+      "country": "Oman",
+      "region": "阿曼湾",
+      "lat": 25.6500349,
+      "lon": 56.270447,
+      "statistics_available": false,
+      "wpi_ids": [],
+      "wpi_names": [],
+      "source_url": "https://nfc.mwasalat.om/FAQs",
+      "inventory_source_url": "https://nfc.mwasalat.om/FAQs",
+      "coordinate_source_url": "https://www.openstreetmap.org/node/1315862381",
+      "coordinate_precision": "OpenStreetMap具名渡轮设施/已核实航线端点代表点；非官方测量泊位边界",
+      "reviewed_port_type": "地方及服务港",
+      "reviewed_business": "阿曼迪巴渔港内的客滚渡轮、沿海货运及渔业服务；与阿联酋迪巴港分开",
+      "business_source_urls": [
+        "https://nfc.mwasalat.om/FAQs",
+        "https://www.omandaily.om/print-article?articleId=17627"
+      ],
+      "port_addition_review": "2026-10-16",
+      "reviewed_at": "2026-10-17",
+      "activity_source": "无独立PortWatch统计",
+      "coverage_note": "已核实具名设施；没有独立进港统计，不借用邻港、不拆分父港艘次、不补零。",
+      "coordinate_status": "verified_osm_representative",
+      "coordinate_license": "ODbL 1.0 / OpenStreetMap contributors"
+    },
+    {
+      "portid": "facility_lima",
+      "name": "Lima Ferry Terminal",
+      "name_cn": "利马渡轮港",
+      "name_en": "Lima Ferry Terminal",
+      "display_name": "利马渡轮港（Lima Ferry Terminal）",
+      "country": "Oman",
+      "region": "阿曼湾",
+      "lat": 25.9378141,
+      "lon": 56.4311282,
+      "statistics_available": false,
+      "wpi_ids": [],
+      "wpi_names": [],
+      "source_url": "https://nfc.mwasalat.om/FAQs",
+      "inventory_source_url": "https://nfc.mwasalat.om/FAQs",
+      "coordinate_source_url": "https://www.openstreetmap.org/node/3722072865",
+      "coordinate_precision": "OpenStreetMap具名渡轮设施/已核实航线端点代表点；非官方测量泊位边界",
+      "reviewed_port_type": "客运旅游港",
+      "reviewed_business": "穆桑代姆利马地区客运及车辆渡轮服务",
+      "business_source_urls": [
+        "https://nfc.mwasalat.om/FAQs",
+        "https://www.omandaily.om/print-article?articleId=1183707"
+      ],
+      "port_addition_review": "2026-10-16",
+      "reviewed_at": "2026-10-17",
+      "activity_source": "无独立PortWatch统计",
+      "coverage_note": "已核实具名设施；没有独立进港统计，不借用邻港、不拆分父港艘次、不补零。",
+      "coordinate_status": "verified_osm_representative",
+      "coordinate_license": "ODbL 1.0 / OpenStreetMap contributors"
+    },
+    {
+      "portid": "facility_shannah",
+      "name": "Shannah Ferry Terminal",
+      "name_cn": "沙纳渡轮港",
+      "name_en": "Shannah Ferry Terminal",
+      "display_name": "沙纳渡轮港（Shannah Ferry Terminal）",
+      "country": "Oman",
+      "region": "阿拉伯海",
+      "lat": 20.7427145,
+      "lon": 58.7484832,
+      "statistics_available": false,
+      "wpi_ids": [],
+      "wpi_names": [],
+      "source_url": "https://mwasalat.om/",
+      "inventory_source_url": "https://mwasalat.om/",
+      "coordinate_source_url": "https://www.openstreetmap.org/node/655414824",
+      "coordinate_precision": "OpenStreetMap具名渡轮设施/已核实航线端点代表点；非官方测量泊位边界",
+      "reviewed_port_type": "客运旅游港",
+      "reviewed_business": "沙纳—马西拉客滚渡轮航线的大陆端",
+      "business_source_urls": [
+        "https://mwasalat.om/"
+      ],
+      "port_addition_review": "2026-10-16",
+      "reviewed_at": "2026-10-17",
+      "activity_source": "无独立PortWatch统计",
+      "coverage_note": "已核实具名设施；没有独立进港统计，不借用邻港、不拆分父港艘次、不补零。",
+      "coordinate_status": "verified_osm_representative",
+      "coordinate_license": "ODbL 1.0 / OpenStreetMap contributors"
+    },
+    {
+      "portid": "facility_masirah",
+      "name": "Masirah Ferry Terminal (Hilf)",
+      "name_cn": "马西拉渡轮港（希尔夫）",
+      "name_en": "Masirah Ferry Terminal (Hilf)",
+      "display_name": "马西拉渡轮港（希尔夫）（Masirah Ferry Terminal (Hilf)）",
+      "country": "Oman",
+      "region": "阿拉伯海",
+      "lat": 20.6666667,
+      "lon": 58.8666667,
+      "statistics_available": false,
+      "wpi_ids": [],
+      "wpi_names": [],
+      "source_url": "https://mwasalat.om/",
+      "inventory_source_url": "https://mwasalat.om/",
+      "coordinate_source_url": "https://msi.nga.mil/api/publications/download?key=16694491%2FSFH00000%2FPub172bk.pdf#page=187",
+      "coordinate_precision": "NGA §9.45 Hilf港代表点；分钟精度，非独立渡轮泊位测量",
+      "reviewed_port_type": "地方及服务港",
+      "reviewed_business": "马西拉岛希尔夫港的客滚渡轮及渔业服务",
+      "business_source_urls": [
+        "https://mwasalat.om/"
+      ],
+      "port_addition_review": "2026-10-16",
+      "reviewed_at": "2026-10-17",
+      "activity_source": "无独立PortWatch统计",
+      "coverage_note": "已核实具名设施；没有独立进港统计，不借用邻港、不拆分父港艘次、不补零。",
+      "coordinate_status": "verified_representative"
+    },
+    {
+      "portid": "facility_taba",
+      "name": "Taba Sea Port (Taba Heights Marina)",
+      "name_cn": "塔巴海港（塔巴高地码头）",
+      "name_en": "Taba Sea Port (Taba Heights Marina)",
+      "display_name": "塔巴海港（塔巴高地码头）（Taba Sea Port (Taba Heights Marina)）",
+      "country": "Egypt",
+      "region": "亚喀巴湾",
+      "lat": 29.375455,
+      "lon": 34.7938729,
+      "statistics_available": false,
+      "wpi_ids": [],
+      "wpi_names": [],
+      "source_url": "https://www.mts.gov.eg/en/port/مارينـا-طابا-هايتس-السياحية/",
+      "inventory_source_url": "https://www.mts.gov.eg/en/port/مارينـا-طابا-هايتس-السياحية/",
+      "coordinate_source_url": "https://www.mts.gov.eg/en/port/مارينـا-طابا-هايتس-السياحية/",
+      "coordinate_precision": "政府公布五个港区边界点的算术平均值，仅作港区代表点",
+      "reviewed_port_type": "客运旅游港",
+      "reviewed_business": "旅客、游艇和旅游船服务；Taba port与Taba Heights为同一设施，不重复建港",
+      "business_source_urls": [
+        "https://www.mts.gov.eg/en/port/مارينـا-طابا-هايتس-السياحية/"
+      ],
+      "port_addition_review": "2026-10-16",
+      "reviewed_at": "2026-10-17",
+      "activity_source": "无独立PortWatch统计",
+      "coverage_note": "已核实具名设施；没有独立进港统计，不借用邻港、不拆分父港艘次、不补零。",
+      "coordinate_status": "verified_representative",
+      "coordinate_boundary_dms": {
+        "lat": [
+          [
+            29,
+            22,
+            28.469
+          ],
+          [
+            29,
+            22,
+            28.069
+          ],
+          [
+            29,
+            22,
+            32.52
+          ],
+          [
+            29,
+            22,
+            34.645
+          ],
+          [
+            29,
+            22,
+            34.487
+          ]
+        ],
+        "lon": [
+          [
+            34,
+            47,
+            43.476
+          ],
+          [
+            34,
+            47,
+            33.531
+          ],
+          [
+            34,
+            47,
+            33.882
+          ],
+          [
+            34,
+            47,
+            37.185
+          ],
+          [
+            34,
+            47,
+            41.639
+          ]
+        ]
+      }
+    },
+    {
+      "portid": "facility_damerjog",
+      "name": "Damerjog Liquid Bulk Port",
+      "name_cn": "达梅尔乔格液体散货港",
+      "name_en": "Damerjog Liquid Bulk Port",
+      "display_name": "达梅尔乔格液体散货港（Damerjog Liquid Bulk Port）",
+      "country": "Djibouti",
+      "region": "亚丁湾",
+      "lat": null,
+      "lon": null,
+      "statistics_available": false,
+      "wpi_ids": [],
+      "wpi_names": [],
+      "source_url": "https://dpfza.gov.dj/damerjog-liquid-bulk-port-modern-oil-terminal-world-class-capacity",
+      "inventory_source_url": "https://dpfza.gov.dj/damerjog-liquid-bulk-port-modern-oil-terminal-world-class-capacity",
+      "coordinate_source_url": null,
+      "coordinate_precision": "官方已确认港口设施；无可核验码头坐标，UN/LOCODE村镇点不冒充海上油码头",
+      "reviewed_port_type": "油品港及终端",
+      "reviewed_business": "柴油、航煤、汽油、重油、LPG及食用油多货种液体装卸设施；非单一原油港",
+      "business_source_urls": [
+        "https://dpfza.gov.dj/damerjog-liquid-bulk-port-modern-oil-terminal-world-class-capacity"
+      ],
+      "port_addition_review": "2026-10-16",
+      "reviewed_at": "2026-10-17",
+      "activity_source": "无独立PortWatch统计",
+      "coverage_note": "已核实具名设施；没有独立进港统计，不借用邻港、不拆分父港艘次、不补零。",
+      "coordinate_status": "unresolved_no_map_point"
+    }
+  ],
+  "added_pipeline_projects": [
+    {
+      "project_id": "KAAOT_TERMINAL_LINE",
+      "name_cn": "豪尔阿迈耶终端输油管线",
+      "name_en": "Khor Al-Amaya Terminal Oil Pipeline",
+      "countries": [
+        "Iraq"
+      ],
+      "status": "unknown",
+      "source_date": "2012",
+      "source_url": "https://openjicareport.jica.go.jp/pdf/12068268.pdf",
+      "purpose": "法奥陆上终端至豪尔阿迈耶等海上出口设施的原油输送；历史政府项目资料，不据此声称当前通油",
+      "geometry_note": "JICA政府合作项目证实海底原油管线；缺少可核验连续坐标及现时状态，暂不画线。",
+      "name": "豪尔阿迈耶终端输油管线（Khor Al-Amaya Terminal Oil Pipeline）",
+      "fuel": "Oil",
+      "capacity_million_bpd": null,
+      "geometry": null,
+      "expected_start_year": null,
+      "reviewed_at": "2026-10-17",
+      "source_urls": [
+        "https://openjicareport.jica.go.jp/pdf/12068268.pdf"
+      ],
+      "status_note": "来源未能确认当前运行/建设阶段；不以历史资料冒充当前状态"
+    },
+    {
+      "project_id": "GOREH_B_GENAVEH",
+      "name_cn": "古雷B—格纳韦输油馈线",
+      "name_en": "Goreh B-Genaveh Oil Pipeline",
+      "countries": [
+        "Iran"
+      ],
+      "status": "unknown",
+      "source_date": "2026-06-18",
+      "source_url": "https://github.com/GlobalEnergyMonitor/goit-ggit-data-ops/blob/9b42e2a37dedea55d3a0eb34657b86f9bca5d464/writing-and-analysis/2026-06-goit-release/hormuz-alternatives/Hormuz-alternative-pipelines-brief-2026-06.docx",
+      "purpose": "古雷B至格纳韦输油馈线项目；GEM研究备忘记载在建，较新所有权目录列规划，现阶段仍有冲突",
+      "geometry_note": "该项目区别于已有古雷—格纳韦运行线路；无源几何，不复用旧线或连接端点。",
+      "name": "古雷B—格纳韦输油馈线（Goreh B-Genaveh Oil Pipeline）",
+      "fuel": "Oil",
+      "capacity_million_bpd": null,
+      "geometry": null,
+      "expected_start_year": null,
+      "reviewed_at": "2026-10-17",
+      "source_urls": [
+        "https://github.com/GlobalEnergyMonitor/goit-ggit-data-ops/blob/9b42e2a37dedea55d3a0eb34657b86f9bca5d464/writing-and-analysis/2026-06-goit-release/hormuz-alternatives/Hormuz-alternative-pipelines-brief-2026-06.docx"
+      ],
+      "status_note": "来源未能确认当前运行/建设阶段；不以历史资料冒充当前状态"
+    }
+  ],
+  "capacity_update": {
+    "project_id": "P0551",
+    "pipeline": "沙特东西原油管线（East-West Crude Oil Pipeline）",
+    "segment": "",
+    "original_capacity": "5,000,000.00",
+    "original_unit": "bpd",
+    "capacity_million_bpd": "7",
+    "capacity_display_label": "运营商披露最大运力",
+    "capacity_basis": "Aramco 2026年一季度公告披露达到7.0百万桶/日；为系统能力，非实时流量或新增独立平行线路",
+    "capacity_reference_url": "https://www.aramco.com/en/news-media/news/2026/aramco-announces-first-quarter-2026-results",
+    "capacity_reference_date": "2026-05-10",
+    "wiki_url": "https://www.gem.wiki/East-West_Crude_Oil_Pipeline",
+    "wiki_http_status": 200,
+    "wiki_sha256": "39541174a2ae72737aad30c7821b7dd748e0248083e20a1ba279f859e88a5cfa",
+    "wiki_revision": 1168009,
+    "wiki_error": null,
+    "reference_capacity_lines": [
+      "5,000,000 barrels per day",
+      "2,000,000 barrels per day[3]"
+    ],
+    "capacity_extra": [],
+    "capacity_review_status": "primary_capacity_confirmed",
+    "capacity_reference_sha256": "a1e6d4a433a1fec870f35392cf7c6489bd75536df35e8866757afcb0c5f191ef",
+    "pipeline_source": "East-West Crude Oil Pipeline",
+    "name_cn": "沙特东西原油管线",
+    "name_en": "East-West Crude Oil Pipeline",
+    "previous_capacity_review": {
+      "capacity_million_bpd": "5",
+      "capacity_display_label": "基准标称运力",
+      "capacity_basis": "EIA记载5；2019年曾临时扩至7，不能将临时最大值当作当前可用值",
+      "capacity_reference_url": "https://www.eia.gov/todayinenergy/detail.php?id=65504",
+      "capacity_reference_date": "2025-06-16",
+      "capacity_extra": [
+        {
+          "label": "2019年临时扩容最大值",
+          "value_million_bpd": "7",
+          "note": "历史临时值，不代表当前可用运力"
+        }
+      ],
+      "capacity_review_status": "primary_capacity_confirmed",
+      "capacity_reference_sha256": "34db5d1510af9878d7f89c56984cf677f45c516af2fde0fa87ddda90525ed6b9"
+    }
+  },
+  "source_receipts": {
+    "dibba": {
+      "url": "https://fujairahport.ae/port-overview/dibba-port/",
+      "status": 200,
+      "final_url": "https://fujairahport.ae/port-overview/dibba-port/",
+      "bytes": 266617,
+      "sha256": "a5296bb7cbef08b6e3e30647676ba86edc353fab4e6c9c16cc57d59b98b9f972",
+      "retrieved_at": "2026-10-16T20:23:32.198571+00:00"
+    },
+    "mwasalat": {
+      "url": "https://mwasalat.om/",
+      "status": 503,
+      "final_url": "https://mwasalat.om/",
+      "bytes": 91,
+      "sha256": "2f85832e31ca57711e6107af6b142363351ae516adb71c69afc643fac26be7f6",
+      "retrieved_at": "2026-10-16T20:23:34.236159+00:00"
+    },
+    "nfc": {
+      "url": "https://nfc.mwasalat.om/FAQs",
+      "status": 503,
+      "final_url": "https://nfc.mwasalat.om/FAQs",
+      "bytes": 91,
+      "sha256": "2f85832e31ca57711e6107af6b142363351ae516adb71c69afc643fac26be7f6",
+      "retrieved_at": "2026-10-16T20:23:34.111835+00:00"
+    },
+    "farasan": {
+      "url": "https://www.spa.gov.sa/en/N2163485",
+      "status": 200,
+      "final_url": "https://www.spa.gov.sa/en/N2163485",
+      "bytes": 166382,
+      "sha256": "b78aaed62177cce61deae9a12767c3903abcc406a5d0b5f34fee3ab4cabd5f76",
+      "retrieved_at": "2026-10-16T20:23:30.604494+00:00"
+    },
+    "lengeh": {
+      "url": "https://www.iaphworldports.org/iaph-md/directory/port_details/61",
+      "status": 200,
+      "final_url": "https://www.iaphworldports.org/iaph-md/directory/port_details/61",
+      "bytes": 51731,
+      "sha256": "a589c25b0ae76608a05cfd79894c270381a81ac0f203d71a1f78036acece07cb",
+      "retrieved_at": "2026-10-16T20:23:30.487473+00:00"
+    },
+    "damerjog": {
+      "url": "https://dpfza.gov.dj/damerjog-liquid-bulk-port-modern-oil-terminal-world-class-capacity",
+      "status": 200,
+      "final_url": "https://dpfza.gov.dj/damerjog-liquid-bulk-port-modern-oil-terminal-world-class-capacity",
+      "bytes": 27593,
+      "sha256": "72f8e2e57798411839ad6e4a28ba38279a4ff0ecced0d0b4567cb4448542d47b",
+      "retrieved_at": "2026-10-16T20:23:32.351127+00:00"
+    },
+    "damerjog2026": {
+      "url": "https://dpfza.gov.dj/chairman-receives-ethiopian-minister-transport-and-logistics-damerjog-liquid-bulk-port",
+      "status": 200,
+      "final_url": "https://dpfza.gov.dj/chairman-receives-ethiopian-minister-transport-and-logistics-damerjog-liquid-bulk-port",
+      "bytes": 27348,
+      "sha256": "b2cbb586ca1c6cad214341ebc7ffd44a458a4eef10f3e920324dce43b8453020",
+      "retrieved_at": "2026-10-16T20:23:32.468918+00:00"
+    },
+    "damerjog_project": {
+      "url": "https://dpfza.gov.dj/index.php/ceremony-launching-damerjog-liquid-bulk-port-construction",
+      "status": 200,
+      "final_url": "https://dpfza.gov.dj/index.php/ceremony-launching-damerjog-liquid-bulk-port-construction",
+      "bytes": 28333,
+      "sha256": "4d66168bb9f1a3aaebfd886d79046900605da894b4137c77ef7afc84211226b1",
+      "retrieved_at": "2026-10-16T20:23:34.173020+00:00"
+    },
+    "aramco": {
+      "url": "https://www.aramco.com/en/news-media/news/2026/aramco-announces-first-quarter-2026-results",
+      "status": 200,
+      "final_url": "https://www.aramco.com/en/news-media/news/2026/aramco-announces-first-quarter-2026-results",
+      "bytes": 500435,
+      "sha256": "a1e6d4a433a1fec870f35392cf7c6489bd75536df35e8866757afcb0c5f191ef",
+      "retrieved_at": "2026-10-16T20:23:34.047795+00:00"
+    },
+    "kaat": {
+      "url": "https://openjicareport.jica.go.jp/pdf/12068268.pdf",
+      "status": 200,
+      "final_url": "https://openjicareport.jica.go.jp/pdf/12068268.pdf",
+      "bytes": 1559617,
+      "sha256": "cea4f75810b0b5b65dad114835a9ce107d754b30b4a6ebfec18e90a47d706e92",
+      "retrieved_at": "2026-10-16T20:23:34.577055+00:00"
+    },
+    "goreh": {
+      "url": "https://www.gem.wiki/Goreh_B-Genaveh_Oil_Pipeline",
+      "status": 403,
+      "final_url": "https://www.gem.wiki/Goreh_B-Genaveh_Oil_Pipeline",
+      "bytes": 6094,
+      "sha256": "2e353b37aa978b168825f3692d0bf5264a1c4ccc46c156df4f5289cc19fabbd2",
+      "retrieved_at": "2026-10-16T20:23:34.583179+00:00"
+    },
+    "dibbaguide": {
+      "url": "https://mefks.ae/wp-content/uploads/2025/11/Dibba%20Port%20information%20Guide-2nd%20Edition%2019-05-2025.pdf",
+      "status": 404,
+      "final_url": "https://mefks.ae/wp-content/uploads/2025/11/Dibba%20Port%20information%20Guide-2nd%20Edition%2019-05-2025.pdf",
+      "bytes": 4511,
+      "sha256": "e7db95c97a5d45787cc3e40cbcb93b748fefc65bc14e162c746e37f979861729",
+      "retrieved_at": "2026-10-16T20:23:35.366167+00:00"
+    },
+    "ortaba": {
+      "url": "https://tabaheights.com/marina/",
+      "status": 403,
+      "final_url": "https://tabaheights.com/marina/",
+      "bytes": 146,
+      "sha256": "32f2fa940d4b4fe19aca1e53a24e5aac29c57b7c5ee78588325b87f1b649c864",
+      "retrieved_at": "2026-10-16T20:23:35.786300+00:00"
+    },
+    "mtstaba": {
+      "url": "https://www.mts.gov.eg/en/port/مارينـا-طابا-هايتس-السياحية/",
+      "status": 503,
+      "final_url": "https://www.mts.gov.eg/en/port/%D9%85%D8%A7%D8%B1%D9%8A%D9%86%D9%80%D8%A7-%D8%B7%D8%A7%D8%A8%D8%A7-%D9%87%D8%A7%D9%8A%D8%AA%D8%B3-%D8%A7%D9%84%D8%B3%D9%8A%D8%A7%D8%AD%D9%8A%D8%A9/",
+      "bytes": 216,
+      "sha256": "b5b660bc2bb92e97199b4b045f7e21eca39307fa087b8be85bb006cc7d83b34b",
+      "retrieved_at": "2026-10-16T20:23:35.506217+00:00"
+    },
+    "nga_reused": {
+      "url": "https://msi.nga.mil/api/publications/download?key=16694491%2FSFH00000%2FPub172bk.pdf",
+      "final_url": "https://msi.nga.mil/api/publications/download?key=16694491%2FSFH00000%2FPub172bk.pdf",
+      "retrieved_at": "2026-10-16T11:09:39Z",
+      "sha256": "576772bceaf94b7a96f2c70d2dd74bba66ac30a939b3dfb98e248cbde68196df",
+      "bytes": 14353026,
+      "title": "NGA Pub.172 Red Sea and the Persian Gulf, 24th edition, corrected 30 August 2025",
+      "source_date": "2025-08-30",
+      "source_date_kind": "publication_version"
+    },
+    "goreh_research_document": {
+      "unmapped_source_assessment_date": "2026-06-18",
+      "unmapped_source_url": "https://github.com/GlobalEnergyMonitor/goit-ggit-data-ops/blob/9b42e2a37dedea55d3a0eb34657b86f9bca5d464/writing-and-analysis/2026-06-goit-release/hormuz-alternatives/Hormuz-alternative-pipelines-brief-2026-06.docx",
+      "unmapped_source_sha256": "539428303eea45064a3d6e135064634e31bc91db8108346a00e7968fc7f491e9"
+    }
+  },
+  "resolved_catalog_gaps": 9,
+  "new_independent_statistics_nodes": 0,
+  "verified_representative_points": 8,
+  "unresolved_port_coordinates": [
+    "facility_damerjog"
+  ],
+  "type_followup": [
+    {
+      "portid": "wpi48035",
+      "result": "未解决货种：NGA仅记载气体船码头；IFC的氨码头及现有LNG终端未建立与该WPI主键的一对一关系，不按同城同名强行匹配。",
+      "checked_urls": [
+        "https://disclosures.ifc.org/project-detail/ESRS/30974/oci-group",
+        "https://disclosures.ifc.org/project-detail/ESRS/35033/chsc-limited",
+        "https://msi.nga.mil/api/publications/download?key=16694491%2FSFH00000%2FPub172bk.pdf#page=36"
+      ]
+    },
+    {
+      "portid": "wpi48533",
+      "result": "未解决精确货种：NGA证实SPM及NIGC联络，历史凝析油报道支持线索，尚无可核验运营商资料把现时设施与WPI48533唯一对应；不改成原油码头或LNG码头。",
+      "checked_urls": [
+        "https://msi.nga.mil/api/publications/download?key=16694491%2FSFH00000%2FPub172bk.pdf#page=275",
+        "https://www.iranicaonline.org/articles/natural-gas-industry-in-iran/"
+      ]
+    }
+  ],
+  "remaining_scope": "UN/LOCODE未匹配地点、同名及父子港区关系仍须逐设施核对。目录补录不等于全部海岸设施已穷尽；管线缺几何和端点冲突不靠直线填补。",
+  "indexed_source_checks": [
+    {
+      "url": "https://www.mts.gov.eg/en/port/مارينـا-طابا-هايتس-السياحية/",
+      "access": "direct HTTP503; official indexed page readable",
+      "finding": "Taba Sea Port/Taba Heights facility at Moqbela south of Taba; five official boundary points; receives passengers, yachts and leisure vessels."
+    },
+    {
+      "url": "https://nfc.mwasalat.om/FAQs",
+      "access": "direct HTTP503; official indexed routes plus government newspaper interview",
+      "finding": "Dibba and Lima are ferry destinations; the Oman facility is distinct from Dibba UAE."
+    },
+    {
+      "url": "https://mwasalat.om/",
+      "access": "direct HTTP503; official indexed timetable readable",
+      "finding": "Shannah–Masirah route, supported by NGA Hilf ferry routes for Masirah island."
+    },
+    {
+      "url": "https://www.omandaily.om/print-article?articleId=17627",
+      "finding": "Government newspaper interviews Dibba port head on fishing, cargo, passenger/vehicle ferry services."
+    },
+    {
+      "url": "https://www.omandaily.om/print-article?articleId=1183707",
+      "finding": "Government newspaper identifies Lima harbor ferry links with Dibba, Khasab and Shinas."
+    },
+    {
+      "url": "https://fujairahport.ae/port-overview/dibba-port-location/",
+      "finding": "Official longitude text says65E despite Gulf of Oman location; embedded map and NGA are56E. Did not copy erroneous65E; used NGA representative point."
+    }
+  ],
+  "osm_coordinate_evidence": [
+    {
+      "portid": "facility_farasan",
+      "receipt": {
+        "url": "https://www.openstreetmap.org/api/0.6/map?bbox=42.16,16.69,42.20,16.73",
+        "sha256": "9a72bc399aa39b9dc1dddd28beab0a389b66621bd19c761b18f54d4beecc1732",
+        "retrieved_at": "2026-10-16T20:29:07.235724+00:00",
+        "license": "OpenStreetMap contributors / ODbL 1.0"
+      },
+      "node": {
+        "id": "8270722588",
+        "version": "3",
+        "timestamp": "2023-08-03T14:48:44Z",
+        "lat": "16.7099276",
+        "lon": "42.1851997"
+      },
+      "tags": {
+        "amenity": "ferry_terminal",
+        "ferry": "yes",
+        "name": "فرسان",
+        "name:ar": "فرسان",
+        "name:en": "Farasan",
+        "public_transport": "station"
+      },
+      "linked_ferry_routes": [
+        {
+          "type": "way",
+          "id": "889636735",
+          "version": "4",
+          "tags": {
+            "name": "جيزان - فرسان",
+            "name:ar": "جيزان - فرسان",
+            "name:en": "Jazan - Farasan",
+            "route": "ferry"
+          },
+          "first_node": "8270722588",
+          "last_node": "8270739487"
+        }
+      ]
+    },
+    {
+      "portid": "facility_dibba_oman",
+      "receipt": {
+        "url": "https://www.openstreetmap.org/api/0.6/map?bbox=56.25,25.63,56.29,25.67",
+        "sha256": "1b474cc4b9a0044935ca5becb7cd9f4a8fc49ba8c0923ad75f8fb3c0d4ec8bd1",
+        "retrieved_at": "2026-10-16T20:29:07.686830+00:00",
+        "license": "OpenStreetMap contributors / ODbL 1.0"
+      },
+      "node": {
+        "id": "1315862381",
+        "version": "9",
+        "timestamp": "2026-10-09T21:10:01Z",
+        "lat": "25.6500349",
+        "lon": "56.2704470"
+      },
+      "tags": {
+        "amenity": "ferry_terminal",
+        "ferry": "yes",
+        "public_transport": "stop_position"
+      },
+      "linked_ferry_routes": [
+        {
+          "type": "way",
+          "id": "342141841",
+          "version": "28",
+          "tags": {
+            "duration": "02:30",
+            "motor_vehicle": "yes",
+            "name": "شناص - دبا",
+            "name:ar": "شناص - دبا",
+            "name:en": "Shinas - Dibba",
+            "operator": "مواصلات",
+            "operator:en": "Mwasalat",
+            "route": "ferry"
+          },
+          "first_node": "3491713835",
+          "last_node": "1315862381"
+        },
+        {
+          "type": "way",
+          "id": "483030983",
+          "version": "4",
+          "tags": {
+            "duration": "01:00",
+            "motor_vehicle": "yes",
+            "name": "دبا - ليما",
+            "name:ar": "دبا - ليما",
+            "name:en": "Dibba - Lima",
+            "operator": "مواصلات",
+            "operator:en": "Mwasalat",
+            "route": "ferry"
+          },
+          "first_node": "1315862381",
+          "last_node": "3722072865"
+        },
+        {
+          "type": "way",
+          "id": "1395687817",
+          "version": "5",
+          "tags": {
+            "duration": "02:30",
+            "motor_vehicle": "yes",
+            "name": "خصب - دبا",
+            "name:ar": "خصب - دبا",
+            "name:en": "Khasab - Dibba",
+            "operator": "مواصلات",
+            "operator:en": "Mwasalat",
+            "route": "ferry"
+          },
+          "first_node": "1315862381",
+          "last_node": "3722004537"
+        }
+      ]
+    },
+    {
+      "portid": "facility_lima",
+      "receipt": {
+        "url": "https://www.openstreetmap.org/api/0.6/map?bbox=56.40,25.90,56.47,25.97",
+        "sha256": "d2cba04ae40c0c57fa89eacc9508d56b320a00049bdf2d2ee89dade3e7523868",
+        "retrieved_at": "2026-10-16T20:29:07.469586+00:00",
+        "license": "OpenStreetMap contributors / ODbL 1.0"
+      },
+      "node": {
+        "id": "3722072865",
+        "version": "5",
+        "timestamp": "2026-10-09T23:54:25Z",
+        "lat": "25.9378141",
+        "lon": "56.4311282"
+      },
+      "tags": {
+        "amenity": "ferry_terminal",
+        "ferry": "yes",
+        "public_transport": "stop_position"
+      },
+      "linked_ferry_routes": [
+        {
+          "type": "way",
+          "id": "483030983",
+          "version": "4",
+          "tags": {
+            "duration": "01:00",
+            "motor_vehicle": "yes",
+            "name": "دبا - ليما",
+            "name:ar": "دبا - ليما",
+            "name:en": "Dibba - Lima",
+            "operator": "مواصلات",
+            "operator:en": "Mwasalat",
+            "route": "ferry"
+          },
+          "first_node": "1315862381",
+          "last_node": "3722072865"
+        },
+        {
+          "type": "way",
+          "id": "1395687818",
+          "version": "5",
+          "tags": {
+            "alt_name": "خصب - ليماء",
+            "duration": "02:00",
+            "motor_vehicle": "yes",
+            "name": "خصب - ليما",
+            "name:ar": "خصب - ليما",
+            "name:en": "Khasab - Lima",
+            "operator": "مواصلات",
+            "operator:en": "Mwasalat",
+            "route": "ferry"
+          },
+          "first_node": "3722004537",
+          "last_node": "3722072865"
+        }
+      ]
+    },
+    {
+      "portid": "facility_shannah",
+      "receipt": {
+        "url": "https://www.openstreetmap.org/api/0.6/map?bbox=58.70,20.75,58.79,20.80",
+        "sha256": "dfce5af1179c10ce615086cbd5b4e4bad274f8644d2a0eea291f6d3ff3cb879e",
+        "retrieved_at": "2026-10-16T20:29:08.256899+00:00",
+        "license": "OpenStreetMap contributors / ODbL 1.0"
+      },
+      "node": {
+        "id": "655414824",
+        "version": "8",
+        "timestamp": "2026-10-09T17:24:04Z",
+        "lat": "20.7427145",
+        "lon": "58.7484832"
+      },
+      "tags": {
+        "amenity": "ferry_terminal",
+        "ferry": "yes",
+        "name": "ميناء شنة",
+        "name:ar": "ميناء شنة",
+        "name:en": "Shannah Port",
+        "public_transport": "stop_position"
+      },
+      "linked_ferry_routes": []
+    }
+  ],
+  "rejected_spatial_candidate": {
+    "portid": "facility_damerjog",
+    "candidate": {
+      "receipt": {
+        "url": "https://www.openstreetmap.org/api/0.6/map?bbox=43.16,11.45,43.25,11.55",
+        "sha256": "a05fbc7205f30dc765e36a61061713d24d011abb4c9c290e1704ad6923593af3",
+        "retrieved_at": "2026-10-16T20:29:08.667026+00:00",
+        "license": "OpenStreetMap contributors / ODbL 1.0"
+      },
+      "objects": [
+        {
+          "type": "way",
+          "id": "193044654",
+          "center": [
+            11.54254974,
+            43.16160959454545
+          ],
+          "tags": {
+            "country": "US",
+            "landuse": "military",
+            "name": "Camp Lemonnier معسكر ليمونيه",
+            "name:ar": "معسكر ليمونيه",
+            "name:en": "Camp Lemonnier",
+            "name:fr": "Camp Lemonnier",
+            "note": "Cette zone d'utilisation des terres militaires est une \"estimation prudente\". Vous pouvez clairement voir suffisamment d'équipements et de structures militaires dans cette zone pour savoir que c'est militaire (comme le note également le type d'aéroport).",
+            "note:en": "This military landuse area is a \"conserative estimation\". You can clearly see enough military equipment and structures in this area to know that it's military (as the airport type notes, too).",
+            "note:fr": "Cette zone d'utilisation des terres militaires est une \"estimation prudente\". Vous pouvez clairement voir suffisamment d'équipements et de structures militaires dans cette zone pour savoir que c'est militaire (comme le note également le type d'aéroport).",
+            "operator": "Marine américaine",
+            "operator:ar": "بحرية الولايات المتحدة",
+            "operator:en": "US Navy",
+            "operator:fr": "Marine américaine",
+            "short_name": "CLDJ",
+            "website": "https://www.cnic.navy.mil/cldj",
+            "wikidata": "Q2935221",
+            "wikipedia": "fr:Camp Lemonnier"
+          }
+        },
+        {
+          "type": "way",
+          "id": "753780246",
+          "center": [
+            11.549108851351352,
+            43.15559601783784
+          ],
+          "tags": {
+            "aerodrome:type": "international",
+            "aeroway": "aerodrome",
+            "closest_town": "Djibouti City",
+            "ele": "15",
+            "iata": "JIB",
+            "icao": "HDAM",
+            "is_in:country": "Djibouti",
+            "landuse": "military",
+            "military": "airfield",
+            "name": "Aéroport International de Djibouti-Ambouli مطار جيبوتي الدولي",
+            "name:ar": "مطار جيبوتي الدولي",
+            "name:cs": "Mezinárodní letiště Džíbutí",
+            "name:de": "Flughafen Dschibuti",
+            "name:en": "Djibouti-Ambouli International Airport",
+            "name:fr": "Aéroport International de Djibouti-Ambouli",
+            "ref": "JIB",
+            "source": "wikipedia",
+            "wikidata": "Q620706",
+            "wikipedia": "fr:Aéroport international Ambouli"
+          }
+        },
+        {
+          "type": "way",
+          "id": "1255981986",
+          "center": [
+            11.514491307407408,
+            43.24130079259259
+          ],
+          "tags": {
+            "industrial": "port",
+            "landuse": "industrial",
+            "name": "JETEE PETROLIER",
+            "name:fr": "Jetée pétrolière",
+            "operator": "CONSTRUCTION"
+          }
+        }
+      ]
+    },
+    "reason": "Generic Jetée pétrolière/CONSTRUCTION polygon not uniquely identified as DLBP; do not bind merely by proximity."
+  }
+}

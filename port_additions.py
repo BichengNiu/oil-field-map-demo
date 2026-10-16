@@ -11,6 +11,9 @@ SUPPLEMENTAL_IDS = frozenset({
     "facility_tadjourah", "facility_ghoubet", "facility_socotra", "facility_jcpdi",
     "facility_abu_flous", "facility_abu_qir", "facility_arish", "facility_gargoub",
     "facility_berenice", "facility_astara", "facility_fereydunkenar",
+    "facility_dibba_uae", "facility_farasan", "facility_bandar_lengeh",
+    "facility_dibba_oman", "facility_lima", "facility_shannah",
+    "facility_masirah", "facility_taba", "facility_damerjog",
 })
 
 
@@ -34,9 +37,14 @@ def extend_inventory(ports: list[dict]) -> list[dict]:
         raise ValueError("港口补充证据与注册编号不匹配")
     for checked in additions:
         pid = checked["portid"]
-        if checked["country"] not in PORT_COUNTRIES or not (
-            -90 <= checked["lat"] <= 90 and -180 <= checked["lon"] <= 180
-        ):
+        lat, lon = checked["lat"], checked["lon"]
+        unlocated = lat is None and lon is None
+        valid_point = (isinstance(lat, (int, float)) and isinstance(lon, (int, float))
+                       and -90 <= lat <= 90 and -180 <= lon <= 180)
+        if checked["country"] not in PORT_COUNTRIES or not (valid_point or (
+            unlocated and checked.get("coordinate_status") == "unresolved_no_map_point"
+            and not checked["statistics_available"]
+        )):
             raise ValueError(f"港口补充范围或坐标无效：{pid}")
         if bool(re.fullmatch(r"(?:port|fso)\d+", pid)) != checked["statistics_available"]:
             raise ValueError(f"港口统计来源身份无效：{pid}")
@@ -48,7 +56,9 @@ def extend_inventory(ports: list[dict]) -> list[dict]:
             continue
         if any(existing.get(key) != checked[key] for key in ("name", "country")):
             raise ValueError(f"港口补充来源身份已改变：{pid}")
-        if any(abs(existing[key] - checked[key]) > 0.05 for key in ("lat", "lon")):
+        if any((existing.get(key) is None) != (checked[key] is None)
+               or (checked[key] is not None and abs(existing[key] - checked[key]) > 0.05)
+               for key in ("lat", "lon")):
             raise ValueError(f"港口来源坐标偏移，需重新核对：{pid}")
         for key, value in checked.items():
             if key in ("wpi_ids", "wpi_names"):

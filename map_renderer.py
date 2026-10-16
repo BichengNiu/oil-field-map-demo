@@ -93,7 +93,6 @@ def build_map_html(
          "calls": port.get("portcalls"),
          "popup": port_popup(port, day)}
         for port in ports
-        if port["lat"] is not None and port["lon"] is not None
     ], ensure_ascii=False).replace("</", "<\\/")
     chokepoint_json = json.dumps([
         {"lat": point["lat"], "lon": point["lon"],
@@ -416,6 +415,7 @@ def build_map_html(
         clusterByPopupKey.set(asset.popupKey, assetLayer);
       }});
       ports.forEach((port) => {{
+        if (port.lat == null || port.lon == null) return;
         const size = 16;
         const icon = L.divIcon({{
           className: 'port-icon', iconSize: [size, size], iconAnchor: [size / 2, size / 2],
@@ -509,7 +509,8 @@ def build_map_html(
           else marker.openPopup();
           return true;
         }}
-        const record = unmappedProjects.find(row => row.key === key);
+        const record = unmappedProjects.find(row => row.key === key)
+          || ports.find(row => row.popupKey === key && (row.lat == null || row.lon == null));
         if (record) {{
           L.popup({{popupKey: key, maxWidth: 410, autoPan: false}})
             .setLatLng(map.getCenter()).setContent(record.popup).openOn(map);

@@ -23,6 +23,52 @@
       "capacity_million_bpd": null,
       "geometry": null,
       "geometry_note": "官方已确认在建及预计2027年投产；尚无可核验的公开线路坐标。当前可查看项目资料，地图未绘制线路。"
+    },
+    {
+      "project_id": "KAAOT_TERMINAL_LINE",
+      "name_cn": "豪尔阿迈耶终端输油管线",
+      "name_en": "Khor Al-Amaya Terminal Oil Pipeline",
+      "countries": [
+        "Iraq"
+      ],
+      "status": "unknown",
+      "source_date": "2012",
+      "source_url": "https://openjicareport.jica.go.jp/pdf/12068268.pdf",
+      "purpose": "法奥陆上终端至豪尔阿迈耶等海上出口设施的原油输送；历史政府项目资料，不据此声称当前通油",
+      "geometry_note": "JICA政府合作项目证实海底原油管线；缺少可核验连续坐标及现时状态，暂不画线。",
+      "name": "豪尔阿迈耶终端输油管线（Khor Al-Amaya Terminal Oil Pipeline）",
+      "fuel": "Oil",
+      "capacity_million_bpd": null,
+      "geometry": null,
+      "expected_start_year": null,
+      "reviewed_at": "2026-10-17",
+      "source_urls": [
+        "https://openjicareport.jica.go.jp/pdf/12068268.pdf"
+      ],
+      "status_note": "来源未能确认当前运行/建设阶段；不以历史资料冒充当前状态"
+    },
+    {
+      "project_id": "GOREH_B_GENAVEH",
+      "name_cn": "古雷B—格纳韦输油馈线",
+      "name_en": "Goreh B-Genaveh Oil Pipeline",
+      "countries": [
+        "Iran"
+      ],
+      "status": "unknown",
+      "source_date": "2026-06-18",
+      "source_url": "https://github.com/GlobalEnergyMonitor/goit-ggit-data-ops/blob/9b42e2a37dedea55d3a0eb34657b86f9bca5d464/writing-and-analysis/2026-06-goit-release/hormuz-alternatives/Hormuz-alternative-pipelines-brief-2026-06.docx",
+      "purpose": "古雷B至格纳韦输油馈线项目；GEM研究备忘记载在建，较新所有权目录列规划，现阶段仍有冲突",
+      "geometry_note": "该项目区别于已有古雷—格纳韦运行线路；无源几何，不复用旧线或连接端点。",
+      "name": "古雷B—格纳韦输油馈线（Goreh B-Genaveh Oil Pipeline）",
+      "fuel": "Oil",
+      "capacity_million_bpd": null,
+      "geometry": null,
+      "expected_start_year": null,
+      "reviewed_at": "2026-10-17",
+      "source_urls": [
+        "https://github.com/GlobalEnergyMonitor/goit-ggit-data-ops/blob/9b42e2a37dedea55d3a0eb34657b86f9bca5d464/writing-and-analysis/2026-06-goit-release/hormuz-alternatives/Hormuz-alternative-pipelines-brief-2026-06.docx"
+      ],
+      "status_note": "来源未能确认当前运行/建设阶段；不以历史资料冒充当前状态"
     }
   ]
 }

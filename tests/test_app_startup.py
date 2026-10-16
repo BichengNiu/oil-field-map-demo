@@ -77,7 +77,7 @@ class AppStartupTest(unittest.TestCase):
                     assert [m.label for m in app.multiselect][:4] == ['国家','水域','港口类型','港口']
                     assert len(app.metric) == 8
                     assert app.metric[0].label == '港口总数'
-                    assert app.metric[0].value == '170'
+                    assert app.metric[0].value == '179'
                     assert app.metric[1].label.startswith('当日进港艘次\\n（')
                     assert app.metric[2].label.startswith('本周累计艘次\\n（')
                     assert not any(h.value == '港口日活动' for h in app.subheader)
@@ -90,7 +90,7 @@ class AppStartupTest(unittest.TestCase):
                     assert list(app.dataframe[0].value.columns)[:9] == ['港口名','港口类型','业务特点','国家','水域','日期','当日进港艘次','本周累计艘次','本周集装箱船累计艘次']
                     assert len(app.dataframe[0].value.columns) == 22
                     assert '厄立特里亚' not in set(app.dataframe[0].value['国家'])
-                    assert len(app.dataframe[0].value) == 170
+                    assert len(app.dataframe[0].value) == 179
                     assert (app.dataframe[0].value['港口类型'] == '待核实').sum() == 2
                     assert not app.dataframe[0].value['业务特点'].isin(['待核实', '未知', '']).any()
                     assert '本月累计艘次' in app.dataframe[0].value.columns

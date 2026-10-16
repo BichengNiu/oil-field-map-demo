@@ -1122,6 +1122,320 @@
       "source_url": "https://telegram.me/s/pmo_ir?after=43471",
       "activity_source": "无独立PortWatch统计",
       "coverage_note": "来源目录记录；没有独立统计的节点不借用邻港、不拆分父港艘次、不补零。"
+    },
+    {
+      "portid": "facility_dibba_uae",
+      "name": "Dibba Port",
+      "name_cn": "迪巴港",
+      "name_en": "Dibba Port",
+      "display_name": "迪巴港（Dibba Port）",
+      "country": "United Arab Emirates",
+      "region": "阿曼湾",
+      "lat": 25.6166667,
+      "lon": 56.3,
+      "statistics_available": false,
+      "wpi_ids": [],
+      "wpi_names": [],
+      "source_url": "https://fujairahport.ae/port-overview/dibba-port/",
+      "inventory_source_url": "https://fujairahport.ae/port-overview/dibba-port/",
+      "coordinate_source_url": "https://msi.nga.mil/api/publications/download?key=16694491%2FSFH00000%2FPub172bk.pdf#page=252",
+      "coordinate_precision": "NGA §13.3 Diba Harbor 分钟精度代表点；非泊位边界",
+      "reviewed_port_type": "干货港",
+      "reviewed_business": "石灰石、骨料及熟料散货出口；深水散货终端于2024年3月开始商业作业",
+      "business_source_urls": [
+        "https://fujairahport.ae/port-overview/dibba-port/"
+      ],
+      "port_addition_review": "2026-10-16",
+      "reviewed_at": "2026-10-17",
+      "activity_source": "无独立PortWatch统计",
+      "coverage_note": "已核实具名设施；没有独立进港统计，不借用邻港、不拆分父港艘次、不补零。",
+      "coordinate_status": "verified_representative"
+    },
+    {
+      "portid": "facility_farasan",
+      "name": "Farasan Ferry Terminal",
+      "name_cn": "法拉桑客运港",
+      "name_en": "Farasan Ferry Terminal",
+      "display_name": "法拉桑客运港（Farasan Ferry Terminal）",
+      "country": "Saudi Arabia",
+      "region": "红海",
+      "lat": 16.7099276,
+      "lon": 42.1851997,
+      "statistics_available": false,
+      "wpi_ids": [],
+      "wpi_names": [],
+      "source_url": "https://www.spa.gov.sa/en/N2163485",
+      "inventory_source_url": "https://www.spa.gov.sa/en/N2163485",
+      "coordinate_source_url": "https://www.openstreetmap.org/node/8270722588",
+      "coordinate_precision": "OpenStreetMap具名渡轮设施/已核实航线端点代表点；非官方测量泊位边界",
+      "reviewed_port_type": "客运旅游港",
+      "reviewed_business": "吉赞—法拉桑渡轮客运及车辆运输",
+      "business_source_urls": [
+        "https://www.spa.gov.sa/en/N2163485"
+      ],
+      "port_addition_review": "2026-10-16",
+      "reviewed_at": "2026-10-17",
+      "activity_source": "无独立PortWatch统计",
+      "coverage_note": "已核实具名设施；没有独立进港统计，不借用邻港、不拆分父港艘次、不补零。",
+      "coordinate_status": "verified_osm_representative",
+      "coordinate_license": "ODbL 1.0 / OpenStreetMap contributors"
+    },
+    {
+      "portid": "facility_bandar_lengeh",
+      "name": "Bandar Lengeh",
+      "name_cn": "伦格港",
+      "name_en": "Bandar Lengeh",
+      "display_name": "伦格港（Bandar Lengeh）",
+      "country": "Iran",
+      "region": "波斯湾",
+      "lat": 26.55,
+      "lon": 54.8833333,
+      "statistics_available": false,
+      "wpi_ids": [],
+      "wpi_names": [],
+      "source_url": "https://www.iaphworldports.org/iaph-md/directory/port_details/61",
+      "inventory_source_url": "https://www.iaphworldports.org/iaph-md/directory/port_details/61",
+      "coordinate_source_url": "https://msi.nga.mil/api/publications/download?key=16694491%2FSFH00000%2FPub172bk.pdf#page=267",
+      "coordinate_precision": "NGA §13.38 Bandar-e Lengeh 港口所在地分钟精度代表点；非泊位边界",
+      "reviewed_port_type": "综合商港",
+      "reviewed_business": "PMO管理的商用港口，服务区域贸易；不据邻港推定具体船型进港量",
+      "business_source_urls": [
+        "https://www.iaphworldports.org/iaph-md/directory/port_details/61"
+      ],
+      "port_addition_review": "2026-10-16",
+      "reviewed_at": "2026-10-17",
+      "activity_source": "无独立PortWatch统计",
+      "coverage_note": "已核实具名设施；没有独立进港统计，不借用邻港、不拆分父港艘次、不补零。",
+      "coordinate_status": "verified_representative"
+    },
+    {
+      "portid": "facility_dibba_oman",
+      "name": "Dibba Ferry Terminal",
+      "name_cn": "迪巴渡轮港",
+      "name_en": "Dibba Ferry Terminal",
+      "display_name": "迪巴渡轮港（Dibba Ferry Terminal）",
+      "country": "Oman",
+      "region": "阿曼湾",
+      "lat": 25.6500349,
+      "lon": 56.270447,
+      "statistics_available": false,
+      "wpi_ids": [],
+      "wpi_names": [],
+      "source_url": "https://nfc.mwasalat.om/FAQs",
+      "inventory_source_url": "https://nfc.mwasalat.om/FAQs",
+      "coordinate_source_url": "https://www.openstreetmap.org/node/1315862381",
+      "coordinate_precision": "OpenStreetMap具名渡轮设施/已核实航线端点代表点；非官方测量泊位边界",
+      "reviewed_port_type": "地方及服务港",
+      "reviewed_business": "阿曼迪巴渔港内的客滚渡轮、沿海货运及渔业服务；与阿联酋迪巴港分开",
+      "business_source_urls": [
+        "https://nfc.mwasalat.om/FAQs",
+        "https://www.omandaily.om/print-article?articleId=17627"
+      ],
+      "port_addition_review": "2026-10-16",
+      "reviewed_at": "2026-10-17",
+      "activity_source": "无独立PortWatch统计",
+      "coverage_note": "已核实具名设施；没有独立进港统计，不借用邻港、不拆分父港艘次、不补零。",
+      "coordinate_status": "verified_osm_representative",
+      "coordinate_license": "ODbL 1.0 / OpenStreetMap contributors"
+    },
+    {
+      "portid": "facility_lima",
+      "name": "Lima Ferry Terminal",
+      "name_cn": "利马渡轮港",
+      "name_en": "Lima Ferry Terminal",
+      "display_name": "利马渡轮港（Lima Ferry Terminal）",
+      "country": "Oman",
+      "region": "阿曼湾",
+      "lat": 25.9378141,
+      "lon": 56.4311282,
+      "statistics_available": false,
+      "wpi_ids": [],
+      "wpi_names": [],
+      "source_url": "https://nfc.mwasalat.om/FAQs",
+      "inventory_source_url": "https://nfc.mwasalat.om/FAQs",
+      "coordinate_source_url": "https://www.openstreetmap.org/node/3722072865",
+      "coordinate_precision": "OpenStreetMap具名渡轮设施/已核实航线端点代表点；非官方测量泊位边界",
+      "reviewed_port_type": "客运旅游港",
+      "reviewed_business": "穆桑代姆利马地区客运及车辆渡轮服务",
+      "business_source_urls": [
+        "https://nfc.mwasalat.om/FAQs",
+        "https://www.omandaily.om/print-article?articleId=1183707"
+      ],
+      "port_addition_review": "2026-10-16",
+      "reviewed_at": "2026-10-17",
+      "activity_source": "无独立PortWatch统计",
+      "coverage_note": "已核实具名设施；没有独立进港统计，不借用邻港、不拆分父港艘次、不补零。",
+      "coordinate_status": "verified_osm_representative",
+      "coordinate_license": "ODbL 1.0 / OpenStreetMap contributors"
+    },
+    {
+      "portid": "facility_shannah",
+      "name": "Shannah Ferry Terminal",
+      "name_cn": "沙纳渡轮港",
+      "name_en": "Shannah Ferry Terminal",
+      "display_name": "沙纳渡轮港（Shannah Ferry Terminal）",
+      "country": "Oman",
+      "region": "阿拉伯海",
+      "lat": 20.7427145,
+      "lon": 58.7484832,
+      "statistics_available": false,
+      "wpi_ids": [],
+      "wpi_names": [],
+      "source_url": "https://mwasalat.om/",
+      "inventory_source_url": "https://mwasalat.om/",
+      "coordinate_source_url": "https://www.openstreetmap.org/node/655414824",
+      "coordinate_precision": "OpenStreetMap具名渡轮设施/已核实航线端点代表点；非官方测量泊位边界",
+      "reviewed_port_type": "客运旅游港",
+      "reviewed_business": "沙纳—马西拉客滚渡轮航线的大陆端",
+      "business_source_urls": [
+        "https://mwasalat.om/"
+      ],
+      "port_addition_review": "2026-10-16",
+      "reviewed_at": "2026-10-17",
+      "activity_source": "无独立PortWatch统计",
+      "coverage_note": "已核实具名设施；没有独立进港统计，不借用邻港、不拆分父港艘次、不补零。",
+      "coordinate_status": "verified_osm_representative",
+      "coordinate_license": "ODbL 1.0 / OpenStreetMap contributors"
+    },
+    {
+      "portid": "facility_masirah",
+      "name": "Masirah Ferry Terminal (Hilf)",
+      "name_cn": "马西拉渡轮港（希尔夫）",
+      "name_en": "Masirah Ferry Terminal (Hilf)",
+      "display_name": "马西拉渡轮港（希尔夫）（Masirah Ferry Terminal (Hilf)）",
+      "country": "Oman",
+      "region": "阿拉伯海",
+      "lat": 20.6666667,
+      "lon": 58.8666667,
+      "statistics_available": false,
+      "wpi_ids": [],
+      "wpi_names": [],
+      "source_url": "https://mwasalat.om/",
+      "inventory_source_url": "https://mwasalat.om/",
+      "coordinate_source_url": "https://msi.nga.mil/api/publications/download?key=16694491%2FSFH00000%2FPub172bk.pdf#page=187",
+      "coordinate_precision": "NGA §9.45 Hilf港代表点；分钟精度，非独立渡轮泊位测量",
+      "reviewed_port_type": "地方及服务港",
+      "reviewed_business": "马西拉岛希尔夫港的客滚渡轮及渔业服务",
+      "business_source_urls": [
+        "https://mwasalat.om/"
+      ],
+      "port_addition_review": "2026-10-16",
+      "reviewed_at": "2026-10-17",
+      "activity_source": "无独立PortWatch统计",
+      "coverage_note": "已核实具名设施；没有独立进港统计，不借用邻港、不拆分父港艘次、不补零。",
+      "coordinate_status": "verified_representative"
+    },
+    {
+      "portid": "facility_taba",
+      "name": "Taba Sea Port (Taba Heights Marina)",
+      "name_cn": "塔巴海港（塔巴高地码头）",
+      "name_en": "Taba Sea Port (Taba Heights Marina)",
+      "display_name": "塔巴海港（塔巴高地码头）（Taba Sea Port (Taba Heights Marina)）",
+      "country": "Egypt",
+      "region": "亚喀巴湾",
+      "lat": 29.375455,
+      "lon": 34.7938729,
+      "statistics_available": false,
+      "wpi_ids": [],
+      "wpi_names": [],
+      "source_url": "https://www.mts.gov.eg/en/port/مارينـا-طابا-هايتس-السياحية/",
+      "inventory_source_url": "https://www.mts.gov.eg/en/port/مارينـا-طابا-هايتس-السياحية/",
+      "coordinate_source_url": "https://www.mts.gov.eg/en/port/مارينـا-طابا-هايتس-السياحية/",
+      "coordinate_precision": "政府公布五个港区边界点的算术平均值，仅作港区代表点",
+      "reviewed_port_type": "客运旅游港",
+      "reviewed_business": "旅客、游艇和旅游船服务；Taba port与Taba Heights为同一设施，不重复建港",
+      "business_source_urls": [
+        "https://www.mts.gov.eg/en/port/مارينـا-طابا-هايتس-السياحية/"
+      ],
+      "port_addition_review": "2026-10-16",
+      "reviewed_at": "2026-10-17",
+      "activity_source": "无独立PortWatch统计",
+      "coverage_note": "已核实具名设施；没有独立进港统计，不借用邻港、不拆分父港艘次、不补零。",
+      "coordinate_status": "verified_representative",
+      "coordinate_boundary_dms": {
+        "lat": [
+          [
+            29,
+            22,
+            28.469
+          ],
+          [
+            29,
+            22,
+            28.069
+          ],
+          [
+            29,
+            22,
+            32.52
+          ],
+          [
+            29,
+            22,
+            34.645
+          ],
+          [
+            29,
+            22,
+            34.487
+          ]
+        ],
+        "lon": [
+          [
+            34,
+            47,
+            43.476
+          ],
+          [
+            34,
+            47,
+            33.531
+          ],
+          [
+            34,
+            47,
+            33.882
+          ],
+          [
+            34,
+            47,
+            37.185
+          ],
+          [
+            34,
+            47,
+            41.639
+          ]
+        ]
+      }
+    },
+    {
+      "portid": "facility_damerjog",
+      "name": "Damerjog Liquid Bulk Port",
+      "name_cn": "达梅尔乔格液体散货港",
+      "name_en": "Damerjog Liquid Bulk Port",
+      "display_name": "达梅尔乔格液体散货港（Damerjog Liquid Bulk Port）",
+      "country": "Djibouti",
+      "region": "亚丁湾",
+      "lat": null,
+      "lon": null,
+      "statistics_available": false,
+      "wpi_ids": [],
+      "wpi_names": [],
+      "source_url": "https://dpfza.gov.dj/damerjog-liquid-bulk-port-modern-oil-terminal-world-class-capacity",
+      "inventory_source_url": "https://dpfza.gov.dj/damerjog-liquid-bulk-port-modern-oil-terminal-world-class-capacity",
+      "coordinate_source_url": null,
+      "coordinate_precision": "官方已确认港口设施；无可核验码头坐标，UN/LOCODE村镇点不冒充海上油码头",
+      "reviewed_port_type": "油品港及终端",
+      "reviewed_business": "柴油、航煤、汽油、重油、LPG及食用油多货种液体装卸设施；非单一原油港",
+      "business_source_urls": [
+        "https://dpfza.gov.dj/damerjog-liquid-bulk-port-modern-oil-terminal-world-class-capacity"
+      ],
+      "port_addition_review": "2026-10-16",
+      "reviewed_at": "2026-10-17",
+      "activity_source": "无独立PortWatch统计",
+      "coverage_note": "已核实具名设施；没有独立进港统计，不借用邻港、不拆分父港艘次、不补零。",
+      "coordinate_status": "unresolved_no_map_point"
     }
   ],
   "crosswalks": {
@@ -1265,5 +1579,6 @@
     "Damerjog: construction/operating identity and coordinates require review",
     "RAK Maritime City / Saqr: parent-child statistical boundary unresolved"
   ],
-  "facts_policy": "Only explicit PortWatch portIDs have independent daily observations. WPI/official/OSM catalogue-only additions never borrow neighboring facts or invent zeroes."
+  "facts_policy": "Only explicit PortWatch portIDs have independent daily observations. WPI/official/OSM catalogue-only additions never borrow neighboring facts or invent zeroes.",
+  "followup_reviewed_at": "2026-10-17"
 }

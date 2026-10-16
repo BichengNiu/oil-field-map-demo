@@ -25,9 +25,9 @@ class PortAdditionsTest(unittest.TestCase):
             rows = extend_inventory([])
             again = extend_inventory(rows)
         self.assertEqual(rows, again)
-        self.assertEqual(len(rows), 39)
+        self.assertEqual(len(rows), 48)
         self.assertEqual(sum(p['statistics_available'] for p in rows), 12)
-        self.assertEqual(sum(not p['statistics_available'] for p in rows), 27)
+        self.assertEqual(sum(not p['statistics_available'] for p in rows), 36)
         self.assertEqual(len({p['portid'] for p in rows}), len(rows))
         wpi = [wid for p in rows for wid in p['wpi_ids']]
         self.assertEqual(len(wpi), 26)
@@ -35,7 +35,11 @@ class PortAdditionsTest(unittest.TestCase):
         for row in rows:
             self.assertNotEqual(port_type_label(row), '待核实')
             self.assertNotEqual(port_business_label(row), '待核实')
-            self.assertTrue(row['coordinate_source_url'])
+            if row['lat'] is None:
+                self.assertIsNone(row['lon'])
+                self.assertEqual(row['coordinate_status'], 'unresolved_no_map_point')
+            else:
+                self.assertTrue(row['coordinate_source_url'])
             self.assertNotIn('portcalls', row)
             self.assertEqual(portwatch.has_independent_statistics(row), row['statistics_available'])
         data_store_port_ids = [row['portid'] for row in rows if not row['statistics_available']]
@@ -57,8 +61,8 @@ class PortAdditionsTest(unittest.TestCase):
         self.assertNotIn('lat >=', where)
         ids = {p['portid'] for p in rows}
         self.assertTrue({f['attributes']['portid'] for f in self.reference['features']} <= ids)
-        self.assertEqual(len(rows), 171)
-        self.assertEqual(len(monitored_ports(rows)), 170)
+        self.assertEqual(len(rows), 180)
+        self.assertEqual(len(monitored_ports(rows)), 179)
         self.assertEqual(next(p for p in rows if p['portid']=='port23')['region'], '地中海')
         for row in rows:
             self.assertFalse(any(k.startswith(('port_operating_status', 'port_status_')) for k in row))
