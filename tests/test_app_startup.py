@@ -74,7 +74,7 @@ class AppStartupTest(unittest.TestCase):
                     assert app.metric[1].label.startswith('当日进港艘次（')
                     assert app.metric[2].label.startswith('本周累计艘次（')
                     assert not any(h.value == '港口日活动' for h in app.subheader)
-                    assert {'每日进港艘次', '各类型船每日进港艘次'} <= {h.value for h in app.subheader}
+                    assert {'每日进港艘次', '集装箱船每日进港艘次', '干散货船每日进港艘次', '普通货船每日进港艘次', '滚装船每日进港艘次', '油轮/液货船每日进港艘次'} <= {h.value for h in app.subheader}
                     assert app.selectbox(key='port_chart_period').value == '近一年'
                     assert list(app.dataframe[0].value.columns)[:8] == ['港口名','港口类型','国家','水域','日期','经营状态','当日进港艘次','本周累计艘次']
                     assert len(app.dataframe[0].value.columns) == 22

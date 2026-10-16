@@ -50,10 +50,10 @@ class PortChartsTest(unittest.TestCase):
         before=plt.get_fignums()
         with patch('Ts.TsPlots.plot_series',side_effect=plot):
             images=port_charts.chart_images.__wrapped__(rows,date(2026,10,1))
-        self.assertEqual(len(images),2)
+        self.assertEqual(len(images),6)
         self.assertTrue(all(image.startswith(b'\x89PNG') for image in images))
-        self.assertEqual(len(seen),2)
-        self.assertEqual([x[2] for x in seen],[1,5])
+        self.assertEqual(len(seen),6)
+        self.assertEqual([x[2] for x in seen],[1]*6)
         import numpy as np
         self.assertTrue(np.isnan(seen[0][1][1]))
         self.assertEqual(seen[0][0],[date(2026,10,i) for i in range(1,4)])

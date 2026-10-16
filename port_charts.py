@@ -11,7 +11,7 @@ _PLOT_LOCK = threading.RLock()
 
 
 @st.cache_data(max_entries=12, show_spinner=False)
-def chart_images(rows: tuple, first_day) -> tuple[bytes, bytes]:
+def chart_images(rows: tuple, first_day) -> tuple[bytes, ...]:
     # Lazy import: opening the map never imports matplotlib or scans its fonts.
     import matplotlib
     matplotlib.use("Agg")
@@ -36,13 +36,13 @@ def chart_images(rows: tuple, first_day) -> tuple[bytes, bytes]:
         style.LATIN_FONT = "DejaVu Sans"
         style.SELECTED_CHINESE_FONT = chinese_font
         style.SELECTED_HEITI_FONT = chinese_font
-        for columns in (["每日进港艘次"], list(SHIP_TYPE_LABELS.values())):
+        for label in ["每日进港艘次", *SHIP_TYPE_LABELS.values()]:
             fig = None
             try:
                 fig, ax = plot_series(
-                    frame[columns], facet=False, auto_dual_y=False,
-                    figsize=(12, 3.5), xtitle="日期", ytitle="进港艘次", ymin=0, grid=True,
-                    linewidth=1.5, markersize=0, show_legend=len(columns)>1,
+                    frame[[label]], facet=False, auto_dual_y=False,
+                    figsize=(4.2, 2.8), xtitle="日期", ytitle="进港艘次", ymin=0, grid=True,
+                    linewidth=1.5, markersize=0, show_legend=False, max_ticks=4,
                     legend_cols=5, legend_size=12, note=None,
                 )
                 # Keep chart labels readable and use the installed CJK family.
