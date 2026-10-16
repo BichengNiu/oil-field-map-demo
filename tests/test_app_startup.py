@@ -78,7 +78,8 @@ class AppStartupTest(unittest.TestCase):
                     chart_downloads = [b for b in app.get('download_button') if b.label == '下载数据']
                     assert len(chart_downloads) == 6
                     assert all(b.proto.type == 'primary' for b in chart_downloads)
-                    assert app.selectbox(key='port_chart_period').value == '近一年'
+                    assert app.selectbox(key='port_chart_period').value == '近1年'
+                    assert app.selectbox(key='port_chart_period').options == ['近1周','近1个月','近1个季度','近半年','近1年','近3年','近5年','近10年','全部']
                     assert list(app.dataframe[0].value.columns)[:8] == ['港口名','港口类型','国家','水域','日期','经营状态','当日进港艘次','本周累计艘次']
                     assert len(app.dataframe[0].value.columns) == 22
                     assert not app.dataframe[0].value['港口类型'].isin(['待核实', '未知', '']).any()

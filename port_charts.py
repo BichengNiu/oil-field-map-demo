@@ -13,6 +13,21 @@ from portwatch_records import SHIP_TYPE_LABELS
 
 _PLOT_LOCK = threading.RLock()
 AGGREGATIONS = {"日度": "每日", "周度": "每周", "月度": "每月", "年度": "年度"}
+TIME_RANGES = ["近1周", "近1个月", "近1个季度", "近半年", "近1年", "近3年", "近5年", "近10年", "全部"]
+
+
+def window_start(last: date, period: str, earliest: date) -> date:
+    """Inclusive rolling calendar window, bounded by the local history."""
+    if period == "全部":
+        return earliest
+    if period == "近1周":
+        return max(earliest, last-timedelta(days=6))
+    months = {"近1个月": 1, "近1个季度": 3, "近半年": 6,
+              "近1年": 12, "近3年": 36, "近5年": 60, "近10年": 120}[period]
+    year, month = divmod(last.year*12+last.month-1-months, 12)
+    month += 1
+    start = date(year, month, min(last.day, calendar.monthrange(year, month)[1]))+timedelta(days=1)
+    return max(earliest, start)
 
 
 def series_labels(aggregation="日度") -> dict[str, str]:
@@ -103,6 +118,11 @@ def chart_images(rows: tuple, first_day, aggregation="日度") -> tuple[bytes, .
                 )
                 if annual:
                     ax.set_xlabel(f"{aggregated[0]['period_start']:%Y-%m-%d}—{aggregated[-1]['period_end']:%Y-%m-%d}")
+                elif len(frame) == 1:
+                    point = frame.index[0]
+                    ax.set_xlim(point-pd.Timedelta(days=1), point+pd.Timedelta(days=1))
+                    ax.set_xticks([point])
+                    ax.xaxis.set_major_formatter(DateFormatter("%Y-%m" if aggregation == "月度" else "%Y-%m-%d"))
                 elif not year_ruler:
                     if span > 550:
                         first_year, last_year = frame.index[0].year, frame.index[-1].year

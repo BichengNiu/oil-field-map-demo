@@ -11,6 +11,15 @@ from portwatch_records import SHIP_TYPES
 
 
 class PortChartsTest(unittest.TestCase):
+    def test_calendar_windows_handle_leap_days_month_ends_and_available_history(self):
+        earliest = date(2019,1,1)
+        last = date(2026,10,9)
+        expected = [date(2026,10,3),date(2026,9,10),date(2026,7,10),date(2026,4,10),
+                    date(2025,10,10),date(2023,10,10),date(2021,10,10),earliest,earliest]
+        self.assertEqual([port_charts.window_start(last,p,earliest) for p in port_charts.TIME_RANGES],expected)
+        self.assertEqual(port_charts.window_start(date(2024,2,29),'近1年',earliest),date(2023,3,1))
+        self.assertEqual(port_charts.window_start(date(2026,3,31),'近1个月',earliest),date(2026,3,1))
+
     def test_calendar_totals_clip_window_and_preserve_missing_values(self):
         rows = tuple((date(2025,12,29)+timedelta(days=i), *[1]*6) for i in range(8))
         for aggregation, totals in [('周度', [7,1]), ('月度', [3,5]), ('年度', [3,5])]:

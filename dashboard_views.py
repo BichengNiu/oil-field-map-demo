@@ -198,7 +198,11 @@ def render_ais_panel(state: DashboardViewState) -> None:
 def _port_chart_filters(ports: list[dict]) -> tuple[str, list[dict], str]:
     columns = st.columns([1.1, 1.6, 1, 1, 1.8, 1])
     with columns[0]:
-        period = st.selectbox("时间范围", ["近90天", "近一年", "全部历史"], index=1, key="port_chart_period")
+        legacy = {"近90天": "近1个季度", "近一年": "近1年", "全部历史": "全部"}
+        current = st.session_state.get("port_chart_period")
+        if current in legacy:
+            st.session_state["port_chart_period"] = legacy[current]
+        period = st.selectbox("时间范围", port_charts.TIME_RANGES, index=4, key="port_chart_period")
     names = {str(port["portid"]): display_name(port) for port in ports}
     filters = (
         ("港口类型", "type", port_type_label, None),
@@ -225,7 +229,7 @@ def _port_chart_filters(ports: list[dict]) -> tuple[str, list[dict], str]:
 
 
 def render_ports_panel(ports: list[dict], selected_day: date | None, port_error: str | None) -> None:
-    port_rows = dashboard_rows.port_rows(ports, selected_day)
+    listed_ports = ports
     if port_error:
         st.error(f"港口数据加载失败：{port_error}")
     metrics = dashboard_rows.port_metrics(ports, selected_day)
@@ -234,12 +238,12 @@ def render_ports_panel(ports: list[dict], selected_day: date | None, port_error:
             column.metric(label, value)
     if selected_day:
         period, chart_ports, aggregation = _port_chart_filters(ports)
+        listed_ports = chart_ports
         port_ids = tuple(sorted({str(p["portid"]) for p in chart_ports if PORTWATCH.has_independent_statistics(p)}))
         path = data_store.database_path()
         history = dashboard_data.port_time_series(port_ids, selected_day, (str(path), path.stat().st_mtime_ns))
         if history:
-            from datetime import timedelta
-            first = max(history[0]["date"], selected_day-timedelta(days=89 if period=="近90天" else 364)) if period!="全部历史" else history[0]["date"]
+            first = port_charts.window_start(selected_day, period, history[0]["date"])
             fields = ["date", "portcalls", *(f"portcalls_{kind}" for kind in PORTWATCH.SHIP_TYPES)]
             rows = tuple(tuple(row[field] for field in fields) for row in history)
             images = port_charts.chart_images(rows, first, aggregation)
@@ -264,6 +268,7 @@ def render_ports_panel(ports: list[dict], selected_day: date | None, port_error:
                         )
         else:
             st.info("所选港口暂无独立进港统计" if chart_ports else "没有符合筛选条件的港口")
+    port_rows = dashboard_rows.port_rows(listed_ports, selected_day)
     if port_rows:
         st.dataframe(
             port_rows,
