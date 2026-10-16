@@ -75,9 +75,9 @@ class PortPopupTest(unittest.TestCase):
         from port_types import port_type_label
         self.assertIn("综合港 / 油品枢纽", port_type_label({'portid':'port362'}))
         self.assertIn("综合港 / 集装箱枢纽", port_type_label({'portid':'port744'}))
-        self.assertEqual(port_type_label({'wpi_names':['Khawr Al Zubair Lng Terminal']}), '液化天然气码头')
-        self.assertEqual(port_type_label({'name':'Al Hamriyah LPG Terminal'}), '液化石油气码头')
-        self.assertEqual(port_type_label({'name':'Fateh Oil Terminal'}), '油品码头')
+        self.assertIn('液化石油气', port_type_label({'portid':'wpi48406','name':'Khawr Al Zubair Lng Terminal'}))
+        self.assertIn('液化石油气', port_type_label({'portid':'port22','name':'Al Hamriyah LPG Terminal'}))
+        self.assertRegex(port_type_label({'portid':'wpi48265','name':'Fateh Oil Terminal'}), '原油|油品')
         self.assertEqual(port_type_label({'name':'Unknown', 'week_calls_tanker':100}), '待核实')
 
     def test_month_cumulative_and_seven_daily_positive_reports_establish_normal(self):

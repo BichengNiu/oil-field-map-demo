@@ -78,6 +78,7 @@ class AppStartupTest(unittest.TestCase):
                     assert app.selectbox(key='port_chart_period').value == '近一年'
                     assert list(app.dataframe[0].value.columns)[:8] == ['港口名','港口类型','国家','水域','日期','经营状态','当日进港艘次','本周累计艘次']
                     assert len(app.dataframe[0].value.columns) == 22
+                    assert not app.dataframe[0].value['港口类型'].isin(['待核实', '未知', '']).any()
                     assert '本月累计艘次' in app.dataframe[0].value.columns
                     assert '本月油轮/液货船累计艘次' in app.dataframe[0].value.columns
                     assert any(b.label == '下载列表' for b in app.get('download_button'))
