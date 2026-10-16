@@ -768,15 +768,16 @@ REVIEWED_PORT_TYPES = {'facility_wpi48104': {'label': '小型地方港（靠泊�
               'confidence': 'high',
               'identity_status': 'source_id_preserved',
               'scope_note': ''},
- 'wpi48533': {'label': '海上液体装卸终端（单点系泊）',
-              'source_url': 'https://msi.nga.mil/api/publications/download?key=16694491%2FSFH00000%2FPub172bk.pdf#page=275',
-              'source_urls': ['https://msi.nga.mil/api/publications/download?key=16694491%2FSFH00000%2FPub172bk.pdf#page=275',
-                              'https://msi.nga.mil/api/publications/download?key=16694491%2FSFH00000%2FPub172bk.pdf#page=276'],
-              'reviewed_at': '2026-10-16',
-              'verification': 'documented',
-              'confidence': 'high',
-              'identity_status': 'source_id_preserved',
-              'scope_note': ''},
+ 'wpi48533': {'label': '海上油品装卸终端（NIGC；单点系泊）',
+ 'source_url': 'https://www.sgs.com/-/media/global/documents/technical-documents/sgs-ogc-crude-oil-terminals-book-interactive-pdf.pdf#page=18',
+ 'source_urls': ['https://www.sgs.com/-/media/global/documents/technical-documents/sgs-ogc-crude-oil-terminals-book-interactive-pdf.pdf#page=18',
+                 'https://msi.nga.mil/api/publications/download?key=16694491%2FSFH00000%2FPub172bk.pdf#page=275'],
+ 'reviewed_at': '2026-10-17',
+ 'verification': 'documented_broad_type',
+ 'confidence': 'medium',
+ 'identity_status': 'source_id_preserved',
+ 'scope_note': 'SGS 2010–2011技术册将Bandar '
+               'Taheri/NIGC列入原油终端交接计量表（IRBTN、VCF6A），与NGA的WPI48533/NIGC对应；仅确认油品装卸大类，不证明当前经营状态或精确货种。'},
  'wpi48535': {'label': '油品出口码头',
               'source_url': 'https://msi.nga.mil/api/publications/download?key=16694491%2FSFH00000%2FPub172bk.pdf#page=260',
               'source_urls': ['https://msi.nga.mil/api/publications/download?key=16694491%2FSFH00000%2FPub172bk.pdf#page=260',
@@ -1204,7 +1205,7 @@ PORT_TYPE_GROUPS = {
         "port2236", "port2245", "port2477", "port2478", "port2479", "port2493", "port305", "port512",
         "port519", "port526", "port570", "port743", "wpi48053", "wpi48255", "wpi48265", "wpi48268",
         "wpi48272", "wpi48279", "wpi48280", "wpi48295", "wpi48298", "wpi48300", "wpi48360",
-        "wpi48390", "wpi48440", "wpi48450", "wpi48468", "wpi48535",
+        "wpi48390", "wpi48440", "wpi48450", "wpi48468", "wpi48533", "wpi48535",
     ),
     "液化天然气港（LNG）": ("facility_bahrain_lng", "port1068"),
     "液化石油气港（LPG）": ("port22", "wpi48342", "wpi48406"),
@@ -1221,7 +1222,6 @@ PORT_TYPE_GROUPS = {
 # nine-group taxonomy. Do not turn generic gas/liquid handling into LNG or oil.
 PORT_TYPE_UNRESOLVED = {
     "wpi48035": "气体船专用码头，既有证据未区分 LNG 与 LPG。",
-    "wpi48533": "海上液体装卸终端，既有证据未明确液体货种。",
 }
 PORT_TYPE_BY_ID = {pid: label for label, ids in PORT_TYPE_GROUPS.items() for pid in ids}
 

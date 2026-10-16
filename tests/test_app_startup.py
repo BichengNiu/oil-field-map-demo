@@ -91,7 +91,7 @@ class AppStartupTest(unittest.TestCase):
                     assert len(app.dataframe[0].value.columns) == 22
                     assert '厄立特里亚' not in set(app.dataframe[0].value['国家'])
                     assert len(app.dataframe[0].value) == 179
-                    assert (app.dataframe[0].value['港口类型'] == '待核实').sum() == 2
+                    assert (app.dataframe[0].value['港口类型'] == '待核实').sum() == 1
                     assert not app.dataframe[0].value['业务特点'].isin(['待核实', '未知', '']).any()
                     assert '本月累计艘次' in app.dataframe[0].value.columns
                     assert '本月油轮/液货船累计艘次' in app.dataframe[0].value.columns

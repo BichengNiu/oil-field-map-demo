@@ -15,17 +15,34 @@ ROOT = Path(__file__).resolve().parents[1]
 
 
 class CoverageGapTest(unittest.TestCase):
-    def test_unlocated_facilities_remain_in_catalog_and_have_no_activity_identity(self):
+    def test_verified_source_can_fill_previously_unknown_coordinates_without_changing_identity(self):
+        doc = json.loads((ROOT/'PORT_ADDITIONS_2026-10-16.json').read_text())
+        checked = next(row for row in doc['ports'] if row['portid']=='facility_damerjog')
+        old = {**checked, 'lat':None, 'lon':None, 'coordinate_status':'unresolved_no_map_point'}
+        with patch('data_store.read_json', return_value=doc):
+            output = extend_inventory([old])
+        new = next(row for row in output if row['portid']=='facility_damerjog')
+        self.assertEqual((new['lat'],new['lon']), (checked['lat'],checked['lon']))
+        self.assertAlmostEqual(new['lat'], 11+30.92/60, places=6)
+        self.assertAlmostEqual(new['lon'], 43+15.08/60, places=6)
+        self.assertIn('前导标',new['coordinate_precision'])
+        self.assertIsNone(old['lat'])
+        moved = {**checked, 'lat':1.0}
+        with patch('data_store.read_json', return_value=doc):
+            with self.assertRaisesRegex(ValueError,'坐标偏移'):
+                extend_inventory([moved])
+
+    def test_new_facilities_have_sourced_points_and_no_borrowed_activity_identity(self):
         doc = json.loads((ROOT/'PORT_ADDITIONS_2026-10-16.json').read_text())
         new = [row for row in doc['ports'] if row.get('reviewed_at') == '2026-10-17']
         self.assertEqual(len(new), 9)
         self.assertTrue(all(not row['statistics_available'] for row in new))
-        self.assertEqual(sum(row['lat'] is None for row in new), 1)
+        self.assertEqual(sum(row['lat'] is None for row in new), 0)
         with patch('data_store.read_json', return_value=doc):
             self.assertEqual(len(extend_inventory([])), 48)
         bad = copy.deepcopy(doc)
-        row = next(row for row in bad['ports'] if row['lat'] is None)
-        row['lat'] = 0  # A half-filled coordinate must not become a marker.
+        row = next(row for row in bad['ports'] if row['portid']=='facility_damerjog')
+        row['lat'] = None  # A half-filled coordinate must not become a marker.
         with patch('data_store.read_json', return_value=bad):
             with self.assertRaisesRegex(ValueError, '坐标'):
                 extend_inventory([])

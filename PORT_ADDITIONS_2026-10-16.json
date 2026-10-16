@@ -1417,15 +1417,15 @@
       "display_name": "达梅尔乔格液体散货港（Damerjog Liquid Bulk Port）",
       "country": "Djibouti",
       "region": "亚丁湾",
-      "lat": null,
-      "lon": null,
+      "lat": 11.5153333,
+      "lon": 43.2513333,
       "statistics_available": false,
       "wpi_ids": [],
       "wpi_names": [],
       "source_url": "https://dpfza.gov.dj/damerjog-liquid-bulk-port-modern-oil-terminal-world-class-capacity",
       "inventory_source_url": "https://dpfza.gov.dj/damerjog-liquid-bulk-port-modern-oil-terminal-world-class-capacity",
-      "coordinate_source_url": null,
-      "coordinate_precision": "官方已确认港口设施；无可核验码头坐标，UN/LOCODE村镇点不冒充海上油码头",
+      "coordinate_source_url": "https://msi.admiralty.co.uk/NoticesToMariners/DownloadFile?batchId=aeccef9a-2269-4819-bb4b-f23de694b28e&fileName=50wknm25.pdf&frequency=Weekly&mimeType=application%2Fpdf#page=90",
+      "coordinate_precision": "UKHO NP77 Vol D，D7282.1 / FA1前导标参考点（11°30.92′N 43°15.08′E）；港口定位参考，非装卸泊位中心",
       "reviewed_port_type": "油品港及终端",
       "reviewed_business": "柴油、航煤、汽油、重油、LPG及食用油多货种液体装卸设施；非单一原油港",
       "business_source_urls": [
@@ -1435,7 +1435,15 @@
       "reviewed_at": "2026-10-17",
       "activity_source": "无独立PortWatch统计",
       "coverage_note": "已核实具名设施；没有独立进港统计，不借用邻港、不拆分父港艘次、不补零。",
-      "coordinate_status": "unresolved_no_map_point"
+      "coordinate_status": "verified_representative",
+      "coordinate_source_date": "2025-12-11",
+      "previous_coordinate_review": {
+        "lat": null,
+        "lon": null,
+        "coordinate_source_url": null,
+        "coordinate_precision": "官方已确认港口设施；无可核验码头坐标，UN/LOCODE村镇点不冒充海上油码头",
+        "coordinate_status": "unresolved_no_map_point"
+      }
     }
   ],
   "crosswalks": {

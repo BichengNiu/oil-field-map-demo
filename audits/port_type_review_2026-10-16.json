@@ -3,7 +3,7 @@
   "catalog_size": 132,
   "scope": "逐一核实当前132个目录ID的设施/业务类别；不表示当前运营状态或穷尽每一货种。",
   "source_priority": "港务局/运营商/政府航路指南优先；不足时使用具名船代技术目录。存档来源保留捕获日期。",
-  "broad_type_count": 4,
+  "broad_type_count": 5,
   "sources": {
     "e1f304e2fa35d4209d47": {
       "url": "https://msi.nga.mil/api/publications/download?key=16694491%2FSFH00000%2FPub172bk.pdf",
@@ -384,6 +384,16 @@
       "sha256": "6e1b186a7d6a9afefe38a8f0fddf9fcb5602ae1e136407422482ed87fcfcc826",
       "bytes": 7857,
       "hash_scope": "saved response envelope"
+    },
+    "sgs_terminal_book": {
+      "url": "https://www.sgs.com/-/media/global/documents/technical-documents/sgs-ogc-crude-oil-terminals-book-interactive-pdf.pdf",
+      "status": 200,
+      "sha256": "c4d2373b5b67ddf73601c0b4f0c13e675e05cfb9b8b0d2370465e6dbed0cedf1",
+      "bytes": 1032363,
+      "retrieved_at": "2026-10-16T20:36:17.290459+00:00",
+      "title": "SGS Crude Oil Terminal & Custody Transfer Data, 2010–2011",
+      "source_date": "2010–2011",
+      "source_date_kind": "publication_version"
     }
   },
   "ports": [
@@ -3218,12 +3228,12 @@
       "country": "Iran",
       "lat": 27.65,
       "lon": 52.35,
-      "label": "海上液体装卸终端（单点系泊）",
-      "reviewed_at": "2026-10-16",
-      "verification": "documented",
-      "confidence": "high",
+      "label": "海上油品装卸终端（NIGC；单点系泊）",
+      "reviewed_at": "2026-10-17",
+      "verification": "documented_broad_type",
+      "confidence": "medium",
       "identity_status": "source_id_preserved",
-      "scope_note": "",
+      "scope_note": "SGS 2010–2011技术册将Bandar Taheri/NIGC列入原油终端交接计量表（IRBTN、VCF6A），与NGA的WPI48533/NIGC对应；仅确认油品装卸大类，不证明当前经营状态或精确货种。",
       "evidence": [
         {
           "source_id": "e1f304e2fa35d4209d47",
@@ -3240,8 +3250,25 @@
           "excerpts": [
             "Pub. 172, Sector 14 267 at the NW end of the complex. Two SPMs are moored in the following positions: a. 27°41.67’N, 52°09.20’E. b. 27°42.48’N, 52°06.83’E. Pilots board in the following positions: a. Siraf Pars Port (27°39.9’N., 52°12.8’E.) b. Sarooj Jetty (27°43.8’N, 52°09.1’E.) c. LNG Jetty (27°45.3’N, 52°06.3’E.) Navigation is prohibited within 2 miles of the SPMs with- out a pilot. Kangan (27°50'N., 52°04'E.), an important town located behind a sandy beach, has a tower at its N end. There is a harbor, protected by stone breakwaters, with a pier, 150m long, for the use of local craft. Designated anchorage areas, centered on position 27°47'21.6\"N, 52°03'00.0\"E and position 27°46'42.0\"N, 52°04'00.0\"E, are situated in the approaches to Kangan. The latter area is reserved for vessels with dangerous cargo. An- chorage off Kangan is partially sheltered from the shamal, but some swell does roll in from WSW. From NW of Kangan, a coastal range rises 610 to 915m, which at a distance appears to form part of the main range, but which obscures the latter from view when vessels are close inshore. The mountains forming it are rugged, precipitous, and very irregular in outline. A valley extends NW from the coast W of Kangan and separates the mountain ranges from a detached group of mountains between them and the sea. Kuh-e Darang (28°05'N., 51°36'E.), the summit of this group, rises to 1,240m about 25 miles NW of Kangan. Depending upon the direction from which it is seen, the mountain appears to have one peak or from three to five hum- mocks of equal height. When seen from SW, the hummocks are in range and a great bluff appears on the N side of the mountain. Funnel Hill (27°52'N., 51°36'E.) is situated about 13 miles SSE of the summit of Kuh-e Darang and about 3 miles inland. It is table-topped, about 244m high, and has a small natural pillar that is a good landmark. Deyyer (27°50'N., 51°56'E.), a village located on a low sandy stretch of coast, has a square fort with two towers, with a white two-story house nearby.Aconspicuous isolated light- gray rock stands about 1 mile W of town. From a distance, the rock appears as a square tower. The harbor is protected by stone breakw"
           ]
+        },
+        {
+          "source_id": "sgs_terminal_book",
+          "pdf_page": 18,
+          "source_url": "https://www.sgs.com/-/media/global/documents/technical-documents/sgs-ogc-crude-oil-terminals-book-interactive-pdf.pdf#page=18",
+          "excerpts": [
+            "BANDAR TAHERI NIGC I 6A A IRBTN"
+          ],
+          "finding": "The SGS custody-transfer table groups Bandar Taheri/NIGC as a petroleum terminal; NGA links the same facility and NIGC to WPI48533. No claim of current operation or exact cargo grade."
         }
-      ]
+      ],
+      "previous_review": {
+        "label": "海上液体装卸终端（单点系泊）",
+        "reviewed_at": "2026-10-16",
+        "verification": "documented",
+        "confidence": "high",
+        "identity_status": "source_id_preserved",
+        "scope_note": ""
+      }
     },
     {
       "portid": "wpi48535",
@@ -4581,5 +4608,6 @@
         }
       ]
     }
-  ]
+  ],
+  "followup_reviewed_at": "2026-10-17"
 }

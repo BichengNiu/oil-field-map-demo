@@ -46,6 +46,8 @@ class PortTypesTest(unittest.TestCase):
         self.assertEqual(port_type_label({'portid':'port744'}), '综合商港')
         self.assertEqual(port_type_label({'portid':'port561'}), '集装箱港')
         self.assertNotEqual(PORT_TYPE_BY_ID['port1068'], PORT_TYPE_BY_ID['wpi48406'])
+        self.assertEqual(port_type_label({'portid':'wpi48533'}),'油品港及终端')
+        self.assertIn('不证明当前经营状态',REVIEWED_PORT_TYPES['wpi48533']['scope_note'])
 
     def test_every_label_has_matching_audit_receipt_with_source_date_separate(self):
         sources = self.audit['sources']

@@ -12,15 +12,14 @@ ROOT = Path(__file__).resolve().parents[1]
 
 
 class MapSearchTest(unittest.TestCase):
-    def test_same_names_keep_distinct_source_keys_and_unmapped_project_is_searchable(self):
-        project = json.loads((ROOT/'data/pipeline_projects.json').read_text())['projects'][0]
+    def test_same_names_keep_distinct_source_keys_and_only_mapped_features_are_searchable(self):
         rows = map_renderer.search_objects(
             [{'name':'Same','country':country,'map_drawable':True} for country in ('Iran','Iraq')],
             [{'portid':pid,'name':'Same'} for pid in ('port1','port2')],
-            [{'mmsi':str(pid),'name':'Same'} for pid in (1,2)], projects=[project])
-        self.assertEqual(len(rows), 7)
-        self.assertEqual(len({row['key'] for row in rows}), 7)
-        self.assertTrue(any(row['key']=='pipeline:ADNOC_WEST_EAST_2026' for row in rows))
+            [{'mmsi':str(pid),'name':'Same'} for pid in (1,2)])
+        self.assertEqual(len(rows), 6)
+        self.assertEqual(len({row['key'] for row in rows}), 6)
+        self.assertFalse(any(row['key']=='pipeline:ADNOC_WEST_EAST_2026' for row in rows))
         self.assertTrue(any('· 1' in row['label'] for row in rows if row['key']=='vessel:1'))
 
     def test_focus_callback_enables_hidden_layer_before_widgets_render(self):

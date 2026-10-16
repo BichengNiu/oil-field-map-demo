@@ -56,10 +56,16 @@ def extend_inventory(ports: list[dict]) -> list[dict]:
             continue
         if any(existing.get(key) != checked[key] for key in ("name", "country")):
             raise ValueError(f"港口补充来源身份已改变：{pid}")
-        if any((existing.get(key) is None) != (checked[key] is None)
+        verified_fill = (valid_point and existing.get("lat") is None and existing.get("lon") is None
+                         and existing.get("coordinate_status") == "unresolved_no_map_point"
+                         and checked.get("coordinate_status") == "verified_representative"
+                         and str(checked.get("coordinate_source_url", "")).startswith("https://"))
+        if not verified_fill and any((existing.get(key) is None) != (checked[key] is None)
                or (checked[key] is not None and abs(existing[key] - checked[key]) > 0.05)
                for key in ("lat", "lon")):
             raise ValueError(f"港口来源坐标偏移，需重新核对：{pid}")
+        if verified_fill:
+            existing["lat"], existing["lon"] = lat, lon
         for key, value in checked.items():
             if key in ("wpi_ids", "wpi_names"):
                 existing[key] = list(dict.fromkeys([*existing.get(key, []), *value]))

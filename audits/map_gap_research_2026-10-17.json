@@ -1,0 +1,116 @@
+{
+  "reviewed_at": "2026-10-17",
+  "source_receipts": {
+    "uk45": {
+      "url": "https://msi.admiralty.co.uk/NoticesToMariners/DownloadFile?batchId=4f31e894-fc28-4e89-9a52-7a67ef90f1a2&fileName=45wknm25.pdf&frequency=Weekly&mimeType=application%2Fpdf",
+      "final_url": "https://msi.admiralty.co.uk/NoticesToMariners/DownloadFile?batchId=4f31e894-fc28-4e89-9a52-7a67ef90f1a2&fileName=45wknm25.pdf&frequency=Weekly&mimeType=application%2Fpdf",
+      "status": 200,
+      "sha256": "b16d3495f1fcf438344e93c1894af4201b3ca96508da85c92f26e828636d010d",
+      "bytes": 3796130,
+      "retrieved_at": "2026-10-16T20:35:49.496522+00:00"
+    },
+    "uk50": {
+      "url": "https://msi.admiralty.co.uk/NoticesToMariners/DownloadFile?batchId=aeccef9a-2269-4819-bb4b-f23de694b28e&fileName=50wknm25.pdf&frequency=Weekly&mimeType=application%2Fpdf",
+      "final_url": "https://msi.admiralty.co.uk/NoticesToMariners/DownloadFile?batchId=aeccef9a-2269-4819-bb4b-f23de694b28e&fileName=50wknm25.pdf&frequency=Weekly&mimeType=application%2Fpdf",
+      "status": 200,
+      "sha256": "496be4e6451d8afd2aeeee2a3b7d7850d674d8f9af91a67bde3e12773c110e9c",
+      "bytes": 4060669,
+      "retrieved_at": "2026-10-16T20:35:49.420907+00:00"
+    },
+    "uk12": {
+      "url": "https://msi.admiralty.co.uk/NoticesToMariners/DownloadFile?batchId=857ea455-09ba-4585-9cdf-b0b4cbc5bdd2&fileName=12wknm26.pdf&frequency=Weekly&mimeType=application%2Fpdf",
+      "final_url": "https://msi.admiralty.co.uk/NoticesToMariners/DownloadFile?batchId=857ea455-09ba-4585-9cdf-b0b4cbc5bdd2&fileName=12wknm26.pdf&frequency=Weekly&mimeType=application%2Fpdf",
+      "status": 200,
+      "sha256": "472c718cc8148491ffba1126375429df29bcdb046b2a12ed7bff3e521b4e1d5d",
+      "bytes": 5454756,
+      "retrieved_at": "2026-10-16T20:35:52.285842+00:00"
+    },
+    "shom": {
+      "url": "https://services.data.shom.fr/geonetwork/cache/api/records/CARTO_CARTES_PAPIER_7849.xml",
+      "final_url": "https://services.data.shom.fr/geonetwork/cache/api/records/CARTO_CARTES_PAPIER_7849.xml",
+      "status": 403,
+      "sha256": "54e1bd956ec8d74a575ee6e955eadd39333c29902b0e52de56bb7e4a0af6711c",
+      "bytes": 4065,
+      "retrieved_at": "2026-10-16T20:35:43.271134+00:00"
+    },
+    "ifc": {
+      "url": "https://disclosures.ifc.org/project-detail/ESRS/35033/chsc-limited",
+      "final_url": "https://disclosures.ifc.org/project-detail/ESRS/35033/chsc-limited",
+      "status": 200,
+      "sha256": "b0e81d6281e079f721f34981fa173cf793fc8d76216993e909e3e8aa586fa73b",
+      "bytes": 141099,
+      "retrieved_at": "2026-10-16T20:35:43.971476+00:00"
+    },
+    "dpfza": {
+      "url": "https://dpfza.gov.dj/damerjog-liquid-bulk-port-modern-oil-terminal-world-class-capacity",
+      "final_url": "https://dpfza.gov.dj/damerjog-liquid-bulk-port-modern-oil-terminal-world-class-capacity",
+      "status": 200,
+      "sha256": "72f8e2e57798411839ad6e4a28ba38279a4ff0ecced0d0b4567cb4448542d47b",
+      "bytes": 27593,
+      "retrieved_at": "2026-10-16T20:35:45.687876+00:00"
+    },
+    "sgs": {
+      "url": "https://www.sgs.com/-/media/global/documents/technical-documents/sgs-ogc-crude-oil-terminals-book-interactive-pdf.pdf",
+      "status": 200,
+      "sha256": "c4d2373b5b67ddf73601c0b4f0c13e675e05cfb9b8b0d2370465e6dbed0cedf1",
+      "bytes": 1032363,
+      "retrieved_at": "2026-10-16T20:36:17.290459+00:00"
+    }
+  },
+  "map_policy": "No pipeline without verified route coordinates appears in map legend, name search or focus popups. Source-only records remain archived.",
+  "resolved": [
+    {
+      "entity": "facility_damerjog",
+      "result": "UKHO named port leading light reference point verified in two editions; later AIS approach-buoy notice supports terminal identity. Added reference point, not an inferred berth center.",
+      "coordinate": {
+        "lat": 11.5153333,
+        "lon": 43.2513333
+      },
+      "coordinate_kind": "UKHO NP77 Vol D，D7282.1 / FA1前导标参考点（11°30.92′N 43°15.08′E）；港口定位参考，非装卸泊位中心",
+      "sources": [
+        "https://msi.admiralty.co.uk/NoticesToMariners/DownloadFile?batchId=4f31e894-fc28-4e89-9a52-7a67ef90f1a2&fileName=45wknm25.pdf&frequency=Weekly&mimeType=application%2Fpdf#page=100",
+        "https://msi.admiralty.co.uk/NoticesToMariners/DownloadFile?batchId=aeccef9a-2269-4819-bb4b-f23de694b28e&fileName=50wknm25.pdf&frequency=Weekly&mimeType=application%2Fpdf#page=90",
+        "https://msi.admiralty.co.uk/NoticesToMariners/DownloadFile?batchId=857ea455-09ba-4585-9cdf-b0b4cbc5bdd2&fileName=12wknm26.pdf&frequency=Weekly&mimeType=application%2Fpdf"
+      ]
+    },
+    {
+      "entity": "wpi48533",
+      "result": "Oil-products terminal broad group supported by SGS custody-transfer reference plus NGA WPI/NIGC identity. Exact condensate grade and current operation are not established.",
+      "source": "https://www.sgs.com/-/media/global/documents/technical-documents/sgs-ogc-crude-oil-terminals-book-interactive-pdf.pdf",
+      "source_period": "2010–2011",
+      "previous_review": {
+        "label": "海上液体装卸终端（单点系泊）",
+        "reviewed_at": "2026-10-16",
+        "verification": "documented",
+        "confidence": "high",
+        "identity_status": "source_id_preserved",
+        "scope_note": ""
+      }
+    }
+  ],
+  "remaining": [
+    {
+      "entity": "wpi48035",
+      "result": "NGA generic gas-tanker terminal still lacks unique operator/cargo match. Sokhna LNG, LPG and ammonia facilities cannot be assigned to this WPI ID merely by locality."
+    },
+    {
+      "entity": "ADNOC_WEST_EAST_2026",
+      "result": "Operator official project confirmation and terminal endpoints do not supply a verified continuous route. Removed from map interfaces."
+    },
+    {
+      "entity": "KAAOT_TERMINAL_LINE",
+      "result": "Historical government project maps and current research descriptions lack a verified georeferenced line. Removed from map interfaces."
+    },
+    {
+      "entity": "GOREH_B_GENAVEH",
+      "result": "No verified route dataset found; status evidence remains conflicting. Removed from map interfaces."
+    },
+    {
+      "entity": "P0640/P5684",
+      "result": "No new source resolves named-endpoint coordinate conflicts; retain quarantine."
+    }
+  ],
+  "all_active_port_coordinates_present": true,
+  "active_port_count": 179,
+  "independent_statistics_nodes": 91
+}

@@ -50,15 +50,14 @@ def render_map_panel(state: DashboardViewState, summary_cards: list, *, cards_pl
                      search_placeholder=None) -> None:
     screenshot_requested = st.session_state.pop("map_screenshot_requested", False)
     (cards_placeholder or st).html(monitoring_cards.cards_html(summary_cards))
-    oil, gas, projects = None, None, []
+    oil, gas = None, None
     try:
         oil = pipeline_catalog.load()
         gas = pipeline_catalog.load_gas_connections()
-        projects = pipeline_catalog.load_unmapped_projects()
     except (FileNotFoundError, ValueError) as exc:
         st.error(f"管线快照不可用：{exc}")
     options = map_renderer.search_objects(state.map_assets, state.map_ports,
-                                         state.live_positions, oil, gas, projects)
+                                         state.live_positions, oil, gas)
     labels = {row["key"]: row["label"] for row in options}
     categories = {row["key"]: row["control"] for row in options}
     if st.session_state.get("map_search_object") not in labels:
@@ -121,7 +120,6 @@ def render_map_panel(state: DashboardViewState, summary_cards: list, *, cards_pl
             sea_day=(getattr(state, "selected_sea_day", None).isoformat()
                      if getattr(state, "selected_sea_day", None) else None),
             focus_request=st.session_state.get("map_search_request"),
-            unmapped_projects=projects if show_pipelines else [],
         ),
         height=735,
     )
