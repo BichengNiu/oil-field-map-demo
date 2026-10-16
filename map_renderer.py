@@ -95,7 +95,7 @@ def build_map_html(
     categories = {"assets", "ports", "vessels"} if visible_categories is None else visible_categories
     location_items = []
     if "assets" in categories:
-        location_items.append(f'<span>{legend_icon("asset", "#000000")}油气</span>')
+        location_items.append(f'<span>{legend_icon("asset", "#808080")}油气</span>')
     if "ports" in categories:
         location_items.extend([
             f'<span>{legend_icon("port", "#2563eb")}港口</span>',
@@ -103,10 +103,10 @@ def build_map_html(
         ])
     if location_items:
         if pipeline_features:
-            location_items.append('<span><svg viewBox="0 0 12 12"><path d="M0 6 H12" stroke="#78350f" stroke-width="3"/></svg>输油管线</span>')
+            location_items.append('<span><svg viewBox="0 0 12 12"><path d="M0 6 H12" stroke="#87595c" stroke-width="3"/></svg>输油管线</span>')
         legend_lines.append('<div class="legend-row">' + "".join(location_items) + '</div>')
     elif pipeline_features:
-        legend_lines.append('<div class="legend-row"><span><svg viewBox="0 0 12 12"><path d="M0 6 H12" stroke="#78350f" stroke-width="3"/></svg>输油管线</span></div>')
+        legend_lines.append('<div class="legend-row"><span><svg viewBox="0 0 12 12"><path d="M0 6 H12" stroke="#87595c" stroke-width="3"/></svg>输油管线</span></div>')
     if "vessels" in categories:
         legend_lines.append(
             '<div class="legend-row">'
@@ -166,7 +166,9 @@ def build_map_html(
       .leaflet-tooltip {{ border: 0; border-radius: 7px; padding: 5px 8px; box-shadow: 0 3px 12px rgba(15,23,42,.18); font-size: 14px; }}
       .leaflet-control-attribution, .leaflet-control-attribution a {{ color: #6b7280; font-size: 11px; }}
       .marker-cluster-small, .marker-cluster-medium, .marker-cluster-large {{ background: transparent; }}
-      .marker-cluster-small div, .marker-cluster-medium div, .marker-cluster-large div {{ background: #000000; color: white; font-weight: 700; border-radius: 7px; transform: rotate(45deg); box-shadow: 0 0 0 5px rgba(0,0,0,.22); }}
+      .marker-cluster-small div, .marker-cluster-medium div, .marker-cluster-large div {{ background: #808080; color: white; font-weight: 700; border-radius: 7px; transform: rotate(45deg); box-shadow: 0 0 0 5px rgba(128,128,128,.22); }}
+      .pipeline-path:focus {{ outline: none; }}
+      .pipeline-path:focus-visible {{ stroke-width: 5; stroke-opacity: 1; }}
       .marker-cluster-small span, .marker-cluster-medium span, .marker-cluster-large span {{ display: block; transform: rotate(-45deg); }}
       .map-tools {{ background: rgba(255,255,255,.96); border-radius: 8px; padding: 8px 10px; color: #172b4d; box-shadow: 0 2px 10px #0f172a26; }}
       .map-tools button {{ background: #0e5570; color: white; border: 0; border-radius: 5px; padding: 8px 12px; cursor: pointer; font-size: 14px; }}
@@ -281,12 +283,12 @@ def build_map_html(
         const planned = ['construction', 'proposed'].includes(p.status);
         const operating = p.status === 'operating';
         const schematic = ['low', 'very low (straight line/schematic)'].includes(p.route_accuracy);
-        return {{color: operating ? '#78350f' : planned ? '#a16207' : '#64748b',
+        return {{color: '#87595c',
           weight: 3, opacity: operating ? .85 : .65,
           dashArray: planned ? '9 5' : !operating ? '3 7' : schematic ? '5 5' : null}};
       }};
       const pipelineLayer = L.geoJSON(pipelines, {{
-        pane: 'pipelinePane', style: pipelineStyle,
+        pane: 'pipelinePane', className: 'pipeline-path', style: pipelineStyle,
         onEachFeature: (feature, layer) => {{
           const p = feature.properties;
           layer.options.popupKey = `pipeline:${{p.project_id}}`;
@@ -321,7 +323,7 @@ def build_map_html(
           className: 'asset-icon', iconSize: [size, size], iconAnchor: [size / 2, size / 2],
           html: `<svg width="${{size}}" height="${{size}}" viewBox="0 0 ${{size}} ${{size}}">
             <polygon points="${{size/2}},1 ${{size-1}},${{size/2}} ${{size/2}},${{size-1}} 1,${{size/2}}"
-              fill="#000000" fill-opacity="1" stroke="#000000"
+              fill="#808080" fill-opacity="1" stroke="#666666"
               stroke-width="1.5"/>
           </svg>`
         }});
