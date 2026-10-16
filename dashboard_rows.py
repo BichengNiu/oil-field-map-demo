@@ -61,8 +61,8 @@ def port_metrics(ports: list[dict], selected_day: date | None = None) -> list[tu
         return "—" if value is None else f"{value:,.0f}"
     def chinese_day(day):
         return day.strftime("%Y年%m月%d日")
-    day_suffix = f"（{chinese_day(selected_day)}）" if selected_day else ""
-    week_suffix = (f"（{chinese_day(selected_day - timedelta(days=selected_day.weekday()))}-"
+    day_suffix = f"\n（{chinese_day(selected_day)}）" if selected_day else ""
+    week_suffix = (f"\n（{chinese_day(selected_day - timedelta(days=selected_day.weekday()))}-"
                    f"{chinese_day(selected_day)}）") if selected_day else ""
     week_total = total("week_calls")
     metrics = [("港口总数", len(ports)), ("当日进港艘次" + day_suffix, count(total("portcalls", True))),

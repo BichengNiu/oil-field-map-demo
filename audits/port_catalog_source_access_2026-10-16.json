@@ -1,0 +1,72 @@
+{
+  "official_nga_csv": {
+    "url": "https://msi.nga.mil/api/publications/download?key=16694622%2FSFH00000%2FUpdatedPub150.csv",
+    "status": 403,
+    "retrieved_at": "2026-10-16T17:44:20.724461+00:00",
+    "sha256": "0f4b1bb0316a40977936d2bbabf90cca5c96e87600a8a83ec8c406c935d45678",
+    "bytes": 39
+  },
+  "official_nga_csv_body": "There was an issue accessing this file.",
+  "reference": {
+    "url": "https://arcgis.netl.doe.gov/server/rest/services/Hosted/CCS_EJ_SJ_Data/FeatureServer/17/query?f=json&where=wpi_cc+IN+%28%27Bahrain%27%2C%27Cyprus%27%2C%27Djibouti%27%2C%27Egypt%27%2C%27Eritrea%27%2C%27Iran%27%2C%27Iraq%27%2C%27Israel%27%2C%27Jordan%27%2C%27Kuwait%27%2C%27Lebanon%27%2C%27Oman%27%2C%27Palestine%27%2C%27Qatar%27%2C%27Saudi+Arabia%27%2C%27Sudan%27%2C%27Syria%27%2C%27Turkey%27%2C%27Turkiye%27%2C%27United+Arab+Emirates%27%2C%27Yemen%27%29&outFields=wpinumber%2Cmain_port_name%2Calternate_name%2Cwpi_cc%2Cdodwaterbody%2Cunlocode%2Cfac_lngterm%2Cfac_oilterm%2Cfac_liquidbulk%2Cfac_solidbulk%2Cfac_container%2Cfac_breakbulk&returnGeometry=true&outSR=4326&resultRecordCount=2000&orderByFields=wpinumber+ASC",
+    "status": 200,
+    "retrieved_at": "2026-10-16T17:44:19.559145+00:00",
+    "sha256": "37c3b628e764d2b969f5b5e8bd0e3c74192f4bfdc9813edfd830237bbede2e2a",
+    "bytes": 82203,
+    "rows": 204,
+    "truncated": false,
+    "error": null
+  },
+  "reference_service_metadata": {
+    "editingInfo": {
+      "lastEditDate": 1776674191094
+    },
+    "currentVersion": 11.5,
+    "description": "The World Port Index (Pub 150) contains the location and physical characteristics of, and the facilities and services offered by major ports and terminals world-wide. Entries are numbered geographically. In 2020, NGA undertook an effort to modernize the content and delivery of the World Port Index, resulting in additional and enhanced data fields, and a web application viewing platform. The modernization also implemented crowd-sourcing methods to validate and update the content.Specific World Port Index entries can be retrieved from the on-line database using the query form below.",
+    "copyrightText": "Maritime Safety Information\nhttps://msi.nga.mil/Publications/WPI"
+  },
+  "reference_service_metadata_url": "https://arcgis.netl.doe.gov/server/rest/services/Hosted/CCS_EJ_SJ_Data/FeatureServer/17?f=json",
+  "palestine_gaza_query": {
+    "url": "https://arcgis.netl.doe.gov/server/rest/services/Hosted/CCS_EJ_SJ_Data/FeatureServer/17/query?f=json&where=UPPER%28main_port_name%29+LIKE+%27%25GAZA%25%27+OR+UPPER%28wpi_cc%29+LIKE+%27%25PALEST%25%27+OR+UPPER%28wpi_cc%29+LIKE+%27%25GAZA%25%27&outFields=wpinumber%2Cmain_port_name%2Cwpi_cc%2Cdodwaterbody&returnGeometry=false",
+    "retrieved_at": "2026-10-16T17:53:40.121984+00:00",
+    "sha256": "80ac8682bf9b0843a1b4bbc80cb272e04008bd2ac6e4c2c89d287153439026ba",
+    "response": {
+      "features": [],
+      "exceededTransferLimit": false,
+      "objectIdFieldName": "objectid",
+      "fields": [
+        {
+          "modelName": "wpinumber",
+          "defaultValue": null,
+          "name": "wpinumber",
+          "alias": "World Port Index Number",
+          "type": "esriFieldTypeDouble"
+        },
+        {
+          "modelName": "main_port_name",
+          "defaultValue": null,
+          "name": "main_port_name",
+          "length": 70,
+          "alias": "Main Port Name",
+          "type": "esriFieldTypeString"
+        },
+        {
+          "modelName": "wpi_cc",
+          "defaultValue": null,
+          "name": "wpi_cc",
+          "length": 2147483647,
+          "alias": "Country Code",
+          "type": "esriFieldTypeString"
+        },
+        {
+          "modelName": "dodwaterbody",
+          "defaultValue": null,
+          "name": "dodwaterbody",
+          "length": 255,
+          "alias": "World Water Body",
+          "type": "esriFieldTypeString"
+        }
+      ]
+    }
+  }
+}

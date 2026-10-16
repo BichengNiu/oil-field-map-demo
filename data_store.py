@@ -298,6 +298,9 @@ def save_catalog(kind, rows, key="portid"):
     from entity_names import enrich_catalog
     if kind in {"assets", "ports", "chokepoints"}:
         rows = enrich_catalog(kind, rows, read_json("data/bilingual_names.json"))
+    if kind == "ports":
+        from port_metadata import apply_port_metadata
+        rows = apply_port_metadata(rows)
     with connect() as conn:
         if kind == "assets":
             pairs = [(row["country"] + "\x1f" + row["name"], row) for row in rows]
@@ -321,6 +324,9 @@ def save_catalog(kind, rows, key="portid"):
 def load_catalog(kind):
     with connect() as conn:
         rows = [json.loads(r[0]) for r in conn.execute("SELECT payload FROM catalogs WHERE kind=? ORDER BY id", (kind,)).fetchall()]
+    if kind == "ports":
+        from port_metadata import apply_port_metadata
+        rows = apply_port_metadata(rows)
     if kind == "assets":
         def restore(value):
             if isinstance(value, dict):
@@ -347,7 +353,11 @@ def cached_catalog(kind, max_age_seconds=86_400, allow_stale=False):
     updated_at = min(row[1] for row in rows)
     if not allow_stale and (datetime.now(timezone.utc) - updated_at).total_seconds() > max_age_seconds:
         return None
-    return [json.loads(row[0]) for row in rows]
+    decoded = [json.loads(row[0]) for row in rows]
+    if kind == "ports":
+        from port_metadata import apply_port_metadata
+        decoded = apply_port_metadata(decoded)
+    return decoded
 
 
 def put_binary_document(relative, content, media, conn=None):

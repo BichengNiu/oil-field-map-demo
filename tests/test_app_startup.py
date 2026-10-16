@@ -71,8 +71,8 @@ class AppStartupTest(unittest.TestCase):
                     assert not app.exception, [str(error.value) for error in app.exception]
                     assert len(app.metric) == 8
                     assert app.metric[0].label == '港口总数'
-                    assert app.metric[1].label.startswith('当日进港艘次（')
-                    assert app.metric[2].label.startswith('本周累计艘次（')
+                    assert app.metric[1].label.startswith('当日进港艘次\\n（')
+                    assert app.metric[2].label.startswith('本周累计艘次\\n（')
                     assert not any(h.value == '港口日活动' for h in app.subheader)
                     assert len(app.image) == 6  # Titles are inside the Ts figures.
                     chart_downloads = [b for b in app.get('download_button') if b.label == '下载数据']

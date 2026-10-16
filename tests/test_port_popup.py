@@ -67,8 +67,8 @@ class PortPopupTest(unittest.TestCase):
 
     def test_metric_labels_use_actual_day_and_calendar_week(self):
         labels = [label for label, _ in dashboard_rows.port_metrics([], date(2026, 1, 1))]
-        self.assertEqual(labels[1], "当日进港艘次（2026年01月01日）")
-        self.assertEqual(labels[2], "本周累计艘次（2025年12月29日-2026年01月01日）")
+        self.assertEqual(labels[1], "当日进港艘次\n（2026年01月01日）")
+        self.assertEqual(labels[2], "本周累计艘次\n（2025年12月29日-2026年01月01日）")
         self.assertTrue(all(label.endswith("（2025年12月29日-2026年01月01日）") for label in labels[2:]))
 
     def test_types_use_reviewed_facilities_not_observed_traffic(self):
