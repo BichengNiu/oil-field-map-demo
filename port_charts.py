@@ -45,7 +45,7 @@ def chart_images(rows: tuple, first_day) -> tuple[bytes, ...]:
             try:
                 fig, ax = plot_series(
                     frame[[label]], facet=False, auto_dual_y=False,
-                    figsize=(6.2, 4.3), xtitle="", ytitle="艘次",
+                    figsize=(6.2, 4.6), xtitle="", ytitle="艘次",
                     ytitle_position="side", ymin=0, grid=False,
                     year_ruler=year_ruler, monthly_ticks=span <= 100,
                     linewidth=1.5, markersize=0, show_legend=False, max_ticks=6,
@@ -75,7 +75,27 @@ def chart_images(rows: tuple, first_day) -> tuple[bytes, ...]:
                              fontsize=18, fontfamily=[chinese_font], pad=12)
                 # Ts lays out its template before this application font pass.
                 # Reserve room again for the readable type and the year ruler.
-                fig.subplots_adjust(left=0.16, right=0.97, top=0.86, bottom=0.25 if year_ruler else 0.17)
+                fig.subplots_adjust(left=0.16, right=0.97, top=0.86, bottom=0.30 if year_ruler else 0.17)
+                if year_ruler:
+                    # Measure the final fonts, including the year label's white
+                    # background, before separating both rows. Move the ruler
+                    # and its labels together; leave the vendored Ts unchanged.
+                    from matplotlib.transforms import ScaledTranslation
+                    fig.canvas.draw()
+                    renderer = fig.canvas.get_renderer()
+                    years = [text for text in ax.texts if text.get_text().strip().removesuffix("年").isdigit()
+                             and text.get_text().strip().endswith("年")]
+                    months = [text for text in ax.get_xticklabels() if text.get_visible() and text.get_text()]
+                    if years and months:
+                        year_top = max(text.get_bbox_patch().get_window_extent(renderer).y1 for text in years)
+                        month_bottom = min(text.get_window_extent(renderer).y0 for text in months)
+                        shift_pixels = max(0, year_top-month_bottom+8*fig.dpi/72)
+                        shift = ScaledTranslation(0, -shift_pixels/fig.dpi, fig.dpi_scale_trans)
+                        for text in years:
+                            text.set_transform(text.get_transform()+shift)
+                        for collection in ax.collections:
+                            if not collection.get_clip_on() and collection.get_transform() == ax.get_xaxis_transform():
+                                collection.set_transform(collection.get_transform()+shift)
                 buffer = io.BytesIO()
                 fig.savefig(buffer, format="png", dpi=140, facecolor="white")
                 images.append(buffer.getvalue())

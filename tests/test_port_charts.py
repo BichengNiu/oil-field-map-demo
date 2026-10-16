@@ -1,6 +1,6 @@
 """Local aggregates and the pinned Ts rendering retain calendar gaps."""
 from contextlib import contextmanager
-from datetime import date
+from datetime import date, timedelta
 import unittest
 from unittest.mock import patch
 
@@ -59,3 +59,28 @@ class PortChartsTest(unittest.TestCase):
         self.assertEqual(seen[0][0],[date(2026,10,i) for i in range(1,4)])
         self.assertFalse(seen[1][3]['auto_dual_y'])
         self.assertEqual(plt.get_fignums(),before)
+
+    def test_year_background_clears_month_labels_and_stays_inside_image(self):
+        from matplotlib.figure import Figure
+        save = Figure.savefig
+        checked = []
+
+        def inspect(figure, *args, **kwargs):
+            figure.canvas.draw()
+            renderer = figure.canvas.get_renderer()
+            axis = figure.axes[0]
+            months = [text.get_window_extent(renderer) for text in axis.get_xticklabels() if text.get_text()]
+            years = [text.get_bbox_patch().get_window_extent(renderer) for text in axis.texts
+                     if text.get_text().strip().endswith('年')]
+            self.assertTrue(years)
+            self.assertLess(max(box.y1 for box in years)+5, min(box.y0 for box in months))
+            self.assertGreaterEqual(min(box.y0 for box in years), 0)
+            checked.append(True)
+            return save(figure, *args, **kwargs)
+
+        for days in (90, 365):
+            rows = tuple((date(2026,10,9)-timedelta(days=offset), *[10]*6)
+                         for offset in reversed(range(days)))
+            with patch.object(Figure, 'savefig', autospec=True, side_effect=inspect):
+                port_charts.chart_images.__wrapped__(rows, rows[0][0])
+        self.assertEqual(len(checked), 12)
