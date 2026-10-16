@@ -27,6 +27,7 @@ class AppStartupTest(unittest.TestCase):
                 data_store.ingest_document("data/pipeline_capacity_review.json")
                 data_store.ingest_document("data/uae_gas_connections.geojson")
                 data_store.ingest_document("data/bilingual_names.json")
+                data_store.ingest_document("data/pipeline_projects.json")
                 for kind in ("assets", "ports", "chokepoints"):
                     catalog = data_store.load_catalog(kind)
                     if kind == "ports":
@@ -73,6 +74,7 @@ class AppStartupTest(unittest.TestCase):
                     app.session_state['main_tabs'] = '港口'
                     app.run(timeout=30)
                     assert not app.exception, [str(error.value) for error in app.exception]
+                    assert [m.label for m in app.multiselect][:4] == ['国家','水域','港口类型','港口']
                     assert len(app.metric) == 8
                     assert app.metric[0].label == '港口总数'
                     assert app.metric[0].value == '170'

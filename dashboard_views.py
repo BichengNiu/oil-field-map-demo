@@ -34,9 +34,39 @@ def queue_map_screenshot() -> None:
     st.session_state["map_screenshot_requested"] = True
 
 
-def render_map_panel(state: DashboardViewState, summary_cards: list, *, cards_placeholder=None) -> None:
+def queue_map_focus(categories: dict) -> None:
+    key = st.session_state.get("map_search_object")
+    if not key:
+        return
+    category = categories.get(key)
+    if category:
+        st.session_state[category] = True
+    revision = st.session_state.get("map_search_revision", 0) + 1
+    st.session_state["map_search_revision"] = revision
+    st.session_state["map_search_request"] = {"key": key, "revision": revision}
+
+
+def render_map_panel(state: DashboardViewState, summary_cards: list, *, cards_placeholder=None,
+                     search_placeholder=None) -> None:
     screenshot_requested = st.session_state.pop("map_screenshot_requested", False)
     (cards_placeholder or st).html(monitoring_cards.cards_html(summary_cards))
+    oil, gas, projects = None, None, []
+    try:
+        oil = pipeline_catalog.load()
+        gas = pipeline_catalog.load_gas_connections()
+        projects = pipeline_catalog.load_unmapped_projects()
+    except (FileNotFoundError, ValueError) as exc:
+        st.error(f"管线快照不可用：{exc}")
+    options = map_renderer.search_objects(state.map_assets, state.map_ports,
+                                         state.live_positions, oil, gas, projects)
+    labels = {row["key"]: row["label"] for row in options}
+    categories = {row["key"]: row["control"] for row in options}
+    if st.session_state.get("map_search_object") not in labels:
+        st.session_state["map_search_object"] = None
+    with search_placeholder or st.container():
+        st.selectbox("查找对象", list(labels), index=None, key="map_search_object",
+                     format_func=labels.get, placeholder="输入油气、港口、船舶或管线名称",
+                     on_change=queue_map_focus, args=(categories,))
     with st.container(horizontal=True, key="map_layer_filters"):
         show_assets = st.checkbox("油气", value=True, key="map_show_assets")
         show_ports = st.checkbox("港口", value=True, key="map_show_ports")
@@ -46,13 +76,12 @@ def render_map_panel(state: DashboardViewState, summary_cards: list, *, cards_pl
     pipelines = None
     if show_pipelines:
         try:
-            pipelines = pipeline_catalog.load()
+            pipelines = oil
         except (FileNotFoundError, ValueError) as exc:
             st.error(f"输油管线快照不可用：{exc}")
     if show_gas:
         try:
-            gas = pipeline_catalog.load_gas_connections()
-            pipelines = {"type": "FeatureCollection", "features": [*(pipelines or {}).get("features", []), *gas["features"]]}
+            pipelines = {"type": "FeatureCollection", "features": [*(pipelines or {}).get("features", []), *(gas or {}).get("features", [])]}
         except (FileNotFoundError, ValueError) as exc:
             st.error(f"输气管线快照不可用：{exc}")
     stream_state = state.ais_status
@@ -91,6 +120,8 @@ def render_map_panel(state: DashboardViewState, summary_cards: list, *, cards_pl
             snapshot_day=snapshot_day.isoformat() if snapshot_day else None,
             sea_day=(getattr(state, "selected_sea_day", None).isoformat()
                      if getattr(state, "selected_sea_day", None) else None),
+            focus_request=st.session_state.get("map_search_request"),
+            unmapped_projects=projects if show_pipelines else [],
         ),
         height=735,
     )
@@ -196,7 +227,7 @@ def render_ais_panel(state: DashboardViewState) -> None:
 
 
 def _port_chart_filters(ports: list[dict]) -> tuple[str, list[dict], str]:
-    columns = st.columns([1.1, 1, 1.6, 1, 1, 1.8])
+    columns = st.columns([1.1, 1, 1, 1, 1.6, 1.8])
     with columns[0]:
         legacy = {"近90天": "近1个季度", "近一年": "近1年", "全部历史": "全部"}
         current = st.session_state.get("port_chart_period")
@@ -212,9 +243,9 @@ def _port_chart_filters(ports: list[dict]) -> tuple[str, list[dict], str]:
     if migrated_types != current_types:
         st.session_state["port_chart_filter_type"] = migrated_types
     filters = (
-        ("港口类型", "type", port_type_label, None),
         ("国家", "country", lambda port: country_label(port.get("country")), None),
         ("水域", "region", lambda port: port.get("region") or "水域未知", None),
+        ("港口类型", "type", port_type_label, None),
         ("港口", "port", lambda port: str(port["portid"]), names.get),
     )
     filtered = list(ports)

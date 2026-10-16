@@ -58,6 +58,7 @@ class MonitoringCardsTest(unittest.TestCase):
                              iframe=lambda html, **kwargs: calls.append(('map', html)),
                              caption=lambda message: calls.append(('caption', message)),
                              container=lambda **kwargs: nullcontext(),
+                             selectbox=lambda *args, **kwargs: None,
                              checkbox=lambda *args, **kwargs: calls.append(('checkbox', args[0])) or True,
                              button=lambda label, *args, **kwargs: buttons.append(label))
         state = SimpleNamespace(live_positions=[], filtered_vessels=[], visible_map_layers=set(),
@@ -67,9 +68,9 @@ class MonitoringCardsTest(unittest.TestCase):
                                 map_assets=[], map_ports=[], map_chokepoints=[],
                                 selected_day=None, selected_chokepoint_day=None, focus_assets=False)
         ns = {'st': st, 'monitoring_cards': monitoring_cards,
-              'pipeline_catalog': SimpleNamespace(load=lambda: {"type": "FeatureCollection", "features": []}, load_gas_connections=lambda: {"features": []}),
-              'map_renderer': SimpleNamespace(build_map_html=lambda *args, **kwargs: 'map')}
-        ns.update({name: None for name in ('asset_popup', 'port_popup', 'chokepoint_popup', 'vessel_popup', 'queue_map_screenshot')})
+              'pipeline_catalog': SimpleNamespace(load=lambda: {"type": "FeatureCollection", "features": []}, load_gas_connections=lambda: {"features": []}, load_unmapped_projects=lambda: []),
+              'map_renderer': SimpleNamespace(build_map_html=lambda *args, **kwargs: 'map', search_objects=lambda *args: [])}
+        ns.update({name: None for name in ('asset_popup', 'port_popup', 'chokepoint_popup', 'vessel_popup', 'queue_map_screenshot', 'queue_map_focus')})
         render = view_function('render_map_panel', ns)
         cards = monitoring_cards.build_cards([], [], [], [], None, None)
         render(state, cards)

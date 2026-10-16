@@ -60,6 +60,7 @@ _RUNTIME_SOURCE_FILES = (
     "dashboard_data.py",
     "dashboard_rows.py",
     "port_types.py",
+    "pipeline_catalog.py",
     "port_metadata.py",
     "port_additions.py",
     "port_inventory.py",
@@ -109,6 +110,7 @@ def _load_runtime_modules(source_fingerprint: str) -> dict[str, object]:
         importlib.import_module("map_renderer"),
         importlib.import_module("map_popups"),
         importlib.import_module("port_types"),
+        importlib.import_module("pipeline_catalog"),
         importlib.import_module("port_charts"),
         importlib.import_module("ui_controls"),
         importlib.import_module("dashboard_rows"),
@@ -207,6 +209,7 @@ def _render_dashboard(refresh_revision: str) -> None:
                 key="map_snapshot_day", format="YYYY-MM-DD", width=240,
                 disabled=first_day is None,
             )
+            map_search_placeholder = st.empty()
     snapshot_identity = (str(data_store.database_path()), *display_revisions.values())
     selected_day = nearest_portwatch_day("ports", snapshot_day, snapshot_identity) if snapshot_day else newest_day
     selected_chokepoint_day = nearest_portwatch_day("chokepoints", snapshot_day, snapshot_identity) if snapshot_day else newest_chokepoint_day
@@ -271,7 +274,8 @@ def _render_dashboard(refresh_revision: str) -> None:
                 available_ports, available_chokepoints, view_state,
                 data_revisions=display_revisions,
             )
-            render_map_panel(view_state, cards, cards_placeholder=cards_placeholder)
+            render_map_panel(view_state, cards, cards_placeholder=cards_placeholder,
+                             search_placeholder=map_search_placeholder)
             for error in card_errors:
                 st.warning(f"监测卡部分指标不可用：{error}")
     if tab_ports.open:

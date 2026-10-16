@@ -1,0 +1,28 @@
+{
+  "schema_version": 1,
+  "reviewed_at": "2026-10-17",
+  "projects": [
+    {
+      "project_id": "ADNOC_WEST_EAST_2026",
+      "name_cn": "阿联酋第二条东西输油管线",
+      "name_en": "ADNOC West-East Pipeline",
+      "name": "阿联酋第二条东西输油管线（ADNOC West-East Pipeline）",
+      "fuel": "Oil",
+      "countries": [
+        "United Arab Emirates"
+      ],
+      "status": "construction",
+      "expected_start_year": 2027,
+      "source_date": "2026-05-15",
+      "source_url": "https://www.adnoc.ae/en/news-and-media/press-releases/2026/khaled-bin-mohamed-bin-zayed--chairs-meeting-of-executive/",
+      "source_urls": [
+        "https://www.adnoc.ae/en/news-and-media/press-releases/2026/khaled-bin-mohamed-bin-zayed--chairs-meeting-of-executive/",
+        "https://www.mediaoffice.abudhabi/en/crown-prince-news/khaled-bin-mohamed-bin-zayed-chairs-meeting-of-executive-committee-of-adnoc-board-of-directors-may-2026/"
+      ],
+      "purpose": "提升经富查伊拉的原油出口能力；官方称完成后出口能力翻倍",
+      "capacity_million_bpd": null,
+      "geometry": null,
+      "geometry_note": "官方已确认在建及预计2027年投产；尚无可核验的公开线路坐标。当前可查看项目资料，地图未绘制线路。"
+    }
+  ]
+}

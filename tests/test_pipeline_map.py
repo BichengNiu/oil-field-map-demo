@@ -116,9 +116,9 @@ class PipelineMapTest(unittest.TestCase):
         const style = (status, route_accuracy='high') => pipelineStyle({properties:{status,route_accuracy}});
         if (style('operating').dashArray !== null) throw new Error('operating');
         if (style('construction').dashArray !== '9 5') throw new Error('construction');
-        if (style('proposed').dashArray !== '9 3 2 3') throw new Error('proposed');
-        if (style('retired').dashArray !== '3 7') throw new Error('retired');
-        if (style('operating','very low (straight line/schematic)').dashArray !== '5 5') throw new Error('schematic');
+        if (style('proposed').dashArray !== '9 5') throw new Error('proposed');
+        if (style('retired').dashArray !== '9 5') throw new Error('retired');
+        if (style('operating','very low (straight line/schematic)').dashArray !== null) throw new Error('schematic');
         """
         checked = subprocess.run([node], input=style_function + assertions, text=True, capture_output=True)
         self.assertEqual(checked.returncode, 0, checked.stderr)

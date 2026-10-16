@@ -18,6 +18,36 @@ _MAP_STYLES = "\n".join((_VENDOR / name).read_text() for name in (
 _MAP_SCRIPTS = "\n".join((_VENDOR / name).read_text() for name in (
     "leaflet.js", "leaflet.markercluster.js"))
 
+
+def search_objects(assets, ports, vessels, oil=None, gas=None, projects=None):
+    """Stable identities; names are labels, never lookup keys."""
+    rows = []
+    for asset in assets:
+        if asset.get("map_drawable") and not asset.get("map_is_proxy", False):
+            rows.append({"key": f'asset:{asset.get("country", "")}\x1f{asset["name"]}',
+                         "label": "油气 · " + display_name(asset), "control": "map_show_assets"})
+    for port in ports:
+        rows.append({"key": f'port:{port["portid"]}', "label": "港口 · " + display_name(port),
+                     "control": "map_show_ports"})
+    for vessel in vessels:
+        rows.append({"key": f'vessel:{vessel["mmsi"]}',
+                     "label": f'船舶 · {vessel.get("name") or vessel["mmsi"]} · {vessel["mmsi"]}',
+                     "control": "map_show_vessels"})
+    for document in (oil, gas):
+        for feature in (document or {}).get("features", []):
+            p = feature["properties"]
+            if not p.get("map_drawable", True):
+                continue
+            fuel = p.get("fuel") == "Gas"
+            rows.append({"key": f'pipeline:{p["project_id"]}',
+                         "label": f'{"输气管线" if fuel else "输油管线"} · {p["name"]}'
+                                  + (f' · {p["segment"]}' if p.get("segment") else ""),
+                         "control": "map_show_gas" if fuel else "map_show_pipelines"})
+    for p in projects or []:
+        rows.append({"key": f'pipeline:{p["project_id"]}', "label": "输油管线 · " + p["name"],
+                     "control": "map_show_pipelines"})
+    return sorted({row["key"]: row for row in rows}.values(), key=lambda row: row["label"])
+
 def build_map_html(
     assets: list[dict[str, object]],
     ports: list[dict],
@@ -35,6 +65,8 @@ def build_map_html(
     snapshot_day: str | None = None,
     sea_day: str | None = None,
     vessel_tracks: dict | None = None,
+    focus_request: dict | None = None,
+    unmapped_projects: list | None = None,
 ) -> str:
     pipeline_features = []
     for feature in (pipelines or {}).get("features", []):
@@ -116,10 +148,15 @@ def build_map_html(
         for fuel, color, label in (("Oil", "#8b2635", "输油管线"), ("Gas", "#416b86", "输气管线")):
             if any(f["properties"].get("fuel") == fuel for f in pipeline_features):
                 dash = ' stroke-dasharray="9 5"' if construction else ""
-                suffix = "（在建）" if construction else ""
+                suffix = "（非运行）" if construction else ""
                 pipeline_items.append(f'<span><svg viewBox="0 0 36 12" style="width:36px;height:12px"><path d="M0 6 H36" stroke="{color}" stroke-width="3"{dash}/></svg>{label}{suffix}</span>')
     if pipeline_items:
         legend_lines.append('<div class="legend-row">' + "".join(pipeline_items) + '</div>')
+    if unmapped_projects:
+        from html import escape
+        legend_lines.append('<div class="legend-row">' + ''.join(
+            f'<button type="button" data-project="{escape(p["project_id"], quote=True)}">{escape(p["name"])}</button>'
+            for p in unmapped_projects) + '</div>')
     if "vessels" in categories:
         legend_lines.append(
             '<div class="legend-row">'
@@ -135,10 +172,15 @@ def build_map_html(
     vessel_times = [AIS.parse_utc(vessel.get("observed_at")) for vessel in vessels]
     latest_vessel_time = max((stamp for stamp in vessel_times if stamp is not None), default=None)
     vessel_time_label = latest_vessel_time.strftime("%Y-%m-%d %H:%M") if latest_vessel_time else "无数据"
-    snapshot_label = f"历史观测日：{snapshot_day} · 海域监测日：{sea_day or '无数据'} · 油气/管线：当前资料目录 · " if snapshot_day else ""
+    snapshot_label = f"历史观测日：{snapshot_day}\n海域监测日：{sea_day or '无数据'}\n" if snapshot_day else ""
     screenshot_label_json = json.dumps(
-        snapshot_label + f"港口数据日（UTC）：{day} · 咽喉点数据日（UTC）：{chokepoint_day} · 船舶数据日（UTC）：{vessel_time_label}",
+        snapshot_label + f"港口数据日：{day}\n咽喉点数据日：{chokepoint_day}\n船舶数据日：{vessel_time_label}",
         ensure_ascii=False)
+    focus_json = json.dumps(focus_request or {}, ensure_ascii=False).replace("</", "<\\/")
+    unmapped_json = json.dumps([
+        {"key": f'pipeline:{p["project_id"]}', "popup": pipeline_catalog.unmapped_popup(p)}
+        for p in unmapped_projects or []
+    ], ensure_ascii=False).replace("</", "<\\/")
     return compressed_document(f"""
     <!doctype html><html lang="zh-CN"><head>
     <meta charset="utf-8" />
@@ -153,6 +195,8 @@ def build_map_html(
       .row {{ display: flex; justify-content: space-between; gap: 14px; padding: 5px 0; border-top: 1px solid #e2e8f0; font-size: 14px; }}
       .row span, .basis, .status {{ color: #64748b; }}
       .row strong {{ color: #0f172a; text-align: right; }}
+      .map-detail .row span {{ flex: 0 0 96px; }}
+      .map-detail .row strong {{ flex: 1; min-width: 0; overflow-wrap: anywhere; }}
       .hierarchy-title {{ margin-top: 10px; padding-top: 8px; border-top: 2px solid #cbd5e1; color: #334155; font-size: 14px; font-weight: 700; }}
       .level-metric {{ padding: 7px 8px; margin-top: 6px; background: #f8fafc; border: 1px solid #e2e8f0; border-radius: 7px; }}
       .level-head, .output-line {{ display: flex; justify-content: space-between; gap: 10px; font-size: 14px; }}
@@ -173,10 +217,18 @@ def build_map_html(
       .source {{ display: block; color: #2563eb; font-size: 14px; margin-top: 8px; text-decoration: none; }}
       .map-legend {{ background: rgba(255,255,255,.95); padding: 9px 11px; border-radius: 8px; box-shadow: 0 2px 10px rgba(15,23,42,.15); color: #0f172a; font-size: 14px; line-height: 1.45; }}
       .map-legend b {{ font-size: 14px; }}
+      .map-legend button {{ border: 0; background: none; padding: 0; color: #8b2635; cursor: pointer; font: inherit; text-align: left; }}
       .map-legend .legend-row {{ display: flex; gap: 14px; margin-top: 4px; }}
+      .map-legend .legend-row {{ flex-wrap: wrap; }}
+      .map-legend {{ max-width: calc(100vw - 40px); box-sizing: border-box; }}
+      .map-detail {{ width: min(410px, calc(100vw - 40px)); }}
+      .map-detail > .leaflet-popup {{ position: relative !important; transform: none !important; left: 0 !important; bottom: auto !important; margin: 0 !important; width: 100%; }}
+      .map-detail .leaflet-popup-tip-container {{ display: none; }}
+      .map-detail .leaflet-popup-content {{ min-width: 0; max-width: 100%; max-height: min(420px, calc(100vh - 250px)); overflow: auto; }}
       .map-legend span {{ white-space: nowrap; }}
       .map-legend svg {{ display: inline-block; width: 10px; height: 10px; margin-right: 6px; vertical-align: -1px; }}
       .map-date {{ background: rgba(255,255,255,.96); padding: 7px 9px; border-radius: 7px; box-shadow: 0 2px 10px #0f172a26; color: #172b4d; font-size: 14px; max-width: calc(100vw - 40px); box-sizing: border-box; }}
+      .map-date {{ white-space: pre-line; line-height: 1.6; }}
       .asset-icon, .port-icon, .chokepoint-icon, .vessel-icon, .vessel-cluster {{ background: transparent; border: 0; }}
       .asset-icon svg, .port-icon svg, .chokepoint-icon svg, .vessel-icon svg, .vessel-cluster svg {{ display: block; filter: drop-shadow(0 1px 1px rgba(15,23,42,.45)); }}
       .leaflet-tooltip {{ border: 0; border-radius: 7px; padding: 5px 8px; box-shadow: 0 3px 12px rgba(15,23,42,.18); font-size: 14px; }}
@@ -203,6 +255,16 @@ def build_map_html(
         return el;
       }};
       legend.addTo(map);
+      L.Popup.mergeOptions({{autoPan: false}});
+      const detailControl = L.control({{position: 'topright'}});
+      detailControl.onAdd = () => {{
+        const el = L.DomUtil.create('div', 'map-detail');
+        el.style.display = 'none';
+        L.DomEvent.disableClickPropagation(el);
+        L.DomEvent.disableScrollPropagation(el);
+        return el;
+      }};
+      detailControl.addTo(map);
       const dateControl = L.control({{position: 'bottomleft'}});
       dateControl.onAdd = () => {{
         const el = L.DomUtil.create('div', 'map-date');
@@ -215,15 +277,21 @@ def build_map_html(
       const chokepoints = {chokepoint_json};
       const vessels = {vessel_json};
       const pipelines = {pipeline_json};
+      const unmappedProjects = {unmapped_json};
+      const focusRequest = {focus_json};
       const popupStateKey = 'energy-map-popup-v1';
       const markerByPopupKey = new Map();
       const clusterByPopupKey = new Map();
       map.on('popupopen', (event) => {{
-        const key = event.popup?._source?.options?.popupKey;
+        const el = detailControl.getContainer();
+        el.style.display = '';
+        el.replaceChildren(event.popup.getElement());
+        const key = event.popup?._source?.options?.popupKey || event.popup.options.popupKey;
         if (key) {{ try {{ sessionStorage.setItem(popupStateKey, key); }} catch (error) {{ }} }}
       }});
       map.on('popupclose', (event) => {{
-        const key = event.popup?._source?.options?.popupKey;
+        detailControl.getContainer().style.display = 'none';
+        const key = event.popup?._source?.options?.popupKey || event.popup.options.popupKey;
         try {{ if (key && sessionStorage.getItem(popupStateKey) === key) sessionStorage.removeItem(popupStateKey); }}
         catch (error) {{ }}
       }});
@@ -296,13 +364,10 @@ def build_map_html(
       map.getPane('pipelinePane').style.zIndex = 350;
       const pipelineStyle = (feature) => {{
         const p = feature.properties;
-        const construction = p.status === 'construction';
-        const proposed = p.status === 'proposed';
         const operating = p.status === 'operating';
-        const schematic = ['low', 'very low (straight line/schematic)'].includes(p.route_accuracy);
         return {{color: p.fuel === 'Gas' ? '#416b86' : '#8b2635',
           weight: 3, opacity: operating ? .95 : .75,
-          dashArray: construction ? '9 5' : proposed ? '9 3 2 3' : !operating ? '3 7' : schematic ? '5 5' : null}};
+          dashArray: operating ? null : '9 5'}};
       }};
       const pipelineLayer = L.geoJSON(pipelines, {{
         pane: 'pipelinePane', className: 'pipeline-path', style: pipelineStyle,
@@ -432,15 +497,43 @@ def build_map_html(
       }});
       // A single bulk update avoids reclustering and rewriting DOM per ship.
       vesselLayer.addLayers(vesselMarkers);
-      try {{
-        const savedPopupKey = sessionStorage.getItem(popupStateKey);
-        const marker = savedPopupKey && markerByPopupKey.get(savedPopupKey);
+      const focusObject = (key, locate = true) => {{
+        const marker = markerByPopupKey.get(key);
         if (marker) {{
-          const cluster = clusterByPopupKey.get(savedPopupKey);
+          const cluster = clusterByPopupKey.get(key);
+          if (locate) {{
+            if (marker.getBounds) map.fitBounds(marker.getBounds(), {{maxZoom: 9, padding: [30, 30]}});
+            else if (marker.getLatLng) map.setView(marker.getLatLng(), Math.max(map.getZoom(), 9), {{animate: false}});
+          }}
           if (cluster) cluster.zoomToShowLayer(marker, () => marker.openPopup());
           else marker.openPopup();
+          return true;
         }}
-      }} catch (error) {{ }}
+        const record = unmappedProjects.find(row => row.key === key);
+        if (record) {{
+          L.popup({{popupKey: key, maxWidth: 410, autoPan: false}})
+            .setLatLng(map.getCenter()).setContent(record.popup).openOn(map);
+          return true;
+        }}
+        return false;
+      }};
+      legend.getContainer().querySelectorAll('[data-project]').forEach(button => {{
+        L.DomEvent.on(button, 'click', event => {{
+          L.DomEvent.stop(event);
+          focusObject(`pipeline:${{button.dataset.project}}`);
+        }});
+      }});
+      const focusToken = `${{focusRequest.revision}}:${{focusRequest.key}}`;
+      let lastFocus = null;
+      try {{ lastFocus = sessionStorage.getItem('energy-map-focus-v1'); }} catch (error) {{ }}
+      if (focusRequest.key && lastFocus !== focusToken && focusObject(focusRequest.key)) {{
+        try {{ sessionStorage.setItem('energy-map-focus-v1', focusToken); }} catch (error) {{ }}
+      }} else {{
+        try {{
+          const savedPopupKey = sessionStorage.getItem(popupStateKey);
+          if (savedPopupKey) focusObject(savedPopupKey, false);
+        }} catch (error) {{ }}
+      }}
       {map_tools.SCREENSHOT_SCRIPT}
       if ({str(screenshot_requested).lower()}) {{
         setTimeout(() => window.saveMapPng(), 800);

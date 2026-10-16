@@ -9,6 +9,7 @@ import data_store
 from pipeline_capacity import display as capacity_display, million_bpd, review_digest
 
 DOCUMENT = "data/oil_pipelines.geojson"
+PROJECT_DOCUMENT = "data/pipeline_projects.json"
 STATUSES = {
     "operating": "运行中", "construction": "建设中", "proposed": "规划中",
     "idle": "闲置", "mothballed": "封存", "retired": "退役",
@@ -27,6 +28,40 @@ ACCURACY = {
     "high": "源路线精度：高", "medium": "源路线精度：中",
     "low": "源路线精度：低", "very low (straight line/schematic)": "源路线为直线或示意",
 }
+
+
+def load_unmapped_projects():
+    """Published project records whose source does not expose a route geometry."""
+    try:
+        document = data_store.read_json(PROJECT_DOCUMENT)
+    except FileNotFoundError:
+        return []  # Older snapshots remain usable during code/data deployment.
+    projects = document["projects"]
+    ids = set()
+    for row in projects:
+        if (row["project_id"] in ids or row.get("geometry") is not None
+                or row.get("status") not in STATUSES or row.get("fuel") != "Oil"
+                or not row.get("source_url", "").startswith("https://")):
+            raise ValueError("未映射管线项目证据无效")
+        if not re.search(r"[\u3400-\u9fff]", row["name_cn"]) or row["name"] != f'{row["name_cn"]}（{row["name_en"]}）':
+            raise ValueError("未映射管线项目双语名称无效")
+        ids.add(row["project_id"])
+    return projects
+
+
+def unmapped_popup(p):
+    fields = [
+        ("国家", "、".join(COUNTRY_NAMES.get(c, c) for c in p["countries"])),
+        ("资料记载状态", STATUSES[p["status"]]),
+        ("预计投产", p.get("expected_start_year") or "未公布"),
+        ("原油运力", "未公布独立数值（百万桶/日）"),
+        ("项目目标", p.get("purpose") or "—"),
+        ("线路资料", p.get("geometry_note") or "尚无可核验的公开线路坐标"),
+        ("资料日期", p["source_date"]),
+    ]
+    return ('<div class="popup-card"><div class="field-name">'+escape(p['name'])+'</div>'
+            + ''.join(f'<div class="row"><span>{escape(k)}</span><strong>{escape(str(v))}</strong></div>' for k,v in fields)
+            + f'<a href="{escape(p["source_url"], quote=True)}" target="_blank" rel="noopener">来源</a></div>')
 
 
 def validate(document, *, expected_fuel="Oil"):

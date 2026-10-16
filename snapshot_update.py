@@ -92,6 +92,7 @@ def collect_candidate(original: Path, candidate: Path, *, force_ports=False, now
         import pipeline_catalog
         pipelines = pipeline_catalog.load()
         gas_connections = pipeline_catalog.load_gas_connections()
+        unmapped_projects = pipeline_catalog.load_unmapped_projects()
         # Persist code-defined asset rules into the same candidate.
         import importlib
         import field_catalog
@@ -137,7 +138,7 @@ def collect_candidate(original: Path, candidate: Path, *, force_ports=False, now
         if not after["counts"]["catalogs"] or not after["counts"]["documents"]:
             raise RuntimeError("数据库目录或来源材料为空")
         summary = {"completed_at": now.isoformat(), "portwatch_updated": due,
-                   "pipelines": {"segments": len(pipelines["features"]), "drawable_segments": sum(f["properties"].get("map_drawable", True) for f in pipelines["features"]), "gas_connection_records": len(gas_connections["features"]), "source": pipelines["metadata"]},
+                   "pipelines": {"segments": len(pipelines["features"]), "drawable_segments": sum(f["properties"].get("map_drawable", True) for f in pipelines["features"]), "gas_connection_records": len(gas_connections["features"]), "unmapped_projects": len(unmapped_projects), "source": pipelines["metadata"]},
                    "portwatch": port_result, "history_coverage": history_coverage,
                    "before": before, "after": after}
         data_store.set_meta("published_snapshot", summary)
