@@ -29,6 +29,7 @@ def multiselect_with_all(
     default_all: bool = True,
     default: list | None = None,
     format_func=None,
+    all_label: str = ALL_SELECTION,
     **kwargs,
 ) -> list:
     """Add an exclusive 全选 option; an empty selection stays empty."""
@@ -56,7 +57,7 @@ def multiselect_with_all(
 
     def display(value):
         if value == ALL_SELECTION:
-            return ALL_SELECTION
+            return all_label
         return format_func(value) if format_func else str(value)
 
     return st.multiselect(

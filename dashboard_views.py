@@ -23,6 +23,10 @@ import report_data
 from dashboard_state import DashboardViewState
 from map_popups import asset_popup, chokepoint_popup, port_popup
 from portwatch_records import SHIP_TYPE_LABELS
+from port_inventory import country_label
+from port_types import port_type_label
+from entity_names import display_name
+from ui_controls import ALL_SELECTION, multiselect_with_all, selected_values
 
 ASSETS = data_store.load_catalog("assets")
 
@@ -192,6 +196,33 @@ def render_ais_panel(state: DashboardViewState) -> None:
         )
 
 
+def _port_chart_filters(ports: list[dict]) -> tuple[str, list[dict]]:
+    columns = st.columns([1.1, 1.6, 1, 1, 1.8])
+    with columns[0]:
+        period = st.selectbox("时间范围", ["近90天", "近一年", "全部历史"], index=1, key="port_chart_period")
+    names = {str(port["portid"]): display_name(port) for port in ports}
+    filters = (
+        ("港口类型", "type", port_type_label, None),
+        ("国家", "country", lambda port: country_label(port.get("country")), None),
+        ("水域", "region", lambda port: port.get("region") or "水域未知", None),
+        ("港口", "port", lambda port: str(port["portid"]), names.get),
+    )
+    filtered = list(ports)
+    for column, (label, suffix, value_of, formatter) in zip(columns[1:], filters):
+        options = sorted({value_of(port) for port in filtered}, key=formatter or str)
+        key = f"port_chart_filter_{suffix}"
+        current = st.session_state.get(key, [])
+        # An upstream filter can remove all formerly selected choices. Reset
+        # that downstream control, but preserve an intentionally empty choice.
+        if current and ALL_SELECTION not in current and not set(current).intersection(options):
+            st.session_state[key] = [ALL_SELECTION]
+        with column:
+            selection = multiselect_with_all(label, options, key=key, format_func=formatter, all_label="全部")
+        selected = set(selected_values(selection, options))
+        filtered = [port for port in filtered if value_of(port) in selected]
+    return period, filtered
+
+
 def render_ports_panel(ports: list[dict], selected_day: date | None, port_error: str | None) -> None:
     port_rows = dashboard_rows.port_rows(ports, selected_day)
     if port_error:
@@ -201,11 +232,11 @@ def render_ports_panel(ports: list[dict], selected_day: date | None, port_error:
         for column, (label, value) in zip(st.columns(4), metrics[start:start+4]):
             column.metric(label, value)
     if selected_day:
-        port_ids = tuple(sorted(str(p["portid"]) for p in ports if PORTWATCH.has_independent_statistics(p)))
+        period, chart_ports = _port_chart_filters(ports)
+        port_ids = tuple(sorted({str(p["portid"]) for p in chart_ports if PORTWATCH.has_independent_statistics(p)}))
         path = data_store.database_path()
         history = dashboard_data.port_time_series(port_ids, selected_day, (str(path), path.stat().st_mtime_ns))
         if history:
-            period = st.selectbox("时间范围", ["近90天", "近一年", "全部历史"], index=1, key="port_chart_period")
             from datetime import timedelta
             first = max(history[0]["date"], selected_day-timedelta(days=89 if period=="近90天" else 364)) if period!="全部历史" else history[0]["date"]
             fields = ["date", "portcalls", *(f"portcalls_{kind}" for kind in PORTWATCH.SHIP_TYPES)]
@@ -231,6 +262,8 @@ def render_ports_panel(ports: list[dict], selected_day: date | None, port_error:
                             type="primary",
                             on_click="ignore",
                         )
+        else:
+            st.info("所选港口暂无独立进港统计" if chart_ports else "没有符合筛选条件的港口")
     if port_rows:
         st.dataframe(
             port_rows,
