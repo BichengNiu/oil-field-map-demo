@@ -2,6 +2,7 @@
 from datetime import date
 from html import escape
 import math
+import re
 from urllib.parse import urlsplit
 
 import data_store
@@ -28,7 +29,7 @@ ACCURACY = {
 }
 
 
-def validate(document):
+def validate(document, *, expected_fuel="Oil"):
     if document.get("type") != "FeatureCollection" or not document.get("features"):
         raise ValueError("输油管线快照为空或格式错误")
     metadata = document["metadata"]
@@ -37,9 +38,12 @@ def validate(document):
     seen = set()
     for feature in document["features"]:
         p, geometry = feature["properties"], feature["geometry"]
-        if p["project_id"] in seen or p.get("fuel") != "Oil" or p.get("status") not in STATUSES:
+        if p["project_id"] in seen or p.get("fuel") != expected_fuel or p.get("status") not in STATUSES:
             raise ValueError("输油管线分段重复、类型或状态无效")
         seen.add(p["project_id"])
+        if metadata.get("bilingual_names_version") == 1:
+            if not re.search(r"[\u3400-\u9fff]", p.get("name_cn", "")) or p["name"] != f"{p['name_cn']}（{p['name_en']}）":
+                raise ValueError("管线中文及英文名称不完整")
         if p.get("updated_at"):
             date.fromisoformat(p["updated_at"])
         if metadata.get("capacity_schema_version") == 2:
@@ -89,7 +93,35 @@ def load():
     return document
 
 
+def load_gas_connections():
+    document = data_store.read_json("data/uae_gas_connections.geojson")
+    ids = {f["properties"]["project_id"] for f in document["features"]}
+    if ids != {"P5683", "P5711", "P5684"}:
+        raise ValueError("阿联酋输气联络证据不完整")
+    validate(document, expected_fuel="Gas")
+    for feature in document["features"]:
+        if feature["properties"].get("connection_source_url") != "https://www.adnocgas.ae/en/our-operations/gas-processing":
+            raise ValueError("输气联络缺少运营商证据")
+    return document
+
+
+def gas_popup(p):
+    title = escape(p["name"])
+    rows = [("介质", "天然气（不属于原油运力）"),
+            ("分段", {"Offshore Segment": "海上段（Offshore Segment）", "Onshore Segment": "陆上段（Onshore Segment）"}.get(p.get("segment"), p.get("segment"))), ("GEM编号", p["project_id"]),
+            ("资料记载状态", STATUSES[p["status"]] + "（非实时）"),
+            ("资料更新日", p.get("updated_at"))]
+    return (f'<div class="field-name">{title}</div>'
+            + "".join(f'<div class="row"><span>{label}</span><strong>{escape(str(value or "未披露"))}</strong></div>' for label, value in rows)
+            + f'<div style="font-size:14px;line-height:1.5;margin-top:10px;color:#172033">路线核查：{escape(p["geometry_review_note"])}</div>'
+            + f'<a class="source" href="{escape(p["connection_source_url"], quote=True)}" target="_blank" rel="noopener">ADNOC Gas · 连接关系</a>'
+            + f'<a class="source" href="{escape(p["source_url"], quote=True)}" target="_blank" rel="noopener">Global Energy Monitor · 示意路线 · CC BY 4.0</a>')
+
+
 def popup(p):
+    if p.get("fuel") == "Gas":
+        return gas_popup(p)
+
     def text(value):
         return escape(str(value if value not in (None, "", "--") else "未披露"))
     value = p.get("capacity_million_bpd") if "capacity_million_bpd" in p else million_bpd(p.get("capacity"), p.get("capacity_unit"))
@@ -120,7 +152,6 @@ def popup(p):
         reference_link = f'<a class="source" href="{escape(reference, quote=True)}" target="_blank" rel="noopener">运力核查原始来源</a>'
     return (
         f'<div class="field-name">{text(p["name"])}</div>'
-        + (f'<div class="country">{text(p["name_en"])}</div>' if p["name"] != p["name_en"] else "")
         + "".join(f'<div class="row"><span>{label}</span><strong>{text(value)}</strong></div>' for label, value in rows)
         + f'<a class="source" href="{escape(p["source_url"], quote=True)}" target="_blank" rel="noopener">Global Energy Monitor · 管线资料</a>'
         + reference_link

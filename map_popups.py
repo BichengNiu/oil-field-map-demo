@@ -2,6 +2,8 @@
 
 from __future__ import annotations
 
+from entity_names import display_name
+
 import html
 
 import field_catalog as CATALOG
@@ -111,9 +113,13 @@ def hierarchy_chain(asset: dict[str, object]) -> list[dict[str, object]]:
     return chain
 
 
+def related_asset_name(asset, name):
+    return display_name(ASSET_INDEX.get((asset["country"], name), {"name": name}))
+
+
 def hierarchy_path(asset: dict[str, object]) -> str:
     chain = list(reversed(hierarchy_chain(asset)))
-    return " → ".join(f"{node['asset_level_label']}：{node['name']}" for node in chain)
+    return " → ".join(f"{node['asset_level_label']}：{display_name(node)}" for node in chain)
 
 
 def _hierarchy_panel(asset: dict[str, object]) -> str:
@@ -135,7 +141,7 @@ def _hierarchy_panel(asset: dict[str, object]) -> str:
         cards.append(
             '<div class="level-metric">'
             f'<div class="level-head"><span>{_esc(node["asset_level_label"])}</span>'
-            f"<b>{_esc(node['name'])}</b></div>"
+            f"<b>{_esc(display_name(node))}</b></div>"
             f'<div class="output-line"><span>日产量</span><strong>{_esc(output)}</strong></div>'
             f'<div class="metric-detail">{_esc(output_detail)}</div>'
             f"{other_html}"
@@ -200,11 +206,11 @@ def asset_popup(asset: dict[str, object]) -> str:
         if coordinate_source_url
         else f'<div class="basis">坐标来源：{_esc(asset["coordinate_source"])}</div>'
     )
-    parent = asset.get("parent_asset") or "无已登记上级"
-    constituents = "、".join(asset.get("constituent_assets") or []) or "—"
+    parent = related_asset_name(asset, asset["parent_asset"]) if asset.get("parent_asset") else "无已登记上级"
+    constituents = "、".join(related_asset_name(asset, name) for name in (asset.get("constituent_assets") or [])) or "—"
     return (
         '<div class="popup-card">'
-        f'<div class="field-name">{_esc(asset["name"])}（{_esc(asset["name_cn"])}）</div>'
+        f'<div class="field-name">{_esc(display_name(asset))}</div>'
         f'<div class="country">{_esc("、".join(asset["countries"]))} · {_esc(asset["asset_type"])}</div>'
         '<div class="row"><span>资产层级</span>'
         f"<strong>{_esc(asset['asset_level_label'])}</strong></div>"
@@ -319,7 +325,7 @@ def port_popup(port: dict, day: str) -> str:
     )
     return (
         '<div class="popup-card">'
-        f'<div class="field-name">⚓ {_esc(port["name"])}</div>'
+        f'<div class="field-name">⚓ {_esc(display_name(port))}</div>'
         f'<div class="country">{_esc(port["country"])} · {_esc(port["region"])} · {_esc(date_label)}</div>'
         '<div class="row"><span>当日有效进港</span>'
         f"<strong>{amount('portcalls', decimals=0)} 艘次</strong></div>"
@@ -364,7 +370,7 @@ def chokepoint_popup(point: dict, day: str) -> str:
     )
     return (
         '<div class="popup-card">'
-        f'<div class="field-name">◆ {_esc(point.get("name_cn", point["portname"]))}</div>'
+        f'<div class="field-name">◆ {_esc(display_name(point))}</div>'
         f'<div class="country">{_esc(point.get("fullname") or point["portname"])} · {_esc(day)} UTC</div>'
         '<div class="row"><span>当日通过船舶</span>'
         f"<strong>{value('n_total')} 艘</strong></div>"

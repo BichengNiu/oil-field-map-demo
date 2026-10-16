@@ -21,17 +21,7 @@ COUNTRIES = {
     "Kuwait", "Qatar", "Yemen", "Syria", "Turkey", "Türkiye", "Israel",
     "Jordan", "Lebanon", "Bahrain",
 }
-NAMES = {
-    "East-West Crude Oil Pipeline": "沙特东西原油管线",
-    "Bab-Habshan–Fujairah Oil Pipeline": "哈卜善—富查伊拉输油管线",
-    "Sumed Oil Pipeline": "苏伊士—地中海输油管线（SUMED）",
-    "Kirkuk-Ceyhan Oil Pipeline": "基尔库克—杰伊汉输油管线",
-    "Baku-Tbilisi-Ceyhan Pipeline": "巴库—第比利斯—杰伊汉输油管线",
-    "Goreh-Jask Crude Oil Pipeline": "戈雷—贾斯克原油管线",
-    "Trans-Arabian Oil Pipeline": "泛阿拉伯输油管线",
-    "Basra–Aqaba Oil Pipeline": "巴士拉—亚喀巴输油管线",
-    "Kirkuk-Baniyas Oil Pipelines": "基尔库克—巴尼亚斯输油管线",
-}
+
 
 
 def build(content):
@@ -42,6 +32,7 @@ def build(content):
     if review["geometry_source_sha256"] != SOURCE_SHA256:
         raise ValueError("Capacity audit belongs to a different source snapshot")
     reviewed = {row["project_id"]: row for row in review["records"]}
+    names = json.loads((Path(__file__).parent / "data/bilingual_names.json").read_text())["pipelines"]
     features = []
     for feature in source["features"]:
         p = feature["properties"]
@@ -54,7 +45,8 @@ def build(content):
         # Preserve separate components: never join branches or missing sections.
         simplified = shape(geometry).simplify(0.003, preserve_topology=True)
         props = {
-            "project_id": p["ProjectID"], "name": NAMES.get(p["PipelineName"], p["PipelineName"]),
+            "project_id": p["ProjectID"], "name": f"{names[p['PipelineName']]}（{p['PipelineName']}）",
+            "name_cn": names[p["PipelineName"]],
             "name_en": p["PipelineName"], "segment": p.get("SegmentName"),
             "countries": countries, "fuel": "Oil", "status": p.get("Status"),
             "start": p.get("StartLocation"), "end": p.get("EndLocation"),
@@ -62,6 +54,9 @@ def build(content):
             "updated_at": p.get("LastUpdated"), "route_accuracy": p.get("RouteAccuracy"),
             "source_url": p.get("Wiki") or SOURCE_URL,
         }
+        props["map_drawable"] = p["ProjectID"] != "P0640"
+        if not props["map_drawable"]:
+            props["geometry_review_note"] = "源坐标终点不在达斯岛，路线名称与坐标不符；保留原始证据，暂停地图绘制。"
         decision = reviewed[p["ProjectID"]]
         if (decision["original_capacity"], decision["original_unit"]) != (p.get("Capacity"), p.get("CapacityUnits")):
             raise ValueError("Capacity source changed after review: " + p["ProjectID"])
@@ -83,6 +78,7 @@ def build(content):
             "modifications": "Regional Oil subset; translated labels; geometry simplified by 0.003 degrees.",
             "geometry_simplification_degrees": 0.003,
             "status_basis": "GEM research map export; LastUpdated is a record date, not live flow monitoring.",
+            "bilingual_names_version": 1,
             "capacity_schema_version": 2, "capacity_display_unit": "百万桶/日",
             "capacity_reviewed_at_utc": review["reviewed_at_utc"],
             "capacity_review_source": "data/pipeline_capacity_review.json",

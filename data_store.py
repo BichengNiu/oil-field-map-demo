@@ -295,6 +295,9 @@ def read_json(relative):
 
 
 def save_catalog(kind, rows, key="portid"):
+    from entity_names import enrich_catalog
+    if kind in {"assets", "ports", "chokepoints"}:
+        rows = enrich_catalog(kind, rows, read_json("data/bilingual_names.json"))
     with connect() as conn:
         if kind == "assets":
             pairs = [(row["country"] + "\x1f" + row["name"], row) for row in rows]

@@ -2,6 +2,8 @@
 
 from __future__ import annotations
 
+from entity_names import display_name
+
 import json
 from datetime import date
 
@@ -13,6 +15,7 @@ from map_popups import (
     display_date,
     extra_measurements,
     hierarchy_path,
+    related_asset_name,
     other_daily_metric,
     production_display_value,
     production_display_date,
@@ -44,7 +47,7 @@ def port_rows(ports: list[dict], selected_day: date | None, rolling_days: int) -
             {
                 "水域": port["region"],
                 "国家": port["country"],
-                "港口": port["name"],
+                "港口": display_name(port),
                 "PortWatch ID": port["portid"],
                 "日期 UTC": selected_day.isoformat(),
                 "当日有效进港 艘次": port.get("portcalls"),
@@ -88,9 +91,10 @@ def asset_rows(assets: list[dict]) -> list[dict]:
             "权益口径": asset["ownership_basis"],
             "地图角色": asset["map_role_label"],
             "层级路径": hierarchy_path(asset),
-            "上级资产": asset["parent_asset"] or "—",
-            "组成资产": "、".join(asset["constituent_assets"]) or "—",
+            "上级资产": related_asset_name(asset, asset["parent_asset"]) if asset["parent_asset"] else "—",
+            "组成资产": "、".join(related_asset_name(asset, name) for name in asset["constituent_assets"]) or "—",
             "汇总规则": asset["rollup_policy"],
+            "名称": display_name(asset),
             "英文名称": asset["name"],
             "中文名称": asset["name_cn"],
             "别名": "、".join(asset["aliases"]),
@@ -184,6 +188,7 @@ def print_asset_record(asset: dict) -> dict:
     if daily_output_value(asset) == "未披露" and asset.get("aggregate_references"):
         metric_type = asset["aggregate_references"][0]["metric_type"]
     return {
+        "名称": display_name(asset),
         "中文名称": asset.get("name_cn") or asset.get("name"),
         "英文名称": asset.get("name"),
         "国家": asset.get("country"),

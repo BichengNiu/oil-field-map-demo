@@ -67,14 +67,14 @@ class MonitoringCardsTest(unittest.TestCase):
                                 map_assets=[], map_ports=[], map_chokepoints=[],
                                 selected_day=None, selected_chokepoint_day=None, focus_assets=False)
         ns = {'st': st, 'monitoring_cards': monitoring_cards,
-              'pipeline_catalog': SimpleNamespace(load=lambda: {"type": "FeatureCollection", "features": []}),
+              'pipeline_catalog': SimpleNamespace(load=lambda: {"type": "FeatureCollection", "features": []}, load_gas_connections=lambda: {"features": []}),
               'map_renderer': SimpleNamespace(build_map_html=lambda *args, **kwargs: 'map')}
         ns.update({name: None for name in ('asset_popup', 'port_popup', 'chokepoint_popup', 'vessel_popup', 'queue_map_screenshot')})
         render = view_function('render_map_panel', ns)
         cards = monitoring_cards.build_cards([], [], [], [], None, None)
         render(state, cards)
         self.assertEqual([call[0] for call in calls], [
-            'cards', 'checkbox', 'checkbox', 'checkbox', 'checkbox', 'map'])
+            'cards', 'checkbox', 'checkbox', 'checkbox', 'checkbox', 'checkbox', 'map'])
         self.assertEqual(calls[0][1].count('class="monitoring-card"'), 4)
         self.assertNotIn('刷新船舶数据', buttons)
         self.assertNotIn('刷新港口数据', buttons)

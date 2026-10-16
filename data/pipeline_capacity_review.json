@@ -108,7 +108,7 @@
   "records": [
     {
       "project_id": "P0530",
-      "pipeline": "Sumed Oil Pipeline",
+      "pipeline": "苏伊士—地中海输油管线（Sumed Oil Pipeline）",
       "segment": "Pipeline 1",
       "original_capacity": "1,250,000.00",
       "original_unit": "bpd",
@@ -135,11 +135,14 @@
       ],
       "capacity_review_status": "equal_split_withdrawn",
       "capacity_system_id": "SUMED",
-      "capacity_reference_sha256": "02b4f8d7ae321c458c412d0abe25693dc5322d30d05995209c1ccfb29c4c353d"
+      "capacity_reference_sha256": "02b4f8d7ae321c458c412d0abe25693dc5322d30d05995209c1ccfb29c4c353d",
+      "pipeline_source": "Sumed Oil Pipeline",
+      "name_cn": "苏伊士—地中海输油管线",
+      "name_en": "Sumed Oil Pipeline"
     },
     {
       "project_id": "P0542",
-      "pipeline": "Iraq Strategic Pipeline",
+      "pipeline": "伊拉克战略输油管线（Iraq Strategic Pipeline）",
       "segment": "Pipeline 1",
       "original_capacity": "1,400,000.00",
       "original_unit": "bpd",
@@ -160,11 +163,14 @@
       ],
       "capacity_extra": [],
       "capacity_review_status": "table_reference_number_matches",
-      "capacity_reference_sha256": "3320fbceec63ee3da7c658ecd9631768a485e4444c379fbeda358616998fb73e"
+      "capacity_reference_sha256": "3320fbceec63ee3da7c658ecd9631768a485e4444c379fbeda358616998fb73e",
+      "pipeline_source": "Iraq Strategic Pipeline",
+      "name_cn": "伊拉克战略输油管线",
+      "name_en": "Iraq Strategic Pipeline"
     },
     {
       "project_id": "P0543",
-      "pipeline": "Iraq-Iran Oil Pipeline",
+      "pipeline": "伊拉克—伊朗输油管线（Iraq-Iran Oil Pipeline）",
       "segment": "",
       "original_capacity": "",
       "original_unit": "",
@@ -183,11 +189,14 @@
       ],
       "capacity_extra": [],
       "capacity_review_status": "source_missing",
-      "capacity_reference_sha256": "5f312b310107f70d68d449f4bc35300bfdca859cdc24ea1c3b74f4902944223d"
+      "capacity_reference_sha256": "5f312b310107f70d68d449f4bc35300bfdca859cdc24ea1c3b74f4902944223d",
+      "pipeline_source": "Iraq-Iran Oil Pipeline",
+      "name_cn": "伊拉克—伊朗输油管线",
+      "name_en": "Iraq-Iran Oil Pipeline"
     },
     {
       "project_id": "P0544",
-      "pipeline": "Basra–Aqaba Oil Pipeline",
+      "pipeline": "巴士拉—亚喀巴输油管线（Basra–Aqaba Oil Pipeline）",
       "segment": "Basra–Haditha Oil Pipeline",
       "original_capacity": "2,250,000.00",
       "original_unit": "bpd",
@@ -207,11 +216,14 @@
       ],
       "capacity_extra": [],
       "capacity_review_status": "conflict_withheld",
-      "capacity_reference_sha256": "3f784b0ec0db1f50d1e0416bdded08edd3b6a677914adf1cc6111e83056ec431"
+      "capacity_reference_sha256": "3f784b0ec0db1f50d1e0416bdded08edd3b6a677914adf1cc6111e83056ec431",
+      "pipeline_source": "Basra–Aqaba Oil Pipeline",
+      "name_cn": "巴士拉—亚喀巴输油管线",
+      "name_en": "Basra–Aqaba Oil Pipeline"
     },
     {
       "project_id": "P0545",
-      "pipeline": "Iraqi Pipeline in Saudi Arabia (IPSA)",
+      "pipeline": "伊拉克—沙特境内输油管线（Iraqi Pipeline in Saudi Arabia (IPSA)）",
       "segment": "",
       "original_capacity": "1,650,000.00",
       "original_unit": "bpd",
@@ -230,11 +242,14 @@
       ],
       "capacity_extra": [],
       "capacity_review_status": "table_reference_number_matches",
-      "capacity_reference_sha256": "3cbb7ec5791a895e97ac0aac8b4217fc532ac2cd7fd8fc5f170f3f487914d489"
+      "capacity_reference_sha256": "3cbb7ec5791a895e97ac0aac8b4217fc532ac2cd7fd8fc5f170f3f487914d489",
+      "pipeline_source": "Iraqi Pipeline in Saudi Arabia (IPSA)",
+      "name_cn": "伊拉克—沙特境内输油管线",
+      "name_en": "Iraqi Pipeline in Saudi Arabia (IPSA)"
     },
     {
       "project_id": "P0546",
-      "pipeline": "Kirkuk-Baniyas Oil Pipelines",
+      "pipeline": "基尔库克—巴尼亚斯输油管线（Kirkuk-Baniyas Oil Pipelines）",
       "segment": "Main Pipeline",
       "original_capacity": "300,000.00",
       "original_unit": "bpd",
@@ -257,11 +272,14 @@
       ],
       "capacity_extra": [],
       "capacity_review_status": "table_reference_number_matches",
-      "capacity_reference_sha256": "cce44e02090e3417fd218a76b1557d9d471cea725d7361532028333434cbe3e8"
+      "capacity_reference_sha256": "cce44e02090e3417fd218a76b1557d9d471cea725d7361532028333434cbe3e8",
+      "pipeline_source": "Kirkuk-Baniyas Oil Pipelines",
+      "name_cn": "基尔库克—巴尼亚斯输油管线",
+      "name_en": "Kirkuk-Baniyas Oil Pipelines"
     },
     {
       "project_id": "P0547",
-      "pipeline": "Kirkuk-Ceyhan Oil Pipeline",
+      "pipeline": "基尔库克—杰伊汉输油管线（Kirkuk-Ceyhan Oil Pipeline）",
       "segment": "",
       "original_capacity": "1,400,000.00",
       "original_unit": "bpd",
@@ -281,11 +299,14 @@
       ],
       "capacity_extra": [],
       "capacity_review_status": "table_only_reference_unconfirmed",
-      "capacity_reference_sha256": "f4cc53c35cd828e91aa9a1ccf548369f509b9ad7ac3251889dcc90c76692c6f6"
+      "capacity_reference_sha256": "f4cc53c35cd828e91aa9a1ccf548369f509b9ad7ac3251889dcc90c76692c6f6",
+      "pipeline_source": "Kirkuk-Ceyhan Oil Pipeline",
+      "name_cn": "基尔库克—杰伊汉输油管线",
+      "name_en": "Kirkuk-Ceyhan Oil Pipeline"
     },
     {
       "project_id": "P0548",
-      "pipeline": "Kurdistan Oil Pipeline",
+      "pipeline": "库尔德斯坦输油管线（Kurdistan Oil Pipeline）",
       "segment": "",
       "original_capacity": "1,000,000.00",
       "original_unit": "bpd",
@@ -305,11 +326,14 @@
       ],
       "capacity_extra": [],
       "capacity_review_status": "table_reference_number_matches",
-      "capacity_reference_sha256": "93b83e0c1dee7c5d9882e8e53c1672cefcf5548832ad6929ee558b15ae6c9d53"
+      "capacity_reference_sha256": "93b83e0c1dee7c5d9882e8e53c1672cefcf5548832ad6929ee558b15ae6c9d53",
+      "pipeline_source": "Kurdistan Oil Pipeline",
+      "name_cn": "库尔德斯坦输油管线",
+      "name_en": "Kurdistan Oil Pipeline"
     },
     {
       "project_id": "P0549",
-      "pipeline": "Trans-Israel Oil Pipeline",
+      "pipeline": "跨以色列输油管线（Trans-Israel Oil Pipeline）",
       "segment": "",
       "original_capacity": "1,200,000.00",
       "original_unit": "bpd",
@@ -326,11 +350,14 @@
       "reference_capacity_lines": [],
       "capacity_extra": [],
       "capacity_review_status": "table_only_unavailable_reference",
-      "capacity_reference_sha256": null
+      "capacity_reference_sha256": null,
+      "pipeline_source": "Trans-Israel Oil Pipeline",
+      "name_cn": "跨以色列输油管线",
+      "name_en": "Trans-Israel Oil Pipeline"
     },
     {
       "project_id": "P0550",
-      "pipeline": "Mina Al Fahal-Sohar Oil Pipeline",
+      "pipeline": "米纳法赫勒—苏哈尔输油管线（Mina Al Fahal-Sohar Oil Pipeline）",
       "segment": "",
       "original_capacity": "116,000.00",
       "original_unit": "bpd",
@@ -349,11 +376,14 @@
       ],
       "capacity_extra": [],
       "capacity_review_status": "table_reference_number_matches",
-      "capacity_reference_sha256": "c04f1bdd5d5cc15766e6510d2c8d70f550484b0186de5c7ed26866149fa32fce"
+      "capacity_reference_sha256": "c04f1bdd5d5cc15766e6510d2c8d70f550484b0186de5c7ed26866149fa32fce",
+      "pipeline_source": "Mina Al Fahal-Sohar Oil Pipeline",
+      "name_cn": "米纳法赫勒—苏哈尔输油管线",
+      "name_en": "Mina Al Fahal-Sohar Oil Pipeline"
     },
     {
       "project_id": "P0551",
-      "pipeline": "East-West Crude Oil Pipeline",
+      "pipeline": "沙特东西原油管线（East-West Crude Oil Pipeline）",
       "segment": "",
       "original_capacity": "5,000,000.00",
       "original_unit": "bpd",
@@ -379,11 +409,14 @@
         }
       ],
       "capacity_review_status": "primary_capacity_confirmed",
-      "capacity_reference_sha256": "34db5d1510af9878d7f89c56984cf677f45c516af2fde0fa87ddda90525ed6b9"
+      "capacity_reference_sha256": "34db5d1510af9878d7f89c56984cf677f45c516af2fde0fa87ddda90525ed6b9",
+      "pipeline_source": "East-West Crude Oil Pipeline",
+      "name_cn": "沙特东西原油管线",
+      "name_en": "East-West Crude Oil Pipeline"
     },
     {
       "project_id": "P0552",
-      "pipeline": "Trans-Arabian Oil Pipeline",
+      "pipeline": "泛阿拉伯输油管线（Trans-Arabian Oil Pipeline）",
       "segment": "Mainline",
       "original_capacity": "500,000.00",
       "original_unit": "bpd",
@@ -403,11 +436,14 @@
       ],
       "capacity_extra": [],
       "capacity_review_status": "table_reference_number_matches",
-      "capacity_reference_sha256": "8bbe8b57e43876285a8d53a1d3a8ebff8575373abdf7e34d629ac668de42080a"
+      "capacity_reference_sha256": "8bbe8b57e43876285a8d53a1d3a8ebff8575373abdf7e34d629ac668de42080a",
+      "pipeline_source": "Trans-Arabian Oil Pipeline",
+      "name_cn": "泛阿拉伯输油管线",
+      "name_en": "Trans-Arabian Oil Pipeline"
     },
     {
       "project_id": "P0553",
-      "pipeline": "Bab-Habshan–Fujairah Oil Pipeline",
+      "pipeline": "巴布—哈布善—富查伊拉输油管线（Bab-Habshan–Fujairah Oil Pipeline）",
       "segment": "",
       "original_capacity": "1,800,000.00",
       "original_unit": "bpd",
@@ -433,11 +469,14 @@
         }
       ],
       "capacity_review_status": "primary_capacity_confirmed",
-      "capacity_reference_sha256": "34db5d1510af9878d7f89c56984cf677f45c516af2fde0fa87ddda90525ed6b9"
+      "capacity_reference_sha256": "34db5d1510af9878d7f89c56984cf677f45c516af2fde0fa87ddda90525ed6b9",
+      "pipeline_source": "Bab-Habshan–Fujairah Oil Pipeline",
+      "name_cn": "巴布—哈布善—富查伊拉输油管线",
+      "name_en": "Bab-Habshan–Fujairah Oil Pipeline"
     },
     {
       "project_id": "P0554",
-      "pipeline": "Marib-Ras Isa Oil Pipeline",
+      "pipeline": "马里卜—拉斯伊萨输油管线（Marib-Ras Isa Oil Pipeline）",
       "segment": "",
       "original_capacity": "400,000.00",
       "original_unit": "bpd",
@@ -456,11 +495,14 @@
       ],
       "capacity_extra": [],
       "capacity_review_status": "table_reference_number_matches",
-      "capacity_reference_sha256": "f1663b599f207e3f3a9b10638d2aa43e0c2b4d931f75d9cfe21b6b1f9803c368"
+      "capacity_reference_sha256": "f1663b599f207e3f3a9b10638d2aa43e0c2b4d931f75d9cfe21b6b1f9803c368",
+      "pipeline_source": "Marib-Ras Isa Oil Pipeline",
+      "name_cn": "马里卜—拉斯伊萨输油管线",
+      "name_en": "Marib-Ras Isa Oil Pipeline"
     },
     {
       "project_id": "P0555",
-      "pipeline": "Masila-Ash Shihr Oil Pipeline",
+      "pipeline": "马西拉—阿什希赫尔输油管线（Masila-Ash Shihr Oil Pipeline）",
       "segment": "",
       "original_capacity": "325,000.00",
       "original_unit": "bpd",
@@ -479,11 +521,14 @@
       ],
       "capacity_extra": [],
       "capacity_review_status": "table_reference_number_matches",
-      "capacity_reference_sha256": "141210ec4e215dd7f0824a8a4df9ddaf1c3eeb4e6d3714fff035835461ed5935"
+      "capacity_reference_sha256": "141210ec4e215dd7f0824a8a4df9ddaf1c3eeb4e6d3714fff035835461ed5935",
+      "pipeline_source": "Masila-Ash Shihr Oil Pipeline",
+      "name_cn": "马西拉—阿什希赫尔输油管线",
+      "name_en": "Masila-Ash Shihr Oil Pipeline"
     },
     {
       "project_id": "P0556",
-      "pipeline": "Shabwah-Bir Ali Pipeline",
+      "pipeline": "舍卜瓦—比尔阿里输油管线（Shabwah-Bir Ali Pipeline）",
       "segment": "",
       "original_capacity": "135,000.00",
       "original_unit": "bpd",
@@ -500,11 +545,14 @@
       "reference_capacity_lines": [],
       "capacity_extra": [],
       "capacity_review_status": "table_only_unavailable_reference",
-      "capacity_reference_sha256": null
+      "capacity_reference_sha256": null,
+      "pipeline_source": "Shabwah-Bir Ali Pipeline",
+      "name_cn": "舍卜瓦—比尔阿里输油管线",
+      "name_en": "Shabwah-Bir Ali Pipeline"
     },
     {
       "project_id": "P0572",
-      "pipeline": "Mleiha-El Hamra Oil Pipeline",
+      "pipeline": "梅莱哈—哈姆拉输油管线（Mleiha-El Hamra Oil Pipeline）",
       "segment": "",
       "original_capacity": "140,000.00",
       "original_unit": "bpd",
@@ -523,11 +571,14 @@
       ],
       "capacity_extra": [],
       "capacity_review_status": "table_reference_number_matches",
-      "capacity_reference_sha256": "92ca34e3db9715e980328c872c1979c578229a22d50689a49b4dec1228649af0"
+      "capacity_reference_sha256": "92ca34e3db9715e980328c872c1979c578229a22d50689a49b4dec1228649af0",
+      "pipeline_source": "Mleiha-El Hamra Oil Pipeline",
+      "name_cn": "梅莱哈—哈姆拉输油管线",
+      "name_en": "Mleiha-El Hamra Oil Pipeline"
     },
     {
       "project_id": "P0574",
-      "pipeline": "Neka Jask Pipeline",
+      "pipeline": "内卡—贾斯克输油管线（Neka Jask Pipeline）",
       "segment": "",
       "original_capacity": "1,000,000.00",
       "original_unit": "bpd",
@@ -546,11 +597,14 @@
       ],
       "capacity_extra": [],
       "capacity_review_status": "table_reference_number_matches",
-      "capacity_reference_sha256": "a715860eb4d7c261ce6f81288f4e58fc0583e05ac45e8fa9d1351d86345c8276"
+      "capacity_reference_sha256": "a715860eb4d7c261ce6f81288f4e58fc0583e05ac45e8fa9d1351d86345c8276",
+      "pipeline_source": "Neka Jask Pipeline",
+      "name_cn": "内卡—贾斯克输油管线",
+      "name_en": "Neka Jask Pipeline"
     },
     {
       "project_id": "P0575",
-      "pipeline": "Badra-PS-2 Oil Pipeline",
+      "pipeline": "巴德拉—PS2泵站输油管线（Badra-PS-2 Oil Pipeline）",
       "segment": "Pipeline 1 \"Badra-AlGharaf Oil Pipeline\"",
       "original_capacity": "165,000.00",
       "original_unit": "bpd",
@@ -570,11 +624,14 @@
       ],
       "capacity_extra": [],
       "capacity_review_status": "table_reference_number_matches",
-      "capacity_reference_sha256": "2d616ed2f075a59c02a048c7c4a9481a882c37a98fb4b298a1306a192cc28f1c"
+      "capacity_reference_sha256": "2d616ed2f075a59c02a048c7c4a9481a882c37a98fb4b298a1306a192cc28f1c",
+      "pipeline_source": "Badra-PS-2 Oil Pipeline",
+      "name_cn": "巴德拉—PS2泵站输油管线",
+      "name_en": "Badra-PS-2 Oil Pipeline"
     },
     {
       "project_id": "P0576",
-      "pipeline": "Buzurgan-Fao Oil Pipeline",
+      "pipeline": "布祖尔甘—法奥输油管线（Buzurgan-Fao Oil Pipeline）",
       "segment": "",
       "original_capacity": "1,000,000.00",
       "original_unit": "bpd",
@@ -593,11 +650,14 @@
       ],
       "capacity_extra": [],
       "capacity_review_status": "table_reference_number_matches",
-      "capacity_reference_sha256": "be2db321caa12de6cc79a738ec795a5527574f4aff552d8bc5484a33508c37ed"
+      "capacity_reference_sha256": "be2db321caa12de6cc79a738ec795a5527574f4aff552d8bc5484a33508c37ed",
+      "pipeline_source": "Buzurgan-Fao Oil Pipeline",
+      "name_cn": "布祖尔甘—法奥输油管线",
+      "name_en": "Buzurgan-Fao Oil Pipeline"
     },
     {
       "project_id": "P0577",
-      "pipeline": "Kirkuk Baiji Baghdad Oil Pipeline",
+      "pipeline": "基尔库克—拜伊吉—巴格达输油管线（Kirkuk Baiji Baghdad Oil Pipeline）",
       "segment": "",
       "original_capacity": "40,000.00",
       "original_unit": "bpd",
@@ -616,11 +676,14 @@
       ],
       "capacity_extra": [],
       "capacity_review_status": "table_reference_number_matches",
-      "capacity_reference_sha256": "fda91240e83117798d0250c4f9a65481b56dede63761d0f6a2276c079ecb2963"
+      "capacity_reference_sha256": "fda91240e83117798d0250c4f9a65481b56dede63761d0f6a2276c079ecb2963",
+      "pipeline_source": "Kirkuk Baiji Baghdad Oil Pipeline",
+      "name_cn": "基尔库克—拜伊吉—巴格达输油管线",
+      "name_en": "Kirkuk Baiji Baghdad Oil Pipeline"
     },
     {
       "project_id": "P0578",
-      "pipeline": "PS-1-Al Basra Oil Terminal Oil Pipeline",
+      "pipeline": "PS1泵站—巴士拉石油终端输油管线（PS-1-Al Basra Oil Terminal Oil Pipeline）",
       "segment": "",
       "original_capacity": "1,800,000.00",
       "original_unit": "bpd",
@@ -639,11 +702,14 @@
       ],
       "capacity_extra": [],
       "capacity_review_status": "table_only_reference_unconfirmed",
-      "capacity_reference_sha256": "02621ae263d88d4932dce495c51b208cfd9ec8ffc3dfe39556a497025e056186"
+      "capacity_reference_sha256": "02621ae263d88d4932dce495c51b208cfd9ec8ffc3dfe39556a497025e056186",
+      "pipeline_source": "PS-1-Al Basra Oil Terminal Oil Pipeline",
+      "name_cn": "PS1泵站—巴士拉石油终端输油管线",
+      "name_en": "PS-1-Al Basra Oil Terminal Oil Pipeline"
     },
     {
       "project_id": "P0579",
-      "pipeline": "PS2–Tuba Oil Pipeline",
+      "pipeline": "PS2泵站—图巴输油管线（PS2–Tuba Oil Pipeline）",
       "segment": "",
       "original_capacity": "",
       "original_unit": "",
@@ -662,11 +728,14 @@
       ],
       "capacity_extra": [],
       "capacity_review_status": "source_missing",
-      "capacity_reference_sha256": "0950eccc0681d81dd8afa7c0473cd0d955d550f5c4a0a5d41c6a015765706056"
+      "capacity_reference_sha256": "0950eccc0681d81dd8afa7c0473cd0d955d550f5c4a0a5d41c6a015765706056",
+      "pipeline_source": "PS2–Tuba Oil Pipeline",
+      "name_cn": "PS2泵站—图巴输油管线",
+      "name_en": "PS2–Tuba Oil Pipeline"
     },
     {
       "project_id": "P0629",
-      "pipeline": "Oman Main Line–Ras Markaz Oil Pipeline",
+      "pipeline": "阿曼主干线—拉斯马尔卡兹输油管线（Oman Main Line–Ras Markaz Oil Pipeline）",
       "segment": "",
       "original_capacity": "700,000.00",
       "original_unit": "bpd",
@@ -685,11 +754,14 @@
       ],
       "capacity_extra": [],
       "capacity_review_status": "table_reference_number_matches",
-      "capacity_reference_sha256": "c55051bd434545e43ae920977352c777efb83f3cfe2c522d4251c361163744f2"
+      "capacity_reference_sha256": "c55051bd434545e43ae920977352c777efb83f3cfe2c522d4251c361163744f2",
+      "pipeline_source": "Oman Main Line–Ras Markaz Oil Pipeline",
+      "name_cn": "阿曼主干线—拉斯马尔卡兹输油管线",
+      "name_en": "Oman Main Line–Ras Markaz Oil Pipeline"
     },
     {
       "project_id": "P0630",
-      "pipeline": "Oman Main Oil Line",
+      "pipeline": "阿曼输油主干线（Oman Main Oil Line）",
       "segment": "",
       "original_capacity": "770,000.00",
       "original_unit": "bpd",
@@ -708,11 +780,14 @@
       ],
       "capacity_extra": [],
       "capacity_review_status": "table_reference_number_matches",
-      "capacity_reference_sha256": "441586dc3b9325a64841961bba2b25d9a8fd934e664fd88d4bd4e1468ed9f333"
+      "capacity_reference_sha256": "441586dc3b9325a64841961bba2b25d9a8fd934e664fd88d4bd4e1468ed9f333",
+      "pipeline_source": "Oman Main Oil Line",
+      "name_cn": "阿曼输油主干线",
+      "name_en": "Oman Main Oil Line"
     },
     {
       "project_id": "P0631",
-      "pipeline": "South Oman Oil Line",
+      "pipeline": "南阿曼输油干线（South Oman Oil Line）",
       "segment": "",
       "original_capacity": "",
       "original_unit": "",
@@ -729,11 +804,14 @@
       "reference_capacity_lines": [],
       "capacity_extra": [],
       "capacity_review_status": "source_missing",
-      "capacity_reference_sha256": null
+      "capacity_reference_sha256": null,
+      "pipeline_source": "South Oman Oil Line",
+      "name_cn": "南阿曼输油干线",
+      "name_en": "South Oman Oil Line"
     },
     {
       "project_id": "P0632",
-      "pipeline": "PS3-Halul Oil Pipeline",
+      "pipeline": "PS3泵站—哈卢勒岛输油管线（PS3-Halul Oil Pipeline）",
       "segment": "",
       "original_capacity": "",
       "original_unit": "",
@@ -752,11 +830,14 @@
       ],
       "capacity_extra": [],
       "capacity_review_status": "source_missing",
-      "capacity_reference_sha256": "56fc9a1ba7ee1231d47d1ec86def06e22b5f2a44e5b7171f9590a92c32792341"
+      "capacity_reference_sha256": "56fc9a1ba7ee1231d47d1ec86def06e22b5f2a44e5b7171f9590a92c32792341",
+      "pipeline_source": "PS3-Halul Oil Pipeline",
+      "name_cn": "PS3泵站—哈卢勒岛输油管线",
+      "name_en": "PS3-Halul Oil Pipeline"
     },
     {
       "project_id": "P0634",
-      "pipeline": "Mile 32-Mesaieed Oil Pipelines",
+      "pipeline": "32英里站—梅赛义德输油管线（Mile 32-Mesaieed Oil Pipelines）",
       "segment": "Pipeline 1",
       "original_capacity": "",
       "original_unit": "",
@@ -777,11 +858,14 @@
       ],
       "capacity_extra": [],
       "capacity_review_status": "source_missing",
-      "capacity_reference_sha256": "fb35248f6cf60904b55bc896f452a7e312749f3e336159ed7ef50766f7bc3bbe"
+      "capacity_reference_sha256": "fb35248f6cf60904b55bc896f452a7e312749f3e336159ed7ef50766f7bc3bbe",
+      "pipeline_source": "Mile 32-Mesaieed Oil Pipelines",
+      "name_cn": "32英里站—梅赛义德输油管线",
+      "name_en": "Mile 32-Mesaieed Oil Pipelines"
     },
     {
       "project_id": "P0635",
-      "pipeline": "Umm Bab-Mile 32 Oil Pipeline",
+      "pipeline": "乌姆巴布—32英里站输油管线（Umm Bab-Mile 32 Oil Pipeline）",
       "segment": "Pipeline 4",
       "original_capacity": "",
       "original_unit": "",
@@ -798,11 +882,14 @@
       "reference_capacity_lines": [],
       "capacity_extra": [],
       "capacity_review_status": "source_missing",
-      "capacity_reference_sha256": null
+      "capacity_reference_sha256": null,
+      "pipeline_source": "Umm Bab-Mile 32 Oil Pipeline",
+      "name_cn": "乌姆巴布—32英里站输油管线",
+      "name_en": "Umm Bab-Mile 32 Oil Pipeline"
     },
     {
       "project_id": "P0637",
-      "pipeline": "Bahrain Saudi Arabia Oil Pipeline",
+      "pipeline": "巴林—沙特阿拉伯输油管线（Bahrain Saudi Arabia Oil Pipeline）",
       "segment": "",
       "original_capacity": "358,000.00",
       "original_unit": "bpd",
@@ -821,11 +908,14 @@
       ],
       "capacity_extra": [],
       "capacity_review_status": "conflict_withheld",
-      "capacity_reference_sha256": "4b58418f2b8b55ece20c0b2d143267e1157e35a6898a9556aafe64f6be88fd8c"
+      "capacity_reference_sha256": "4b58418f2b8b55ece20c0b2d143267e1157e35a6898a9556aafe64f6be88fd8c",
+      "pipeline_source": "Bahrain Saudi Arabia Oil Pipeline",
+      "name_cn": "巴林—沙特阿拉伯输油管线",
+      "name_en": "Bahrain Saudi Arabia Oil Pipeline"
     },
     {
       "project_id": "P0639",
-      "pipeline": "Bab-Habshan–Jebel Dhanna Oil Pipeline",
+      "pipeline": "巴布—哈布善—杰贝尔丹那输油管线（Bab-Habshan–Jebel Dhanna Oil Pipeline）",
       "segment": "Pipeline 1 \"MP21 (MOL 1.2)/Jebel Dhanna\"",
       "original_capacity": "",
       "original_unit": "",
@@ -844,11 +934,14 @@
       ],
       "capacity_extra": [],
       "capacity_review_status": "source_missing",
-      "capacity_reference_sha256": "8395b6a9d91f612386b1ac4d39204009bd17923e26c1f3210f4ed83037661130"
+      "capacity_reference_sha256": "8395b6a9d91f612386b1ac4d39204009bd17923e26c1f3210f4ed83037661130",
+      "pipeline_source": "Bab-Habshan–Jebel Dhanna Oil Pipeline",
+      "name_cn": "巴布—哈布善—杰贝尔丹那输油管线",
+      "name_en": "Bab-Habshan–Jebel Dhanna Oil Pipeline"
     },
     {
       "project_id": "P0640",
-      "pipeline": "Umm Shaif-Das Island oil pipeline",
+      "pipeline": "乌姆沙伊夫—达斯岛输油管线（Umm Shaif-Das Island oil pipeline）",
       "segment": "Pipeline 1",
       "original_capacity": "",
       "original_unit": "",
@@ -865,11 +958,14 @@
       "reference_capacity_lines": [],
       "capacity_extra": [],
       "capacity_review_status": "source_missing",
-      "capacity_reference_sha256": null
+      "capacity_reference_sha256": null,
+      "pipeline_source": "Umm Shaif-Das Island oil pipeline",
+      "name_cn": "乌姆沙伊夫—达斯岛输油管线",
+      "name_en": "Umm Shaif-Das Island oil pipeline"
     },
     {
       "project_id": "P0641",
-      "pipeline": "Upper Zakum-Das Island Oil Pipeline",
+      "pipeline": "上扎库姆—达斯岛输油管线（Upper Zakum-Das Island Oil Pipeline）",
       "segment": "",
       "original_capacity": "310,000.00",
       "original_unit": "bpd",
@@ -888,11 +984,14 @@
       ],
       "capacity_extra": [],
       "capacity_review_status": "table_reference_number_matches",
-      "capacity_reference_sha256": "668ac098f668ca2aa06d1dfae12e47009ca86a1ea1f40518df548b0af470759c"
+      "capacity_reference_sha256": "668ac098f668ca2aa06d1dfae12e47009ca86a1ea1f40518df548b0af470759c",
+      "pipeline_source": "Upper Zakum-Das Island Oil Pipeline",
+      "name_cn": "上扎库姆—达斯岛输油管线",
+      "name_en": "Upper Zakum-Das Island Oil Pipeline"
     },
     {
       "project_id": "P0642",
-      "pipeline": "Upper Zakum-Zirku Island Oil Pipeline",
+      "pipeline": "上扎库姆—济尔库岛输油管线（Upper Zakum-Zirku Island Oil Pipeline）",
       "segment": "Pipeline 1",
       "original_capacity": "",
       "original_unit": "",
@@ -909,11 +1008,14 @@
       "reference_capacity_lines": [],
       "capacity_extra": [],
       "capacity_review_status": "source_missing",
-      "capacity_reference_sha256": null
+      "capacity_reference_sha256": null,
+      "pipeline_source": "Upper Zakum-Zirku Island Oil Pipeline",
+      "name_cn": "上扎库姆—济尔库岛输油管线",
+      "name_en": "Upper Zakum-Zirku Island Oil Pipeline"
     },
     {
       "project_id": "P0644",
-      "pipeline": "Baku-Tbilisi-Ceyhan Pipeline",
+      "pipeline": "巴库—第比利斯—杰伊汉输油管线（Baku-Tbilisi-Ceyhan Pipeline）",
       "segment": "",
       "original_capacity": "1,200,000.00",
       "original_unit": "bpd",
@@ -932,11 +1034,14 @@
       ],
       "capacity_extra": [],
       "capacity_review_status": "table_reference_number_matches",
-      "capacity_reference_sha256": "8b40ac58f7f4310052a90745cc291f55dc689feeff1b4f40fc07743925f8e097"
+      "capacity_reference_sha256": "8b40ac58f7f4310052a90745cc291f55dc689feeff1b4f40fc07743925f8e097",
+      "pipeline_source": "Baku-Tbilisi-Ceyhan Pipeline",
+      "name_cn": "巴库—第比利斯—杰伊汉输油管线",
+      "name_en": "Baku-Tbilisi-Ceyhan Pipeline"
     },
     {
       "project_id": "P0662",
-      "pipeline": "Samsun–Ceyhan Pipeline",
+      "pipeline": "萨姆松—杰伊汉输油管线（Samsun–Ceyhan Pipeline）",
       "segment": "",
       "original_capacity": "1,500,000.00",
       "original_unit": "bpd",
@@ -955,11 +1060,14 @@
       ],
       "capacity_extra": [],
       "capacity_review_status": "table_reference_number_matches",
-      "capacity_reference_sha256": "c89d00a288cf375e03e6a1b55c0c2223bc02ab9f7acf9c5bdb4e11ae4f01df1e"
+      "capacity_reference_sha256": "c89d00a288cf375e03e6a1b55c0c2223bc02ab9f7acf9c5bdb4e11ae4f01df1e",
+      "pipeline_source": "Samsun–Ceyhan Pipeline",
+      "name_cn": "萨姆松—杰伊汉输油管线",
+      "name_en": "Samsun–Ceyhan Pipeline"
     },
     {
       "project_id": "P0799",
-      "pipeline": "Ceyhan-Kırıkkale Oil Pipeline",
+      "pipeline": "杰伊汉—克勒克卡莱输油管线（Ceyhan-Kırıkkale Oil Pipeline）",
       "segment": "",
       "original_capacity": "145,000.00",
       "original_unit": "bpd",
@@ -978,11 +1086,14 @@
       ],
       "capacity_extra": [],
       "capacity_review_status": "table_reference_number_matches",
-      "capacity_reference_sha256": "77dad46904f93a8e71bef68ac8b02a66817730277670e376e6fcc58ff42176ba"
+      "capacity_reference_sha256": "77dad46904f93a8e71bef68ac8b02a66817730277670e376e6fcc58ff42176ba",
+      "pipeline_source": "Ceyhan-Kırıkkale Oil Pipeline",
+      "name_cn": "杰伊汉—克勒克卡莱输油管线",
+      "name_en": "Ceyhan-Kırıkkale Oil Pipeline"
     },
     {
       "project_id": "P1854",
-      "pipeline": "Kirkuk-Ceyhan Oil Pipeline",
+      "pipeline": "基尔库克—杰伊汉输油管线（Kirkuk-Ceyhan Oil Pipeline）",
       "segment": "Beji–Fishkhabur Replacement",
       "original_capacity": "1,000,000.00",
       "original_unit": "bpd",
@@ -1002,11 +1113,14 @@
       ],
       "capacity_extra": [],
       "capacity_review_status": "table_reference_number_matches",
-      "capacity_reference_sha256": "f4cc53c35cd828e91aa9a1ccf548369f509b9ad7ac3251889dcc90c76692c6f6"
+      "capacity_reference_sha256": "f4cc53c35cd828e91aa9a1ccf548369f509b9ad7ac3251889dcc90c76692c6f6",
+      "pipeline_source": "Kirkuk-Ceyhan Oil Pipeline",
+      "name_cn": "基尔库克—杰伊汉输油管线",
+      "name_en": "Kirkuk-Ceyhan Oil Pipeline"
     },
     {
       "project_id": "P1954",
-      "pipeline": "Shaybah-Abqaiq Oil Pipeline",
+      "pipeline": "谢巴—布盖格输油管线（Shaybah-Abqaiq Oil Pipeline）",
       "segment": "Shbab-1",
       "original_capacity": "750,000.00",
       "original_unit": "bpd",
@@ -1023,11 +1137,14 @@
       "reference_capacity_lines": [],
       "capacity_extra": [],
       "capacity_review_status": "table_only_unavailable_reference",
-      "capacity_reference_sha256": null
+      "capacity_reference_sha256": null,
+      "pipeline_source": "Shaybah-Abqaiq Oil Pipeline",
+      "name_cn": "谢巴—布盖格输油管线",
+      "name_en": "Shaybah-Abqaiq Oil Pipeline"
     },
     {
       "project_id": "P1955",
-      "pipeline": "Trans-Arabian Oil Pipeline",
+      "pipeline": "泛阿拉伯输油管线（Trans-Arabian Oil Pipeline）",
       "segment": "Qatif-Qaisumah Gathering Line",
       "original_capacity": "500,000.00",
       "original_unit": "bpd",
@@ -1047,11 +1164,14 @@
       ],
       "capacity_extra": [],
       "capacity_review_status": "table_reference_number_matches",
-      "capacity_reference_sha256": "8bbe8b57e43876285a8d53a1d3a8ebff8575373abdf7e34d629ac668de42080a"
+      "capacity_reference_sha256": "8bbe8b57e43876285a8d53a1d3a8ebff8575373abdf7e34d629ac668de42080a",
+      "pipeline_source": "Trans-Arabian Oil Pipeline",
+      "name_cn": "泛阿拉伯输油管线",
+      "name_en": "Trans-Arabian Oil Pipeline"
     },
     {
       "project_id": "P1956",
-      "pipeline": "Hawtah-Hawtah stabilizer Oil Pipeline",
+      "pipeline": "豪塔—豪塔稳定处理厂输油管线（Hawtah-Hawtah stabilizer Oil Pipeline）",
       "segment": "",
       "original_capacity": "200,000.00",
       "original_unit": "bpd",
@@ -1070,11 +1190,14 @@
       ],
       "capacity_extra": [],
       "capacity_review_status": "table_only_reference_unconfirmed",
-      "capacity_reference_sha256": "e5ac26ff4ba7cdb5eb5065583e507b795d623785426ad3bf02dbd0d93cdec28c"
+      "capacity_reference_sha256": "e5ac26ff4ba7cdb5eb5065583e507b795d623785426ad3bf02dbd0d93cdec28c",
+      "pipeline_source": "Hawtah-Hawtah stabilizer Oil Pipeline",
+      "name_cn": "豪塔—豪塔稳定处理厂输油管线",
+      "name_en": "Hawtah-Hawtah stabilizer Oil Pipeline"
     },
     {
       "project_id": "P1957",
-      "pipeline": "Haradh-Abqaiq Oil Plants Pipelines",
+      "pipeline": "哈拉德—布盖格处理厂输油管线（Haradh-Abqaiq Oil Plants Pipelines）",
       "segment": "Pipeline 1",
       "original_capacity": "300,000.00",
       "original_unit": "bpd",
@@ -1095,11 +1218,14 @@
       ],
       "capacity_extra": [],
       "capacity_review_status": "table_only_reference_unconfirmed",
-      "capacity_reference_sha256": "f8bec14097c3d737b5129b7881250a713392f729e7bd75f57c0b05fa596cc0df"
+      "capacity_reference_sha256": "f8bec14097c3d737b5129b7881250a713392f729e7bd75f57c0b05fa596cc0df",
+      "pipeline_source": "Haradh-Abqaiq Oil Plants Pipelines",
+      "name_cn": "哈拉德—布盖格处理厂输油管线",
+      "name_en": "Haradh-Abqaiq Oil Plants Pipelines"
     },
     {
       "project_id": "P1958",
-      "pipeline": "Safaniyah-Juaymah Oil Pipeline",
+      "pipeline": "萨法尼耶—朱艾马输油管线（Safaniyah-Juaymah Oil Pipeline）",
       "segment": "",
       "original_capacity": "",
       "original_unit": "",
@@ -1116,11 +1242,14 @@
       "reference_capacity_lines": [],
       "capacity_extra": [],
       "capacity_review_status": "source_missing",
-      "capacity_reference_sha256": null
+      "capacity_reference_sha256": null,
+      "pipeline_source": "Safaniyah-Juaymah Oil Pipeline",
+      "name_cn": "萨法尼耶—朱艾马输油管线",
+      "name_en": "Safaniyah-Juaymah Oil Pipeline"
     },
     {
       "project_id": "P1959",
-      "pipeline": "Haradh-Abqaiq plants Oil Pipelines",
+      "pipeline": "哈拉德—布盖格处理厂输油管线（Haradh-Abqaiq plants Oil Pipelines）",
       "segment": "Pipeline 2",
       "original_capacity": "",
       "original_unit": "",
@@ -1141,11 +1270,14 @@
       ],
       "capacity_extra": [],
       "capacity_review_status": "source_missing",
-      "capacity_reference_sha256": "f8bec14097c3d737b5129b7881250a713392f729e7bd75f57c0b05fa596cc0df"
+      "capacity_reference_sha256": "f8bec14097c3d737b5129b7881250a713392f729e7bd75f57c0b05fa596cc0df",
+      "pipeline_source": "Haradh-Abqaiq plants Oil Pipelines",
+      "name_cn": "哈拉德—布盖格处理厂输油管线",
+      "name_en": "Haradh-Abqaiq plants Oil Pipelines"
     },
     {
       "project_id": "P1960",
-      "pipeline": "AY1L KP 65.628-Rabigh refinery Oil Pipeline",
+      "pipeline": "AY1L第65.628公里点—拉比格炼油厂输油管线（AY1L KP 65.628-Rabigh refinery Oil Pipeline）",
       "segment": "",
       "original_capacity": "",
       "original_unit": "",
@@ -1164,11 +1296,14 @@
       ],
       "capacity_extra": [],
       "capacity_review_status": "source_missing",
-      "capacity_reference_sha256": "c39512ab6e9ec44b84a9d47d2a576dde1a49ca5d31bfd2f5686fa0da393dd49d"
+      "capacity_reference_sha256": "c39512ab6e9ec44b84a9d47d2a576dde1a49ca5d31bfd2f5686fa0da393dd49d",
+      "pipeline_source": "AY1L KP 65.628-Rabigh refinery Oil Pipeline",
+      "name_cn": "AY1L第65.628公里点—拉比格炼油厂输油管线",
+      "name_en": "AY1L KP 65.628-Rabigh refinery Oil Pipeline"
     },
     {
       "project_id": "P1961",
-      "pipeline": "Haradh-Abqaiq plants Oil Pipelines",
+      "pipeline": "哈拉德—布盖格处理厂输油管线（Haradh-Abqaiq plants Oil Pipelines）",
       "segment": "Pipeline 3",
       "original_capacity": "",
       "original_unit": "",
@@ -1189,11 +1324,14 @@
       ],
       "capacity_extra": [],
       "capacity_review_status": "source_missing",
-      "capacity_reference_sha256": "f8bec14097c3d737b5129b7881250a713392f729e7bd75f57c0b05fa596cc0df"
+      "capacity_reference_sha256": "f8bec14097c3d737b5129b7881250a713392f729e7bd75f57c0b05fa596cc0df",
+      "pipeline_source": "Haradh-Abqaiq plants Oil Pipelines",
+      "name_cn": "哈拉德—布盖格处理厂输油管线",
+      "name_en": "Haradh-Abqaiq plants Oil Pipelines"
     },
     {
       "project_id": "P1962",
-      "pipeline": "Khurais-Riyadh Oil Pipeline",
+      "pipeline": "胡赖斯—利雅得输油管线（Khurais-Riyadh Oil Pipeline）",
       "segment": "",
       "original_capacity": "",
       "original_unit": "",
@@ -1212,11 +1350,14 @@
       ],
       "capacity_extra": [],
       "capacity_review_status": "source_missing",
-      "capacity_reference_sha256": "9a22dbc8ef3820c53018c4690cfa2a142e878f465969678cce6ba7fd0e4c2f0d"
+      "capacity_reference_sha256": "9a22dbc8ef3820c53018c4690cfa2a142e878f465969678cce6ba7fd0e4c2f0d",
+      "pipeline_source": "Khurais-Riyadh Oil Pipeline",
+      "name_cn": "胡赖斯—利雅得输油管线",
+      "name_en": "Khurais-Riyadh Oil Pipeline"
     },
     {
       "project_id": "P1963",
-      "pipeline": "Khursaniyah-Ras Tanura Oil Pipelines",
+      "pipeline": "胡尔萨尼耶—拉斯坦努拉输油管线（Khursaniyah-Ras Tanura Oil Pipelines）",
       "segment": "Pipeline 1",
       "original_capacity": "",
       "original_unit": "",
@@ -1238,11 +1379,14 @@
       ],
       "capacity_extra": [],
       "capacity_review_status": "source_missing",
-      "capacity_reference_sha256": "d860624f14ca04db5887040ba52e141620eab815721be251cf31b223ab8e79ad"
+      "capacity_reference_sha256": "d860624f14ca04db5887040ba52e141620eab815721be251cf31b223ab8e79ad",
+      "pipeline_source": "Khursaniyah-Ras Tanura Oil Pipelines",
+      "name_cn": "胡尔萨尼耶—拉斯坦努拉输油管线",
+      "name_en": "Khursaniyah-Ras Tanura Oil Pipelines"
     },
     {
       "project_id": "P1964",
-      "pipeline": "Safiniyah-Kursaniyah Oil Pipelines",
+      "pipeline": "萨法尼耶—胡尔萨尼耶输油管线（Safiniyah-Kursaniyah Oil Pipelines）",
       "segment": "Pipeline 1",
       "original_capacity": "",
       "original_unit": "",
@@ -1264,11 +1408,14 @@
       ],
       "capacity_extra": [],
       "capacity_review_status": "source_missing",
-      "capacity_reference_sha256": "d860624f14ca04db5887040ba52e141620eab815721be251cf31b223ab8e79ad"
+      "capacity_reference_sha256": "d860624f14ca04db5887040ba52e141620eab815721be251cf31b223ab8e79ad",
+      "pipeline_source": "Safiniyah-Kursaniyah Oil Pipelines",
+      "name_cn": "萨法尼耶—胡尔萨尼耶输油管线",
+      "name_en": "Safiniyah-Kursaniyah Oil Pipelines"
     },
     {
       "project_id": "P1965",
-      "pipeline": "Safiniyah-Kursaniyah Oil Pipelines",
+      "pipeline": "萨法尼耶—胡尔萨尼耶输油管线（Safiniyah-Kursaniyah Oil Pipelines）",
       "segment": "Pipeline 2",
       "original_capacity": "",
       "original_unit": "",
@@ -1290,11 +1437,14 @@
       ],
       "capacity_extra": [],
       "capacity_review_status": "source_missing",
-      "capacity_reference_sha256": "d860624f14ca04db5887040ba52e141620eab815721be251cf31b223ab8e79ad"
+      "capacity_reference_sha256": "d860624f14ca04db5887040ba52e141620eab815721be251cf31b223ab8e79ad",
+      "pipeline_source": "Safiniyah-Kursaniyah Oil Pipelines",
+      "name_cn": "萨法尼耶—胡尔萨尼耶输油管线",
+      "name_en": "Safiniyah-Kursaniyah Oil Pipelines"
     },
     {
       "project_id": "P1966",
-      "pipeline": "Safiniyah-Kursaniyah Oil Pipelines",
+      "pipeline": "萨法尼耶—胡尔萨尼耶输油管线（Safiniyah-Kursaniyah Oil Pipelines）",
       "segment": "Pipeline 3",
       "original_capacity": "",
       "original_unit": "",
@@ -1316,11 +1466,14 @@
       ],
       "capacity_extra": [],
       "capacity_review_status": "source_missing",
-      "capacity_reference_sha256": "d860624f14ca04db5887040ba52e141620eab815721be251cf31b223ab8e79ad"
+      "capacity_reference_sha256": "d860624f14ca04db5887040ba52e141620eab815721be251cf31b223ab8e79ad",
+      "pipeline_source": "Safiniyah-Kursaniyah Oil Pipelines",
+      "name_cn": "萨法尼耶—胡尔萨尼耶输油管线",
+      "name_en": "Safiniyah-Kursaniyah Oil Pipelines"
     },
     {
       "project_id": "P1967",
-      "pipeline": "Kursaniyah-Ras Tanura Oil Pipelines",
+      "pipeline": "胡尔萨尼耶—拉斯坦努拉输油管线（Kursaniyah-Ras Tanura Oil Pipelines）",
       "segment": "Pipeline 3",
       "original_capacity": "",
       "original_unit": "",
@@ -1342,11 +1495,14 @@
       ],
       "capacity_extra": [],
       "capacity_review_status": "source_missing",
-      "capacity_reference_sha256": "d860624f14ca04db5887040ba52e141620eab815721be251cf31b223ab8e79ad"
+      "capacity_reference_sha256": "d860624f14ca04db5887040ba52e141620eab815721be251cf31b223ab8e79ad",
+      "pipeline_source": "Kursaniyah-Ras Tanura Oil Pipelines",
+      "name_cn": "胡尔萨尼耶—拉斯坦努拉输油管线",
+      "name_en": "Kursaniyah-Ras Tanura Oil Pipelines"
     },
     {
       "project_id": "P1968",
-      "pipeline": "Kursaniyah-Ras Tanura Oil Pipelines",
+      "pipeline": "胡尔萨尼耶—拉斯坦努拉输油管线（Kursaniyah-Ras Tanura Oil Pipelines）",
       "segment": "Pipeline 2",
       "original_capacity": "",
       "original_unit": "",
@@ -1368,11 +1524,14 @@
       ],
       "capacity_extra": [],
       "capacity_review_status": "source_missing",
-      "capacity_reference_sha256": "d860624f14ca04db5887040ba52e141620eab815721be251cf31b223ab8e79ad"
+      "capacity_reference_sha256": "d860624f14ca04db5887040ba52e141620eab815721be251cf31b223ab8e79ad",
+      "pipeline_source": "Kursaniyah-Ras Tanura Oil Pipelines",
+      "name_cn": "胡尔萨尼耶—拉斯坦努拉输油管线",
+      "name_en": "Kursaniyah-Ras Tanura Oil Pipelines"
     },
     {
       "project_id": "P1970",
-      "pipeline": "Abu Ali-Berri junction Oil Pipeline",
+      "pipeline": "阿布阿里—贝里枢纽输油管线（Abu Ali-Berri junction Oil Pipeline）",
       "segment": "",
       "original_capacity": "250,000.00",
       "original_unit": "bpd",
@@ -1391,11 +1550,14 @@
       ],
       "capacity_extra": [],
       "capacity_review_status": "table_only_reference_unconfirmed",
-      "capacity_reference_sha256": "4a0f2472b15efb1e68575f989f7abd53dedffbc896e94bf289077ba3837cea7f"
+      "capacity_reference_sha256": "4a0f2472b15efb1e68575f989f7abd53dedffbc896e94bf289077ba3837cea7f",
+      "pipeline_source": "Abu Ali-Berri junction Oil Pipeline",
+      "name_cn": "阿布阿里—贝里枢纽输油管线",
+      "name_en": "Abu Ali-Berri junction Oil Pipeline"
     },
     {
       "project_id": "P1972",
-      "pipeline": "Abqaiq Plants-Qatif Junction Oil Pipelines",
+      "pipeline": "布盖格处理厂—盖提夫枢纽输油管线（Abqaiq Plants-Qatif Junction Oil Pipelines）",
       "segment": "Pipeline 1",
       "original_capacity": "",
       "original_unit": "",
@@ -1418,11 +1580,14 @@
       ],
       "capacity_extra": [],
       "capacity_review_status": "source_missing",
-      "capacity_reference_sha256": "a0f6667d37b1e4d3c7745f862e339081f1a263e67cffce5917f96ae5f58e194e"
+      "capacity_reference_sha256": "a0f6667d37b1e4d3c7745f862e339081f1a263e67cffce5917f96ae5f58e194e",
+      "pipeline_source": "Abqaiq Plants-Qatif Junction Oil Pipelines",
+      "name_cn": "布盖格处理厂—盖提夫枢纽输油管线",
+      "name_en": "Abqaiq Plants-Qatif Junction Oil Pipelines"
     },
     {
       "project_id": "P1973",
-      "pipeline": "Abqaiq Plants-Qatif Junction Oil Pipelines",
+      "pipeline": "布盖格处理厂—盖提夫枢纽输油管线（Abqaiq Plants-Qatif Junction Oil Pipelines）",
       "segment": "Pipeline 2",
       "original_capacity": "",
       "original_unit": "",
@@ -1445,11 +1610,14 @@
       ],
       "capacity_extra": [],
       "capacity_review_status": "source_missing",
-      "capacity_reference_sha256": "a0f6667d37b1e4d3c7745f862e339081f1a263e67cffce5917f96ae5f58e194e"
+      "capacity_reference_sha256": "a0f6667d37b1e4d3c7745f862e339081f1a263e67cffce5917f96ae5f58e194e",
+      "pipeline_source": "Abqaiq Plants-Qatif Junction Oil Pipelines",
+      "name_cn": "布盖格处理厂—盖提夫枢纽输油管线",
+      "name_en": "Abqaiq Plants-Qatif Junction Oil Pipelines"
     },
     {
       "project_id": "P1974",
-      "pipeline": "Abqaiq Plants-Qatif Junction Oil Pipelines",
+      "pipeline": "布盖格处理厂—盖提夫枢纽输油管线（Abqaiq Plants-Qatif Junction Oil Pipelines）",
       "segment": "Pipeline 3",
       "original_capacity": "",
       "original_unit": "",
@@ -1472,11 +1640,14 @@
       ],
       "capacity_extra": [],
       "capacity_review_status": "source_missing",
-      "capacity_reference_sha256": "a0f6667d37b1e4d3c7745f862e339081f1a263e67cffce5917f96ae5f58e194e"
+      "capacity_reference_sha256": "a0f6667d37b1e4d3c7745f862e339081f1a263e67cffce5917f96ae5f58e194e",
+      "pipeline_source": "Abqaiq Plants-Qatif Junction Oil Pipelines",
+      "name_cn": "布盖格处理厂—盖提夫枢纽输油管线",
+      "name_en": "Abqaiq Plants-Qatif Junction Oil Pipelines"
     },
     {
       "project_id": "P1975",
-      "pipeline": "Abqaiq Plants-Qatif Junction Oil Pipelines",
+      "pipeline": "布盖格处理厂—盖提夫枢纽输油管线（Abqaiq Plants-Qatif Junction Oil Pipelines）",
       "segment": "Pipeline 4",
       "original_capacity": "",
       "original_unit": "",
@@ -1499,11 +1670,14 @@
       ],
       "capacity_extra": [],
       "capacity_review_status": "source_missing",
-      "capacity_reference_sha256": "a0f6667d37b1e4d3c7745f862e339081f1a263e67cffce5917f96ae5f58e194e"
+      "capacity_reference_sha256": "a0f6667d37b1e4d3c7745f862e339081f1a263e67cffce5917f96ae5f58e194e",
+      "pipeline_source": "Abqaiq Plants-Qatif Junction Oil Pipelines",
+      "name_cn": "布盖格处理厂—盖提夫枢纽输油管线",
+      "name_en": "Abqaiq Plants-Qatif Junction Oil Pipelines"
     },
     {
       "project_id": "P1976",
-      "pipeline": "Abqaiq Plants-Qatif Junction Oil Pipelines",
+      "pipeline": "布盖格处理厂—盖提夫枢纽输油管线（Abqaiq Plants-Qatif Junction Oil Pipelines）",
       "segment": "Pipeline 5",
       "original_capacity": "",
       "original_unit": "",
@@ -1526,11 +1700,14 @@
       ],
       "capacity_extra": [],
       "capacity_review_status": "source_missing",
-      "capacity_reference_sha256": "a0f6667d37b1e4d3c7745f862e339081f1a263e67cffce5917f96ae5f58e194e"
+      "capacity_reference_sha256": "a0f6667d37b1e4d3c7745f862e339081f1a263e67cffce5917f96ae5f58e194e",
+      "pipeline_source": "Abqaiq Plants-Qatif Junction Oil Pipelines",
+      "name_cn": "布盖格处理厂—盖提夫枢纽输油管线",
+      "name_en": "Abqaiq Plants-Qatif Junction Oil Pipelines"
     },
     {
       "project_id": "P1977",
-      "pipeline": "Dhahran-Bapco refinery Oil Pipeline",
+      "pipeline": "宰赫兰—巴普科炼油厂输油管线（Dhahran-Bapco refinery Oil Pipeline）",
       "segment": "",
       "original_capacity": "",
       "original_unit": "",
@@ -1549,11 +1726,14 @@
       ],
       "capacity_extra": [],
       "capacity_review_status": "source_missing",
-      "capacity_reference_sha256": "f4480508e6b12154a211ff9d4ded65539c42997d6a532826e83d8fdbdc18b870"
+      "capacity_reference_sha256": "f4480508e6b12154a211ff9d4ded65539c42997d6a532826e83d8fdbdc18b870",
+      "pipeline_source": "Dhahran-Bapco refinery Oil Pipeline",
+      "name_cn": "宰赫兰—巴普科炼油厂输油管线",
+      "name_en": "Dhahran-Bapco refinery Oil Pipeline"
     },
     {
       "project_id": "P1978",
-      "pipeline": "Berri junction-Ras Tanura Oil Pipeline",
+      "pipeline": "贝里枢纽—拉斯坦努拉输油管线（Berri junction-Ras Tanura Oil Pipeline）",
       "segment": "",
       "original_capacity": "250,000.00",
       "original_unit": "bpd",
@@ -1572,11 +1752,14 @@
       ],
       "capacity_extra": [],
       "capacity_review_status": "table_only_reference_unconfirmed",
-      "capacity_reference_sha256": "5d046a4c5b09a466365122eaa90a6d1accb9da3c0341a0f67972f7bcf3ad5a4b"
+      "capacity_reference_sha256": "5d046a4c5b09a466365122eaa90a6d1accb9da3c0341a0f67972f7bcf3ad5a4b",
+      "pipeline_source": "Berri junction-Ras Tanura Oil Pipeline",
+      "name_cn": "贝里枢纽—拉斯坦努拉输油管线",
+      "name_en": "Berri junction-Ras Tanura Oil Pipeline"
     },
     {
       "project_id": "P1980",
-      "pipeline": "Wafra field-Mina Saud Oil Pipelines",
+      "pipeline": "瓦夫拉油田—米纳沙特输油管线（Wafra field-Mina Saud Oil Pipelines）",
       "segment": "Pipeline 1",
       "original_capacity": "",
       "original_unit": "",
@@ -1597,11 +1780,14 @@
       ],
       "capacity_extra": [],
       "capacity_review_status": "source_missing",
-      "capacity_reference_sha256": "c3dd81641f7250333015f18978d226888db0885852fee80f554e15b768ae20d7"
+      "capacity_reference_sha256": "c3dd81641f7250333015f18978d226888db0885852fee80f554e15b768ae20d7",
+      "pipeline_source": "Wafra field-Mina Saud Oil Pipelines",
+      "name_cn": "瓦夫拉油田—米纳沙特输油管线",
+      "name_en": "Wafra field-Mina Saud Oil Pipelines"
     },
     {
       "project_id": "P1981",
-      "pipeline": "Wafra field-Mina Saud Oil Pipelines",
+      "pipeline": "瓦夫拉油田—米纳沙特输油管线（Wafra field-Mina Saud Oil Pipelines）",
       "segment": "Pipeline 2",
       "original_capacity": "",
       "original_unit": "",
@@ -1618,11 +1804,14 @@
       "reference_capacity_lines": [],
       "capacity_extra": [],
       "capacity_review_status": "source_missing",
-      "capacity_reference_sha256": null
+      "capacity_reference_sha256": null,
+      "pipeline_source": "Wafra field-Mina Saud Oil Pipelines",
+      "name_cn": "瓦夫拉油田—米纳沙特输油管线",
+      "name_en": "Wafra field-Mina Saud Oil Pipelines"
     },
     {
       "project_id": "P1982",
-      "pipeline": "Wafra field-Mina Saud Oil Pipelines",
+      "pipeline": "瓦夫拉油田—米纳沙特输油管线（Wafra field-Mina Saud Oil Pipelines）",
       "segment": "Pipeline 3",
       "original_capacity": "",
       "original_unit": "",
@@ -1639,11 +1828,14 @@
       "reference_capacity_lines": [],
       "capacity_extra": [],
       "capacity_review_status": "source_missing",
-      "capacity_reference_sha256": null
+      "capacity_reference_sha256": null,
+      "pipeline_source": "Wafra field-Mina Saud Oil Pipelines",
+      "name_cn": "瓦夫拉油田—米纳沙特输油管线",
+      "name_en": "Wafra field-Mina Saud Oil Pipelines"
     },
     {
       "project_id": "P1984",
-      "pipeline": "Aindar-Abqaiq Plants Oil Pipelines",
+      "pipeline": "艾因达尔—布盖格处理厂输油管线（Aindar-Abqaiq Plants Oil Pipelines）",
       "segment": "Pipeline 1",
       "original_capacity": "",
       "original_unit": "",
@@ -1664,11 +1856,14 @@
       ],
       "capacity_extra": [],
       "capacity_review_status": "source_missing",
-      "capacity_reference_sha256": "e9cd55bfbefd7a34bdc87a1e194210167c6079e84f793c55a6dd90a5cf481345"
+      "capacity_reference_sha256": "e9cd55bfbefd7a34bdc87a1e194210167c6079e84f793c55a6dd90a5cf481345",
+      "pipeline_source": "Aindar-Abqaiq Plants Oil Pipelines",
+      "name_cn": "艾因达尔—布盖格处理厂输油管线",
+      "name_en": "Aindar-Abqaiq Plants Oil Pipelines"
     },
     {
       "project_id": "P1985",
-      "pipeline": "Aindar-Abqaiq Plants Oil Pipelines",
+      "pipeline": "艾因达尔—布盖格处理厂输油管线（Aindar-Abqaiq Plants Oil Pipelines）",
       "segment": "Pipeline 2",
       "original_capacity": "",
       "original_unit": "",
@@ -1689,11 +1884,14 @@
       ],
       "capacity_extra": [],
       "capacity_review_status": "source_missing",
-      "capacity_reference_sha256": "0ce0f0cc089a95632f282fb0759fcbdef6f6173cbb686ec5f1381d22e20cc770"
+      "capacity_reference_sha256": "0ce0f0cc089a95632f282fb0759fcbdef6f6173cbb686ec5f1381d22e20cc770",
+      "pipeline_source": "Aindar-Abqaiq Plants Oil Pipelines",
+      "name_cn": "艾因达尔—布盖格处理厂输油管线",
+      "name_en": "Aindar-Abqaiq Plants Oil Pipelines"
     },
     {
       "project_id": "P1986",
-      "pipeline": "Aindar-Abqaiq Plants Oil Pipelines",
+      "pipeline": "艾因达尔—布盖格处理厂输油管线（Aindar-Abqaiq Plants Oil Pipelines）",
       "segment": "Pipeline 3",
       "original_capacity": "",
       "original_unit": "",
@@ -1714,11 +1912,14 @@
       ],
       "capacity_extra": [],
       "capacity_review_status": "source_missing",
-      "capacity_reference_sha256": "0ce0f0cc089a95632f282fb0759fcbdef6f6173cbb686ec5f1381d22e20cc770"
+      "capacity_reference_sha256": "0ce0f0cc089a95632f282fb0759fcbdef6f6173cbb686ec5f1381d22e20cc770",
+      "pipeline_source": "Aindar-Abqaiq Plants Oil Pipelines",
+      "name_cn": "艾因达尔—布盖格处理厂输油管线",
+      "name_en": "Aindar-Abqaiq Plants Oil Pipelines"
     },
     {
       "project_id": "P1987",
-      "pipeline": "Qatif Junction-Juaymah terminal Oil Pipelines",
+      "pipeline": "盖提夫枢纽—朱艾马终端输油管线（Qatif Junction-Juaymah terminal Oil Pipelines）",
       "segment": "Pipeline 1",
       "original_capacity": "",
       "original_unit": "",
@@ -1739,11 +1940,14 @@
       ],
       "capacity_extra": [],
       "capacity_review_status": "source_missing",
-      "capacity_reference_sha256": "3bcf12da332dd3c56f2b55607ea9c5466810b5388d89a4064d4cce9945c76f4b"
+      "capacity_reference_sha256": "3bcf12da332dd3c56f2b55607ea9c5466810b5388d89a4064d4cce9945c76f4b",
+      "pipeline_source": "Qatif Junction-Juaymah terminal Oil Pipelines",
+      "name_cn": "盖提夫枢纽—朱艾马终端输油管线",
+      "name_en": "Qatif Junction-Juaymah terminal Oil Pipelines"
     },
     {
       "project_id": "P1988",
-      "pipeline": "Qatif Junction-Juaymah terminal Oil Pipelines",
+      "pipeline": "盖提夫枢纽—朱艾马终端输油管线（Qatif Junction-Juaymah terminal Oil Pipelines）",
       "segment": "Pipeline 2",
       "original_capacity": "",
       "original_unit": "",
@@ -1764,11 +1968,14 @@
       ],
       "capacity_extra": [],
       "capacity_review_status": "source_missing",
-      "capacity_reference_sha256": "3bcf12da332dd3c56f2b55607ea9c5466810b5388d89a4064d4cce9945c76f4b"
+      "capacity_reference_sha256": "3bcf12da332dd3c56f2b55607ea9c5466810b5388d89a4064d4cce9945c76f4b",
+      "pipeline_source": "Qatif Junction-Juaymah terminal Oil Pipelines",
+      "name_cn": "盖提夫枢纽—朱艾马终端输油管线",
+      "name_en": "Qatif Junction-Juaymah terminal Oil Pipelines"
     },
     {
       "project_id": "P1989",
-      "pipeline": "Qatif Junction-Juaymah terminal Oil Pipelines",
+      "pipeline": "盖提夫枢纽—朱艾马终端输油管线（Qatif Junction-Juaymah terminal Oil Pipelines）",
       "segment": "Pipeline 3",
       "original_capacity": "",
       "original_unit": "",
@@ -1789,11 +1996,14 @@
       ],
       "capacity_extra": [],
       "capacity_review_status": "source_missing",
-      "capacity_reference_sha256": "3bcf12da332dd3c56f2b55607ea9c5466810b5388d89a4064d4cce9945c76f4b"
+      "capacity_reference_sha256": "3bcf12da332dd3c56f2b55607ea9c5466810b5388d89a4064d4cce9945c76f4b",
+      "pipeline_source": "Qatif Junction-Juaymah terminal Oil Pipelines",
+      "name_cn": "盖提夫枢纽—朱艾马终端输油管线",
+      "name_en": "Qatif Junction-Juaymah terminal Oil Pipelines"
     },
     {
       "project_id": "P2221",
-      "pipeline": "Cheshme Shour-Eshtehard Oil Pipeline",
+      "pipeline": "切什梅舒尔—埃什特哈德输油管线（Cheshme Shour-Eshtehard Oil Pipeline）",
       "segment": "",
       "original_capacity": "",
       "original_unit": "",
@@ -1812,11 +2022,14 @@
       ],
       "capacity_extra": [],
       "capacity_review_status": "source_missing",
-      "capacity_reference_sha256": "eab761b368eb721af89214d0466e7b4a1b623ca1e206722f1aba2d7e4120ebc3"
+      "capacity_reference_sha256": "eab761b368eb721af89214d0466e7b4a1b623ca1e206722f1aba2d7e4120ebc3",
+      "pipeline_source": "Cheshme Shour-Eshtehard Oil Pipeline",
+      "name_cn": "切什梅舒尔—埃什特哈德输油管线",
+      "name_en": "Cheshme Shour-Eshtehard Oil Pipeline"
     },
     {
       "project_id": "P2222",
-      "pipeline": "Cheshme Shour-Eyvanaki Oil Pipeline",
+      "pipeline": "切什梅舒尔—埃伊瓦纳基输油管线（Cheshme Shour-Eyvanaki Oil Pipeline）",
       "segment": "",
       "original_capacity": "",
       "original_unit": "",
@@ -1835,11 +2048,14 @@
       ],
       "capacity_extra": [],
       "capacity_review_status": "source_missing",
-      "capacity_reference_sha256": "08fc76372b258743682a6ea589f761e31cca67339405ae0f68ac4090cc53ab9f"
+      "capacity_reference_sha256": "08fc76372b258743682a6ea589f761e31cca67339405ae0f68ac4090cc53ab9f",
+      "pipeline_source": "Cheshme Shour-Eyvanaki Oil Pipeline",
+      "name_cn": "切什梅舒尔—埃伊瓦纳基输油管线",
+      "name_en": "Cheshme Shour-Eyvanaki Oil Pipeline"
     },
     {
       "project_id": "P2224",
-      "pipeline": "Goreh-Jask Crude Oil Pipeline",
+      "pipeline": "戈雷—贾斯克原油管线（Goreh-Jask Crude Oil Pipeline）",
       "segment": "",
       "original_capacity": "300,000.00",
       "original_unit": "bpd",
@@ -1859,11 +2075,14 @@
       "capacity_extra": [],
       "capacity_review_status": "primary_capacity_confirmed",
       "capacity_approximate": true,
-      "capacity_reference_sha256": "02b4f8d7ae321c458c412d0abe25693dc5322d30d05995209c1ccfb29c4c353d"
+      "capacity_reference_sha256": "02b4f8d7ae321c458c412d0abe25693dc5322d30d05995209c1ccfb29c4c353d",
+      "pipeline_source": "Goreh-Jask Crude Oil Pipeline",
+      "name_cn": "戈雷—贾斯克原油管线",
+      "name_en": "Goreh-Jask Crude Oil Pipeline"
     },
     {
       "project_id": "P2228",
-      "pipeline": "Batman-Dortyol Crude Oil Pipeline",
+      "pipeline": "巴特曼—多尔特约尔原油管线（Batman-Dortyol Crude Oil Pipeline）",
       "segment": "",
       "original_capacity": "4.5",
       "original_unit": "mtpa",
@@ -1882,11 +2101,14 @@
       ],
       "capacity_extra": [],
       "capacity_review_status": "mass_unit_not_converted",
-      "capacity_reference_sha256": "100d79fa58fd94daf1116b1afe9d47d3fd65f88a48fdd1ff236bb063eee26f13"
+      "capacity_reference_sha256": "100d79fa58fd94daf1116b1afe9d47d3fd65f88a48fdd1ff236bb063eee26f13",
+      "pipeline_source": "Batman-Dortyol Crude Oil Pipeline",
+      "name_cn": "巴特曼—多尔特约尔原油管线",
+      "name_en": "Batman-Dortyol Crude Oil Pipeline"
     },
     {
       "project_id": "P2229",
-      "pipeline": "Sabz–Rey Oil Pipeline",
+      "pipeline": "萨卜兹—雷伊输油管线（Sabz–Rey Oil Pipeline）",
       "segment": "Pipeline 1 \"Sabzab PS—Tang Fani PS Oil Pipeline\"",
       "original_capacity": "450,000.00",
       "original_unit": "bpd",
@@ -1903,11 +2125,14 @@
       "reference_capacity_lines": [],
       "capacity_extra": [],
       "capacity_review_status": "table_only_unavailable_reference",
-      "capacity_reference_sha256": null
+      "capacity_reference_sha256": null,
+      "pipeline_source": "Sabz–Rey Oil Pipeline",
+      "name_cn": "萨卜兹—雷伊输油管线",
+      "name_en": "Sabz–Rey Oil Pipeline"
     },
     {
       "project_id": "P2230",
-      "pipeline": "Tehran-Tabriz Crude Oil Pipeline",
+      "pipeline": "德黑兰—大不里士原油管线（Tehran-Tabriz Crude Oil Pipeline）",
       "segment": "2nd Section",
       "original_capacity": "110,000.00",
       "original_unit": "bpd",
@@ -1924,11 +2149,14 @@
       "reference_capacity_lines": [],
       "capacity_extra": [],
       "capacity_review_status": "table_only_unavailable_reference",
-      "capacity_reference_sha256": null
+      "capacity_reference_sha256": null,
+      "pipeline_source": "Tehran-Tabriz Crude Oil Pipeline",
+      "name_cn": "德黑兰—大不里士原油管线",
+      "name_en": "Tehran-Tabriz Crude Oil Pipeline"
     },
     {
       "project_id": "P2702",
-      "pipeline": "Al Khafji Joint Operations Offshore Pipeline",
+      "pipeline": "海夫吉联合运营海上管线（Al Khafji Joint Operations Offshore Pipeline）",
       "segment": "",
       "original_capacity": "",
       "original_unit": "",
@@ -1947,11 +2175,14 @@
       ],
       "capacity_extra": [],
       "capacity_review_status": "source_missing",
-      "capacity_reference_sha256": "01fb6e49fd9a2760b50ffdd799a947783a04c460eac1cb1c7df587976c247e21"
+      "capacity_reference_sha256": "01fb6e49fd9a2760b50ffdd799a947783a04c460eac1cb1c7df587976c247e21",
+      "pipeline_source": "Al Khafji Joint Operations Offshore Pipeline",
+      "name_cn": "海夫吉联合运营海上管线",
+      "name_en": "Al Khafji Joint Operations Offshore Pipeline"
     },
     {
       "project_id": "P3688",
-      "pipeline": "Abu Gharadig-El Hamra Oil Pipeline",
+      "pipeline": "阿布加拉迪格—哈姆拉输油管线（Abu Gharadig-El Hamra Oil Pipeline）",
       "segment": "",
       "original_capacity": "60,000.00",
       "original_unit": "bpd",
@@ -1970,11 +2201,14 @@
       ],
       "capacity_extra": [],
       "capacity_review_status": "table_reference_number_matches",
-      "capacity_reference_sha256": "52029baf2cc9f5981ac90251f94feb57bf17386e07d5df84d8ab1b159cc21cae"
+      "capacity_reference_sha256": "52029baf2cc9f5981ac90251f94feb57bf17386e07d5df84d8ab1b159cc21cae",
+      "pipeline_source": "Abu Gharadig-El Hamra Oil Pipeline",
+      "name_cn": "阿布加拉迪格—哈姆拉输油管线",
+      "name_en": "Abu Gharadig-El Hamra Oil Pipeline"
     },
     {
       "project_id": "P3689",
-      "pipeline": "Badr El Din-El Hamra Oil Pipeline",
+      "pipeline": "巴德尔丁—哈姆拉输油管线（Badr El Din-El Hamra Oil Pipeline）",
       "segment": "",
       "original_capacity": "60,000.00",
       "original_unit": "bpd",
@@ -1993,11 +2227,14 @@
       ],
       "capacity_extra": [],
       "capacity_review_status": "table_reference_number_matches",
-      "capacity_reference_sha256": "a0649a3fd9b8d1b0ecc959d0126fb886000918c63fb8c9ccdd1ec4a66c3c8290"
+      "capacity_reference_sha256": "a0649a3fd9b8d1b0ecc959d0126fb886000918c63fb8c9ccdd1ec4a66c3c8290",
+      "pipeline_source": "Badr El Din-El Hamra Oil Pipeline",
+      "name_cn": "巴德尔丁—哈姆拉输油管线",
+      "name_en": "Badr El Din-El Hamra Oil Pipeline"
     },
     {
       "project_id": "P3691",
-      "pipeline": "El Hamra-Shamandoura Oil Pipeline",
+      "pipeline": "哈姆拉—沙曼杜拉输油管线（El Hamra-Shamandoura Oil Pipeline）",
       "segment": "Expansion",
       "original_capacity": "1,000,000.00",
       "original_unit": "bpd",
@@ -2016,11 +2253,14 @@
       ],
       "capacity_extra": [],
       "capacity_review_status": "table_only_reference_unconfirmed",
-      "capacity_reference_sha256": "c6d0c8d944d8fac1ebd59f37f603d707d9125f6d706aa09eb9d476d137ffb25c"
+      "capacity_reference_sha256": "c6d0c8d944d8fac1ebd59f37f603d707d9125f6d706aa09eb9d476d137ffb25c",
+      "pipeline_source": "El Hamra-Shamandoura Oil Pipeline",
+      "name_cn": "哈姆拉—沙曼杜拉输油管线",
+      "name_en": "El Hamra-Shamandoura Oil Pipeline"
     },
     {
       "project_id": "P3692",
-      "pipeline": "Petroshahd Oil Pipeline",
+      "pipeline": "佩特罗沙赫德输油管线（Petroshahd Oil Pipeline）",
       "segment": "",
       "original_capacity": "30,000.00",
       "original_unit": "bpd",
@@ -2039,11 +2279,14 @@
       ],
       "capacity_extra": [],
       "capacity_review_status": "table_reference_number_matches",
-      "capacity_reference_sha256": "552df9f7329566d3e9991454fd89016a822e05cbc12a2905b6bd301c336275c7"
+      "capacity_reference_sha256": "552df9f7329566d3e9991454fd89016a822e05cbc12a2905b6bd301c336275c7",
+      "pipeline_source": "Petroshahd Oil Pipeline",
+      "name_cn": "佩特罗沙赫德输油管线",
+      "name_en": "Petroshahd Oil Pipeline"
     },
     {
       "project_id": "P3693",
-      "pipeline": "El Hamra-Sidi Krir-Alexandria Oil Pipeline",
+      "pipeline": "哈姆拉—西迪克里尔—亚历山大输油管线（El Hamra-Sidi Krir-Alexandria Oil Pipeline）",
       "segment": "",
       "original_capacity": "200,000.00",
       "original_unit": "bpd",
@@ -2062,11 +2305,14 @@
       ],
       "capacity_extra": [],
       "capacity_review_status": "table_reference_number_matches",
-      "capacity_reference_sha256": "27e7131de8c0198610c7817df90c49fa5a4596fae16ec75f3132d720ad71e8be"
+      "capacity_reference_sha256": "27e7131de8c0198610c7817df90c49fa5a4596fae16ec75f3132d720ad71e8be",
+      "pipeline_source": "El Hamra-Sidi Krir-Alexandria Oil Pipeline",
+      "name_cn": "哈姆拉—西迪克里尔—亚历山大输油管线",
+      "name_en": "El Hamra-Sidi Krir-Alexandria Oil Pipeline"
     },
     {
       "project_id": "P3701",
-      "pipeline": "Abu Sennan-El Hamra Oil Pipeline",
+      "pipeline": "阿布塞南—哈姆拉输油管线（Abu Sennan-El Hamra Oil Pipeline）",
       "segment": "",
       "original_capacity": "50,000.00",
       "original_unit": "bpd",
@@ -2085,11 +2331,14 @@
       ],
       "capacity_extra": [],
       "capacity_review_status": "table_only_reference_unconfirmed",
-      "capacity_reference_sha256": "3e9aeb370503814f52513b1cca8d7418b7d8aa24a4553bffef50fcb8fc7f4ff5"
+      "capacity_reference_sha256": "3e9aeb370503814f52513b1cca8d7418b7d8aa24a4553bffef50fcb8fc7f4ff5",
+      "pipeline_source": "Abu Sennan-El Hamra Oil Pipeline",
+      "name_cn": "阿布塞南—哈姆拉输油管线",
+      "name_en": "Abu Sennan-El Hamra Oil Pipeline"
     },
     {
       "project_id": "P3719",
-      "pipeline": "Tobruk-Alexandria Oil Pipeline",
+      "pipeline": "托布鲁克—亚历山大输油管线（Tobruk-Alexandria Oil Pipeline）",
       "segment": "",
       "original_capacity": "150,000.00",
       "original_unit": "bpd",
@@ -2106,11 +2355,14 @@
       "reference_capacity_lines": [],
       "capacity_extra": [],
       "capacity_review_status": "table_only_unavailable_reference",
-      "capacity_reference_sha256": null
+      "capacity_reference_sha256": null,
+      "pipeline_source": "Tobruk-Alexandria Oil Pipeline",
+      "name_cn": "托布鲁克—亚历山大输油管线",
+      "name_en": "Tobruk-Alexandria Oil Pipeline"
     },
     {
       "project_id": "P3847",
-      "pipeline": "Marun–Isfahan Oil Pipelines",
+      "pipeline": "马伦—伊斯法罕输油管线（Marun–Isfahan Oil Pipelines）",
       "segment": "Pipeline 1",
       "original_capacity": "550,000.00",
       "original_unit": "bpd",
@@ -2130,11 +2382,14 @@
       ],
       "capacity_extra": [],
       "capacity_review_status": "table_reference_number_matches",
-      "capacity_reference_sha256": "251144a9048f7c75b2413cbc64e1e6a1693cf07a56fb7988390be4b45e663569"
+      "capacity_reference_sha256": "251144a9048f7c75b2413cbc64e1e6a1693cf07a56fb7988390be4b45e663569",
+      "pipeline_source": "Marun–Isfahan Oil Pipelines",
+      "name_cn": "马伦—伊斯法罕输油管线",
+      "name_en": "Marun–Isfahan Oil Pipelines"
     },
     {
       "project_id": "P3848",
-      "pipeline": "Cheshme Shour-Palangabad Oil Pipeline",
+      "pipeline": "切什梅舒尔—帕兰加巴德输油管线（Cheshme Shour-Palangabad Oil Pipeline）",
       "segment": "",
       "original_capacity": "",
       "original_unit": "",
@@ -2153,11 +2408,14 @@
       ],
       "capacity_extra": [],
       "capacity_review_status": "source_missing",
-      "capacity_reference_sha256": "4dcd5ab98137fd076563fab9ee03acf0be473a8e99e6a14b9e5bacd93521a725"
+      "capacity_reference_sha256": "4dcd5ab98137fd076563fab9ee03acf0be473a8e99e6a14b9e5bacd93521a725",
+      "pipeline_source": "Cheshme Shour-Palangabad Oil Pipeline",
+      "name_cn": "切什梅舒尔—帕兰加巴德输油管线",
+      "name_en": "Cheshme Shour-Palangabad Oil Pipeline"
     },
     {
       "project_id": "P3876",
-      "pipeline": "Iraq Strategic Pipeline",
+      "pipeline": "伊拉克战略输油管线（Iraq Strategic Pipeline）",
       "segment": "Pipeline 3",
       "original_capacity": "800,000.00",
       "original_unit": "bpd",
@@ -2178,11 +2436,14 @@
       ],
       "capacity_extra": [],
       "capacity_review_status": "table_reference_number_matches",
-      "capacity_reference_sha256": "3320fbceec63ee3da7c658ecd9631768a485e4444c379fbeda358616998fb73e"
+      "capacity_reference_sha256": "3320fbceec63ee3da7c658ecd9631768a485e4444c379fbeda358616998fb73e",
+      "pipeline_source": "Iraq Strategic Pipeline",
+      "name_cn": "伊拉克战略输油管线",
+      "name_en": "Iraq Strategic Pipeline"
     },
     {
       "project_id": "P3878",
-      "pipeline": "Iraq Crude Oil Export Expansion Project (ICOEEP)",
+      "pipeline": "伊拉克原油出口扩建项目（Iraq Crude Oil Export Expansion Project (ICOEEP)）",
       "segment": "Phase I (Pipeline 1)",
       "original_capacity": "900,000.00",
       "original_unit": "bpd",
@@ -2202,11 +2463,14 @@
       ],
       "capacity_extra": [],
       "capacity_review_status": "table_reference_number_matches",
-      "capacity_reference_sha256": "ea02b733f8f529a320677f62241ae42e84f96a23c1cfe49198baec3f8f7784b5"
+      "capacity_reference_sha256": "ea02b733f8f529a320677f62241ae42e84f96a23c1cfe49198baec3f8f7784b5",
+      "pipeline_source": "Iraq Crude Oil Export Expansion Project (ICOEEP)",
+      "name_cn": "伊拉克原油出口扩建项目",
+      "name_en": "Iraq Crude Oil Export Expansion Project (ICOEEP)"
     },
     {
       "project_id": "P3879",
-      "pipeline": "Tuba–Fao Oil Pipelines",
+      "pipeline": "图巴—法奥输油管线（Tuba–Fao Oil Pipelines）",
       "segment": "Pipeline 2- Known as West Qurna2- Tuba Oil Pipeline",
       "original_capacity": "1,200,000.00",
       "original_unit": "bpd",
@@ -2223,11 +2487,14 @@
       "reference_capacity_lines": [],
       "capacity_extra": [],
       "capacity_review_status": "table_only_unavailable_reference",
-      "capacity_reference_sha256": null
+      "capacity_reference_sha256": null,
+      "pipeline_source": "Tuba–Fao Oil Pipelines",
+      "name_cn": "图巴—法奥输油管线",
+      "name_en": "Tuba–Fao Oil Pipelines"
     },
     {
       "project_id": "P5121",
-      "pipeline": "Sumed Oil Pipeline",
+      "pipeline": "苏伊士—地中海输油管线（Sumed Oil Pipeline）",
       "segment": "Pipeline 2",
       "original_capacity": "1,250,000.00",
       "original_unit": "bpd",
@@ -2254,11 +2521,14 @@
       ],
       "capacity_review_status": "equal_split_withdrawn",
       "capacity_system_id": "SUMED",
-      "capacity_reference_sha256": "02b4f8d7ae321c458c412d0abe25693dc5322d30d05995209c1ccfb29c4c353d"
+      "capacity_reference_sha256": "02b4f8d7ae321c458c412d0abe25693dc5322d30d05995209c1ccfb29c4c353d",
+      "pipeline_source": "Sumed Oil Pipeline",
+      "name_cn": "苏伊士—地中海输油管线",
+      "name_en": "Sumed Oil Pipeline"
     },
     {
       "project_id": "P5122",
-      "pipeline": "West Esh El-Mallaha-Gebel Az Zeit Oil Pipeline",
+      "pipeline": "西埃什马拉哈—盖贝勒宰特输油管线（West Esh El-Mallaha-Gebel Az Zeit Oil Pipeline）",
       "segment": "",
       "original_capacity": "24,000.00",
       "original_unit": "bpd",
@@ -2277,11 +2547,14 @@
       ],
       "capacity_extra": [],
       "capacity_review_status": "table_reference_number_matches",
-      "capacity_reference_sha256": "8315c3d40d0511454eee3ef8f65a48fa8e7172bfb31047445d753ca265b4c8ee"
+      "capacity_reference_sha256": "8315c3d40d0511454eee3ef8f65a48fa8e7172bfb31047445d753ca265b4c8ee",
+      "pipeline_source": "West Esh El-Mallaha-Gebel Az Zeit Oil Pipeline",
+      "name_cn": "西埃什马拉哈—盖贝勒宰特输油管线",
+      "name_en": "West Esh El-Mallaha-Gebel Az Zeit Oil Pipeline"
     },
     {
       "project_id": "P5125",
-      "pipeline": "Southwest Mleiha Pipeline",
+      "pipeline": "西南梅莱哈输油管线（Southwest Mleiha Pipeline）",
       "segment": "",
       "original_capacity": "7,000.00",
       "original_unit": "bpd",
@@ -2298,11 +2571,14 @@
       "reference_capacity_lines": [],
       "capacity_extra": [],
       "capacity_review_status": "table_only_unavailable_reference",
-      "capacity_reference_sha256": null
+      "capacity_reference_sha256": null,
+      "pipeline_source": "Southwest Mleiha Pipeline",
+      "name_cn": "西南梅莱哈输油管线",
+      "name_en": "Southwest Mleiha Pipeline"
     },
     {
       "project_id": "P5135",
-      "pipeline": "Marjan Oil Pipeline",
+      "pipeline": "马尔詹输油管线（Marjan Oil Pipeline）",
       "segment": "",
       "original_capacity": "300,000.00",
       "original_unit": "bpd",
@@ -2321,11 +2597,14 @@
       ],
       "capacity_extra": [],
       "capacity_review_status": "table_reference_number_matches",
-      "capacity_reference_sha256": "c374862f35c0edc3a299a4e7bcd6484f6db9c8e9b73682f87f851c4d1bb5f399"
+      "capacity_reference_sha256": "c374862f35c0edc3a299a4e7bcd6484f6db9c8e9b73682f87f851c4d1bb5f399",
+      "pipeline_source": "Marjan Oil Pipeline",
+      "name_cn": "马尔詹输油管线",
+      "name_en": "Marjan Oil Pipeline"
     },
     {
       "project_id": "P5155",
-      "pipeline": "Saudi-Omani Oil Pipeline",
+      "pipeline": "沙特—阿曼输油管线（Saudi-Omani Oil Pipeline）",
       "segment": "",
       "original_capacity": "",
       "original_unit": "",
@@ -2342,11 +2621,14 @@
       "reference_capacity_lines": [],
       "capacity_extra": [],
       "capacity_review_status": "source_missing",
-      "capacity_reference_sha256": null
+      "capacity_reference_sha256": null,
+      "pipeline_source": "Saudi-Omani Oil Pipeline",
+      "name_cn": "沙特—阿曼输油管线",
+      "name_en": "Saudi-Omani Oil Pipeline"
     },
     {
       "project_id": "P5159",
-      "pipeline": "Kursaniyah-Ras Tanura Oil Pipeline",
+      "pipeline": "胡尔萨尼耶—拉斯坦努拉输油管线（Kursaniyah-Ras Tanura Oil Pipeline）",
       "segment": "",
       "original_capacity": "",
       "original_unit": "",
@@ -2368,11 +2650,14 @@
       ],
       "capacity_extra": [],
       "capacity_review_status": "source_missing",
-      "capacity_reference_sha256": "d860624f14ca04db5887040ba52e141620eab815721be251cf31b223ab8e79ad"
+      "capacity_reference_sha256": "d860624f14ca04db5887040ba52e141620eab815721be251cf31b223ab8e79ad",
+      "pipeline_source": "Kursaniyah-Ras Tanura Oil Pipeline",
+      "name_cn": "胡尔萨尼耶—拉斯坦努拉输油管线",
+      "name_en": "Kursaniyah-Ras Tanura Oil Pipeline"
     },
     {
       "project_id": "P5169",
-      "pipeline": "Safiniyah-Kursaniyah Oil Pipelines",
+      "pipeline": "萨法尼耶—胡尔萨尼耶输油管线（Safiniyah-Kursaniyah Oil Pipelines）",
       "segment": "Pipeline 4",
       "original_capacity": "",
       "original_unit": "",
@@ -2394,11 +2679,14 @@
       ],
       "capacity_extra": [],
       "capacity_review_status": "source_missing",
-      "capacity_reference_sha256": "d860624f14ca04db5887040ba52e141620eab815721be251cf31b223ab8e79ad"
+      "capacity_reference_sha256": "d860624f14ca04db5887040ba52e141620eab815721be251cf31b223ab8e79ad",
+      "pipeline_source": "Safiniyah-Kursaniyah Oil Pipelines",
+      "name_cn": "萨法尼耶—胡尔萨尼耶输油管线",
+      "name_en": "Safiniyah-Kursaniyah Oil Pipelines"
     },
     {
       "project_id": "P5240",
-      "pipeline": "Basra–Aqaba Oil Pipeline",
+      "pipeline": "巴士拉—亚喀巴输油管线（Basra–Aqaba Oil Pipeline）",
       "segment": "Haditha–Aqaba Oil Pipeline",
       "original_capacity": "2,250,000.00",
       "original_unit": "bpd",
@@ -2418,11 +2706,14 @@
       ],
       "capacity_extra": [],
       "capacity_review_status": "conflict_withheld",
-      "capacity_reference_sha256": "3f784b0ec0db1f50d1e0416bdded08edd3b6a677914adf1cc6111e83056ec431"
+      "capacity_reference_sha256": "3f784b0ec0db1f50d1e0416bdded08edd3b6a677914adf1cc6111e83056ec431",
+      "pipeline_source": "Basra–Aqaba Oil Pipeline",
+      "name_cn": "巴士拉—亚喀巴输油管线",
+      "name_en": "Basra–Aqaba Oil Pipeline"
     },
     {
       "project_id": "P5244",
-      "pipeline": "Iraq Strategic Pipeline",
+      "pipeline": "伊拉克战略输油管线（Iraq Strategic Pipeline）",
       "segment": "Pipeline 2",
       "original_capacity": "",
       "original_unit": "",
@@ -2443,11 +2734,14 @@
       ],
       "capacity_extra": [],
       "capacity_review_status": "source_missing",
-      "capacity_reference_sha256": "3320fbceec63ee3da7c658ecd9631768a485e4444c379fbeda358616998fb73e"
+      "capacity_reference_sha256": "3320fbceec63ee3da7c658ecd9631768a485e4444c379fbeda358616998fb73e",
+      "pipeline_source": "Iraq Strategic Pipeline",
+      "name_cn": "伊拉克战略输油管线",
+      "name_en": "Iraq Strategic Pipeline"
     },
     {
       "project_id": "P5256",
-      "pipeline": "Tuba–Fao Oil Pipelines",
+      "pipeline": "图巴—法奥输油管线（Tuba–Fao Oil Pipelines）",
       "segment": "Pipeline 1",
       "original_capacity": "1,500,000.00",
       "original_unit": "bpd",
@@ -2464,11 +2758,14 @@
       "reference_capacity_lines": [],
       "capacity_extra": [],
       "capacity_review_status": "table_only_unavailable_reference",
-      "capacity_reference_sha256": null
+      "capacity_reference_sha256": null,
+      "pipeline_source": "Tuba–Fao Oil Pipelines",
+      "name_cn": "图巴—法奥输油管线",
+      "name_en": "Tuba–Fao Oil Pipelines"
     },
     {
       "project_id": "P5257",
-      "pipeline": "Basra Sealines Oil Pipelines",
+      "pipeline": "巴士拉海底输油管线（Basra Sealines Oil Pipelines）",
       "segment": "Sealine 1",
       "original_capacity": "1,600,000.00",
       "original_unit": "bpd",
@@ -2491,11 +2788,14 @@
       ],
       "capacity_extra": [],
       "capacity_review_status": "table_only_reference_unconfirmed",
-      "capacity_reference_sha256": "5dc32eb646985ac3046df323c99ce415f4a64a71485598f2e1a34e171e5fc4aa"
+      "capacity_reference_sha256": "5dc32eb646985ac3046df323c99ce415f4a64a71485598f2e1a34e171e5fc4aa",
+      "pipeline_source": "Basra Sealines Oil Pipelines",
+      "name_cn": "巴士拉海底输油管线",
+      "name_en": "Basra Sealines Oil Pipelines"
     },
     {
       "project_id": "P5258",
-      "pipeline": "Basra Sealines Oil Pipelines",
+      "pipeline": "巴士拉海底输油管线（Basra Sealines Oil Pipelines）",
       "segment": "Sealine 2",
       "original_capacity": "1,600,000.00",
       "original_unit": "bpd",
@@ -2518,11 +2818,14 @@
       ],
       "capacity_extra": [],
       "capacity_review_status": "table_only_reference_unconfirmed",
-      "capacity_reference_sha256": "5dc32eb646985ac3046df323c99ce415f4a64a71485598f2e1a34e171e5fc4aa"
+      "capacity_reference_sha256": "5dc32eb646985ac3046df323c99ce415f4a64a71485598f2e1a34e171e5fc4aa",
+      "pipeline_source": "Basra Sealines Oil Pipelines",
+      "name_cn": "巴士拉海底输油管线",
+      "name_en": "Basra Sealines Oil Pipelines"
     },
     {
       "project_id": "P5259",
-      "pipeline": "Basra Sealines Oil Pipelines",
+      "pipeline": "巴士拉海底输油管线（Basra Sealines Oil Pipelines）",
       "segment": "Sealine 3",
       "original_capacity": "2,400,000.00",
       "original_unit": "bpd",
@@ -2545,11 +2848,14 @@
       ],
       "capacity_extra": [],
       "capacity_review_status": "table_only_reference_unconfirmed",
-      "capacity_reference_sha256": "5dc32eb646985ac3046df323c99ce415f4a64a71485598f2e1a34e171e5fc4aa"
+      "capacity_reference_sha256": "5dc32eb646985ac3046df323c99ce415f4a64a71485598f2e1a34e171e5fc4aa",
+      "pipeline_source": "Basra Sealines Oil Pipelines",
+      "name_cn": "巴士拉海底输油管线",
+      "name_en": "Basra Sealines Oil Pipelines"
     },
     {
       "project_id": "P5275",
-      "pipeline": "Kirkuk—Tripoli Oil Pipeline",
+      "pipeline": "基尔库克—的黎波里输油管线（Kirkuk—Tripoli Oil Pipeline）",
       "segment": "",
       "original_capacity": "421,000.00",
       "original_unit": "bpd",
@@ -2568,11 +2874,14 @@
       ],
       "capacity_extra": [],
       "capacity_review_status": "conflict_withheld",
-      "capacity_reference_sha256": "c2405df5b6e6149d275474ed2fd66b9483dfae145dd0ebad21d7e9b54e002843"
+      "capacity_reference_sha256": "c2405df5b6e6149d275474ed2fd66b9483dfae145dd0ebad21d7e9b54e002843",
+      "pipeline_source": "Kirkuk—Tripoli Oil Pipeline",
+      "name_cn": "基尔库克—的黎波里输油管线",
+      "name_en": "Kirkuk—Tripoli Oil Pipeline"
     },
     {
       "project_id": "P5277",
-      "pipeline": "Kirkuk-Baniyas Oil Pipelines",
+      "pipeline": "基尔库克—巴尼亚斯输油管线（Kirkuk-Baniyas Oil Pipelines）",
       "segment": "Rehabilitation Pipeline",
       "original_capacity": "300,000.00",
       "original_unit": "bpd",
@@ -2595,11 +2904,14 @@
       ],
       "capacity_extra": [],
       "capacity_review_status": "table_reference_number_matches",
-      "capacity_reference_sha256": "cce44e02090e3417fd218a76b1557d9d471cea725d7361532028333434cbe3e8"
+      "capacity_reference_sha256": "cce44e02090e3417fd218a76b1557d9d471cea725d7361532028333434cbe3e8",
+      "pipeline_source": "Kirkuk-Baniyas Oil Pipelines",
+      "name_cn": "基尔库克—巴尼亚斯输油管线",
+      "name_en": "Kirkuk-Baniyas Oil Pipelines"
     },
     {
       "project_id": "P5278",
-      "pipeline": "Kirkuk-Baniyas Oil Pipelines",
+      "pipeline": "基尔库克—巴尼亚斯输油管线（Kirkuk-Baniyas Oil Pipelines）",
       "segment": "Heavy Oil Pipeline",
       "original_capacity": "1,500,000.00",
       "original_unit": "bpd",
@@ -2622,11 +2934,14 @@
       ],
       "capacity_extra": [],
       "capacity_review_status": "table_reference_number_matches",
-      "capacity_reference_sha256": "cce44e02090e3417fd218a76b1557d9d471cea725d7361532028333434cbe3e8"
+      "capacity_reference_sha256": "cce44e02090e3417fd218a76b1557d9d471cea725d7361532028333434cbe3e8",
+      "pipeline_source": "Kirkuk-Baniyas Oil Pipelines",
+      "name_cn": "基尔库克—巴尼亚斯输油管线",
+      "name_en": "Kirkuk-Baniyas Oil Pipelines"
     },
     {
       "project_id": "P5279",
-      "pipeline": "Kirkuk-Baniyas Oil Pipelines",
+      "pipeline": "基尔库克—巴尼亚斯输油管线（Kirkuk-Baniyas Oil Pipelines）",
       "segment": "Light Oil Pipeline",
       "original_capacity": "1,250,000.00",
       "original_unit": "bpd",
@@ -2649,11 +2964,14 @@
       ],
       "capacity_extra": [],
       "capacity_review_status": "table_reference_number_matches",
-      "capacity_reference_sha256": "cce44e02090e3417fd218a76b1557d9d471cea725d7361532028333434cbe3e8"
+      "capacity_reference_sha256": "cce44e02090e3417fd218a76b1557d9d471cea725d7361532028333434cbe3e8",
+      "pipeline_source": "Kirkuk-Baniyas Oil Pipelines",
+      "name_cn": "基尔库克—巴尼亚斯输油管线",
+      "name_en": "Kirkuk-Baniyas Oil Pipelines"
     },
     {
       "project_id": "P5281",
-      "pipeline": "Buzurgan-Al Halfayah Oil Pipeline",
+      "pipeline": "布祖尔甘—哈法亚输油管线（Buzurgan-Al Halfayah Oil Pipeline）",
       "segment": "",
       "original_capacity": "500,000.00",
       "original_unit": "bpd",
@@ -2672,11 +2990,14 @@
       ],
       "capacity_extra": [],
       "capacity_review_status": "table_reference_number_matches",
-      "capacity_reference_sha256": "38c80495b49cb53d36a2699fb23eed4a72ad6620edf4c016a94dd37eac114ce4"
+      "capacity_reference_sha256": "38c80495b49cb53d36a2699fb23eed4a72ad6620edf4c016a94dd37eac114ce4",
+      "pipeline_source": "Buzurgan-Al Halfayah Oil Pipeline",
+      "name_cn": "布祖尔甘—哈法亚输油管线",
+      "name_en": "Buzurgan-Al Halfayah Oil Pipeline"
     },
     {
       "project_id": "P5282",
-      "pipeline": "PS1-Fao Oil Pipeline",
+      "pipeline": "PS1泵站—法奥输油管线（PS1-Fao Oil Pipeline）",
       "segment": "",
       "original_capacity": "1,500,000.00",
       "original_unit": "bpd",
@@ -2695,11 +3016,14 @@
       ],
       "capacity_extra": [],
       "capacity_review_status": "conflict_withheld",
-      "capacity_reference_sha256": "b5b58cf1dd1fcb2caa6e0e9257d5f7cd2e5d08cb9f3b2ed458e9c80d617917f0"
+      "capacity_reference_sha256": "b5b58cf1dd1fcb2caa6e0e9257d5f7cd2e5d08cb9f3b2ed458e9c80d617917f0",
+      "pipeline_source": "PS1-Fao Oil Pipeline",
+      "name_cn": "PS1泵站—法奥输油管线",
+      "name_en": "PS1-Fao Oil Pipeline"
     },
     {
       "project_id": "P5283",
-      "pipeline": "Zb2-Fao Oil Pipeline",
+      "pipeline": "ZB2—法奥输油管线（Zb2-Fao Oil Pipeline）",
       "segment": "",
       "original_capacity": "1,500,000.00",
       "original_unit": "bpd",
@@ -2716,11 +3040,14 @@
       "reference_capacity_lines": [],
       "capacity_extra": [],
       "capacity_review_status": "table_only_unavailable_reference",
-      "capacity_reference_sha256": null
+      "capacity_reference_sha256": null,
+      "pipeline_source": "Zb2-Fao Oil Pipeline",
+      "name_cn": "ZB2—法奥输油管线",
+      "name_en": "Zb2-Fao Oil Pipeline"
     },
     {
       "project_id": "P5284",
-      "pipeline": "Zubair 2—PS1 Oil Pipeline",
+      "pipeline": "祖拜尔2—PS1泵站输油管线（Zubair 2—PS1 Oil Pipeline）",
       "segment": "Zubair 2 to Tuba",
       "original_capacity": "",
       "original_unit": "",
@@ -2739,11 +3066,14 @@
       ],
       "capacity_extra": [],
       "capacity_review_status": "source_missing",
-      "capacity_reference_sha256": "c3a755645a1fae64cf8291446de73395a864d5161fdc8784300f11a36aa63194"
+      "capacity_reference_sha256": "c3a755645a1fae64cf8291446de73395a864d5161fdc8784300f11a36aa63194",
+      "pipeline_source": "Zubair 2—PS1 Oil Pipeline",
+      "name_cn": "祖拜尔2—PS1泵站输油管线",
+      "name_en": "Zubair 2—PS1 Oil Pipeline"
     },
     {
       "project_id": "P5285",
-      "pipeline": "Zubair 2—PS1 Oil Pipeline",
+      "pipeline": "祖拜尔2—PS1泵站输油管线（Zubair 2—PS1 Oil Pipeline）",
       "segment": "Zubair 2 to PS1",
       "original_capacity": "",
       "original_unit": "",
@@ -2762,11 +3092,14 @@
       ],
       "capacity_extra": [],
       "capacity_review_status": "source_missing",
-      "capacity_reference_sha256": "b47f4f391af10814f8a6ae8744c29d11c74f582242fc9a90112451f382df77dd"
+      "capacity_reference_sha256": "b47f4f391af10814f8a6ae8744c29d11c74f582242fc9a90112451f382df77dd",
+      "pipeline_source": "Zubair 2—PS1 Oil Pipeline",
+      "name_cn": "祖拜尔2—PS1泵站输油管线",
+      "name_en": "Zubair 2—PS1 Oil Pipeline"
     },
     {
       "project_id": "P5286",
-      "pipeline": "Al-Ahdab–Tuba Oil Pipeline",
+      "pipeline": "艾哈代布—图巴输油管线（Al-Ahdab–Tuba Oil Pipeline）",
       "segment": "Pipeline 1 \"AlAhdab-Nasiriyah Oil Pipeline\"",
       "original_capacity": "45,000.00",
       "original_unit": "bpd",
@@ -2786,11 +3119,14 @@
       ],
       "capacity_extra": [],
       "capacity_review_status": "table_reference_number_matches",
-      "capacity_reference_sha256": "17cb5911857061e59b342e4a64530b3a17e12e9f407c7b594da598d736389478"
+      "capacity_reference_sha256": "17cb5911857061e59b342e4a64530b3a17e12e9f407c7b594da598d736389478",
+      "pipeline_source": "Al-Ahdab–Tuba Oil Pipeline",
+      "name_cn": "艾哈代布—图巴输油管线",
+      "name_en": "Al-Ahdab–Tuba Oil Pipeline"
     },
     {
       "project_id": "P5287",
-      "pipeline": "Dehloran-Cheshmeh Khosh Oil Pipeline",
+      "pipeline": "代赫洛兰—切什梅霍什输油管线（Dehloran-Cheshmeh Khosh Oil Pipeline）",
       "segment": "Pipeline 1",
       "original_capacity": "",
       "original_unit": "",
@@ -2810,11 +3146,14 @@
       ],
       "capacity_extra": [],
       "capacity_review_status": "source_missing",
-      "capacity_reference_sha256": "455a2982e21c6c7bb322e90d7a211ab140530f01f4c548bf2c14ce7da8ecb8c1"
+      "capacity_reference_sha256": "455a2982e21c6c7bb322e90d7a211ab140530f01f4c548bf2c14ce7da8ecb8c1",
+      "pipeline_source": "Dehloran-Cheshmeh Khosh Oil Pipeline",
+      "name_cn": "代赫洛兰—切什梅霍什输油管线",
+      "name_en": "Dehloran-Cheshmeh Khosh Oil Pipeline"
     },
     {
       "project_id": "P5288",
-      "pipeline": "Al-Ahdab–Tuba Oil Pipeline",
+      "pipeline": "艾哈代布—图巴输油管线（Al-Ahdab–Tuba Oil Pipeline）",
       "segment": "Pipeline 2 \"Nasiriyah-Tuba Oil Pipeline\"",
       "original_capacity": "45,000.00",
       "original_unit": "bpd",
@@ -2834,11 +3173,14 @@
       ],
       "capacity_extra": [],
       "capacity_review_status": "table_reference_number_matches",
-      "capacity_reference_sha256": "17cb5911857061e59b342e4a64530b3a17e12e9f407c7b594da598d736389478"
+      "capacity_reference_sha256": "17cb5911857061e59b342e4a64530b3a17e12e9f407c7b594da598d736389478",
+      "pipeline_source": "Al-Ahdab–Tuba Oil Pipeline",
+      "name_cn": "艾哈代布—图巴输油管线",
+      "name_en": "Al-Ahdab–Tuba Oil Pipeline"
     },
     {
       "project_id": "P5289",
-      "pipeline": "Badra-PS-2 Oil Pipeline",
+      "pipeline": "巴德拉—PS2泵站输油管线（Badra-PS-2 Oil Pipeline）",
       "segment": "Pipeline 2 \"AlGharaf-PS-2 Oil Pipeline\"",
       "original_capacity": "",
       "original_unit": "",
@@ -2858,11 +3200,14 @@
       ],
       "capacity_extra": [],
       "capacity_review_status": "source_missing",
-      "capacity_reference_sha256": "2d616ed2f075a59c02a048c7c4a9481a882c37a98fb4b298a1306a192cc28f1c"
+      "capacity_reference_sha256": "2d616ed2f075a59c02a048c7c4a9481a882c37a98fb4b298a1306a192cc28f1c",
+      "pipeline_source": "Badra-PS-2 Oil Pipeline",
+      "name_cn": "巴德拉—PS2泵站输油管线",
+      "name_en": "Badra-PS-2 Oil Pipeline"
     },
     {
       "project_id": "P5290",
-      "pipeline": "Iraq Crude Oil Export Expansion Project (ICOEEP)",
+      "pipeline": "伊拉克原油出口扩建项目（Iraq Crude Oil Export Expansion Project (ICOEEP)）",
       "segment": "Phase I (Pipeline 2)",
       "original_capacity": "900,000.00",
       "original_unit": "bpd",
@@ -2882,11 +3227,14 @@
       ],
       "capacity_extra": [],
       "capacity_review_status": "table_reference_number_matches",
-      "capacity_reference_sha256": "ea02b733f8f529a320677f62241ae42e84f96a23c1cfe49198baec3f8f7784b5"
+      "capacity_reference_sha256": "ea02b733f8f529a320677f62241ae42e84f96a23c1cfe49198baec3f8f7784b5",
+      "pipeline_source": "Iraq Crude Oil Export Expansion Project (ICOEEP)",
+      "name_cn": "伊拉克原油出口扩建项目",
+      "name_en": "Iraq Crude Oil Export Expansion Project (ICOEEP)"
     },
     {
       "project_id": "P5292",
-      "pipeline": "Ahdeb–Wassit Oil Pipeline",
+      "pipeline": "艾哈代布—瓦西特输油管线（Ahdeb–Wassit Oil Pipeline）",
       "segment": "Pipeline 1",
       "original_capacity": "",
       "original_unit": "",
@@ -2906,11 +3254,14 @@
       ],
       "capacity_extra": [],
       "capacity_review_status": "source_missing",
-      "capacity_reference_sha256": "2afc32d7b5d71ed442baa75852f7bfc9ba05cfb2a249f28f955e1fd4c349652a"
+      "capacity_reference_sha256": "2afc32d7b5d71ed442baa75852f7bfc9ba05cfb2a249f28f955e1fd4c349652a",
+      "pipeline_source": "Ahdeb–Wassit Oil Pipeline",
+      "name_cn": "艾哈代布—瓦西特输油管线",
+      "name_en": "Ahdeb–Wassit Oil Pipeline"
     },
     {
       "project_id": "P5293",
-      "pipeline": "Ahdeb–Wassit Oil Pipeline",
+      "pipeline": "艾哈代布—瓦西特输油管线（Ahdeb–Wassit Oil Pipeline）",
       "segment": "Pipeline 2",
       "original_capacity": "",
       "original_unit": "",
@@ -2930,11 +3281,14 @@
       ],
       "capacity_extra": [],
       "capacity_review_status": "source_missing",
-      "capacity_reference_sha256": "2afc32d7b5d71ed442baa75852f7bfc9ba05cfb2a249f28f955e1fd4c349652a"
+      "capacity_reference_sha256": "2afc32d7b5d71ed442baa75852f7bfc9ba05cfb2a249f28f955e1fd4c349652a",
+      "pipeline_source": "Ahdeb–Wassit Oil Pipeline",
+      "name_cn": "艾哈代布—瓦西特输油管线",
+      "name_en": "Ahdeb–Wassit Oil Pipeline"
     },
     {
       "project_id": "P5294",
-      "pipeline": "Salahedin Oil Pipeline",
+      "pipeline": "萨拉赫丁输油管线（Salahedin Oil Pipeline）",
       "segment": "",
       "original_capacity": "25,000.00",
       "original_unit": "bpd",
@@ -2953,11 +3307,14 @@
       ],
       "capacity_extra": [],
       "capacity_review_status": "table_reference_number_matches",
-      "capacity_reference_sha256": "dd37305994e0436fa4e8ae93d00ac05d20ecc83f90c8cd90f7651a8503128547"
+      "capacity_reference_sha256": "dd37305994e0436fa4e8ae93d00ac05d20ecc83f90c8cd90f7651a8503128547",
+      "pipeline_source": "Salahedin Oil Pipeline",
+      "name_cn": "萨拉赫丁输油管线",
+      "name_en": "Salahedin Oil Pipeline"
     },
     {
       "project_id": "P5300",
-      "pipeline": "(IT1) Station-North Refinery Company Oil Pipeline",
+      "pipeline": "IT1站—北方炼油公司输油管线（(IT1) Station-North Refinery Company Oil Pipeline）",
       "segment": "",
       "original_capacity": "",
       "original_unit": "",
@@ -2976,11 +3333,14 @@
       ],
       "capacity_extra": [],
       "capacity_review_status": "source_missing",
-      "capacity_reference_sha256": "6d93e8a10897be40de596aa2ae93e4e3dafa1672d0bc24d782569849156307c3"
+      "capacity_reference_sha256": "6d93e8a10897be40de596aa2ae93e4e3dafa1672d0bc24d782569849156307c3",
+      "pipeline_source": "(IT1) Station-North Refinery Company Oil Pipeline",
+      "name_cn": "IT1站—北方炼油公司输油管线",
+      "name_en": "(IT1) Station-North Refinery Company Oil Pipeline"
     },
     {
       "project_id": "P5328",
-      "pipeline": "Genaveh-Kharg Oil Pipelines",
+      "pipeline": "加纳韦—哈尔克岛输油管线（Genaveh-Kharg Oil Pipelines）",
       "segment": "Pipeline 1",
       "original_capacity": "",
       "original_unit": "",
@@ -3004,11 +3364,14 @@
       ],
       "capacity_extra": [],
       "capacity_review_status": "source_missing",
-      "capacity_reference_sha256": "7e65fc95a137dd578a9c39fae83689167824428f4a5abd7740508b0fbd741b93"
+      "capacity_reference_sha256": "7e65fc95a137dd578a9c39fae83689167824428f4a5abd7740508b0fbd741b93",
+      "pipeline_source": "Genaveh-Kharg Oil Pipelines",
+      "name_cn": "加纳韦—哈尔克岛输油管线",
+      "name_en": "Genaveh-Kharg Oil Pipelines"
     },
     {
       "project_id": "P5336",
-      "pipeline": "Genaveh-Kharg Oil Pipelines",
+      "pipeline": "加纳韦—哈尔克岛输油管线（Genaveh-Kharg Oil Pipelines）",
       "segment": "Pipeline 2",
       "original_capacity": "1,500,000.00",
       "original_unit": "bpd",
@@ -3032,11 +3395,14 @@
       ],
       "capacity_extra": [],
       "capacity_review_status": "table_only_reference_unconfirmed",
-      "capacity_reference_sha256": "7e65fc95a137dd578a9c39fae83689167824428f4a5abd7740508b0fbd741b93"
+      "capacity_reference_sha256": "7e65fc95a137dd578a9c39fae83689167824428f4a5abd7740508b0fbd741b93",
+      "pipeline_source": "Genaveh-Kharg Oil Pipelines",
+      "name_cn": "加纳韦—哈尔克岛输油管线",
+      "name_en": "Genaveh-Kharg Oil Pipelines"
     },
     {
       "project_id": "P5337",
-      "pipeline": "Genaveh-Kharg Oil Pipelines",
+      "pipeline": "加纳韦—哈尔克岛输油管线（Genaveh-Kharg Oil Pipelines）",
       "segment": "Pipeline 3",
       "original_capacity": "",
       "original_unit": "",
@@ -3060,11 +3426,14 @@
       ],
       "capacity_extra": [],
       "capacity_review_status": "source_missing",
-      "capacity_reference_sha256": "7e65fc95a137dd578a9c39fae83689167824428f4a5abd7740508b0fbd741b93"
+      "capacity_reference_sha256": "7e65fc95a137dd578a9c39fae83689167824428f4a5abd7740508b0fbd741b93",
+      "pipeline_source": "Genaveh-Kharg Oil Pipelines",
+      "name_cn": "加纳韦—哈尔克岛输油管线",
+      "name_en": "Genaveh-Kharg Oil Pipelines"
     },
     {
       "project_id": "P5338",
-      "pipeline": "Kharg–Azarpad Oil Pipelines",
+      "pipeline": "哈尔克岛—阿扎尔帕德输油管线（Kharg–Azarpad Oil Pipelines）",
       "segment": "Pipeline 1",
       "original_capacity": "",
       "original_unit": "",
@@ -3084,11 +3453,14 @@
       ],
       "capacity_extra": [],
       "capacity_review_status": "source_missing",
-      "capacity_reference_sha256": "58f640c0f5ea77cf3025c91ef655da8628a1e846c9f8ba8df5941138b843e287"
+      "capacity_reference_sha256": "58f640c0f5ea77cf3025c91ef655da8628a1e846c9f8ba8df5941138b843e287",
+      "pipeline_source": "Kharg–Azarpad Oil Pipelines",
+      "name_cn": "哈尔克岛—阿扎尔帕德输油管线",
+      "name_en": "Kharg–Azarpad Oil Pipelines"
     },
     {
       "project_id": "P5339",
-      "pipeline": "Kharg–Azarpad Oil Pipelines",
+      "pipeline": "哈尔克岛—阿扎尔帕德输油管线（Kharg–Azarpad Oil Pipelines）",
       "segment": "Pipeline 2",
       "original_capacity": "",
       "original_unit": "",
@@ -3108,11 +3480,14 @@
       ],
       "capacity_extra": [],
       "capacity_review_status": "source_missing",
-      "capacity_reference_sha256": "58f640c0f5ea77cf3025c91ef655da8628a1e846c9f8ba8df5941138b843e287"
+      "capacity_reference_sha256": "58f640c0f5ea77cf3025c91ef655da8628a1e846c9f8ba8df5941138b843e287",
+      "pipeline_source": "Kharg–Azarpad Oil Pipelines",
+      "name_cn": "哈尔克岛—阿扎尔帕德输油管线",
+      "name_en": "Kharg–Azarpad Oil Pipelines"
     },
     {
       "project_id": "P5340",
-      "pipeline": "Khesht–Genaveh Oil Pipeline",
+      "pipeline": "赫什特—加纳韦输油管线（Khesht–Genaveh Oil Pipeline）",
       "segment": "",
       "original_capacity": "",
       "original_unit": "",
@@ -3131,11 +3506,14 @@
       ],
       "capacity_extra": [],
       "capacity_review_status": "source_missing",
-      "capacity_reference_sha256": "34260e030f329d4bb05d7169ca9e2bcb62b1337d6a38ae0b39f72d4a013dcc75"
+      "capacity_reference_sha256": "34260e030f329d4bb05d7169ca9e2bcb62b1337d6a38ae0b39f72d4a013dcc75",
+      "pipeline_source": "Khesht–Genaveh Oil Pipeline",
+      "name_cn": "赫什特—加纳韦输油管线",
+      "name_en": "Khesht–Genaveh Oil Pipeline"
     },
     {
       "project_id": "P5349",
-      "pipeline": "Ahwaz–Ray Oil Pipeline",
+      "pipeline": "阿瓦士—雷伊输油管线（Ahwaz–Ray Oil Pipeline）",
       "segment": "",
       "original_capacity": "600,000.00",
       "original_unit": "bpd",
@@ -3158,11 +3536,14 @@
         "0.45",
         "0.6"
       ],
-      "capacity_reference_sha256": "5ff849a30c2fe90f802813b74af3e4ff324040ab7e96314dc61891457d23399e"
+      "capacity_reference_sha256": "5ff849a30c2fe90f802813b74af3e4ff324040ab7e96314dc61891457d23399e",
+      "pipeline_source": "Ahwaz–Ray Oil Pipeline",
+      "name_cn": "阿瓦士—雷伊输油管线",
+      "name_en": "Ahwaz–Ray Oil Pipeline"
     },
     {
       "project_id": "P5350",
-      "pipeline": "Isfahan–Ray Oil Pipeline",
+      "pipeline": "伊斯法罕—雷伊输油管线（Isfahan–Ray Oil Pipeline）",
       "segment": "",
       "original_capacity": "245,000.00",
       "original_unit": "bpd",
@@ -3181,11 +3562,14 @@
       ],
       "capacity_extra": [],
       "capacity_review_status": "table_reference_number_matches",
-      "capacity_reference_sha256": "64af59b0f4961727c279fb71402ca39291aeea311b716f0b5148a163d74ee084"
+      "capacity_reference_sha256": "64af59b0f4961727c279fb71402ca39291aeea311b716f0b5148a163d74ee084",
+      "pipeline_source": "Isfahan–Ray Oil Pipeline",
+      "name_cn": "伊斯法罕—雷伊输油管线",
+      "name_en": "Isfahan–Ray Oil Pipeline"
     },
     {
       "project_id": "P5351",
-      "pipeline": "Neka–Ray Oil Pipeline",
+      "pipeline": "内卡—雷伊输油管线（Neka–Ray Oil Pipeline）",
       "segment": "Original line",
       "original_capacity": "115,000.00",
       "original_unit": "bpd",
@@ -3206,11 +3590,14 @@
       ],
       "capacity_extra": [],
       "capacity_review_status": "table_reference_number_matches",
-      "capacity_reference_sha256": "bf4f05b19873bf1c011246925b2c74ca300ecb7436973a42b7f59b5a01b5141b"
+      "capacity_reference_sha256": "bf4f05b19873bf1c011246925b2c74ca300ecb7436973a42b7f59b5a01b5141b",
+      "pipeline_source": "Neka–Ray Oil Pipeline",
+      "name_cn": "内卡—雷伊输油管线",
+      "name_en": "Neka–Ray Oil Pipeline"
     },
     {
       "project_id": "P5352",
-      "pipeline": "Naftshahr–Kermanshah Oil Pipelines",
+      "pipeline": "纳夫特沙赫尔—克尔曼沙阿输油管线（Naftshahr–Kermanshah Oil Pipelines）",
       "segment": "",
       "original_capacity": "15,000.00",
       "original_unit": "bpd",
@@ -3229,11 +3616,14 @@
       ],
       "capacity_extra": [],
       "capacity_review_status": "table_reference_number_matches",
-      "capacity_reference_sha256": "9bc2795548fa9240e48c184da11cb2892923b88be18a91f31f4c67df098d2c93"
+      "capacity_reference_sha256": "9bc2795548fa9240e48c184da11cb2892923b88be18a91f31f4c67df098d2c93",
+      "pipeline_source": "Naftshahr–Kermanshah Oil Pipelines",
+      "name_cn": "纳夫特沙赫尔—克尔曼沙阿输油管线",
+      "name_en": "Naftshahr–Kermanshah Oil Pipelines"
     },
     {
       "project_id": "P5357",
-      "pipeline": "Sabz–Rey Oil Pipeline",
+      "pipeline": "萨卜兹—雷伊输油管线（Sabz–Rey Oil Pipeline）",
       "segment": "Pipeline 2 \"Tang Fani PS- Shazand\"",
       "original_capacity": "295,000.00",
       "original_unit": "bpd",
@@ -3250,11 +3640,14 @@
       "reference_capacity_lines": [],
       "capacity_extra": [],
       "capacity_review_status": "table_only_unavailable_reference",
-      "capacity_reference_sha256": null
+      "capacity_reference_sha256": null,
+      "pipeline_source": "Sabz–Rey Oil Pipeline",
+      "name_cn": "萨卜兹—雷伊输油管线",
+      "name_en": "Sabz–Rey Oil Pipeline"
     },
     {
       "project_id": "P5358",
-      "pipeline": "Sabz–Rey Oil Pipeline",
+      "pipeline": "萨卜兹—雷伊输油管线（Sabz–Rey Oil Pipeline）",
       "segment": "Pipeline 3",
       "original_capacity": "105,000.00",
       "original_unit": "bpd",
@@ -3271,11 +3664,14 @@
       "reference_capacity_lines": [],
       "capacity_extra": [],
       "capacity_review_status": "table_only_unavailable_reference",
-      "capacity_reference_sha256": null
+      "capacity_reference_sha256": null,
+      "pipeline_source": "Sabz–Rey Oil Pipeline",
+      "name_cn": "萨卜兹—雷伊输油管线",
+      "name_en": "Sabz–Rey Oil Pipeline"
     },
     {
       "project_id": "P5359",
-      "pipeline": "Cheshmeh Khosh–Ahvaz Oil Pipelines",
+      "pipeline": "切什梅霍什—阿瓦士输油管线（Cheshmeh Khosh–Ahvaz Oil Pipelines）",
       "segment": "Pipeline 1",
       "original_capacity": "90,000.00",
       "original_unit": "bpd",
@@ -3295,11 +3691,14 @@
       ],
       "capacity_extra": [],
       "capacity_review_status": "conflict_withheld",
-      "capacity_reference_sha256": "1cfc7c3a765a58811af7822dbe2ded67fb7aba6b2ed959a504a250f167cdb523"
+      "capacity_reference_sha256": "1cfc7c3a765a58811af7822dbe2ded67fb7aba6b2ed959a504a250f167cdb523",
+      "pipeline_source": "Cheshmeh Khosh–Ahvaz Oil Pipelines",
+      "name_cn": "切什梅霍什—阿瓦士输油管线",
+      "name_en": "Cheshmeh Khosh–Ahvaz Oil Pipelines"
     },
     {
       "project_id": "P5366",
-      "pipeline": "Gachsaran–Shiraz Oil Pipeline",
+      "pipeline": "加奇萨兰—设拉子输油管线（Gachsaran–Shiraz Oil Pipeline）",
       "segment": "",
       "original_capacity": "",
       "original_unit": "",
@@ -3318,11 +3717,14 @@
       ],
       "capacity_extra": [],
       "capacity_review_status": "source_missing",
-      "capacity_reference_sha256": "a41459472db8a499aefa837858aec107590229949b4b3f83522194a75d8d3eca"
+      "capacity_reference_sha256": "a41459472db8a499aefa837858aec107590229949b4b3f83522194a75d8d3eca",
+      "pipeline_source": "Gachsaran–Shiraz Oil Pipeline",
+      "name_cn": "加奇萨兰—设拉子输油管线",
+      "name_en": "Gachsaran–Shiraz Oil Pipeline"
     },
     {
       "project_id": "P5368",
-      "pipeline": "Marun–Isfahan Oil Pipelines",
+      "pipeline": "马伦—伊斯法罕输油管线（Marun–Isfahan Oil Pipelines）",
       "segment": "Pipeline 2",
       "original_capacity": "550,000.00",
       "original_unit": "bpd",
@@ -3342,11 +3744,14 @@
       ],
       "capacity_extra": [],
       "capacity_review_status": "table_reference_number_matches",
-      "capacity_reference_sha256": "251144a9048f7c75b2413cbc64e1e6a1693cf07a56fb7988390be4b45e663569"
+      "capacity_reference_sha256": "251144a9048f7c75b2413cbc64e1e6a1693cf07a56fb7988390be4b45e663569",
+      "pipeline_source": "Marun–Isfahan Oil Pipelines",
+      "name_cn": "马伦—伊斯法罕输油管线",
+      "name_en": "Marun–Isfahan Oil Pipelines"
     },
     {
       "project_id": "P5369",
-      "pipeline": "Omidiyeh–Abadan Oil Pipeline",
+      "pipeline": "奥米迪耶—阿巴丹输油管线（Omidiyeh–Abadan Oil Pipeline）",
       "segment": "",
       "original_capacity": "",
       "original_unit": "",
@@ -3365,11 +3770,14 @@
       ],
       "capacity_extra": [],
       "capacity_review_status": "source_missing",
-      "capacity_reference_sha256": "c05808e40952d31396faa2feaad56ef7316044b054a4172a3c14687d9607622e"
+      "capacity_reference_sha256": "c05808e40952d31396faa2feaad56ef7316044b054a4172a3c14687d9607622e",
+      "pipeline_source": "Omidiyeh–Abadan Oil Pipeline",
+      "name_cn": "奥米迪耶—阿巴丹输油管线",
+      "name_en": "Omidiyeh–Abadan Oil Pipeline"
     },
     {
       "project_id": "P5371",
-      "pipeline": "West Karoon–Omidiyeh Oil Pipeline",
+      "pipeline": "西卡伦—奥米迪耶输油管线（West Karoon–Omidiyeh Oil Pipeline）",
       "segment": "",
       "original_capacity": "",
       "original_unit": "",
@@ -3386,11 +3794,14 @@
       "reference_capacity_lines": [],
       "capacity_extra": [],
       "capacity_review_status": "source_missing",
-      "capacity_reference_sha256": null
+      "capacity_reference_sha256": null,
+      "pipeline_source": "West Karoon–Omidiyeh Oil Pipeline",
+      "name_cn": "西卡伦—奥米迪耶输油管线",
+      "name_en": "West Karoon–Omidiyeh Oil Pipeline"
     },
     {
       "project_id": "P5372",
-      "pipeline": "West Karoon–Gureh Oil Pipeline",
+      "pipeline": "西卡伦—戈雷输油管线（West Karoon–Gureh Oil Pipeline）",
       "segment": "",
       "original_capacity": "",
       "original_unit": "",
@@ -3407,11 +3818,14 @@
       "reference_capacity_lines": [],
       "capacity_extra": [],
       "capacity_review_status": "source_missing",
-      "capacity_reference_sha256": null
+      "capacity_reference_sha256": null,
+      "pipeline_source": "West Karoon–Gureh Oil Pipeline",
+      "name_cn": "西卡伦—戈雷输油管线",
+      "name_en": "West Karoon–Gureh Oil Pipeline"
     },
     {
       "project_id": "P5373",
-      "pipeline": "Ahwaz–Abadan Oil Pipelines",
+      "pipeline": "阿瓦士—阿巴丹输油管线（Ahwaz–Abadan Oil Pipelines）",
       "segment": "Pipeline 1",
       "original_capacity": "",
       "original_unit": "",
@@ -3431,11 +3845,14 @@
       ],
       "capacity_extra": [],
       "capacity_review_status": "source_missing",
-      "capacity_reference_sha256": "af134cac6aacaa6ae27f9d2871ac75f785bef117c18bb5d6948574b98c688f10"
+      "capacity_reference_sha256": "af134cac6aacaa6ae27f9d2871ac75f785bef117c18bb5d6948574b98c688f10",
+      "pipeline_source": "Ahwaz–Abadan Oil Pipelines",
+      "name_cn": "阿瓦士—阿巴丹输油管线",
+      "name_en": "Ahwaz–Abadan Oil Pipelines"
     },
     {
       "project_id": "P5374",
-      "pipeline": "Ahwaz–Abadan Oil Pipelines",
+      "pipeline": "阿瓦士—阿巴丹输油管线（Ahwaz–Abadan Oil Pipelines）",
       "segment": "Pipeline 2",
       "original_capacity": "",
       "original_unit": "",
@@ -3455,11 +3872,14 @@
       ],
       "capacity_extra": [],
       "capacity_review_status": "source_missing",
-      "capacity_reference_sha256": "af134cac6aacaa6ae27f9d2871ac75f785bef117c18bb5d6948574b98c688f10"
+      "capacity_reference_sha256": "af134cac6aacaa6ae27f9d2871ac75f785bef117c18bb5d6948574b98c688f10",
+      "pipeline_source": "Ahwaz–Abadan Oil Pipelines",
+      "name_cn": "阿瓦士—阿巴丹输油管线",
+      "name_en": "Ahwaz–Abadan Oil Pipelines"
     },
     {
       "project_id": "P5375",
-      "pipeline": "Tang-e-Fani–Kermanshah Oil Pipeline",
+      "pipeline": "坦格法尼—克尔曼沙阿输油管线（Tang-e-Fani–Kermanshah Oil Pipeline）",
       "segment": "",
       "original_capacity": "40,000.00",
       "original_unit": "bpd",
@@ -3478,11 +3898,14 @@
       ],
       "capacity_extra": [],
       "capacity_review_status": "table_reference_number_matches",
-      "capacity_reference_sha256": "43ddd2b9317831e2b9359163f0db36fb8230c25f566df756e9167b9a3fbb8023"
+      "capacity_reference_sha256": "43ddd2b9317831e2b9359163f0db36fb8230c25f566df756e9167b9a3fbb8023",
+      "pipeline_source": "Tang-e-Fani–Kermanshah Oil Pipeline",
+      "name_cn": "坦格法尼—克尔曼沙阿输油管线",
+      "name_en": "Tang-e-Fani–Kermanshah Oil Pipeline"
     },
     {
       "project_id": "P5376",
-      "pipeline": "Goreh–Genaveh Oil Pipelines",
+      "pipeline": "戈雷—加纳韦输油管线（Goreh–Genaveh Oil Pipelines）",
       "segment": "",
       "original_capacity": "",
       "original_unit": "",
@@ -3501,11 +3924,14 @@
       ],
       "capacity_extra": [],
       "capacity_review_status": "source_missing",
-      "capacity_reference_sha256": "69f7c05498deddf9edb2c5f9c6481a90c579830d605ce7e777d1fc8a1b7f1c46"
+      "capacity_reference_sha256": "69f7c05498deddf9edb2c5f9c6481a90c579830d605ce7e777d1fc8a1b7f1c46",
+      "pipeline_source": "Goreh–Genaveh Oil Pipelines",
+      "name_cn": "戈雷—加纳韦输油管线",
+      "name_en": "Goreh–Genaveh Oil Pipelines"
     },
     {
       "project_id": "P5379",
-      "pipeline": "Kharg–East Jetty T Oil Pipelines",
+      "pipeline": "哈尔克岛—东栈桥T输油管线（Kharg–East Jetty T Oil Pipelines）",
       "segment": "Pipeline 1",
       "original_capacity": "",
       "original_unit": "",
@@ -3527,11 +3953,14 @@
       ],
       "capacity_extra": [],
       "capacity_review_status": "source_missing",
-      "capacity_reference_sha256": "75fd49538f2a0a0d2439d77246f91de9b777cda18688bb60b828d365ced1963f"
+      "capacity_reference_sha256": "75fd49538f2a0a0d2439d77246f91de9b777cda18688bb60b828d365ced1963f",
+      "pipeline_source": "Kharg–East Jetty T Oil Pipelines",
+      "name_cn": "哈尔克岛—东栈桥T输油管线",
+      "name_en": "Kharg–East Jetty T Oil Pipelines"
     },
     {
       "project_id": "P5380",
-      "pipeline": "Kharg–East Jetty T Oil Pipelines",
+      "pipeline": "哈尔克岛—东栈桥T输油管线（Kharg–East Jetty T Oil Pipelines）",
       "segment": "Pipeline 2",
       "original_capacity": "",
       "original_unit": "",
@@ -3553,11 +3982,14 @@
       ],
       "capacity_extra": [],
       "capacity_review_status": "source_missing",
-      "capacity_reference_sha256": "75fd49538f2a0a0d2439d77246f91de9b777cda18688bb60b828d365ced1963f"
+      "capacity_reference_sha256": "75fd49538f2a0a0d2439d77246f91de9b777cda18688bb60b828d365ced1963f",
+      "pipeline_source": "Kharg–East Jetty T Oil Pipelines",
+      "name_cn": "哈尔克岛—东栈桥T输油管线",
+      "name_en": "Kharg–East Jetty T Oil Pipelines"
     },
     {
       "project_id": "P5381",
-      "pipeline": "Kharg–East Jetty T Oil Pipelines",
+      "pipeline": "哈尔克岛—东栈桥T输油管线（Kharg–East Jetty T Oil Pipelines）",
       "segment": "Pipeline 3",
       "original_capacity": "",
       "original_unit": "",
@@ -3579,11 +4011,14 @@
       ],
       "capacity_extra": [],
       "capacity_review_status": "source_missing",
-      "capacity_reference_sha256": "75fd49538f2a0a0d2439d77246f91de9b777cda18688bb60b828d365ced1963f"
+      "capacity_reference_sha256": "75fd49538f2a0a0d2439d77246f91de9b777cda18688bb60b828d365ced1963f",
+      "pipeline_source": "Kharg–East Jetty T Oil Pipelines",
+      "name_cn": "哈尔克岛—东栈桥T输油管线",
+      "name_en": "Kharg–East Jetty T Oil Pipelines"
     },
     {
       "project_id": "P5382",
-      "pipeline": "Kharg–East Jetty T Oil Pipelines",
+      "pipeline": "哈尔克岛—东栈桥T输油管线（Kharg–East Jetty T Oil Pipelines）",
       "segment": "Pipeline 4",
       "original_capacity": "",
       "original_unit": "",
@@ -3605,11 +4040,14 @@
       ],
       "capacity_extra": [],
       "capacity_review_status": "source_missing",
-      "capacity_reference_sha256": "75fd49538f2a0a0d2439d77246f91de9b777cda18688bb60b828d365ced1963f"
+      "capacity_reference_sha256": "75fd49538f2a0a0d2439d77246f91de9b777cda18688bb60b828d365ced1963f",
+      "pipeline_source": "Kharg–East Jetty T Oil Pipelines",
+      "name_cn": "哈尔克岛—东栈桥T输油管线",
+      "name_en": "Kharg–East Jetty T Oil Pipelines"
     },
     {
       "project_id": "P5438",
-      "pipeline": "Ashkelon-Haifa Oil Pipeline",
+      "pipeline": "阿什凯隆—海法输油管线（Ashkelon-Haifa Oil Pipeline）",
       "segment": "",
       "original_capacity": "5.8",
       "original_unit": "mtpa",
@@ -3628,11 +4066,14 @@
       ],
       "capacity_extra": [],
       "capacity_review_status": "mass_unit_not_converted",
-      "capacity_reference_sha256": "154cb49dbc749a9fcc66b3c607f13dad4f5877b2524786d8d24c0854755704d9"
+      "capacity_reference_sha256": "154cb49dbc749a9fcc66b3c607f13dad4f5877b2524786d8d24c0854755704d9",
+      "pipeline_source": "Ashkelon-Haifa Oil Pipeline",
+      "name_cn": "阿什凯隆—海法输油管线",
+      "name_en": "Ashkelon-Haifa Oil Pipeline"
     },
     {
       "project_id": "P5439",
-      "pipeline": "Ashkelon-Ashdod Oil Pipeline",
+      "pipeline": "阿什凯隆—阿什杜德输油管线（Ashkelon-Ashdod Oil Pipeline）",
       "segment": "",
       "original_capacity": "7.0",
       "original_unit": "mtpa",
@@ -3651,11 +4092,14 @@
       ],
       "capacity_extra": [],
       "capacity_review_status": "mass_unit_not_converted",
-      "capacity_reference_sha256": "f0db71871a7242123fd5b657be0fd0d954126d0dff5db0f835becad78201627b"
+      "capacity_reference_sha256": "f0db71871a7242123fd5b657be0fd0d954126d0dff5db0f835becad78201627b",
+      "pipeline_source": "Ashkelon-Ashdod Oil Pipeline",
+      "name_cn": "阿什凯隆—阿什杜德输油管线",
+      "name_en": "Ashkelon-Ashdod Oil Pipeline"
     },
     {
       "project_id": "P6043",
-      "pipeline": "Northern Azadegan-West Karun Station",
+      "pipeline": "北阿扎德甘—西卡伦站输油管线（Northern Azadegan-West Karun Station）",
       "segment": "",
       "original_capacity": "75,000.00",
       "original_unit": "bpd",
@@ -3674,11 +4118,14 @@
       ],
       "capacity_extra": [],
       "capacity_review_status": "table_reference_number_matches",
-      "capacity_reference_sha256": "8e67661d73c6a1ce9405c590f136c437d215d9249278aad3b2a256a9d4965a90"
+      "capacity_reference_sha256": "8e67661d73c6a1ce9405c590f136c437d215d9249278aad3b2a256a9d4965a90",
+      "pipeline_source": "Northern Azadegan-West Karun Station",
+      "name_cn": "北阿扎德甘—西卡伦站输油管线",
+      "name_en": "Northern Azadegan-West Karun Station"
     },
     {
       "project_id": "P6044",
-      "pipeline": "Azar-Dehloran Oil Pipeline",
+      "pipeline": "阿扎尔—代赫洛兰输油管线（Azar-Dehloran Oil Pipeline）",
       "segment": "",
       "original_capacity": "30,000.00",
       "original_unit": "bpd",
@@ -3697,11 +4144,14 @@
       ],
       "capacity_extra": [],
       "capacity_review_status": "table_reference_number_matches",
-      "capacity_reference_sha256": "9304c1ae7f6ed768666db6391b2767d82a71ad5c8ff08e6175683c11b0fa6e01"
+      "capacity_reference_sha256": "9304c1ae7f6ed768666db6391b2767d82a71ad5c8ff08e6175683c11b0fa6e01",
+      "pipeline_source": "Azar-Dehloran Oil Pipeline",
+      "name_cn": "阿扎尔—代赫洛兰输油管线",
+      "name_en": "Azar-Dehloran Oil Pipeline"
     },
     {
       "project_id": "P6046",
-      "pipeline": "Forouzan-Kharg Oil Pipeline",
+      "pipeline": "福鲁赞—哈尔克岛输油管线（Forouzan-Kharg Oil Pipeline）",
       "segment": "",
       "original_capacity": "80,000.00",
       "original_unit": "bpd",
@@ -3720,11 +4170,14 @@
       ],
       "capacity_extra": [],
       "capacity_review_status": "table_reference_number_matches",
-      "capacity_reference_sha256": "23c24ce069becfb7ba8af9211bdb71f7c92db2f40a42d13c035e81eb9550c2d1"
+      "capacity_reference_sha256": "23c24ce069becfb7ba8af9211bdb71f7c92db2f40a42d13c035e81eb9550c2d1",
+      "pipeline_source": "Forouzan-Kharg Oil Pipeline",
+      "name_cn": "福鲁赞—哈尔克岛输油管线",
+      "name_en": "Forouzan-Kharg Oil Pipeline"
     },
     {
       "project_id": "P6047",
-      "pipeline": "Esfandiar Oil Pipeline",
+      "pipeline": "埃斯凡迪亚尔输油管线（Esfandiar Oil Pipeline）",
       "segment": "",
       "original_capacity": "",
       "original_unit": "",
@@ -3741,11 +4194,14 @@
       "reference_capacity_lines": [],
       "capacity_extra": [],
       "capacity_review_status": "source_missing",
-      "capacity_reference_sha256": null
+      "capacity_reference_sha256": null,
+      "pipeline_source": "Esfandiar Oil Pipeline",
+      "name_cn": "埃斯凡迪亚尔输油管线",
+      "name_en": "Esfandiar Oil Pipeline"
     },
     {
       "project_id": "P6051",
-      "pipeline": "Lavan Oil Pipeline",
+      "pipeline": "拉万岛输油管线（Lavan Oil Pipeline）",
       "segment": "",
       "original_capacity": "35,000.00",
       "original_unit": "bpd",
@@ -3764,11 +4220,14 @@
       ],
       "capacity_extra": [],
       "capacity_review_status": "table_reference_number_matches",
-      "capacity_reference_sha256": "9716c64b5f03e651884e6cdf5035091b256158c8c798b53720eeb49d712274b9"
+      "capacity_reference_sha256": "9716c64b5f03e651884e6cdf5035091b256158c8c798b53720eeb49d712274b9",
+      "pipeline_source": "Lavan Oil Pipeline",
+      "name_cn": "拉万岛输油管线",
+      "name_en": "Lavan Oil Pipeline"
     },
     {
       "project_id": "P6052",
-      "pipeline": "Balal-Lavan Oil Pipeline",
+      "pipeline": "巴拉勒—拉万岛输油管线（Balal-Lavan Oil Pipeline）",
       "segment": "",
       "original_capacity": "40,000.00",
       "original_unit": "bpd",
@@ -3787,11 +4246,14 @@
       ],
       "capacity_extra": [],
       "capacity_review_status": "table_reference_number_matches",
-      "capacity_reference_sha256": "929d77089fb7be48fd41ea86f7e47644aed0a8617b6a9d524b303d7b2e29e054"
+      "capacity_reference_sha256": "929d77089fb7be48fd41ea86f7e47644aed0a8617b6a9d524b303d7b2e29e054",
+      "pipeline_source": "Balal-Lavan Oil Pipeline",
+      "name_cn": "巴拉勒—拉万岛输油管线",
+      "name_en": "Balal-Lavan Oil Pipeline"
     },
     {
       "project_id": "P6053",
-      "pipeline": "Soroosh Oil Pipelines",
+      "pipeline": "索鲁什输油管线（Soroosh Oil Pipelines）",
       "segment": "Pipeline 1",
       "original_capacity": "",
       "original_unit": "",
@@ -3808,11 +4270,14 @@
       "reference_capacity_lines": [],
       "capacity_extra": [],
       "capacity_review_status": "source_missing",
-      "capacity_reference_sha256": null
+      "capacity_reference_sha256": null,
+      "pipeline_source": "Soroosh Oil Pipelines",
+      "name_cn": "索鲁什输油管线",
+      "name_en": "Soroosh Oil Pipelines"
     },
     {
       "project_id": "P6054",
-      "pipeline": "Soroosh Oil Pipelines",
+      "pipeline": "索鲁什输油管线（Soroosh Oil Pipelines）",
       "segment": "Pipeline 2",
       "original_capacity": "",
       "original_unit": "",
@@ -3829,11 +4294,14 @@
       "reference_capacity_lines": [],
       "capacity_extra": [],
       "capacity_review_status": "source_missing",
-      "capacity_reference_sha256": null
+      "capacity_reference_sha256": null,
+      "pipeline_source": "Soroosh Oil Pipelines",
+      "name_cn": "索鲁什输油管线",
+      "name_en": "Soroosh Oil Pipelines"
     },
     {
       "project_id": "P6055",
-      "pipeline": "Reshadat-Lavan Oil Pipelines",
+      "pipeline": "雷沙达特—拉万岛输油管线（Reshadat-Lavan Oil Pipelines）",
       "segment": "Pipeline 1",
       "original_capacity": "65,000.00",
       "original_unit": "bpd",
@@ -3850,11 +4318,14 @@
       "reference_capacity_lines": [],
       "capacity_extra": [],
       "capacity_review_status": "table_only_unavailable_reference",
-      "capacity_reference_sha256": null
+      "capacity_reference_sha256": null,
+      "pipeline_source": "Reshadat-Lavan Oil Pipelines",
+      "name_cn": "雷沙达特—拉万岛输油管线",
+      "name_en": "Reshadat-Lavan Oil Pipelines"
     },
     {
       "project_id": "P6056",
-      "pipeline": "Reshadat-Lavan Oil Pipelines",
+      "pipeline": "雷沙达特—拉万岛输油管线（Reshadat-Lavan Oil Pipelines）",
       "segment": "Pipeline 2",
       "original_capacity": "65,000.00",
       "original_unit": "bpd",
@@ -3871,11 +4342,14 @@
       "reference_capacity_lines": [],
       "capacity_extra": [],
       "capacity_review_status": "table_only_unavailable_reference",
-      "capacity_reference_sha256": null
+      "capacity_reference_sha256": null,
+      "pipeline_source": "Reshadat-Lavan Oil Pipelines",
+      "name_cn": "雷沙达特—拉万岛输油管线",
+      "name_en": "Reshadat-Lavan Oil Pipelines"
     },
     {
       "project_id": "P6057",
-      "pipeline": "Abouzar-Kharg Oil Pipeline",
+      "pipeline": "阿布扎尔—哈尔克岛输油管线（Abouzar-Kharg Oil Pipeline）",
       "segment": "",
       "original_capacity": "200,000.00",
       "original_unit": "bpd",
@@ -3894,11 +4368,14 @@
       ],
       "capacity_extra": [],
       "capacity_review_status": "table_reference_number_matches",
-      "capacity_reference_sha256": "0ebfcc1a22e6e17b1fc749ad3ce6977fd568b44804d6acf089e371c9f1edbf2e"
+      "capacity_reference_sha256": "0ebfcc1a22e6e17b1fc749ad3ce6977fd568b44804d6acf089e371c9f1edbf2e",
+      "pipeline_source": "Abouzar-Kharg Oil Pipeline",
+      "name_cn": "阿布扎尔—哈尔克岛输油管线",
+      "name_en": "Abouzar-Kharg Oil Pipeline"
     },
     {
       "project_id": "P6058",
-      "pipeline": "Hengam-Bandar Abbas Oil Pipeline",
+      "pipeline": "亨加姆—阿巴斯港输油管线（Hengam-Bandar Abbas Oil Pipeline）",
       "segment": "",
       "original_capacity": "100,000.00",
       "original_unit": "bpd",
@@ -3917,11 +4394,14 @@
       ],
       "capacity_extra": [],
       "capacity_review_status": "table_reference_number_matches",
-      "capacity_reference_sha256": "eede3e05bd56d39bde75d3bb3636e9c916043da9e9d7aa03898f0f2eb1b085b1"
+      "capacity_reference_sha256": "eede3e05bd56d39bde75d3bb3636e9c916043da9e9d7aa03898f0f2eb1b085b1",
+      "pipeline_source": "Hengam-Bandar Abbas Oil Pipeline",
+      "name_cn": "亨加姆—阿巴斯港输油管线",
+      "name_en": "Hengam-Bandar Abbas Oil Pipeline"
     },
     {
       "project_id": "P6059",
-      "pipeline": "South Azadegan' CTEP- West Karoun PS Oil Pipeline",
+      "pipeline": "南阿扎德甘中央处理站—西卡伦泵站输油管线（South Azadegan' CTEP- West Karoun PS Oil Pipeline）",
       "segment": "",
       "original_capacity": "320,000.00",
       "original_unit": "bpd",
@@ -3940,11 +4420,14 @@
       ],
       "capacity_extra": [],
       "capacity_review_status": "table_reference_number_matches",
-      "capacity_reference_sha256": "d90d92e7cc3c4c8604f6d220895ab2287d6b4dec8e2c9f35dabb22a9783ae409"
+      "capacity_reference_sha256": "d90d92e7cc3c4c8604f6d220895ab2287d6b4dec8e2c9f35dabb22a9783ae409",
+      "pipeline_source": "South Azadegan' CTEP- West Karoun PS Oil Pipeline",
+      "name_cn": "南阿扎德甘中央处理站—西卡伦泵站输油管线",
+      "name_en": "South Azadegan' CTEP- West Karoun PS Oil Pipeline"
     },
     {
       "project_id": "P6060",
-      "pipeline": "Yadavaran-Darquain Export Oil Pipeline",
+      "pipeline": "亚达瓦兰—达尔霍温出口输油管线（Yadavaran-Darquain Export Oil Pipeline）",
       "segment": "",
       "original_capacity": "",
       "original_unit": "",
@@ -3963,11 +4446,14 @@
       ],
       "capacity_extra": [],
       "capacity_review_status": "source_missing",
-      "capacity_reference_sha256": "abc4a2c41c3a4d3672aed71fc40416a963dd107780de0124bc03c751ffe5f774"
+      "capacity_reference_sha256": "abc4a2c41c3a4d3672aed71fc40416a963dd107780de0124bc03c751ffe5f774",
+      "pipeline_source": "Yadavaran-Darquain Export Oil Pipeline",
+      "name_cn": "亚达瓦兰—达尔霍温出口输油管线",
+      "name_en": "Yadavaran-Darquain Export Oil Pipeline"
     },
     {
       "project_id": "P6061",
-      "pipeline": "Shadegan-Maroun 4 Oil Pipelines",
+      "pipeline": "沙德甘—马伦4输油管线（Shadegan-Maroun 4 Oil Pipelines）",
       "segment": "Pipeline 1",
       "original_capacity": "130,000.00",
       "original_unit": "bpd",
@@ -3990,11 +4476,14 @@
       ],
       "capacity_extra": [],
       "capacity_review_status": "table_reference_number_matches",
-      "capacity_reference_sha256": "5a41a04a3e01f46b1d63cf4b91aed7c80cc5fbd92969f51c93d064e0d9a83a4d"
+      "capacity_reference_sha256": "5a41a04a3e01f46b1d63cf4b91aed7c80cc5fbd92969f51c93d064e0d9a83a4d",
+      "pipeline_source": "Shadegan-Maroun 4 Oil Pipelines",
+      "name_cn": "沙德甘—马伦4输油管线",
+      "name_en": "Shadegan-Maroun 4 Oil Pipelines"
     },
     {
       "project_id": "P6062",
-      "pipeline": "Shadegan-Maroun 4 Oil Pipelines",
+      "pipeline": "沙德甘—马伦4输油管线（Shadegan-Maroun 4 Oil Pipelines）",
       "segment": "Pipeline 2",
       "original_capacity": "130,000.00",
       "original_unit": "bpd",
@@ -4017,11 +4506,14 @@
       ],
       "capacity_extra": [],
       "capacity_review_status": "table_reference_number_matches",
-      "capacity_reference_sha256": "5a41a04a3e01f46b1d63cf4b91aed7c80cc5fbd92969f51c93d064e0d9a83a4d"
+      "capacity_reference_sha256": "5a41a04a3e01f46b1d63cf4b91aed7c80cc5fbd92969f51c93d064e0d9a83a4d",
+      "pipeline_source": "Shadegan-Maroun 4 Oil Pipelines",
+      "name_cn": "沙德甘—马伦4输油管线",
+      "name_en": "Shadegan-Maroun 4 Oil Pipelines"
     },
     {
       "project_id": "P6063",
-      "pipeline": "Shadegan-Maroun 4 Oil Pipelines",
+      "pipeline": "沙德甘—马伦4输油管线（Shadegan-Maroun 4 Oil Pipelines）",
       "segment": "Pipeline 3",
       "original_capacity": "130,000.00",
       "original_unit": "bpd",
@@ -4044,11 +4536,14 @@
       ],
       "capacity_extra": [],
       "capacity_review_status": "table_reference_number_matches",
-      "capacity_reference_sha256": "5a41a04a3e01f46b1d63cf4b91aed7c80cc5fbd92969f51c93d064e0d9a83a4d"
+      "capacity_reference_sha256": "5a41a04a3e01f46b1d63cf4b91aed7c80cc5fbd92969f51c93d064e0d9a83a4d",
+      "pipeline_source": "Shadegan-Maroun 4 Oil Pipelines",
+      "name_cn": "沙德甘—马伦4输油管线",
+      "name_en": "Shadegan-Maroun 4 Oil Pipelines"
     },
     {
       "project_id": "P6064",
-      "pipeline": "Shadegan-Maroun 4 Oil Pipelines",
+      "pipeline": "沙德甘—马伦4输油管线（Shadegan-Maroun 4 Oil Pipelines）",
       "segment": "Pipeline 4",
       "original_capacity": "130,000.00",
       "original_unit": "bpd",
@@ -4071,11 +4566,14 @@
       ],
       "capacity_extra": [],
       "capacity_review_status": "table_reference_number_matches",
-      "capacity_reference_sha256": "5a41a04a3e01f46b1d63cf4b91aed7c80cc5fbd92969f51c93d064e0d9a83a4d"
+      "capacity_reference_sha256": "5a41a04a3e01f46b1d63cf4b91aed7c80cc5fbd92969f51c93d064e0d9a83a4d",
+      "pipeline_source": "Shadegan-Maroun 4 Oil Pipelines",
+      "name_cn": "沙德甘—马伦4输油管线",
+      "name_en": "Shadegan-Maroun 4 Oil Pipelines"
     },
     {
       "project_id": "P6065",
-      "pipeline": "Shadegan-Maroun 4 Oil Pipelines",
+      "pipeline": "沙德甘—马伦4输油管线（Shadegan-Maroun 4 Oil Pipelines）",
       "segment": "Pipeline 5",
       "original_capacity": "130,000.00",
       "original_unit": "bpd",
@@ -4098,11 +4596,14 @@
       ],
       "capacity_extra": [],
       "capacity_review_status": "table_reference_number_matches",
-      "capacity_reference_sha256": "5a41a04a3e01f46b1d63cf4b91aed7c80cc5fbd92969f51c93d064e0d9a83a4d"
+      "capacity_reference_sha256": "5a41a04a3e01f46b1d63cf4b91aed7c80cc5fbd92969f51c93d064e0d9a83a4d",
+      "pipeline_source": "Shadegan-Maroun 4 Oil Pipelines",
+      "name_cn": "沙德甘—马伦4输油管线",
+      "name_en": "Shadegan-Maroun 4 Oil Pipelines"
     },
     {
       "project_id": "P6070",
-      "pipeline": "Saadat Abad-Sarvestan-Shiraz Oil Pipeline",
+      "pipeline": "萨阿达特阿巴德—萨尔韦斯坦—设拉子输油管线（Saadat Abad-Sarvestan-Shiraz Oil Pipeline）",
       "segment": "",
       "original_capacity": "25,000.00",
       "original_unit": "bpd",
@@ -4119,11 +4620,14 @@
       "reference_capacity_lines": [],
       "capacity_extra": [],
       "capacity_review_status": "table_only_unavailable_reference",
-      "capacity_reference_sha256": null
+      "capacity_reference_sha256": null,
+      "pipeline_source": "Saadat Abad-Sarvestan-Shiraz Oil Pipeline",
+      "name_cn": "萨阿达特阿巴德—萨尔韦斯坦—设拉子输油管线",
+      "name_en": "Saadat Abad-Sarvestan-Shiraz Oil Pipeline"
     },
     {
       "project_id": "P6072",
-      "pipeline": "Ahwaz PS-Genaveh PS Oil Pipeline",
+      "pipeline": "阿瓦士泵站—加纳韦泵站输油管线（Ahwaz PS-Genaveh PS Oil Pipeline）",
       "segment": "",
       "original_capacity": "2,500,000.00",
       "original_unit": "bpd",
@@ -4142,11 +4646,14 @@
       ],
       "capacity_extra": [],
       "capacity_review_status": "table_reference_number_matches",
-      "capacity_reference_sha256": "3b164b5f0e390796f60e1e48656e893dc443a45b01fcc5c2c1c10fca76a22625"
+      "capacity_reference_sha256": "3b164b5f0e390796f60e1e48656e893dc443a45b01fcc5c2c1c10fca76a22625",
+      "pipeline_source": "Ahwaz PS-Genaveh PS Oil Pipeline",
+      "name_cn": "阿瓦士泵站—加纳韦泵站输油管线",
+      "name_en": "Ahwaz PS-Genaveh PS Oil Pipeline"
     },
     {
       "project_id": "P6073",
-      "pipeline": "Ahwaz PS-Bahregansar PS Oil Pipeline",
+      "pipeline": "阿瓦士泵站—巴赫雷甘萨尔泵站输油管线（Ahwaz PS-Bahregansar PS Oil Pipeline）",
       "segment": "",
       "original_capacity": "230,000.00",
       "original_unit": "bpd",
@@ -4165,11 +4672,14 @@
       ],
       "capacity_extra": [],
       "capacity_review_status": "table_reference_number_matches",
-      "capacity_reference_sha256": "886664579ea682496aa3332018750162f1c1ce40980cfdecc1a6136e3a641ab4"
+      "capacity_reference_sha256": "886664579ea682496aa3332018750162f1c1ce40980cfdecc1a6136e3a641ab4",
+      "pipeline_source": "Ahwaz PS-Bahregansar PS Oil Pipeline",
+      "name_cn": "阿瓦士泵站—巴赫雷甘萨尔泵站输油管线",
+      "name_en": "Ahwaz PS-Bahregansar PS Oil Pipeline"
     },
     {
       "project_id": "P6076",
-      "pipeline": "Salman-Lavan Oil Pipeline",
+      "pipeline": "萨勒曼—拉万岛输油管线（Salman-Lavan Oil Pipeline）",
       "segment": "",
       "original_capacity": "220,000.00",
       "original_unit": "bpd",
@@ -4186,11 +4696,14 @@
       "reference_capacity_lines": [],
       "capacity_extra": [],
       "capacity_review_status": "table_only_unavailable_reference",
-      "capacity_reference_sha256": null
+      "capacity_reference_sha256": null,
+      "pipeline_source": "Salman-Lavan Oil Pipeline",
+      "name_cn": "萨勒曼—拉万岛输油管线",
+      "name_en": "Salman-Lavan Oil Pipeline"
     },
     {
       "project_id": "P6077",
-      "pipeline": "Mansouri-Ahvaz Booster Station Oil Pipeline",
+      "pipeline": "曼苏里—阿瓦士增压站输油管线（Mansouri-Ahvaz Booster Station Oil Pipeline）",
       "segment": "",
       "original_capacity": "55,000.00",
       "original_unit": "bpd",
@@ -4209,11 +4722,14 @@
       ],
       "capacity_extra": [],
       "capacity_review_status": "table_reference_number_matches",
-      "capacity_reference_sha256": "7c146e6138eac10e6b9722fc37bd41db78fcb973a79c8735170421894deed2ec"
+      "capacity_reference_sha256": "7c146e6138eac10e6b9722fc37bd41db78fcb973a79c8735170421894deed2ec",
+      "pipeline_source": "Mansouri-Ahvaz Booster Station Oil Pipeline",
+      "name_cn": "曼苏里—阿瓦士增压站输油管线",
+      "name_en": "Mansouri-Ahvaz Booster Station Oil Pipeline"
     },
     {
       "project_id": "P6084",
-      "pipeline": "Sumar-Naftshahr Oil Pipeline",
+      "pipeline": "苏马尔—纳夫特沙赫尔输油管线（Sumar-Naftshahr Oil Pipeline）",
       "segment": "",
       "original_capacity": "10,000.00",
       "original_unit": "bpd",
@@ -4230,11 +4746,14 @@
       "reference_capacity_lines": [],
       "capacity_extra": [],
       "capacity_review_status": "table_only_unavailable_reference",
-      "capacity_reference_sha256": null
+      "capacity_reference_sha256": null,
+      "pipeline_source": "Sumar-Naftshahr Oil Pipeline",
+      "name_cn": "苏马尔—纳夫特沙赫尔输油管线",
+      "name_en": "Sumar-Naftshahr Oil Pipeline"
     },
     {
       "project_id": "P6093",
-      "pipeline": "Danan- Dehloran Oil Pipeline",
+      "pipeline": "达南—代赫洛兰输油管线（Danan- Dehloran Oil Pipeline）",
       "segment": "",
       "original_capacity": "3,000.00",
       "original_unit": "bpd",
@@ -4253,11 +4772,14 @@
       ],
       "capacity_extra": [],
       "capacity_review_status": "conflict_withheld",
-      "capacity_reference_sha256": "14c68ad8cd40754051934aabb810a16080cdd210e478f134fcb7c53414ce6c7f"
+      "capacity_reference_sha256": "14c68ad8cd40754051934aabb810a16080cdd210e478f134fcb7c53414ce6c7f",
+      "pipeline_source": "Danan- Dehloran Oil Pipeline",
+      "name_cn": "达南—代赫洛兰输油管线",
+      "name_en": "Danan- Dehloran Oil Pipeline"
     },
     {
       "project_id": "P6094",
-      "pipeline": "Dehloran-Cheshmeh Khos Oil Pipeline",
+      "pipeline": "代赫洛兰—切什梅霍什输油管线（Dehloran-Cheshmeh Khos Oil Pipeline）",
       "segment": "Pipeline 2",
       "original_capacity": "30,000.00",
       "original_unit": "bpd",
@@ -4277,11 +4799,14 @@
       ],
       "capacity_extra": [],
       "capacity_review_status": "table_reference_number_matches",
-      "capacity_reference_sha256": "455a2982e21c6c7bb322e90d7a211ab140530f01f4c548bf2c14ce7da8ecb8c1"
+      "capacity_reference_sha256": "455a2982e21c6c7bb322e90d7a211ab140530f01f4c548bf2c14ce7da8ecb8c1",
+      "pipeline_source": "Dehloran-Cheshmeh Khos Oil Pipeline",
+      "name_cn": "代赫洛兰—切什梅霍什输油管线",
+      "name_en": "Dehloran-Cheshmeh Khos Oil Pipeline"
     },
     {
       "project_id": "P6097",
-      "pipeline": "Cheshmeh Khosh–Ahvaz Oil Pipelines",
+      "pipeline": "切什梅霍什—阿瓦士输油管线（Cheshmeh Khosh–Ahvaz Oil Pipelines）",
       "segment": "Pipeline 2",
       "original_capacity": "90,000.00",
       "original_unit": "bpd",
@@ -4301,11 +4826,14 @@
       ],
       "capacity_extra": [],
       "capacity_review_status": "conflict_withheld",
-      "capacity_reference_sha256": "1cfc7c3a765a58811af7822dbe2ded67fb7aba6b2ed959a504a250f167cdb523"
+      "capacity_reference_sha256": "1cfc7c3a765a58811af7822dbe2ded67fb7aba6b2ed959a504a250f167cdb523",
+      "pipeline_source": "Cheshmeh Khosh–Ahvaz Oil Pipelines",
+      "name_cn": "切什梅霍什—阿瓦士输油管线",
+      "name_en": "Cheshmeh Khosh–Ahvaz Oil Pipelines"
     },
     {
       "project_id": "P6141",
-      "pipeline": "Tuba–Zb1 Oil Pipeline",
+      "pipeline": "图巴—ZB1输油管线（Tuba–Zb1 Oil Pipeline）",
       "segment": "",
       "original_capacity": "",
       "original_unit": "",
@@ -4324,11 +4852,14 @@
       ],
       "capacity_extra": [],
       "capacity_review_status": "source_missing",
-      "capacity_reference_sha256": "fd8c5f817a2bddbf8a4432869087456283e43e68ccb4dd0be4b84751e2916c05"
+      "capacity_reference_sha256": "fd8c5f817a2bddbf8a4432869087456283e43e68ccb4dd0be4b84751e2916c05",
+      "pipeline_source": "Tuba–Zb1 Oil Pipeline",
+      "name_cn": "图巴—ZB1输油管线",
+      "name_en": "Tuba–Zb1 Oil Pipeline"
     },
     {
       "project_id": "P6142",
-      "pipeline": "Khider al Mai—Zb2 Oil Pipeline",
+      "pipeline": "胡德尔迈—ZB2输油管线（Khider al Mai—Zb2 Oil Pipeline）",
       "segment": "",
       "original_capacity": "",
       "original_unit": "",
@@ -4347,11 +4878,14 @@
       ],
       "capacity_extra": [],
       "capacity_review_status": "source_missing",
-      "capacity_reference_sha256": "d5019ba76d4349a46ed3421967ca9c230388fe76bfe3f99e29c737f62aa2c15c"
+      "capacity_reference_sha256": "d5019ba76d4349a46ed3421967ca9c230388fe76bfe3f99e29c737f62aa2c15c",
+      "pipeline_source": "Khider al Mai—Zb2 Oil Pipeline",
+      "name_cn": "胡德尔迈—ZB2输油管线",
+      "name_en": "Khider al Mai—Zb2 Oil Pipeline"
     },
     {
       "project_id": "P6144",
-      "pipeline": "Jabal Sanam—Zb1 Oil Pipeline",
+      "pipeline": "贾巴勒萨纳姆—ZB1输油管线（Jabal Sanam—Zb1 Oil Pipeline）",
       "segment": "",
       "original_capacity": "",
       "original_unit": "",
@@ -4370,11 +4904,14 @@
       ],
       "capacity_extra": [],
       "capacity_review_status": "source_missing",
-      "capacity_reference_sha256": "d5e4af2d28334bcf453ce1bd6ab95758c999abeb02c6a62482f74775c243c6eb"
+      "capacity_reference_sha256": "d5e4af2d28334bcf453ce1bd6ab95758c999abeb02c6a62482f74775c243c6eb",
+      "pipeline_source": "Jabal Sanam—Zb1 Oil Pipeline",
+      "name_cn": "贾巴勒萨纳姆—ZB1输油管线",
+      "name_en": "Jabal Sanam—Zb1 Oil Pipeline"
     },
     {
       "project_id": "P6145",
-      "pipeline": "Ramshir-Omidiyeh Oil Pipeline",
+      "pipeline": "拉姆希尔—奥米迪耶输油管线（Ramshir-Omidiyeh Oil Pipeline）",
       "segment": "",
       "original_capacity": "",
       "original_unit": "",
@@ -4393,11 +4930,14 @@
       ],
       "capacity_extra": [],
       "capacity_review_status": "source_missing",
-      "capacity_reference_sha256": "99a554a3846217615b18be19c4b8e731a69fd85c66ffeed9c5dcbea9baf548e6"
+      "capacity_reference_sha256": "99a554a3846217615b18be19c4b8e731a69fd85c66ffeed9c5dcbea9baf548e6",
+      "pipeline_source": "Ramshir-Omidiyeh Oil Pipeline",
+      "name_cn": "拉姆希尔—奥米迪耶输油管线",
+      "name_en": "Ramshir-Omidiyeh Oil Pipeline"
     },
     {
       "project_id": "P6147",
-      "pipeline": "Ahvaz-Omidiyeh oil pipeline",
+      "pipeline": "阿瓦士—奥米迪耶输油管线（Ahvaz-Omidiyeh oil pipeline）",
       "segment": "",
       "original_capacity": "",
       "original_unit": "",
@@ -4416,11 +4956,14 @@
       ],
       "capacity_extra": [],
       "capacity_review_status": "source_missing",
-      "capacity_reference_sha256": "cea2ce099bdd74c622cb865b3e7b694ceca2731df90b3ba2bcdcf9ef160ff083"
+      "capacity_reference_sha256": "cea2ce099bdd74c622cb865b3e7b694ceca2731df90b3ba2bcdcf9ef160ff083",
+      "pipeline_source": "Ahvaz-Omidiyeh oil pipeline",
+      "name_cn": "阿瓦士—奥米迪耶输油管线",
+      "name_en": "Ahvaz-Omidiyeh oil pipeline"
     },
     {
       "project_id": "P6156",
-      "pipeline": "East Baghdad Oil Field—Zubaydia Oil Pipeline",
+      "pipeline": "东巴格达油田—祖拜迪亚输油管线（East Baghdad Oil Field—Zubaydia Oil Pipeline）",
       "segment": "",
       "original_capacity": "",
       "original_unit": "",
@@ -4439,11 +4982,14 @@
       ],
       "capacity_extra": [],
       "capacity_review_status": "source_missing",
-      "capacity_reference_sha256": "d281a5f0c8e1181a36ef47fe97e2ff636093eea1437a81ac0d609715254724c5"
+      "capacity_reference_sha256": "d281a5f0c8e1181a36ef47fe97e2ff636093eea1437a81ac0d609715254724c5",
+      "pipeline_source": "East Baghdad Oil Field—Zubaydia Oil Pipeline",
+      "name_cn": "东巴格达油田—祖拜迪亚输油管线",
+      "name_en": "East Baghdad Oil Field—Zubaydia Oil Pipeline"
     },
     {
       "project_id": "P6168",
-      "pipeline": "East Baghdad-Daura Refinery Oil Pipeline",
+      "pipeline": "东巴格达—道拉炼油厂输油管线（East Baghdad-Daura Refinery Oil Pipeline）",
       "segment": "",
       "original_capacity": "",
       "original_unit": "",
@@ -4462,11 +5008,14 @@
       ],
       "capacity_extra": [],
       "capacity_review_status": "source_missing",
-      "capacity_reference_sha256": "483be78b3a20460e56a1fbd37f35d89858f2111aec72ac68add5bd178b3a0a63"
+      "capacity_reference_sha256": "483be78b3a20460e56a1fbd37f35d89858f2111aec72ac68add5bd178b3a0a63",
+      "pipeline_source": "East Baghdad-Daura Refinery Oil Pipeline",
+      "name_cn": "东巴格达—道拉炼油厂输油管线",
+      "name_en": "East Baghdad-Daura Refinery Oil Pipeline"
     },
     {
       "project_id": "P6169",
-      "pipeline": "Neft Khana—Daura Refinery Oil Pipeline",
+      "pipeline": "纳夫特哈纳—道拉炼油厂输油管线（Neft Khana—Daura Refinery Oil Pipeline）",
       "segment": "",
       "original_capacity": "",
       "original_unit": "",
@@ -4485,11 +5034,14 @@
       ],
       "capacity_extra": [],
       "capacity_review_status": "source_missing",
-      "capacity_reference_sha256": "7e63b9c7c4ae228092fac1f4cb479773317b849a16608398f8bed34785c16da2"
+      "capacity_reference_sha256": "7e63b9c7c4ae228092fac1f4cb479773317b849a16608398f8bed34785c16da2",
+      "pipeline_source": "Neft Khana—Daura Refinery Oil Pipeline",
+      "name_cn": "纳夫特哈纳—道拉炼油厂输油管线",
+      "name_en": "Neft Khana—Daura Refinery Oil Pipeline"
     },
     {
       "project_id": "P6170",
-      "pipeline": "Al Faihaa—Zb1 Oil Pipeline",
+      "pipeline": "费哈—ZB1输油管线（Al Faihaa—Zb1 Oil Pipeline）",
       "segment": "",
       "original_capacity": "100,000.00",
       "original_unit": "bpd",
@@ -4508,11 +5060,14 @@
       ],
       "capacity_extra": [],
       "capacity_review_status": "table_only_reference_unconfirmed",
-      "capacity_reference_sha256": "ab19ebda37546c11bfab692ac484587e30d318581fe4550fc4c89e0167f95a23"
+      "capacity_reference_sha256": "ab19ebda37546c11bfab692ac484587e30d318581fe4550fc4c89e0167f95a23",
+      "pipeline_source": "Al Faihaa—Zb1 Oil Pipeline",
+      "name_cn": "费哈—ZB1输油管线",
+      "name_en": "Al Faihaa—Zb1 Oil Pipeline"
     },
     {
       "project_id": "P6171",
-      "pipeline": "Majnoon—Zb1 Oil Pipeline",
+      "pipeline": "马季农—ZB1输油管线（Majnoon—Zb1 Oil Pipeline）",
       "segment": "",
       "original_capacity": "",
       "original_unit": "",
@@ -4531,11 +5086,14 @@
       ],
       "capacity_extra": [],
       "capacity_review_status": "source_missing",
-      "capacity_reference_sha256": "ee885e049b5cdb7bbb7af13fe3f48a23020473c7b40434aa3758ecea4bb36945"
+      "capacity_reference_sha256": "ee885e049b5cdb7bbb7af13fe3f48a23020473c7b40434aa3758ecea4bb36945",
+      "pipeline_source": "Majnoon—Zb1 Oil Pipeline",
+      "name_cn": "马季农—ZB1输油管线",
+      "name_en": "Majnoon—Zb1 Oil Pipeline"
     },
     {
       "project_id": "P6172",
-      "pipeline": "PS1-Az Zubayr Oil Pipeline",
+      "pipeline": "PS1泵站—祖拜尔输油管线（PS1-Az Zubayr Oil Pipeline）",
       "segment": "",
       "original_capacity": "1,000,000.00",
       "original_unit": "bpd",
@@ -4554,11 +5112,14 @@
       ],
       "capacity_extra": [],
       "capacity_review_status": "table_reference_number_matches",
-      "capacity_reference_sha256": "b95d28d4ff8811d9e0594b3b8b4a131260ef4188923a002ab8fbe5bc3abfc7ae"
+      "capacity_reference_sha256": "b95d28d4ff8811d9e0594b3b8b4a131260ef4188923a002ab8fbe5bc3abfc7ae",
+      "pipeline_source": "PS1-Az Zubayr Oil Pipeline",
+      "name_cn": "PS1泵站—祖拜尔输油管线",
+      "name_en": "PS1-Az Zubayr Oil Pipeline"
     },
     {
       "project_id": "P6173",
-      "pipeline": "ZB1-ZB2 Oil Pipeline",
+      "pipeline": "ZB1—ZB2输油管线（ZB1-ZB2 Oil Pipeline）",
       "segment": "",
       "original_capacity": "1,600,000.00",
       "original_unit": "bpd",
@@ -4577,11 +5138,14 @@
       ],
       "capacity_extra": [],
       "capacity_review_status": "table_reference_number_matches",
-      "capacity_reference_sha256": "a54956c638ecee34ed2c3fdd7dce61f09fb60160361b877f333754eacf5b8fab"
+      "capacity_reference_sha256": "a54956c638ecee34ed2c3fdd7dce61f09fb60160361b877f333754eacf5b8fab",
+      "pipeline_source": "ZB1-ZB2 Oil Pipeline",
+      "name_cn": "ZB1—ZB2输油管线",
+      "name_en": "ZB1-ZB2 Oil Pipeline"
     },
     {
       "project_id": "P6174",
-      "pipeline": "Nahr Bin Omar-Al Faw Oil Pipelines",
+      "pipeline": "纳赫尔本欧马尔—法奥输油管线（Nahr Bin Omar-Al Faw Oil Pipelines）",
       "segment": "Pipeline 1",
       "original_capacity": "1,500,000.00",
       "original_unit": "bpd",
@@ -4601,11 +5165,14 @@
       ],
       "capacity_extra": [],
       "capacity_review_status": "table_reference_number_matches",
-      "capacity_reference_sha256": "81eba7af95c4a224bda5f0e461d0e83ca5f90a6c12f488fa65a89f5574da01cb"
+      "capacity_reference_sha256": "81eba7af95c4a224bda5f0e461d0e83ca5f90a6c12f488fa65a89f5574da01cb",
+      "pipeline_source": "Nahr Bin Omar-Al Faw Oil Pipelines",
+      "name_cn": "纳赫尔本欧马尔—法奥输油管线",
+      "name_en": "Nahr Bin Omar-Al Faw Oil Pipelines"
     },
     {
       "project_id": "P6175",
-      "pipeline": "Nahr Bin Omar-Al Faw Oil Pipelines",
+      "pipeline": "纳赫尔本欧马尔—法奥输油管线（Nahr Bin Omar-Al Faw Oil Pipelines）",
       "segment": "Pipeline 2",
       "original_capacity": "1,500,000.00",
       "original_unit": "bpd",
@@ -4625,11 +5192,14 @@
       ],
       "capacity_extra": [],
       "capacity_review_status": "table_reference_number_matches",
-      "capacity_reference_sha256": "81eba7af95c4a224bda5f0e461d0e83ca5f90a6c12f488fa65a89f5574da01cb"
+      "capacity_reference_sha256": "81eba7af95c4a224bda5f0e461d0e83ca5f90a6c12f488fa65a89f5574da01cb",
+      "pipeline_source": "Nahr Bin Omar-Al Faw Oil Pipelines",
+      "name_cn": "纳赫尔本欧马尔—法奥输油管线",
+      "name_en": "Nahr Bin Omar-Al Faw Oil Pipelines"
     },
     {
       "project_id": "P6179",
-      "pipeline": "Al faw—Ras Al Bishah 2 Oil Pipeline",
+      "pipeline": "法奥—拉斯比沙2号输油管线（Al faw—Ras Al Bishah 2 Oil Pipeline）",
       "segment": "",
       "original_capacity": "1,500,000.00",
       "original_unit": "bpd",
@@ -4648,11 +5218,14 @@
       ],
       "capacity_extra": [],
       "capacity_review_status": "table_reference_number_matches",
-      "capacity_reference_sha256": "fe59fb83f26dcc3e47d32ff7f77369663a3f486d97a3f3dfe813f6ea5a97c0b9"
+      "capacity_reference_sha256": "fe59fb83f26dcc3e47d32ff7f77369663a3f486d97a3f3dfe813f6ea5a97c0b9",
+      "pipeline_source": "Al faw—Ras Al Bishah 2 Oil Pipeline",
+      "name_cn": "法奥—拉斯比沙2号输油管线",
+      "name_en": "Al faw—Ras Al Bishah 2 Oil Pipeline"
     },
     {
       "project_id": "P6180",
-      "pipeline": "PS1-Tuba Oil Pipeline",
+      "pipeline": "PS1泵站—图巴输油管线（PS1-Tuba Oil Pipeline）",
       "segment": "",
       "original_capacity": "",
       "original_unit": "",
@@ -4671,11 +5244,14 @@
       ],
       "capacity_extra": [],
       "capacity_review_status": "source_missing",
-      "capacity_reference_sha256": "843b99a971067392d068661cfa283c4d98d25738ca3029b9115aff87b0c10092"
+      "capacity_reference_sha256": "843b99a971067392d068661cfa283c4d98d25738ca3029b9115aff87b0c10092",
+      "pipeline_source": "PS1-Tuba Oil Pipeline",
+      "name_cn": "PS1泵站—图巴输油管线",
+      "name_en": "PS1-Tuba Oil Pipeline"
     },
     {
       "project_id": "P6195",
-      "pipeline": "West Qurna 1-Az Zubayr Oil Pipeline",
+      "pipeline": "西古尔纳1—祖拜尔输油管线（West Qurna 1-Az Zubayr Oil Pipeline）",
       "segment": "",
       "original_capacity": "2,250,000.00",
       "original_unit": "bpd",
@@ -4692,11 +5268,14 @@
       "reference_capacity_lines": [],
       "capacity_extra": [],
       "capacity_review_status": "table_only_unavailable_reference",
-      "capacity_reference_sha256": null
+      "capacity_reference_sha256": null,
+      "pipeline_source": "West Qurna 1-Az Zubayr Oil Pipeline",
+      "name_cn": "西古尔纳1—祖拜尔输油管线",
+      "name_en": "West Qurna 1-Az Zubayr Oil Pipeline"
     },
     {
       "project_id": "P6196",
-      "pipeline": "Zb1—Al Faw Oil Pipeline",
+      "pipeline": "ZB1—法奥输油管线（Zb1—Al Faw Oil Pipeline）",
       "segment": "",
       "original_capacity": "800,000.00",
       "original_unit": "bpd",
@@ -4715,11 +5294,14 @@
       ],
       "capacity_extra": [],
       "capacity_review_status": "table_reference_number_matches",
-      "capacity_reference_sha256": "764bf086892b12ae846149e0a91d8fc27d79a4a13012dc979b8852b0f7e8f2b1"
+      "capacity_reference_sha256": "764bf086892b12ae846149e0a91d8fc27d79a4a13012dc979b8852b0f7e8f2b1",
+      "pipeline_source": "Zb1—Al Faw Oil Pipeline",
+      "name_cn": "ZB1—法奥输油管线",
+      "name_en": "Zb1—Al Faw Oil Pipeline"
     },
     {
       "project_id": "P6197",
-      "pipeline": "Rumaila-Az Zubayr-Al Faw Oil Pipelines",
+      "pipeline": "鲁迈拉—祖拜尔—法奥输油管线（Rumaila-Az Zubayr-Al Faw Oil Pipelines）",
       "segment": "Pipline 1",
       "original_capacity": "",
       "original_unit": "",
@@ -4739,11 +5321,14 @@
       ],
       "capacity_extra": [],
       "capacity_review_status": "source_missing",
-      "capacity_reference_sha256": "381472d1854e54851ab2e4786e8496bd30d65e506ade55f6f5bb6ef917f11c2e"
+      "capacity_reference_sha256": "381472d1854e54851ab2e4786e8496bd30d65e506ade55f6f5bb6ef917f11c2e",
+      "pipeline_source": "Rumaila-Az Zubayr-Al Faw Oil Pipelines",
+      "name_cn": "鲁迈拉—祖拜尔—法奥输油管线",
+      "name_en": "Rumaila-Az Zubayr-Al Faw Oil Pipelines"
     },
     {
       "project_id": "P6198",
-      "pipeline": "Rumaila-Az Zubayr-Al Faw Oil Pipelines",
+      "pipeline": "鲁迈拉—祖拜尔—法奥输油管线（Rumaila-Az Zubayr-Al Faw Oil Pipelines）",
       "segment": "Pipline 2",
       "original_capacity": "",
       "original_unit": "",
@@ -4763,11 +5348,14 @@
       ],
       "capacity_extra": [],
       "capacity_review_status": "source_missing",
-      "capacity_reference_sha256": "381472d1854e54851ab2e4786e8496bd30d65e506ade55f6f5bb6ef917f11c2e"
+      "capacity_reference_sha256": "381472d1854e54851ab2e4786e8496bd30d65e506ade55f6f5bb6ef917f11c2e",
+      "pipeline_source": "Rumaila-Az Zubayr-Al Faw Oil Pipelines",
+      "name_cn": "鲁迈拉—祖拜尔—法奥输油管线",
+      "name_en": "Rumaila-Az Zubayr-Al Faw Oil Pipelines"
     },
     {
       "project_id": "P6252",
-      "pipeline": "Gharraf–Nasiriyah Oil Pipeline",
+      "pipeline": "加拉夫—纳西里耶输油管线（Gharraf–Nasiriyah Oil Pipeline）",
       "segment": "",
       "original_capacity": "300,000.00",
       "original_unit": "bpd",
@@ -4784,11 +5372,14 @@
       "reference_capacity_lines": [],
       "capacity_extra": [],
       "capacity_review_status": "table_only_unavailable_reference",
-      "capacity_reference_sha256": null
+      "capacity_reference_sha256": null,
+      "pipeline_source": "Gharraf–Nasiriyah Oil Pipeline",
+      "name_cn": "加拉夫—纳西里耶输油管线",
+      "name_en": "Gharraf–Nasiriyah Oil Pipeline"
     },
     {
       "project_id": "P6253",
-      "pipeline": "Nasiriyah–PS-1 Oil Pipeline",
+      "pipeline": "纳西里耶—PS1泵站输油管线（Nasiriyah–PS-1 Oil Pipeline）",
       "segment": "",
       "original_capacity": "500,000.00",
       "original_unit": "bpd",
@@ -4805,11 +5396,14 @@
       "reference_capacity_lines": [],
       "capacity_extra": [],
       "capacity_review_status": "table_only_unavailable_reference",
-      "capacity_reference_sha256": null
+      "capacity_reference_sha256": null,
+      "pipeline_source": "Nasiriyah–PS-1 Oil Pipeline",
+      "name_cn": "纳西里耶—PS1泵站输油管线",
+      "name_en": "Nasiriyah–PS-1 Oil Pipeline"
     },
     {
       "project_id": "P6254",
-      "pipeline": "Strategic Pipeline-Musaiab Power Station Oil Pipeline",
+      "pipeline": "战略管线—穆萨伊卜电站输油管线（Strategic Pipeline-Musaiab Power Station Oil Pipeline）",
       "segment": "",
       "original_capacity": "",
       "original_unit": "",
@@ -4826,11 +5420,14 @@
       "reference_capacity_lines": [],
       "capacity_extra": [],
       "capacity_review_status": "source_missing",
-      "capacity_reference_sha256": null
+      "capacity_reference_sha256": null,
+      "pipeline_source": "Strategic Pipeline-Musaiab Power Station Oil Pipeline",
+      "name_cn": "战略管线—穆萨伊卜电站输油管线",
+      "name_en": "Strategic Pipeline-Musaiab Power Station Oil Pipeline"
     },
     {
       "project_id": "P6256",
-      "pipeline": "Strategic Pipeline-Daura Refinery Oil Pipeline",
+      "pipeline": "战略管线—道拉炼油厂输油管线（Strategic Pipeline-Daura Refinery Oil Pipeline）",
       "segment": "Pipeline 1",
       "original_capacity": "",
       "original_unit": "",
@@ -4847,11 +5444,14 @@
       "reference_capacity_lines": [],
       "capacity_extra": [],
       "capacity_review_status": "source_missing",
-      "capacity_reference_sha256": null
+      "capacity_reference_sha256": null,
+      "pipeline_source": "Strategic Pipeline-Daura Refinery Oil Pipeline",
+      "name_cn": "战略管线—道拉炼油厂输油管线",
+      "name_en": "Strategic Pipeline-Daura Refinery Oil Pipeline"
     },
     {
       "project_id": "P6364",
-      "pipeline": "ISO4-PS1 Oil Pipeline",
+      "pipeline": "ISO4—PS1泵站输油管线（ISO4-PS1 Oil Pipeline）",
       "segment": "",
       "original_capacity": "",
       "original_unit": "",
@@ -4868,11 +5468,14 @@
       "reference_capacity_lines": [],
       "capacity_extra": [],
       "capacity_review_status": "source_missing",
-      "capacity_reference_sha256": null
+      "capacity_reference_sha256": null,
+      "pipeline_source": "ISO4-PS1 Oil Pipeline",
+      "name_cn": "ISO4—PS1泵站输油管线",
+      "name_en": "ISO4-PS1 Oil Pipeline"
     },
     {
       "project_id": "P6365",
-      "pipeline": "PS1-Halul Oil Pipelines",
+      "pipeline": "PS1泵站—哈卢勒岛输油管线（PS1-Halul Oil Pipelines）",
       "segment": "Pipeline 1",
       "original_capacity": "",
       "original_unit": "",
@@ -4889,11 +5492,14 @@
       "reference_capacity_lines": [],
       "capacity_extra": [],
       "capacity_review_status": "source_missing",
-      "capacity_reference_sha256": null
+      "capacity_reference_sha256": null,
+      "pipeline_source": "PS1-Halul Oil Pipelines",
+      "name_cn": "PS1泵站—哈卢勒岛输油管线",
+      "name_en": "PS1-Halul Oil Pipelines"
     },
     {
       "project_id": "P6366",
-      "pipeline": "PS1-Halul Oil Pipelines",
+      "pipeline": "PS1泵站—哈卢勒岛输油管线（PS1-Halul Oil Pipelines）",
       "segment": "Pipeline 2",
       "original_capacity": "",
       "original_unit": "",
@@ -4910,11 +5516,14 @@
       "reference_capacity_lines": [],
       "capacity_extra": [],
       "capacity_review_status": "source_missing",
-      "capacity_reference_sha256": null
+      "capacity_reference_sha256": null,
+      "pipeline_source": "PS1-Halul Oil Pipelines",
+      "name_cn": "PS1泵站—哈卢勒岛输油管线",
+      "name_en": "PS1-Halul Oil Pipelines"
     },
     {
       "project_id": "P6367",
-      "pipeline": "GIP-PS3 Oil Pipeline",
+      "pipeline": "GIP—PS3泵站输油管线（GIP-PS3 Oil Pipeline）",
       "segment": "",
       "original_capacity": "",
       "original_unit": "",
@@ -4931,11 +5540,14 @@
       "reference_capacity_lines": [],
       "capacity_extra": [],
       "capacity_review_status": "source_missing",
-      "capacity_reference_sha256": null
+      "capacity_reference_sha256": null,
+      "pipeline_source": "GIP-PS3 Oil Pipeline",
+      "name_cn": "GIP—PS3泵站输油管线",
+      "name_en": "GIP-PS3 Oil Pipeline"
     },
     {
       "project_id": "P6368",
-      "pipeline": "PS2-Halul Oil Pipeline",
+      "pipeline": "PS2泵站—哈卢勒岛输油管线（PS2-Halul Oil Pipeline）",
       "segment": "",
       "original_capacity": "",
       "original_unit": "",
@@ -4952,11 +5564,14 @@
       "reference_capacity_lines": [],
       "capacity_extra": [],
       "capacity_review_status": "source_missing",
-      "capacity_reference_sha256": null
+      "capacity_reference_sha256": null,
+      "pipeline_source": "PS2-Halul Oil Pipeline",
+      "name_cn": "PS2泵站—哈卢勒岛输油管线",
+      "name_en": "PS2-Halul Oil Pipeline"
     },
     {
       "project_id": "P6369",
-      "pipeline": "Umm Bab-Mile 32 Oil Pipeline",
+      "pipeline": "乌姆巴布—32英里站输油管线（Umm Bab-Mile 32 Oil Pipeline）",
       "segment": "Pipeline 3",
       "original_capacity": "",
       "original_unit": "",
@@ -4973,11 +5588,14 @@
       "reference_capacity_lines": [],
       "capacity_extra": [],
       "capacity_review_status": "source_missing",
-      "capacity_reference_sha256": null
+      "capacity_reference_sha256": null,
+      "pipeline_source": "Umm Bab-Mile 32 Oil Pipeline",
+      "name_cn": "乌姆巴布—32英里站输油管线",
+      "name_en": "Umm Bab-Mile 32 Oil Pipeline"
     },
     {
       "project_id": "P6370",
-      "pipeline": "Umm Bab-Mile 32 Oil Pipeline",
+      "pipeline": "乌姆巴布—32英里站输油管线（Umm Bab-Mile 32 Oil Pipeline）",
       "segment": "Pipeline 1",
       "original_capacity": "",
       "original_unit": "",
@@ -4994,11 +5612,14 @@
       "reference_capacity_lines": [],
       "capacity_extra": [],
       "capacity_review_status": "source_missing",
-      "capacity_reference_sha256": null
+      "capacity_reference_sha256": null,
+      "pipeline_source": "Umm Bab-Mile 32 Oil Pipeline",
+      "name_cn": "乌姆巴布—32英里站输油管线",
+      "name_en": "Umm Bab-Mile 32 Oil Pipeline"
     },
     {
       "project_id": "P6371",
-      "pipeline": "DP1-Halul Oil Pipelines",
+      "pipeline": "DP1—哈卢勒岛输油管线（DP1-Halul Oil Pipelines）",
       "segment": "Pipeline 1",
       "original_capacity": "",
       "original_unit": "",
@@ -5015,11 +5636,14 @@
       "reference_capacity_lines": [],
       "capacity_extra": [],
       "capacity_review_status": "source_missing",
-      "capacity_reference_sha256": null
+      "capacity_reference_sha256": null,
+      "pipeline_source": "DP1-Halul Oil Pipelines",
+      "name_cn": "DP1—哈卢勒岛输油管线",
+      "name_en": "DP1-Halul Oil Pipelines"
     },
     {
       "project_id": "P6372",
-      "pipeline": "DP1-Halul Oil Pipelines",
+      "pipeline": "DP1—哈卢勒岛输油管线（DP1-Halul Oil Pipelines）",
       "segment": "Pipeline 2",
       "original_capacity": "",
       "original_unit": "",
@@ -5036,11 +5660,14 @@
       "reference_capacity_lines": [],
       "capacity_extra": [],
       "capacity_review_status": "source_missing",
-      "capacity_reference_sha256": null
+      "capacity_reference_sha256": null,
+      "pipeline_source": "DP1-Halul Oil Pipelines",
+      "name_cn": "DP1—哈卢勒岛输油管线",
+      "name_en": "DP1-Halul Oil Pipelines"
     },
     {
       "project_id": "P6380",
-      "pipeline": "Mile 32-Mesaieed Oil Pipelines",
+      "pipeline": "32英里站—梅赛义德输油管线（Mile 32-Mesaieed Oil Pipelines）",
       "segment": "Pipeline 2",
       "original_capacity": "",
       "original_unit": "",
@@ -5061,11 +5688,14 @@
       ],
       "capacity_extra": [],
       "capacity_review_status": "source_missing",
-      "capacity_reference_sha256": "fb35248f6cf60904b55bc896f452a7e312749f3e336159ed7ef50766f7bc3bbe"
+      "capacity_reference_sha256": "fb35248f6cf60904b55bc896f452a7e312749f3e336159ed7ef50766f7bc3bbe",
+      "pipeline_source": "Mile 32-Mesaieed Oil Pipelines",
+      "name_cn": "32英里站—梅赛义德输油管线",
+      "name_en": "Mile 32-Mesaieed Oil Pipelines"
     },
     {
       "project_id": "P6381",
-      "pipeline": "Mile 32-Mesaieed Oil Pipelines",
+      "pipeline": "32英里站—梅赛义德输油管线（Mile 32-Mesaieed Oil Pipelines）",
       "segment": "Pipeline 3",
       "original_capacity": "",
       "original_unit": "",
@@ -5086,11 +5716,14 @@
       ],
       "capacity_extra": [],
       "capacity_review_status": "source_missing",
-      "capacity_reference_sha256": "fb35248f6cf60904b55bc896f452a7e312749f3e336159ed7ef50766f7bc3bbe"
+      "capacity_reference_sha256": "fb35248f6cf60904b55bc896f452a7e312749f3e336159ed7ef50766f7bc3bbe",
+      "pipeline_source": "Mile 32-Mesaieed Oil Pipelines",
+      "name_cn": "32英里站—梅赛义德输油管线",
+      "name_en": "Mile 32-Mesaieed Oil Pipelines"
     },
     {
       "project_id": "P6387",
-      "pipeline": "Umm Bab-Mile 32 Oil Pipeline",
+      "pipeline": "乌姆巴布—32英里站输油管线（Umm Bab-Mile 32 Oil Pipeline）",
       "segment": "Pipeline 2",
       "original_capacity": "",
       "original_unit": "",
@@ -5107,11 +5740,14 @@
       "reference_capacity_lines": [],
       "capacity_extra": [],
       "capacity_review_status": "source_missing",
-      "capacity_reference_sha256": null
+      "capacity_reference_sha256": null,
+      "pipeline_source": "Umm Bab-Mile 32 Oil Pipeline",
+      "name_cn": "乌姆巴布—32英里站输油管线",
+      "name_en": "Umm Bab-Mile 32 Oil Pipeline"
     },
     {
       "project_id": "P6485",
-      "pipeline": "Ras Markaz-Duqm Refinery Oil Pipeline",
+      "pipeline": "拉斯马尔卡兹—杜库姆炼油厂输油管线（Ras Markaz-Duqm Refinery Oil Pipeline）",
       "segment": "",
       "original_capacity": "",
       "original_unit": "",
@@ -5130,11 +5766,14 @@
       ],
       "capacity_extra": [],
       "capacity_review_status": "source_missing",
-      "capacity_reference_sha256": "960c15d98a9c888ee7ca8bd5334c489313802f571b880f13a54ac640166a9e77"
+      "capacity_reference_sha256": "960c15d98a9c888ee7ca8bd5334c489313802f571b880f13a54ac640166a9e77",
+      "pipeline_source": "Ras Markaz-Duqm Refinery Oil Pipeline",
+      "name_cn": "拉斯马尔卡兹—杜库姆炼油厂输油管线",
+      "name_en": "Ras Markaz-Duqm Refinery Oil Pipeline"
     },
     {
       "project_id": "P7165",
-      "pipeline": "Kadma-Doha PS Oil Pipeline",
+      "pipeline": "卡德马—多哈泵站输油管线（Kadma-Doha PS Oil Pipeline）",
       "segment": "",
       "original_capacity": "",
       "original_unit": "",
@@ -5151,11 +5790,14 @@
       "reference_capacity_lines": [],
       "capacity_extra": [],
       "capacity_review_status": "source_missing",
-      "capacity_reference_sha256": null
+      "capacity_reference_sha256": null,
+      "pipeline_source": "Kadma-Doha PS Oil Pipeline",
+      "name_cn": "卡德马—多哈泵站输油管线",
+      "name_en": "Kadma-Doha PS Oil Pipeline"
     },
     {
       "project_id": "P7172",
-      "pipeline": "MF-PointA/MF-CR119R Oil Pipeline",
+      "pipeline": "MF—A点／MF—CR119R输油管线（MF-PointA/MF-CR119R Oil Pipeline）",
       "segment": "",
       "original_capacity": "",
       "original_unit": "",
@@ -5172,11 +5814,14 @@
       "reference_capacity_lines": [],
       "capacity_extra": [],
       "capacity_review_status": "source_missing",
-      "capacity_reference_sha256": null
+      "capacity_reference_sha256": null,
+      "pipeline_source": "MF-PointA/MF-CR119R Oil Pipeline",
+      "name_cn": "MF—A点／MF—CR119R输油管线",
+      "name_en": "MF-PointA/MF-CR119R Oil Pipeline"
     },
     {
       "project_id": "P7173",
-      "pipeline": "MF-Ratqa1/SC-130 Oil Pipeline",
+      "pipeline": "MF—拉特卡1／SC-130输油管线（MF-Ratqa1/SC-130 Oil Pipeline）",
       "segment": "",
       "original_capacity": "",
       "original_unit": "",
@@ -5193,11 +5838,14 @@
       "reference_capacity_lines": [],
       "capacity_extra": [],
       "capacity_review_status": "source_missing",
-      "capacity_reference_sha256": null
+      "capacity_reference_sha256": null,
+      "pipeline_source": "MF-Ratqa1/SC-130 Oil Pipeline",
+      "name_cn": "MF—拉特卡1／SC-130输油管线",
+      "name_en": "MF-Ratqa1/SC-130 Oil Pipeline"
     },
     {
       "project_id": "P7176",
-      "pipeline": "Point-A-KADMA Oil Pipeline",
+      "pipeline": "A点—卡德马输油管线（Point-A-KADMA Oil Pipeline）",
       "segment": "",
       "original_capacity": "",
       "original_unit": "",
@@ -5214,11 +5862,14 @@
       "reference_capacity_lines": [],
       "capacity_extra": [],
       "capacity_review_status": "source_missing",
-      "capacity_reference_sha256": null
+      "capacity_reference_sha256": null,
+      "pipeline_source": "Point-A-KADMA Oil Pipeline",
+      "name_cn": "A点—卡德马输油管线",
+      "name_en": "Point-A-KADMA Oil Pipeline"
     },
     {
       "project_id": "P7177",
-      "pipeline": "Wafra-Burgan Oil Pipeline",
+      "pipeline": "瓦夫拉—布尔干输油管线（Wafra-Burgan Oil Pipeline）",
       "segment": "",
       "original_capacity": "",
       "original_unit": "",
@@ -5235,11 +5886,14 @@
       "reference_capacity_lines": [],
       "capacity_extra": [],
       "capacity_review_status": "source_missing",
-      "capacity_reference_sha256": null
+      "capacity_reference_sha256": null,
+      "pipeline_source": "Wafra-Burgan Oil Pipeline",
+      "name_cn": "瓦夫拉—布尔干输油管线",
+      "name_en": "Wafra-Burgan Oil Pipeline"
     },
     {
       "project_id": "P7178",
-      "pipeline": "Khafji Offshore- Khafji Onshore Oil Pipeline",
+      "pipeline": "海夫吉海上—陆上输油管线（Khafji Offshore- Khafji Onshore Oil Pipeline）",
       "segment": "Pipeline 1",
       "original_capacity": "",
       "original_unit": "",
@@ -5256,11 +5910,14 @@
       "reference_capacity_lines": [],
       "capacity_extra": [],
       "capacity_review_status": "source_missing",
-      "capacity_reference_sha256": null
+      "capacity_reference_sha256": null,
+      "pipeline_source": "Khafji Offshore- Khafji Onshore Oil Pipeline",
+      "name_cn": "海夫吉海上—陆上输油管线",
+      "name_en": "Khafji Offshore- Khafji Onshore Oil Pipeline"
     },
     {
       "project_id": "P7179",
-      "pipeline": "Khafji Offshore- Khafji Onshore Oil Pipeline",
+      "pipeline": "海夫吉海上—陆上输油管线（Khafji Offshore- Khafji Onshore Oil Pipeline）",
       "segment": "Pipeline 2",
       "original_capacity": "",
       "original_unit": "",
@@ -5277,11 +5934,14 @@
       "reference_capacity_lines": [],
       "capacity_extra": [],
       "capacity_review_status": "source_missing",
-      "capacity_reference_sha256": null
+      "capacity_reference_sha256": null,
+      "pipeline_source": "Khafji Offshore- Khafji Onshore Oil Pipeline",
+      "name_cn": "海夫吉海上—陆上输油管线",
+      "name_en": "Khafji Offshore- Khafji Onshore Oil Pipeline"
     },
     {
       "project_id": "P7180",
-      "pipeline": "Khafji Offshore- Khafji Onshore Oil Pipeline",
+      "pipeline": "海夫吉海上—陆上输油管线（Khafji Offshore- Khafji Onshore Oil Pipeline）",
       "segment": "Pipeline 3",
       "original_capacity": "",
       "original_unit": "",
@@ -5298,11 +5958,14 @@
       "reference_capacity_lines": [],
       "capacity_extra": [],
       "capacity_review_status": "source_missing",
-      "capacity_reference_sha256": null
+      "capacity_reference_sha256": null,
+      "pipeline_source": "Khafji Offshore- Khafji Onshore Oil Pipeline",
+      "name_cn": "海夫吉海上—陆上输油管线",
+      "name_en": "Khafji Offshore- Khafji Onshore Oil Pipeline"
     },
     {
       "project_id": "P7181",
-      "pipeline": "Khafji Offshore- Khafji Onshore Oil Pipeline",
+      "pipeline": "海夫吉海上—陆上输油管线（Khafji Offshore- Khafji Onshore Oil Pipeline）",
       "segment": "Pipeline 4",
       "original_capacity": "",
       "original_unit": "",
@@ -5319,11 +5982,14 @@
       "reference_capacity_lines": [],
       "capacity_extra": [],
       "capacity_review_status": "source_missing",
-      "capacity_reference_sha256": null
+      "capacity_reference_sha256": null,
+      "pipeline_source": "Khafji Offshore- Khafji Onshore Oil Pipeline",
+      "name_cn": "海夫吉海上—陆上输油管线",
+      "name_en": "Khafji Offshore- Khafji Onshore Oil Pipeline"
     },
     {
       "project_id": "P7182",
-      "pipeline": "Wafra-Mab Oil Pipeline",
+      "pipeline": "瓦夫拉—MAB输油管线（Wafra-Mab Oil Pipeline）",
       "segment": "",
       "original_capacity": "",
       "original_unit": "",
@@ -5340,11 +6006,14 @@
       "reference_capacity_lines": [],
       "capacity_extra": [],
       "capacity_review_status": "source_missing",
-      "capacity_reference_sha256": null
+      "capacity_reference_sha256": null,
+      "pipeline_source": "Wafra-Mab Oil Pipeline",
+      "name_cn": "瓦夫拉—MAB输油管线",
+      "name_en": "Wafra-Mab Oil Pipeline"
     },
     {
       "project_id": "P7193",
-      "pipeline": "Ras Markaz Subsea Pipelines",
+      "pipeline": "拉斯马尔卡兹海底管线（Ras Markaz Subsea Pipelines）",
       "segment": "Import Pipeline",
       "original_capacity": "",
       "original_unit": "",
@@ -5361,11 +6030,14 @@
       "reference_capacity_lines": [],
       "capacity_extra": [],
       "capacity_review_status": "source_missing",
-      "capacity_reference_sha256": null
+      "capacity_reference_sha256": null,
+      "pipeline_source": "Ras Markaz Subsea Pipelines",
+      "name_cn": "拉斯马尔卡兹海底管线",
+      "name_en": "Ras Markaz Subsea Pipelines"
     },
     {
       "project_id": "P7194",
-      "pipeline": "Ras Markaz Subsea Pipelines",
+      "pipeline": "拉斯马尔卡兹海底管线（Ras Markaz Subsea Pipelines）",
       "segment": "Export Pipeline",
       "original_capacity": "",
       "original_unit": "",
@@ -5382,11 +6054,14 @@
       "reference_capacity_lines": [],
       "capacity_extra": [],
       "capacity_review_status": "source_missing",
-      "capacity_reference_sha256": null
+      "capacity_reference_sha256": null,
+      "pipeline_source": "Ras Markaz Subsea Pipelines",
+      "name_cn": "拉斯马尔卡兹海底管线",
+      "name_en": "Ras Markaz Subsea Pipelines"
     },
     {
       "project_id": "P7283",
-      "pipeline": "Genaveh-Kharg Oil Pipelines",
+      "pipeline": "加纳韦—哈尔克岛输油管线（Genaveh-Kharg Oil Pipelines）",
       "segment": "Pipeline 6",
       "original_capacity": "750,000.00",
       "original_unit": "bpd",
@@ -5410,11 +6085,14 @@
       ],
       "capacity_extra": [],
       "capacity_review_status": "table_only_reference_unconfirmed",
-      "capacity_reference_sha256": "7e65fc95a137dd578a9c39fae83689167824428f4a5abd7740508b0fbd741b93"
+      "capacity_reference_sha256": "7e65fc95a137dd578a9c39fae83689167824428f4a5abd7740508b0fbd741b93",
+      "pipeline_source": "Genaveh-Kharg Oil Pipelines",
+      "name_cn": "加纳韦—哈尔克岛输油管线",
+      "name_en": "Genaveh-Kharg Oil Pipelines"
     },
     {
       "project_id": "P7315",
-      "pipeline": "Agroud-Ain Sokhna Oil Pipeline",
+      "pipeline": "阿格鲁德—艾因苏赫纳输油管线（Agroud-Ain Sokhna Oil Pipeline）",
       "segment": "Wadi Hagool-Ain Sokhna( Pipeline 2)",
       "original_capacity": "",
       "original_unit": "",
@@ -5434,11 +6112,14 @@
       ],
       "capacity_extra": [],
       "capacity_review_status": "source_missing",
-      "capacity_reference_sha256": "efcc56d206ba7900027bbaef0cde91e92db909c4621e84e28ff487bd5e084ac7"
+      "capacity_reference_sha256": "efcc56d206ba7900027bbaef0cde91e92db909c4621e84e28ff487bd5e084ac7",
+      "pipeline_source": "Agroud-Ain Sokhna Oil Pipeline",
+      "name_cn": "阿格鲁德—艾因苏赫纳输油管线",
+      "name_en": "Agroud-Ain Sokhna Oil Pipeline"
     },
     {
       "project_id": "P7316",
-      "pipeline": "El Minya-Asyut Oil Pipeline",
+      "pipeline": "明亚—艾斯尤特输油管线（El Minya-Asyut Oil Pipeline）",
       "segment": "",
       "original_capacity": "",
       "original_unit": "",
@@ -5457,11 +6138,14 @@
       ],
       "capacity_extra": [],
       "capacity_review_status": "source_missing",
-      "capacity_reference_sha256": "2027802914bcc67932268c0ec0cc350d302065809dfe746636328c7c96374228"
+      "capacity_reference_sha256": "2027802914bcc67932268c0ec0cc350d302065809dfe746636328c7c96374228",
+      "pipeline_source": "El Minya-Asyut Oil Pipeline",
+      "name_cn": "明亚—艾斯尤特输油管线",
+      "name_en": "El Minya-Asyut Oil Pipeline"
     },
     {
       "project_id": "P7327",
-      "pipeline": "Ain Sokhna-Al-Hafayer-Wadi hagool Oil Pipeline",
+      "pipeline": "艾因苏赫纳—哈法耶尔—瓦迪哈古勒输油管线（Ain Sokhna-Al-Hafayer-Wadi hagool Oil Pipeline）",
       "segment": "",
       "original_capacity": "",
       "original_unit": "",
@@ -5480,11 +6164,14 @@
       ],
       "capacity_extra": [],
       "capacity_review_status": "source_missing",
-      "capacity_reference_sha256": "667cd5f6cbfc3060b68219cb2faa9affb7329cf57991f08aaa4d2db4afd2c3fb"
+      "capacity_reference_sha256": "667cd5f6cbfc3060b68219cb2faa9affb7329cf57991f08aaa4d2db4afd2c3fb",
+      "pipeline_source": "Ain Sokhna-Al-Hafayer-Wadi hagool Oil Pipeline",
+      "name_cn": "艾因苏赫纳—哈法耶尔—瓦迪哈古勒输油管线",
+      "name_en": "Ain Sokhna-Al-Hafayer-Wadi hagool Oil Pipeline"
     },
     {
       "project_id": "P7329",
-      "pipeline": "Northern Geisum \"GNN-11\" Oil Pipeline",
+      "pipeline": "北盖苏姆GNN-11输油管线（Northern Geisum \"GNN-11\" Oil Pipeline）",
       "segment": "",
       "original_capacity": "12,000.00",
       "original_unit": "bpd",
@@ -5503,11 +6190,14 @@
       ],
       "capacity_extra": [],
       "capacity_review_status": "table_reference_number_matches",
-      "capacity_reference_sha256": "6f1f63cb7d06b65ab01a0e2c01db71ab120ba7d7d7ba067b709003eb5e4c8cb9"
+      "capacity_reference_sha256": "6f1f63cb7d06b65ab01a0e2c01db71ab120ba7d7d7ba067b709003eb5e4c8cb9",
+      "pipeline_source": "Northern Geisum \"GNN-11\" Oil Pipeline",
+      "name_cn": "北盖苏姆GNN-11输油管线",
+      "name_en": "Northern Geisum \"GNN-11\" Oil Pipeline"
     },
     {
       "project_id": "P7330",
-      "pipeline": "Badr-Musturad Oil Pipeline",
+      "pipeline": "巴德尔—穆斯图鲁德输油管线（Badr-Musturad Oil Pipeline）",
       "segment": "",
       "original_capacity": "",
       "original_unit": "",
@@ -5526,11 +6216,14 @@
       ],
       "capacity_extra": [],
       "capacity_review_status": "source_missing",
-      "capacity_reference_sha256": "328985524702bbfca0710ab5e15fb6520ac54ec708f93c767f5f151e18706f66"
+      "capacity_reference_sha256": "328985524702bbfca0710ab5e15fb6520ac54ec708f93c767f5f151e18706f66",
+      "pipeline_source": "Badr-Musturad Oil Pipeline",
+      "name_cn": "巴德尔—穆斯图鲁德输油管线",
+      "name_en": "Badr-Musturad Oil Pipeline"
     },
     {
       "project_id": "P7331",
-      "pipeline": "Agroud-Ain Sokhna Oil Pipeline",
+      "pipeline": "阿格鲁德—艾因苏赫纳输油管线（Agroud-Ain Sokhna Oil Pipeline）",
       "segment": "Agroud-Wadi Hagool (Pipeline 1)",
       "original_capacity": "",
       "original_unit": "",
@@ -5550,11 +6243,14 @@
       ],
       "capacity_extra": [],
       "capacity_review_status": "source_missing",
-      "capacity_reference_sha256": "efcc56d206ba7900027bbaef0cde91e92db909c4621e84e28ff487bd5e084ac7"
+      "capacity_reference_sha256": "efcc56d206ba7900027bbaef0cde91e92db909c4621e84e28ff487bd5e084ac7",
+      "pipeline_source": "Agroud-Ain Sokhna Oil Pipeline",
+      "name_cn": "阿格鲁德—艾因苏赫纳输油管线",
+      "name_en": "Agroud-Ain Sokhna Oil Pipeline"
     },
     {
       "project_id": "P7332",
-      "pipeline": "Suez-Musturad Oil Pipeline",
+      "pipeline": "苏伊士—穆斯图鲁德输油管线（Suez-Musturad Oil Pipeline）",
       "segment": "",
       "original_capacity": "",
       "original_unit": "",
@@ -5571,11 +6267,14 @@
       "reference_capacity_lines": [],
       "capacity_extra": [],
       "capacity_review_status": "source_missing",
-      "capacity_reference_sha256": null
+      "capacity_reference_sha256": null,
+      "pipeline_source": "Suez-Musturad Oil Pipeline",
+      "name_cn": "苏伊士—穆斯图鲁德输油管线",
+      "name_en": "Suez-Musturad Oil Pipeline"
     },
     {
       "project_id": "P7341",
-      "pipeline": "Ras Shukeir-Asyut Oil Pipeline",
+      "pipeline": "拉斯舒凯尔—艾斯尤特输油管线（Ras Shukeir-Asyut Oil Pipeline）",
       "segment": "",
       "original_capacity": "",
       "original_unit": "",
@@ -5594,11 +6293,14 @@
       ],
       "capacity_extra": [],
       "capacity_review_status": "source_missing",
-      "capacity_reference_sha256": "d4b0730a2391a781aa15572c0adcf204d42e7e158798484d32785d36bbd6d38c"
+      "capacity_reference_sha256": "d4b0730a2391a781aa15572c0adcf204d42e7e158798484d32785d36bbd6d38c",
+      "pipeline_source": "Ras Shukeir-Asyut Oil Pipeline",
+      "name_cn": "拉斯舒凯尔—艾斯尤特输油管线",
+      "name_en": "Ras Shukeir-Asyut Oil Pipeline"
     },
     {
       "project_id": "P7877",
-      "pipeline": "Tawke Oil Pipeline",
+      "pipeline": "塔克输油管线（Tawke Oil Pipeline）",
       "segment": "",
       "original_capacity": "200,000.00",
       "original_unit": "bpd",
@@ -5615,11 +6317,14 @@
       "reference_capacity_lines": [],
       "capacity_extra": [],
       "capacity_review_status": "table_only_unavailable_reference",
-      "capacity_reference_sha256": null
+      "capacity_reference_sha256": null,
+      "pipeline_source": "Tawke Oil Pipeline",
+      "name_cn": "塔克输油管线",
+      "name_en": "Tawke Oil Pipeline"
     },
     {
       "project_id": "P7906",
-      "pipeline": "Kirkuk—Haifa Oil Pipeline",
+      "pipeline": "基尔库克—海法输油管线（Kirkuk—Haifa Oil Pipeline）",
       "segment": "",
       "original_capacity": "",
       "original_unit": "",
@@ -5638,11 +6343,14 @@
       ],
       "capacity_extra": [],
       "capacity_review_status": "source_missing",
-      "capacity_reference_sha256": "56dc526aebe5ea30513ad79a13fc820d9a6f788766d674974f05a36a867977df"
+      "capacity_reference_sha256": "56dc526aebe5ea30513ad79a13fc820d9a6f788766d674974f05a36a867977df",
+      "pipeline_source": "Kirkuk—Haifa Oil Pipeline",
+      "name_cn": "基尔库克—海法输油管线",
+      "name_en": "Kirkuk—Haifa Oil Pipeline"
     },
     {
       "project_id": "P7913",
-      "pipeline": "Kirkuk-Baniyas Oil Pipelines",
+      "pipeline": "基尔库克—巴尼亚斯输油管线（Kirkuk-Baniyas Oil Pipelines）",
       "segment": "Hybrid Rehabilitation Pipeline",
       "original_capacity": "700,000.00",
       "original_unit": "bpd",
@@ -5665,11 +6373,14 @@
       ],
       "capacity_extra": [],
       "capacity_review_status": "table_reference_number_matches",
-      "capacity_reference_sha256": "cce44e02090e3417fd218a76b1557d9d471cea725d7361532028333434cbe3e8"
+      "capacity_reference_sha256": "cce44e02090e3417fd218a76b1557d9d471cea725d7361532028333434cbe3e8",
+      "pipeline_source": "Kirkuk-Baniyas Oil Pipelines",
+      "name_cn": "基尔库克—巴尼亚斯输油管线",
+      "name_en": "Kirkuk-Baniyas Oil Pipelines"
     },
     {
       "project_id": "P7914",
-      "pipeline": "Musturad-Huckstep Oil Pipeline",
+      "pipeline": "穆斯图鲁德—哈克斯泰普输油管线（Musturad-Huckstep Oil Pipeline）",
       "segment": "",
       "original_capacity": "",
       "original_unit": "",
@@ -5688,11 +6399,14 @@
       ],
       "capacity_extra": [],
       "capacity_review_status": "source_missing",
-      "capacity_reference_sha256": "b5409b31feb598752d4c2bf29cd3b3c36e93bf731913bf1747a904b878322490"
+      "capacity_reference_sha256": "b5409b31feb598752d4c2bf29cd3b3c36e93bf731913bf1747a904b878322490",
+      "pipeline_source": "Musturad-Huckstep Oil Pipeline",
+      "name_cn": "穆斯图鲁德—哈克斯泰普输油管线",
+      "name_en": "Musturad-Huckstep Oil Pipeline"
     },
     {
       "project_id": "P7915",
-      "pipeline": "Al Ahdab—Zubaydia Oil Pipeline",
+      "pipeline": "艾哈代布—祖拜迪亚输油管线（Al Ahdab—Zubaydia Oil Pipeline）",
       "segment": "",
       "original_capacity": "",
       "original_unit": "",
@@ -5711,11 +6425,14 @@
       ],
       "capacity_extra": [],
       "capacity_review_status": "source_missing",
-      "capacity_reference_sha256": "75913c484917548bcfa648c78c047af26f9675223b708835f03e34489aa119d0"
+      "capacity_reference_sha256": "75913c484917548bcfa648c78c047af26f9675223b708835f03e34489aa119d0",
+      "pipeline_source": "Al Ahdab—Zubaydia Oil Pipeline",
+      "name_cn": "艾哈代布—祖拜迪亚输油管线",
+      "name_en": "Al Ahdab—Zubaydia Oil Pipeline"
     },
     {
       "project_id": "P7960",
-      "pipeline": "Iraq–Oman Oil Pipeline",
+      "pipeline": "伊拉克—阿曼输油管线（Iraq–Oman Oil Pipeline）",
       "segment": "",
       "original_capacity": "",
       "original_unit": "",
@@ -5734,11 +6451,14 @@
       ],
       "capacity_extra": [],
       "capacity_review_status": "source_missing",
-      "capacity_reference_sha256": "6bce7c55550fbf6f1290d2fd3763eca8467bdb114df887e7daf111cd3cc4b69c"
+      "capacity_reference_sha256": "6bce7c55550fbf6f1290d2fd3763eca8467bdb114df887e7daf111cd3cc4b69c",
+      "pipeline_source": "Iraq–Oman Oil Pipeline",
+      "name_cn": "伊拉克—阿曼输油管线",
+      "name_en": "Iraq–Oman Oil Pipeline"
     },
     {
       "project_id": "P7965",
-      "pipeline": "October-El-Tibeen Oil Pipeline",
+      "pipeline": "十月油田—提宾输油管线（October-El-Tibeen Oil Pipeline）",
       "segment": "",
       "original_capacity": "",
       "original_unit": "",
@@ -5757,11 +6477,14 @@
       ],
       "capacity_extra": [],
       "capacity_review_status": "source_missing",
-      "capacity_reference_sha256": "64625a40b19545873f4d7c5808f58ec049bbc2e387dcbb68986cc16dd4c1c428"
+      "capacity_reference_sha256": "64625a40b19545873f4d7c5808f58ec049bbc2e387dcbb68986cc16dd4c1c428",
+      "pipeline_source": "October-El-Tibeen Oil Pipeline",
+      "name_cn": "十月油田—提宾输油管线",
+      "name_en": "October-El-Tibeen Oil Pipeline"
     },
     {
       "project_id": "P7967",
-      "pipeline": "Genaveh-Kharg Oil Pipelines",
+      "pipeline": "加纳韦—哈尔克岛输油管线（Genaveh-Kharg Oil Pipelines）",
       "segment": "Pipeline 4",
       "original_capacity": "",
       "original_unit": "",
@@ -5785,11 +6508,14 @@
       ],
       "capacity_extra": [],
       "capacity_review_status": "source_missing",
-      "capacity_reference_sha256": "7e65fc95a137dd578a9c39fae83689167824428f4a5abd7740508b0fbd741b93"
+      "capacity_reference_sha256": "7e65fc95a137dd578a9c39fae83689167824428f4a5abd7740508b0fbd741b93",
+      "pipeline_source": "Genaveh-Kharg Oil Pipelines",
+      "name_cn": "加纳韦—哈尔克岛输油管线",
+      "name_en": "Genaveh-Kharg Oil Pipelines"
     },
     {
       "project_id": "P7968",
-      "pipeline": "Genaveh-Kharg Oil Pipelines",
+      "pipeline": "加纳韦—哈尔克岛输油管线（Genaveh-Kharg Oil Pipelines）",
       "segment": "Pipeline 5",
       "original_capacity": "",
       "original_unit": "",
@@ -5813,11 +6539,14 @@
       ],
       "capacity_extra": [],
       "capacity_review_status": "source_missing",
-      "capacity_reference_sha256": "7e65fc95a137dd578a9c39fae83689167824428f4a5abd7740508b0fbd741b93"
+      "capacity_reference_sha256": "7e65fc95a137dd578a9c39fae83689167824428f4a5abd7740508b0fbd741b93",
+      "pipeline_source": "Genaveh-Kharg Oil Pipelines",
+      "name_cn": "加纳韦—哈尔克岛输油管线",
+      "name_en": "Genaveh-Kharg Oil Pipelines"
     },
     {
       "project_id": "P7975",
-      "pipeline": "Ras Shukheir-El-Hafair Oil Pipeline",
+      "pipeline": "拉斯舒凯尔—哈法伊尔输油管线（Ras Shukheir-El-Hafair Oil Pipeline）",
       "segment": "",
       "original_capacity": "140,000.00",
       "original_unit": "bpd",
@@ -5834,11 +6563,14 @@
       "reference_capacity_lines": [],
       "capacity_extra": [],
       "capacity_review_status": "table_only_unavailable_reference",
-      "capacity_reference_sha256": null
+      "capacity_reference_sha256": null,
+      "pipeline_source": "Ras Shukheir-El-Hafair Oil Pipeline",
+      "name_cn": "拉斯舒凯尔—哈法伊尔输油管线",
+      "name_en": "Ras Shukheir-El-Hafair Oil Pipeline"
     },
     {
       "project_id": "P7976",
-      "pipeline": "El-Hafair-Suez Oil Pipeline",
+      "pipeline": "哈法伊尔—苏伊士输油管线（El-Hafair-Suez Oil Pipeline）",
       "segment": "",
       "original_capacity": "50,000.00",
       "original_unit": "bpd",
@@ -5857,11 +6589,14 @@
       ],
       "capacity_extra": [],
       "capacity_review_status": "table_reference_number_matches",
-      "capacity_reference_sha256": "3fbf283ea75f0351abfb1dcd68e389f3cc66f5cfce94fad3f7a4b10ee11f66e1"
+      "capacity_reference_sha256": "3fbf283ea75f0351abfb1dcd68e389f3cc66f5cfce94fad3f7a4b10ee11f66e1",
+      "pipeline_source": "El-Hafair-Suez Oil Pipeline",
+      "name_cn": "哈法伊尔—苏伊士输油管线",
+      "name_en": "El-Hafair-Suez Oil Pipeline"
     },
     {
       "project_id": "P7977",
-      "pipeline": "El-Hafair-Musturad Oil Pipelines",
+      "pipeline": "哈法伊尔—穆斯图鲁德输油管线（El-Hafair-Musturad Oil Pipelines）",
       "segment": "Pipeline 1",
       "original_capacity": "85,000.00",
       "original_unit": "bpd",
@@ -5881,11 +6616,14 @@
       ],
       "capacity_extra": [],
       "capacity_review_status": "table_reference_number_matches",
-      "capacity_reference_sha256": "05218502960963f6a2028d6d2351e473d03045f9579ab97bbfe825a3b64689d1"
+      "capacity_reference_sha256": "05218502960963f6a2028d6d2351e473d03045f9579ab97bbfe825a3b64689d1",
+      "pipeline_source": "El-Hafair-Musturad Oil Pipelines",
+      "name_cn": "哈法伊尔—穆斯图鲁德输油管线",
+      "name_en": "El-Hafair-Musturad Oil Pipelines"
     },
     {
       "project_id": "P7978",
-      "pipeline": "El-Hafair-Musturad Oil Pipelines",
+      "pipeline": "哈法伊尔—穆斯图鲁德输油管线（El-Hafair-Musturad Oil Pipelines）",
       "segment": "Pipeline 2",
       "original_capacity": "85,000.00",
       "original_unit": "bpd",
@@ -5905,11 +6643,14 @@
       ],
       "capacity_extra": [],
       "capacity_review_status": "table_reference_number_matches",
-      "capacity_reference_sha256": "05218502960963f6a2028d6d2351e473d03045f9579ab97bbfe825a3b64689d1"
+      "capacity_reference_sha256": "05218502960963f6a2028d6d2351e473d03045f9579ab97bbfe825a3b64689d1",
+      "pipeline_source": "El-Hafair-Musturad Oil Pipelines",
+      "name_cn": "哈法伊尔—穆斯图鲁德输油管线",
+      "name_en": "El-Hafair-Musturad Oil Pipelines"
     },
     {
       "project_id": "P7979",
-      "pipeline": "Zeit Bay Facilities-Ras Gharib Oil Pipeline",
+      "pipeline": "宰特湾设施—拉斯加里卜输油管线（Zeit Bay Facilities-Ras Gharib Oil Pipeline）",
       "segment": "",
       "original_capacity": "97,000.00",
       "original_unit": "bpd",
@@ -5928,11 +6669,14 @@
       ],
       "capacity_extra": [],
       "capacity_review_status": "table_reference_number_matches",
-      "capacity_reference_sha256": "0b5906369ce8dd2c005fbb6a64633e4569becf139c175044fbdcb260b72d7541"
+      "capacity_reference_sha256": "0b5906369ce8dd2c005fbb6a64633e4569becf139c175044fbdcb260b72d7541",
+      "pipeline_source": "Zeit Bay Facilities-Ras Gharib Oil Pipeline",
+      "name_cn": "宰特湾设施—拉斯加里卜输油管线",
+      "name_en": "Zeit Bay Facilities-Ras Gharib Oil Pipeline"
     },
     {
       "project_id": "P7980",
-      "pipeline": "Gachsacran–Goureh Oil Pipeline",
+      "pipeline": "加奇萨兰—戈雷输油管线（Gachsacran–Goureh Oil Pipeline）",
       "segment": "",
       "original_capacity": "",
       "original_unit": "",
@@ -5949,11 +6693,14 @@
       "reference_capacity_lines": [],
       "capacity_extra": [],
       "capacity_review_status": "source_missing",
-      "capacity_reference_sha256": null
+      "capacity_reference_sha256": null,
+      "pipeline_source": "Gachsacran–Goureh Oil Pipeline",
+      "name_cn": "加奇萨兰—戈雷输油管线",
+      "name_en": "Gachsacran–Goureh Oil Pipeline"
     },
     {
       "project_id": "P7981",
-      "pipeline": "Nowruz–Ras Bahregan Oil Pipeline",
+      "pipeline": "诺鲁兹—拉斯巴赫雷甘输油管线（Nowruz–Ras Bahregan Oil Pipeline）",
       "segment": "",
       "original_capacity": "",
       "original_unit": "",
@@ -5970,7 +6717,10 @@
       "reference_capacity_lines": [],
       "capacity_extra": [],
       "capacity_review_status": "source_missing",
-      "capacity_reference_sha256": null
+      "capacity_reference_sha256": null,
+      "pipeline_source": "Nowruz–Ras Bahregan Oil Pipeline",
+      "name_cn": "诺鲁兹—拉斯巴赫雷甘输油管线",
+      "name_en": "Nowruz–Ras Bahregan Oil Pipeline"
     }
   ],
   "primary_evidence": [

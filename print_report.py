@@ -2,6 +2,8 @@
 
 from __future__ import annotations
 
+from entity_names import display_name
+
 from collections import Counter, defaultdict
 from datetime import date, datetime, timedelta
 from html import escape
@@ -185,7 +187,7 @@ def _change_table(choke_rows: list[dict], choke_catalog: list[dict],
             delta = f"{(current / previous - 1) * 100:+.1f}%"
         point = catalog.get(point_id, {})
         rows.append([
-            point.get("name_cn") or point.get("name") or point_id,
+            display_name(point),
             end.isoformat(),
             _fmt(previous, 1),
             _fmt(current, 1),
@@ -298,7 +300,7 @@ def _overview_map(ports: list[dict], chokes: list[dict], assets: list[dict],
         if not point:
             continue
         x, y = point
-        name = choke.get("name_cn") or choke.get("name") or choke.get("portname") or "咽喉点"
+        name = display_name(choke)
         point_id = str(choke.get("portid", ""))
         dx, dy, align = {
             "chokepoint1": (5.5, -5.0, "left"),  # 苏伊士
@@ -333,16 +335,16 @@ def _overview_map(ports: list[dict], chokes: list[dict], assets: list[dict],
             )
 
     for port in ports:
-        append_point("port", port.get("name_cn") or port.get("name") or port.get("portname") or "港口",
+        append_point("port", display_name(port),
                      port.get("lat"), port.get("lon"))
     for asset in assets:
         if not asset.get("map_drawable", True):
             continue
-        append_point("asset", asset.get("name_cn") or asset.get("name") or "油气资产",
+        append_point("asset", display_name(asset),
                      asset.get("map_lat", asset.get("lat")),
                      asset.get("map_lon", asset.get("lon")))
     for choke in chokes:
-        append_point("choke", choke.get("name_cn") or choke.get("name") or "咽喉点",
+        append_point("choke", display_name(choke),
                      choke.get("lat"), choke.get("lon"))
     parts.extend(choke_labels)
 
@@ -444,7 +446,7 @@ def build_report_html(
         + cover_table
     )
 
-    choke_names = {str(row.get("portid")): row.get("name_cn") or row.get("name") or row.get("portname") or row.get("portid")
+    choke_names = {str(row.get("portid")): display_name(row)
                    for row in choke_catalog}
     n_series = [(str(choke_names.get(point_id, point_id)),
                  [(row.get("date"), row.get("n_total")) for row in choke_history
@@ -464,7 +466,7 @@ def build_report_html(
     )
 
     history_ids = sorted({str(row.get("portid")) for row in port_history})
-    port_name = {str(row.get("portid")): row.get("name") or row.get("portname") or row.get("portid")
+    port_name = {str(row.get("portid")): display_name(row)
                  for row in port_catalog}
     node_daily = _history_by_node(port_history)
     latest_daily = latest_by_node(port_history)
@@ -507,7 +509,7 @@ def build_report_html(
     )[:12]
     port_content += '<h3>港口最新日记录（最多12个）</h3>' + _table(
         ["港口", "国家", "观测日 UTC", "有效进港艘次", "估算进口（万吨）", "估算出口（万吨）"],
-        [[row.get("name") or row.get("portname"), row.get("country"), row.get("date"),
+        [[port_name.get(str(row.get("portid")), display_name(row)), row.get("country"), row.get("date"),
           _fmt(row.get("portcalls")), _fmt((_number(row.get("import")) or 0) / 10000, 2)
           if _number(row.get("import")) is not None else "—",
           _fmt((_number(row.get("export")) or 0) / 10000, 2)
@@ -517,7 +519,7 @@ def build_report_html(
     assets_table_rows = []
     for row in asset_table[:20]:
         assets_table_rows.append([
-            row.get("中文名称") or row.get("英文名称"),
+            display_name(row),
             row.get("国家"),
             row.get("生产状态"),
             row.get("产量显示") or row.get("本层级日产量"),
@@ -534,7 +536,7 @@ def build_report_html(
         + '<h3>产量来源与检索结论（对应以上资产）</h3>'
         + _table(
             ["资产", "产量检索复核", "资产指标来源", "合计参考来源"],
-            [[row.get("英文名称"), row.get("产量检索复核"), row.get("来源链接"),
+            [[display_name(row), row.get("产量检索复核"), row.get("来源链接"),
               row.get("合计参考证据链接")] for row in asset_table[:20]],
         )
     )
@@ -546,7 +548,7 @@ def build_report_html(
             '投产年不表示当前在产；未披露字段保持为空。</p>'
             + _table(
                 ["资产", "运营商（参考）", "发现年", "商业投产年", "GEM ID", "固定版本来源"],
-                [[row.get("英文名称"), row.get("运营商（2026-03目录参考）"),
+                [[display_name(row), row.get("运营商（2026-03目录参考）"),
                   row.get("发现年（目录参考）"), row.get("商业投产年（目录参考）"),
                   row.get("GEM Unit ID"), row.get("参考资料链接")] for row in reference_rows],
             )

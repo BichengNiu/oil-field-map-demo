@@ -1,0 +1,369 @@
+{
+  "reviewed_at_utc": "2026-10-16",
+  "scope": "Selected UAE oil and gas connectivity; does not assert full network coverage or surveyed alignments.",
+  "operator_source": {
+    "url": "https://www.adnocgas.ae/en/our-operations/gas-processing",
+    "retrieved_at_utc": "2026-10-16",
+    "content_sha256": "a6100c3e322c7f3e875e0892cf2293347d77684c25e086d9a2fcead7bba601b3",
+    "excerpt": "Our Integrated Gas Development (IGD) project, which came into operation in 2013 and has been subsequently extended, added infrastructure including two +200km pipelines linking Das Island to Habshan",
+    "finding": "达斯岛（Das Island）与哈布善（Habshan）存在输气连接，不能作为原油线接入巴布—哈布善—富查伊拉输油管线（Bab-Habshan–Fujairah Oil Pipeline）；运营商叙述不提供可绘制的精确路线或逐线运力。"
+  },
+  "records": [
+    {
+      "project_id": "P0553",
+      "name": "巴布—哈布善—富查伊拉输油管线（Bab-Habshan–Fujairah Oil Pipeline）",
+      "name_en": "Bab-Habshan–Fujairah Oil Pipeline",
+      "name_cn": "巴布—哈布善—富查伊拉输油管线",
+      "fuel": "Oil",
+      "map_drawable": true,
+      "route_accuracy": "high",
+      "source_url": "https://www.gem.wiki/Bab-Habshan%E2%80%93Fujairah_Oil_Pipeline",
+      "geometry_review_note": "沿用源路线；不从坐标接近推断两条管线已连接。",
+      "geometry": {
+        "type": "MultiLineString",
+        "coordinates": [
+          [
+            [
+              53.6176,
+              23.8279
+            ],
+            [
+              53.6909,
+              23.937
+            ],
+            [
+              54.1381,
+              24.0253
+            ],
+            [
+              54.3781,
+              24.1648
+            ],
+            [
+              54.6168,
+              24.1671
+            ],
+            [
+              54.6572,
+              24.1615
+            ],
+            [
+              54.7243,
+              24.1693
+            ],
+            [
+              54.7912,
+              24.211
+            ],
+            [
+              54.8052,
+              24.273
+            ],
+            [
+              54.8317,
+              24.2699
+            ],
+            [
+              55.0235,
+              24.41
+            ],
+            [
+              55.1303,
+              24.6067
+            ],
+            [
+              55.1916,
+              24.5746
+            ],
+            [
+              55.3609,
+              24.5772
+            ],
+            [
+              55.3677,
+              24.5939
+            ],
+            [
+              55.6388,
+              24.6895
+            ],
+            [
+              55.7521,
+              24.7037
+            ],
+            [
+              55.752499,
+              24.754776
+            ]
+          ],
+          [
+            [
+              55.752499,
+              24.754776
+            ],
+            [
+              55.7525,
+              24.7549
+            ],
+            [
+              55.7523,
+              24.7546
+            ],
+            [
+              55.752499,
+              24.754776
+            ]
+          ],
+          [
+            [
+              55.752499,
+              24.754776
+            ],
+            [
+              55.8028,
+              24.7992
+            ],
+            [
+              55.7827,
+              24.8901
+            ],
+            [
+              55.8882,
+              25.0177
+            ],
+            [
+              55.9794,
+              25.0655
+            ],
+            [
+              56.0259,
+              25.1101
+            ],
+            [
+              56.0351,
+              25.1993
+            ],
+            [
+              56.1821,
+              25.1928
+            ],
+            [
+              56.2127,
+              25.2171
+            ],
+            [
+              56.3413,
+              25.2128
+            ]
+          ]
+        ]
+      }
+    },
+    {
+      "project_id": "P0639",
+      "name": "巴布—哈布善—杰贝尔丹那输油管线（Bab-Habshan–Jebel Dhanna Oil Pipeline）",
+      "name_en": "Bab-Habshan–Jebel Dhanna Oil Pipeline",
+      "name_cn": "巴布—哈布善—杰贝尔丹那输油管线",
+      "fuel": "Oil",
+      "map_drawable": true,
+      "route_accuracy": "medium",
+      "source_url": "https://www.gem.wiki/Bab-Habshan%E2%80%93Jebel_Dhanna_Oil_Pipeline",
+      "geometry_review_note": "沿用源路线；不从坐标接近推断两条管线已连接。",
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            53.6176,
+            23.8279
+          ],
+          [
+            53.4618,
+            23.8288
+          ],
+          [
+            53.293,
+            23.8488
+          ],
+          [
+            53.0224,
+            24.0113
+          ],
+          [
+            52.6708,
+            24.1271
+          ],
+          [
+            52.6187,
+            24.1559
+          ],
+          [
+            52.6037,
+            24.1699
+          ]
+        ]
+      }
+    },
+    {
+      "project_id": "P0640",
+      "name": "乌姆沙伊夫—达斯岛输油管线（Umm Shaif-Das Island oil pipeline）",
+      "name_en": "Umm Shaif-Das Island oil pipeline",
+      "name_cn": "乌姆沙伊夫—达斯岛输油管线",
+      "fuel": "Oil",
+      "map_drawable": false,
+      "route_accuracy": "medium",
+      "source_url": "https://www.gem.wiki/Umm_Shaif-Das_Island_oil_pipeline",
+      "geometry_review_note": "源坐标终点不在达斯岛，路线名称与坐标不符；保留原始证据，暂停地图绘制。",
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            53.075199,
+            25.313299
+          ],
+          [
+            53.5924,
+            24.944799
+          ],
+          [
+            54.792198,
+            24.841
+          ],
+          [
+            54.588699,
+            24.4093
+          ],
+          [
+            54.597198,
+            24.4093
+          ]
+        ]
+      }
+    },
+    {
+      "project_id": "P0641",
+      "name": "上扎库姆—达斯岛输油管线（Upper Zakum-Das Island Oil Pipeline）",
+      "name_en": "Upper Zakum-Das Island Oil Pipeline",
+      "name_cn": "上扎库姆—达斯岛输油管线",
+      "fuel": "Oil",
+      "map_drawable": true,
+      "route_accuracy": "very low (straight line/schematic)",
+      "source_url": "https://www.gem.wiki/Upper_Zakum-Das_Island_Oil_Pipeline",
+      "geometry_review_note": "沿用源路线；不从坐标接近推断两条管线已连接。",
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            53.76,
+            24.78
+          ],
+          [
+            52.875,
+            25.1522
+          ]
+        ]
+      }
+    },
+    {
+      "project_id": "P0642",
+      "name": "上扎库姆—济尔库岛输油管线（Upper Zakum-Zirku Island Oil Pipeline）",
+      "name_en": "Upper Zakum-Zirku Island Oil Pipeline",
+      "name_cn": "上扎库姆—济尔库岛输油管线",
+      "fuel": "Oil",
+      "map_drawable": true,
+      "route_accuracy": "very low (straight line/schematic)",
+      "source_url": "https://www.gem.wiki/Upper_Zakum-Zirku_Island_Oil_Pipeline",
+      "geometry_review_note": "沿用源路线；不从坐标接近推断两条管线已连接。",
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            53.75,
+            24.75
+          ],
+          [
+            53.0807,
+            24.8784
+          ]
+        ]
+      }
+    },
+    {
+      "project_id": "P5683",
+      "name": "达斯岛—哈布善输气管线（Das Island–Habshan Gas Pipeline）",
+      "name_en": "Das Island–Habshan Gas Pipeline",
+      "name_cn": "达斯岛—哈布善输气管线",
+      "fuel": "Gas",
+      "map_drawable": true,
+      "route_accuracy": "very low (straight line/schematic)",
+      "source_url": "https://www.gem.wiki/Das_Island%E2%80%93Habshan_Gas_Pipeline",
+      "geometry_review_note": "源表为直线示意，海陆两段之间约22公里缺口，未人为补线；连接关系已由ADNOC Gas确认，未证明这是独立的两条实际管线。",
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            52.87797,
+            25.145556
+          ],
+          [
+            53.151235,
+            24.170808
+          ]
+        ]
+      }
+    },
+    {
+      "project_id": "P5684",
+      "name": "乌姆沙伊夫—达斯岛输气管线（Umm Shaif–Das Island Gas Pipeline）",
+      "name_en": "Umm Shaif–Das Island Gas Pipeline",
+      "name_cn": "乌姆沙伊夫—达斯岛输气管线",
+      "fuel": "Gas",
+      "map_drawable": false,
+      "route_accuracy": "very low (straight line/schematic)",
+      "source_url": "https://www.gem.wiki/Umm_Shaif%E2%80%93Das_Island_Gas_Pipeline",
+      "geometry_review_note": "源坐标从阿布扎比城区出发，与乌姆沙伊夫海上油田不符；仅保留证据，暂停绘制。",
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            54.37715,
+            24.454084
+          ],
+          [
+            52.878209,
+            25.139729
+          ]
+        ]
+      }
+    },
+    {
+      "project_id": "P5711",
+      "name": "达斯岛—哈布善输气管线（Das Island–Habshan Gas Pipeline）",
+      "name_en": "Das Island–Habshan Gas Pipeline",
+      "name_cn": "达斯岛—哈布善输气管线",
+      "fuel": "Gas",
+      "map_drawable": true,
+      "route_accuracy": "very low (straight line/schematic)",
+      "source_url": "https://www.gem.wiki/Das_Island%E2%80%93Habshan_Gas_Pipeline",
+      "geometry_review_note": "源表为直线示意，海陆两段之间约22公里缺口，未人为补线；连接关系已由ADNOC Gas确认，未证明这是独立的两条实际管线。",
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            53.368902,
+            24.113162
+          ],
+          [
+            53.546056,
+            23.780111
+          ]
+        ]
+      }
+    }
+  ],
+  "decisions": [
+    "油线P0640的终点约54.5972E、24.4093N，远离达斯岛约52.878E、25.145N；保留源证据，不绘制错配路线。",
+    "气线P5684的起点约54.3772E、24.4541N，位于阿布扎比城区，与乌姆沙伊夫（Umm Shaif）海上位置不符；保留源证据，不绘制。",
+    "P5683和P5711是源表海上、陆上示意分段，海岸端点相隔约22公里；不吸附、不补线，不将两个分段当成运营商所说的两条完整管线。",
+    "原油运力仍以百万桶/日显示；本次输气联络不换算成原油运力，不加入原油汇总。"
+  ]
+}

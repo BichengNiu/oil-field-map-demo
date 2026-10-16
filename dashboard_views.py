@@ -37,12 +37,19 @@ def render_map_panel(state: DashboardViewState, summary_cards: list) -> None:
         show_ports = st.checkbox("港口", value=True, key="map_show_ports")
         show_vessels = st.checkbox("船舶", value=True, key="map_show_vessels")
         show_pipelines = st.checkbox("输油管线", value=True, key="map_show_pipelines")
+        show_gas = st.checkbox("输气联络", value=True, key="map_show_gas")
     pipelines = None
     if show_pipelines:
         try:
             pipelines = pipeline_catalog.load()
         except (FileNotFoundError, ValueError) as exc:
             st.error(f"输油管线快照不可用：{exc}")
+    if show_gas:
+        try:
+            gas = pipeline_catalog.load_gas_connections()
+            pipelines = {"type": "FeatureCollection", "features": [*(pipelines or {}).get("features", []), *gas["features"]]}
+        except (FileNotFoundError, ValueError) as exc:
+            st.error(f"输气联络快照不可用：{exc}")
     stream_state = state.ais_status
     if state.port_error:
         st.error(f"港口数据加载失败：{state.port_error}")
@@ -240,7 +247,7 @@ def render_assets_panel(assets: list[dict]) -> None:
     )
     a5.metric("含公开目录参考", sum(bool(a.get("public_metadata")) for a in assets))
     st.dataframe(
-        asset_rows,
+        [{k: v for k, v in row.items() if k not in {"英文名称", "中文名称"}} for row in asset_rows],
         width="stretch",
         hide_index=True,
         height=620,

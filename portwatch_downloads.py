@@ -1,6 +1,8 @@
 """Complete, source-count-checked PortWatch downloads with dated provenance."""
 from __future__ import annotations
 
+from entity_names import display_name
+
 from collections import defaultdict
 import csv
 from datetime import date, datetime, timedelta, timezone
@@ -29,7 +31,7 @@ BATCH_SIZE = 60
 XLSX_ROW_LIMIT = 20_000
 INLINE_EXPORT_ROW_LIMIT = 20_000
 KINDS = {"ports": "港口", "chokepoints": "咽喉要道"}
-BASE_FIELDS = ["date", "portid", "portname", "country", "ISO3", "region", "lat", "lon"]
+BASE_FIELDS = ["date", "portid", "portname", "portname_source", "country", "ISO3", "region", "lat", "lon"]
 CATALOG_FIELDS = ["node_kind", "portid", "node_name", "country", "region", "lat", "lon",
                   "statistics_available", "first_available_utc", "latest_available_utc",
                   "source_url", "coverage_note"]
@@ -62,7 +64,7 @@ def node(kind: str, raw: dict) -> dict:
     pid = str(raw["portid"])
     supported = pw.valid_port_ids((pid,)) if kind == "ports" else pw.valid_chokepoint_ids((pid,))
     return {"node_kind": kind, "portid": pid,
-            "node_name": raw.get("name_cn") or raw.get("name") or raw.get("portname") or pid,
+            "node_name": display_name(raw) or pid,
             "country": raw.get("country"),
             "region": raw.get("region") or raw.get("name_cn"),
             "lat": raw.get("lat"), "lon": raw.get("lon"),
@@ -465,7 +467,7 @@ def _collect_streaming(prepared: dict, mode: str, first: date | None, last: date
                         target["last"] = day if target["last"] is None else max(target["last"], day)
                         node_row = selected_by_id[pid]
                         exported_by_year[day.year].append({
-                            **row, "region": node_row["region"], "lat": node_row["lat"],
+                            **row, "portname_source": row.get("portname"), "portname": node_row["node_name"], "region": node_row["region"], "lat": node_row["lat"],
                             "lon": node_row["lon"], "source_url": pw.SOURCE,
                         })
 
@@ -641,7 +643,7 @@ def collect(nodes: list[dict], mode: str, first: date | None = None, last: date 
             begin, end = wanted[row["portid"]]
             if begin <= _day(row["date"]) <= end:
                 n = selected_by_id[row["portid"]]
-                exported.append({**row, "region": n["region"], "lat": n["lat"], "lon": n["lon"],
+                exported.append({**row, "portname_source": row.get("portname"), "portname": n["node_name"], "region": n["region"], "lat": n["lat"], "lon": n["lon"],
                                  "source_url": pw.SOURCE})
         exported.sort(key=lambda r: (r["portid"], r["date"]))
         by_id = defaultdict(list)
@@ -702,7 +704,7 @@ def columns(kind: str, derived: bool = False) -> list[str]:
 def dictionary(derived: bool) -> list[dict]:
     entries = []
     labels = {"date": ("观测日", "UTC日期"), "portid": ("稳定节点编号", "文本"),
-              "portname": ("源站节点名称", "文本"), "country": ("源站国家", "文本"),
+              "portname": ("节点名称（中文及英文）", "文本"), "portname_source": ("源站节点原名", "文本"), "country": ("源站国家", "文本"),
               "ISO3": ("国家三位代码", "文本"), "region": ("项目监测水域", "文本"),
               "lat": ("节点纬度", "度"), "lon": ("节点经度", "度"), "source_url": ("数据来源", "URL")}
     for kind in KINDS:

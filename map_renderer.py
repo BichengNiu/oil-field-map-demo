@@ -1,6 +1,8 @@
 """Pure Leaflet map HTML renderer; UI state stays in the Streamlit page."""
 from __future__ import annotations
 
+from entity_names import display_name
+
 import json
 from pathlib import Path
 
@@ -33,6 +35,8 @@ def build_map_html(
 ) -> str:
     pipeline_features = []
     for feature in (pipelines or {}).get("features", []):
+        if not feature["properties"].get("map_drawable", True):
+            continue
         properties = {**feature["properties"], "popup": pipeline_catalog.popup(feature["properties"])}
         pipeline_features.append({**feature, "properties": properties})
     pipeline_json = json.dumps({"type": "FeatureCollection", "features": pipeline_features}, ensure_ascii=False).replace("</", "<\\/")
@@ -41,7 +45,7 @@ def build_map_html(
             "lat": asset["map_lat"],
             "lon": asset["map_lon"],
             "popupKey": f'asset:{asset.get("country", "")}\x1f{asset["name"]}',
-            "name": f'{asset["name_cn"]} · {asset["name"]}',
+            "name": display_name(asset),
             "popup": asset_popup(asset),
         }
         for asset in assets
@@ -50,7 +54,7 @@ def build_map_html(
     marker_json = json.dumps(markers, ensure_ascii=False).replace("</", "<\\/")
     port_json = json.dumps([
         {"lat": port["lat"], "lon": port["lon"], "popupKey": f'port:{port["portid"]}',
-         "name": port["name"],
+         "name": display_name(port),
          "calls": port.get("portcalls"),
          "popup": port_popup(port, day)}
         for port in ports
@@ -59,7 +63,7 @@ def build_map_html(
     chokepoint_json = json.dumps([
         {"lat": point["lat"], "lon": point["lon"],
          "popupKey": f'chokepoint:{point["portid"]}',
-         "name": point.get("name_cn", point["portname"]),
+         "name": display_name(point),
          "calls": point.get("n_total"),
          "popup": chokepoint_popup(point, chokepoint_day)}
         for point in chokepoints
@@ -101,12 +105,11 @@ def build_map_html(
             f'<span>{legend_icon("port", "#2563eb")}港口</span>',
             f'<span>{legend_icon("choke", "#7c3aed")}咽喉点</span>',
         ])
+    for fuel, color, label in (("Oil", "#8b2635", "输油管线"), ("Gas", "#416b86", "输气联络")):
+        if any(f["properties"].get("fuel") == fuel for f in pipeline_features):
+            location_items.append(f'<span><svg viewBox="0 0 12 12"><path d="M0 6 H12" stroke="{color}" stroke-width="3"/></svg>{label}</span>')
     if location_items:
-        if pipeline_features:
-            location_items.append('<span><svg viewBox="0 0 12 12"><path d="M0 6 H12" stroke="#8b2635" stroke-width="3"/></svg>输油管线</span>')
         legend_lines.append('<div class="legend-row">' + "".join(location_items) + '</div>')
-    elif pipeline_features:
-        legend_lines.append('<div class="legend-row"><span><svg viewBox="0 0 12 12"><path d="M0 6 H12" stroke="#8b2635" stroke-width="3"/></svg>输油管线</span></div>')
     if "vessels" in categories:
         legend_lines.append(
             '<div class="legend-row">'
@@ -283,7 +286,7 @@ def build_map_html(
         const planned = ['construction', 'proposed'].includes(p.status);
         const operating = p.status === 'operating';
         const schematic = ['low', 'very low (straight line/schematic)'].includes(p.route_accuracy);
-        return {{color: '#8b2635',
+        return {{color: p.fuel === 'Gas' ? '#416b86' : '#8b2635',
           weight: 3, opacity: operating ? .95 : .75,
           dashArray: planned ? '9 5' : !operating ? '3 7' : schematic ? '5 5' : null}};
       }};

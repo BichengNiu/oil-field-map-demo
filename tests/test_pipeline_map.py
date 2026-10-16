@@ -102,7 +102,7 @@ class PipelineMapTest(unittest.TestCase):
         html = self.render(self.document)
         rendered = json.loads(re.search(r'const pipelines = (.*);', html).group(1))
         self.assertEqual([f['geometry'] for f in rendered['features']],
-                         [f['geometry'] for f in self.document['features']])
+                         [f['geometry'] for f in self.document['features'] if f['properties'].get('map_drawable', True)])
         self.assertIn('输油管线', html)
         self.assertNotIn('未选择显示类别', html)
         script = re.findall(r'<script>(.*?)</script>', html, re.S)[-1]

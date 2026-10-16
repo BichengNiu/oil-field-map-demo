@@ -59,7 +59,7 @@ def audit(source_path, csv_path=None):
         if hasattr(old, 'geoms') and len(old.geoms) != len(new.geoms):
             raise ValueError('A geometry branch was lost: ' + pid)
         rows.append({
-            'project_id': pid, 'pipeline': p['name_en'], 'segment': p['segment'],
+            'project_id': pid, 'pipeline': p['name'], 'pipeline_source': p['name_en'], 'map_drawable': p.get('map_drawable', True), 'geometry_review_note': p.get('geometry_review_note'), 'segment': p['segment'],
             'countries': '; '.join(p['countries']), 'status': p['status'],
             'source_capacity': p['capacity'], 'source_unit': p['capacity_unit'],
             'million_barrels_per_day': p['capacity_million_bpd'],
@@ -71,11 +71,13 @@ def audit(source_path, csv_path=None):
         })
     if csv_path:
         with Path(csv_path).open('w', encoding='utf-8-sig', newline='') as handle:
-            writer = csv.DictWriter(handle, fieldnames=list(rows[0]))
+            writer = csv.DictWriter(handle, fieldnames=list(rows[0]), lineterminator="\n")
             writer.writeheader()
             writer.writerows(rows)
     return {
         'mapped_scope_expected': len(source_rows), 'mapped_scope_actual': len(actual),
+        'drawable_segments': sum(row['map_drawable'] for row in rows),
+        'quarantined_ids': [row['project_id'] for row in rows if not row['map_drawable']],
         'missing_ids': sorted(set(source_rows)-set(actual)), 'extra_ids': sorted(set(actual)-set(source_rows)),
         'capacity_review_status': dict(Counter(row['review_status'] for row in rows)),
         'numeric_single_capacities': sum(row['million_barrels_per_day'] is not None for row in rows),

@@ -91,10 +91,16 @@ def collect_candidate(original: Path, candidate: Path, *, force_ports=False, now
         data_store.initialize()
         import pipeline_catalog
         pipelines = pipeline_catalog.load()
+        gas_connections = pipeline_catalog.load_gas_connections()
         # Persist code-defined asset rules into the same candidate.
         import importlib
         import field_catalog
         importlib.reload(field_catalog)
+        from entity_names import validate_catalogs
+        # Enrich even when PortWatch is not due; identities and daily facts stay intact.
+        for kind in ("assets", "ports", "chokepoints"):
+            data_store.save_catalog(kind, data_store.load_catalog(kind))
+        validate_catalogs({kind: data_store.load_catalog(kind) for kind in ("assets", "ports", "chokepoints")})
         snapshot = collector.collect_once()
         if snapshot.get("error") or snapshot.get("archive_error") or not snapshot.get("vessels"):
             raise RuntimeError("船位采集未完整成功：" + str(snapshot.get("archive_error") or snapshot.get("error")))
@@ -109,6 +115,7 @@ def collect_candidate(original: Path, candidate: Path, *, force_ports=False, now
             with portwatch.request_budget(3600 if history_due else 240):
                 port_result = collector.collect_portwatch_run(strict=True, force=True, include_history=True)
             data_store.set_meta("snapshot_portwatch_completed_at", now.isoformat())
+        validate_catalogs({kind: data_store.load_catalog(kind) for kind in ("assets", "ports", "chokepoints")})
         history_coverage = portwatch_history.validate_all()
         # Only expendable raw responses/caches expire. Facts and events accumulate.
         with data_store.connect() as conn:
@@ -126,7 +133,7 @@ def collect_candidate(original: Path, candidate: Path, *, force_ports=False, now
         if not after["counts"]["catalogs"] or not after["counts"]["documents"]:
             raise RuntimeError("数据库目录或来源材料为空")
         summary = {"completed_at": now.isoformat(), "portwatch_updated": due,
-                   "pipelines": {"segments": len(pipelines["features"]), "source": pipelines["metadata"]},
+                   "pipelines": {"segments": len(pipelines["features"]), "drawable_segments": sum(f["properties"].get("map_drawable", True) for f in pipelines["features"]), "gas_connection_records": len(gas_connections["features"]), "source": pipelines["metadata"]},
                    "portwatch": port_result, "history_coverage": history_coverage,
                    "before": before, "after": after}
         data_store.set_meta("published_snapshot", summary)

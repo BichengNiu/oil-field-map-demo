@@ -103,7 +103,7 @@ def render_download_panel(
         node_options = [("ports", n["portid"]) for n in candidate_ports] + [
             ("chokepoints", n["portid"]) for n in choke_options
         ]
-        labels = {("ports", n["portid"]): port_inventory.port_label(n) for n in candidate_ports}
+        labels = {("ports", n["portid"]): n["node_name"] for n in candidate_ports}
         labels.update({("chokepoints", n["portid"]): n["node_name"] for n in choke_options})
         nodes_selection = multiselect_with_all(
             "节点",

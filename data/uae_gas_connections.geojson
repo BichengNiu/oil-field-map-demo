@@ -1,0 +1,129 @@
+{
+  "type": "FeatureCollection",
+  "features": [
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            52.87797,
+            25.145556
+          ],
+          [
+            53.151235,
+            24.170808
+          ]
+        ]
+      },
+      "properties": {
+        "project_id": "P5683",
+        "name": "达斯岛—哈布善输气管线（Das Island–Habshan Gas Pipeline）",
+        "name_en": "Das Island–Habshan Gas Pipeline",
+        "name_source": "Das Island–Habshan Gas Pipeline ",
+        "name_cn": "达斯岛—哈布善输气管线",
+        "countries": [
+          "United Arab Emirates"
+        ],
+        "fuel": "Gas",
+        "status": "operating",
+        "segment": "Offshore Segment",
+        "updated_at": "2023-08-17",
+        "route_accuracy": "very low (straight line/schematic)",
+        "source_url": "https://www.gem.wiki/Das_Island%E2%80%93Habshan_Gas_Pipeline",
+        "capacity": "400.0",
+        "capacity_unit": "MMcf/d",
+        "map_drawable": true,
+        "geometry_review_note": "源表为直线示意，海陆两段之间约22公里缺口，未人为补线；连接关系已由ADNOC Gas确认，未证明这是独立的两条实际管线。",
+        "connection_source_url": "https://www.adnocgas.ae/en/our-operations/gas-processing"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            54.37715,
+            24.454084
+          ],
+          [
+            52.878209,
+            25.139729
+          ]
+        ]
+      },
+      "properties": {
+        "project_id": "P5684",
+        "name": "乌姆沙伊夫—达斯岛输气管线（Umm Shaif–Das Island Gas Pipeline）",
+        "name_en": "Umm Shaif–Das Island Gas Pipeline",
+        "name_source": "Umm Shaif–Das Island Gas Pipeline ",
+        "name_cn": "乌姆沙伊夫—达斯岛输气管线",
+        "countries": [
+          "United Arab Emirates"
+        ],
+        "fuel": "Gas",
+        "status": "operating",
+        "segment": "Gas Line 1",
+        "updated_at": "2023-08-17",
+        "route_accuracy": "very low (straight line/schematic)",
+        "source_url": "https://www.gem.wiki/Umm_Shaif%E2%80%93Das_Island_Gas_Pipeline",
+        "capacity": "",
+        "capacity_unit": "",
+        "map_drawable": false,
+        "geometry_review_note": "源坐标从阿布扎比城区出发，与乌姆沙伊夫海上油田不符；仅保留证据，暂停绘制。",
+        "connection_source_url": "https://www.adnocgas.ae/en/our-operations/gas-processing"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            53.368902,
+            24.113162
+          ],
+          [
+            53.546056,
+            23.780111
+          ]
+        ]
+      },
+      "properties": {
+        "project_id": "P5711",
+        "name": "达斯岛—哈布善输气管线（Das Island–Habshan Gas Pipeline）",
+        "name_en": "Das Island–Habshan Gas Pipeline",
+        "name_source": "Das Island–Habshan Gas Pipeline ",
+        "name_cn": "达斯岛—哈布善输气管线",
+        "countries": [
+          "United Arab Emirates"
+        ],
+        "fuel": "Gas",
+        "status": "operating",
+        "segment": "Onshore Segment",
+        "updated_at": "2023-08-17",
+        "route_accuracy": "very low (straight line/schematic)",
+        "source_url": "https://www.gem.wiki/Das_Island%E2%80%93Habshan_Gas_Pipeline",
+        "capacity": "400.0",
+        "capacity_unit": "MMcf/d",
+        "map_drawable": true,
+        "geometry_review_note": "源表为直线示意，海陆两段之间约22公里缺口，未人为补线；连接关系已由ADNOC Gas确认，未证明这是独立的两条实际管线。",
+        "connection_source_url": "https://www.adnocgas.ae/en/our-operations/gas-processing"
+      }
+    }
+  ],
+  "metadata": {
+    "source": "Global Energy Monitor — Global Gas Infrastructure Tracker",
+    "source_url": "https://raw.githubusercontent.com/GlobalEnergyMonitor/goit-ggit-data-ops/1f9ebdec2a863b7e0b6e9f4aa1edd666ec258667/ggit_map_latest.geojson",
+    "source_sha256": "6b5fc679aa17ab37959b597095310f6dab996e48435fb4c580da7f7cf3dfaca4",
+    "license": "CC BY 4.0",
+    "license_url": "https://creativecommons.org/licenses/by/4.0/",
+    "coverage": "Selected UAE offshore-onshore gas connections; not a complete gas network. Source segments are separate schematic fragments, not surveyed alignments.",
+    "operator_url": "https://www.adnocgas.ae/en/our-operations/gas-processing",
+    "operator_evidence_sha256": "a6100c3e322c7f3e875e0892cf2293347d77684c25e086d9a2fcead7bba601b3",
+    "operator_excerpt": "Our Integrated Gas Development (IGD) project, which came into operation in 2013 and has been subsequently extended, added infrastructure including two +200km pipelines linking Das Island to Habshan",
+    "reviewed_at_utc": "2026-10-16",
+    "bilingual_names_version": 1
+  }
+}

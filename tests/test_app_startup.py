@@ -25,6 +25,10 @@ class AppStartupTest(unittest.TestCase):
             with patch.dict(os.environ, {"MONITORING_DB_PATH": str(database), "MONITORING_READ_ONLY": "false"}):
                 data_store.ingest_document("data/oil_pipelines.geojson")
                 data_store.ingest_document("data/pipeline_capacity_review.json")
+                data_store.ingest_document("data/uae_gas_connections.geojson")
+                data_store.ingest_document("data/bilingual_names.json")
+                for kind in ("assets", "ports", "chokepoints"):
+                    data_store.save_catalog(kind, data_store.load_catalog(kind))
             database.with_suffix(".duckdb.lock").unlink(missing_ok=True)
             env = {**os.environ,
                    "MONITORING_DB_PATH": str(database),
