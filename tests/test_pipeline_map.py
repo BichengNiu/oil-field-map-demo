@@ -13,6 +13,7 @@ from unittest.mock import patch
 import data_store
 import map_renderer
 import pipeline_catalog
+from pipeline_capacity import million_bpd
 
 ROOT = Path(__file__).resolve().parents[1]
 
@@ -49,6 +50,7 @@ class PipelineMapTest(unittest.TestCase):
             path = str(Path(temporary) / 'pipeline.duckdb')
             with patch.dict(os.environ, {'MONITORING_DB_PATH': path, 'MONITORING_READ_ONLY': 'false'}):
                 data_store.ingest_document(pipeline_catalog.DOCUMENT)
+                data_store.ingest_document('data/pipeline_capacity_review.json')
             before = Path(path).read_bytes()
             with patch.dict(os.environ, {'MONITORING_DB_PATH': path, 'MONITORING_READ_ONLY': 'true'}), \
                  patch('urllib.request.urlopen', side_effect=AssertionError('network')), \
@@ -58,12 +60,43 @@ class PipelineMapTest(unittest.TestCase):
 
     def test_popup_preserves_units_dates_status_and_escapes_source_text(self):
         p = dict(self.document['features'][0]['properties'], name='<script>bad</script>',
-                 status='mothballed', capacity='15,000', capacity_unit='bpd')
+                 status='mothballed', capacity='15,000', capacity_unit='bpd',
+                 capacity_million_bpd='0.015', capacity_extra=[],
+                 capacity_review_status='table_reference_number_matches')
         html = pipeline_catalog.popup(p)
         self.assertIn('&lt;script&gt;', html)
         self.assertNotIn('<script>', html)
-        for text in ('封存（非实时）', '15,000 桶/日', p['updated_at'], 'CC BY 4.0', '路线'):
+        for text in ('封存（非实时）', '0.015 百万桶/日', p['updated_at'], 'CC BY 4.0', '路线'):
             self.assertIn(text, html)
+
+    def test_capacity_units_and_unsupported_mass_conversion(self):
+        self.assertEqual(million_bpd('1,250,000.00', 'bpd'), '1.25')
+        self.assertEqual(million_bpd('15,000', 'bpd'), '0.015')
+        self.assertEqual(million_bpd('0', 'bpd'), '0')
+        self.assertIsNone(million_bpd('7', 'mtpa'))
+        for value in ('NaN', 'Infinity', '-1', 'bad'):
+            with self.assertRaises(ValueError):
+                million_bpd(value, 'bpd')
+
+    def test_review_preserves_system_scope_ranges_conflicts_and_missing_values(self):
+        index = {f['properties']['project_id']: f['properties'] for f in self.document['features']}
+        for pid in ('P0530', 'P5121'):
+            self.assertIsNone(index[pid]['capacity_million_bpd'])
+            self.assertEqual(index[pid]['capacity_extra'][0]['value_million_bpd'], '2.5')
+            self.assertEqual(index[pid]['capacity_system_id'], 'SUMED')
+            self.assertIn('单线运力', pipeline_catalog.popup(index[pid]))
+        self.assertEqual(index['P5349']['capacity_range_million_bpd'], ['0.45', '0.6'])
+        self.assertIn('0.45—0.6 百万桶/日', pipeline_catalog.popup(index['P5349']))
+        self.assertIsNone(index['P6093']['capacity_million_bpd'])
+        self.assertIn('待核实', pipeline_catalog.popup(index['P6093']))
+        for p in index.values():
+            if not p['capacity'] or p['capacity_unit'] == 'mtpa':
+                self.assertIsNone(p['capacity_million_bpd'])
+        bad = copy.deepcopy(self.document)
+        withheld = next(f['properties'] for f in bad['features'] if f['properties']['project_id'] == 'P6093')
+        withheld['capacity_million_bpd'] = '0.03'
+        with self.assertRaisesRegex(ValueError, '未核实'):
+            pipeline_catalog.validate(bad)
 
     def test_map_preserves_multiline_geometry_and_status_styles(self):
         html = self.render(self.document)

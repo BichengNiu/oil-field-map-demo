@@ -103,10 +103,10 @@ def build_map_html(
         ])
     if location_items:
         if pipeline_features:
-            location_items.append('<span><svg viewBox="0 0 12 12"><path d="M0 6 H12" stroke="#87595c" stroke-width="3"/></svg>输油管线</span>')
+            location_items.append('<span><svg viewBox="0 0 12 12"><path d="M0 6 H12" stroke="#8b2635" stroke-width="3"/></svg>输油管线</span>')
         legend_lines.append('<div class="legend-row">' + "".join(location_items) + '</div>')
     elif pipeline_features:
-        legend_lines.append('<div class="legend-row"><span><svg viewBox="0 0 12 12"><path d="M0 6 H12" stroke="#87595c" stroke-width="3"/></svg>输油管线</span></div>')
+        legend_lines.append('<div class="legend-row"><span><svg viewBox="0 0 12 12"><path d="M0 6 H12" stroke="#8b2635" stroke-width="3"/></svg>输油管线</span></div>')
     if "vessels" in categories:
         legend_lines.append(
             '<div class="legend-row">'
@@ -283,8 +283,8 @@ def build_map_html(
         const planned = ['construction', 'proposed'].includes(p.status);
         const operating = p.status === 'operating';
         const schematic = ['low', 'very low (straight line/schematic)'].includes(p.route_accuracy);
-        return {{color: '#87595c',
-          weight: 3, opacity: operating ? .85 : .65,
+        return {{color: '#8b2635',
+          weight: 3, opacity: operating ? .95 : .75,
           dashArray: planned ? '9 5' : !operating ? '3 7' : schematic ? '5 5' : null}};
       }};
       const pipelineLayer = L.geoJSON(pipelines, {{

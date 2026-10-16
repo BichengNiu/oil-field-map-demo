@@ -10,6 +10,7 @@ from pathlib import Path
 import sys
 
 from shapely.geometry import mapping, shape
+from pipeline_capacity import review_digest
 
 SOURCE_COMMIT = "1f9ebdec2a863b7e0b6e9f4aa1edd666ec258667"
 SOURCE_SHA256 = "5a8ec96c3e7a622d628fbe87afef9d9361eda7f42cd225fb79cc3ffa1740e4a1"
@@ -37,6 +38,10 @@ def build(content):
     if hashlib.sha256(content).hexdigest() != SOURCE_SHA256:
         raise ValueError("Input does not match the pinned GEM source SHA256")
     source = json.loads(content)
+    review = json.loads((Path(__file__).parent / "data/pipeline_capacity_review.json").read_text())
+    if review["geometry_source_sha256"] != SOURCE_SHA256:
+        raise ValueError("Capacity audit belongs to a different source snapshot")
+    reviewed = {row["project_id"]: row for row in review["records"]}
     features = []
     for feature in source["features"]:
         p = feature["properties"]
@@ -57,8 +62,14 @@ def build(content):
             "updated_at": p.get("LastUpdated"), "route_accuracy": p.get("RouteAccuracy"),
             "source_url": p.get("Wiki") or SOURCE_URL,
         }
+        decision = reviewed[p["ProjectID"]]
+        if (decision["original_capacity"], decision["original_unit"]) != (p.get("Capacity"), p.get("CapacityUnits")):
+            raise ValueError("Capacity source changed after review: " + p["ProjectID"])
+        props.update({key: value for key, value in decision.items() if key.startswith("capacity_")})
         features.append({"type": "Feature", "geometry": mapping(simplified), "properties": props})
     features.sort(key=lambda value: value["properties"]["project_id"])
+    if {feature["properties"]["project_id"] for feature in features} != set(reviewed):
+        raise ValueError("Capacity review does not cover every selected pipeline")
     return {
         "type": "FeatureCollection", "features": features,
         "metadata": {
@@ -72,6 +83,11 @@ def build(content):
             "modifications": "Regional Oil subset; translated labels; geometry simplified by 0.003 degrees.",
             "geometry_simplification_degrees": 0.003,
             "status_basis": "GEM research map export; LastUpdated is a record date, not live flow monitoring.",
+            "capacity_schema_version": 2, "capacity_display_unit": "百万桶/日",
+            "capacity_reviewed_at_utc": review["reviewed_at_utc"],
+            "capacity_review_source": "data/pipeline_capacity_review.json",
+            "capacity_review_sha256": review_digest(review),
+            "coverage": review["coverage"],
         },
     }
 

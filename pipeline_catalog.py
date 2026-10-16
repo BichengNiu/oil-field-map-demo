@@ -5,6 +5,7 @@ import math
 from urllib.parse import urlsplit
 
 import data_store
+from pipeline_capacity import display as capacity_display, million_bpd, review_digest
 
 DOCUMENT = "data/oil_pipelines.geojson"
 STATUSES = {
@@ -41,6 +42,20 @@ def validate(document):
         seen.add(p["project_id"])
         if p.get("updated_at"):
             date.fromisoformat(p["updated_at"])
+        if metadata.get("capacity_schema_version") == 2:
+            if "capacity_million_bpd" not in p or not p.get("capacity_review_status"):
+                raise ValueError("输油管线缺少运力核查结果")
+            values = [p["capacity_million_bpd"], *p.get("capacity_range_million_bpd", []),
+                      *(row["value_million_bpd"] for row in p.get("capacity_extra", []))]
+            for value in values:
+                if value is not None:
+                    # Reuse the finite/nonnegative guard, without an extra conversion.
+                    million_bpd(value, "bpd")
+            if p["capacity_review_status"] in {"conflict_withheld", "equal_split_withdrawn", "mass_unit_not_converted", "source_missing"} and p["capacity_million_bpd"] is not None:
+                raise ValueError("未核实的运力不能显示为确定值")
+            if p["capacity_million_bpd"] is not None and p["capacity_review_status"] != "primary_capacity_confirmed":
+                if p["capacity_million_bpd"] != million_bpd(p.get("capacity"), p.get("capacity_unit")):
+                    raise ValueError("运力换算与原始单位不一致")
         url = urlsplit(p["source_url"])
         if url.scheme != "https" or not (url.hostname == "www.gem.wiki" or p["source_url"] == metadata["source_url"]):
             raise ValueError("输油管线来源链接无效")
@@ -59,28 +74,55 @@ def validate(document):
 
 
 def load():
-    return validate(data_store.read_json(DOCUMENT))
+    document = validate(data_store.read_json(DOCUMENT))
+    if document["metadata"].get("capacity_schema_version") == 2:
+        review = data_store.read_json("data/pipeline_capacity_review.json")
+        if review_digest(review) != document["metadata"]["capacity_review_sha256"]:
+            raise ValueError("运力核查记录与管线快照版本不一致")
+        rows = {r["project_id"]: r for r in review["records"]}
+        if set(rows) != {f["properties"]["project_id"] for f in document["features"]}:
+            raise ValueError("运力核查没有覆盖全部管线分段")
+        for feature in document["features"]:
+            p = feature["properties"]
+            if any(p.get(key) != value for key, value in rows[p["project_id"]].items() if key.startswith("capacity_")):
+                raise ValueError("地图运力与核查记录不一致")
+    return document
 
 
 def popup(p):
     def text(value):
         return escape(str(value if value not in (None, "", "--") else "未披露"))
-    capacity = p.get("capacity")
-    unit = {"bpd": "桶/日", "mtpa": "百万吨/年"}.get(p.get("capacity_unit"), p.get("capacity_unit") or "")
-    capacity_text = f"{capacity} {unit}" if capacity not in (None, "", "--") else None
+    value = p.get("capacity_million_bpd") if "capacity_million_bpd" in p else million_bpd(p.get("capacity"), p.get("capacity_unit"))
+    capacity_text = capacity_display(value, approximate=p.get("capacity_approximate", False))
+    if p.get("capacity_range_million_bpd"):
+        capacity_text = "—".join(p["capacity_range_million_bpd"]) + " 百万桶/日"
+    if p.get("capacity_review_status") == "conflict_withheld":
+        capacity_text = "待核实"
     rows = [
         ("GEM编号", p["project_id"]),
         ("分段", p.get("segment")),
         ("国家/地区", "、".join(COUNTRY_NAMES.get(x, x) for x in p["countries"])),
         ("起点", p.get("start")), ("终点", p.get("end")),
         ("资料记载状态", STATUSES[p["status"]] + "（非实时）"),
-        ("公开运力", capacity_text), ("资料更新日", p.get("updated_at")),
+        (p.get("capacity_display_label") or "公开运力", capacity_text),
+        *[(row["label"], capacity_display(row["value_million_bpd"]) + "；" + row["note"])
+          for row in p.get("capacity_extra", [])],
+        ("运力口径", p.get("capacity_basis") or "源表标称值；非实际日输送量"),
+        ("运力资料期", p.get("capacity_reference_date") or p.get("updated_at")),
+        ("资料更新日", p.get("updated_at")),
         ("路线", (ACCURACY.get(p.get("route_accuracy"), p.get("route_accuracy")) or "源精度未披露") + "；地图已简化约0.003°"),
     ]
+    if p.get("capacity") and p.get("capacity_unit") == "mtpa":
+        rows.insert(7, ("原始质量单位", f"{p['capacity']} 百万吨/年；缺少密度，未换算为百万桶/日"))
+    reference = p.get("capacity_reference_url")
+    reference_link = ""
+    if reference and reference != p["source_url"] and urlsplit(reference).scheme == "https":
+        reference_link = f'<a class="source" href="{escape(reference, quote=True)}" target="_blank" rel="noopener">运力核查原始来源</a>'
     return (
         f'<div class="field-name">{text(p["name"])}</div>'
         + (f'<div class="country">{text(p["name_en"])}</div>' if p["name"] != p["name_en"] else "")
         + "".join(f'<div class="row"><span>{label}</span><strong>{text(value)}</strong></div>' for label, value in rows)
         + f'<a class="source" href="{escape(p["source_url"], quote=True)}" target="_blank" rel="noopener">Global Energy Monitor · 管线资料</a>'
+        + reference_link
         + '<a class="source" href="https://creativecommons.org/licenses/by/4.0/" target="_blank" rel="noopener">CC BY 4.0 · 路线经筛选及简化</a>'
     )
