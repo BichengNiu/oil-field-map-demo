@@ -1,7 +1,7 @@
 """Cached data preparation for the full-project browser print report."""
 from __future__ import annotations
 
-from datetime import date, timedelta
+from datetime import date, datetime, time, timedelta
 import json
 import os
 
@@ -86,13 +86,35 @@ def sea_history_config() -> dict:
     return config
 
 
-@st.cache_data(ttl=60, show_spinner=False)
-def card_sea_history(data_revision: int = 0) -> dict:
-    """Read the shared event archive without synchronizing its delivery source."""
+@st.cache_data(ttl=60, max_entries=12, show_spinner=False)
+def card_sea_history(data_revision: int = 0, selected_day: str | None = None) -> dict:
+    """Read provider history or observed local runs at the nearest real source day."""
     import sea_history
-    config = sea_history_config()
-    result = sea_history.read_history(sea_history.archive_path(config))
-    if not result["source"]:
-        import sea_tracking
-        result = sea_tracking.observation_summary()
-    return {**result, "error": None}
+    import sea_tracking
+    from historical_dates import nearest_day, nearest_sea_day
+    try:
+        config = sea_history_config()
+        result = sea_history.read_history(sea_history.archive_path(config))
+        effective_day = None
+        if result["source"]:
+            if selected_day:
+                effective_day = nearest_sea_day(result["rows"], date.fromisoformat(selected_day))
+        elif selected_day:
+            # Generated month rows are not proof of an observation on that day.
+            # Anchor local partial-month cards only to actual successful collection days.
+            with data_store.connect() as conn:
+                days = [row[0] for row in conn.execute("""
+                    SELECT DISTINCT CAST(started_at AT TIME ZONE 'Asia/Shanghai' AS DATE)
+                    FROM collection_runs WHERE provider='Open Waters' AND status IN ('ok','partial')
+                      AND reports>0
+                """).fetchall()]
+            effective_day = nearest_day(days, date.fromisoformat(selected_day))
+            result = (sea_tracking.observation_summary(
+                datetime.combine(effective_day, time.max, sea_tracking.TZ)) if effective_day
+                else {"rows": [], "source": None, "card": None})
+        else:
+            result = sea_tracking.observation_summary()
+        return {**result, "selected_day": effective_day, "error": None}
+    except Exception as exc:
+        return {"rows": [], "card": None, "source": None, "selected_day": None,
+                "error": f"{type(exc).__name__}: {exc}"}

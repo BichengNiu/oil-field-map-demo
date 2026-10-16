@@ -83,6 +83,8 @@ def render_map_panel(state: DashboardViewState, summary_cards: list, *, cards_pl
             screenshot_requested=screenshot_requested,
             pipelines=pipelines,
             snapshot_day=snapshot_day.isoformat() if snapshot_day else None,
+            sea_day=(getattr(state, "selected_sea_day", None).isoformat()
+                     if getattr(state, "selected_sea_day", None) else None),
         ),
         height=735,
     )
@@ -393,7 +395,7 @@ def render_method_panel() -> None:
     )
     st.markdown(
         "**咽喉点。** 打印地图的空心紫色圆点标示全部监测咽喉点。"
-        "popup列示总通过船数、估算承载货量及五类船型分解；港口和咽喉点分别使用源站最新观测日，缺报不补零。"
+        "popup列示总通过船数、估算承载货量及五类船型分解；港口和咽喉点默认分别使用最新观测日；选择历史日期时，各来源采用最近有效记录日，缺报不补零。"
     )
     st.markdown(
         f"**资产覆盖与战略层级（公开目录，非全量保证）。** 目录保留全部{len(ASSETS)}项公开命名的生产、开发、发现或历史资产；"
@@ -447,23 +449,24 @@ def prepare_monitoring_cards(available_ports, available_chokepoints, state,
     comparison_chokes = choke_comparison or []
     sea_history = []
     sea_observation_card = None
+    snapshot_day = getattr(state, "snapshot_day", None)
+    sea_day = None
     try:
-        sea_state = report_data.card_sea_history(revisions.get("sea", 0))
+        sea_state = (report_data.card_sea_history(revisions.get("sea", 0), snapshot_day.isoformat())
+                     if snapshot_day else report_data.card_sea_history(revisions.get("sea", 0)))
+        sea_day = sea_state.get("selected_day")
         sea_history = sea_state["rows"]
         sea_observation_card = sea_state.get("card")
         if sea_state.get("error"):
             errors.append(sea_state["error"])
     except Exception as exc:
         errors.append(f"海域历史记录：{type(exc).__name__}: {exc}")
-    snapshot_day = getattr(state, "snapshot_day", None)
-    if snapshot_day is not None:
-        # The current aggregate observation summary is not historical evidence.
-        sea_observation_card = None
+
     cards = monitoring_cards.build_cards(
         available_ports, available_chokepoints,
         port_history + comparison_ports, choke_history + comparison_chokes,
         state.selected_day, state.selected_chokepoint_day,
-        vessel_day=snapshot_day or datetime.now(ZoneInfo("Asia/Shanghai")).date(), assets=ASSETS,
+        vessel_day=sea_day or snapshot_day or datetime.now(ZoneInfo("Asia/Shanghai")).date(), assets=ASSETS,
         sea_passage_history=sea_history,
         sea_observation_card=sea_observation_card,
     )

@@ -33,6 +33,7 @@ def build_map_html(
     screenshot_requested: bool = False,
     pipelines: dict | None = None,
     snapshot_day: str | None = None,
+    sea_day: str | None = None,
 ) -> str:
     pipeline_features = []
     for feature in (pipelines or {}).get("features", []):
@@ -132,7 +133,7 @@ def build_map_html(
     vessel_times = [AIS.parse_utc(vessel.get("observed_at")) for vessel in vessels]
     latest_vessel_time = max((stamp for stamp in vessel_times if stamp is not None), default=None)
     vessel_time_label = latest_vessel_time.strftime("%Y-%m-%d %H:%M") if latest_vessel_time else "无数据"
-    snapshot_label = f"历史观测日（UTC）：{snapshot_day} · 油气/管线：当前资料目录 · " if snapshot_day else ""
+    snapshot_label = f"历史观测日：{snapshot_day} · 海域监测日：{sea_day or '无数据'} · 油气/管线：当前资料目录 · " if snapshot_day else ""
     screenshot_label_json = json.dumps(
         snapshot_label + f"港口数据日（UTC）：{day} · 咽喉点数据日（UTC）：{chokepoint_day} · 船舶数据日（UTC）：{vessel_time_label}",
         ensure_ascii=False)
@@ -325,7 +326,7 @@ def build_map_html(
             className: 'vessel-cluster', iconSize: [38, 34], iconAnchor: [19, 17],
             html: `<svg width="38" height="34" viewBox="0 0 38 34">
               <path d="M19 1 L37 32 L19 26 L1 32 Z" fill="${{hasChineseFlag ? '#334155' : '#94a3b8'}}"
-                stroke="${{hasChineseFlag ? '#f59e0b' : '#ffffff'}}" stroke-width="${{hasChineseFlag ? 2.2 : 1.4}}"/>
+                stroke="${{hasChineseFlag ? '#dc2626' : '#ffffff'}}" stroke-width="${{hasChineseFlag ? 2.2 : 1.4}}"/>
               <text x="19" y="22" text-anchor="middle" fill="#ffffff" font-size="10" font-weight="700">${{label}}</text>
             </svg>`
           }});
@@ -396,7 +397,7 @@ def build_map_html(
           className: 'vessel-icon', iconSize: [18, 18], iconAnchor: [9, 9],
           html: `<svg width="18" height="18" viewBox="0 0 18 18" style="transform:rotate(${{angle}}deg)">
             <path d="M9 1 L16 16 L9 12.8 L2 16 Z" fill="${{color}}"
-              stroke="${{chineseFlag ? '#f59e0b' : '#ffffff'}}" stroke-width="${{chineseFlag ? 2.2 : 1.15}}"/>
+              stroke="${{chineseFlag ? '#dc2626' : '#ffffff'}}" stroke-width="${{chineseFlag ? 2.2 : 1.15}}"/>
           </svg>`
         }});
         const marker = L.marker([lat, lon], {{icon, chineseFlag, zIndexOffset: chineseFlag ? 500 : 0}});

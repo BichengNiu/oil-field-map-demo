@@ -20,3 +20,4 @@ class DashboardViewState:
     selected_day: date | None
     selected_chokepoint_day: date | None
     snapshot_day: date | None = None
+    selected_sea_day: date | None = None

@@ -200,7 +200,7 @@ def observation_summary(now=None):
             upper = datetime.combine(end + timedelta(days=1), time.min, TZ)
             week_counts.append(_count(conn, lower, upper) if _continuous(conn, lower, upper) else None)
         valid_run = conn.execute("SELECT COUNT(*) FROM collection_runs WHERE provider='Open Waters' "
-                                 "AND status IN ('ok','partial') AND started_at>=?", (month_start,)).fetchone()[0]
+                                 "AND status IN ('ok','partial') AND started_at>=? AND started_at<=?", (month_start, now)).fetchone()[0]
         month = _count(conn, max(first, month_start), now) if valid_run else None
         comparisons = [None, None]
         if _continuous(conn, month_start, now):

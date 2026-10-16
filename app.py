@@ -59,6 +59,7 @@ _RUNTIME_SOURCE_FILES = (
     "data_store.py",
     "dashboard_data.py",
     "dashboard_state.py",
+    "historical_dates.py",
     "dashboard_views.py",
     "download_panel.py",
     "map_renderer.py",
@@ -69,6 +70,7 @@ _RUNTIME_SOURCE_FILES = (
     "print_report.py",
     "report_data.py",
     "sea_history.py",
+    "sea_tracking.py",
     "sea_history_panel.py",
 )
 
@@ -94,7 +96,9 @@ def _load_runtime_modules(source_fingerprint: str) -> dict[str, object]:
         importlib.import_module("map_popups"),
         importlib.import_module("monitoring_cards"),
         importlib.import_module("sea_history"),
+        importlib.import_module("sea_tracking"),
         importlib.import_module("print_report"),
+        importlib.import_module("historical_dates"),
         _report_data_module,
         _dashboard_data_module,
         _dashboard_state_module,
@@ -112,6 +116,7 @@ def _load_runtime_modules(source_fingerprint: str) -> dict[str, object]:
         "openwaters_snapshot": _dashboard_data_module.openwaters_snapshot,
         "portwatch_state": _dashboard_data_module.portwatch_state,
         "snapshot_date_bounds": _dashboard_data_module.snapshot_date_bounds,
+        "nearest_portwatch_day": _dashboard_data_module.nearest_portwatch_day,
         "initialize_storage": _dashboard_data_module.initialize_storage,
         "render_ais_panel": _dashboard_views_module.render_ais_panel,
         "render_assets_panel": _dashboard_views_module.render_assets_panel,
@@ -179,12 +184,15 @@ def _render_dashboard(refresh_revision: str) -> None:
         cards_placeholder = st.empty()
         with st.container(horizontal=True, horizontal_alignment="left"):
             snapshot_day = st.date_input(
-                "历史日期（UTC）", value=None, min_value=first_day, max_value=last_day,
+                "历史日期", value=None, min_value=first_day, max_value=last_day,
                 key="map_snapshot_day", format="YYYY-MM-DD", width=240,
                 disabled=first_day is None,
             )
-    selected_day = snapshot_day or newest_day
-    selected_chokepoint_day = snapshot_day or newest_chokepoint_day
+    snapshot_identity = (str(data_store.database_path()), *display_revisions.values())
+    selected_day = nearest_portwatch_day("ports", snapshot_day, snapshot_identity) if snapshot_day else newest_day
+    selected_chokepoint_day = nearest_portwatch_day("chokepoints", snapshot_day, snapshot_identity) if snapshot_day else newest_chokepoint_day
+    selected_sea_day = (_report_data_module.card_sea_history(
+        display_revisions["sea"], snapshot_day.isoformat()).get("selected_day") if snapshot_day else None)
     open_state = openwaters_snapshot(AIS.MODULE_VERSION, snapshot_day)
     live_positions = open_state.get("vessels", [])
     ais_status = collector_status()
@@ -232,6 +240,7 @@ def _render_dashboard(refresh_revision: str) -> None:
         selected_day=selected_day,
         selected_chokepoint_day=selected_chokepoint_day,
         snapshot_day=snapshot_day,
+        selected_sea_day=selected_sea_day,
     )
 
     if tab_map.open:

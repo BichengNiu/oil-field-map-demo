@@ -58,6 +58,20 @@ def snapshot_date_bounds(snapshot_identity: tuple) -> tuple[date | None, date | 
         """).fetchone()
 
 
+@st.cache_data(max_entries=48, show_spinner=False)
+def nearest_portwatch_day(kind: str, selected: date, snapshot_identity: tuple) -> date | None:
+    from historical_dates import nearest_day
+    metric = {"ports": "portcalls", "chokepoints": "n_total"}[kind]
+    with data_store.connect() as conn:
+        before, after = conn.execute(f"""
+            SELECT MAX(day) FILTER (WHERE day<=?), MIN(day) FILTER (WHERE day>=?)
+            FROM (SELECT day, TRY_CAST(json_extract_string(payload,'$.{metric}') AS DOUBLE) metric_value
+                  FROM portwatch_daily WHERE kind=?) observations
+            WHERE metric_value>=0 AND isfinite(metric_value)
+        """, [selected, selected, kind]).fetchone()
+    return nearest_day((before, after), selected)
+
+
 @st.cache_data(ttl=60, max_entries=12, show_spinner=False)
 def portwatch_state(kind: str, resource: str, module_version: int,
                     stored_revision: int = 0, refresh_revision: str = "initial"):

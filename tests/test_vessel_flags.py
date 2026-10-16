@@ -70,6 +70,9 @@ class VesselFlagsTest(unittest.TestCase):
             )
         self.assertIn('"unknown", "巴拿马"', html)
         self.assertIn('<span>船籍</span>', html)
+        self.assertIn("chineseFlag ? '#dc2626'", html)
+        self.assertIn("hasChineseFlag ? '#dc2626'", html)
+        self.assertNotIn('#f59e0b',html)
 
     def test_northern_red_sea_gulfs_are_queried_within_anonymous_limits(self):
         for latitude, longitude in ((29, 33), (29.5, 34.9)):
