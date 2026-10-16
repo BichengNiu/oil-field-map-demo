@@ -209,12 +209,9 @@ def render_ports_panel(ports: list[dict], selected_day: date | None, port_error:
             first = max(history[0]["date"], selected_day-timedelta(days=89 if period=="近90天" else 364)) if period!="全部历史" else history[0]["date"]
             fields = ["date", "portcalls", *(f"portcalls_{kind}" for kind in PORTWATCH.SHIP_TYPES)]
             images = port_charts.chart_images(tuple(tuple(row[field] for field in fields) for row in history), first)
-            from portwatch_records import SHIP_TYPE_LABELS
-            titles = ["每日进港艘次", *(f"{label}每日进港艘次" for label in SHIP_TYPE_LABELS.values())]
             for start in (0, 3):
-                for column, title, image in zip(st.columns(3), titles[start:start+3], images[start:start+3]):
+                for column, image in zip(st.columns(3), images[start:start+3]):
                     with column:
-                        st.subheader(title)
                         st.image(image, width="stretch")
     if port_rows:
         st.dataframe(
