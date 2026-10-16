@@ -10,6 +10,7 @@ import ais as AIS
 import ais_history
 import data_store
 import portwatch as PORTWATCH
+from port_metadata import monitored_ports
 
 
 @st.cache_resource(show_spinner=False)
@@ -91,10 +92,12 @@ def portwatch_state(kind: str, resource: str, module_version: int,
         ("chokepoints", "latest_date"): PORTWATCH.latest_chokepoint_date,
     }
     reader = readers[kind, resource]
+    def scoped(value):
+        return monitored_ports(value) if (kind, resource) == ("ports", "catalog") else value
     source_error = None
     if refresh_revision != "initial" and not data_store.read_only():
         try:
-            return reader(refresh_revision), None
+            return scoped(reader(refresh_revision)), None
         except Exception as exc:
             source_error = f"{type(exc).__name__}: {exc}"
     try:
@@ -105,7 +108,7 @@ def portwatch_state(kind: str, resource: str, module_version: int,
         else:
             cached = None
         if cached is not None:
-            return cached, source_error
+            return scoped(cached), source_error
     except Exception:
         pass
     label = "港口" if kind == "ports" else "咽喉点"

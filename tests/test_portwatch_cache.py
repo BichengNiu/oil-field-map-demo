@@ -66,7 +66,7 @@ class PortWatchCacheTest(unittest.TestCase):
     def test_failed_auto_catalog_and_date_requests_keep_saved_state(self):
         day = date(2026, 10, 6)
         for kind, node_id in (("ports", "port105"), ("chokepoints", "chokepoint1")):
-            catalog = [{"portid": node_id, "name": "Saved node"}]
+            catalog = [{"portid": node_id, "name": "Saved node", "country": "Oman"}]
             data_store.save_catalog(kind, catalog)
             data_store.save_portwatch(kind, [{"portid": node_id, "date": day.isoformat()}], "test-source")
             catalog_reader = "port_catalog" if kind == "ports" else "chokepoint_catalog"

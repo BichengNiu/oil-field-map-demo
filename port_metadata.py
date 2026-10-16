@@ -9,6 +9,18 @@ from __future__ import annotations
 from entity_names import display_name
 
 REVIEW_VERSION = "2026-10-16"
+# User-selected monitoring scope. Archived catalogs and historical facts remain
+# intact; this allowlist is applied at the dashboard's shared catalog boundary.
+PORT_COUNTRIES = frozenset({
+    "Bahrain", "Djibouti", "Egypt", "Iran", "Iraq", "Kuwait", "Oman",
+    "Qatar", "Saudi Arabia", "United Arab Emirates", "Yemen",
+})
+
+
+def monitored_ports(rows: list[dict]) -> list[dict]:
+    return [row for row in rows if row.get("country") in PORT_COUNTRIES]
+
+
 EXPECTED_IDENTITIES = {'facility_wpi48104': ('Sharmah', 'Saudi Arabia'),
  'facility_yanbu_north_crude': ('Yanbu North Crude Terminal', 'Saudi Arabia'),
  'facility_yanbu_north_refined': ('Yanbu North Refined Product Terminal', 'Saudi Arabia'),

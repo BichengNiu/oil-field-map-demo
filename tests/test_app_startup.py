@@ -71,6 +71,7 @@ class AppStartupTest(unittest.TestCase):
                     assert not app.exception, [str(error.value) for error in app.exception]
                     assert len(app.metric) == 8
                     assert app.metric[0].label == '港口总数'
+                    assert app.metric[0].value == '131'
                     assert app.metric[1].label.startswith('当日进港艘次\\n（')
                     assert app.metric[2].label.startswith('本周累计艘次\\n（')
                     assert not any(h.value == '港口日活动' for h in app.subheader)
@@ -82,6 +83,8 @@ class AppStartupTest(unittest.TestCase):
                     assert app.selectbox(key='port_chart_period').options == ['近1周','近1个月','近1个季度','近半年','近1年','近3年','近5年','近10年','全部']
                     assert list(app.dataframe[0].value.columns)[:9] == ['港口名','港口类型','业务特点','国家','水域','日期','经营状态','当日进港艘次','本周累计艘次']
                     assert len(app.dataframe[0].value.columns) == 23
+                    assert '厄立特里亚' not in set(app.dataframe[0].value['国家'])
+                    assert len(app.dataframe[0].value) == 131
                     assert (app.dataframe[0].value['港口类型'] == '待核实').sum() == 2
                     assert not app.dataframe[0].value['业务特点'].isin(['待核实', '未知', '']).any()
                     assert '本月累计艘次' in app.dataframe[0].value.columns

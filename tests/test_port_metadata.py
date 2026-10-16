@@ -9,12 +9,36 @@ from unittest.mock import patch
 
 import duckdb
 import data_store
-from port_metadata import apply_port_metadata
+from port_metadata import apply_port_metadata, monitored_ports, PORT_COUNTRIES
 
 ROOT = Path(__file__).resolve().parents[1]
 
 
 class PortMetadataTest(unittest.TestCase):
+    def test_dashboard_scope_keeps_eleven_countries_without_erasing_archive(self):
+        import dashboard_data
+        audit = json.loads((ROOT/'audits/port_catalog_review_2026-10-16.json').read_text())
+        rows = [dict(row) for row in audit['ports']]
+        self.assertEqual(len(PORT_COUNTRIES), 11)
+        self.assertEqual(len(monitored_ports(rows)), 131)
+        self.assertNotIn('Eritrea', {row['country'] for row in monitored_ports(rows)})
+        self.assertEqual(len(rows), 132)
+        self.assertEqual({row['country'] for row in monitored_ports(rows)}, PORT_COUNTRIES)
+        dashboard_data.portwatch_state.clear()
+        with patch('data_store.cached_catalog', return_value=rows):
+            saved, error = dashboard_data.portwatch_state('ports', 'catalog', -101)
+            self.assertEqual(len(saved), 131)
+            self.assertIsNone(error)
+        with patch('data_store.read_only', return_value=False), \
+             patch('portwatch.port_catalog', return_value=rows):
+            fetched, error = dashboard_data.portwatch_state('ports', 'catalog', -102, refresh_revision='scope-test')
+            self.assertEqual(len(fetched), 131)
+            self.assertIsNone(error)
+        with patch('data_store.cached_catalog', return_value=rows):
+            saved, error = dashboard_data.portwatch_state('chokepoints', 'catalog', -103)
+            self.assertEqual(len(saved), 132)
+        dashboard_data.portwatch_state.clear()
+
     def test_each_published_id_matches_the_review_and_country_source(self):
         audit = json.loads((ROOT/'audits/port_catalog_review_2026-10-16.json').read_text())
         with duckdb.connect(str(ROOT/'runtime/monitoring.duckdb'), read_only=True) as conn:
