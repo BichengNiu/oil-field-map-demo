@@ -196,13 +196,15 @@ def render_ais_panel(state: DashboardViewState) -> None:
 
 
 def _port_chart_filters(ports: list[dict]) -> tuple[str, list[dict], str]:
-    columns = st.columns([1.1, 1.6, 1, 1, 1.8, 1])
+    columns = st.columns([1.1, 1, 1.6, 1, 1, 1.8])
     with columns[0]:
         legacy = {"近90天": "近1个季度", "近一年": "近1年", "全部历史": "全部"}
         current = st.session_state.get("port_chart_period")
         if current in legacy:
             st.session_state["port_chart_period"] = legacy[current]
         period = st.selectbox("时间范围", port_charts.TIME_RANGES, index=4, key="port_chart_period")
+    with columns[1]:
+        aggregation = st.selectbox("聚合方式", list(port_charts.AGGREGATIONS), key="port_chart_aggregation")
     names = {str(port["portid"]): display_name(port) for port in ports}
     filters = (
         ("港口类型", "type", port_type_label, None),
@@ -211,7 +213,7 @@ def _port_chart_filters(ports: list[dict]) -> tuple[str, list[dict], str]:
         ("港口", "port", lambda port: str(port["portid"]), names.get),
     )
     filtered = list(ports)
-    for column, (label, suffix, value_of, formatter) in zip(columns[1:5], filters):
+    for column, (label, suffix, value_of, formatter) in zip(columns[2:], filters):
         options = sorted({value_of(port) for port in filtered}, key=formatter or str)
         key = f"port_chart_filter_{suffix}"
         current = st.session_state.get(key, [])
@@ -223,8 +225,6 @@ def _port_chart_filters(ports: list[dict]) -> tuple[str, list[dict], str]:
             selection = multiselect_with_all(label, options, key=key, format_func=formatter, all_label="全部")
         selected = set(selected_values(selection, options))
         filtered = [port for port in filtered if value_of(port) in selected]
-    with columns[5]:
-        aggregation = st.selectbox("聚合方式", list(port_charts.AGGREGATIONS), key="port_chart_aggregation")
     return period, filtered, aggregation
 
 
