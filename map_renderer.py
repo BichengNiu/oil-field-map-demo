@@ -108,9 +108,12 @@ def build_map_html(
     if location_items:
         legend_lines.append('<div class="legend-row">' + "".join(location_items) + '</div>')
     pipeline_items = []
-    for fuel, color, label in (("Oil", "#8b2635", "输油管线"), ("Gas", "#416b86", "输气联络")):
-        if any(f["properties"].get("fuel") == fuel for f in pipeline_features):
-            pipeline_items.append(f'<span><svg viewBox="0 0 12 12"><path d="M0 6 H12" stroke="{color}" stroke-width="3"/></svg>{label}</span>')
+    for construction in (False, True):
+        for fuel, color, label in (("Oil", "#8b2635", "输油管线"), ("Gas", "#416b86", "输气管线")):
+            if any(f["properties"].get("fuel") == fuel for f in pipeline_features):
+                dash = ' stroke-dasharray="9 5"' if construction else ""
+                suffix = "（在建）" if construction else ""
+                pipeline_items.append(f'<span><svg viewBox="0 0 36 12" style="width:36px;height:12px"><path d="M0 6 H36" stroke="{color}" stroke-width="3"{dash}/></svg>{label}{suffix}</span>')
     if pipeline_items:
         legend_lines.append('<div class="legend-row">' + "".join(pipeline_items) + '</div>')
     if "vessels" in categories:
@@ -286,12 +289,13 @@ def build_map_html(
       map.getPane('pipelinePane').style.zIndex = 350;
       const pipelineStyle = (feature) => {{
         const p = feature.properties;
-        const planned = ['construction', 'proposed'].includes(p.status);
+        const construction = p.status === 'construction';
+        const proposed = p.status === 'proposed';
         const operating = p.status === 'operating';
         const schematic = ['low', 'very low (straight line/schematic)'].includes(p.route_accuracy);
         return {{color: p.fuel === 'Gas' ? '#416b86' : '#8b2635',
           weight: 3, opacity: operating ? .95 : .75,
-          dashArray: planned ? '9 5' : !operating ? '3 7' : schematic ? '5 5' : null}};
+          dashArray: construction ? '9 5' : proposed ? '9 3 2 3' : !operating ? '3 7' : schematic ? '5 5' : null}};
       }};
       const pipelineLayer = L.geoJSON(pipelines, {{
         pane: 'pipelinePane', className: 'pipeline-path', style: pipelineStyle,

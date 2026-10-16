@@ -48,7 +48,7 @@ class EntityNamesTest(unittest.TestCase):
         self.assertNotIn('"project_id": "P0640"', html)
         self.assertNotIn('"project_id": "P5684"', html)
         self.assertIn('"project_id": "P5683"', html)
-        self.assertIn('输气联络', html)
+        self.assertIn('输气管线（在建）', html)
         popup = pipeline_catalog.popup(index['P5683']['properties'])
         self.assertIn('天然气（不属于原油运力）', popup)
         self.assertNotIn('百万桶/日', popup)
