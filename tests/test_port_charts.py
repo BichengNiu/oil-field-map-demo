@@ -11,6 +11,36 @@ from portwatch_records import SHIP_TYPES
 
 
 class PortChartsTest(unittest.TestCase):
+    def test_calendar_totals_clip_window_and_preserve_missing_values(self):
+        rows = tuple((date(2025,12,29)+timedelta(days=i), *[1]*6) for i in range(8))
+        for aggregation, totals in [('周度', [7,1]), ('月度', [3,5]), ('年度', [3,5])]:
+            result = port_charts.aggregate_rows(rows, rows[0][0], aggregation)
+            self.assertEqual([r['portcalls'] for r in result], totals)
+            self.assertEqual(sum(r['portcalls'] for r in result), 8)
+        clipped = port_charts.aggregate_rows(rows, date(2025,12,31), '周度')
+        self.assertEqual([r['portcalls'] for r in clipped], [5,1])
+        self.assertEqual(clipped[0]['period_start'], date(2025,12,31))
+        self.assertEqual(clipped[-1]['period_end'], date(2026,1,5))
+        incomplete = tuple(row for row in rows if row[0] != date(2026,1,2))
+        self.assertIsNone(port_charts.aggregate_rows(incomplete, rows[0][0], '月度')[1]['portcalls'])
+        missing = (*rows[:-1], (*rows[-1][:-1], None))
+        yearly = port_charts.aggregate_rows(missing, rows[0][0], '年度')
+        self.assertEqual(yearly[1]['portcalls'], 5)
+        self.assertIsNone(yearly[1]['portcalls_tanker'])
+
+    def test_annual_totals_render_as_bars(self):
+        from Ts.TsPlots import plot_series
+        seen = []
+        def plot(*args, **kwargs):
+            figure, axis = plot_series(*args, **kwargs)
+            seen.append(([p.get_height() for p in axis.patches], len(axis.lines)))
+            return figure, axis
+        rows = tuple((date(2025,12,29)+timedelta(days=i), *[1]*6) for i in range(8))
+        with patch('Ts.TsPlots.plot_series', side_effect=plot):
+            images = port_charts.chart_images.__wrapped__(rows, rows[0][0], '年度')
+        self.assertEqual(len(images), 6)
+        self.assertEqual(seen, [([3,5], 0)]*6)
+
     def test_sql_complete_coverage_zero_gaps_invalid_values_and_cutoff(self):
         conn=duckdb.connect(':memory:')
         conn.execute(data_store.SCHEMA)
