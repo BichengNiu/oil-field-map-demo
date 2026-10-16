@@ -98,6 +98,11 @@ CORRECTIONS = {'facility_wpi48104': {'region': '红海'},
 def apply_port_metadata(rows):
     result = []
     for original in rows:
+        # The retired port operating-status field is absent from current
+        # catalogs and exports. Original review documents remain archived.
+        original = {key: value for key, value in original.items()
+                    if not key.startswith(("port_operating_status", "port_status_"))
+                    and key not in ("recent_daily_activity_normal", "activity_status_as_of")}
         pid = str(original.get("portid", ""))
         patch = CORRECTIONS.get(pid)
         if patch is None:

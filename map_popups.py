@@ -9,7 +9,7 @@ import html
 import field_catalog as CATALOG
 import portwatch as PORTWATCH
 from asset_values import display_value
-from portwatch_records import SHIP_TYPE_LABELS, port_status_label
+from portwatch_records import SHIP_TYPE_LABELS
 
 METRIC_LABELS = {
     "estimated_daily_average": "估算期间日均（公布总量×份额）",
@@ -259,7 +259,6 @@ def port_popup(port: dict, day: str) -> str:
     def count(value):
         return "—" if value is None else f"{value:,.0f}"
 
-    status = port_status_label(port, day)
     weekly_calls = port.get("week_calls")
     colors = {"container": "#2563eb", "dry_bulk": "#b45309",
               "general_cargo": "#64748b", "roro": "#7c3aed", "tanker": "#0f766e"}
@@ -278,7 +277,6 @@ def port_popup(port: dict, day: str) -> str:
     return (
         '<div class="popup-card port-popup">'
         f'<div class="field-name">⚓ {_esc(display_name(port))}</div>'
-        f'<div class="row"><span>运行状态</span><strong>{status}</strong></div>'
         f'<div class="row"><span>当日进港艘次</span><strong>{count(daily_calls)} 艘次</strong></div>'
         f'<div class="row"><span>本周累计艘次</span><strong>{count(weekly_calls)} 艘次</strong></div>'
         '<div class="hierarchy-title">本周各船型累计艘次</div>'

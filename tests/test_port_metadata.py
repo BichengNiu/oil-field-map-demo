@@ -44,7 +44,7 @@ class PortMetadataTest(unittest.TestCase):
         with duckdb.connect(str(ROOT/'runtime/monitoring.duckdb'), read_only=True) as conn:
             original = [json.loads(row[0]) for row in conn.execute("SELECT payload FROM catalogs WHERE kind='ports'").fetchall()]
         checked = {row['portid']: row for row in apply_port_metadata(original)}
-        self.assertEqual(set(checked), {row['portid'] for row in audit['ports']})
+        self.assertTrue({row['portid'] for row in audit['ports']} <= set(checked))
         for record in audit['ports']:
             row = checked[record['portid']]
             for key in ('name_cn','country','region'):

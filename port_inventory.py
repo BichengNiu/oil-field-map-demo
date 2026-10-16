@@ -13,8 +13,6 @@ NGA_SAILING = "https://msi.nga.mil/api/publications/download?key=16694491%2FSFH0
 PORT_REVIEW = read_json("PORT_REVIEW_2026-10-03.json")
 
 PORT_FOLLOWUP = read_json("PORT_REVIEW_2026-10-04.json")
-_FOLLOWUP_IDS = {row["portid"] for kind in ("additions", "status_decisions")
-                 for row in PORT_FOLLOWUP[kind]}
 
 _COUNTRY_NAMES_ZH = {
     "bahrain": "巴林",
@@ -268,19 +266,8 @@ def enrich(ports: list[dict]) -> list[dict]:
                            coordinate_precision=f"NGA Pub172 §{section}港口所在地代表点；分钟精度",
                            coverage_note="Asyad港口名录补充；坐标是所在地近似点，进港与货量未知"))
     output.extend(dict(row) for row in PORT_REVIEW["additions"] + PORT_FOLLOWUP["additions"])
-    decisions = {row["portid"]: row for row in PORT_REVIEW["status_decisions"] + PORT_FOLLOWUP["status_decisions"]}
-    for port in output:
-        port.setdefault("port_operating_status", "unknown")
-        port.setdefault("port_operating_status_as_of", "未取得当前逐港公告")
-        port.setdefault("port_status_basis", "港口名录及AIS活动不直接证明停复运；零量或缺报不等于关闭。")
-        port.setdefault("port_status_evidence_url", None)
-        if port["portid"] in decisions:
-            port.update({k: v for k, v in decisions[port["portid"]].items() if k != "portid"})
-        port["port_operating_status_label"] = {
-            "unknown": "当前停复运待核", "development": "建设／商业启用待核",
-            "activity_confirmed": "已确认装船活动（带时点）",
-        }[port["port_operating_status"]]
-        port["port_status_audit_date"] = "2026-10-04" if port["portid"] in _FOLLOWUP_IDS else "2026-10-03"
+    from port_additions import extend_inventory
+    output = extend_inventory(output)
     if len({p["portid"] for p in output}) != len(output):
         raise ValueError("合并港口目录出现重复编号")
     for port in output:
@@ -293,3 +280,5 @@ def enrich(ports: list[dict]) -> list[dict]:
 
 SUPPLEMENTAL_IDS = {f"wpi{r['wpi']}" for r in WPI_ROWS if not r["portwatch_id"]} | {
     "facility_shinas", "facility_suwaiq"} | {r["portid"] for r in PORT_REVIEW["additions"] + PORT_FOLLOWUP["additions"]}
+from port_additions import SUPPLEMENTAL_IDS as ADDED_SUPPLEMENTAL_IDS
+SUPPLEMENTAL_IDS |= ADDED_SUPPLEMENTAL_IDS

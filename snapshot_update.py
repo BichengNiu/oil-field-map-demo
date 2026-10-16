@@ -99,7 +99,11 @@ def collect_candidate(original: Path, candidate: Path, *, force_ports=False, now
         from entity_names import validate_catalogs
         # Enrich even when PortWatch is not due; identities and daily facts stay intact.
         for kind in ("assets", "ports", "chokepoints"):
-            data_store.save_catalog(kind, data_store.load_catalog(kind))
+            catalog = data_store.load_catalog(kind)
+            if kind == "ports":
+                from port_additions import extend_inventory
+                catalog = extend_inventory(catalog)
+            data_store.save_catalog(kind, catalog)
         validate_catalogs({kind: data_store.load_catalog(kind) for kind in ("assets", "ports", "chokepoints")})
         snapshot = collector.collect_once()
         if snapshot.get("error") or snapshot.get("archive_error") or not snapshot.get("vessels"):

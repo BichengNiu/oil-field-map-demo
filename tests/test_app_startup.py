@@ -28,7 +28,11 @@ class AppStartupTest(unittest.TestCase):
                 data_store.ingest_document("data/uae_gas_connections.geojson")
                 data_store.ingest_document("data/bilingual_names.json")
                 for kind in ("assets", "ports", "chokepoints"):
-                    data_store.save_catalog(kind, data_store.load_catalog(kind))
+                    catalog = data_store.load_catalog(kind)
+                    if kind == "ports":
+                        from port_additions import extend_inventory
+                        catalog = extend_inventory(catalog)
+                    data_store.save_catalog(kind, catalog)
             database.with_suffix(".duckdb.lock").unlink(missing_ok=True)
             env = {**os.environ,
                    "MONITORING_DB_PATH": str(database),
@@ -71,7 +75,7 @@ class AppStartupTest(unittest.TestCase):
                     assert not app.exception, [str(error.value) for error in app.exception]
                     assert len(app.metric) == 8
                     assert app.metric[0].label == '港口总数'
-                    assert app.metric[0].value == '131'
+                    assert app.metric[0].value == '170'
                     assert app.metric[1].label.startswith('当日进港艘次\\n（')
                     assert app.metric[2].label.startswith('本周累计艘次\\n（')
                     assert not any(h.value == '港口日活动' for h in app.subheader)
@@ -81,17 +85,17 @@ class AppStartupTest(unittest.TestCase):
                     assert all(b.proto.type == 'primary' for b in chart_downloads)
                     assert app.selectbox(key='port_chart_period').value == '近1年'
                     assert app.selectbox(key='port_chart_period').options == ['近1周','近1个月','近1个季度','近半年','近1年','近3年','近5年','近10年','全部']
-                    assert list(app.dataframe[0].value.columns)[:9] == ['港口名','港口类型','业务特点','国家','水域','日期','经营状态','当日进港艘次','本周累计艘次']
-                    assert len(app.dataframe[0].value.columns) == 23
+                    assert list(app.dataframe[0].value.columns)[:9] == ['港口名','港口类型','业务特点','国家','水域','日期','当日进港艘次','本周累计艘次','本周集装箱船累计艘次']
+                    assert len(app.dataframe[0].value.columns) == 22
                     assert '厄立特里亚' not in set(app.dataframe[0].value['国家'])
-                    assert len(app.dataframe[0].value) == 131
+                    assert len(app.dataframe[0].value) == 170
                     assert (app.dataframe[0].value['港口类型'] == '待核实').sum() == 2
                     assert not app.dataframe[0].value['业务特点'].isin(['待核实', '未知', '']).any()
                     assert '本月累计艘次' in app.dataframe[0].value.columns
                     assert '本月油轮/液货船累计艘次' in app.dataframe[0].value.columns
                     assert any(b.label == '下载列表' for b in app.get('download_button'))
                     assert not any(b.label == '下载所列港口历史' for b in app.button)
-                    assert set(app.dataframe[0].value['经营状态']) <= {'正常','停运','未知'}
+                    assert '经营状态' not in app.dataframe[0].value.columns
                     assert all(any('\u4e00' <= ch <= '\u9fff' for ch in value) for value in app.dataframe[0].value['国家'])
                     app.session_state['main_tabs'] = '数据下载'
                     app.run(timeout=30)

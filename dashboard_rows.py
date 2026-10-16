@@ -11,7 +11,7 @@ import ais as AIS
 import portwatch as PORTWATCH
 from port_inventory import country_label
 from port_types import port_type_label, port_business_label
-from portwatch_records import SHIP_TYPE_LABELS, port_status_label
+from portwatch_records import SHIP_TYPE_LABELS
 from map_popups import (
     METRIC_LABELS,
     daily_output_value,
@@ -41,7 +41,6 @@ def port_rows(ports: list[dict], selected_day: date | None) -> list[dict]:
         "国家": country_label(port.get("country")),
         "水域": port.get("region"),
         "日期": selected_day.isoformat() if selected_day else None,
-        "经营状态": port_status_label(port, selected_day),
         "当日进港艘次": port.get("portcalls") if port.get("has_data") else None,
         "本周累计艘次": port.get("week_calls"),
         **{f"本周{label}累计艘次": port.get(f"week_calls_{kind}") for kind, label in SHIP_TYPE_LABELS.items()},

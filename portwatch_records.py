@@ -34,16 +34,3 @@ def latest_by_node(rows: list[dict], *, require_date: bool = True) -> dict[str, 
         ):
             latest[node_id] = row
     return latest
-
-
-def port_status_label(port: dict, day) -> str:
-    status = {
-        "normal": "正常", "operating": "正常", "open": "正常",
-        "stopped": "停运", "closed": "停运", "suspended": "停运", "shutdown": "停运",
-    }.get(port.get("port_operating_status"), "未知")
-    evidence_day = str(port.get("port_operating_status_as_of") or "")[:10]
-    if day and len(evidence_day) == 10 and evidence_day[4:5] == "-" and evidence_day > str(day):
-        status = "未知"
-    if status == "未知" and port.get("recent_daily_activity_normal") and str(port.get("activity_status_as_of")) == str(day):
-        return "正常"
-    return status

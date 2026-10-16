@@ -61,6 +61,8 @@ _RUNTIME_SOURCE_FILES = (
     "dashboard_rows.py",
     "port_types.py",
     "port_metadata.py",
+    "port_additions.py",
+    "port_inventory.py",
     "port_charts.py",
     "ui_controls.py",
     "Ts/TsPlots/ts_plot.py",
@@ -97,6 +99,8 @@ def _load_runtime_modules(source_fingerprint: str) -> dict[str, object]:
     """Reload helper modules together when Streamlit reruns a changed entrypoint."""
     for module in (
         importlib.import_module("port_metadata"),
+        importlib.import_module("port_additions"),
+        importlib.import_module("port_inventory"),
         _data_store_module,
         _ais_history_module,
         importlib.import_module("portwatch_records"),

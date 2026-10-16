@@ -229,4 +229,4 @@ PortWatch 方法说明：[Data and Methodology](https://portwatch.imf.org/pages/
 
 港口表和“下载列表”CSV增加本月累计总艘次与五类船月累计列（月初至实际数据日期）；缺日不补零。港口页已移除历史下载快捷按钮及跳转回调。经营状态采用明确公告与最近7天完整进港记录，详见[运营信息来源核查](PORT_OPERATIONS.md)。
 
-> 当前国家范围以 [11 国覆盖复核](PORT_SCOPE_REVIEW.md) 为准：排除厄立特里亚，展示 131 条，原始归档与历史保留。该范围仍有已确认缺口。
+> 当前国家范围以 [11 国覆盖复核](PORT_SCOPE_REVIEW.md) 为准：排除厄立特里亚，原始归档与历史保留。后续已补入 39 条，展示 170 条，移除港口经营状态字段；详见 [补充清单](PORT_ADDITIONS_REVIEW.md)。

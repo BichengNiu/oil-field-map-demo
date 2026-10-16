@@ -30,7 +30,7 @@ CHOKEPOINTS = f"{ROOT}/PortWatch_chokepoints_database/FeatureServer/0/query"
 CHOKEPOINT_DAILY = f"{ROOT}/Daily_Chokepoints_Data/FeatureServer/0/query"
 SPILLOVERS = f"{ROOT}/spillovers_port_level_impact/FeatureServer/0/query"
 SOURCE = "https://portwatch.imf.org/pages/data-and-methodology"
-MODULE_VERSION = 8
+MODULE_VERSION = 9
 _REQUEST_LOCK = threading.Lock()
 _LAST_REQUEST = 0.0
 _REQUEST_DEADLINE = ContextVar("portwatch_request_deadline", default=None)
@@ -170,13 +170,10 @@ def port_region_for(lat: float, lon: float) -> str | None:
 
 @st.cache_data(ttl=24 * 3600, max_entries=12, show_spinner=False)
 def port_catalog(refresh_revision: str = "initial") -> list[dict]:
-    # Retain the five waters and all ports of the Gulf producers.
-    where = " OR ".join(
-        f"(lat >= {south} AND lat <= {north} AND lon >= {west} AND lon <= {east})"
-        for south, north, west, east in REGIONS.values()
-    )
-    where = "(" + where + ") OR country IN (" + ",".join(
-        f"'{country}'" for country in GULF_COUNTRIES) + ")"
+    from port_metadata import PORT_COUNTRIES
+    # Fetch each selected country's full coastline, independent of AIS boxes.
+    where = "country IN (" + ",".join(
+        f"'{country}'" for country in sorted(PORT_COUNTRIES)) + ")"
     found = []
     offset = 0
     while True:
@@ -196,9 +193,8 @@ def port_catalog(refresh_revision: str = "initial") -> list[dict]:
     for item in found:
         if item["lat"] is None or item["lon"] is None:
             continue
-        region = (port_region_for(item["lat"], item["lon"])
-                  if item["country"] in GULF_COUNTRIES else region_for(item["lat"], item["lon"]))
-        if region is None and item["country"] in GULF_COUNTRIES:
+        region = port_region_for(item["lat"], item["lon"])
+        if region is None:
             region = "其他沿岸（水域待核）"
         if region:
             ports.append({"portid": item["portid"], "name": item["portname"],
@@ -323,10 +319,6 @@ def week_to_date_activity(day: date, port_ids: tuple[str, ...],
         result["month_calls"] = _complete_sum(month, day.day, "portcalls")
         for kind in SHIP_TYPES:
             result[f"month_calls_{kind}"] = _complete_sum(month, day.day, f"portcalls_{kind}")
-        recent = [row for observed,row in grouped.get(pid, {}).items() if day-timedelta(days=6)<=observed<=day]
-        result["recent_daily_activity_normal"] = (len(recent)==7 and all(
-            row.get("portcalls") is not None and row["portcalls"]>0 for row in recent))
-        result["activity_status_as_of"] = day.isoformat()
         summary[pid] = result
     return summary
 

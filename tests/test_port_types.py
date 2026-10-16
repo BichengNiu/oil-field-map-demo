@@ -21,9 +21,14 @@ class PortTypesTest(unittest.TestCase):
                          for p in [json.loads(payload)]}
         reviewed = {p['portid']:p for p in self.audit['ports']}
         self.assertEqual(len(reviewed),len(self.audit['ports']))
-        self.assertEqual(set(reviewed),set(published))
+        self.assertTrue(set(reviewed) <= set(published))
         self.assertEqual(set(reviewed),set(REVIEWED_PORT_TYPES))
         for pid, row in published.items():
+            if pid not in reviewed:
+                self.assertEqual(row.get("port_addition_review"), "2026-10-16")
+                self.assertNotEqual(port_type_label(row), "待核实")
+                self.assertNotEqual(port_business_label(row), "待核实")
+                continue
             for field in ('name','country','lat','lon'):
                 self.assertEqual(reviewed[pid][field],row[field],(pid,field))
             self.assertNotIn(port_business_label(row),('待核实','未知',''))

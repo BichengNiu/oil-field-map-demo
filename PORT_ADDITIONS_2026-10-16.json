@@ -1,0 +1,1269 @@
+{
+  "review_version": "2026-10-16",
+  "scope": "User-selected eleven countries; Eritrea excluded from active view; archived histories preserved",
+  "baseline_commit": "30a7b8b",
+  "ports": [
+    {
+      "portid": "port191",
+      "name": "Safaga",
+      "country": "Egypt",
+      "lat": 26.72555551,
+      "lon": 33.9422311,
+      "statistics_available": true,
+      "source_url": "https://portwatch.imf.org/pages/data-and-methodology",
+      "wpi_ids": [
+        47980
+      ],
+      "wpi_names": [
+        "Safaja"
+      ],
+      "name_cn": "萨法加港",
+      "name_en": "Safaga",
+      "display_name": "萨法加港（Safaga）",
+      "region": "红海",
+      "reviewed_port_type": "综合商港",
+      "reviewed_business": "综合商港（干散货、杂货、滚装及客运）",
+      "port_addition_review": "2026-10-16",
+      "inventory_source_url": "https://msi.nga.mil/api/publications/download?key=16694491%2FSFH00000%2FPub172bk.pdf",
+      "business_source_urls": [
+        "https://msi.nga.mil/api/publications/download?key=16694491%2FSFH00000%2FPub172bk.pdf"
+      ],
+      "coordinate_source_url": "https://services9.arcgis.com/weJ1QsnbMYJlCHdG/arcgis/rest/services/PortWatch_ports_database/FeatureServer/0/query?f=json&where=country+IN+%28%27Bahrain%27%2C%27Djibouti%27%2C%27Egypt%27%2C%27Iran%27%2C%27Iraq%27%2C%27Kuwait%27%2C%27Oman%27%2C%27Qatar%27%2C%27Saudi+Arabia%27%2C%27United+Arab+Emirates%27%2C%27Yemen%27%29&outFields=portid%2Cportname%2Ccountry%2Clat%2Clon&returnGeometry=false&orderByFields=portid+ASC&resultRecordCount=1000",
+      "coordinate_precision": "上游目录港口代表点；非泊位边界",
+      "activity_source": "IMF PortWatch",
+      "coverage_note": "来源目录记录；没有独立统计的节点不借用邻港、不拆分父港艘次、不补零。"
+    },
+    {
+      "portid": "port2044",
+      "name": "El Dekheila",
+      "country": "Egypt",
+      "lat": 31.14295533289,
+      "lon": 29.8103749314518,
+      "statistics_available": true,
+      "source_url": "https://portwatch.imf.org/pages/data-and-methodology",
+      "name_cn": "德凯拉港",
+      "name_en": "El Dekheila",
+      "display_name": "德凯拉港（El Dekheila）",
+      "region": "地中海",
+      "reviewed_port_type": "综合商港",
+      "reviewed_business": "综合商港（集装箱、干散货及杂货）",
+      "port_addition_review": "2026-10-16",
+      "inventory_source_url": "https://msi.nga.mil/api/publications/download?key=16694491%2FSFH00000%2FPub132bk.pdf",
+      "business_source_urls": [
+        "https://msi.nga.mil/api/publications/download?key=16694491%2FSFH00000%2FPub132bk.pdf"
+      ],
+      "coordinate_source_url": "https://services9.arcgis.com/weJ1QsnbMYJlCHdG/arcgis/rest/services/PortWatch_ports_database/FeatureServer/0/query?f=json&where=country+IN+%28%27Bahrain%27%2C%27Djibouti%27%2C%27Egypt%27%2C%27Iran%27%2C%27Iraq%27%2C%27Kuwait%27%2C%27Oman%27%2C%27Qatar%27%2C%27Saudi+Arabia%27%2C%27United+Arab+Emirates%27%2C%27Yemen%27%29&outFields=portid%2Cportname%2Ccountry%2Clat%2Clon&returnGeometry=false&orderByFields=portid+ASC&resultRecordCount=1000",
+      "coordinate_precision": "上游目录港口代表点；非泊位边界",
+      "wpi_ids": [],
+      "wpi_names": [],
+      "activity_source": "IMF PortWatch",
+      "coverage_note": "来源目录记录；没有独立统计的节点不借用邻港、不拆分父港艘次、不补零。"
+    },
+    {
+      "portid": "port2129",
+      "name": "Sidi Kerir",
+      "country": "Egypt",
+      "lat": 31.0958825329663,
+      "lon": 29.6187321299824,
+      "statistics_available": true,
+      "source_url": "https://portwatch.imf.org/pages/data-and-methodology",
+      "wpi_ids": [
+        45172
+      ],
+      "wpi_names": [
+        "Sidi Kerir (Kurayr)"
+      ],
+      "name_cn": "西迪基里尔终端",
+      "name_en": "Sidi Kerir",
+      "display_name": "西迪基里尔终端（Sidi Kerir）",
+      "region": "地中海",
+      "reviewed_port_type": "油品港及终端",
+      "reviewed_business": "SUMED原油储运及装卸终端",
+      "port_addition_review": "2026-10-16",
+      "inventory_source_url": "https://msi.nga.mil/api/publications/download?key=16694491%2FSFH00000%2FPub132bk.pdf",
+      "business_source_urls": [
+        "https://msi.nga.mil/api/publications/download?key=16694491%2FSFH00000%2FPub132bk.pdf"
+      ],
+      "coordinate_source_url": "https://services9.arcgis.com/weJ1QsnbMYJlCHdG/arcgis/rest/services/PortWatch_ports_database/FeatureServer/0/query?f=json&where=country+IN+%28%27Bahrain%27%2C%27Djibouti%27%2C%27Egypt%27%2C%27Iran%27%2C%27Iraq%27%2C%27Kuwait%27%2C%27Oman%27%2C%27Qatar%27%2C%27Saudi+Arabia%27%2C%27United+Arab+Emirates%27%2C%27Yemen%27%29&outFields=portid%2Cportname%2Ccountry%2Clat%2Clon&returnGeometry=false&orderByFields=portid+ASC&resultRecordCount=1000",
+      "coordinate_precision": "上游目录港口代表点；非泊位边界",
+      "activity_source": "IMF PortWatch",
+      "coverage_note": "来源目录记录；没有独立统计的节点不借用邻港、不拆分父港艘次、不补零。"
+    },
+    {
+      "portid": "port2130",
+      "name": "Ras Gharib",
+      "country": "Egypt",
+      "lat": 28.3445642535532,
+      "lon": 33.1097191315154,
+      "statistics_available": true,
+      "source_url": "https://portwatch.imf.org/pages/data-and-methodology",
+      "wpi_ids": [
+        48020
+      ],
+      "wpi_names": [
+        "Ras Gharib"
+      ],
+      "name_cn": "拉斯加里卜港",
+      "name_en": "Ras Gharib",
+      "display_name": "拉斯加里卜港（Ras Gharib）",
+      "region": "苏伊士湾",
+      "reviewed_port_type": "油品港及终端",
+      "reviewed_business": "石油装卸及海上油田服务港",
+      "port_addition_review": "2026-10-16",
+      "inventory_source_url": "https://msi.nga.mil/api/publications/download?key=16694491%2FSFH00000%2FPub172bk.pdf",
+      "business_source_urls": [
+        "https://msi.nga.mil/api/publications/download?key=16694491%2FSFH00000%2FPub172bk.pdf"
+      ],
+      "coordinate_source_url": "https://services9.arcgis.com/weJ1QsnbMYJlCHdG/arcgis/rest/services/PortWatch_ports_database/FeatureServer/0/query?f=json&where=country+IN+%28%27Bahrain%27%2C%27Djibouti%27%2C%27Egypt%27%2C%27Iran%27%2C%27Iraq%27%2C%27Kuwait%27%2C%27Oman%27%2C%27Qatar%27%2C%27Saudi+Arabia%27%2C%27United+Arab+Emirates%27%2C%27Yemen%27%29&outFields=portid%2Cportname%2Ccountry%2Clat%2Clon&returnGeometry=false&orderByFields=portid+ASC&resultRecordCount=1000",
+      "coordinate_precision": "上游目录港口代表点；非泊位边界",
+      "activity_source": "IMF PortWatch",
+      "coverage_note": "来源目录记录；没有独立统计的节点不借用邻港、不拆分父港艘次、不补零。"
+    },
+    {
+      "portid": "port2131",
+      "name": "Zeit Bay",
+      "country": "Egypt",
+      "lat": 27.8161621640394,
+      "lon": 33.5801485093014,
+      "statistics_available": true,
+      "source_url": "https://portwatch.imf.org/pages/data-and-methodology",
+      "wpi_ids": [
+        47985
+      ],
+      "wpi_names": [
+        "Zeit Bay Terminal"
+      ],
+      "name_cn": "宰特湾终端",
+      "name_en": "Zeit Bay",
+      "display_name": "宰特湾终端（Zeit Bay）",
+      "region": "苏伊士湾",
+      "reviewed_port_type": "油品港及终端",
+      "reviewed_business": "原油装运终端（Zeit Bay）",
+      "port_addition_review": "2026-10-16",
+      "inventory_source_url": "https://msi.nga.mil/api/publications/download?key=16694491%2FSFH00000%2FPub172bk.pdf",
+      "business_source_urls": [
+        "https://msi.nga.mil/api/publications/download?key=16694491%2FSFH00000%2FPub172bk.pdf"
+      ],
+      "coordinate_source_url": "https://services9.arcgis.com/weJ1QsnbMYJlCHdG/arcgis/rest/services/PortWatch_ports_database/FeatureServer/0/query?f=json&where=country+IN+%28%27Bahrain%27%2C%27Djibouti%27%2C%27Egypt%27%2C%27Iran%27%2C%27Iraq%27%2C%27Kuwait%27%2C%27Oman%27%2C%27Qatar%27%2C%27Saudi+Arabia%27%2C%27United+Arab+Emirates%27%2C%27Yemen%27%29&outFields=portid%2Cportname%2Ccountry%2Clat%2Clon&returnGeometry=false&orderByFields=portid+ASC&resultRecordCount=1000",
+      "coordinate_precision": "上游目录港口代表点；非泊位边界",
+      "activity_source": "IMF PortWatch",
+      "coverage_note": "来源目录记录；没有独立统计的节点不借用邻港、不拆分父港艘次、不补零。"
+    },
+    {
+      "portid": "port2132",
+      "name": "Ras Shukheir",
+      "country": "Egypt",
+      "lat": 28.1285102857574,
+      "lon": 33.2826172757473,
+      "statistics_available": true,
+      "source_url": "https://portwatch.imf.org/pages/data-and-methodology",
+      "wpi_ids": [
+        48015
+      ],
+      "wpi_names": [
+        "Ras Shukhier"
+      ],
+      "name_cn": "拉斯舒凯尔港",
+      "name_en": "Ras Shukheir",
+      "display_name": "拉斯舒凯尔港（Ras Shukheir）",
+      "region": "苏伊士湾",
+      "reviewed_port_type": "油品港及终端",
+      "reviewed_business": "原油装卸及油田服务港",
+      "port_addition_review": "2026-10-16",
+      "inventory_source_url": "https://msi.nga.mil/api/publications/download?key=16694491%2FSFH00000%2FPub172bk.pdf",
+      "business_source_urls": [
+        "https://msi.nga.mil/api/publications/download?key=16694491%2FSFH00000%2FPub172bk.pdf"
+      ],
+      "coordinate_source_url": "https://services9.arcgis.com/weJ1QsnbMYJlCHdG/arcgis/rest/services/PortWatch_ports_database/FeatureServer/0/query?f=json&where=country+IN+%28%27Bahrain%27%2C%27Djibouti%27%2C%27Egypt%27%2C%27Iran%27%2C%27Iraq%27%2C%27Kuwait%27%2C%27Oman%27%2C%27Qatar%27%2C%27Saudi+Arabia%27%2C%27United+Arab+Emirates%27%2C%27Yemen%27%29&outFields=portid%2Cportname%2Ccountry%2Clat%2Clon&returnGeometry=false&orderByFields=portid+ASC&resultRecordCount=1000",
+      "coordinate_precision": "上游目录港口代表点；非泊位边界",
+      "activity_source": "IMF PortWatch",
+      "coverage_note": "来源目录记录；没有独立统计的节点不借用邻港、不拆分父港艘次、不补零。"
+    },
+    {
+      "portid": "port2263",
+      "name": "Ash Shihr",
+      "country": "Yemen",
+      "lat": 14.6944993583033,
+      "lon": 49.5436480987972,
+      "statistics_available": true,
+      "source_url": "https://portwatch.imf.org/pages/data-and-methodology",
+      "wpi_ids": [
+        48202
+      ],
+      "wpi_names": [
+        "Ash Shihr Oil Terminal"
+      ],
+      "name_cn": "希赫尔石油终端",
+      "name_en": "Ash Shihr",
+      "display_name": "希赫尔石油终端（Ash Shihr）",
+      "region": "亚丁湾",
+      "reviewed_port_type": "油品港及终端",
+      "reviewed_business": "原油出口终端（Ash Shihr）",
+      "port_addition_review": "2026-10-16",
+      "inventory_source_url": "https://msi.nga.mil/api/publications/download?key=16694491%2FSFH00000%2FPub172bk.pdf",
+      "business_source_urls": [
+        "https://msi.nga.mil/api/publications/download?key=16694491%2FSFH00000%2FPub172bk.pdf"
+      ],
+      "coordinate_source_url": "https://services9.arcgis.com/weJ1QsnbMYJlCHdG/arcgis/rest/services/PortWatch_ports_database/FeatureServer/0/query?f=json&where=country+IN+%28%27Bahrain%27%2C%27Djibouti%27%2C%27Egypt%27%2C%27Iran%27%2C%27Iraq%27%2C%27Kuwait%27%2C%27Oman%27%2C%27Qatar%27%2C%27Saudi+Arabia%27%2C%27United+Arab+Emirates%27%2C%27Yemen%27%29&outFields=portid%2Cportname%2Ccountry%2Clat%2Clon&returnGeometry=false&orderByFields=portid+ASC&resultRecordCount=1000",
+      "coordinate_precision": "上游目录港口代表点；非泊位边界",
+      "activity_source": "IMF PortWatch",
+      "coverage_note": "来源目录记录；没有独立统计的节点不借用邻港、不拆分父港艘次、不补零。"
+    },
+    {
+      "portid": "port2264",
+      "name": "Rudum Terminal",
+      "country": "Yemen",
+      "lat": 13.9931436850754,
+      "lon": 47.914459003825,
+      "statistics_available": true,
+      "source_url": "https://portwatch.imf.org/pages/data-and-methodology",
+      "wpi_ids": [
+        48214
+      ],
+      "wpi_names": [
+        "Rudum Terminal"
+      ],
+      "name_cn": "鲁杜姆终端",
+      "name_en": "Rudum Terminal",
+      "display_name": "鲁杜姆终端（Rudum Terminal）",
+      "region": "亚丁湾",
+      "reviewed_port_type": "油品港及终端",
+      "reviewed_business": "原油装运终端（Rudum）",
+      "port_addition_review": "2026-10-16",
+      "inventory_source_url": "https://msi.nga.mil/api/publications/download?key=16694491%2FSFH00000%2FPub172bk.pdf",
+      "business_source_urls": [
+        "https://msi.nga.mil/api/publications/download?key=16694491%2FSFH00000%2FPub172bk.pdf"
+      ],
+      "coordinate_source_url": "https://services9.arcgis.com/weJ1QsnbMYJlCHdG/arcgis/rest/services/PortWatch_ports_database/FeatureServer/0/query?f=json&where=country+IN+%28%27Bahrain%27%2C%27Djibouti%27%2C%27Egypt%27%2C%27Iran%27%2C%27Iraq%27%2C%27Kuwait%27%2C%27Oman%27%2C%27Qatar%27%2C%27Saudi+Arabia%27%2C%27United+Arab+Emirates%27%2C%27Yemen%27%29&outFields=portid%2Cportname%2Ccountry%2Clat%2Clon&returnGeometry=false&orderByFields=portid+ASC&resultRecordCount=1000",
+      "coordinate_precision": "上游目录港口代表点；非泊位边界",
+      "activity_source": "IMF PortWatch",
+      "coverage_note": "来源目录记录；没有独立统计的节点不借用邻港、不拆分父港艘次、不补零。"
+    },
+    {
+      "portid": "port23",
+      "name": "Alexandria",
+      "country": "Egypt",
+      "lat": 31.15536502,
+      "lon": 29.83759053,
+      "statistics_available": true,
+      "source_url": "https://portwatch.imf.org/pages/data-and-methodology",
+      "wpi_ids": [
+        45165
+      ],
+      "wpi_names": [
+        "Al Iskandariyh (Alexandria)"
+      ],
+      "name_cn": "亚历山大港",
+      "name_en": "Alexandria",
+      "display_name": "亚历山大港（Alexandria）",
+      "region": "地中海",
+      "reviewed_port_type": "综合商港",
+      "reviewed_business": "综合商港（集装箱、杂货、干散货、液体散货及滚装）",
+      "port_addition_review": "2026-10-16",
+      "inventory_source_url": "https://msi.nga.mil/api/publications/download?key=16694491%2FSFH00000%2FPub132bk.pdf",
+      "business_source_urls": [
+        "https://msi.nga.mil/api/publications/download?key=16694491%2FSFH00000%2FPub132bk.pdf"
+      ],
+      "coordinate_source_url": "https://services9.arcgis.com/weJ1QsnbMYJlCHdG/arcgis/rest/services/PortWatch_ports_database/FeatureServer/0/query?f=json&where=country+IN+%28%27Bahrain%27%2C%27Djibouti%27%2C%27Egypt%27%2C%27Iran%27%2C%27Iraq%27%2C%27Kuwait%27%2C%27Oman%27%2C%27Qatar%27%2C%27Saudi+Arabia%27%2C%27United+Arab+Emirates%27%2C%27Yemen%27%29&outFields=portid%2Cportname%2Ccountry%2Clat%2Clon&returnGeometry=false&orderByFields=portid+ASC&resultRecordCount=1000",
+      "coordinate_precision": "上游目录港口代表点；非泊位边界",
+      "activity_source": "IMF PortWatch",
+      "coverage_note": "来源目录记录；没有独立统计的节点不借用邻港、不拆分父港艘次、不补零。"
+    },
+    {
+      "portid": "port2392",
+      "name": "Yemen LNG Terminal",
+      "country": "Yemen",
+      "lat": 13.980059591578499,
+      "lon": 48.177455343879174,
+      "statistics_available": true,
+      "source_url": "https://portwatch.imf.org/pages/data-and-methodology",
+      "wpi_ids": [
+        48216
+      ],
+      "wpi_names": [
+        "Balhaf"
+      ],
+      "name_cn": "也门液化天然气终端",
+      "name_en": "Yemen LNG Terminal",
+      "display_name": "也门液化天然气终端（Yemen LNG Terminal）",
+      "region": "亚丁湾",
+      "reviewed_port_type": "液化天然气港（LNG）",
+      "reviewed_business": "巴勒哈夫液化天然气出口终端",
+      "port_addition_review": "2026-10-16",
+      "inventory_source_url": "https://msi.nga.mil/api/publications/download?key=16694491%2FSFH00000%2FPub172bk.pdf",
+      "business_source_urls": [
+        "https://msi.nga.mil/api/publications/download?key=16694491%2FSFH00000%2FPub172bk.pdf"
+      ],
+      "coordinate_source_url": "https://services9.arcgis.com/weJ1QsnbMYJlCHdG/arcgis/rest/services/PortWatch_ports_database/FeatureServer/0/query?f=json&where=country+IN+%28%27Bahrain%27%2C%27Djibouti%27%2C%27Egypt%27%2C%27Iran%27%2C%27Iraq%27%2C%27Kuwait%27%2C%27Oman%27%2C%27Qatar%27%2C%27Saudi+Arabia%27%2C%27United+Arab+Emirates%27%2C%27Yemen%27%29&outFields=portid%2Cportname%2Ccountry%2Clat%2Clon&returnGeometry=false&orderByFields=portid+ASC&resultRecordCount=1000",
+      "coordinate_precision": "上游目录港口代表点；非泊位边界",
+      "activity_source": "IMF PortWatch",
+      "coverage_note": "来源目录记录；没有独立统计的节点不借用邻港、不拆分父港艘次、不补零。"
+    },
+    {
+      "portid": "port2482",
+      "name": "Egyptian LNG Terminal",
+      "country": "Egypt",
+      "lat": 31.36463682625328,
+      "lon": 30.310526699040828,
+      "statistics_available": true,
+      "source_url": "https://portwatch.imf.org/pages/data-and-methodology",
+      "name_cn": "埃及液化天然气终端",
+      "name_en": "Egyptian LNG Terminal",
+      "display_name": "埃及液化天然气终端（Egyptian LNG Terminal）",
+      "region": "地中海",
+      "reviewed_port_type": "液化天然气港（LNG）",
+      "reviewed_business": "伊德库液化天然气出口终端",
+      "port_addition_review": "2026-10-16",
+      "inventory_source_url": "https://msi.nga.mil/api/publications/download?key=16694491%2FSFH00000%2FPub132bk.pdf",
+      "business_source_urls": [
+        "https://msi.nga.mil/api/publications/download?key=16694491%2FSFH00000%2FPub132bk.pdf"
+      ],
+      "coordinate_source_url": "https://services9.arcgis.com/weJ1QsnbMYJlCHdG/arcgis/rest/services/PortWatch_ports_database/FeatureServer/0/query?f=json&where=country+IN+%28%27Bahrain%27%2C%27Djibouti%27%2C%27Egypt%27%2C%27Iran%27%2C%27Iraq%27%2C%27Kuwait%27%2C%27Oman%27%2C%27Qatar%27%2C%27Saudi+Arabia%27%2C%27United+Arab+Emirates%27%2C%27Yemen%27%29&outFields=portid%2Cportname%2Ccountry%2Clat%2Clon&returnGeometry=false&orderByFields=portid+ASC&resultRecordCount=1000",
+      "coordinate_precision": "上游目录港口代表点；非泊位边界",
+      "wpi_ids": [],
+      "wpi_names": [],
+      "activity_source": "IMF PortWatch",
+      "coverage_note": "来源目录记录；没有独立统计的节点不借用邻港、不拆分父港艘次、不补零。"
+    },
+    {
+      "portid": "port27",
+      "name": "Mukalla",
+      "country": "Yemen",
+      "lat": 14.52061091,
+      "lon": 49.15123019,
+      "statistics_available": true,
+      "source_url": "https://portwatch.imf.org/pages/data-and-methodology",
+      "wpi_ids": [
+        48210
+      ],
+      "wpi_names": [
+        "Al Mukalla"
+      ],
+      "name_cn": "穆卡拉港",
+      "name_en": "Mukalla",
+      "display_name": "穆卡拉港（Mukalla）",
+      "region": "亚丁湾",
+      "reviewed_port_type": "综合商港",
+      "reviewed_business": "综合商港（杂货、集装箱及地方商业运输）",
+      "port_addition_review": "2026-10-16",
+      "inventory_source_url": "https://msi.nga.mil/api/publications/download?key=16694491%2FSFH00000%2FPub172bk.pdf",
+      "business_source_urls": [
+        "https://msi.nga.mil/api/publications/download?key=16694491%2FSFH00000%2FPub172bk.pdf",
+        "https://www.yaspc.co/en/ports/port-of-mukalla"
+      ],
+      "coordinate_source_url": "https://services9.arcgis.com/weJ1QsnbMYJlCHdG/arcgis/rest/services/PortWatch_ports_database/FeatureServer/0/query?f=json&where=country+IN+%28%27Bahrain%27%2C%27Djibouti%27%2C%27Egypt%27%2C%27Iran%27%2C%27Iraq%27%2C%27Kuwait%27%2C%27Oman%27%2C%27Qatar%27%2C%27Saudi+Arabia%27%2C%27United+Arab+Emirates%27%2C%27Yemen%27%29&outFields=portid%2Cportname%2Ccountry%2Clat%2Clon&returnGeometry=false&orderByFields=portid+ASC&resultRecordCount=1000",
+      "coordinate_precision": "上游目录港口代表点；非泊位边界",
+      "activity_source": "IMF PortWatch",
+      "coverage_note": "来源目录记录；没有独立统计的节点不借用邻港、不拆分父港艘次、不补零。"
+    },
+    {
+      "portid": "wpi45163",
+      "name": "El Maadiya",
+      "country": "Egypt",
+      "lat": 31.26666700009155,
+      "lon": 30.1499999998455,
+      "statistics_available": false,
+      "wpi_ids": [
+        45163
+      ],
+      "wpi_names": [
+        "El Maadiya"
+      ],
+      "name_cn": "马阿迪亚港",
+      "name_en": "El Maadiya",
+      "display_name": "马阿迪亚港（El Maadiya）",
+      "region": "地中海",
+      "reviewed_port_type": "地方及服务港",
+      "reviewed_business": "地方港（渔业及小型船舶服务）",
+      "port_addition_review": "2026-10-16",
+      "inventory_source_url": "https://msi.nga.mil/api/publications/download?key=16694491%2FSFH00000%2FPub132bk.pdf",
+      "business_source_urls": [
+        "https://msi.nga.mil/api/publications/download?key=16694491%2FSFH00000%2FPub132bk.pdf"
+      ],
+      "coordinate_source_url": "https://arcgis.netl.doe.gov/server/rest/services/Hosted/CCS_EJ_SJ_Data/FeatureServer/17",
+      "coordinate_precision": "上游目录港口代表点；非泊位边界",
+      "source_url": "https://msi.nga.mil/api/publications/download?key=16694491%2FSFH00000%2FPub132bk.pdf",
+      "activity_source": "无独立PortWatch统计",
+      "coverage_note": "来源目录记录；没有独立统计的节点不借用邻港、不拆分父港艘次、不补零。"
+    },
+    {
+      "portid": "wpi45175",
+      "name": "El Hamra Oil Terminal",
+      "country": "Egypt",
+      "lat": 30.98333300016271,
+      "lon": 28.866666999649723,
+      "statistics_available": false,
+      "wpi_ids": [
+        45175
+      ],
+      "wpi_names": [
+        "El Hamra Oil Terminal"
+      ],
+      "name_cn": "哈姆拉石油终端",
+      "name_en": "El Hamra Oil Terminal",
+      "display_name": "哈姆拉石油终端（El Hamra Oil Terminal）",
+      "region": "地中海",
+      "reviewed_port_type": "油品港及终端",
+      "reviewed_business": "原油装运终端",
+      "port_addition_review": "2026-10-16",
+      "inventory_source_url": "https://msi.nga.mil/api/publications/download?key=16694491%2FSFH00000%2FPub132bk.pdf",
+      "business_source_urls": [
+        "https://msi.nga.mil/api/publications/download?key=16694491%2FSFH00000%2FPub132bk.pdf"
+      ],
+      "coordinate_source_url": "https://arcgis.netl.doe.gov/server/rest/services/Hosted/CCS_EJ_SJ_Data/FeatureServer/17",
+      "coordinate_precision": "上游目录港口代表点；非泊位边界",
+      "source_url": "https://msi.nga.mil/api/publications/download?key=16694491%2FSFH00000%2FPub132bk.pdf",
+      "activity_source": "无独立PortWatch统计",
+      "coverage_note": "来源目录记录；没有独立统计的节点不借用邻港、不拆分父港艘次、不补零。"
+    },
+    {
+      "portid": "wpi45180",
+      "name": "Mersa Matruh",
+      "country": "Egypt",
+      "lat": 31.350000000351866,
+      "lon": 27.23333300032652,
+      "statistics_available": false,
+      "wpi_ids": [
+        45180
+      ],
+      "wpi_names": [
+        "Mersa Matruh"
+      ],
+      "name_cn": "马特鲁港",
+      "name_en": "Mersa Matruh",
+      "display_name": "马特鲁港（Mersa Matruh）",
+      "region": "地中海",
+      "reviewed_port_type": "地方及服务港",
+      "reviewed_business": "地方港及锚地（不推定大型商港业务）",
+      "port_addition_review": "2026-10-16",
+      "inventory_source_url": "https://msi.nga.mil/api/publications/download?key=16694491%2FSFH00000%2FPub132bk.pdf",
+      "business_source_urls": [
+        "https://msi.nga.mil/api/publications/download?key=16694491%2FSFH00000%2FPub132bk.pdf"
+      ],
+      "coordinate_source_url": "https://arcgis.netl.doe.gov/server/rest/services/Hosted/CCS_EJ_SJ_Data/FeatureServer/17",
+      "coordinate_precision": "上游目录港口代表点；非泊位边界",
+      "source_url": "https://msi.nga.mil/api/publications/download?key=16694491%2FSFH00000%2FPub132bk.pdf",
+      "activity_source": "无独立PortWatch统计",
+      "coverage_note": "来源目录记录；没有独立统计的节点不借用邻港、不拆分父港艘次、不补零。"
+    },
+    {
+      "portid": "wpi47960",
+      "name": "Nuwaybi'",
+      "country": "Egypt",
+      "lat": 28.966666999943786,
+      "lon": 34.65000000011741,
+      "statistics_available": false,
+      "wpi_ids": [
+        47960
+      ],
+      "wpi_names": [
+        "Nuwaybi'"
+      ],
+      "name_cn": "努韦巴港",
+      "name_en": "Nuwaybi'",
+      "display_name": "努韦巴港（Nuwaybi'）",
+      "region": "亚喀巴湾",
+      "reviewed_port_type": "综合商港",
+      "reviewed_business": "客货运输港（滚装、渡轮及杂货）",
+      "port_addition_review": "2026-10-16",
+      "inventory_source_url": "https://msi.nga.mil/api/publications/download?key=16694491%2FSFH00000%2FPub172bk.pdf",
+      "business_source_urls": [
+        "https://msi.nga.mil/api/publications/download?key=16694491%2FSFH00000%2FPub172bk.pdf"
+      ],
+      "coordinate_source_url": "https://arcgis.netl.doe.gov/server/rest/services/Hosted/CCS_EJ_SJ_Data/FeatureServer/17",
+      "coordinate_precision": "上游目录港口代表点；非泊位边界",
+      "source_url": "https://msi.nga.mil/api/publications/download?key=16694491%2FSFH00000%2FPub172bk.pdf",
+      "activity_source": "无独立PortWatch统计",
+      "coverage_note": "来源目录记录；没有独立统计的节点不借用邻港、不拆分父港艘次、不补零。"
+    },
+    {
+      "portid": "wpi47970",
+      "name": "Al Qusayr",
+      "country": "Egypt",
+      "lat": 26.100000000175978,
+      "lon": 34.28333300039317,
+      "statistics_available": false,
+      "wpi_ids": [
+        47970
+      ],
+      "wpi_names": [
+        "Al Qusayr"
+      ],
+      "name_cn": "库赛尔港",
+      "name_en": "Al Qusayr",
+      "display_name": "库赛尔港（Al Qusayr）",
+      "region": "红海",
+      "reviewed_port_type": "干货港",
+      "reviewed_business": "矿产品装运港及锚地（磷矿）",
+      "port_addition_review": "2026-10-16",
+      "inventory_source_url": "https://msi.nga.mil/api/publications/download?key=16694491%2FSFH00000%2FPub172bk.pdf",
+      "business_source_urls": [
+        "https://msi.nga.mil/api/publications/download?key=16694491%2FSFH00000%2FPub172bk.pdf"
+      ],
+      "coordinate_source_url": "https://arcgis.netl.doe.gov/server/rest/services/Hosted/CCS_EJ_SJ_Data/FeatureServer/17",
+      "coordinate_precision": "上游目录港口代表点；非泊位边界",
+      "source_url": "https://msi.nga.mil/api/publications/download?key=16694491%2FSFH00000%2FPub172bk.pdf",
+      "activity_source": "无独立PortWatch统计",
+      "coverage_note": "来源目录记录；没有独立统计的节点不借用邻港、不拆分父港艘次、不补零。"
+    },
+    {
+      "portid": "wpi47974",
+      "name": "Hamrawein",
+      "country": "Egypt",
+      "lat": 26.25000000002437,
+      "lon": 34.19999999973089,
+      "statistics_available": false,
+      "wpi_ids": [
+        47974
+      ],
+      "wpi_names": [
+        "Hamrawein"
+      ],
+      "name_cn": "哈姆拉温港",
+      "name_en": "Hamrawein",
+      "display_name": "哈姆拉温港（Hamrawein）",
+      "region": "红海",
+      "reviewed_port_type": "干货港",
+      "reviewed_business": "磷矿装运港",
+      "port_addition_review": "2026-10-16",
+      "inventory_source_url": "https://msi.nga.mil/api/publications/download?key=16694491%2FSFH00000%2FPub172bk.pdf",
+      "business_source_urls": [
+        "https://msi.nga.mil/api/publications/download?key=16694491%2FSFH00000%2FPub172bk.pdf"
+      ],
+      "coordinate_source_url": "https://arcgis.netl.doe.gov/server/rest/services/Hosted/CCS_EJ_SJ_Data/FeatureServer/17",
+      "coordinate_precision": "上游目录港口代表点；非泊位边界",
+      "source_url": "https://msi.nga.mil/api/publications/download?key=16694491%2FSFH00000%2FPub172bk.pdf",
+      "activity_source": "无独立PortWatch统计",
+      "coverage_note": "来源目录记录；没有独立统计的节点不借用邻港、不拆分父港艘次、不补零。"
+    },
+    {
+      "portid": "wpi47982",
+      "name": "At Tur",
+      "country": "Egypt",
+      "lat": 28.233333000337723,
+      "lon": 33.61666699993672,
+      "statistics_available": false,
+      "wpi_ids": [
+        47982
+      ],
+      "wpi_names": [
+        "At Tur"
+      ],
+      "name_cn": "图尔港",
+      "name_en": "At Tur",
+      "display_name": "图尔港（At Tur）",
+      "region": "苏伊士湾",
+      "reviewed_port_type": "综合商港",
+      "reviewed_business": "地方商港（通用货物及沿岸运输）",
+      "port_addition_review": "2026-10-16",
+      "inventory_source_url": "https://msi.nga.mil/api/publications/download?key=16694491%2FSFH00000%2FPub172bk.pdf",
+      "business_source_urls": [
+        "https://msi.nga.mil/api/publications/download?key=16694491%2FSFH00000%2FPub172bk.pdf"
+      ],
+      "coordinate_source_url": "https://arcgis.netl.doe.gov/server/rest/services/Hosted/CCS_EJ_SJ_Data/FeatureServer/17",
+      "coordinate_precision": "上游目录港口代表点；非泊位边界",
+      "source_url": "https://msi.nga.mil/api/publications/download?key=16694491%2FSFH00000%2FPub172bk.pdf",
+      "activity_source": "无独立PortWatch统计",
+      "coverage_note": "来源目录记录；没有独立统计的节点不借用邻港、不拆分父港艘次、不补零。"
+    },
+    {
+      "portid": "wpi47987",
+      "name": "Marsa az Zaytiyah",
+      "country": "Egypt",
+      "lat": 27.8499999996109,
+      "lon": 33.60000000041331,
+      "statistics_available": false,
+      "wpi_ids": [
+        47987
+      ],
+      "wpi_names": [
+        "Marsa az Zaytiyah"
+      ],
+      "name_cn": "宰提亚锚地",
+      "name_en": "Marsa az Zaytiyah",
+      "display_name": "宰提亚锚地（Marsa az Zaytiyah）",
+      "region": "苏伊士湾",
+      "reviewed_port_type": "油品港及终端",
+      "reviewed_business": "油品终端及锚地（不借用Zeit Bay统计）",
+      "port_addition_review": "2026-10-16",
+      "inventory_source_url": "https://msi.nga.mil/api/publications/download?key=16694491%2FSFH00000%2FPub172bk.pdf",
+      "business_source_urls": [
+        "https://msi.nga.mil/api/publications/download?key=16694491%2FSFH00000%2FPub172bk.pdf"
+      ],
+      "coordinate_source_url": "https://arcgis.netl.doe.gov/server/rest/services/Hosted/CCS_EJ_SJ_Data/FeatureServer/17",
+      "coordinate_precision": "上游目录港口代表点；非泊位边界",
+      "source_url": "https://msi.nga.mil/api/publications/download?key=16694491%2FSFH00000%2FPub172bk.pdf",
+      "activity_source": "无独立PortWatch统计",
+      "coverage_note": "来源目录记录；没有独立统计的节点不借用邻港、不拆分父港艘次、不补零。"
+    },
+    {
+      "portid": "wpi47988",
+      "name": "Sharm El Sheikh",
+      "country": "Egypt",
+      "lat": 27.8499999996109,
+      "lon": 34.28333300039317,
+      "statistics_available": false,
+      "wpi_ids": [
+        47988
+      ],
+      "wpi_names": [
+        "Sharm El Sheikh"
+      ],
+      "name_cn": "沙姆沙伊赫港",
+      "name_en": "Sharm El Sheikh",
+      "display_name": "沙姆沙伊赫港（Sharm El Sheikh）",
+      "region": "红海",
+      "reviewed_port_type": "客运旅游港",
+      "reviewed_business": "客运及旅游船港",
+      "port_addition_review": "2026-10-16",
+      "inventory_source_url": "https://msi.nga.mil/api/publications/download?key=16694491%2FSFH00000%2FPub172bk.pdf",
+      "business_source_urls": [
+        "https://msi.nga.mil/api/publications/download?key=16694491%2FSFH00000%2FPub172bk.pdf"
+      ],
+      "coordinate_source_url": "https://arcgis.netl.doe.gov/server/rest/services/Hosted/CCS_EJ_SJ_Data/FeatureServer/17",
+      "coordinate_precision": "上游目录港口代表点；非泊位边界",
+      "source_url": "https://msi.nga.mil/api/publications/download?key=16694491%2FSFH00000%2FPub172bk.pdf",
+      "activity_source": "无独立PortWatch统计",
+      "coverage_note": "来源目录记录；没有独立统计的节点不借用邻港、不拆分父港艘次、不补零。"
+    },
+    {
+      "portid": "wpi47989",
+      "name": "Zeit Bay Lpg Terminal",
+      "country": "Egypt",
+      "lat": 27.80000000001146,
+      "lon": 33.56666700029302,
+      "statistics_available": false,
+      "wpi_ids": [
+        47989
+      ],
+      "wpi_names": [
+        "Zeit Bay Lpg Terminal"
+      ],
+      "name_cn": "宰特湾液化石油气终端",
+      "name_en": "Zeit Bay Lpg Terminal",
+      "display_name": "宰特湾液化石油气终端（Zeit Bay Lpg Terminal）",
+      "region": "苏伊士湾",
+      "reviewed_port_type": "液化石油气港（LPG）",
+      "reviewed_business": "液化石油气装运终端",
+      "port_addition_review": "2026-10-16",
+      "inventory_source_url": "https://msi.nga.mil/api/publications/download?key=16694491%2FSFH00000%2FPub172bk.pdf",
+      "business_source_urls": [
+        "https://msi.nga.mil/api/publications/download?key=16694491%2FSFH00000%2FPub172bk.pdf"
+      ],
+      "coordinate_source_url": "https://arcgis.netl.doe.gov/server/rest/services/Hosted/CCS_EJ_SJ_Data/FeatureServer/17",
+      "coordinate_precision": "上游目录港口代表点；非泊位边界",
+      "source_url": "https://msi.nga.mil/api/publications/download?key=16694491%2FSFH00000%2FPub172bk.pdf",
+      "activity_source": "无独立PortWatch统计",
+      "coverage_note": "来源目录记录；没有独立统计的节点不借用邻港、不拆分父港艘次、不补零。"
+    },
+    {
+      "portid": "wpi47990",
+      "name": "El Ghardaqa",
+      "country": "Egypt",
+      "lat": 27.2166670002268,
+      "lon": 33.8500000004284,
+      "statistics_available": false,
+      "wpi_ids": [
+        47990
+      ],
+      "wpi_names": [
+        "El Ghardaqa"
+      ],
+      "name_cn": "赫尔格达港",
+      "name_en": "El Ghardaqa",
+      "display_name": "赫尔格达港（El Ghardaqa）",
+      "region": "红海",
+      "reviewed_port_type": "客运旅游港",
+      "reviewed_business": "客运及旅游船港",
+      "port_addition_review": "2026-10-16",
+      "inventory_source_url": "https://msi.nga.mil/api/publications/download?key=16694491%2FSFH00000%2FPub172bk.pdf",
+      "business_source_urls": [
+        "https://msi.nga.mil/api/publications/download?key=16694491%2FSFH00000%2FPub172bk.pdf"
+      ],
+      "coordinate_source_url": "https://arcgis.netl.doe.gov/server/rest/services/Hosted/CCS_EJ_SJ_Data/FeatureServer/17",
+      "coordinate_precision": "上游目录港口代表点；非泊位边界",
+      "source_url": "https://msi.nga.mil/api/publications/download?key=16694491%2FSFH00000%2FPub172bk.pdf",
+      "activity_source": "无独立PortWatch统计",
+      "coverage_note": "来源目录记录；没有独立统计的节点不借用邻港、不拆分父港艘次、不补零。"
+    },
+    {
+      "portid": "wpi48025",
+      "name": "Ras Badran Oil Terminal",
+      "country": "Egypt",
+      "lat": 28.95000000022805,
+      "lon": 33.166667000448534,
+      "statistics_available": false,
+      "wpi_ids": [
+        48025
+      ],
+      "wpi_names": [
+        "Ras Badran Oil Terminal"
+      ],
+      "name_cn": "拉斯巴德兰石油终端",
+      "name_en": "Ras Badran Oil Terminal",
+      "display_name": "拉斯巴德兰石油终端（Ras Badran Oil Terminal）",
+      "region": "苏伊士湾",
+      "reviewed_port_type": "油品港及终端",
+      "reviewed_business": "原油装运终端",
+      "port_addition_review": "2026-10-16",
+      "inventory_source_url": "https://msi.nga.mil/api/publications/download?key=16694491%2FSFH00000%2FPub172bk.pdf",
+      "business_source_urls": [
+        "https://msi.nga.mil/api/publications/download?key=16694491%2FSFH00000%2FPub172bk.pdf"
+      ],
+      "coordinate_source_url": "https://arcgis.netl.doe.gov/server/rest/services/Hosted/CCS_EJ_SJ_Data/FeatureServer/17",
+      "coordinate_precision": "上游目录港口代表点；非泊位边界",
+      "source_url": "https://msi.nga.mil/api/publications/download?key=16694491%2FSFH00000%2FPub172bk.pdf",
+      "activity_source": "无独立PortWatch统计",
+      "coverage_note": "来源目录记录；没有独立统计的节点不借用邻港、不拆分父港艘次、不补零。"
+    },
+    {
+      "portid": "wpi48057",
+      "name": "Zafarana Terminal",
+      "country": "Egypt",
+      "lat": 29.1666670001872,
+      "lon": 32.68333300011683,
+      "statistics_available": false,
+      "wpi_ids": [
+        48057
+      ],
+      "wpi_names": [
+        "Zafarana Terminal"
+      ],
+      "name_cn": "扎法拉纳终端",
+      "name_en": "Zafarana Terminal",
+      "display_name": "扎法拉纳终端（Zafarana Terminal）",
+      "region": "苏伊士湾",
+      "reviewed_port_type": "油品港及终端",
+      "reviewed_business": "海上石油装运终端",
+      "port_addition_review": "2026-10-16",
+      "inventory_source_url": "https://msi.nga.mil/api/publications/download?key=16694491%2FSFH00000%2FPub172bk.pdf",
+      "business_source_urls": [
+        "https://msi.nga.mil/api/publications/download?key=16694491%2FSFH00000%2FPub172bk.pdf"
+      ],
+      "coordinate_source_url": "https://arcgis.netl.doe.gov/server/rest/services/Hosted/CCS_EJ_SJ_Data/FeatureServer/17",
+      "coordinate_precision": "上游目录港口代表点；非泊位边界",
+      "source_url": "https://msi.nga.mil/api/publications/download?key=16694491%2FSFH00000%2FPub172bk.pdf",
+      "activity_source": "无独立PortWatch统计",
+      "coverage_note": "来源目录记录；没有独立统计的节点不借用邻港、不拆分父港艘次、不补零。"
+    },
+    {
+      "portid": "wpi48060",
+      "name": "Ras Abu Zanimah",
+      "country": "Egypt",
+      "lat": 29.033333000233043,
+      "lon": 33.116666999906506,
+      "statistics_available": false,
+      "wpi_ids": [
+        48060
+      ],
+      "wpi_names": [
+        "Ras Abu Zanimah"
+      ],
+      "name_cn": "拉斯阿布宰尼马港",
+      "name_en": "Ras Abu Zanimah",
+      "display_name": "拉斯阿布宰尼马港（Ras Abu Zanimah）",
+      "region": "苏伊士湾",
+      "reviewed_port_type": "干货港",
+      "reviewed_business": "矿石装运港",
+      "port_addition_review": "2026-10-16",
+      "inventory_source_url": "https://msi.nga.mil/api/publications/download?key=16694491%2FSFH00000%2FPub172bk.pdf",
+      "business_source_urls": [
+        "https://msi.nga.mil/api/publications/download?key=16694491%2FSFH00000%2FPub172bk.pdf"
+      ],
+      "coordinate_source_url": "https://arcgis.netl.doe.gov/server/rest/services/Hosted/CCS_EJ_SJ_Data/FeatureServer/17",
+      "coordinate_precision": "上游目录港口代表点；非泊位边界",
+      "source_url": "https://msi.nga.mil/api/publications/download?key=16694491%2FSFH00000%2FPub172bk.pdf",
+      "activity_source": "无独立PortWatch统计",
+      "coverage_note": "来源目录记录；没有独立统计的节点不借用邻港、不拆分父港艘次、不补零。"
+    },
+    {
+      "portid": "wpi48065",
+      "name": "Wadi Feiran",
+      "country": "Egypt",
+      "lat": 28.749999999734303,
+      "lon": 33.19999999967049,
+      "statistics_available": false,
+      "wpi_ids": [
+        48065
+      ],
+      "wpi_names": [
+        "Wadi Feiran"
+      ],
+      "name_cn": "瓦迪费兰终端",
+      "name_en": "Wadi Feiran",
+      "display_name": "瓦迪费兰终端（Wadi Feiran）",
+      "region": "苏伊士湾",
+      "reviewed_port_type": "油品港及终端",
+      "reviewed_business": "石油装运终端（海底管线泊位）",
+      "port_addition_review": "2026-10-16",
+      "inventory_source_url": "https://msi.nga.mil/api/publications/download?key=16694491%2FSFH00000%2FPub172bk.pdf",
+      "business_source_urls": [
+        "https://msi.nga.mil/api/publications/download?key=16694491%2FSFH00000%2FPub172bk.pdf"
+      ],
+      "coordinate_source_url": "https://arcgis.netl.doe.gov/server/rest/services/Hosted/CCS_EJ_SJ_Data/FeatureServer/17",
+      "coordinate_precision": "上游目录港口代表点；非泊位边界",
+      "source_url": "https://msi.nga.mil/api/publications/download?key=16694491%2FSFH00000%2FPub172bk.pdf",
+      "activity_source": "无独立PortWatch统计",
+      "coverage_note": "来源目录记录；没有独立统计的节点不借用邻港、不拆分父港艘次、不补零。"
+    },
+    {
+      "portid": "wpi48198",
+      "name": "Nishtun",
+      "country": "Yemen",
+      "lat": 15.81666699983808,
+      "lon": 52.199999999920216,
+      "statistics_available": false,
+      "wpi_ids": [
+        48198
+      ],
+      "wpi_names": [
+        "Nishtun"
+      ],
+      "name_cn": "尼什通港",
+      "name_en": "Nishtun",
+      "display_name": "尼什通港（Nishtun）",
+      "region": "阿拉伯海",
+      "reviewed_port_type": "综合商港",
+      "reviewed_business": "地方多用途商港（杂货及渔业运输）",
+      "port_addition_review": "2026-10-16",
+      "inventory_source_url": "https://msi.nga.mil/api/publications/download?key=16694491%2FSFH00000%2FPub172bk.pdf",
+      "business_source_urls": [
+        "https://msi.nga.mil/api/publications/download?key=16694491%2FSFH00000%2FPub172bk.pdf"
+      ],
+      "coordinate_source_url": "https://arcgis.netl.doe.gov/server/rest/services/Hosted/CCS_EJ_SJ_Data/FeatureServer/17",
+      "coordinate_precision": "上游目录港口代表点；非泊位边界",
+      "source_url": "https://msi.nga.mil/api/publications/download?key=16694491%2FSFH00000%2FPub172bk.pdf",
+      "activity_source": "无独立PortWatch统计",
+      "coverage_note": "来源目录记录；没有独立统计的节点不借用邻港、不拆分父港艘次、不补零。"
+    },
+    {
+      "portid": "facility_tadjourah",
+      "name": "Port of Tadjourah",
+      "country": "Djibouti",
+      "lat": 11.781036119642858,
+      "lon": 42.8670562125,
+      "statistics_available": false,
+      "name_cn": "塔朱拉港",
+      "name_en": "Port of Tadjourah",
+      "display_name": "塔朱拉港（Port of Tadjourah）",
+      "region": "亚丁湾",
+      "reviewed_port_type": "综合商港",
+      "reviewed_business": "多用途商港（钾盐、杂货及滚装）",
+      "port_addition_review": "2026-10-16",
+      "inventory_source_url": "https://dpfza.gov.dj/index.php/facilities/Port-Tadjourah",
+      "business_source_urls": [
+        "https://dpfza.gov.dj/index.php/facilities/Port-Tadjourah"
+      ],
+      "coordinate_source_url": "https://www.openstreetmap.org/relation/11175575",
+      "coordinate_precision": "OpenStreetMap港区多边形顶点平均代表点；ODbL",
+      "wpi_ids": [],
+      "wpi_names": [],
+      "source_url": "https://dpfza.gov.dj/index.php/facilities/Port-Tadjourah",
+      "activity_source": "无独立PortWatch统计",
+      "coverage_note": "来源目录记录；没有独立统计的节点不借用邻港、不拆分父港艘次、不补零。"
+    },
+    {
+      "portid": "facility_ghoubet",
+      "name": "Port of Ghoubet",
+      "country": "Djibouti",
+      "lat": 11.535254955511812,
+      "lon": 42.52197398503937,
+      "statistics_available": false,
+      "name_cn": "古贝特港",
+      "name_en": "Port of Ghoubet",
+      "display_name": "古贝特港（Port of Ghoubet）",
+      "region": "亚丁湾",
+      "reviewed_port_type": "干货港",
+      "reviewed_business": "盐出口专用散货港",
+      "port_addition_review": "2026-10-16",
+      "inventory_source_url": "https://dpfza.gov.dj/facilities/port-ghoubet",
+      "business_source_urls": [
+        "https://dpfza.gov.dj/facilities/port-ghoubet"
+      ],
+      "coordinate_source_url": "https://www.openstreetmap.org/relation/11199579",
+      "coordinate_precision": "OpenStreetMap港区多边形顶点平均代表点；ODbL",
+      "wpi_ids": [],
+      "wpi_names": [],
+      "source_url": "https://dpfza.gov.dj/facilities/port-ghoubet",
+      "activity_source": "无独立PortWatch统计",
+      "coverage_note": "来源目录记录；没有独立统计的节点不借用邻港、不拆分父港艘次、不补零。"
+    },
+    {
+      "portid": "facility_socotra",
+      "name": "Socotra Port (Hawlaf)",
+      "country": "Yemen",
+      "lat": 12.680328421199164,
+      "lon": 54.07887027414972,
+      "statistics_available": false,
+      "name_cn": "索科特拉港（豪拉夫）",
+      "name_en": "Socotra Port (Hawlaf)",
+      "display_name": "索科特拉港（豪拉夫）（Socotra Port (Hawlaf)）",
+      "region": "阿拉伯海",
+      "reviewed_port_type": "地方及服务港",
+      "reviewed_business": "岛屿补给及沿岸商运港（食品、油品等生活物资）",
+      "port_addition_review": "2026-10-16",
+      "inventory_source_url": "https://www.yaspc.co/en/ports/port-of-socatra",
+      "business_source_urls": [
+        "https://www.yaspc.co/en/ports/port-of-socatra"
+      ],
+      "coordinate_source_url": "https://www.yaspc.co/en",
+      "coordinate_precision": "官方港口页嵌入地图定位点；非泊位边界",
+      "wpi_ids": [],
+      "wpi_names": [],
+      "source_url": "https://www.yaspc.co/en/ports/port-of-socatra",
+      "activity_source": "无独立PortWatch统计",
+      "coverage_note": "来源目录记录；没有独立统计的节点不借用邻港、不拆分父港艘次、不补零。"
+    },
+    {
+      "portid": "facility_jcpdi",
+      "name": "Jazan City for Primary and Downstream Industries Port",
+      "country": "Saudi Arabia",
+      "lat": 17.283333333333335,
+      "lon": 42.333333333333336,
+      "statistics_available": false,
+      "name_cn": "吉赞基础及下游工业港",
+      "name_en": "Jazan City for Primary and Downstream Industries Port",
+      "display_name": "吉赞基础及下游工业港（Jazan City for Primary and Downstream Industries Port）",
+      "region": "红海",
+      "reviewed_port_type": "综合商港",
+      "reviewed_business": "工业多用途港（集装箱、干散货、杂货及液体散货）",
+      "port_addition_review": "2026-10-16",
+      "inventory_source_url": "https://hutchisonportsjazan.com/facilities",
+      "business_source_urls": [
+        "https://hutchisonportsjazan.com/facilities"
+      ],
+      "coordinate_source_url": "https://msi.nga.mil/api/publications/download?key=16694491%2FSFH00000%2FPub172bk.pdf",
+      "coordinate_precision": "NGA Pub172 §7.36港口代表位置；分钟精度，与Jizan商业港区分",
+      "wpi_ids": [],
+      "wpi_names": [],
+      "source_url": "https://hutchisonportsjazan.com/facilities",
+      "activity_source": "无独立PortWatch统计",
+      "coverage_note": "来源目录记录；没有独立统计的节点不借用邻港、不拆分父港艘次、不补零。"
+    },
+    {
+      "portid": "facility_abu_flous",
+      "name": "Abu Flous Port",
+      "country": "Iraq",
+      "lat": 30.45,
+      "lon": 48.03333333333333,
+      "statistics_available": false,
+      "name_cn": "阿布弗卢斯港",
+      "name_en": "Abu Flous Port",
+      "display_name": "阿布弗卢斯港（Abu Flous Port）",
+      "region": "阿拉伯河",
+      "reviewed_port_type": "干货港",
+      "reviewed_business": "河港（杂货及工业散货装卸）",
+      "port_addition_review": "2026-10-16",
+      "inventory_source_url": "https://www.aspf.org.eg/ardirectory/default/viewArticle/53-ميناء-أبو-فلوس/21",
+      "business_source_urls": [
+        "https://www.aspf.org.eg/ardirectory/default/viewArticle/53-ميناء-أبو-فلوس/21"
+      ],
+      "coordinate_source_url": "https://msi.nga.mil/api/publications/download?key=16694491%2FSFH00000%2FPub172bk.pdf",
+      "coordinate_precision": "NGA Pub172 §17.29港口所在地代表点；分钟精度",
+      "wpi_ids": [],
+      "wpi_names": [],
+      "source_url": "https://www.aspf.org.eg/ardirectory/default/viewArticle/53-ميناء-أبو-فلوس/21",
+      "activity_source": "无独立PortWatch统计",
+      "coverage_note": "来源目录记录；没有独立统计的节点不借用邻港、不拆分父港艘次、不补零。"
+    },
+    {
+      "portid": "facility_abu_qir",
+      "name": "Abu Qir",
+      "country": "Egypt",
+      "lat": 31.333333333333332,
+      "lon": 30.066666666666666,
+      "statistics_available": false,
+      "name_cn": "阿布基尔港",
+      "name_en": "Abu Qir",
+      "display_name": "阿布基尔港（Abu Qir）",
+      "region": "地中海",
+      "reviewed_port_type": "干货港",
+      "reviewed_business": "军商港区的商业部分（磷矿、化肥及谷物）",
+      "port_addition_review": "2026-10-16",
+      "inventory_source_url": "https://msi.nga.mil/api/publications/download?key=16694491%2FSFH00000%2FPub132bk.pdf",
+      "business_source_urls": [
+        "https://msi.nga.mil/api/publications/download?key=16694491%2FSFH00000%2FPub132bk.pdf"
+      ],
+      "coordinate_source_url": "https://msi.nga.mil/api/publications/download?key=16694491%2FSFH00000%2FPub132bk.pdf",
+      "coordinate_precision": "NGA Pub132 §2.12港口所在地代表点；分钟精度",
+      "wpi_ids": [],
+      "wpi_names": [],
+      "source_url": "https://msi.nga.mil/api/publications/download?key=16694491%2FSFH00000%2FPub132bk.pdf",
+      "activity_source": "无独立PortWatch统计",
+      "coverage_note": "来源目录记录；没有独立统计的节点不借用邻港、不拆分父港艘次、不补零。"
+    },
+    {
+      "portid": "facility_arish",
+      "name": "Al Arish",
+      "country": "Egypt",
+      "lat": 31.133333333333333,
+      "lon": 33.8,
+      "statistics_available": false,
+      "name_cn": "阿里什港",
+      "name_en": "Al Arish",
+      "display_name": "阿里什港（Al Arish）",
+      "region": "地中海",
+      "reviewed_port_type": "综合商港",
+      "reviewed_business": "地方商港（通用货物及干散货）",
+      "port_addition_review": "2026-10-16",
+      "inventory_source_url": "https://msi.nga.mil/api/publications/download?key=16694491%2FSFH00000%2FPub132bk.pdf",
+      "business_source_urls": [
+        "https://msi.nga.mil/api/publications/download?key=16694491%2FSFH00000%2FPub132bk.pdf",
+        "https://sis.gov.eg/en/media-center/files/how-will-egypt-become-a-global-hub-for-trade-and-logistics/"
+      ],
+      "coordinate_source_url": "https://msi.nga.mil/api/publications/download?key=16694491%2FSFH00000%2FPub132bk.pdf",
+      "coordinate_precision": "NGA Pub132 §2.24港口所在地代表点；分钟精度",
+      "wpi_ids": [],
+      "wpi_names": [],
+      "source_url": "https://msi.nga.mil/api/publications/download?key=16694491%2FSFH00000%2FPub132bk.pdf",
+      "activity_source": "无独立PortWatch统计",
+      "coverage_note": "来源目录记录；没有独立统计的节点不借用邻港、不拆分父港艘次、不补零。"
+    },
+    {
+      "portid": "facility_gargoub",
+      "name": "Gargoub Port",
+      "country": "Egypt",
+      "lat": 31.505166666666668,
+      "lon": 26.586,
+      "statistics_available": false,
+      "name_cn": "加尔古卜港",
+      "name_en": "Gargoub Port",
+      "display_name": "加尔古卜港（Gargoub Port）",
+      "region": "地中海",
+      "reviewed_port_type": "综合商港",
+      "reviewed_business": "商港开发及货物装卸（散货等）",
+      "port_addition_review": "2026-10-16",
+      "inventory_source_url": "https://www.mts.gov.eg/en/port/جرجوب/",
+      "business_source_urls": [
+        "https://www.mts.gov.eg/en/port/جرجوب/"
+      ],
+      "coordinate_source_url": "https://msi.admiralty.co.uk/NoticesToMariners/DownloadFile?batchId=e35adee3-9792-42aa-9be2-2cab70ef175e&fileName=47wknm23.pdf&frequency=Weekly&mimeType=application%2Fpdf",
+      "coordinate_precision": "UKHO 2023第47周N6203港口灯标位置代表港口入口；非泊位中心",
+      "wpi_ids": [],
+      "wpi_names": [],
+      "source_url": "https://www.mts.gov.eg/en/port/جرجوب/",
+      "activity_source": "无独立PortWatch统计",
+      "coverage_note": "来源目录记录；没有独立统计的节点不借用邻港、不拆分父港艘次、不补零。"
+    },
+    {
+      "portid": "facility_berenice",
+      "name": "Mina Baranis (Port Berenice)",
+      "country": "Egypt",
+      "lat": 23.916666666666668,
+      "lon": 35.5,
+      "statistics_available": false,
+      "name_cn": "贝雷尼斯港",
+      "name_en": "Mina Baranis (Port Berenice)",
+      "display_name": "贝雷尼斯港（Mina Baranis (Port Berenice)）",
+      "region": "红海",
+      "reviewed_port_type": "综合商港",
+      "reviewed_business": "商港及港区开发（不把规划吞吐能力当实际吞吐量）",
+      "port_addition_review": "2026-10-16",
+      "inventory_source_url": "https://msi.nga.mil/api/publications/download?key=16694491%2FSFH00000%2FPub172bk.pdf",
+      "business_source_urls": [
+        "https://msi.nga.mil/api/publications/download?key=16694491%2FSFH00000%2FPub172bk.pdf"
+      ],
+      "coordinate_source_url": "https://msi.nga.mil/api/publications/download?key=16694491%2FSFH00000%2FPub172bk.pdf",
+      "coordinate_precision": "NGA Pub172 §4.20港口代表位置；分钟精度",
+      "wpi_ids": [],
+      "wpi_names": [],
+      "source_url": "https://msi.nga.mil/api/publications/download?key=16694491%2FSFH00000%2FPub172bk.pdf",
+      "activity_source": "无独立PortWatch统计",
+      "coverage_note": "来源目录记录；没有独立统计的节点不借用邻港、不拆分父港艘次、不补零。"
+    },
+    {
+      "portid": "facility_astara",
+      "name": "Astara Port",
+      "country": "Iran",
+      "lat": 38.4074981,
+      "lon": 48.8825512,
+      "statistics_available": false,
+      "name_cn": "阿斯塔拉港",
+      "name_en": "Astara Port",
+      "display_name": "阿斯塔拉港（Astara Port）",
+      "region": "里海",
+      "reviewed_port_type": "综合商港",
+      "reviewed_business": "里海商业港（杂货、散货及集装箱运输）",
+      "port_addition_review": "2026-10-16",
+      "inventory_source_url": "https://t.me/s/pmo_ir?q=%23IranPorts",
+      "business_source_urls": [
+        "https://t.me/s/pmo_ir?q=%23IranPorts"
+      ],
+      "coordinate_source_url": "https://www.openstreetmap.org/node/13423334262",
+      "coordinate_precision": "OpenStreetMap具名harbour节点；ODbL；不是城市中心或阿塞拜疆同名港",
+      "wpi_ids": [],
+      "wpi_names": [],
+      "source_url": "https://t.me/s/pmo_ir?q=%23IranPorts",
+      "activity_source": "无独立PortWatch统计",
+      "coverage_note": "来源目录记录；没有独立统计的节点不借用邻港、不拆分父港艘次、不补零。"
+    },
+    {
+      "portid": "facility_fereydunkenar",
+      "name": "Fereydunkenar Port",
+      "country": "Iran",
+      "lat": 36.697962,
+      "lon": 52.5566922,
+      "statistics_available": false,
+      "name_cn": "费雷敦凯纳尔港",
+      "name_en": "Fereydunkenar Port",
+      "display_name": "费雷敦凯纳尔港（Fereydunkenar Port）",
+      "region": "里海",
+      "reviewed_port_type": "综合商港",
+      "reviewed_business": "里海多用途商业港（杂货及散货）",
+      "port_addition_review": "2026-10-16",
+      "inventory_source_url": "https://telegram.me/s/pmo_ir?after=43471",
+      "business_source_urls": [
+        "https://telegram.me/s/pmo_ir?after=43471"
+      ],
+      "coordinate_source_url": "https://www.openstreetmap.org/node/4699612983",
+      "coordinate_precision": "OpenStreetMap具名harbour节点；ODbL；不使用邻近游艇码头位置",
+      "wpi_ids": [],
+      "wpi_names": [],
+      "source_url": "https://telegram.me/s/pmo_ir?after=43471",
+      "activity_source": "无独立PortWatch统计",
+      "coverage_note": "来源目录记录；没有独立统计的节点不借用邻港、不拆分父港艘次、不补零。"
+    }
+  ],
+  "crosswalks": {
+    "port191": 47980,
+    "port2129": 45172,
+    "port2130": 48020,
+    "port2131": 47985,
+    "port2132": 48015,
+    "port23": 45165,
+    "port2263": 48202,
+    "port2264": 48214,
+    "port2392": 48216,
+    "port27": 48210
+  },
+  "spatial_receipts": {
+    "ghoubet": {
+      "sha256": "1a753cbe0481a920ab1a33aa1f122c5c5d259e2135e227350f67773ddb2cd8ed",
+      "bytes": 52689,
+      "attribution": "© OpenStreetMap contributors, ODbL 1.0",
+      "retrieved_at": "2026-10-16T18:51:28.262507+00:00"
+    },
+    "tadjourah": {
+      "sha256": "cdb989c5c635b784a02a9791fec18f53d895d98d0c542c3c8150c07c85510161",
+      "bytes": 3260980,
+      "attribution": "© OpenStreetMap contributors, ODbL 1.0",
+      "retrieved_at": "2026-10-16T18:51:28.265105+00:00"
+    },
+    "astara": {
+      "sha256": "0ccbdc8446aebd8078acba43ce553a491f273616cc28c002debaa15938bd455f",
+      "bytes": 1946633,
+      "attribution": "© OpenStreetMap contributors, ODbL 1.0",
+      "retrieved_at": "2026-10-16T18:51:28.266551+00:00"
+    },
+    "fereydunkenar": {
+      "sha256": "ed1701ca682c1e813001ec354b901224e1866db6f8685d52df31f8203d0cc379",
+      "bytes": 1343317,
+      "attribution": "© OpenStreetMap contributors, ODbL 1.0",
+      "retrieved_at": "2026-10-16T18:51:28.267544+00:00"
+    }
+  },
+  "original_portwatch_query": {
+    "url": "https://services9.arcgis.com/weJ1QsnbMYJlCHdG/arcgis/rest/services/PortWatch_ports_database/FeatureServer/0/query?f=json&where=country+IN+%28%27Bahrain%27%2C%27Djibouti%27%2C%27Egypt%27%2C%27Iran%27%2C%27Iraq%27%2C%27Kuwait%27%2C%27Oman%27%2C%27Qatar%27%2C%27Saudi+Arabia%27%2C%27United+Arab+Emirates%27%2C%27Yemen%27%29&outFields=portid%2Cportname%2Ccountry%2Clat%2Clon&returnGeometry=false&orderByFields=portid+ASC&resultRecordCount=1000",
+    "retrieved_at": "2026-10-16T18:42:01.207090+00:00",
+    "http_status": 200,
+    "raw_response_sha256": "9cc52def0c15bf7b1ebea746390fa2496d68841bfe8bbf537a7ceadb714ad2f5",
+    "rows": 91,
+    "truncated": false,
+    "unmatched_id_count": 12,
+    "unmatched_nodes": [
+      {
+        "portid": "port191",
+        "portname": "Safaga",
+        "country": "Egypt",
+        "lat": 26.72555551,
+        "lon": 33.9422311
+      },
+      {
+        "portid": "port2044",
+        "portname": "El Dekheila",
+        "country": "Egypt",
+        "lat": 31.14295533289,
+        "lon": 29.8103749314518
+      },
+      {
+        "portid": "port2129",
+        "portname": "Sidi Kerir",
+        "country": "Egypt",
+        "lat": 31.0958825329663,
+        "lon": 29.6187321299824
+      },
+      {
+        "portid": "port2130",
+        "portname": "Ras Gharib",
+        "country": "Egypt",
+        "lat": 28.3445642535532,
+        "lon": 33.1097191315154
+      },
+      {
+        "portid": "port2131",
+        "portname": "Zeit Bay",
+        "country": "Egypt",
+        "lat": 27.8161621640394,
+        "lon": 33.5801485093014
+      },
+      {
+        "portid": "port2132",
+        "portname": "Ras Shukheir",
+        "country": "Egypt",
+        "lat": 28.1285102857574,
+        "lon": 33.2826172757473
+      },
+      {
+        "portid": "port2263",
+        "portname": "Ash Shihr",
+        "country": "Yemen",
+        "lat": 14.6944993583033,
+        "lon": 49.5436480987972
+      },
+      {
+        "portid": "port2264",
+        "portname": "Rudum Terminal",
+        "country": "Yemen",
+        "lat": 13.9931436850754,
+        "lon": 47.914459003825
+      },
+      {
+        "portid": "port23",
+        "portname": "Alexandria",
+        "country": "Egypt",
+        "lat": 31.15536502,
+        "lon": 29.83759053
+      },
+      {
+        "portid": "port2392",
+        "portname": "Yemen LNG Terminal",
+        "country": "Yemen",
+        "lat": 13.980059591578499,
+        "lon": 48.177455343879174
+      },
+      {
+        "portid": "port2482",
+        "portname": "Egyptian LNG Terminal",
+        "country": "Egypt",
+        "lat": 31.36463682625328,
+        "lon": 30.310526699040828
+      },
+      {
+        "portid": "port27",
+        "portname": "Mukalla",
+        "country": "Yemen",
+        "lat": 14.52061091,
+        "lon": 49.15123019
+      }
+    ],
+    "caveat": "Source node IDs are not proof of distinct physical facilities or independent traffic coverage; identity/coordinates require review before importing.",
+    "saved_file_sha256": "08d87ea14d0da440e3ffc4006b72aaa020439a18a9caaf22535dc966703749bb"
+  },
+  "reference_wpi_sha256": "37c3b628e764d2b969f5b5e8bd0e3c74192f4bfdc9813edfd830237bbede2e2a",
+  "unresolved_not_added": [
+    "Ras Abu Aboud: current facility identity and Doha parent coverage unresolved",
+    "Damerjog: construction/operating identity and coordinates require review",
+    "RAK Maritime City / Saqr: parent-child statistical boundary unresolved"
+  ],
+  "facts_policy": "Only explicit PortWatch portIDs have independent daily observations. WPI/official/OSM catalogue-only additions never borrow neighboring facts or invent zeroes."
+}

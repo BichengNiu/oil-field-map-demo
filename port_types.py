@@ -1227,10 +1227,19 @@ PORT_TYPE_BY_ID = {pid: label for label, ids in PORT_TYPE_GROUPS.items() for pid
 
 
 def port_type_label(port: dict) -> str:
-    return PORT_TYPE_BY_ID.get(str(port.get("portid", "")), "待核实")
+    reviewed = PORT_TYPE_BY_ID.get(str(port.get("portid", "")))
+    if reviewed:
+        return reviewed
+    if port.get("port_addition_review") == "2026-10-16" and port.get("reviewed_port_type") in PORT_TYPE_GROUPS:
+        return port["reviewed_port_type"]
+    return "待核实"
 
 
 def port_business_label(port: dict) -> str:
     """Keep the full reviewed facility description and its original scope."""
     reviewed = REVIEWED_PORT_TYPES.get(str(port.get("portid", "")))
-    return reviewed["label"] if reviewed else "待核实"
+    if reviewed:
+        return reviewed["label"]
+    if port.get("port_addition_review") == "2026-10-16" and port.get("reviewed_business"):
+        return port["reviewed_business"]
+    return "待核实"
