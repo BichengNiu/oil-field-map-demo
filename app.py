@@ -58,6 +58,7 @@ _RUNTIME_SOURCE_FILES = (
     "collector.py",
     "data_store.py",
     "dashboard_data.py",
+    "dashboard_rows.py",
     "dashboard_state.py",
     "historical_dates.py",
     "dashboard_views.py",
@@ -66,6 +67,7 @@ _RUNTIME_SOURCE_FILES = (
     "map_popups.py",
     "monitoring_cards.py",
     "portwatch.py",
+    "portwatch_records.py",
     "portwatch_downloads.py",
     "print_report.py",
     "report_data.py",
@@ -90,10 +92,12 @@ def _load_runtime_modules(source_fingerprint: str) -> dict[str, object]:
     for module in (
         _data_store_module,
         _ais_history_module,
+        importlib.import_module("portwatch_records"),
         PORTWATCH,
         _portwatch_downloads_module,
         importlib.import_module("map_renderer"),
         importlib.import_module("map_popups"),
+        importlib.import_module("dashboard_rows"),
         importlib.import_module("monitoring_cards"),
         importlib.import_module("sea_history"),
         importlib.import_module("sea_tracking"),
@@ -184,7 +188,7 @@ def _render_dashboard(refresh_revision: str) -> None:
         cards_placeholder = st.empty()
         with st.container(horizontal=True, horizontal_alignment="left"):
             snapshot_day = st.date_input(
-                "历史日期", value=None, min_value=first_day, max_value=last_day,
+                "选择日期", value=None, min_value=first_day, max_value=last_day,
                 key="map_snapshot_day", format="YYYY-MM-DD", width=240,
                 disabled=first_day is None,
             )
@@ -198,14 +202,12 @@ def _render_dashboard(refresh_revision: str) -> None:
     ais_status = collector_status()
 
     port_error = port_catalog_error or port_latest_error
-    port_risk_error = None
     ports: list[dict] = []
     if selected_day is not None and available_ports:
-        ports, activity_error, port_risk_error = load_ports(
+        ports, activity_error, _ = load_ports(
             available_ports,
             selected_day,
             rolling_days=7,
-            with_risk=tab_ports.open and snapshot_day is None,
             refresh_revision=refresh_revision,
             stored_revision=revisions["ports"],
         )
@@ -257,9 +259,7 @@ def _render_dashboard(refresh_revision: str) -> None:
             render_ports_panel(
                 ports,
                 selected_day,
-                7,
                 port_error,
-                port_risk_error,
             )
     if tab_download.open:
         with tab_download:

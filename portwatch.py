@@ -300,6 +300,29 @@ def _complete_sum(rows: list[dict], days: int, *fields: str) -> float | None:
     return sum(sum(row[field] for field in fields) for row in rows)
 
 
+@st.cache_data(ttl=3600, max_entries=24, show_spinner=False)
+def week_to_date_activity(day: date, port_ids: tuple[str, ...],
+                          refresh_revision: str = "initial", data_revision: int = 0) -> dict[str, dict]:
+    """Sum Monday through the source day; partial weeks require all elapsed days."""
+    ids = tuple(_activity_ids(port_ids))
+    first = day - timedelta(days=day.weekday())
+    expected = day.weekday() + 1
+    # Share the existing daily lookup's cached local read, without another query.
+    grouped = _activity_rows(day, ids, 14, refresh_revision, data_revision)
+    summary = {}
+    for pid in port_ids:
+        values = [row for observed, row in grouped.get(pid, {}).items() if first <= observed <= day]
+        total = _complete_sum(values, expected, "portcalls")
+        result = {"week_start": first.isoformat(), "week_end": day.isoformat(),
+                  "week_expected_days": expected, "week_observed_days": len(values), "week_calls": total}
+        for kind in SHIP_TYPES:
+            calls = _complete_sum(values, expected, f"portcalls_{kind}")
+            result[f"week_calls_{kind}"] = calls
+            result[f"week_share_{kind}"] = calls / total * 100 if calls is not None and total else None
+        summary[pid] = result
+    return summary
+
+
 @st.cache_data(ttl=3600, max_entries=12, show_spinner=False)
 def rolling_activity(day: date, port_ids: tuple[str, ...], days: int = 7,
                      refresh_revision: str = "initial",

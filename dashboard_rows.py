@@ -9,6 +9,8 @@ from datetime import date
 
 import ais as AIS
 import portwatch as PORTWATCH
+from port_inventory import country_label
+from portwatch_records import SHIP_TYPE_LABELS, port_status_label
 from map_popups import (
     METRIC_LABELS,
     daily_output_value,
@@ -29,57 +31,38 @@ def _rounded(value, digits: int = 1, divisor: int = 1):
     return round(value / divisor if divisor != 1 else value, digits)
 
 
-def port_rows(ports: list[dict], selected_day: date | None, rolling_days: int) -> list[dict]:
-    rows = []
-    for port in ports:
-        notes = [port.get("coverage_note", "")]
-        if not port.get("has_data"):
-            notes.append("所选日缺少源记录")
-        if port.get("observed_days") != rolling_days:
-            notes.append("当前窗口不完整")
-        if port.get("previous_observed_days") != rolling_days:
-            notes.append("比较窗口不完整")
-        if port.get("activity_index") is None:
-            notes.append("活动指数不可算（基期为0或数据不完整）")
-        if port.get("portcalls") == 0 and (port.get("active_days") or 0) > 0:
-            notes.append("当日为0但窗口内有进港")
-        rows.append(
-            {
-                "水域": port["region"],
-                "国家": port["country"],
-                "港口": display_name(port),
-                "PortWatch ID": port["portid"],
-                "日期 UTC": selected_day.isoformat(),
-                "当日有效进港 艘次": port.get("portcalls"),
-                "坐标精度": port.get("coordinate_precision", "未核验"),
-                "坐标来源": port.get("coordinate_source_url"),
-                "港口活动指数": _rounded(port.get("activity_index"), 1),
-                f"{rolling_days}天活跃天数率 %": _rounded(port.get("active_day_rate"), 1),
-                f"{rolling_days}天日均进港 艘次": _rounded(port.get("avg_calls"), 3),
-                f"{rolling_days}天日均装卸 万吨": _rounded(port.get("avg_handled"), 6, 10000),
-                "单船平均货量 万吨/艘次": _rounded(port.get("average_cargo_per_call"), 6, 10000),
-                "进出口平衡指数": _rounded(port.get("trade_balance_index"), 1),
-                "风险运力 万吨/日": _rounded(port.get("risk_capacity"), 6, 10000),
-                "集装箱船占比 %": _rounded(port.get("share_container"), 1),
-                "干散货船占比 %": _rounded(port.get("share_dry_bulk"), 1),
-                "普通货船占比 %": _rounded(port.get("share_general_cargo"), 1),
-                "滚装船占比 %": _rounded(port.get("share_roro"), 1),
-                "油轮/液货船占比 %": _rounded(port.get("share_tanker"), 1),
-                f"{rolling_days}天有效日期": port.get("observed_days"),
-                "数据提示": "；".join(notes),
-                "纬度": port["lat"],
-                "经度": port["lon"],
-                "来源": port.get("source_url", PORTWATCH.SOURCE),
-                "统计覆盖": port.get("activity_source"),
-                "NGA WPI编号": str(port.get("wpi_ids", [])),
-                "停复运状态": port["port_operating_status_label"],
-                "状态截至": port["port_operating_status_as_of"],
-                "状态依据": port["port_status_basis"],
-                "状态证据": port["port_status_evidence_url"],
-            }
-        )
+def port_rows(ports: list[dict], selected_day: date | None) -> list[dict]:
+    ordered = sorted(ports, key=lambda port: (not bool(port.get("has_data")), -(port.get("portcalls") or 0), display_name(port)))
+    return [{
+        "港口名": display_name(port),
+        "国家": country_label(port.get("country")),
+        "水域": port.get("region"),
+        "日期": selected_day.isoformat() if selected_day else None,
+        "经营状态": port_status_label(port, selected_day),
+        "当日进港艘次": port.get("portcalls") if port.get("has_data") else None,
+        "本周累计艘次": port.get("week_calls"),
+        **{f"本周{label}累计艘次": port.get(f"week_calls_{kind}") for kind, label in SHIP_TYPE_LABELS.items()},
+        "纬度": port.get("lat"), "经度": port.get("lon"),
+        "来源": port.get("source_url", PORTWATCH.SOURCE),
+    } for port in ordered]
 
-    return rows
+
+def port_metrics(ports: list[dict]) -> list[tuple[str, object]]:
+    covered = [p for p in ports if PORTWATCH.has_independent_statistics(p)]
+    def total(key, daily=False):
+        values = [p.get(key) if not daily or p.get("has_data") else None for p in covered]
+        return sum(values) if values and all(v is not None for v in values) else None
+    def count(value):
+        return "—" if value is None else f"{value:,.0f}"
+    week_total = total("week_calls")
+    metrics = [("港口总数", len(ports)), ("当日进港艘次", count(total("portcalls", True))),
+               ("本周累计艘次", count(week_total))]
+    for kind, label in SHIP_TYPE_LABELS.items():
+        calls = total(f"week_calls_{kind}")
+        share = calls / week_total * 100 if calls is not None and week_total else None
+        value = f"{count(calls)}（{share:.1f}%）" if share is not None else f"{count(calls)}（—）"
+        metrics.append((f"本周{label}艘次/占比", value))
+    return metrics
 
 
 def asset_rows(assets: list[dict]) -> list[dict]:

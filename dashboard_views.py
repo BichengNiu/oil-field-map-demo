@@ -89,7 +89,7 @@ def render_map_panel(state: DashboardViewState, summary_cards: list, *, cards_pl
         height=735,
     )
     with st.container(horizontal=True, key="map_refresh_actions"):
-        st.button("保存地图PNG", type="primary", width="content",
+        st.button("保存图片", type="primary", width="content",
                   on_click=queue_map_screenshot)
 
 
@@ -189,33 +189,15 @@ def render_ais_panel(state: DashboardViewState) -> None:
         )
 
 
-def render_ports_panel(
-    ports: list[dict],
-    selected_day: date | None,
-    rolling_days: int,
-    port_error: str | None,
-    port_risk_error: str | None,
-) -> None:
-    port_rows = dashboard_rows.port_rows(ports, selected_day, rolling_days)
-    st.subheader("港口日活动")
+def render_ports_panel(ports: list[dict], selected_day: date | None, port_error: str | None) -> None:
+    port_rows = dashboard_rows.port_rows(ports, selected_day)
     if port_error:
         st.error(f"港口数据加载失败：{port_error}")
-    elif port_rows:
-        p1, p2, p3, p4 = st.columns(4)
-        p1.metric("港口总数", len(port_rows))
-        p2.metric("当日有进港", sum((p.get("portcalls") or 0) > 0 for p in ports))
-        p3.metric(
-            f"{rolling_days}天持续活跃", sum((p.get("active_day_rate") or 0) >= 50 for p in ports)
-        )
-        risk_values = [p["risk_capacity"] for p in ports if p.get("risk_capacity") is not None]
-        p4.metric(
-            "风险运力合计",
-            "—"
-            if not risk_values
-            else f"{sum(risk_values) / 10000:,.1f} 万吨/日",
-        )
-        if port_risk_error:
-            st.error(f"历史风险运力暂不可用：{port_risk_error}")
+    metrics = dashboard_rows.port_metrics(ports)
+    for start in range(0, len(metrics), 4):
+        for column, (label, value) in zip(st.columns(4), metrics[start:start+4]):
+            column.metric(label, value)
+    if port_rows:
         st.dataframe(
             port_rows,
             width="stretch",
@@ -223,13 +205,13 @@ def render_ports_panel(
             height=560,
             column_config={
                 "来源": st.column_config.LinkColumn("来源"),
-                "坐标来源": st.column_config.LinkColumn("坐标来源"),
+                **{name: st.column_config.NumberColumn(format="%d") for name in port_rows[0] if name.endswith("艘次")},
             },
         )
         st.download_button(
             "下载港口列表 CSV",
             csv_export.csv_bytes(port_rows, list(port_rows[0])),
-            file_name=f"portwatch_ports_{selected_day.isoformat()}.csv",
+            file_name=f"portwatch_ports_{selected_day.isoformat() if selected_day else 'unknown'}.csv",
             mime="text/csv",
             type="primary",
         )
@@ -272,28 +254,28 @@ def render_assets_panel(assets: list[dict]) -> None:
 def render_method_panel() -> None:
     st.subheader("范围、口径与数据限制")
     st.markdown(
-        "**更新方式。** 每次运行自动获取港口、咽喉点和船位数据并保存历史；港口页按钮刷新风险运力。"
+        "**更新方式。** 展示端只读GitHub发布快照，不联网采集或写库；数据由既有采集发布脚本统一更新。"
     )
     st.dataframe(
         [
             {
                 "数据": "港口 / 咽喉点日度记录",
-                "当前更新": "每次运行自动获取并保存日度记录，同一节点同一天去重更新",
+                "当前更新": "采集端更新成功后发布日度记录，同一节点同一天去重更新",
                 "进一步自动化": "源站发布时间决定最新观测日；缺失仍保持未知",
             },
             {
                 "数据": "实时船位",
-                "当前更新": "每次运行自动查询一次 Open Waters，失败时沿用本地最新快照",
-                "进一步自动化": "AISStream 当前暂停；单独运行采集服务才会持续采集",
+                "当前更新": "展示已发布船位快照；选择日期时读取当天归档",
+                "进一步自动化": "覆盖与采集频率决定实时性，展示端不启动采集服务",
             },
             {
                 "数据": "港口 / 咽喉点官方目录",
-                "当前更新": "每次运行自动获取目录并更新本地缓存",
+                "当前更新": "读取已发布的版本化目录",
                 "进一步自动化": "补充 WPI / 运营商名录仍需版本核验",
             },
             {
                 "数据": "港口风险运力",
-                "当前更新": "点击港口页“刷新风险运力”按钮时读取",
+                "当前更新": "既有采集任务尝试更新并归档；港口页不再展示该模型",
                 "进一步自动化": "源为历史航线模型；重新抓取不代表实时风险",
             },
             {
@@ -309,14 +291,14 @@ def render_method_panel() -> None:
             {
                 "数据": "船位归档",
                 "当前更新": "归档有明确观测时间的上游快照；接收时间另存，地图与船舶页展示已存最新快照",
-                "进一步自动化": "统一MONITORING_DB_PATH持久盘；需要连续采样时显式运行独立服务；免费AIS仅为观测覆盖",
+                "进一步自动化": "统一DuckDB由Git LFS发布；保留真实观测，不以稀疏船位推断完整流量",
             },
         ],
         hide_index=True,
         width="stretch",
     )
     st.markdown(
-        "**地图与截图。** 港口和咽喉点分别使用源站最新观测日，船舶图层显示当前AIS快照；油气保留披露日期。地图下方的“保存地图PNG”按钮可导出当前视野、图例、日期、弹窗及底图署名。"
+        "**地图与截图。** 港口和咽喉点分别使用源站最新观测日，船舶图层显示当前AIS快照；油气保留披露日期。地图下方的“保存图片”按钮可导出当前视野、图例、日期、弹窗及底图署名。"
     )
     st.markdown(
         "**港口覆盖。** 地图读取 IMF 当前维护的 PortWatch 港口点位数据库，"
@@ -338,7 +320,7 @@ def render_method_panel() -> None:
         "[每日咽喉点 API](https://services9.arcgis.com/weJ1QsnbMYJlCHdG/arcgis/rest/services/Daily_Chokepoints_Data/FeatureServer/0) · "
         "[风险运力网络 API](https://services9.arcgis.com/weJ1QsnbMYJlCHdG/arcgis/rest/services/spillovers_port_level_impact/FeatureServer/0)"
     )
-    st.markdown("**港口派生指标。** 所有窗口指标固定使用最新观测日及此前6个日历日；缺报不补零。")
+    st.markdown("**港口指标。** 港口页与地图弹窗的本周累计为所显示数据日所在周周一至当天；船型占比为分类累计艘次除以本周总艘次。缺报保留未知，下载中的滚动窗口指标按对应字段口径计算。")
     st.dataframe(
         [
             {

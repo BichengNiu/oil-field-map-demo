@@ -48,7 +48,7 @@ class AppStartupTest(unittest.TestCase):
                     assert any(element.label == '输气管线' for element in app.checkbox)
                     assert not any(element.label == '输气联络' for element in app.checkbox)
                     assert not app.error, [str(error.value) for error in app.error]
-                    assert any(element.label == '保存地图PNG' for element in app.button)
+                    assert any(element.label == '保存图片' for element in app.button)
                     assert not any(element.label in ('刷新港口数据', '刷新船舶数据') for element in app.button)
                     assert app.date_input(key='map_snapshot_day').value is None
                     app.date_input(key='map_snapshot_day').set_value(date(2020, 1, 2))
@@ -65,6 +65,16 @@ class AppStartupTest(unittest.TestCase):
                     app.run(timeout=30)
                     assert not app.exception, [str(error.value) for error in app.exception]
                     assert app.date_input(key='map_snapshot_day').value is None
+                    assert app.date_input(key='map_snapshot_day').label == '选择日期'
+                    app.session_state['main_tabs'] = '港口'
+                    app.run(timeout=30)
+                    assert not app.exception, [str(error.value) for error in app.exception]
+                    assert len(app.metric) == 8
+                    assert [m.label for m in app.metric][:3] == ['港口总数','当日进港艘次','本周累计艘次']
+                    assert not any(h.value == '港口日活动' for h in app.subheader)
+                    assert list(app.dataframe[0].value.columns)[:7] == ['港口名','国家','水域','日期','经营状态','当日进港艘次','本周累计艘次']
+                    assert set(app.dataframe[0].value['经营状态']) <= {'正常','停运','未知'}
+                    assert all(any('\u4e00' <= ch <= '\u9fff' for ch in value) for value in app.dataframe[0].value['国家'])
                     app.session_state['main_tabs'] = '数据下载'
                     app.run(timeout=30)
                     assert not app.exception, [str(error.value) for error in app.exception]

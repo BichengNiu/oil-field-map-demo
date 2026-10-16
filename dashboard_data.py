@@ -141,7 +141,7 @@ def load_ports(
         for port in available_ports
         if PORTWATCH.has_independent_statistics(port)
     ))
-    activity_all, rolling_all = {}, {}
+    activity_all, weekly_all = {}, {}
     if statistical_ids:
         try:
             activity_all = PORTWATCH.daily_activity(
@@ -156,20 +156,20 @@ def load_ports(
             except Exception:
                 pass
         try:
-            rolling_all = PORTWATCH.rolling_activity(
-                selected_day, statistical_ids, rolling_days, refresh_revision, stored_revision
+            weekly_all = PORTWATCH.week_to_date_activity(
+                selected_day, statistical_ids, refresh_revision, stored_revision
             )
         except Exception as exc:
-            rolling_error = f"窗口指标：{type(exc).__name__}: {exc}"
+            rolling_error = f"本周累计：{type(exc).__name__}: {exc}"
             port_error = f"{port_error}；{rolling_error}" if port_error else rolling_error
             try:
-                rolling_all = PORTWATCH.rolling_activity(
-                    selected_day, statistical_ids, rolling_days, "initial", stored_revision
+                weekly_all = PORTWATCH.week_to_date_activity(
+                    selected_day, statistical_ids, "initial", stored_revision
                 )
             except Exception:
                 pass
     activity = {port_id: activity_all[port_id] for port_id in ids if port_id in activity_all}
-    rolling = {port_id: rolling_all[port_id] for port_id in ids if port_id in rolling_all}
+    rolling = {port_id: weekly_all[port_id] for port_id in ids if port_id in weekly_all}
 
     risk_capacity = None
     if with_risk:

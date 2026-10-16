@@ -9,7 +9,7 @@ import html
 import field_catalog as CATALOG
 import portwatch as PORTWATCH
 from asset_values import display_value
-from portwatch_records import SHIP_TYPE_LABELS
+from portwatch_records import SHIP_TYPE_LABELS, port_status_label
 
 METRIC_LABELS = {
     "estimated_daily_average": "估算期间日均（公布总量×份额）",
@@ -259,22 +259,14 @@ def port_popup(port: dict, day: str) -> str:
     def count(value):
         return "—" if value is None else f"{value:,.0f}"
 
-    status = {
-        "normal": "正常", "operating": "正常", "open": "正常",
-        "stopped": "停运", "closed": "停运", "suspended": "停运", "shutdown": "停运",
-    }.get(port.get("port_operating_status"), "待核实")
-    # An announcement from after the selected day cannot establish its status.
-    evidence_day = str(port.get("port_operating_status_as_of") or "")[:10]
-    if len(evidence_day) == 10 and evidence_day[4:5] == "-" and evidence_day > day:
-        status = "待核实"
-    complete_week = port.get("window_days") == 7 and port.get("observed_days") == 7
-    weekly_calls = port.get("window_calls") if complete_week else None
+    status = port_status_label(port, day)
+    weekly_calls = port.get("week_calls")
     colors = {"container": "#2563eb", "dry_bulk": "#b45309",
               "general_cargo": "#64748b", "roro": "#7c3aed", "tanker": "#0f766e"}
     structure = []
     for kind, label in SHIP_TYPE_LABELS.items():
-        share = port.get(f"share_{kind}") if complete_week else None
-        calls = port.get(f"window_calls_{kind}") if complete_week else None
+        share = port.get(f"week_share_{kind}")
+        calls = port.get(f"week_calls_{kind}")
         width = max(0, min(100, share or 0))
         share_text = f"{share:.1f}%" if share is not None else "—"
         structure.append(
@@ -288,8 +280,8 @@ def port_popup(port: dict, day: str) -> str:
         f'<div class="field-name">⚓ {_esc(display_name(port))}</div>'
         f'<div class="row"><span>运行状态</span><strong>{status}</strong></div>'
         f'<div class="row"><span>当日进港艘次</span><strong>{count(daily_calls)} 艘次</strong></div>'
-        f'<div class="row"><span>过去7天进港艘次</span><strong>{count(weekly_calls)} 艘次</strong></div>'
-        '<div class="hierarchy-title">过去7天各船型艘次</div>'
+        f'<div class="row"><span>本周累计艘次</span><strong>{count(weekly_calls)} 艘次</strong></div>'
+        '<div class="hierarchy-title">本周各船型累计艘次</div>'
         + "".join(structure)
         + "</div>"
     )
