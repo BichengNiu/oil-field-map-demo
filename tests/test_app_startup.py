@@ -80,9 +80,10 @@ class AppStartupTest(unittest.TestCase):
                     assert all(b.proto.type == 'primary' for b in chart_downloads)
                     assert app.selectbox(key='port_chart_period').value == '近1年'
                     assert app.selectbox(key='port_chart_period').options == ['近1周','近1个月','近1个季度','近半年','近1年','近3年','近5年','近10年','全部']
-                    assert list(app.dataframe[0].value.columns)[:8] == ['港口名','港口类型','国家','水域','日期','经营状态','当日进港艘次','本周累计艘次']
-                    assert len(app.dataframe[0].value.columns) == 22
-                    assert not app.dataframe[0].value['港口类型'].isin(['待核实', '未知', '']).any()
+                    assert list(app.dataframe[0].value.columns)[:9] == ['港口名','港口类型','业务特点','国家','水域','日期','经营状态','当日进港艘次','本周累计艘次']
+                    assert len(app.dataframe[0].value.columns) == 23
+                    assert (app.dataframe[0].value['港口类型'] == '待核实').sum() == 2
+                    assert not app.dataframe[0].value['业务特点'].isin(['待核实', '未知', '']).any()
                     assert '本月累计艘次' in app.dataframe[0].value.columns
                     assert '本月油轮/液货船累计艘次' in app.dataframe[0].value.columns
                     assert any(b.label == '下载列表' for b in app.get('download_button'))

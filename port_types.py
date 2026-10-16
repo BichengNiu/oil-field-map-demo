@@ -1186,6 +1186,51 @@ REVIEWED_PORT_TYPES = {'facility_wpi48104': {'label': '小型地方港（靠泊�
             'scope_note': '仅核实上游明确命名的海上油品终端类别；没有公开具名设施对应关系，不推断运营商、油田或具体货种。'}}
 
 
+PORT_TYPE_GROUPS = {
+    "综合商港": (
+        "facility_grand_faw", "facility_hamriya_dubai", "facility_hamriyah", "facility_musaffah",
+        "facility_rak", "facility_zayed", "port105", "port106", "port107", "port108", "port1089",
+        "port13", "port1341", "port1342", "port1408", "port18", "port192", "port196", "port2012",
+        "port2025", "port2026", "port2031", "port2067", "port2074", "port226", "port24", "port25",
+        "port274", "port275", "port294", "port304", "port306", "port321", "port362", "port43",
+        "port5", "port518", "port563", "port58", "port71", "port72", "port744", "port746",
+        "port747", "port828", "port9", "port984", "port988", "wpi47855", "wpi47880", "wpi48269", "wpi48404",
+    ),
+    "集装箱港": ("port561",),
+    "干货港": ("port1088", "port1117", "port20", "port2060", "port2109", "port2219", "port834", "wpi48530"),
+    "油品港及终端": (
+        "facility_yanbu_north_crude", "facility_yanbu_north_refined", "facility_yanbu_south", "fso151", "fso158",
+        "port1081", "port1091", "port1203", "port2164", "port2165", "port2217", "port2218", "port2235",
+        "port2236", "port2245", "port2477", "port2478", "port2479", "port2493", "port305", "port512",
+        "port519", "port526", "port570", "port743", "wpi48053", "wpi48255", "wpi48265", "wpi48268",
+        "wpi48272", "wpi48279", "wpi48280", "wpi48295", "wpi48298", "wpi48300", "wpi48360",
+        "wpi48390", "wpi48440", "wpi48450", "wpi48468", "wpi48535",
+    ),
+    "液化天然气港（LNG）": ("facility_bahrain_lng", "port1068"),
+    "液化石油气港（LPG）": ("port22", "wpi48342", "wpi48406"),
+    "油气综合港": ("port1090", "port2237", "wpi48055"),
+    "客运旅游港": ("facility_doha_old", "facility_rashid", "port745"),
+    "地方及服务港": (
+        "facility_aljeer", "facility_delma", "facility_freeport", "facility_mirfa", "facility_mugharraq",
+        "facility_shahama", "facility_shinas", "facility_sila", "facility_suwaiq", "facility_wpi48104",
+        "port1340", "port2486", "wpi48050", "wpi48259", "wpi48310", "wpi48341", "wpi48374",
+    ),
+}
+
+# The evidence establishes a terminal, but not a cargo class supported by the
+# nine-group taxonomy. Do not turn generic gas/liquid handling into LNG or oil.
+PORT_TYPE_UNRESOLVED = {
+    "wpi48035": "气体船专用码头，既有证据未区分 LNG 与 LPG。",
+    "wpi48533": "海上液体装卸终端，既有证据未明确液体货种。",
+}
+PORT_TYPE_BY_ID = {pid: label for label, ids in PORT_TYPE_GROUPS.items() for pid in ids}
+
+
 def port_type_label(port: dict) -> str:
+    return PORT_TYPE_BY_ID.get(str(port.get("portid", "")), "待核实")
+
+
+def port_business_label(port: dict) -> str:
+    """Keep the full reviewed facility description and its original scope."""
     reviewed = REVIEWED_PORT_TYPES.get(str(port.get("portid", "")))
     return reviewed["label"] if reviewed else "待核实"

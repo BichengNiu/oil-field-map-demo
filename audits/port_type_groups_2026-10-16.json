@@ -1,0 +1,946 @@
+{
+  "reviewed_at": "2026-10-16",
+  "basis": "audits/port_type_review_2026-10-16.json",
+  "policy": "Stable-ID grouping of reviewed business descriptions; no name/traffic inference. Detailed source evidence unchanged.",
+  "group_counts": {
+    "综合商港": 52,
+    "集装箱港": 1,
+    "干货港": 8,
+    "油品港及终端": 41,
+    "液化天然气港（LNG）": 2,
+    "液化石油气港（LPG）": 3,
+    "油气综合港": 3,
+    "客运旅游港": 3,
+    "地方及服务港": 17
+  },
+  "unresolved": {
+    "wpi48035": "气体船专用码头，既有证据未区分 LNG 与 LPG。",
+    "wpi48533": "海上液体装卸终端，既有证据未明确液体货种。"
+  },
+  "ports": [
+    {
+      "portid": "facility_wpi48104",
+      "name_cn": "沙尔马港",
+      "name_en": "Sharmah",
+      "category": "地方及服务港",
+      "business_description": "小型地方港（靠泊服务）"
+    },
+    {
+      "portid": "port105",
+      "name_cn": "帕尔斯港码头",
+      "name_en": "Bandar-E Pars Terminal",
+      "category": "综合商港",
+      "business_description": "石化工业及物流港（固体、液体产品）"
+    },
+    {
+      "portid": "port106",
+      "name_cn": "沙希德拉贾伊港",
+      "name_en": "Bandar Shahid Rajaee",
+      "category": "综合商港",
+      "business_description": "综合商港（集装箱、滚装、散货、油品）"
+    },
+    {
+      "portid": "port1068",
+      "name_cn": "卡尔哈特液化天然气码头",
+      "name_en": "Qalhat LNG Terminal",
+      "category": "液化天然气港（LNG）",
+      "business_description": "液化天然气出口终端（兼凝析油装卸）"
+    },
+    {
+      "portid": "port107",
+      "name_cn": "阿巴斯港",
+      "name_en": "Bandar Abbas",
+      "category": "综合商港",
+      "business_description": "军商港区（商用泊位、海军设施）"
+    },
+    {
+      "portid": "port108",
+      "name_cn": "霍梅尼港",
+      "name_en": "Bandar Khomeini",
+      "category": "综合商港",
+      "business_description": "河口综合商港（杂货、散货、集装箱、油品）"
+    },
+    {
+      "portid": "port1088",
+      "name_cn": "米沙卜港",
+      "name_en": "Ras Al Mishab",
+      "category": "干货港",
+      "business_description": "干货港（杂货、水泥散货）"
+    },
+    {
+      "portid": "port1091",
+      "name_cn": "拉斯坦努拉港",
+      "name_en": "Ras Tanura",
+      "category": "油品港及终端",
+      "business_description": "油品出口港"
+    },
+    {
+      "portid": "port1203",
+      "name_cn": "西特拉港",
+      "name_en": "Sitrah",
+      "category": "油品港及终端",
+      "business_description": "油品码头（炼油产品装卸）"
+    },
+    {
+      "portid": "port13",
+      "name_cn": "阿治曼港",
+      "name_en": "Ajman",
+      "category": "综合商港",
+      "business_description": "综合商港（集装箱、杂货、滚装）"
+    },
+    {
+      "portid": "port1340",
+      "name_cn": "乌姆盖万港",
+      "name_en": "Umm al Qaiwain",
+      "category": "地方及服务港",
+      "business_description": "地方商港（中小型货船、传统木船）"
+    },
+    {
+      "portid": "port1341",
+      "name_cn": "乌姆盖斯尔港",
+      "name_en": "Umm Qasr",
+      "category": "综合商港",
+      "business_description": "综合商港（集装箱、项目货、杂货、散货）"
+    },
+    {
+      "portid": "port1342",
+      "name_cn": "多哈—乌姆赛义德港",
+      "name_en": "Doha-Umm Said",
+      "category": "综合商港",
+      "business_description": "复合港区（多哈商港、梅赛义德工业港）"
+    },
+    {
+      "portid": "port18",
+      "name_cn": "荷台达港",
+      "name_en": "Hudaydah (Hodeidah)",
+      "category": "综合商港",
+      "business_description": "综合商港（杂货、油品）"
+    },
+    {
+      "portid": "port196",
+      "name_cn": "布什尔港",
+      "name_en": "Bushehr",
+      "category": "综合商港",
+      "business_description": "综合商港（杂货、集装箱）"
+    },
+    {
+      "portid": "port20",
+      "name_cn": "巴士拉港",
+      "name_en": "Al Basrah",
+      "category": "干货港",
+      "business_description": "内河商港（杂货、仓储）"
+    },
+    {
+      "portid": "port2012",
+      "name_cn": "哈利法·本·萨勒曼港",
+      "name_en": "Khalifa Bin Salman",
+      "category": "综合商港",
+      "business_description": "综合商港（集装箱、滚装、杂货、客运）"
+    },
+    {
+      "portid": "port2026",
+      "name_cn": "哈马德港",
+      "name_en": "Hamad Port",
+      "category": "综合商港",
+      "business_description": "综合商港（集装箱、杂货、车辆、牲畜）"
+    },
+    {
+      "portid": "port2060",
+      "name_cn": "萨勒曼港",
+      "name_en": "Mina Salman",
+      "category": "干货港",
+      "business_description": "干货港（杂货、散货）"
+    },
+    {
+      "portid": "port2067",
+      "name_cn": "舒艾拜港",
+      "name_en": "Shuaiba",
+      "category": "综合商港",
+      "business_description": "工业综合港（干货、石油产品）"
+    },
+    {
+      "portid": "port2109",
+      "name_cn": "穆哈港",
+      "name_en": "Mokha",
+      "category": "干货港",
+      "business_description": "沿海商港（杂货）"
+    },
+    {
+      "portid": "port2164",
+      "name_cn": "哈尔克岛石油码头",
+      "name_en": "Kharg Island",
+      "category": "油品港及终端",
+      "business_description": "原油出口终端"
+    },
+    {
+      "portid": "port2165",
+      "name_cn": "拉万岛石油码头",
+      "name_en": "Lavan",
+      "category": "油品港及终端",
+      "business_description": "油品出口终端"
+    },
+    {
+      "portid": "port22",
+      "name_cn": "哈姆里亚液化石油气码头",
+      "name_en": "Al Hamriyah LPG Terminal",
+      "category": "液化石油气港（LPG）",
+      "business_description": "液化石油气码头（兼粮食、杂货）"
+    },
+    {
+      "portid": "port2217",
+      "name_cn": "哈夫吉港",
+      "name_en": "Ras Al Khafji",
+      "category": "油品港及终端",
+      "business_description": "油品装卸终端"
+    },
+    {
+      "portid": "port2219",
+      "name_cn": "萨利夫港",
+      "name_en": "Salif",
+      "category": "干货港",
+      "business_description": "干散货港（盐、水泥等）"
+    },
+    {
+      "portid": "port2235",
+      "name_cn": "吉尔库岛港",
+      "name_en": "Zirku Island",
+      "category": "油品港及终端",
+      "business_description": "海上油品装卸港（单点系泊）"
+    },
+    {
+      "portid": "port2237",
+      "name_cn": "达斯岛港",
+      "name_en": "Das Island",
+      "category": "油气综合港",
+      "business_description": "油气出口终端（原油、LNG、LPG）"
+    },
+    {
+      "portid": "port2245",
+      "name_cn": "拉斯伊萨海洋码头",
+      "name_en": "Ras Isa Terminal",
+      "category": "油品港及终端",
+      "business_description": "油品储运终端"
+    },
+    {
+      "portid": "port226",
+      "name_cn": "恰巴哈尔港",
+      "name_en": "Chabahar",
+      "category": "综合商港",
+      "business_description": "综合商港（杂货、集装箱）"
+    },
+    {
+      "portid": "port24",
+      "name_cn": "朱拜勒港",
+      "name_en": "Jubail",
+      "category": "综合商港",
+      "business_description": "工业及商业复合港（石化、散货、杂货）"
+    },
+    {
+      "portid": "port2477",
+      "name_cn": "阿巴丹港",
+      "name_en": "Abadan",
+      "category": "油品港及终端",
+      "business_description": "炼油配套河港（沥青、杂货、船舶加油）"
+    },
+    {
+      "portid": "port2478",
+      "name_cn": "巴里根角港",
+      "name_en": "Bahregan",
+      "category": "油品港及终端",
+      "business_description": "海上油品装卸终端"
+    },
+    {
+      "portid": "port2479",
+      "name_cn": "巴士拉石油码头",
+      "name_en": "Basrah Oil Terminal",
+      "category": "油品港及终端",
+      "business_description": "海上油品出口终端"
+    },
+    {
+      "portid": "port2486",
+      "name_cn": "贾斯克港",
+      "name_en": "Jask",
+      "category": "地方及服务港",
+      "business_description": "沿海港区（靠泊、海军设施）"
+    },
+    {
+      "portid": "port2493",
+      "name_cn": "祖尔港",
+      "name_en": "Mina Al Zour",
+      "category": "油品港及终端",
+      "business_description": "油品装卸终端"
+    },
+    {
+      "portid": "port25",
+      "name_cn": "舒韦赫港",
+      "name_en": "Shuwaikh",
+      "category": "综合商港",
+      "business_description": "综合商港（杂货、集装箱）"
+    },
+    {
+      "portid": "port275",
+      "name_cn": "达曼港",
+      "name_en": "Dammam",
+      "category": "综合商港",
+      "business_description": "干货综合港（集装箱、杂货、散货、滚装）"
+    },
+    {
+      "portid": "port294",
+      "name_cn": "吉布提港",
+      "name_en": "Djibouti",
+      "category": "综合商港",
+      "business_description": "综合商港（杂货、散货、航运服务）"
+    },
+    {
+      "portid": "port306",
+      "name_cn": "迪拜港",
+      "name_en": "Dubai",
+      "category": "综合商港",
+      "business_description": "复合港区（杂货、滚装、邮轮、修船）"
+    },
+    {
+      "portid": "port321",
+      "name_cn": "阿达比亚港",
+      "name_en": "Al Adabiyah",
+      "category": "综合商港",
+      "business_description": "综合商港（粮食、散货、杂货）"
+    },
+    {
+      "portid": "port362",
+      "name_cn": "富查伊拉港",
+      "name_en": "Fujairah",
+      "category": "综合商港",
+      "business_description": "综合港 / 油品枢纽（石油储运、加油、干散货、集装箱等）"
+    },
+    {
+      "portid": "port5",
+      "name_cn": "阿布扎比港",
+      "name_en": "Abu Dhabi",
+      "category": "综合商港",
+      "business_description": "综合港区（杂货、散货、邮轮）"
+    },
+    {
+      "portid": "port512",
+      "name_cn": "杰贝勒宰纳／鲁韦斯港",
+      "name_en": "Jabal Az Zannah-Ruways",
+      "category": "油品港及终端",
+      "business_description": "油品工业港（原油、炼化产品）"
+    },
+    {
+      "portid": "port526",
+      "name_cn": "朱艾玛石油码头",
+      "name_en": "Juaymah",
+      "category": "油品港及终端",
+      "business_description": "海上油品出口终端"
+    },
+    {
+      "portid": "port561",
+      "name_cn": "豪尔费坎港",
+      "name_en": "Khor Fakkan",
+      "category": "集装箱港",
+      "business_description": "集装箱转运港"
+    },
+    {
+      "portid": "port563",
+      "name_cn": "霍拉姆沙赫尔港",
+      "name_en": "Khorramshahr",
+      "category": "综合商港",
+      "business_description": "内河综合商港（杂货、集装箱）"
+    },
+    {
+      "portid": "port71",
+      "name_cn": "苏伊士港",
+      "name_en": "As Suways",
+      "category": "综合商港",
+      "business_description": "运河门户综合港（货运、航运服务、修船）"
+    },
+    {
+      "portid": "port72",
+      "name_cn": "沙迦港",
+      "name_en": "Sharjah",
+      "category": "综合商港",
+      "business_description": "综合商港（集装箱、杂货、散货、油品）"
+    },
+    {
+      "portid": "port743",
+      "name_cn": "艾哈迈迪港",
+      "name_en": "Mina Al Ahmadi",
+      "category": "油品港及终端",
+      "business_description": "油品出口港"
+    },
+    {
+      "portid": "port744",
+      "name_cn": "杰贝阿里港",
+      "name_en": "Jebel Ali",
+      "category": "综合商港",
+      "business_description": "综合港 / 集装箱枢纽（集装箱业务突出，同时处理散货、液体货物和车辆）"
+    },
+    {
+      "portid": "port745",
+      "name_cn": "卡布斯港",
+      "name_en": "Port Sultan Qaboos",
+      "category": "客运旅游港",
+      "business_description": "多用途港（客运、邮轮、货运泊位）"
+    },
+    {
+      "portid": "port747",
+      "name_cn": "萨克尔港",
+      "name_en": "Mina Saqr",
+      "category": "综合商港",
+      "business_description": "综合港 / 干散货港（骨料、水泥、集装箱、油品）"
+    },
+    {
+      "portid": "port828",
+      "name_cn": "苏赫纳港",
+      "name_en": "El Sokhna",
+      "category": "综合商港",
+      "business_description": "综合商港（集装箱、散货、液体货物）"
+    },
+    {
+      "portid": "port9",
+      "name_cn": "亚丁港",
+      "name_en": "Aden",
+      "category": "综合商港",
+      "business_description": "综合转运港（集装箱、杂货、燃油补给）"
+    },
+    {
+      "portid": "port988",
+      "name_cn": "苏哈尔港",
+      "name_en": "Port of Sohar",
+      "category": "综合商港",
+      "business_description": "综合工业港（矿石、集装箱、散货、液体货物）"
+    },
+    {
+      "portid": "wpi47855",
+      "name_cn": "多哈雷港",
+      "name_en": "Doraleh",
+      "category": "综合商港",
+      "business_description": "复合港区（集装箱、油品码头）"
+    },
+    {
+      "portid": "wpi47880",
+      "name_cn": "阿萨布港",
+      "name_en": "Assab",
+      "category": "综合商港",
+      "business_description": "综合商港（杂货、散货、油品）"
+    },
+    {
+      "portid": "wpi48035",
+      "name_cn": "苏赫纳港气体船码头",
+      "name_en": "Sokhna Port Gas Tanker Terminal",
+      "category": "待核实",
+      "business_description": "气体船专用码头"
+    },
+    {
+      "portid": "wpi48050",
+      "name_cn": "伊斯梅利亚港",
+      "name_en": "El Ismailiya",
+      "category": "地方及服务港",
+      "business_description": "运河服务港（引航、驳船）"
+    },
+    {
+      "portid": "wpi48053",
+      "name_cn": "拉斯苏德尔港",
+      "name_en": "Ras Sudr",
+      "category": "油品港及终端",
+      "business_description": "海上油品码头"
+    },
+    {
+      "portid": "wpi48055",
+      "name_cn": "艾因苏赫纳码头",
+      "name_en": "Ain Sukhna Terminal",
+      "category": "油气综合港",
+      "business_description": "油气储运终端（原油、LNG接收及再气化）"
+    },
+    {
+      "portid": "wpi48255",
+      "name_cn": "法赫勒港",
+      "name_en": "Mina Al Fahl",
+      "category": "油品港及终端",
+      "business_description": "油品装卸港"
+    },
+    {
+      "portid": "wpi48259",
+      "name_cn": "哈萨卜港",
+      "name_en": "Khawr Khasab",
+      "category": "地方及服务港",
+      "business_description": "沿海地方港（本地船舶、交通）"
+    },
+    {
+      "portid": "wpi48265",
+      "name_cn": "法特赫石油码头",
+      "name_en": "Fateh Oil Terminal",
+      "category": "油品港及终端",
+      "business_description": "海上原油装卸终端"
+    },
+    {
+      "portid": "wpi48268",
+      "name_cn": "穆巴拉兹石油码头",
+      "name_en": "Mubarraz Oil Terminal",
+      "category": "油品港及终端",
+      "business_description": "海上油品装卸终端"
+    },
+    {
+      "portid": "wpi48269",
+      "name_cn": "贾齐拉港",
+      "name_en": "Al Jazeera Port",
+      "category": "综合商港",
+      "business_description": "综合港（骨料、散货、液体、滚装、集装箱）"
+    },
+    {
+      "portid": "wpi48272",
+      "name_cn": "沙迦海上码头",
+      "name_en": "Sharjah Offshore Terminal",
+      "category": "油品港及终端",
+      "business_description": "海上油品装卸终端"
+    },
+    {
+      "portid": "wpi48279",
+      "name_cn": "乌姆纳尔港",
+      "name_en": "Umm An Nar",
+      "category": "油品港及终端",
+      "business_description": "油品装卸码头（油轮业务）"
+    },
+    {
+      "portid": "wpi48280",
+      "name_cn": "哈莱拉石油码头",
+      "name_en": "Hulaylah Oil Terminal",
+      "category": "油品港及终端",
+      "business_description": "海上油品装卸终端"
+    },
+    {
+      "portid": "wpi48295",
+      "name_cn": "哈卢尔岛港",
+      "name_en": "Jazirat Halul",
+      "category": "油品港及终端",
+      "business_description": "海上油品储运港"
+    },
+    {
+      "portid": "wpi48298",
+      "name_cn": "阿尔沙欣码头",
+      "name_en": "Al Shaheen Terminal",
+      "category": "油品港及终端",
+      "business_description": "海上油品储卸终端（FSO）"
+    },
+    {
+      "portid": "wpi48300",
+      "name_cn": "阿尔赖扬码头",
+      "name_en": "Al Rayyan Terminal",
+      "category": "油品港及终端",
+      "business_description": "海上油品储卸终端（FSO）"
+    },
+    {
+      "portid": "wpi48310",
+      "name_cn": "麦纳麦港",
+      "name_en": "Al Manamah",
+      "category": "地方及服务港",
+      "business_description": "地方港（传统木船、驳运）"
+    },
+    {
+      "portid": "wpi48341",
+      "name_cn": "拉斯盖尔港",
+      "name_en": "Ras Al Ghar",
+      "category": "地方及服务港",
+      "business_description": "地方商港（一般货船业务）"
+    },
+    {
+      "portid": "wpi48342",
+      "name_cn": "朱艾玛液化石油气码头",
+      "name_en": "Ju Aymah Lpg Terminal",
+      "category": "液化石油气港（LPG）",
+      "business_description": "液化石油气出口码头"
+    },
+    {
+      "portid": "wpi48360",
+      "name_cn": "阿卜杜拉港",
+      "name_en": "Mina Abd Allah",
+      "category": "油品港及终端",
+      "business_description": "油品出口码头"
+    },
+    {
+      "portid": "wpi48374",
+      "name_cn": "多哈港",
+      "name_en": "Doha Harbor",
+      "category": "地方及服务港",
+      "business_description": "沿海商港（传统木船、小型沿海船舶）"
+    },
+    {
+      "portid": "wpi48390",
+      "name_cn": "阿迈耶港",
+      "name_en": "Khawr Al Amaya",
+      "category": "油品港及终端",
+      "business_description": "海上油品出口终端"
+    },
+    {
+      "portid": "wpi48440",
+      "name_cn": "霍斯罗阿巴德港",
+      "name_en": "Khosrowabad",
+      "category": "油品港及终端",
+      "business_description": "油品装卸码头"
+    },
+    {
+      "portid": "wpi48450",
+      "name_cn": "马赫沙赫尔港",
+      "name_en": "Bandar-E Mahshahr",
+      "category": "油品港及终端",
+      "business_description": "油品出口码头（炼化产品、原油）"
+    },
+    {
+      "portid": "wpi48468",
+      "name_cn": "锡里斯石油码头",
+      "name_en": "Sirus Oil Terminal",
+      "category": "油品港及终端",
+      "business_description": "海上油品储卸终端（FSO）"
+    },
+    {
+      "portid": "wpi48530",
+      "name_cn": "霍尔木兹岛港",
+      "name_en": "Jazireh-Ye Hormoz",
+      "category": "干货港",
+      "business_description": "地方散货装运港（氧化铁、驳运）"
+    },
+    {
+      "portid": "wpi48533",
+      "name_cn": "塔赫里海上码头",
+      "name_en": "Bandar Taheri Offshore Terminal",
+      "category": "待核实",
+      "business_description": "海上液体装卸终端（单点系泊）"
+    },
+    {
+      "portid": "wpi48535",
+      "name_cn": "锡里岛港",
+      "name_en": "Jazireh-Ye Sirri",
+      "category": "油品港及终端",
+      "business_description": "油品出口码头"
+    },
+    {
+      "portid": "port1081",
+      "name_cn": "拉比格港",
+      "name_en": "Rabigh",
+      "category": "油品港及终端",
+      "business_description": "油品码头（炼化产品装卸）"
+    },
+    {
+      "portid": "port1089",
+      "name_cn": "拉斯海尔港",
+      "name_en": "Ras Al-Khair",
+      "category": "综合商港",
+      "business_description": "工业综合港（铝材、散装化工品、集装箱）"
+    },
+    {
+      "portid": "port1090",
+      "name_cn": "拉斯拉凡港",
+      "name_en": "Ras Laffan",
+      "category": "油气综合港",
+      "business_description": "天然气工业港（LNG、液体产品、配套物流）"
+    },
+    {
+      "portid": "port1408",
+      "name_cn": "延布商业港",
+      "name_en": "Yanbu (Yanbu city)",
+      "category": "综合商港",
+      "business_description": "综合商港（干货、客运）"
+    },
+    {
+      "portid": "port2074",
+      "name_cn": "吉赞港",
+      "name_en": "Jazan",
+      "category": "综合商港",
+      "business_description": "综合商港（杂货、集装箱、滚装、水泥）"
+    },
+    {
+      "portid": "port2236",
+      "name_cn": "杰贝尔丹那港",
+      "name_en": "Jebel Dhanna",
+      "category": "油品港及终端",
+      "business_description": "油品出口终端（杰贝尔丹那港区）"
+    },
+    {
+      "portid": "port304",
+      "name_cn": "杜巴港（NEOM）",
+      "name_en": "Duba (Port of Neom)",
+      "category": "综合商港",
+      "business_description": "综合商港（滚装、杂货）"
+    },
+    {
+      "portid": "port305",
+      "name_cn": "杜巴油轮码头",
+      "name_en": "Duba Bulk Plant Tanker Terminal",
+      "category": "油品港及终端",
+      "business_description": "油品装卸码头"
+    },
+    {
+      "portid": "port518",
+      "name_cn": "吉达港",
+      "name_en": "Jeddah",
+      "category": "综合商港",
+      "business_description": "综合商港（集装箱、干散货、客运）"
+    },
+    {
+      "portid": "port519",
+      "name_cn": "舒艾拜港（沙特）",
+      "name_en": "Shoaiba",
+      "category": "油品港及终端",
+      "business_description": "电力工业专用港（燃油装卸）"
+    },
+    {
+      "portid": "port570",
+      "name_cn": "延布法赫德国王工业港",
+      "name_en": "Yanbu (King Fahd Port)",
+      "category": "油品港及终端",
+      "business_description": "石化工业港（原油、成品油、液体产品）"
+    },
+    {
+      "portid": "port746",
+      "name_cn": "塞拉莱港",
+      "name_en": "Salalah",
+      "category": "综合商港",
+      "business_description": "综合商港（集装箱、杂货、散货、液体货物）"
+    },
+    {
+      "portid": "port984",
+      "name_cn": "杜库姆港",
+      "name_en": "Duqm",
+      "category": "综合商港",
+      "business_description": "综合工业港（杂货、散货、液体货物、船舶维修）"
+    },
+    {
+      "portid": "wpi48404",
+      "name_cn": "祖拜尔港",
+      "name_en": "Khawr Al Zubair",
+      "category": "综合商港",
+      "business_description": "综合商港（杂货、油品、气体货物）"
+    },
+    {
+      "portid": "wpi48406",
+      "name_cn": "祖拜尔液化天然气码头",
+      "name_en": "Khawr Al Zubair Lng Terminal",
+      "category": "液化石油气港（LPG）",
+      "business_description": "液化石油气码头（兼油轮泊位）"
+    },
+    {
+      "portid": "facility_shinas",
+      "name_cn": "希纳斯港",
+      "name_en": "Shinas",
+      "category": "地方及服务港",
+      "business_description": "沿海地方港（渔业、传统木船）"
+    },
+    {
+      "portid": "facility_suwaiq",
+      "name_cn": "苏瓦伊克港",
+      "name_en": "Suwaiq",
+      "category": "地方及服务港",
+      "business_description": "地方综合商港（项目货、牲畜、食品）"
+    },
+    {
+      "portid": "port192",
+      "name_cn": "塞得港",
+      "name_en": "Port Said",
+      "category": "综合商港",
+      "business_description": "运河门户综合港（集装箱、杂货、航运服务）"
+    },
+    {
+      "portid": "port274",
+      "name_cn": "达米埃塔港",
+      "name_en": "Damietta",
+      "category": "综合商港",
+      "business_description": "综合商港（集装箱、杂货、散货、液体货物）"
+    },
+    {
+      "portid": "facility_delma",
+      "name_cn": "德尔马港",
+      "name_en": "Delma Port",
+      "category": "地方及服务港",
+      "business_description": "社区综合港（客运渡轮、货运、渔业）"
+    },
+    {
+      "portid": "facility_freeport",
+      "name_cn": "自由港（扎耶德港区）",
+      "name_en": "Free Port (Zayed)",
+      "category": "地方及服务港",
+      "business_description": "近海服务港（小型货船、拖轮、驳船）"
+    },
+    {
+      "portid": "facility_mirfa",
+      "name_cn": "米尔法港",
+      "name_en": "Mirfa Port",
+      "category": "地方及服务港",
+      "business_description": "社区渔港（渔船、休闲船舶）"
+    },
+    {
+      "portid": "facility_mugharraq",
+      "name_cn": "穆盖拉克港",
+      "name_en": "Mugharraq Port",
+      "category": "地方及服务港",
+      "business_description": "综合服务港（海上油气后勤、杂货、渡轮）"
+    },
+    {
+      "portid": "facility_musaffah",
+      "name_cn": "穆萨法港",
+      "name_en": "Musaffah Port",
+      "category": "综合商港",
+      "business_description": "工业综合港（杂货、散货、滚装）"
+    },
+    {
+      "portid": "facility_shahama",
+      "name_cn": "沙哈马港",
+      "name_en": "Shahama Port",
+      "category": "地方及服务港",
+      "business_description": "社区多用途港（规划发展休闲游艇服务）"
+    },
+    {
+      "portid": "facility_sila",
+      "name_cn": "锡拉港",
+      "name_en": "Sila Port",
+      "category": "地方及服务港",
+      "business_description": "地方综合港（滚装、杂货、油气后勤、渔业）"
+    },
+    {
+      "portid": "facility_zayed",
+      "name_cn": "扎耶德港",
+      "name_en": "Zayed Port",
+      "category": "综合商港",
+      "business_description": "综合商港（杂货、散货、邮轮）"
+    },
+    {
+      "portid": "port2025",
+      "name_cn": "哈利法港",
+      "name_en": "Khalifa Port",
+      "category": "综合商港",
+      "business_description": "综合商港（集装箱、滚装、散货、液体及气体）"
+    },
+    {
+      "portid": "facility_bahrain_lng",
+      "name_cn": "巴林LNG进口码头",
+      "name_en": "Bahrain LNG Import Terminal",
+      "category": "液化天然气港（LNG）",
+      "business_description": "液化天然气进口终端"
+    },
+    {
+      "portid": "facility_grand_faw",
+      "name_cn": "大法奥港",
+      "name_en": "Al Faw Grand Port",
+      "category": "综合商港",
+      "business_description": "深水综合港项目（集装箱码头）"
+    },
+    {
+      "portid": "facility_rak",
+      "name_cn": "哈伊马角港",
+      "name_en": "Ras Al Khaimah Port",
+      "category": "综合商港",
+      "business_description": "综合商港（货运、仓储、邮轮）"
+    },
+    {
+      "portid": "facility_aljeer",
+      "name_cn": "杰尔港",
+      "name_en": "Al Jeer Port",
+      "category": "地方及服务港",
+      "business_description": "牲畜进口专用港（检疫、候泊）"
+    },
+    {
+      "portid": "facility_rashid",
+      "name_cn": "拉希德港",
+      "name_en": "Mina Rashid",
+      "category": "客运旅游港",
+      "business_description": "邮轮及多用途港（客运、滚装、杂货）"
+    },
+    {
+      "portid": "facility_hamriya_dubai",
+      "name_cn": "哈姆里亚港（迪拜）",
+      "name_en": "Mina Al Hamriya (Dubai)",
+      "category": "综合商港",
+      "business_description": "沿海多用途商港（杂货、散货、滚装）"
+    },
+    {
+      "portid": "facility_hamriyah",
+      "name_cn": "哈姆里亚港",
+      "name_en": "Hamriyah Port",
+      "category": "综合商港",
+      "business_description": "多用途工业港（液化气、散货、杂货）"
+    },
+    {
+      "portid": "facility_doha_old",
+      "name_cn": "多哈老港",
+      "name_en": "Doha Port (Old Port)",
+      "category": "客运旅游港",
+      "business_description": "邮轮客运港（游艇、旅游服务）"
+    },
+    {
+      "portid": "facility_yanbu_north_crude",
+      "name_cn": "延布北原油码头",
+      "name_en": "Yanbu North Crude Terminal",
+      "category": "油品港及终端",
+      "business_description": "原油出口码头"
+    },
+    {
+      "portid": "facility_yanbu_north_refined",
+      "name_cn": "延布北成品油码头",
+      "name_en": "Yanbu North Refined Product Terminal",
+      "category": "油品港及终端",
+      "business_description": "成品油出口码头"
+    },
+    {
+      "portid": "facility_yanbu_south",
+      "name_cn": "延布南码头（Al Muajjiz）",
+      "name_en": "Yanbu South Terminal",
+      "category": "油品港及终端",
+      "business_description": "液体油品装卸码头"
+    },
+    {
+      "portid": "port1117",
+      "name_cn": "鲁韦斯港",
+      "name_en": "Al Ruwais",
+      "category": "干货港",
+      "business_description": "沿海商港（杂货、食品）"
+    },
+    {
+      "portid": "port2031",
+      "name_cn": "阿卜杜拉国王港",
+      "name_en": "King Abdullah Port",
+      "category": "综合商港",
+      "business_description": "综合商港（集装箱、滚装、散货、杂货）"
+    },
+    {
+      "portid": "port2218",
+      "name_cn": "舒盖格港",
+      "name_en": "Shuqaiq",
+      "category": "油品港及终端",
+      "business_description": "油品装卸港（油轮业务）"
+    },
+    {
+      "portid": "port43",
+      "name_cn": "阿米拉巴德港",
+      "name_en": "Amirabad Port",
+      "category": "综合商港",
+      "business_description": "综合商港（粮食、石化产品、滚装、集装箱）"
+    },
+    {
+      "portid": "port58",
+      "name_cn": "安扎利港",
+      "name_en": "Bandar-e Anzali",
+      "category": "综合商港",
+      "business_description": "综合商港（杂货、集装箱）"
+    },
+    {
+      "portid": "port834",
+      "name_cn": "诺沙赫尔港",
+      "name_en": "Nowshahr Port",
+      "category": "干货港",
+      "business_description": "商业货运港（货物装卸、仓储）"
+    },
+    {
+      "portid": "fso151",
+      "name_cn": "阿曼海上石油终端1（源库名称）",
+      "name_en": "Oman - Offshore Oil Terminal 1",
+      "category": "油品港及终端",
+      "business_description": "海上油品终端（源目录未具名）"
+    },
+    {
+      "portid": "fso158",
+      "name_cn": "海上石油终端1",
+      "name_en": "Saudi Arabia - Offshore Oil Terminal 1",
+      "category": "油品港及终端",
+      "business_description": "海上油品终端（源目录未具名）"
+    }
+  ]
+}

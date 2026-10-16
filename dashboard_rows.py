@@ -10,7 +10,7 @@ from datetime import date, timedelta
 import ais as AIS
 import portwatch as PORTWATCH
 from port_inventory import country_label
-from port_types import port_type_label
+from port_types import port_type_label, port_business_label
 from portwatch_records import SHIP_TYPE_LABELS, port_status_label
 from map_popups import (
     METRIC_LABELS,
@@ -37,6 +37,7 @@ def port_rows(ports: list[dict], selected_day: date | None) -> list[dict]:
     return [{
         "港口名": display_name(port),
         "港口类型": port_type_label(port),
+        "业务特点": port_business_label(port),
         "国家": country_label(port.get("country")),
         "水域": port.get("region"),
         "日期": selected_day.isoformat() if selected_day else None,

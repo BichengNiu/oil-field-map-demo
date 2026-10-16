@@ -4,7 +4,8 @@ from pathlib import Path
 import unittest
 
 import duckdb
-from port_types import REVIEWED_PORT_TYPES, port_type_label
+from port_types import (REVIEWED_PORT_TYPES, PORT_TYPE_GROUPS, PORT_TYPE_BY_ID,
+                        PORT_TYPE_UNRESOLVED, port_type_label, port_business_label)
 
 ROOT = Path(__file__).resolve().parents[1]
 
@@ -25,7 +26,21 @@ class PortTypesTest(unittest.TestCase):
         for pid, row in published.items():
             for field in ('name','country','lat','lon'):
                 self.assertEqual(reviewed[pid][field],row[field],(pid,field))
-            self.assertNotIn(port_type_label(row),('待核实','未知',''))
+            self.assertNotIn(port_business_label(row),('待核实','未知',''))
+
+    def test_nine_groups_are_exclusive_complete_and_do_not_guess_unknown_cargo(self):
+        ids = [pid for group in PORT_TYPE_GROUPS.values() for pid in group]
+        self.assertEqual(len(PORT_TYPE_GROUPS), 9)
+        self.assertEqual(len(ids), len(set(ids)))
+        self.assertEqual(set(ids) | set(PORT_TYPE_UNRESOLVED), set(REVIEWED_PORT_TYPES))
+        self.assertFalse(set(ids) & set(PORT_TYPE_UNRESOLVED))
+        for pid in PORT_TYPE_UNRESOLVED:
+            self.assertEqual(port_type_label({'portid':pid}), '待核实')
+            self.assertNotEqual(port_business_label({'portid':pid}), '待核实')
+        self.assertEqual(port_type_label({'portid':'port362'}), '综合商港')
+        self.assertEqual(port_type_label({'portid':'port744'}), '综合商港')
+        self.assertEqual(port_type_label({'portid':'port561'}), '集装箱港')
+        self.assertNotEqual(PORT_TYPE_BY_ID['port1068'], PORT_TYPE_BY_ID['wpi48406'])
 
     def test_every_label_has_matching_audit_receipt_with_source_date_separate(self):
         sources = self.audit['sources']
@@ -50,13 +65,13 @@ class PortTypesTest(unittest.TestCase):
         self.assertEqual(REVIEWED_PORT_TYPES['wpi48406']['identity_status'],'source_name_conflict')
         self.assertNotIn('原油',port_type_label({'portid':'port2486'}))
         self.assertIn('较远处',REVIEWED_PORT_TYPES['port2486']['scope_note'])
-        self.assertIn('牲畜',port_type_label({'portid':'facility_aljeer'}))
-        self.assertIn('渔港',port_type_label({'portid':'facility_mirfa'}))
-        self.assertIn('项目',port_type_label({'portid':'facility_grand_faw'}))
-        self.assertIn('复合港区',port_type_label({'portid':'port1342'}))
+        self.assertIn('牲畜',port_business_label({'portid':'facility_aljeer'}))
+        self.assertIn('渔港',port_business_label({'portid':'facility_mirfa'}))
+        self.assertIn('项目',port_business_label({'portid':'facility_grand_faw'}))
+        self.assertIn('复合港区',port_business_label({'portid':'port1342'}))
 
     def test_unknown_future_ids_are_not_classified_from_names_or_traffic(self):
         self.assertEqual(port_type_label({'portid':'new_port','name':'Some Oil Terminal','week_calls_tanker':999}), '待核实')
         for pid in ('fso151','fso158'):
-            self.assertIn('未具名',port_type_label({'portid':pid}))
+            self.assertIn('未具名',port_business_label({'portid':pid}))
             self.assertEqual(REVIEWED_PORT_TYPES[pid]['identity_status'],'unnamed_in_source')

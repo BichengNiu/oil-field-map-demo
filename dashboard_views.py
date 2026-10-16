@@ -23,7 +23,7 @@ import report_data
 from dashboard_state import DashboardViewState
 from map_popups import asset_popup, chokepoint_popup, port_popup
 from port_inventory import country_label
-from port_types import port_type_label
+from port_types import port_type_label, port_business_label
 from entity_names import display_name
 from ui_controls import ALL_SELECTION, multiselect_with_all, selected_values
 
@@ -206,6 +206,11 @@ def _port_chart_filters(ports: list[dict]) -> tuple[str, list[dict], str]:
     with columns[1]:
         aggregation = st.selectbox("聚合方式", list(port_charts.AGGREGATIONS), key="port_chart_aggregation")
     names = {str(port["portid"]): display_name(port) for port in ports}
+    old_types = {port_business_label(port): port_type_label(port) for port in ports}
+    current_types = st.session_state.get("port_chart_filter_type", [])
+    migrated_types = list(dict.fromkeys(old_types.get(value, value) for value in current_types))
+    if migrated_types != current_types:
+        st.session_state["port_chart_filter_type"] = migrated_types
     filters = (
         ("港口类型", "type", port_type_label, None),
         ("国家", "country", lambda port: country_label(port.get("country")), None),
@@ -277,7 +282,8 @@ def render_ports_panel(ports: list[dict], selected_day: date | None, port_error:
             height=560,
             column_config={
                 "来源": st.column_config.LinkColumn("来源"),
-                "港口类型": st.column_config.TextColumn("港口类型", width=520),
+                "港口类型": st.column_config.TextColumn("港口类型", width=180),
+                "业务特点": st.column_config.TextColumn("业务特点", width=520),
                 **{name: st.column_config.NumberColumn(format="%d") for name in port_rows[0] if name.endswith("艘次")},
             },
         )
