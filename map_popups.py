@@ -256,104 +256,42 @@ def asset_popup(asset: dict[str, object]) -> str:
 
 
 def port_popup(port: dict, day: str) -> str:
-    def amount(key: str, divisor: float = 1, decimals: int = 1) -> str:
-        value = port.get(key)
-        if value is None:
-            return "—"
-        if divisor != 1 and 0 < abs(value / divisor) < 0.05:
-            return "<0.1"
-        return f"{value / divisor:,.{decimals}f}"
+    def count(value):
+        return "—" if value is None else f"{value:,.0f}"
 
-    if port.get("activity_source") == "无独立PortWatch统计":
-        date_label = "无独立统计"
-    elif port.get("has_data"):
-        date_label = f"观测日 UTC：{day}"
-    else:
-        date_label = "该日无源记录"
-
-    window = port.get("window_days", 7)
-    activity = port.get("activity_index")
-    activity_text = f"{activity:,.0f}" if activity is not None else "—"
-    balance = port.get("trade_balance_index")
-    if balance is None:
-        balance_text = "—"
-    elif balance > 5:
-        balance_text = f"{balance:+.1f} · 出口偏向"
-    elif balance < -5:
-        balance_text = f"{balance:+.1f} · 进口偏向"
-    else:
-        balance_text = f"{balance:+.1f} · 大致平衡"
-    ship_labels = SHIP_TYPE_LABELS
-    ship_colors = {
-        "container": "#2563eb",
-        "dry_bulk": "#b45309",
-        "general_cargo": "#64748b",
-        "roro": "#7c3aed",
-        "tanker": "#0f766e",
-    }
+    status = {
+        "normal": "正常", "operating": "正常", "open": "正常",
+        "stopped": "停运", "closed": "停运", "suspended": "停运", "shutdown": "停运",
+    }.get(port.get("port_operating_status"), "待核实")
+    # An announcement from after the selected day cannot establish its status.
+    evidence_day = str(port.get("port_operating_status_as_of") or "")[:10]
+    if len(evidence_day) == 10 and evidence_day[4:5] == "-" and evidence_day > day:
+        status = "待核实"
+    complete_week = port.get("window_days") == 7 and port.get("observed_days") == 7
+    weekly_calls = port.get("window_calls") if complete_week else None
+    colors = {"container": "#2563eb", "dry_bulk": "#b45309",
+              "general_cargo": "#64748b", "roro": "#7c3aed", "tanker": "#0f766e"}
     structure = []
-    for kind, label in ship_labels.items():
-        share = port.get(f"share_{kind}")
-        calls = port.get(f"window_calls_{kind}")
+    for kind, label in SHIP_TYPE_LABELS.items():
+        share = port.get(f"share_{kind}") if complete_week else None
+        calls = port.get(f"window_calls_{kind}") if complete_week else None
         width = max(0, min(100, share or 0))
         share_text = f"{share:.1f}%" if share is not None else "—"
-        calls_text = f"{calls:,.0f}" if calls is not None else "—"
         structure.append(
             '<div class="mix-row">'
-            f'<span>{label}</span><div class="mix-track"><i style="width:{width:.1f}%;background:{ship_colors[kind]}"></i></div>'
-            f"<b>{share_text} · {calls_text}艘次</b></div>"
+            f'<span>{label}</span><div class="mix-track"><i style="width:{width:.1f}%;background:{colors[kind]}"></i></div>'
+            f'<b>{count(calls)}艘次（{share_text}）</b></div>'
         )
-    risk_block = (
-        '<div class="row"><span>风险运力（出港网络）</span>'
-        f"<strong>{amount('risk_capacity', 10000)} 万吨/日</strong></div>"
-        if port.get("risk_capacity") is not None
-        else ""
-    )
-    coordinate_source_url = port.get("coordinate_source_url")
-    coordinate_precision = port.get("coordinate_precision")
-    coordinate_block = (
-        '<div class="basis">地图坐标：'
-        f"{_esc(coordinate_precision)}"
-        + (
-            f' <a href="{_esc(coordinate_source_url)}" target="_blank" rel="noopener">坐标来源</a>'
-            if coordinate_source_url
-            else ""
-        )
-        + "</div>"
-        if coordinate_precision
-        else ""
-    )
+    daily_calls = port.get("portcalls") if port.get("has_data") else None
     return (
-        '<div class="popup-card">'
+        '<div class="popup-card port-popup">'
         f'<div class="field-name">⚓ {_esc(display_name(port))}</div>'
-        f'<div class="country">{_esc(port["country"])} · {_esc(port["region"])} · {_esc(date_label)}</div>'
-        '<div class="row"><span>当日有效进港</span>'
-        f"<strong>{amount('portcalls', decimals=0)} 艘次</strong></div>"
-        '<div class="row"><span>当日估算装卸</span>'
-        f"<strong>{amount('handled', 10000)} 万吨</strong></div>"
-        f'<div class="hierarchy-title">过去 {window} 天港口指标</div>'
-        '<div class="row"><span>港口活动指数</span>'
-        f"<strong>{activity_text}（前一窗口=100）</strong></div>"
-        '<div class="row"><span>活跃天数率</span>'
-        f"<strong>{amount('active_day_rate')}%</strong></div>"
-        '<div class="row"><span>日均进港 / 日均装卸</span>'
-        f"<strong>{amount('avg_calls')} 艘次 · {amount('avg_handled', 10000)} 万吨</strong></div>"
-        '<div class="row"><span>单船平均货量</span>'
-        f"<strong>{amount('average_cargo_per_call', 10000, 2)} 万吨/艘次</strong></div>"
-        '<div class="row"><span>进出口平衡指数</span>'
-        f"<strong>{balance_text}</strong></div>"
-        f"{risk_block}"
-        f'<div class="basis">停复运：{_esc(port["port_operating_status_label"])}；'
-        f"{_esc(port['port_operating_status_as_of'])}。{_esc(port['port_status_basis'])}</div>"
-        '<div class="hierarchy-title">船型结构</div>'
-        f"{''.join(structure)}"
-        '<div class="basis">活动指数比较相邻等长窗口；100表示持平。平衡指数范围−100至+100，'
-        "负值偏进口、正值偏出口。风险运力来自2019—2024港口航线网络，是历史冲击暴露估算。"
-        "“—”表示窗口不完整、基期为0或源数据不足，不按零处理。</div>"
-        f'<div class="basis">统计覆盖：{_esc(port.get("coverage_note", ""))}</div>'
-        f"{coordinate_block}"
-        f'<a class="source" href="{_esc(port.get("source_url", PORTWATCH.SOURCE))}" target="_blank" rel="noopener">港口目录/统计来源</a>'
-        "</div>"
+        f'<div class="row"><span>运行状态</span><strong>{status}</strong></div>'
+        f'<div class="row"><span>当日进港艘次</span><strong>{count(daily_calls)} 艘次</strong></div>'
+        f'<div class="row"><span>过去7天进港艘次</span><strong>{count(weekly_calls)} 艘次</strong></div>'
+        '<div class="hierarchy-title">过去7天各船型艘次</div>'
+        + "".join(structure)
+        + "</div>"
     )
 
 

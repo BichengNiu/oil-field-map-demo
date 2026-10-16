@@ -162,6 +162,8 @@ def build_map_html(
       .mix-row {{ display: grid; grid-template-columns: 90px 1fr 110px; gap: 8px; align-items: center; margin-top: 6px; font-size: 14px; }}
       .mix-row span {{ color: #475569; }}
       .mix-row b {{ color: #334155; text-align: right; font-weight: 600; }}
+      .port-popup .row span, .port-popup .mix-row span, .port-popup .mix-row b {{ color: #0f172a; }}
+      .port-popup .mix-row {{ grid-template-columns: 84px minmax(40px, 1fr) 140px; }}
       .mix-track {{ height: 6px; border-radius: 999px; background: #e2e8f0; overflow: hidden; }}
       .mix-track i {{ display: block; height: 100%; border-radius: 999px; }}
       .status, .basis {{ font-size: 14px; margin-top: 8px; line-height: 1.4; }}
@@ -358,7 +360,7 @@ def build_map_html(
         label.textContent = `${{port.name}} · ${{port.calls == null ? '无日度记录' : port.calls + ' 艘次进港'}}`;
         const marker = L.marker([port.lat, port.lon], {{icon, popupKey: port.popupKey}})
           .bindTooltip(label, {{direction: 'top', opacity: .95}})
-          .bindPopup(port.popup, {{maxWidth: 410}}).addTo(portLayer);
+          .bindPopup(port.popup, {{maxWidth: 410, autoPanPaddingTopLeft: [10, 135], autoPanPaddingBottomRight: [10, 10]}}).addTo(portLayer);
         markerByPopupKey.set(port.popupKey, marker);
       }});
       chokepoints.forEach((point) => {{

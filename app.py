@@ -62,6 +62,7 @@ _RUNTIME_SOURCE_FILES = (
     "dashboard_views.py",
     "download_panel.py",
     "map_renderer.py",
+    "map_popups.py",
     "monitoring_cards.py",
     "portwatch.py",
     "portwatch_downloads.py",
@@ -90,6 +91,7 @@ def _load_runtime_modules(source_fingerprint: str) -> dict[str, object]:
         PORTWATCH,
         _portwatch_downloads_module,
         importlib.import_module("map_renderer"),
+        importlib.import_module("map_popups"),
         importlib.import_module("monitoring_cards"),
         importlib.import_module("sea_history"),
         importlib.import_module("print_report"),
@@ -175,7 +177,7 @@ def _render_dashboard(refresh_revision: str) -> None:
     first_day, last_day = snapshot_date_bounds((str(data_store.database_path()), *display_revisions.values()))
     with tab_map:
         cards_placeholder = st.empty()
-        with st.container(horizontal=True, horizontal_alignment="right"):
+        with st.container(horizontal=True, horizontal_alignment="left"):
             snapshot_day = st.date_input(
                 "历史日期（UTC）", value=None, min_value=first_day, max_value=last_day,
                 key="map_snapshot_day", format="YYYY-MM-DD", width=240,

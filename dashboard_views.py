@@ -37,7 +37,7 @@ def render_map_panel(state: DashboardViewState, summary_cards: list, *, cards_pl
         show_ports = st.checkbox("港口", value=True, key="map_show_ports")
         show_vessels = st.checkbox("船舶", value=True, key="map_show_vessels")
         show_pipelines = st.checkbox("输油管线", value=True, key="map_show_pipelines")
-        show_gas = st.checkbox("输气联络", value=True, key="map_show_gas")
+        show_gas = st.checkbox("输气管线", value=True, key="map_show_gas")
     pipelines = None
     if show_pipelines:
         try:
@@ -49,7 +49,7 @@ def render_map_panel(state: DashboardViewState, summary_cards: list, *, cards_pl
             gas = pipeline_catalog.load_gas_connections()
             pipelines = {"type": "FeatureCollection", "features": [*(pipelines or {}).get("features", []), *gas["features"]]}
         except (FileNotFoundError, ValueError) as exc:
-            st.error(f"输气联络快照不可用：{exc}")
+            st.error(f"输气管线快照不可用：{exc}")
     stream_state = state.ais_status
     if state.port_error:
         st.error(f"港口数据加载失败：{state.port_error}")

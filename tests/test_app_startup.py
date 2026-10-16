@@ -45,6 +45,8 @@ class AppStartupTest(unittest.TestCase):
                     assert not app.exception, [str(error.value) for error in app.exception]
                     assert len(app.checkbox) >= 3
                     assert any(element.label == '输油管线' for element in app.checkbox)
+                    assert any(element.label == '输气管线' for element in app.checkbox)
+                    assert not any(element.label == '输气联络' for element in app.checkbox)
                     assert not app.error, [str(error.value) for error in app.error]
                     assert any(element.label == '保存地图PNG' for element in app.button)
                     assert not any(element.label in ('刷新港口数据', '刷新船舶数据') for element in app.button)

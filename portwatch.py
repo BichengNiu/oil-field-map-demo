@@ -348,6 +348,7 @@ def rolling_activity(day: date, port_ids: tuple[str, ...], days: int = 7,
         total_import = _complete_sum(values, days, "import")
         total_export = _complete_sum(values, days, "export")
         previous_calls = _complete_sum(previous, days, "portcalls")
+        result["window_calls"] = total_calls
         result["avg_calls"] = total_calls / days if total_calls is not None else None
         result["avg_handled"] = ((total_import + total_export) / days
                                  if total_import is not None and total_export is not None else None)
