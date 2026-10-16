@@ -19,3 +19,4 @@ class DashboardViewState:
     map_chokepoints: list[dict[str, Any]]
     selected_day: date | None
     selected_chokepoint_day: date | None
+    snapshot_day: date | None = None

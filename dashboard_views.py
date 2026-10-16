@@ -29,9 +29,9 @@ def queue_map_screenshot() -> None:
     st.session_state["map_screenshot_requested"] = True
 
 
-def render_map_panel(state: DashboardViewState, summary_cards: list) -> None:
+def render_map_panel(state: DashboardViewState, summary_cards: list, *, cards_placeholder=None) -> None:
     screenshot_requested = st.session_state.pop("map_screenshot_requested", False)
-    st.html(monitoring_cards.cards_html(summary_cards))
+    (cards_placeholder or st).html(monitoring_cards.cards_html(summary_cards))
     with st.container(horizontal=True, key="map_layer_filters"):
         show_assets = st.checkbox("油气", value=True, key="map_show_assets")
         show_ports = st.checkbox("港口", value=True, key="map_show_ports")
@@ -61,15 +61,18 @@ def render_map_panel(state: DashboardViewState, summary_cards: list) -> None:
         st.error(f"Open Waters 快照加载失败：{state.open_state['error']}")
     if stream_state.get("last_error") and not state.live_positions:
         st.error(f"AISStream 暂无可用船位：{stream_state['last_error']}")
+    snapshot_day = getattr(state, "snapshot_day", None)
+    port_day = state.selected_day if snapshot_day is None or any(p.get("has_data") for p in state.map_ports) else None
+    choke_day = state.selected_chokepoint_day if snapshot_day is None or any(p.get("has_data") for p in state.map_chokepoints) else None
     st.iframe(
         map_renderer.build_map_html(
             state.map_assets if show_assets else [],
             state.map_ports if show_ports else [],
             state.map_chokepoints if show_ports else [],
             state.live_positions if show_vessels else [],
-            state.selected_day.isoformat() if state.selected_day else "无数据",
-            state.selected_chokepoint_day.isoformat()
-            if state.selected_chokepoint_day
+            port_day.isoformat() if port_day else "无数据",
+            choke_day.isoformat()
+            if choke_day
             else "无数据",
             visible_categories={name for name, selected in (
                 ("assets", show_assets), ("ports", show_ports), ("vessels", show_vessels)
@@ -79,6 +82,7 @@ def render_map_panel(state: DashboardViewState, summary_cards: list) -> None:
             chokepoint_popup=chokepoint_popup,
             screenshot_requested=screenshot_requested,
             pipelines=pipelines,
+            snapshot_day=snapshot_day.isoformat() if snapshot_day else None,
         ),
         height=735,
     )
@@ -451,11 +455,15 @@ def prepare_monitoring_cards(available_ports, available_chokepoints, state,
             errors.append(sea_state["error"])
     except Exception as exc:
         errors.append(f"海域历史记录：{type(exc).__name__}: {exc}")
+    snapshot_day = getattr(state, "snapshot_day", None)
+    if snapshot_day is not None:
+        # The current aggregate observation summary is not historical evidence.
+        sea_observation_card = None
     cards = monitoring_cards.build_cards(
         available_ports, available_chokepoints,
         port_history + comparison_ports, choke_history + comparison_chokes,
         state.selected_day, state.selected_chokepoint_day,
-        vessel_day=datetime.now(ZoneInfo("Asia/Shanghai")).date(), assets=ASSETS,
+        vessel_day=snapshot_day or datetime.now(ZoneInfo("Asia/Shanghai")).date(), assets=ASSETS,
         sea_passage_history=sea_history,
         sea_observation_card=sea_observation_card,
     )

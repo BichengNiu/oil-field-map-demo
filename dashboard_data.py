@@ -2,7 +2,7 @@
 
 from __future__ import annotations
 
-from datetime import date
+from datetime import date, datetime, time, timezone
 
 import streamlit as st
 
@@ -17,10 +17,11 @@ def initialize_storage():
     return data_store.initialize_runtime()
 
 
-def openwaters_snapshot(collector_version: int) -> dict:
+def openwaters_snapshot(collector_version: int, selected_day: date | None = None) -> dict:
     """Display source-dated positions from the published snapshot only."""
-    rows = ais_history.latest_snapshot(max_age_minutes=120, fallback_to_latest=True)
-    now = AIS.utc_now()
+    rows = (ais_history.day_snapshot(selected_day) if selected_day is not None else
+            ais_history.latest_snapshot(max_age_minutes=120, fallback_to_latest=True))
+    now = datetime.combine(selected_day, time.max, timezone.utc) if selected_day is not None else AIS.utc_now()
     vessels = []
     for vessel in rows:
         row = dict(vessel)
@@ -28,7 +29,7 @@ def openwaters_snapshot(collector_version: int) -> dict:
         if observed is not None:
             age_minutes = max(0.0, (now - observed).total_seconds() / 60)
             row["age_minutes"] = age_minutes
-            row["age_basis"] = "源站观测时间"
+            row["age_basis"] = "距所选UTC日结束" if selected_day is not None else "源站观测时间"
         else:
             row["age_minutes"] = None
             row["age_basis"] = None
@@ -41,6 +42,20 @@ def openwaters_snapshot(collector_version: int) -> dict:
         "fetched_at": newest,
         "refresh_summary": None,
     }
+
+
+@st.cache_data(max_entries=8, show_spinner=False)
+def snapshot_date_bounds(snapshot_identity: tuple) -> tuple[date | None, date | None]:
+    """Calendar bounds from the local facts only; revisions identify the snapshot."""
+    with data_store.connect() as conn:
+        return conn.execute("""
+            SELECT MIN(first_day), MAX(last_day) FROM (
+                SELECT MIN(day) first_day, MAX(day) last_day FROM portwatch_daily
+                UNION ALL
+                SELECT CAST(MIN(observed) AT TIME ZONE 'UTC' AS DATE),
+                       CAST(MAX(observed) AT TIME ZONE 'UTC' AS DATE) FROM ais_reports
+            ) dates
+        """).fetchone()
 
 
 @st.cache_data(ttl=60, max_entries=12, show_spinner=False)

@@ -38,6 +38,7 @@ class AppStartupTest(unittest.TestCase):
                 from unittest.mock import patch
                 from urllib.error import URLError
                 from streamlit.testing.v1 import AppTest
+                from datetime import date
 
                 with patch('urllib.request.urlopen', side_effect=URLError('offline startup check')) as upstream:
                     app = AppTest.from_file('app.py').run(timeout=30)
@@ -47,9 +48,21 @@ class AppStartupTest(unittest.TestCase):
                     assert not app.error, [str(error.value) for error in app.error]
                     assert any(element.label == '保存地图PNG' for element in app.button)
                     assert not any(element.label in ('刷新港口数据', '刷新船舶数据') for element in app.button)
+                    assert app.date_input(key='map_snapshot_day').value is None
+                    app.date_input(key='map_snapshot_day').set_value(date(2020, 1, 2))
+                    app.run(timeout=30)
+                    assert not app.exception, [str(error.value) for error in app.exception]
+                    assert not app.error, [str(error.value) for error in app.error]
+                    assert app.date_input(key='map_snapshot_day').value == date(2020, 1, 2)
                     app.session_state['main_tabs'] = '船舶'
                     app.run(timeout=30)
                     assert not app.exception, [str(error.value) for error in app.exception]
+                    assert app.date_input(key='map_snapshot_day').value == date(2020, 1, 2)
+                    assert app.metric[0].value == '—', app.metric[0].value
+                    app.date_input(key='map_snapshot_day').set_value(None)
+                    app.run(timeout=30)
+                    assert not app.exception, [str(error.value) for error in app.exception]
+                    assert app.date_input(key='map_snapshot_day').value is None
                     app.session_state['main_tabs'] = '数据下载'
                     app.run(timeout=30)
                     assert not app.exception, [str(error.value) for error in app.exception]
@@ -72,7 +85,7 @@ class AppStartupTest(unittest.TestCase):
             before = hashlib.sha256(database.read_bytes()).hexdigest()
             result = subprocess.run(
                 [sys.executable, "-c", script], cwd=ROOT, env=env,
-                capture_output=True, text=True, timeout=60,
+                capture_output=True, text=True, timeout=90,
             )
             self.assertEqual(result.returncode, 0, result.stdout + result.stderr)
             self.assertEqual(hashlib.sha256(database.read_bytes()).hexdigest(), before)

@@ -24,6 +24,7 @@ import portwatch as PORTWATCH
 import data_store as _data_store_module
 import dashboard_data as _dashboard_data_module
 import dashboard_views as _dashboard_views_module
+import dashboard_state as _dashboard_state_module
 import download_panel as _download_panel_module
 import portwatch_downloads as _portwatch_downloads_module
 import report_data as _report_data_module
@@ -57,6 +58,7 @@ _RUNTIME_SOURCE_FILES = (
     "collector.py",
     "data_store.py",
     "dashboard_data.py",
+    "dashboard_state.py",
     "dashboard_views.py",
     "download_panel.py",
     "map_renderer.py",
@@ -93,6 +95,7 @@ def _load_runtime_modules(source_fingerprint: str) -> dict[str, object]:
         importlib.import_module("print_report"),
         _report_data_module,
         _dashboard_data_module,
+        _dashboard_state_module,
         _dashboard_views_module,
         _download_panel_module,
         _sea_history_panel_module,
@@ -100,11 +103,13 @@ def _load_runtime_modules(source_fingerprint: str) -> dict[str, object]:
         importlib.reload(module)
 
     return {
+        "DashboardViewState": _dashboard_state_module.DashboardViewState,
         "collector_status": _dashboard_data_module.collector_status,
         "load_chokepoints": _dashboard_data_module.load_chokepoints,
         "load_ports": _dashboard_data_module.load_ports,
         "openwaters_snapshot": _dashboard_data_module.openwaters_snapshot,
         "portwatch_state": _dashboard_data_module.portwatch_state,
+        "snapshot_date_bounds": _dashboard_data_module.snapshot_date_bounds,
         "initialize_storage": _dashboard_data_module.initialize_storage,
         "render_ais_panel": _dashboard_views_module.render_ais_panel,
         "render_assets_panel": _dashboard_views_module.render_assets_panel,
@@ -166,9 +171,19 @@ def _render_dashboard(refresh_revision: str) -> None:
         on_change="rerun",
     )
 
-    selected_day = newest_day
-    selected_chokepoint_day = newest_chokepoint_day
-    open_state = openwaters_snapshot(AIS.MODULE_VERSION)
+    display_revisions = data_store.revisions(("ports", "chokepoints", "ais", "sea"))
+    first_day, last_day = snapshot_date_bounds((str(data_store.database_path()), *display_revisions.values()))
+    with tab_map:
+        cards_placeholder = st.empty()
+        with st.container(horizontal=True, horizontal_alignment="right"):
+            snapshot_day = st.date_input(
+                "历史日期（UTC）", value=None, min_value=first_day, max_value=last_day,
+                key="map_snapshot_day", format="YYYY-MM-DD", width=240,
+                disabled=first_day is None,
+            )
+    selected_day = snapshot_day or newest_day
+    selected_chokepoint_day = snapshot_day or newest_chokepoint_day
+    open_state = openwaters_snapshot(AIS.MODULE_VERSION, snapshot_day)
     live_positions = open_state.get("vessels", [])
     ais_status = collector_status()
 
@@ -180,7 +195,7 @@ def _render_dashboard(refresh_revision: str) -> None:
             available_ports,
             selected_day,
             rolling_days=7,
-            with_risk=tab_ports.open,
+            with_risk=tab_ports.open and snapshot_day is None,
             refresh_revision=refresh_revision,
             stored_revision=revisions["ports"],
         )
@@ -201,8 +216,6 @@ def _render_dashboard(refresh_revision: str) -> None:
     else:
         chokepoints = PORTWATCH.decorate_chokepoints(available_chokepoints, {})
 
-    display_revisions = data_store.revisions(("ports", "chokepoints", "ais", "sea"))
-
     map_assets = [asset for asset in ASSETS if asset.get("map_drawable")]
     view_state = DashboardViewState(
         live_positions=live_positions,
@@ -216,6 +229,7 @@ def _render_dashboard(refresh_revision: str) -> None:
         map_chokepoints=chokepoints,
         selected_day=selected_day,
         selected_chokepoint_day=selected_chokepoint_day,
+        snapshot_day=snapshot_day,
     )
 
     if tab_map.open:
@@ -224,7 +238,7 @@ def _render_dashboard(refresh_revision: str) -> None:
                 available_ports, available_chokepoints, view_state,
                 data_revisions=display_revisions,
             )
-            render_map_panel(view_state, cards)
+            render_map_panel(view_state, cards, cards_placeholder=cards_placeholder)
             for error in card_errors:
                 st.warning(f"监测卡部分指标不可用：{error}")
     if tab_ports.open:

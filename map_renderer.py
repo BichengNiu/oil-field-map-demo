@@ -32,6 +32,7 @@ def build_map_html(
     chokepoint_popup,
     screenshot_requested: bool = False,
     pipelines: dict | None = None,
+    snapshot_day: str | None = None,
 ) -> str:
     pipeline_features = []
     for feature in (pipelines or {}).get("features", []):
@@ -127,12 +128,13 @@ def build_map_html(
     if not categories and not pipeline_features:
         legend_lines.append('<span>未选择显示类别</span>')
     legend_json = json.dumps("".join(legend_lines), ensure_ascii=False).replace("</", "<\\/")
-    screenshot_date_json = json.dumps(day if day != "无数据" else chokepoint_day)
+    screenshot_date_json = json.dumps(snapshot_day or (day if day != "无数据" else chokepoint_day))
     vessel_times = [AIS.parse_utc(vessel.get("observed_at")) for vessel in vessels]
     latest_vessel_time = max((stamp for stamp in vessel_times if stamp is not None), default=None)
     vessel_time_label = latest_vessel_time.strftime("%Y-%m-%d %H:%M") if latest_vessel_time else "无数据"
+    snapshot_label = f"历史观测日（UTC）：{snapshot_day} · 油气/管线：当前资料目录 · " if snapshot_day else ""
     screenshot_label_json = json.dumps(
-        f"港口数据日（UTC）：{day} · 咽喉点数据日（UTC）：{chokepoint_day} · 船舶数据日（UTC）：{vessel_time_label}",
+        snapshot_label + f"港口数据日（UTC）：{day} · 咽喉点数据日（UTC）：{chokepoint_day} · 船舶数据日（UTC）：{vessel_time_label}",
         ensure_ascii=False)
     return compressed_document(f"""
     <!doctype html><html lang="zh-CN"><head>
@@ -169,7 +171,7 @@ def build_map_html(
       .map-legend .legend-row {{ display: flex; gap: 14px; margin-top: 4px; }}
       .map-legend span {{ white-space: nowrap; }}
       .map-legend svg {{ display: inline-block; width: 10px; height: 10px; margin-right: 6px; vertical-align: -1px; }}
-      .map-date {{ background: rgba(255,255,255,.96); padding: 7px 9px; border-radius: 7px; box-shadow: 0 2px 10px #0f172a26; color: #172b4d; font-size: 14px; }}
+      .map-date {{ background: rgba(255,255,255,.96); padding: 7px 9px; border-radius: 7px; box-shadow: 0 2px 10px #0f172a26; color: #172b4d; font-size: 14px; max-width: calc(100vw - 40px); box-sizing: border-box; }}
       .asset-icon, .port-icon, .chokepoint-icon, .vessel-icon, .vessel-cluster {{ background: transparent; border: 0; }}
       .asset-icon svg, .port-icon svg, .chokepoint-icon svg, .vessel-icon svg, .vessel-cluster svg {{ display: block; filter: drop-shadow(0 1px 1px rgba(15,23,42,.45)); }}
       .leaflet-tooltip {{ border: 0; border-radius: 7px; padding: 5px 8px; box-shadow: 0 3px 12px rgba(15,23,42,.18); font-size: 14px; }}
@@ -189,7 +191,7 @@ def build_map_html(
     <script>
       const map = L.map('map', {{zoomControl: true}}).setView([25.5, 48.5], 4);
       const screenshotDate = {screenshot_date_json};
-      const legend = L.control({{position: 'bottomright'}});
+      const legend = L.control({{position: 'topright'}});
       legend.onAdd = () => {{
         const el = L.DomUtil.create('div', 'map-legend');
         el.innerHTML = {legend_json};

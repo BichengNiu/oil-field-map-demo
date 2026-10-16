@@ -139,6 +139,27 @@ def day_reports(day: date) -> list[dict]:
     return [json.loads(row[0]) for row in rows]
 
 
+def day_snapshot(day: date) -> list[dict]:
+    """Last observed report per vessel inside one UTC day, without date fallback."""
+    start = datetime.combine(day, time.min, timezone.utc)
+    end = start + timedelta(days=1)
+    with connect_archive() as conn:
+        rows = conn.execute(
+            """SELECT payload FROM (
+                   SELECT payload, observed,
+                          ROW_NUMBER() OVER (
+                              PARTITION BY mmsi
+                              ORDER BY observed DESC,
+                                       TRY_CAST(json_extract_string(payload,'$.received_at') AS TIMESTAMPTZ) DESC NULLS LAST,
+                                       source ASC
+                          ) AS source_rank
+                   FROM ais_reports WHERE observed >= ? AND observed < ?
+               ) ranked WHERE source_rank=1 ORDER BY observed DESC""",
+            (start, end),
+        ).fetchall()
+    return [json.loads(row[0]) for row in rows]
+
+
 def latest_snapshot(max_age_minutes: int = 120, *, fallback_to_latest: bool = False) -> list[dict]:
     """Read recent positions, optionally retaining the last available local window."""
     window = timedelta(minutes=max(0, max_age_minutes))
