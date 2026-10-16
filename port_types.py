@@ -541,15 +541,18 @@ REVIEWED_PORT_TYPES = {'facility_wpi48104': {'label': '小型地方港（靠泊�
               'confidence': 'high',
               'identity_status': 'source_id_preserved',
               'scope_note': ''},
- 'wpi48035': {'label': '气体船专用码头',
-              'source_url': 'https://msi.nga.mil/api/publications/download?key=16694491%2FSFH00000%2FPub172bk.pdf#page=36',
-              'source_urls': ['https://msi.nga.mil/api/publications/download?key=16694491%2FSFH00000%2FPub172bk.pdf#page=36',
-                              'https://msi.nga.mil/api/publications/download?key=16694491%2FSFH00000%2FPub172bk.pdf#page=37'],
-              'reviewed_at': '2026-10-16',
-              'verification': 'documented',
-              'confidence': 'high',
-              'identity_status': 'source_id_preserved',
-              'scope_note': ''},
+ 'wpi48035': {'label': '化工气体码头（丙烯接卸）',
+               'source_url': 'https://disclosures.ifc.org/project-detail/ESRS/35033/chsc-limited',
+               'source_urls': ['https://disclosures.ifc.org/project-detail/ESRS/35033/chsc-limited',
+                               'https://www.dfc.gov/sites/default/files/esia/2015/tahrir_petro/Final_ESIA_Report_Rev_01.pdf#page=227',
+                               'https://www.dfc.gov/sites/default/files/esia/2015/tahrir_petro/Final_ESIA_Report_Rev_01.pdf#page=191',
+                               'https://msi.nga.mil/api/publications/download?key=16694491%2FSFH00000%2FPub172bk.pdf#page=36'],
+               'reviewed_at': '2026-10-17',
+               'verification': 'documented_historical_facility',
+               'confidence': 'high',
+               'identity_status': 'source_id_preserved',
+               'scope_note': 'DFC托管2015年环评图5-2将Sokhna 1（McDermott）港区标为Gas Tanker Terminal，图4-53标明EHC PORT；IFC 35033披露OPC在Sokhna '
+                             '1既有丙烯接卸泊位及EHC液氨扩建方案。核实的是历史设施业务，不证明液氨扩建已投用或当前经营状态；不归为LNG或LPG，不借用南侧DP World/Sonker码头业务。'},
  'wpi48050': {'label': '运河服务港（引航、驳船）',
               'source_url': 'https://msi.nga.mil/api/publications/download?key=16694491%2FSFH00000%2FPub172bk.pdf#page=26',
               'source_urls': ['https://msi.nga.mil/api/publications/download?key=16694491%2FSFH00000%2FPub172bk.pdf#page=26',
@@ -1209,6 +1212,7 @@ PORT_TYPE_GROUPS = {
     ),
     "液化天然气港（LNG）": ("facility_bahrain_lng", "port1068"),
     "液化石油气港（LPG）": ("port22", "wpi48342", "wpi48406"),
+    "化工气体港": ("wpi48035",),
     "油气综合港": ("port1090", "port2237", "wpi48055"),
     "客运旅游港": ("facility_doha_old", "facility_rashid", "port745"),
     "地方及服务港": (
@@ -1218,11 +1222,8 @@ PORT_TYPE_GROUPS = {
     ),
 }
 
-# The evidence establishes a terminal, but not a cargo class supported by the
-# nine-group taxonomy. Do not turn generic gas/liquid handling into LNG or oil.
-PORT_TYPE_UNRESOLVED = {
-    "wpi48035": "气体船专用码头，既有证据未区分 LNG 与 LPG。",
-}
+# Propylene handling is documented separately from LNG and LPG.
+PORT_TYPE_UNRESOLVED = {}
 PORT_TYPE_BY_ID = {pid: label for label, ids in PORT_TYPE_GROUPS.items() for pid in ids}
 
 

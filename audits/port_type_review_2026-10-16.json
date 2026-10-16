@@ -394,6 +394,26 @@
       "title": "SGS Crude Oil Terminal & Custody Transfer Data, 2010–2011",
       "source_date": "2010–2011",
       "source_date_kind": "publication_version"
+    },
+    "d9eb594ed8e0285b349a": {
+      "url": "https://www.dfc.gov/sites/default/files/esia/2015/tahrir_petro/Final_ESIA_Report_Rev_01.pdf",
+      "status": 200,
+      "bytes": 29733280,
+      "sha256": "d9eb594ed8e0285b349a02b267d6bc514e3ea13e4a14baa645dd7c302ce16447",
+      "retrieved_at": "2026-10-16T20:50:30.421362+00:00",
+      "title": "WorleyParsons Tahrir Petrochemicals ESIA Rev 1",
+      "source_date": "2015-01-13",
+      "source_date_kind": "report_revision"
+    },
+    "b0e81d6281e079f721f3": {
+      "url": "https://disclosures.ifc.org/project-detail/ESRS/35033/chsc-limited",
+      "status": 200,
+      "bytes": 141099,
+      "sha256": "b0e81d6281e079f721f34981fa173cf793fc8d76216993e909e3e8aa586fa73b",
+      "retrieved_at": "2026-10-16T21:02:25.797666+00:00",
+      "source_date": "2015",
+      "source_date_kind": "historical_project_disclosure",
+      "title": "IFC project 35033 CHSC Limited ESRS"
     }
   },
   "ports": [
@@ -2398,13 +2418,30 @@
       "country": "Egypt",
       "lat": 29.683333,
       "lon": 32.366667,
-      "label": "气体船专用码头",
-      "reviewed_at": "2026-10-16",
-      "verification": "documented",
+      "label": "化工气体码头（丙烯接卸）",
+      "reviewed_at": "2026-10-17",
+      "verification": "documented_historical_facility",
       "confidence": "high",
       "identity_status": "source_id_preserved",
-      "scope_note": "",
+      "scope_note": "DFC托管2015年环评图5-2将Sokhna 1（McDermott）港区标为Gas Tanker Terminal，图4-53标明EHC PORT；IFC 35033披露OPC在Sokhna 1既有丙烯接卸泊位及EHC液氨扩建方案。核实的是历史设施业务，不证明液氨扩建已投用或当前经营状态；不归为LNG或LPG，不借用南侧DP World/Sonker码头业务。",
       "evidence": [
+        {
+          "source_id": "d9eb594ed8e0285b349a",
+          "pdf_page": 227,
+          "source_url": "https://www.dfc.gov/sites/default/files/esia/2015/tahrir_petro/Final_ESIA_Report_Rev_01.pdf#page=227",
+          "excerpts": [
+            "环评图5-2：Sokhna 1（McDermott）港区附图的旧海图明确标出Gas Tanker Terminal。图4-53显示EHC PORT。"
+          ],
+          "excerpts_kind": "Chinese paraphrase; figures visually inspected"
+        },
+        {
+          "source_id": "b0e81d6281e079f721f3",
+          "source_url": "https://disclosures.ifc.org/project-detail/ESRS/35033/chsc-limited",
+          "excerpts": [
+            "IFC披露OPC在Sokhna 1拥有既有码头，以三个靠泊墩接卸3500吨丙烯气体船；另披露为EHC液氨船改扩建的计划。"
+          ],
+          "excerpts_kind": "Chinese paraphrase"
+        },
         {
           "source_id": "e1f304e2fa35d4209d47",
           "pdf_page": 36,
@@ -2412,14 +2449,47 @@
           "excerpts": [
             "s ESE of Ras Sidat. A submerged oil pipeline extends W from the tanker to the shore. Sokhna Port Gas Tanker Terminal (29°41'N., 32°22'E.) (World Port Index No. 48035) is located about 6.5 miles SW of Ras Sadat Terminal. The channel approaching the terminal is 120m wide, with a dredged depth of 8m. The maximum draft permitted alongside is 7m. 2.4 North Ayn Sukhnah Port (Sokhna Port) (29°39'N., 32°22'E.) (World Port Index No. 48030) is located about 2.5 miles S of Sokhna Port Gas Tanker Terminal. The port presently consists of two basins, but three more basins are planned to be added to the harbor. Sokhna Port Home Page https://www.dpworldsokhna.com Egypt Maritime Transport Sector Home Page https://www.mts.gov.eg/en Depths—Limitations.—The harbor is reached from the E through a channel dredged to a depth of 18m and marked by lighted buoys. Two lighted breakwaters extend from the shore as the harbor is reached. The inner portion of the en- trance channel and the turning basin have been dredged to 17m. Vessels up to 170,000 dwt can be accommodated."
           ]
-        },
+        }
+      ],
+      "source_url": "https://disclosures.ifc.org/project-detail/ESRS/35033/chsc-limited",
+      "source_urls": [
+        "https://disclosures.ifc.org/project-detail/ESRS/35033/chsc-limited",
+        "https://www.dfc.gov/sites/default/files/esia/2015/tahrir_petro/Final_ESIA_Report_Rev_01.pdf#page=227",
+        "https://www.dfc.gov/sites/default/files/esia/2015/tahrir_petro/Final_ESIA_Report_Rev_01.pdf#page=191",
+        "https://msi.nga.mil/api/publications/download?key=16694491%2FSFH00000%2FPub172bk.pdf#page=36"
+      ],
+      "previous_reviews": [
         {
-          "source_id": "e1f304e2fa35d4209d47",
-          "pdf_page": 37,
-          "source_url": "https://msi.nga.mil/api/publications/download?key=16694491%2FSFH00000%2FPub172bk.pdf#page=37",
-          "excerpts": [
-            "Pub. 172, Sector 2 28 The bulk terminal can accommodate two 30,000 dwt ves- sels or one vessel of 150,000 dwt. The South Basin consists of a bulk liquid ammonia termi- nal, with a reported (2012) dredged depth alongside of 17m. Athird basin is under construction (2018) at the head of the approach channel W of the turning basin. It has been reported (2020) the construction of the basin, including an area with a dredged depth of 17m within the basin, has been completed. For more berthing information see the table titled North Ayn Sukhnah Port—Berth Information. North Ayn Sukhnah Port—Berth Information Berth Length Depth Maximum Vessel Remarks LOA Draft Beam Size DP World Sokhna Terminal (Basin 1) Service Berth 240m 17.0m 199m 12.8m 32.3m 64,049 dwt Offshore, vessels, project/ heavy cargo, and breakbulk. West Quay (Ba- sin 1) 750m 17.0m 368m 14.8m 51.2m 157,076 dwt Containers, project/heavy cargo, breakbulk, and live- stock. DP World Sokhna Terminal (Basin 2) East Quay (N Quay, Basin 2) 700m 17.0m 368m 14.8m 51.2m 156,198 dwt Containers, bunkers, live- stock, and PCC. Continuous berthing length of 1,400m. West Berth 700m 17.0m 199m 7.8m 38.0m 17,885 dwt Dry Bulk and General Cargo Terminal East Quay (Basin 1) — 17.0m 299m — 50.0m 207,999 dwt Clinker, coal, iron ore, slag, sugar, and breakbulk. Con- tinuous berth length 750m. Sonker Bulk Liquids Terminal (Basin 3) Ammonia East Pier 112m 17.0m — — — — Under construction. Chemi- cals. Berthing length of 340m (including dolphins). Berth visited by hopper barges. Ammonia West Pier 112m 17.0m — — — — East Pier (East Berth) 30m 17.0m 228m 8.2m 32.2m 74,999 dwt Crude. Berthing length 3of 40m (including dolphins). * West Pier (East Berth) 30m 17.0m 295m 11.4m 48.9m 109,647 dwt LNG. Berthing length of 340m (including dolphins). Berth can accommodate 2x120,000 dwt tankers simultaneously. *Previously used by FSRU Hoegh Gallants but is no longer moored at the jetty in Sokhna due to an amendment in its time charter contract. The LNG carrier was originally contracted to operate in Sokhna until April 2020. Aspect.—Agroup of tanks stands NW of the quays.Aport control tower stands N of the channel along the shoreline. Range lights, i",
-            "tation. Container vessels must also submit a notice of ETA 2 weeks in advance. Bulk vessels, general cargo vessels, and passenger vessels must also submit a notice of ETA 5 days in advance. Any change to an ETA of over 12 hours must be submitted to the port by 1100 on working days. Contact Information.—See the table titled North Ayn Sukhnah Port—Contact Information. North Ayn Sukhnah Port—Contact Information Port Operations Call sign So"
+          "portid": "wpi48035",
+          "name": "Sokhna Port Gas Tanker Terminal",
+          "name_cn": "苏赫纳港气体船码头",
+          "country": "Egypt",
+          "lat": 29.683333,
+          "lon": 32.366667,
+          "label": "气体船专用码头",
+          "reviewed_at": "2026-10-16",
+          "verification": "documented",
+          "confidence": "high",
+          "identity_status": "source_id_preserved",
+          "scope_note": "",
+          "evidence": [
+            {
+              "source_id": "e1f304e2fa35d4209d47",
+              "pdf_page": 36,
+              "source_url": "https://msi.nga.mil/api/publications/download?key=16694491%2FSFH00000%2FPub172bk.pdf#page=36",
+              "excerpts": [
+                "s ESE of Ras Sidat. A submerged oil pipeline extends W from the tanker to the shore. Sokhna Port Gas Tanker Terminal (29°41'N., 32°22'E.) (World Port Index No. 48035) is located about 6.5 miles SW of Ras Sadat Terminal. The channel approaching the terminal is 120m wide, with a dredged depth of 8m. The maximum draft permitted alongside is 7m. 2.4 North Ayn Sukhnah Port (Sokhna Port) (29°39'N., 32°22'E.) (World Port Index No. 48030) is located about 2.5 miles S of Sokhna Port Gas Tanker Terminal. The port presently consists of two basins, but three more basins are planned to be added to the harbor. Sokhna Port Home Page https://www.dpworldsokhna.com Egypt Maritime Transport Sector Home Page https://www.mts.gov.eg/en Depths—Limitations.—The harbor is reached from the E through a channel dredged to a depth of 18m and marked by lighted buoys. Two lighted breakwaters extend from the shore as the harbor is reached. The inner portion of the en- trance channel and the turning basin have been dredged to 17m. Vessels up to 170,000 dwt can be accommodated."
+              ]
+            },
+            {
+              "source_id": "e1f304e2fa35d4209d47",
+              "pdf_page": 37,
+              "source_url": "https://msi.nga.mil/api/publications/download?key=16694491%2FSFH00000%2FPub172bk.pdf#page=37",
+              "excerpts": [
+                "Pub. 172, Sector 2 28 The bulk terminal can accommodate two 30,000 dwt ves- sels or one vessel of 150,000 dwt. The South Basin consists of a bulk liquid ammonia termi- nal, with a reported (2012) dredged depth alongside of 17m. Athird basin is under construction (2018) at the head of the approach channel W of the turning basin. It has been reported (2020) the construction of the basin, including an area with a dredged depth of 17m within the basin, has been completed. For more berthing information see the table titled North Ayn Sukhnah Port—Berth Information. North Ayn Sukhnah Port—Berth Information Berth Length Depth Maximum Vessel Remarks LOA Draft Beam Size DP World Sokhna Terminal (Basin 1) Service Berth 240m 17.0m 199m 12.8m 32.3m 64,049 dwt Offshore, vessels, project/ heavy cargo, and breakbulk. West Quay (Ba- sin 1) 750m 17.0m 368m 14.8m 51.2m 157,076 dwt Containers, project/heavy cargo, breakbulk, and live- stock. DP World Sokhna Terminal (Basin 2) East Quay (N Quay, Basin 2) 700m 17.0m 368m 14.8m 51.2m 156,198 dwt Containers, bunkers, live- stock, and PCC. Continuous berthing length of 1,400m. West Berth 700m 17.0m 199m 7.8m 38.0m 17,885 dwt Dry Bulk and General Cargo Terminal East Quay (Basin 1) — 17.0m 299m — 50.0m 207,999 dwt Clinker, coal, iron ore, slag, sugar, and breakbulk. Con- tinuous berth length 750m. Sonker Bulk Liquids Terminal (Basin 3) Ammonia East Pier 112m 17.0m — — — — Under construction. Chemi- cals. Berthing length of 340m (including dolphins). Berth visited by hopper barges. Ammonia West Pier 112m 17.0m — — — — East Pier (East Berth) 30m 17.0m 228m 8.2m 32.2m 74,999 dwt Crude. Berthing length 3of 40m (including dolphins). * West Pier (East Berth) 30m 17.0m 295m 11.4m 48.9m 109,647 dwt LNG. Berthing length of 340m (including dolphins). Berth can accommodate 2x120,000 dwt tankers simultaneously. *Previously used by FSRU Hoegh Gallants but is no longer moored at the jetty in Sokhna due to an amendment in its time charter contract. The LNG carrier was originally contracted to operate in Sokhna until April 2020. Aspect.—Agroup of tanks stands NW of the quays.Aport control tower stands N of the channel along the shoreline. Range lights, i",
+                "tation. Container vessels must also submit a notice of ETA 2 weeks in advance. Bulk vessels, general cargo vessels, and passenger vessels must also submit a notice of ETA 5 days in advance. Any change to an ETA of over 12 hours must be submitted to the port by 1100 on working days. Contact Information.—See the table titled North Ayn Sukhnah Port—Contact Information. North Ayn Sukhnah Port—Contact Information Port Operations Call sign So"
+              ]
+            }
           ]
         }
       ]

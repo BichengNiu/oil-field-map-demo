@@ -1,0 +1,286 @@
+{
+  "reviewed_at_utc": "2026-10-16T21:02:25.797666+00:00",
+  "baseline_commit": "198c4a0073cca0e7a0f615532fcd46b407804fde",
+  "source_receipts": [
+    {
+      "url": "https://msi.nga.mil/api/publications/download?key=16694622%2FSFH00000%2FUpdatedPub150.csv",
+      "final_url": "https://msi.nga.mil/api/publications/download?key=16694622%2FSFH00000%2FUpdatedPub150.csv",
+      "status": 403,
+      "sha256": "0f4b1bb0316a40977936d2bbabf90cca5c96e87600a8a83ec8c406c935d45678",
+      "bytes": 39,
+      "retrieved_at": "2026-10-16T20:47:24.263354+00:00"
+    },
+    {
+      "url": "https://www.openstreetmap.org/api/0.6/map?bbox=32.34,29.66,32.40,29.71",
+      "final_url": "https://www.openstreetmap.org/api/0.6/map?bbox=32.34,29.66,32.40,29.71",
+      "status": 200,
+      "sha256": "ce7c2f67e2b7b893ccccd1546f6314bc589276258a2f8cf9ca0e59283bf2a313",
+      "bytes": 1524367,
+      "retrieved_at": "2026-10-16T20:47:24.348626+00:00"
+    },
+    {
+      "url": "https://disclosures.ifc.org/project-detail/ESRS/35033/chsc-limited",
+      "final_url": "https://disclosures.ifc.org/project-detail/ESRS/35033/chsc-limited",
+      "status": 200,
+      "sha256": "b0e81d6281e079f721f34981fa173cf793fc8d76216993e909e3e8aa586fa73b",
+      "bytes": 141099,
+      "retrieved_at": "2026-10-16T20:47:23.318802+00:00"
+    },
+    {
+      "url": "https://www.gem.wiki/Khor_Al-Amaya_Oil_Pipelines",
+      "final_url": "https://www.gem.wiki/Khor_Al-Amaya_Oil_Pipelines",
+      "status": 403,
+      "sha256": "67863049a27ff984ad7774d01b0660f0abbdf4ce6cc0ef10c4206791fd94d1b3",
+      "bytes": 6091,
+      "retrieved_at": "2026-10-16T20:47:23.266370+00:00"
+    },
+    {
+      "url": "https://www.petroleum.gov.eg/ar-eg/media-center/news/news-pages/Pages/mop_22012023_01.aspx",
+      "final_url": "https://www.petroleum.gov.eg/ar-eg/media-center/news/news-pages/Pages/mop_22012023_01.aspx",
+      "status": 200,
+      "sha256": "79152a42b4a04e030641dac9ee8ba53d6c5a3c8d07a0e187856cd21e4927c03d",
+      "bytes": 137961,
+      "retrieved_at": "2026-10-16T20:47:26.366827+00:00"
+    },
+    {
+      "url": "https://api.github.com/repos/GlobalEnergyMonitor/goit-ggit-data-ops/git/trees/main?recursive=1",
+      "final_url": "https://api.github.com/repos/GlobalEnergyMonitor/goit-ggit-data-ops/git/trees/main?recursive=1",
+      "status": 200,
+      "sha256": "4acba32d90ac31900e2531e64ec25f60d091acc5baa347f9dbd06169eef52632",
+      "bytes": 100720,
+      "retrieved_at": "2026-10-16T20:47:23.882584+00:00"
+    },
+    {
+      "url": "https://www.adnoc.ae/en/news-and-media/press-releases/2026/khaled-bin-mohamed-bin-zayed--chairs-meeting-of-executive/",
+      "final_url": "https://www.adnoc.ae/en/news-and-media/press-releases/2026/khaled-bin-mohamed-bin-zayed--chairs-meeting-of-executive/",
+      "status": 200,
+      "sha256": "9bc95cb8ad65ec24467d63582f8dc65cf83598fa741ebd19b057387eeb692453",
+      "bytes": 351982,
+      "retrieved_at": "2026-10-16T20:47:26.114910+00:00"
+    },
+    {
+      "url": "https://openjicareport.jica.go.jp/710/710/710_103_12068268.html",
+      "final_url": "https://openjicareport.jica.go.jp/710/710/710_103_12068268.html",
+      "status": 404,
+      "sha256": "a6406d7bc404d00c6fab4113ba4248c1908ae2b4dd355db1448cbed96d0e04f6",
+      "bytes": 1055,
+      "retrieved_at": "2026-10-16T20:47:25.217862+00:00"
+    },
+    {
+      "url": "https://raw.githubusercontent.com/GlobalEnergyMonitor/goit-ggit-data-ops/edeac05c80b48bf8ec85cf5844f5fa65ffceca29/writing-and-analysis/2026-06-goit-release/hormuz-alternatives/GOIT-Hormuz-alternative-routes-2026-06.gpkg",
+      "status": 200,
+      "bytes": 155648,
+      "sha256": "eb9e1c3203bd8bd6f66b209a6fbf356c3fa664fb0cff9d40585b086ed98847ab",
+      "retrieved_at": "2026-10-16T20:48:21.555684+00:00"
+    },
+    {
+      "url": "https://raw.githubusercontent.com/GlobalEnergyMonitor/goit-ggit-data-ops/edeac05c80b48bf8ec85cf5844f5fa65ffceca29/writing-and-analysis/2026-06-goit-release/hormuz-alternatives/map/prep_data.py",
+      "status": 200,
+      "bytes": 2846,
+      "sha256": "27a8e7c10ef5a87fb037ad1b04948d75fbe386b76002868dc2800dc53cb066bc",
+      "retrieved_at": "2026-10-16T20:48:21.457648+00:00"
+    },
+    {
+      "url": "https://raw.githubusercontent.com/GlobalEnergyMonitor/goit-ggit-data-ops/edeac05c80b48bf8ec85cf5844f5fa65ffceca29/writing-and-analysis/2026-06-goit-release/hormuz-alternatives/map/README.md",
+      "status": 200,
+      "bytes": 3695,
+      "sha256": "1c21df370c03515fb9b286402008ed700341a9e8d3b3cbd515000bdb112018db",
+      "retrieved_at": "2026-10-16T20:48:21.454345+00:00"
+    },
+    {
+      "url": "https://www.jondishapour.com/my_upload/filepdf/pdf_1762601225.pdf",
+      "status": 200,
+      "bytes": 266291,
+      "sha256": "c6e9a7c153987e8a4675e534804a59c6280710954527b93a402770080e769e1f",
+      "retrieved_at": "2026-10-16T20:48:23.669202+00:00"
+    },
+    {
+      "url": "https://raw.githubusercontent.com/GlobalEnergyMonitor/goit-ggit-data-ops/edeac05c80b48bf8ec85cf5844f5fa65ffceca29/writing-and-analysis/2026-06-goit-release/GOIT-pipeline-coverage-benchmarking-2026-06.docx",
+      "status": 200,
+      "bytes": 42707,
+      "sha256": "21e5a270b185acb99b8b9f50b8994a28588694261eb2e9b93bf8d6beacc22dea",
+      "retrieved_at": "2026-10-16T20:48:21.873433+00:00"
+    },
+    {
+      "url": "https://raw.githubusercontent.com/GlobalEnergyMonitor/goit-ggit-data-ops/edeac05c80b48bf8ec85cf5844f5fa65ffceca29/writing-and-analysis/2026-06-goit-release/hormuz-alternatives/Hormuz-alternative-pipelines-brief-2026-06.docx",
+      "status": 200,
+      "bytes": 41099,
+      "sha256": "539428303eea45064a3d6e135064634e31bc91db8108346a00e7968fc7f491e9",
+      "retrieved_at": "2026-10-16T20:48:21.843902+00:00"
+    },
+    {
+      "url": "https://www.enppi.com/Enppi%20Corporate/Enppi%20Corporate.pdf",
+      "final_url": "https://www.enppi.com/Enppi%20Corporate/Enppi%20Corporate.pdf",
+      "status": 404,
+      "bytes": 808,
+      "sha256": "b9347f234dc3c8d56e015e86d88a1400415db8f7a5ad91f02b6a2323c10a4187",
+      "retrieved_at": "2026-10-16T20:50:13.349470+00:00"
+    },
+    {
+      "url": "https://www.dfc.gov/sites/default/files/esia/2015/tahrir_petro/Intial_Project_Summary_Tahrir.pdf",
+      "final_url": "https://www.dfc.gov/sites/default/files/esia/2015/tahrir_petro/Intial_Project_Summary_Tahrir.pdf",
+      "status": 200,
+      "bytes": 131334,
+      "sha256": "5c214d0a4b2c34e505197d40b31336f73b76ab8639df76c2e64b3407773aadcd",
+      "retrieved_at": "2026-10-16T20:50:12.860493+00:00"
+    },
+    {
+      "url": "https://enoia.com/projects/carbon-holdings-industrial-project-services-chips-tank-farm-jetty-and-pipelines-port-area-facility/",
+      "final_url": "https://enoia.com/projects/carbon-holdings-industrial-project-services-chips-tank-farm-jetty-and-pipelines-port-area-facility/",
+      "status": 200,
+      "bytes": 95364,
+      "sha256": "a836819b1fbdd169a1209171946c7c368893fa9c4b01abf18aed51b1a8c68884",
+      "retrieved_at": "2026-10-16T20:50:14.162427+00:00"
+    },
+    {
+      "url": "https://ieiti.org.iq/mediafiles/articles/doc-65-20171201120329.pdf",
+      "error": "HTTPSConnectionPool(host='ieiti.org.iq', port=443): Max retries exceeded with url: /mediafiles/articles/doc-65-20171201120329.pdf (Caused by ProxyError('Unable to connect to proxy', OSError('Tunnel connection failed: 403 Forbidden')))"
+    },
+    {
+      "url": "https://www.jondishapour.com/",
+      "final_url": "https://www.jondishapour.com/eng/",
+      "status": 200,
+      "bytes": 27218,
+      "sha256": "c2824265250a829088ef118300ffc279c51274b522ccfa8cc97ff2db9bcf035f",
+      "retrieved_at": "2026-10-16T20:50:13.654804+00:00"
+    },
+    {
+      "url": "https://panahsanat.com/",
+      "final_url": "https://panahsanat.com/",
+      "status": 503,
+      "bytes": 216,
+      "sha256": "b5b660bc2bb92e97199b4b045f7e21eca39307fa087b8be85bb006cc7d83b34b",
+      "retrieved_at": "2026-10-16T20:50:14.258332+00:00"
+    },
+    {
+      "id": "enppi-nonwww",
+      "url": "https://enppi.com/Enppi%20Corporate/Enppi%20Corporate.pdf",
+      "final_url": "https://www.enppi.com/Enppi%20Corporate/Enppi%20Corporate.pdf",
+      "status": 404,
+      "bytes": 808,
+      "sha256": "b9347f234dc3c8d56e015e86d88a1400415db8f7a5ad91f02b6a2323c10a4187"
+    },
+    {
+      "id": "diar",
+      "url": "https://www.diargroup.net/projects/west-east-wep-project-drafting-and-engineering-assistance-enppi/",
+      "final_url": "https://www.diargroup.net/projects/west-east-wep-project-drafting-and-engineering-assistance-enppi/",
+      "status": 406,
+      "bytes": 226,
+      "sha256": "80a265bed528211aa708dcd58f7a95db36eeb7f873c6fe4ddab0b3a1dc0973a4"
+    },
+    {
+      "id": "inpex",
+      "url": "https://www.inpex.co.jp/english/ir/library/pdf_inpex/00005520.pdf",
+      "final_url": "https://www.inpex.com/assets/documents/english/ir/library/inpex/00005520.pdf",
+      "status": 200,
+      "bytes": 1465627,
+      "sha256": "cae56b93e35069cf679306fa72e6b35237e1c5f5718c4979ba66092a98da0023"
+    },
+    {
+      "id": "ogj",
+      "url": "https://www.ogj.com/home/article/17216960/design-techniques-bring-big-line-on-to-congested-shope",
+      "final_url": "https://www.ogj.com/home/article/17216960/design-techniques-bring-big-line-on-to-congested-shope",
+      "status": 200,
+      "bytes": 232232,
+      "sha256": "674ecf661008e50b0cc388175ae662a226e9f5fea02e389203833669b144f199"
+    },
+    {
+      "url": "https://images.pennwellnet.com/ogj/images/ogj/93325401.gif",
+      "status": 410,
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "url": "http://images.pennwellnet.com/ogj/images/ogj/93325401.gif",
+      "status": 410,
+      "bytes": 254,
+      "sha256": "ba578e2ce793a2bd412b7a9844fa224a4522d26c81b3be0041613e31f5876266"
+    },
+    {
+      "url": "https://www.diargroup.net/wp-json/wp/v2/search?search=West%20East",
+      "status": 406,
+      "bytes": 226,
+      "sha256": "80a265bed528211aa708dcd58f7a95db36eeb7f873c6fe4ddab0b3a1dc0973a4"
+    },
+    {
+      "url": "https://www.dfc.gov/sites/default/files/esia/2015/tahrir_petro/Final_ESIA_Report_Rev_01.pdf",
+      "status": 200,
+      "bytes": 29733280,
+      "sha256": "d9eb594ed8e0285b349a02b267d6bc514e3ea13e4a14baa645dd7c302ce16447",
+      "retrieved_at": "2026-10-16T20:50:30.421362+00:00"
+    }
+  ],
+  "resolved": [
+    {
+      "entity": "wpi48035",
+      "type": "化工气体港",
+      "business": "化工气体码头（丙烯接卸）",
+      "identity_chain": [
+        {
+          "source": "https://www.dfc.gov/sites/default/files/esia/2015/tahrir_petro/Final_ESIA_Report_Rev_01.pdf",
+          "pages": [
+            66,
+            191,
+            227
+          ],
+          "finding": "具名港区、EHC港口测深图和旧Gas Tanker Terminal海图关联；已逐页视觉检查。"
+        },
+        {
+          "source": "https://disclosures.ifc.org/project-detail/ESRS/35033/chsc-limited",
+          "finding": "同名Sokhna 1既有OPC丙烯泊位，另有EHC液氨改扩建方案。"
+        }
+      ],
+      "limits": "DFC托管2015年环评图5-2将Sokhna 1（McDermott）港区标为Gas Tanker Terminal，图4-53标明EHC PORT；IFC 35033披露OPC在Sokhna 1既有丙烯接卸泊位及EHC液氨扩建方案。核实的是历史设施业务，不证明液氨扩建已投用或当前经营状态；不归为LNG或LPG，不借用南侧DP World/Sonker码头业务。"
+    }
+  ],
+  "refined": [
+    {
+      "entity": "ADNOC_WEST_EAST_2026",
+      "facts": {
+        "length_km": 500,
+        "diameter_inches": 48,
+        "start": "Jebel Dhanna",
+        "end": "Fujairah MOT"
+      },
+      "source": "https://www.diargroup.net/projects/west-east-wep-project-drafting-and-engineering-assistance-enppi/",
+      "access_method": "web indexed full page; direct HTTP 406",
+      "geometry": null
+    },
+    {
+      "entity": "KAAOT_TERMINAL_LINE",
+      "finding": "P5290已有标为KAAOT终点的源路线；不能笼统说该终端无管线，也不能将ICOEEP记录直接充当全部历史旧线。",
+      "remaining": "需逐线对应历史42/32英寸路线和现有扩建线。"
+    },
+    {
+      "entity": "P5684",
+      "finding": "Bechtel工程作者说明北侧选线、方案间5km偏离，确认不能用直线替代；原路线插图HTTP410、公开CDX无200存档。",
+      "source": "https://www.ogj.com/home/article/17216960/design-techniques-bring-big-line-on-to-congested-shope"
+    }
+  ],
+  "remaining": [
+    {
+      "entity": "ADNOC_WEST_EAST_2026",
+      "needed": "可公开核验的连续路线/带坐标桩号的批准线路图"
+    },
+    {
+      "entity": "KAAOT_TERMINAL_LINE",
+      "needed": "能区分历史旧线与ICOEEP扩建线的海图或运营商逐线坐标"
+    },
+    {
+      "entity": "GOREH_B_GENAVEH",
+      "needed": "新B线独立路线与具日期的当前建设/投产确认；不复用旧Goreh—Genaveh P5376"
+    },
+    {
+      "entity": "P0640/P5684",
+      "needed": "对应具体油/气线的真实海底路线；不采用第三方对GEM同一错误坐标的转载"
+    }
+  ],
+  "all_gaps_resolved": false,
+  "map_policy": "没有核定连续路线的项目仍不进入地图、图例或查找。",
+  "rejected_inferences": [
+    "不将2015液氨扩建方案当成当前已投用",
+    "不将500km/48in当作已知独立原油运力",
+    "不将GEM同一源的LNG Atlas转载作为坐标交叉验证",
+    "不把Omidiyeh–Gurreh物料清单中的GOREH B当作新B–Genaveh线路坐标"
+  ]
+}

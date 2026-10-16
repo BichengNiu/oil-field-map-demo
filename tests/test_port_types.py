@@ -33,9 +33,12 @@ class PortTypesTest(unittest.TestCase):
                 self.assertEqual(reviewed[pid][field],row[field],(pid,field))
             self.assertNotIn(port_business_label(row),('待核实','未知',''))
 
-    def test_nine_groups_are_exclusive_complete_and_do_not_guess_unknown_cargo(self):
+    def test_groups_are_exclusive_complete_and_do_not_guess_unknown_cargo(self):
         ids = [pid for group in PORT_TYPE_GROUPS.values() for pid in group]
-        self.assertEqual(len(PORT_TYPE_GROUPS), 9)
+        self.assertEqual(len(PORT_TYPE_GROUPS), 10)
+        self.assertEqual(port_type_label({"portid":"wpi48035"}), "化工气体港")
+        self.assertIn("丙烯", port_business_label({"portid":"wpi48035"}))
+        self.assertIn("不证明", REVIEWED_PORT_TYPES["wpi48035"]["scope_note"])
         self.assertEqual(len(ids), len(set(ids)))
         self.assertEqual(set(ids) | set(PORT_TYPE_UNRESOLVED), set(REVIEWED_PORT_TYPES))
         self.assertFalse(set(ids) & set(PORT_TYPE_UNRESOLVED))

@@ -17,13 +17,22 @@
       "source_url": "https://www.adnoc.ae/en/news-and-media/press-releases/2026/khaled-bin-mohamed-bin-zayed--chairs-meeting-of-executive/",
       "source_urls": [
         "https://www.adnoc.ae/en/news-and-media/press-releases/2026/khaled-bin-mohamed-bin-zayed--chairs-meeting-of-executive/",
-        "https://www.mediaoffice.abudhabi/en/crown-prince-news/khaled-bin-mohamed-bin-zayed-chairs-meeting-of-executive-committee-of-adnoc-board-of-directors-may-2026/"
+        "https://www.mediaoffice.abudhabi/en/crown-prince-news/khaled-bin-mohamed-bin-zayed-chairs-meeting-of-executive-committee-of-adnoc-board-of-directors-may-2026/",
+        "https://www.diargroup.net/projects/west-east-wep-project-drafting-and-engineering-assistance-enppi/"
       ],
       "purpose": "提升经富查伊拉的原油出口能力；官方称完成后出口能力翻倍",
       "capacity_million_bpd": null,
       "geometry": null,
       "geometry_note": "未取得可核验的连续路线坐标；仅保留来源归档，不进入地图图例、名称查找或弹窗。",
-      "map_drawable": false
+      "map_drawable": false,
+      "length_km": 500,
+      "diameter_inches": 48,
+      "start_location_cn": "杰贝勒丹纳",
+      "start_location_en": "Jebel Dhanna",
+      "end_location_cn": "富查伊拉海运终端",
+      "end_location_en": "Fujairah MOT",
+      "engineering_source_url": "https://www.diargroup.net/projects/west-east-wep-project-drafting-and-engineering-assistance-enppi/",
+      "engineering_source_note": "设计承包商项目页；项目规模和端点明确，但没有公开连续路线坐标。"
     },
     {
       "project_id": "KAAOT_TERMINAL_LINE",
@@ -36,7 +45,7 @@
       "source_date": "2012",
       "source_url": "https://openjicareport.jica.go.jp/pdf/12068268.pdf",
       "purpose": "法奥陆上终端至豪尔阿迈耶等海上出口设施的原油输送；历史政府项目资料，不据此声称当前通油",
-      "geometry_note": "未取得可核验的连续路线坐标；仅保留来源归档，不进入地图图例、名称查找或弹窗。",
+      "geometry_note": "现有P5290源记录标注终点为KAAOT，但项目名为ICOEEP Phase I Pipeline 2，不能据此认定其代表全部历史42/32英寸终端管线；本条仅追踪未核定旧线，不重复绘制现有路线。",
       "name": "豪尔阿迈耶终端输油管线（Khor Al-Amaya Terminal Oil Pipeline）",
       "fuel": "Oil",
       "capacity_million_bpd": null,
@@ -47,7 +56,11 @@
         "https://openjicareport.jica.go.jp/pdf/12068268.pdf"
       ],
       "status_note": "来源未能确认当前运行/建设阶段；不以历史资料冒充当前状态",
-      "map_drawable": false
+      "map_drawable": false,
+      "existing_related_geometry_ids": [
+        "P5290"
+      ],
+      "identity_review_status": "legacy_lines_not_reconciled_with_existing_ICOEEP_record"
     },
     {
       "project_id": "GOREH_B_GENAVEH",

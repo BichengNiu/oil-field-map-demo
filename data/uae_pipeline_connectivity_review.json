@@ -365,5 +365,17 @@
     "气线P5684的起点约54.3772E、24.4541N，位于阿布扎比城区，与乌姆沙伊夫（Umm Shaif）海上位置不符；保留源证据，不绘制。",
     "P5683和P5711是源表海上、陆上示意分段，海岸端点相隔约22公里；不吸附、不补线，不将两个分段当成运营商所说的两条完整管线。",
     "原油运力仍以百万桶/日显示；本次输气联络不换算成原油运力，不加入原油汇总。"
-  ]
+  ],
+  "followup_2026_10_17": {
+    "primary_engineering_article": {
+      "url": "https://www.ogj.com/home/article/17216960/design-techniques-bring-big-line-on-to-congested-shope",
+      "author": "Keith Shotbolt, Bechtel Ltd.",
+      "published_at": "1995-08-07",
+      "finding_cn": "工程参与者说明1993年铺设46英寸Umm Shaif—Das输气线；所选北侧路径比34.5公里方案长约200米，两方案最大偏离约5公里。不能以油田与岛屿端点直连来替代真实路线。",
+      "route_figure_url": "https://images.pennwellnet.com/ogj/images/ogj/93325401.gif",
+      "route_figure_http_status": 410,
+      "archive_index_result": "No HTTP 200 capture returned by public CDX query"
+    },
+    "geometry_decision": "P0640/P5684继续隔离；没有可核验路线修正，未添加任何坐标。"
+  }
 }
