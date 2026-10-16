@@ -19,7 +19,6 @@ import portwatch as PORTWATCH
 import print_report
 import report_data
 from dashboard_state import DashboardViewState
-from download_panel import open_download_tab
 from map_popups import asset_popup, chokepoint_popup, port_popup
 
 ASSETS = data_store.load_catalog("assets")
@@ -81,6 +80,7 @@ def render_map_panel(state: DashboardViewState, summary_cards: list, *, cards_pl
             port_popup=port_popup,
             chokepoint_popup=chokepoint_popup,
             screenshot_requested=screenshot_requested,
+            vessel_tracks=getattr(state, "vessel_tracks", None) if show_vessels else None,
             pipelines=pipelines,
             snapshot_day=snapshot_day.isoformat() if snapshot_day else None,
             sea_day=(getattr(state, "selected_sea_day", None).isoformat()
@@ -209,18 +209,13 @@ def render_ports_panel(ports: list[dict], selected_day: date | None, port_error:
             },
         )
         st.download_button(
-            "下载港口列表 CSV",
+            "下载列表",
             csv_export.csv_bytes(port_rows, list(port_rows[0])),
             file_name=f"portwatch_ports_{selected_day.isoformat() if selected_day else 'unknown'}.csv",
             mime="text/csv",
             type="primary",
         )
-        st.button(
-            "下载所列港口历史",
-            key="download_port_history",
-            on_click=open_download_tab,
-            args=("ports", tuple(p["portid"] for p in ports)),
-        )
+
 
 
 def render_assets_panel(assets: list[dict]) -> None:

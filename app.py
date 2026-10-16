@@ -86,7 +86,7 @@ def _runtime_source_fingerprint() -> str:
     return digest.hexdigest()
 
 
-@st.cache_resource(max_entries=2, show_spinner=False)
+@st.cache_resource(max_entries=1, show_spinner=False)
 def _load_runtime_modules(source_fingerprint: str) -> dict[str, object]:
     """Reload helper modules together when Streamlit reruns a changed entrypoint."""
     for module in (
@@ -118,6 +118,7 @@ def _load_runtime_modules(source_fingerprint: str) -> dict[str, object]:
         "load_chokepoints": _dashboard_data_module.load_chokepoints,
         "load_ports": _dashboard_data_module.load_ports,
         "openwaters_snapshot": _dashboard_data_module.openwaters_snapshot,
+        "vessel_tracks": _dashboard_data_module.vessel_tracks,
         "portwatch_state": _dashboard_data_module.portwatch_state,
         "snapshot_date_bounds": _dashboard_data_module.snapshot_date_bounds,
         "nearest_portwatch_day": _dashboard_data_module.nearest_portwatch_day,
@@ -228,6 +229,10 @@ def _render_dashboard(refresh_revision: str) -> None:
     else:
         chokepoints = PORTWATCH.decorate_chokepoints(available_chokepoints, {})
 
+    tracks = {}
+    if tab_map.open and st.session_state.get("map_show_vessels", True):
+        tracks = vessel_tracks(tuple((str(v["mmsi"]), v.get("observed_at"), v["lat"], v["lon"])
+                                     for v in live_positions), display_revisions["ais"], str(data_store.database_path()))
     map_assets = [asset for asset in ASSETS if asset.get("map_drawable")]
     view_state = DashboardViewState(
         live_positions=live_positions,
@@ -243,6 +248,7 @@ def _render_dashboard(refresh_revision: str) -> None:
         selected_chokepoint_day=selected_chokepoint_day,
         snapshot_day=snapshot_day,
         selected_sea_day=selected_sea_day,
+        vessel_tracks=tracks,
     )
 
     if tab_map.open:

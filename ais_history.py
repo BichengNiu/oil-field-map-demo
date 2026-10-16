@@ -160,6 +160,39 @@ def day_snapshot(day: date) -> list[dict]:
     return [json.loads(row[0]) for row in rows]
 
 
+def snapshot_tracks(vessels: list[dict]) -> dict[str, list]:
+    """Compact, time-ordered observed points, ending at each displayed marker."""
+    selected = {str(v["mmsi"]): v for v in vessels if ais.parse_utc(v.get("observed_at"))}
+    if not selected:
+        return {}
+    with connect_archive() as conn:
+        rows = conn.execute("""
+            WITH selected AS (
+                SELECT UNNEST(?::VARCHAR[]) mmsi, UNNEST(?::TIMESTAMPTZ[]) cutoff
+            ), ranked AS (
+                SELECT a.mmsi, a.observed,
+                       TRY_CAST(json_extract_string(a.payload,'$.lat') AS DOUBLE) lat,
+                       TRY_CAST(json_extract_string(a.payload,'$.lon') AS DOUBLE) lon,
+                       ROW_NUMBER() OVER (PARTITION BY a.mmsi,a.observed ORDER BY
+                           TRY_CAST(json_extract_string(a.payload,'$.received_at') AS TIMESTAMPTZ) DESC NULLS LAST,
+                           a.source ASC) source_rank
+                FROM ais_reports a JOIN selected s ON a.mmsi=s.mmsi WHERE a.observed<=s.cutoff
+            ) SELECT mmsi,observed,lat,lon FROM ranked WHERE source_rank=1
+                AND lat BETWEEN -90 AND 90 AND lon BETWEEN -180 AND 180
+            ORDER BY mmsi,observed
+        """, [list(selected), [v["observed_at"] for v in selected.values()]]).fetchall()
+    tracks = {mmsi: [] for mmsi in selected}
+    for mmsi, observed, lat, lon in rows:
+        tracks[mmsi].append([lat, lon, observed.isoformat()])
+    for mmsi, vessel in selected.items():
+        end = [vessel["lat"], vessel["lon"], ais.parse_utc(vessel["observed_at"]).isoformat()]
+        if tracks[mmsi] and tracks[mmsi][-1][2] == end[2]:
+            tracks[mmsi][-1] = end
+        else:
+            tracks[mmsi].append(end)
+    return tracks
+
+
 def latest_snapshot(max_age_minutes: int = 120, *, fallback_to_latest: bool = False) -> list[dict]:
     """Read recent positions, optionally retaining the last available local window."""
     window = timedelta(minutes=max(0, max_age_minutes))

@@ -42,6 +42,8 @@ def port_rows(ports: list[dict], selected_day: date | None) -> list[dict]:
         "当日进港艘次": port.get("portcalls") if port.get("has_data") else None,
         "本周累计艘次": port.get("week_calls"),
         **{f"本周{label}累计艘次": port.get(f"week_calls_{kind}") for kind, label in SHIP_TYPE_LABELS.items()},
+        "本月累计艘次": port.get("month_calls"),
+        **{f"本月{label}累计艘次": port.get(f"month_calls_{kind}") for kind,label in SHIP_TYPE_LABELS.items()},
         "纬度": port.get("lat"), "经度": port.get("lon"),
         "来源": port.get("source_url", PORTWATCH.SOURCE),
     } for port in ordered]

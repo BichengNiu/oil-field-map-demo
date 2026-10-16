@@ -1,0 +1,129 @@
+{
+  "checked_at_utc": "2026-10-16",
+  "scope": "Official public channels inspected; HTTP availability is not a port-normality determination.",
+  "sources": [
+    {
+      "url": "https://www.dpworld.com/en/uae/ports-and-terminals/jebel-ali-port",
+      "resolved_url": "https://www.dpworld.com/en/ports-terminals/uae/jebel-ali-port",
+      "http_status": 200,
+      "sha256": "c484c4ba633414c3caea9b836fe43dff1584cd24db3a966607f0f0655a581647",
+      "title": [
+        "Jebel Ali Port | Port Operations | DP World "
+      ],
+      "matching_links": [
+        "/en/news",
+        "/en/contact-us",
+        "/en/about-us/our-locations/uae/contact-us",
+        "/en/privacy-notice"
+      ]
+    },
+    {
+      "url": "https://www.dpworld.com/en/uae/notices",
+      "error": "HTTPError: HTTP Error 404: Not Found"
+    },
+    {
+      "url": "https://www.adports.ae/",
+      "resolved_url": "https://www.adports.ae/",
+      "http_status": 200,
+      "sha256": "d803681a7a573c7629476e93aafe2d22f9f03e39aac5236001122b134d1a1b01",
+      "title": [
+        "Ports &amp; Terminal Operations | Abu Dhabi Ports"
+      ],
+      "matching_links": [
+        "https://www.adports.ae/wp-content/plugins/contact-form-7/includes/css/styles.css?m=1791462870g",
+        "https://www.adports.ae/customer-service/contact-us/",
+        "https://www.adports.ae/media-center/news/",
+        "https://www.adports.ae/media-center/subscribe-to-newsletter-2/",
+        "https://www.adports.ae/media-center/news/press-releases/"
+      ]
+    },
+    {
+      "url": "https://www.asyadports.com/",
+      "error": "HTTPError: HTTP Error 503: Service Unavailable"
+    },
+    {
+      "url": "https://soharportandfreezone.om/",
+      "resolved_url": "https://soharportandfreezone.om/",
+      "http_status": 200,
+      "sha256": "e2a8243f6bb51308e14409175401e7fb75c7f40a10d9d664f30406e7e685e8ca",
+      "title": [
+        "SOHAR Port and Freezone &#8211; SOHAR Port and Freezone"
+      ],
+      "matching_links": [
+        "https://soharportandfreezone.om/wp-content/plugins/contact-form-7/includes/css/styles.css?ver=6.2.2",
+        "https://soharportandfreezone.om/wp-content/plugins/news-insights/plugin-style.css?ver=1787175644",
+        "/news-insights",
+        "/contact-us"
+      ]
+    },
+    {
+      "url": "https://www.apmterminals.com/en/bahrain",
+      "resolved_url": "https://www.apmterminals.com/en/bahrain",
+      "http_status": 200,
+      "sha256": "b6ce7165cd8997c0a571c47fd85986e93f15a2bcc3edd099e1a1385ec350ec3d",
+      "title": [
+        "Bahrain - APM Terminals"
+      ],
+      "matching_links": [
+        "/track-and-trace/vessel-schedule?terminal=BHKBS",
+        "/en/bahrain/investors/investor-news/2026/261014-Truck-Registration-Requirements-and-RFID-Compliance",
+        "/en/bahrain/investors/investor-news/2026/261013-APM-Terminals-Bahrain-Participates-in-Made-in-GCC-2026",
+        "/en/bahrain/investors/investor-news/2026/261008-Pilot-Night-De-Stuffing-Operations-at-CFS",
+        "/en/bahrain/news-and-media/news"
+      ]
+    },
+    {
+      "url": "https://mawani.gov.sa/",
+      "error": "HTTPError: HTTP Error 405: Method Not Allowed"
+    },
+    {
+      "url": "https://www.apmterminals.com/en/bahrain/investors/investor-news/2026/261014-Truck-Registration-Requirements-and-RFID-Compliance",
+      "resolved_url": "https://www.apmterminals.com/en/bahrain/investors/investor-news/2026/261014-Truck-Registration-Requirements-and-RFID-Compliance",
+      "http_status": 200,
+      "sha256": "f6da267fd8f22d062704c829e8b8f2a1ef2c0fc16c1d04d47b6768a40b4cf03c",
+      "title": [
+        "Truck Registration Requirements and RFID Compliance - APM Terminals"
+      ]
+    },
+    {
+      "url": "https://www.apmterminals.com/track-and-trace/vessel-schedule?terminal=BHKBS",
+      "resolved_url": "https://www.apmterminals.com/track-and-trace/vessel-schedule?terminal=BHKBS",
+      "http_status": 200,
+      "sha256": "2b51707f0aa0758ce57e3b3ba7136322254b034cb59e1e5daf9e3699aac21ca5",
+      "title": [
+        "Track and Trace"
+      ]
+    },
+    {
+      "url": "https://www.dpworld.com/en/news",
+      "resolved_url": "https://www.dpworld.com/en/news",
+      "http_status": 200,
+      "sha256": "74da3f948d32a057c3d229cb01c8fd8e7900118809305e33a10ae945f518d0b9",
+      "title": [
+        "Latest News and Updates | DP World"
+      ]
+    },
+    {
+      "url": "https://www.mwani.com.qa/English/Ports/HamadPort/Pages/default.aspx",
+      "error": "HTTPError: HTTP Error 403: Forbidden"
+    },
+    {
+      "url": "https://www.adports.ae/media-center/news/press-releases/",
+      "resolved_url": "https://www.adports.ae/media-center/news/press-releases/",
+      "http_status": 200,
+      "sha256": "71bf21b9abd37b3458512142a586b971cca777f792fa88564c15c8a97573ce7f",
+      "title": [
+        "Press Releases and the Latest Maritime News | Abu Dhabi Ports"
+      ]
+    },
+    {
+      "url": "https://soharportandfreezone.om/news-insights",
+      "resolved_url": "https://soharportandfreezone.om/news-insights/",
+      "http_status": 200,
+      "sha256": "c6801a2d9f6e7c6fc04d68c1d43e2f50cb6cc1e9820dfa203ed81efe0163ac75",
+      "title": [
+        "News Insights &#8211; SOHAR Port and Freezone"
+      ]
+    }
+  ]
+}

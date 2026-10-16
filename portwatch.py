@@ -289,7 +289,7 @@ def daily_activity(day: date, port_ids: tuple[str, ...],
                    refresh_revision: str = "initial",
                    data_revision: int = 0) -> dict[str, dict]:
     # Reuse the same two-week response as the default rolling indicators.
-    rows = _activity_rows(day, port_ids, 14, refresh_revision, data_revision)
+    rows = _activity_rows(day, port_ids, max(14, day.day), refresh_revision, data_revision)
     return {port_id: values[day] for port_id, values in rows.items() if day in values}
 
 
@@ -308,7 +308,7 @@ def week_to_date_activity(day: date, port_ids: tuple[str, ...],
     first = day - timedelta(days=day.weekday())
     expected = day.weekday() + 1
     # Share the existing daily lookup's cached local read, without another query.
-    grouped = _activity_rows(day, ids, 14, refresh_revision, data_revision)
+    grouped = _activity_rows(day, ids, max(14, day.day), refresh_revision, data_revision)
     summary = {}
     for pid in port_ids:
         values = [row for observed, row in grouped.get(pid, {}).items() if first <= observed <= day]
@@ -319,6 +319,14 @@ def week_to_date_activity(day: date, port_ids: tuple[str, ...],
             calls = _complete_sum(values, expected, f"portcalls_{kind}")
             result[f"week_calls_{kind}"] = calls
             result[f"week_share_{kind}"] = calls / total * 100 if calls is not None and total else None
+        month = [row for observed,row in grouped.get(pid, {}).items() if day.replace(day=1)<=observed<=day]
+        result["month_calls"] = _complete_sum(month, day.day, "portcalls")
+        for kind in SHIP_TYPES:
+            result[f"month_calls_{kind}"] = _complete_sum(month, day.day, f"portcalls_{kind}")
+        recent = [row for observed,row in grouped.get(pid, {}).items() if day-timedelta(days=6)<=observed<=day]
+        result["recent_daily_activity_normal"] = (len(recent)==7 and all(
+            row.get("portcalls") is not None and row["portcalls"]>0 for row in recent))
+        result["activity_status_as_of"] = day.isoformat()
         summary[pid] = result
     return summary
 

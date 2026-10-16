@@ -43,5 +43,7 @@ def port_status_label(port: dict, day) -> str:
     }.get(port.get("port_operating_status"), "未知")
     evidence_day = str(port.get("port_operating_status_as_of") or "")[:10]
     if day and len(evidence_day) == 10 and evidence_day[4:5] == "-" and evidence_day > str(day):
-        return "未知"
+        status = "未知"
+    if status == "未知" and port.get("recent_daily_activity_normal") and str(port.get("activity_status_as_of")) == str(day):
+        return "正常"
     return status

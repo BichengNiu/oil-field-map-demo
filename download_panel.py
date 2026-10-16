@@ -17,21 +17,6 @@ from dashboard_data import portwatch_state
 from ui_controls import ALL_SELECTION, multiselect_with_all, selected_values
 
 
-def open_download_tab(kind: str | None = None, node_ids: tuple[str, ...] = ()) -> None:
-    """Open the downloader with all nodes or a chosen node set."""
-    st.session_state["main_tabs"] = "数据下载"
-    st.session_state["pw_download_mode"] = "全部可用历史"
-    if node_ids:
-        st.session_state["pw_download_scope"] = "按条件筛选"
-        st.session_state["pw_download_regions"] = [ALL_SELECTION]
-        st.session_state["pw_download_countries"] = [ALL_SELECTION]
-        st.session_state["pw_download_nodes"] = [(kind, pid) for pid in node_ids]
-    else:
-        st.session_state["pw_download_scope"] = "全部项目节点"
-        st.session_state.pop("pw_download_nodes", None)
-    st.session_state["pw_download_kinds"] = [kind] if kind else [ALL_SELECTION]
-
-
 def render_download_panel(
     newest_port_day: date | None,
     newest_choke_day: date | None,

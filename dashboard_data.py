@@ -44,6 +44,14 @@ def openwaters_snapshot(collector_version: int, selected_day: date | None = None
     }
 
 
+@st.cache_data(max_entries=4, show_spinner=False)
+def vessel_tracks(positions: tuple, data_revision: int, snapshot_identity: str) -> dict:
+    return ais_history.snapshot_tracks([
+        {"mmsi":mmsi,"observed_at":observed,"lat":lat,"lon":lon}
+        for mmsi,observed,lat,lon in positions
+    ])
+
+
 @st.cache_data(max_entries=8, show_spinner=False)
 def snapshot_date_bounds(snapshot_identity: tuple) -> tuple[date | None, date | None]:
     """Calendar bounds from the local facts only; revisions identify the snapshot."""

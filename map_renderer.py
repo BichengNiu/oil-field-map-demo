@@ -34,6 +34,7 @@ def build_map_html(
     pipelines: dict | None = None,
     snapshot_day: str | None = None,
     sea_day: str | None = None,
+    vessel_tracks: dict | None = None,
 ) -> str:
     pipeline_features = []
     for feature in (pipelines or {}).get("features", []):
@@ -89,6 +90,7 @@ def build_map_html(
         ]
         for vessel in vessels
     ], ensure_ascii=False).replace("</", "<\\/")
+    tracks_json = json.dumps(vessel_tracks or {}, ensure_ascii=False, separators=(",", ":")).replace("</", "<\\/")
     legend_lines = ["<b>图例</b>"]
 
     def legend_icon(shape: str, color: str) -> str:
@@ -386,6 +388,22 @@ def build_map_html(
       const mutedVesselColors = {{
         tanker: '#fca5a5', cargo: '#a5b4fc', other: '#cbd5e1'
       }};
+      const vesselTracks = {tracks_json};
+      map.createPane('vesselTrackPane');
+      map.getPane('vesselTrackPane').style.zIndex = 450;
+      const vesselTrackLayer = L.layerGroup().addTo(map);
+      let activeTrackMmsi = null;
+      const showVesselTrack = (mmsi, color) => {{
+        vesselTrackLayer.clearLayers();
+        activeTrackMmsi = String(mmsi);
+        const points = vesselTracks[activeTrackMmsi] || [];
+        if (points.length < 2) return;
+        L.polyline(points.map(p => [p[0], p[1]]), {{pane: 'vesselTrackPane',
+          color, weight: 3, opacity: .95, dashArray: '6 6', interactive: false}}).addTo(vesselTrackLayer);
+        L.circleMarker([points[0][0], points[0][1]], {{pane: 'vesselTrackPane',
+          radius: 4, color, fillColor: color, fillOpacity: 1, weight: 2}})
+          .bindTooltip(escapeHTML(`起点 · ${{points[0][2]}}`)).addTo(vesselTrackLayer);
+      }};
       const vesselMarkers = vessels.map((vessel) => {{
         const [lat, lon, name, mmsi, region, categoryLabel, imo, sog, course,
           navigationStatus, callSign, destination, observedAt, receivedAt,
@@ -404,6 +422,10 @@ def build_map_html(
         marker.options.popupKey = `vessel:${{mmsi}}`;
         marker.bindTooltip(escapeHTML(name), {{direction: 'top', opacity: .95}})
           .bindPopup(() => vesselPopup(vessel), {{maxWidth: 410}});
+        marker.on('popupopen', () => showVesselTrack(mmsi, color));
+        marker.on('popupclose', () => {{
+          if (activeTrackMmsi === String(mmsi)) {{vesselTrackLayer.clearLayers();activeTrackMmsi=null;}}
+        }});
         markerByPopupKey.set(marker.options.popupKey, marker);
         clusterByPopupKey.set(marker.options.popupKey, vesselLayer);
         return marker;

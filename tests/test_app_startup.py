@@ -73,6 +73,11 @@ class AppStartupTest(unittest.TestCase):
                     assert [m.label for m in app.metric][:3] == ['港口总数','当日进港艘次','本周累计艘次']
                     assert not any(h.value == '港口日活动' for h in app.subheader)
                     assert list(app.dataframe[0].value.columns)[:7] == ['港口名','国家','水域','日期','经营状态','当日进港艘次','本周累计艘次']
+                    assert len(app.dataframe[0].value.columns) == 21
+                    assert '本月累计艘次' in app.dataframe[0].value.columns
+                    assert '本月油轮/液货船累计艘次' in app.dataframe[0].value.columns
+                    assert any(b.label == '下载列表' for b in app.get('download_button'))
+                    assert not any(b.label == '下载所列港口历史' for b in app.button)
                     assert set(app.dataframe[0].value['经营状态']) <= {'正常','停运','未知'}
                     assert all(any('\u4e00' <= ch <= '\u9fff' for ch in value) for value in app.dataframe[0].value['国家'])
                     app.session_state['main_tabs'] = '数据下载'

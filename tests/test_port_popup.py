@@ -59,7 +59,31 @@ class PortPopupTest(unittest.TestCase):
         self.assertEqual(metrics['本周油轮/液货船艘次/占比'],'9（9.0%）')
         rows=dashboard_rows.port_rows([{**one,'name':'Dubai','name_cn':'迪拜港','country':'United Arab Emirates'}],date(2026,10,9))
         self.assertEqual(list(rows[0]),['港口名','国家','水域','日期','经营状态','当日进港艘次','本周累计艘次',
-            '本周集装箱船累计艘次','本周干散货船累计艘次','本周普通货船累计艘次','本周滚装船累计艘次','本周油轮/液货船累计艘次','纬度','经度','来源'])
+            '本周集装箱船累计艘次','本周干散货船累计艘次','本周普通货船累计艘次','本周滚装船累计艘次','本周油轮/液货船累计艘次','本月累计艘次','本月集装箱船累计艘次','本月干散货船累计艘次','本月普通货船累计艘次','本月滚装船累计艘次','本月油轮/液货船累计艘次','纬度','经度','来源'])
         self.assertEqual(rows[0]['国家'],'阿联酋')
         self.assertEqual(rows[0]['经营状态'],'未知')
         self.assertEqual(rows[0]['港口名'],'迪拜港（Dubai）')
+
+
+    def test_month_cumulative_and_seven_daily_positive_reports_establish_normal(self):
+        from portwatch_records import port_status_label
+        day=date(2026,6,29)
+        rows={day-timedelta(days=i):{**{field:0 for field in PORT_METRICS},'portcalls':2,'portcalls_tanker':2} for i in range(29)}
+        with patch('portwatch._activity_rows',return_value={'port105':rows}):
+            result=portwatch.week_to_date_activity.__wrapped__(day,('port105',))['port105']
+        self.assertEqual(result['month_calls'],58)
+        self.assertEqual(result['month_calls_tanker'],58)
+        self.assertEqual(result['week_calls'],2)
+        self.assertEqual(port_status_label(result,day),'正常')
+        self.assertEqual(port_status_label(result,day-timedelta(days=1)),'未知')
+        self.assertEqual(port_status_label({**result,'port_operating_status':'closed'},day),'停运')
+        rows.pop(day-timedelta(days=12))
+        with patch('portwatch._activity_rows',return_value={'port105':rows}):
+            result=portwatch.week_to_date_activity.__wrapped__(day,('port105',))['port105']
+        self.assertIsNone(result['month_calls'])
+        self.assertEqual(result['week_calls'],2)
+        self.assertEqual(port_status_label(result,day),'正常')
+        rows[day]['portcalls']=0
+        with patch('portwatch._activity_rows',return_value={'port105':rows}):
+            result=portwatch.week_to_date_activity.__wrapped__(day,('port105',))['port105']
+        self.assertEqual(port_status_label(result,day),'未知')
