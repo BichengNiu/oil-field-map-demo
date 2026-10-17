@@ -77,3 +77,17 @@ GitHub 上是一个权威数据库版本，Codex 与 Streamlit 各自持有文�
 地图点击咽喉点、港口、船舶后可选择“实时画面”或“回看”，按对象坐标在20/50/100/250公里内筛选摄像头，默认50公里；这是附近固定摄像头，不代表视野覆盖该对象，也不是船载摄像头。只有 API 返回 `player.live` 才启用直播播放；day/month/year/lifetime是源站延时回看，不冒充直播，也不保证指定历史日期有录像。无覆盖、无直播或无回看时明确显示不可用。历史地图定位与播放器画面时间分开显示。
 
 Streamlit不调用Windy API；只在用户主动点开画面后，由浏览器加载Windy公开播放器。Windy源站可能限制地区、付费档位、回看范围或嵌入，保留原站入口。为避免免费图片URL十余分钟过期，目录不存临时缩略图，不抓取/存储摄像头录像。来源授权、广告与播放器控制由Windy负责。源码及MIT声明见THIRD_PARTY.md。
+
+
+## Sentinel-2 地表影像
+
+地图中的“最新卫星影像 / 历史卫星影像”使用 Microsoft Planetary Computer 的公开 Sentinel-2 L2A STAC 与 Data API，无需新增密钥。它独立于 Eagle Eye 的卫星轨道模块和 Windy 摄像头，未新增数据库采集、录像存储或定时任务。Streamlit 本身不调用影像 API、不写库；用户主动点击后，浏览器按对象坐标检索并显示公开影像瓦片，与现有底图加载方式一致。
+
+支持具坐标的油气资产、港口、咽喉点和船位。最新查询以当前日期为截止日，历史查询默认采用地图所选日期；搜索此前90天的影像，最多展示服务返回的20景，默认不限制整景云量，按真实拍摄时间倒序，绝不将低云量旧影像冒充最新。可选择10%/30%/60%整景云量上限；它不是对象附近的小区域云量。客户端再次核验影像所属集合、时间与实际覆盖多边形，拒绝邻接但未覆盖对象、晚于截止日期或未来日期的记录。查询结果在当前地图内存中缓存5分钟、最多16组，不自动轮询。
+
+显示单景真彩色影像、实际拍摄时间、整景云量、影像编号与原始STAC来源。原始可见光像元约10米；地图继续放大不增加原始分辨率。进入影像视图时隐藏Esri底图，防止影像缺口透出旧底图而被误认成同日卫星影像；返回详情或关闭弹窗后恢复。影像不能保证拍到某艘船；历史AIS位置只是查询中心，不表示船位与影像时间一致。长距离海上区域、云层或源站缺景会明确显示无匹配影像。
+
+数据说明：https://planetarycomputer.microsoft.com/dataset/sentinel-2-l2a
+STAC：https://planetarycomputer.microsoft.com/api/stac/v1
+Data API：https://planetarycomputer.microsoft.com/api/data/v1/docs
+署名：Contains modified Copernicus Sentinel data / Microsoft Planetary Computer。源站服务不可用时在面板显示错误，不替换成本地假影像。

@@ -53,7 +53,7 @@ const renderMedia = () => {
   const title = document.createElement('div');title.className='field-name';title.textContent=context.name;view.appendChild(title);
   const actions = document.createElement('div');actions.className='media-actions';view.appendChild(actions);
   const addButton = (label, handler) => {const b=document.createElement('button');b.type='button';b.textContent=label;b.onclick=event=>{event.stopPropagation();handler();};actions.appendChild(b);};
-  addButton('返回详情', () => {const old=activeMedia;activeMedia=null;cameraPositionLayer.clearLayers();old.popup.setContent(old.original);appendMediaActions(old.popup,old.key);});
+  addButton('返回详情', () => {const old=activeMedia;activeMedia=null;cameraPositionLayer.clearLayers();old.popup.setContent(old.original);map.fire('popupopen',{popup:old.popup});});
   addButton('实时画面', () => {context.mode='live';renderMedia();});
   addButton('回看', () => {context.mode='replay';renderMedia();});
   const row = text => {const p=document.createElement('p');p.textContent=text;view.appendChild(p);return p;};
@@ -113,7 +113,7 @@ const appendMediaActions = (popup, key) => {
   const actions=document.createElement('div');actions.className='media-actions';
   for (const [mode,label] of [['live','实时画面'],['replay','回看']]) {
     const button=document.createElement('button');button.type='button';button.textContent=label;
-    button.onclick=event=>{event.stopPropagation();activeMedia={key,popup,original,name:name || key,lat:coordinate.lat,lon:coordinate.lng,mode,radius:50,period:'day',cameraId:null};renderMedia();};
+    button.onclick=event=>{event.stopPropagation();map.fire('objectmediaopen',{kind:'camera'});activeMedia={key,popup,original,name:name || key,lat:coordinate.lat,lon:coordinate.lng,mode,radius:50,period:'day',cameraId:null};renderMedia();};
     actions.appendChild(button);
   }
   content.appendChild(actions);
@@ -128,3 +128,5 @@ map.on('popupclose', () => {
   detailControl.getContainer().querySelectorAll('iframe').forEach(frame=>frame.remove());
   activeMedia=null;cameraPositionLayer.clearLayers();
 });
+
+map.on('objectmediaopen',event=>{if(event.kind!=='camera'){activeMedia=null;cameraPositionLayer.clearLayers();detailControl.getContainer().querySelectorAll('iframe').forEach(frame=>frame.remove());}});

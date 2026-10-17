@@ -74,6 +74,7 @@ _RUNTIME_SOURCE_FILES = (
     "download_panel.py",
     "map_renderer.py",
     "map_media.js",
+    "map_satellite.js",
     "camera_feeds.py",
     "map_popups.py",
     "monitoring_cards.py",

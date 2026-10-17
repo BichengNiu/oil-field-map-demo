@@ -169,6 +169,7 @@ def build_map_html(
         ensure_ascii=False)
     media_json = json.dumps(camera_catalog or {"cameras": [], "status": {"status": "not_configured"}}, ensure_ascii=False).replace("</", "<\\/")
     media_script = Path(__file__).with_name("map_media.js").read_text()
+    satellite_script = Path(__file__).with_name("map_satellite.js").read_text()
     focus_json = json.dumps(focus_request or {}, ensure_ascii=False).replace("</", "<\\/")
     return compressed_document(f"""
     <!doctype html><html lang="zh-CN"><head>
@@ -339,7 +340,7 @@ def build_map_html(
         }})); }} catch (error) {{ }}
       }});
       // Request tiles only for the final initial viewport.
-      L.tileLayer('https://server.arcgisonline.com/ArcGIS/rest/services/World_Street_Map/MapServer/tile/{{z}}/{{y}}/{{x}}', {{
+      const basemapLayer = L.tileLayer('https://server.arcgisonline.com/ArcGIS/rest/services/World_Street_Map/MapServer/tile/{{z}}/{{y}}/{{x}}', {{
         attribution: '地图来源：<a href="https://server.arcgisonline.com/ArcGIS/rest/services/World_Street_Map/MapServer" target="_blank" rel="noopener">Esri World Street Map</a> &copy; Esri 及数据提供方',
         maxZoom: 18, crossOrigin: true
       }}).addTo(map);
@@ -508,6 +509,7 @@ def build_map_html(
       const cameraCatalog = {media_json};
       const mediaSnapshotDay = {json.dumps(snapshot_day)};
       {media_script}
+      {satellite_script}
       const focusToken = `${{focusRequest.revision}}:${{focusRequest.key}}`;
       let lastFocus = null;
       try {{ lastFocus = sessionStorage.getItem('energy-map-focus-v1'); }} catch (error) {{ }}
