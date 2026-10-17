@@ -8,6 +8,7 @@ import streamlit as st
 
 import ais as AIS
 import data_store
+import camera_feeds
 import csv_export
 import dashboard_rows
 import dashboard_data
@@ -114,6 +115,7 @@ def render_map_panel(state: DashboardViewState, summary_cards: list, *, cards_pl
             port_popup=port_popup,
             chokepoint_popup=chokepoint_popup,
             screenshot_requested=screenshot_requested,
+            camera_catalog=camera_feeds.published(),
             vessel_tracks=getattr(state, "vessel_tracks", None) if show_vessels else None,
             pipelines=pipelines,
             snapshot_day=snapshot_day.isoformat() if snapshot_day else None,

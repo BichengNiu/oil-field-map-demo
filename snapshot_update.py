@@ -126,6 +126,8 @@ def collect_candidate(original: Path, candidate: Path, *, force_ports=False, now
         with data_store.connect() as conn:
             conn.execute("DELETE FROM source_queries WHERE retrieved_at < ?", [now - timedelta(days=7)])
             conn.execute("DELETE FROM portwatch_cache WHERE saved < ?", [(now - timedelta(days=7)).timestamp()])
+        import camera_feeds
+        webcam_status = camera_feeds.collect(now)
         after = inspect(candidate)
         for table in ("portwatch_daily", "sea_entries", "ais_reports"):
             if after["counts"][table] < before["counts"][table]:
@@ -138,6 +140,7 @@ def collect_candidate(original: Path, candidate: Path, *, force_ports=False, now
         if not after["counts"]["catalogs"] or not after["counts"]["documents"]:
             raise RuntimeError("数据库目录或来源材料为空")
         summary = {"completed_at": now.isoformat(), "portwatch_updated": due,
+                   "webcams": webcam_status,
                    "pipelines": {"segments": len(pipelines["features"]), "drawable_segments": sum(f["properties"].get("map_drawable", True) for f in pipelines["features"]), "gas_connection_records": len(gas_connections["features"]), "unmapped_projects": len(unmapped_projects), "source": pipelines["metadata"]},
                    "portwatch": port_result, "history_coverage": history_coverage,
                    "before": before, "after": after}
