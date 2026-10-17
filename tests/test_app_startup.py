@@ -54,12 +54,6 @@ class AppStartupTest(unittest.TestCase):
                     assert not any(element.label == '输气联络' for element in app.checkbox)
                     assert not app.error, [str(error.value) for error in app.error]
                     assert any(element.label == '保存图片' for element in app.button)
-                    assert app.radio(key='map_view_mode').value == '二维'
-                    app.radio(key='map_view_mode').set_value('三维').run(timeout=30)
-                    assert not app.exception, [str(error.value) for error in app.exception]
-                    assert not app.error, [str(error.value) for error in app.error]
-                    app.radio(key='map_view_mode').set_value('二维').run(timeout=30)
-                    assert not app.exception, [str(error.value) for error in app.exception]
                     assert not any(element.label in ('刷新港口数据', '刷新船舶数据') for element in app.button)
                     assert app.date_input(key='map_snapshot_day').value is None
                     app.date_input(key='map_snapshot_day').set_value(date(2020, 1, 2))

@@ -2,16 +2,6 @@
 
 运行：`pip install -r requirements.txt && streamlit run app.py`
 
-## 三维地图
-
-地图上方的“地图视图”可切换二维和三维，默认二维；只有打开三维时才加载 CesiumJS。三维复用所选日期、图层、对象查找、详情和船位轨迹，不采集或写入业务数据。无密钥时使用 Esri World Imagery 与 Re:Earth / Mapterhorn 地形；地形不可用时保留卫星地球。
-
-要显示 Google 照片级三维实景，在 **Streamlit Cloud → App settings → Secrets** 中设置 `GOOGLE_MAPS_API_KEY = "..."`（启用 Map Tiles API 与计费），或 `CESIUM_ION_TOKEN = "..."`（有 Google Photorealistic 3D Tiles 资产权限；按当前 ion 方案的用途与额度使用）。仅在 Codex 环境配置不会传递到 Streamlit。两者都配置时优先 Google，失败后尝试 ion，再降级到卫星地形。
-
-这两类凭据用于浏览器地图请求，会发送给前端；应使用专用、最小权限的地图凭据，按供应商要求设置来源限制和额度，不要填写服务器管理密钥。三维模型、卫星纹理是历史影像，AIS 点位显示所选快照的观测；实景覆盖和精度由供应商决定，不能据此判断当前船舶或设施状态。保留 Cesium、Google、Esri 及地形来源署名。三维引擎固定为 CesiumJS 1.124.0，通过 jsDelivr 按需加载，不新增 Python 依赖。
-
-三维 Worker 使用该固定版本 SDK 自带的 bundle，在 iframe 内生成 Blob URL；不从 CDN 单独启动跨域 Worker。启动时先实际检测 Worker 与数组传递，10 秒内失败则显示错误，不让地形网格无限等待。更新 Cesium 版本时必须重新验证 `map_3d_workers.js` 的 TaskProcessor 兼容性，以及压缩文档还原后的 sandbox/srcdoc 场景；独立 HTML 页面显示正常不足以证明 Streamlit 内可用。
-
 项目配置开启 Streamlit WebSocket 压缩，减少地图与打印报告 HTML 的传输量；修改此服务端配置后须重启应用进程才能生效。
 地图文档也以 gzip 压缩包传输，浏览器使用随项目提供的解码器同步还原，避免大段 HTML 排队传输；点位、弹窗和原生打印内容保持一致。
 

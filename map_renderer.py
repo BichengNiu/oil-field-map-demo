@@ -63,9 +63,6 @@ def build_map_html(
     sea_day: str | None = None,
     vessel_tracks: dict | None = None,
     focus_request: dict | None = None,
-    three_dimensional: bool = False,
-    google_maps_key: str = "",
-    cesium_ion_token: str = "",
 ) -> str:
     pipeline_features = []
     for feature in (pipelines or {}).get("features", []):
@@ -169,18 +166,7 @@ def build_map_html(
     screenshot_label_json = json.dumps(
         snapshot_label + f"港口数据日：{day}\n咽喉点数据日：{chokepoint_day}\n船舶数据日：{vessel_time_label}",
         ensure_ascii=False)
-    satellite_script = Path(__file__).with_name("map_satellite.js").read_text()
     focus_json = json.dumps(focus_request or {}, ensure_ascii=False).replace("</", "<\\/")
-    if three_dimensional:
-        from map_3d import build_3d_html
-        return build_3d_html(
-            assets=json.loads(marker_json), ports=json.loads(port_json),
-            chokepoints=json.loads(chokepoint_json), vessels=json.loads(vessel_json),
-            pipelines=json.loads(pipeline_json), tracks=vessel_tracks or {},
-            legend=json.loads(legend_json), dates=json.loads(screenshot_label_json),
-            focus=focus_request or {}, screenshot=screenshot_requested,
-            google_key=google_maps_key, ion_token=cesium_ion_token,
-        )
     return compressed_document(f"""
     <!doctype html><html lang="zh-CN"><head>
     <meta charset="utf-8" />
@@ -350,7 +336,7 @@ def build_map_html(
         }})); }} catch (error) {{ }}
       }});
       // Request tiles only for the final initial viewport.
-      const basemapLayer = L.tileLayer('https://server.arcgisonline.com/ArcGIS/rest/services/World_Street_Map/MapServer/tile/{{z}}/{{y}}/{{x}}', {{
+      L.tileLayer('https://server.arcgisonline.com/ArcGIS/rest/services/World_Street_Map/MapServer/tile/{{z}}/{{y}}/{{x}}', {{
         attribution: '地图来源：<a href="https://server.arcgisonline.com/ArcGIS/rest/services/World_Street_Map/MapServer" target="_blank" rel="noopener">Esri World Street Map</a> &copy; Esri 及数据提供方',
         maxZoom: 18, crossOrigin: true
       }}).addTo(map);
@@ -516,8 +502,6 @@ def build_map_html(
         }}
         return false;
       }};
-      const imagerySnapshotDay = {json.dumps(snapshot_day)};
-      {satellite_script}
       const focusToken = `${{focusRequest.revision}}:${{focusRequest.key}}`;
       let lastFocus = null;
       try {{ lastFocus = sessionStorage.getItem('energy-map-focus-v1'); }} catch (error) {{ }}
