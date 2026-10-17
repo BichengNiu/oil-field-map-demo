@@ -3,6 +3,7 @@
 from __future__ import annotations
 
 from datetime import date
+import os
 
 import streamlit as st
 
@@ -48,6 +49,15 @@ def queue_map_focus(categories: dict) -> None:
 
 def render_map_panel(state: DashboardViewState, summary_cards: list, *, cards_placeholder=None,
                      search_placeholder=None) -> None:
+    map_view = st.radio("地图视图", ["二维", "三维"], horizontal=True, key="map_view_mode")
+    def browser_credential(name):
+        value = os.environ.get(name, "")
+        if not value:
+            try:
+                value = st.secrets.get(name, "")
+            except (FileNotFoundError, st.errors.StreamlitSecretNotFoundError):
+                pass
+        return str(value or "").strip()
     screenshot_requested = st.session_state.pop("map_screenshot_requested", False)
     (cards_placeholder or st).html(monitoring_cards.cards_html(summary_cards))
     oil, gas = None, None
@@ -120,6 +130,9 @@ def render_map_panel(state: DashboardViewState, summary_cards: list, *, cards_pl
             sea_day=(getattr(state, "selected_sea_day", None).isoformat()
                      if getattr(state, "selected_sea_day", None) else None),
             focus_request=st.session_state.get("map_search_request"),
+            three_dimensional=map_view == "三维",
+            google_maps_key=browser_credential("GOOGLE_MAPS_API_KEY") if map_view == "三维" else "",
+            cesium_ion_token=browser_credential("CESIUM_ION_TOKEN") if map_view == "三维" else "",
         ),
         height=735,
     )

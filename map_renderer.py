@@ -63,6 +63,9 @@ def build_map_html(
     sea_day: str | None = None,
     vessel_tracks: dict | None = None,
     focus_request: dict | None = None,
+    three_dimensional: bool = False,
+    google_maps_key: str = "",
+    cesium_ion_token: str = "",
 ) -> str:
     pipeline_features = []
     for feature in (pipelines or {}).get("features", []):
@@ -168,6 +171,16 @@ def build_map_html(
         ensure_ascii=False)
     satellite_script = Path(__file__).with_name("map_satellite.js").read_text()
     focus_json = json.dumps(focus_request or {}, ensure_ascii=False).replace("</", "<\\/")
+    if three_dimensional:
+        from map_3d import build_3d_html
+        return build_3d_html(
+            assets=json.loads(marker_json), ports=json.loads(port_json),
+            chokepoints=json.loads(chokepoint_json), vessels=json.loads(vessel_json),
+            pipelines=json.loads(pipeline_json), tracks=vessel_tracks or {},
+            legend=json.loads(legend_json), dates=json.loads(screenshot_label_json),
+            focus=focus_request or {}, screenshot=screenshot_requested,
+            google_key=google_maps_key, ion_token=cesium_ion_token,
+        )
     return compressed_document(f"""
     <!doctype html><html lang="zh-CN"><head>
     <meta charset="utf-8" />
