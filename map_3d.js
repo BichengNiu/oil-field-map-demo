@@ -8,6 +8,7 @@
   }[c]));
   const color = value => C.Color.fromCssColorString(value);
   try {
+    await installCesiumFrameWorkers(C);
     // Never use the SDK's bundled demo ion token.
     C.Ion.defaultAccessToken = '';
     const viewer = new C.Viewer('globe', {

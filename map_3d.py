@@ -6,7 +6,8 @@ from html_transport import compressed_document
 
 def build_3d_html(**payload):
     data = json.dumps(payload, ensure_ascii=False, separators=(",", ":")).replace("<", "\\u003c")
-    script = Path(__file__).with_suffix(".js").read_text()
+    script = (Path(__file__).with_name("map_3d_workers.js").read_text() + "\n"
+              + Path(__file__).with_suffix(".js").read_text())
     return compressed_document("""<!doctype html><html lang="zh-CN"><head><meta charset="utf-8">
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/cesium@1.124.0/Build/Cesium/Widgets/widgets.css">
 <style>
