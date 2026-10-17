@@ -32,3 +32,24 @@ class SentinelMapTest(unittest.TestCase):
         '''
         result=subprocess.run([node],input=script,capture_output=True,text=True)
         self.assertEqual(result.returncode,0,result.stderr)
+
+    def test_highres_dates_and_draw_priority_do_not_substitute_newer_coarse_imagery(self):
+        node=shutil.which('node')
+        if not node:self.skipTest('node unavailable')
+        source=(ROOT/'map_satellite.js').read_text()
+        section=source[source.index('const highresDate'):source.index('const openHighresView')]
+        script=section+"""
+        const assert=(condition,label)=>{if(!condition)throw new Error(label)};
+        assert(highresDate(20251027)==='2025-10-27','capture date');
+        assert(highresDate(null)==='未提供','missing date');
+        assert(highresDate(20250230)==='未提供','invalid calendar date');
+        const oldFine={SRC_DATE:20200419,SRC_RES:.5,NICE_NAME:'fine',MinMapLevel:12,MaxMapLevel:18,DrawOrder:80};
+        const newCoarse={SRC_DATE:20261017,SRC_RES:15,NICE_NAME:'coarse',MinMapLevel:0,MaxMapLevel:19,DrawOrder:70};
+        assert(highresRecords([oldFine,newCoarse],18)[0].SRC_DATE===20200419,'draw priority, not newest date');
+        assert(highresRecords([oldFine,newCoarse],5)[0].NICE_NAME==='coarse','zoom-specific source');
+        assert(highresRecords([oldFine],19).length===0,'no inferred zoom metadata');
+        const secondFine={...oldFine,NICE_NAME:'other',SRC_DATE:20250101};
+        assert(highresRecords([oldFine,oldFine,secondFine],18).length===2,'keep ambiguous equal-priority sources');
+        """
+        result=subprocess.run([node],input=script,capture_output=True,text=True)
+        self.assertEqual(result.returncode,0,result.stderr)

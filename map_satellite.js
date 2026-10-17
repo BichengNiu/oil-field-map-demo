@@ -3,6 +3,8 @@
 const sentinelEndpoint = 'https://planetarycomputer.microsoft.com/api/stac/v1';
 const sentinelDataEndpoint = 'https://planetarycomputer.microsoft.com/api/data/v1';
 const sentinelCache = new Map();
+const highresMetadataCache = new Map();
+const highresEndpoint = 'https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer';
 let satelliteContext = null;
 let satelliteController = null;
 let satelliteLayer = null;
@@ -24,6 +26,7 @@ const closeSatelliteView = () => {
   satelliteRequest++;
   if (satelliteController) satelliteController.abort();
   satelliteController=null;
+  if (satelliteContext?.onZoom) map.off('zoomend',satelliteContext.onZoom);
   if (satelliteLayer) map.removeLayer(satelliteLayer);
   satelliteLayer=null;satelliteContext=null;basemapLayer.setOpacity(1);
 };
@@ -133,21 +136,20 @@ const querySentinel = async (context,view,results,status) => {
   } finally {clearTimeout(timeout);}
 };
 const openSatelliteView = (popup,key,coordinate,name,mode) => {
-  map.fire('objectmediaopen',{kind:'satellite'});
   closeSatelliteView();
   const original=popup.getContent();
   map.setView(coordinate,key.startsWith('chokepoint:')?10:13,{animate:false});
   // An independent popup survives vessel/asset cluster rebuilds while zooming.
   popup=L.popup({popupKey:key,maxWidth:410,autoPan:false}).setLatLng(coordinate).setContent(original).openOn(map);
   const context={popup,key,lat:coordinate.lat,lon:coordinate.lng,name,mode,original,
-    end:mode==='history'?(mediaSnapshotDay || sentinelToday()):sentinelToday(),cloud:100};
+    end:mode==='history'?(imagerySnapshotDay || sentinelToday()):sentinelToday(),cloud:100};
   satelliteContext=context;
   const content=popup.getElement()?.querySelector('.leaflet-popup-content');if(!content)return;
   content.replaceChildren();const view=document.createElement('div');view.className='satellite-view';content.appendChild(view);
   const title=document.createElement('div');title.className='field-name';title.textContent=`${name} · ${mode==='history'?'历史卫星影像':'最新卫星影像'}`;view.appendChild(title);
   const back=document.createElement('button');back.type='button';back.textContent='返回详情';
   back.onclick=e=>{e.stopPropagation();closeSatelliteView();map.closePopup(popup);focusObject(key,false);};view.appendChild(back);
-  if(mediaSnapshotDay){const p=document.createElement('p');p.textContent=`对象定位日期：${mediaSnapshotDay}`;view.appendChild(p);}
+  if(imagerySnapshotDay){const p=document.createElement('p');p.textContent=`对象定位日期：${imagerySnapshotDay}`;view.appendChild(p);}
   const dateLabel=document.createElement('label');dateLabel.textContent='影像查询截至日期';view.appendChild(dateLabel);
   const date=document.createElement('input');date.type='date';date.min='2015-06-23';date.max=sentinelToday();date.value=context.end;
   date.setAttribute('aria-label',dateLabel.textContent);date.onclick=e=>e.stopPropagation();view.appendChild(date);
@@ -162,6 +164,77 @@ const openSatelliteView = (popup,key,coordinate,name,mode) => {
   submit.onclick=e=>{e.stopPropagation();if(!date.value || !date.checkValidity()){status.textContent='请选择有效日期';return;}context.end=date.value;context.cloud=Number(cloud.value);querySentinel(context,view,results,status);};
   querySentinel(context,view,results,status);
 };
+const highresDate = value => {
+  const text=String(value ?? '');
+  if(!/^\d{8}$/.test(text))return '未提供';
+  const date=`${text.slice(0,4)}-${text.slice(4,6)}-${text.slice(6,8)}`;
+  const parsed=new Date(date+'T00:00:00Z');
+  return Number.isFinite(parsed.getTime()) && parsed.toISOString().slice(0,10)===date ? date : '未提供';
+};
+const highresRecords = (records,zoom) => {
+  const matched=records.filter(row=>Number.isFinite(row.MinMapLevel) && Number.isFinite(row.MaxMapLevel) && row.MinMapLevel<=zoom && zoom<=row.MaxMapLevel);
+  if(!matched.length)return [];
+  const order=Math.max(...matched.map(row=>Number.isFinite(row.DrawOrder)?row.DrawOrder:0));
+  // Equal priority sources are retained, not resolved by an invented newest date.
+  return [...new Map(matched.filter(row=>(Number.isFinite(row.DrawOrder)?row.DrawOrder:0)===order).map(row=>[
+    JSON.stringify([row.SRC_DATE,row.SRC_RES,row.NICE_NAME,row.NICE_DESC,row.SRC_DESC]),row])).values()];
+};
+const openHighresView = (popup,key,coordinate,name) => {
+  closeSatelliteView();
+  const original=popup.getContent();
+  map.setView(coordinate,18,{animate:false});
+  popup=L.popup({popupKey:key,maxWidth:410,autoPan:false}).setLatLng(coordinate).setContent(original).openOn(map);
+  const context={popup,key,lat:coordinate.lat,lon:coordinate.lng,mode:'highres'};
+  satelliteContext=context;const token=++satelliteRequest;
+  satelliteController=new AbortController();const controller=satelliteController;
+  const content=popup.getElement()?.querySelector('.leaflet-popup-content');if(!content)return;
+  content.replaceChildren();const view=document.createElement('div');view.className='satellite-view';content.appendChild(view);
+  const title=document.createElement('div');title.className='field-name';title.textContent=`${name} · 高清影像`;view.appendChild(title);
+  const back=document.createElement('button');back.type='button';back.textContent='返回详情';
+  back.onclick=e=>{e.stopPropagation();closeSatelliteView();map.closePopup(popup);focusObject(key,false);};view.appendChild(back);
+  const row=(parent,text)=>{const p=document.createElement('p');p.textContent=text;parent.appendChild(p);};
+  row(view,'历史拼接影像（非实时）');
+  row(view,`元数据位置：${coordinate.lat.toFixed(5)}, ${coordinate.lng.toFixed(5)}`);
+  if(imagerySnapshotDay)row(view,`对象定位日期：${imagerySnapshotDay}`);
+  const status=document.createElement('div');status.setAttribute('role','status');status.textContent='正在加载高清影像';view.appendChild(status);
+  const info=document.createElement('div');info.textContent='正在查询拍摄日期与分辨率';view.appendChild(info);
+  const params=new URLSearchParams({f:'json',geometry:`${coordinate.lng},${coordinate.lat}`,geometryType:'esriGeometryPoint',inSR:'4326',spatialRel:'esriSpatialRelIntersects',outFields:'SRC_DATE,SRC_RES,NICE_NAME,NICE_DESC,SRC_DESC,MinMapLevel,MaxMapLevel,DrawOrder',returnGeometry:'false'});
+  const source=document.createElement('a');source.href=`${highresEndpoint}/4/query?${params}`;source.target='_blank';source.rel='noopener noreferrer';source.textContent='查看 Esri 影像来源记录';view.appendChild(source);
+  const layer=L.tileLayer(highresEndpoint+'/tile/{z}/{y}/{x}',{maxNativeZoom:19,maxZoom:19,
+    attribution:'高清影像：<a href="https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer" target="_blank" rel="noopener">Esri World Imagery</a> · Esri, Vantor 及数据提供方'});
+  satelliteLayer=layer;let failed=false;
+  layer.on('tileerror',()=>{if(satelliteLayer===layer){failed=true;status.textContent='部分高清影像瓦片加载失败';}});
+  layer.on('load',()=>{if(satelliteLayer===layer && !failed)status.textContent='高清影像已显示在地图上';});
+  basemapLayer.setOpacity(0);layer.addTo(map);
+  const showRecords = records => {
+    if(satelliteContext!==context)return;
+    info.replaceChildren();const matched=highresRecords(records,map.getZoom());
+    if(!matched.length){row(info,'当前缩放级别未提供此位置的影像元数据');return;}
+    for(const entry of matched){
+      const section=document.createElement('div');info.appendChild(section);
+      row(section,`拍摄日期：${highresDate(entry.SRC_DATE)}`);
+      const resolution=typeof entry.SRC_RES==='number' && entry.SRC_RES>0 ? (entry.SRC_RES<1?`${Math.round(entry.SRC_RES*100)}厘米`:`${entry.SRC_RES}米`) : '未提供';
+      row(section,`标称分辨率：${resolution}`);
+      row(section,`来源：${[entry.NICE_NAME,entry.NICE_DESC,entry.SRC_DESC].filter(Boolean).join(' · ') || '未提供'}`);
+    }
+  };
+  (async()=>{
+    try {
+      const cacheKey=params.toString();let records;
+      const cached=highresMetadataCache.get(cacheKey);
+      if(cached && Date.now()-cached.saved<300000)records=cached.records;
+      else {
+        const payload=await sentinelFetch(`${highresEndpoint}/4/query?${params}`,controller.signal);
+        if(payload.error || !Array.isArray(payload.features))throw new Error('元数据不可用');
+        records=payload.features.map(feature=>feature.attributes || {});
+        if(highresMetadataCache.size>=16)highresMetadataCache.delete(highresMetadataCache.keys().next().value);
+        highresMetadataCache.set(cacheKey,{records,saved:Date.now()});
+      }
+      if(token!==satelliteRequest || satelliteContext!==context)return;
+      context.onZoom=()=>showRecords(records);map.on('zoomend',context.onZoom);showRecords(records);
+    }catch(error){if(token===satelliteRequest && satelliteContext===context)info.textContent=error.name==='AbortError'?'影像元数据查询超时，拍摄日期与分辨率未确认':'影像元数据暂不可用，拍摄日期与分辨率未确认';}
+  })();
+};
 const appendSatelliteActions = (popup,key) => {
   if(!/^(asset|port|chokepoint|vessel):/.test(key || ''))return;
   const marker=markerByPopupKey.get(key),coordinate=marker?.getLatLng?.();if(!coordinate)return;
@@ -169,12 +242,11 @@ const appendSatelliteActions = (popup,key) => {
   if(!content || content.querySelector('.satellite-actions'))return;
   const name=key.startsWith('vessel:')?vessels.find(v=>`vessel:${v[3]}`===key)?.[2]:[...ports,...chokepoints,...assets].find(p=>p.popupKey===key)?.name;
   const actions=document.createElement('div');actions.className='satellite-actions';
-  for(const [mode,label] of [['latest','最新卫星影像'],['history','历史卫星影像']]){
+  for(const [mode,label] of [['highres','高清影像'],['latest','最新卫星影像'],['history','历史卫星影像']]){
     const button=document.createElement('button');button.type='button';button.textContent=label;
-    button.onclick=e=>{e.stopPropagation();openSatelliteView(popup,key,coordinate,name || key,mode);};actions.appendChild(button);
+    button.onclick=e=>{e.stopPropagation();if(mode==='highres')openHighresView(popup,key,coordinate,name || key);else openSatelliteView(popup,key,coordinate,name || key,mode);};actions.appendChild(button);
   }
   content.appendChild(actions);
 };
-map.on('objectmediaopen',event=>{if(event.kind!=='satellite')closeSatelliteView();});
 map.on('popupopen',event=>{closeSatelliteView();const key=event.popup?._source?.options?.popupKey || event.popup.options.popupKey;appendSatelliteActions(event.popup,key);});
 map.on('popupclose',closeSatelliteView);

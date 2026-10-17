@@ -63,7 +63,6 @@ def build_map_html(
     sea_day: str | None = None,
     vessel_tracks: dict | None = None,
     focus_request: dict | None = None,
-    camera_catalog: dict | None = None,
 ) -> str:
     pipeline_features = []
     for feature in (pipelines or {}).get("features", []):
@@ -167,8 +166,6 @@ def build_map_html(
     screenshot_label_json = json.dumps(
         snapshot_label + f"港口数据日：{day}\n咽喉点数据日：{chokepoint_day}\n船舶数据日：{vessel_time_label}",
         ensure_ascii=False)
-    media_json = json.dumps(camera_catalog or {"cameras": [], "status": {"status": "not_configured"}}, ensure_ascii=False).replace("</", "<\\/")
-    media_script = Path(__file__).with_name("map_media.js").read_text()
     satellite_script = Path(__file__).with_name("map_satellite.js").read_text()
     focus_json = json.dumps(focus_request or {}, ensure_ascii=False).replace("</", "<\\/")
     return compressed_document(f"""
@@ -506,9 +503,7 @@ def build_map_html(
         }}
         return false;
       }};
-      const cameraCatalog = {media_json};
-      const mediaSnapshotDay = {json.dumps(snapshot_day)};
-      {media_script}
+      const imagerySnapshotDay = {json.dumps(snapshot_day)};
       {satellite_script}
       const focusToken = `${{focusRequest.revision}}:${{focusRequest.key}}`;
       let lastFocus = null;
