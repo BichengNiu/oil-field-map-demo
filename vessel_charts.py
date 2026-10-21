@@ -9,6 +9,12 @@ import ais
 import data_store
 import port_charts
 
+CHART_REGIONS = ("霍尔木兹海峡", "阿曼湾", "波斯湾")
+CHART_TYPES = {"tanker": "油轮/液货船", "cargo": "货船", "other_unknown": "其他/未知船型"}
+CHART_LABELS = {**{r: f"{r}观测船舶数" for r in CHART_REGIONS},
+                **{key: f"{label}观测船舶数" for key, label in CHART_TYPES.items()}}
+CHART_FIELDS = ("date", "period_start", "period_end", *CHART_LABELS)
+
 
 def flag_label(row):
     return row.get("flag_country") or row.get("flag") or "未知船籍"
@@ -59,6 +65,7 @@ def bucket(day, aggregation):
 def aggregate(rows, first, last, aggregation, flags, destinations):
     observed = defaultdict(set)
     vessels = defaultdict(set)
+    latest = {}
     for row in rows:
         timestamp = ais.parse_utc(row.get("observed_at"))
         if timestamp is None or not first <= timestamp.date() <= last:
@@ -68,6 +75,14 @@ def aggregate(rows, first, last, aggregation, flags, destinations):
         observed[start].add(region)
         if matches(row, flags, destinations) and row.get("mmsi"):
             vessels[start, region].add(str(row["mmsi"]))
+            # A ship moving between waters is still one ship in the type charts.
+            key = (start, str(row["mmsi"]))
+            if key not in latest or timestamp >= latest[key][0]:
+                latest[key] = (timestamp, row.get("category"))
+    types = defaultdict(set)
+    for (start, mmsi), (_, category) in latest.items():
+        kind = category if category in ("tanker", "cargo") else "other_unknown"
+        types[start, kind].add(mmsi)
     result = []
     cursor = bucket(first, aggregation)
     while cursor <= last:
@@ -77,6 +92,8 @@ def aggregate(rows, first, last, aggregation, flags, destinations):
         record = {"date": cursor, "period_start": max(first, cursor), "period_end": min(last, end)}
         for region in ais.REGIONS:
             record[region] = len(vessels[cursor, region]) if region in observed[cursor] else None
+        for kind in CHART_TYPES:
+            record[kind] = len(types[cursor, kind]) if observed[cursor] else None
         result.append(record)
         cursor = end+timedelta(days=1)
     return result
@@ -84,7 +101,5 @@ def aggregate(rows, first, last, aggregation, flags, destinations):
 
 @st.cache_data(max_entries=12, show_spinner=False)
 def chart_images(rows: tuple, aggregation):
-    fields = ("date", "period_start", "period_end", *ais.REGIONS)
-    records = [dict(zip(fields, row)) for row in rows]
-    labels = {region: f"{region}观测船舶数" for region in ais.REGIONS}
-    return port_charts.render_chart_images(records, labels, aggregation, ytitle="艘", point_markers=True)
+    records = [dict(zip(CHART_FIELDS, row)) for row in rows]
+    return port_charts.render_chart_images(records, CHART_LABELS, aggregation, ytitle="艘", point_markers=True)

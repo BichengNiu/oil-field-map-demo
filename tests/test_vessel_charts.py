@@ -5,6 +5,20 @@ import vessel_charts
 
 
 class VesselChartsTest(unittest.TestCase):
+    def test_type_counts_deduplicate_across_waters_and_use_latest_classification(self):
+        rows = [
+            {"mmsi": "1", "observed_at": "2026-10-05T01:00:00Z", "region": "波斯湾", "category": "unknown"},
+            {"mmsi": "1", "observed_at": "2026-10-06T01:00:00Z", "region": "阿曼湾", "category": "tanker"},
+            {"mmsi": "2", "observed_at": "2026-10-06T01:00:00Z", "region": "波斯湾", "category": "cargo"},
+            {"mmsi": "3", "observed_at": "2026-10-06T01:00:00Z", "region": "波斯湾", "category": "passenger"},
+        ]
+        records = vessel_charts.aggregate(rows, date(2026,10,5), date(2026,10,18), "周度",
+                                          ["未知船籍"], ["未知目的地"])
+        self.assertEqual([records[0][key] for key in vessel_charts.CHART_TYPES], [1,1,1])
+        self.assertTrue(all(records[1][key] is None for key in vessel_charts.CHART_TYPES))
+        self.assertEqual(list(vessel_charts.CHART_LABELS)[:3], ["霍尔木兹海峡", "阿曼湾", "波斯湾"])
+        self.assertEqual(len(vessel_charts.CHART_LABELS), 6)
+
     def test_distinct_vessels_across_reports_days_and_sources(self):
         rows = [{"mmsi": ship, "observed_at": f"2026-10-{day:02}T12:00:00Z",
                  "region": "波斯湾", "flag_country": "中国", "destination": "DUBAI"}

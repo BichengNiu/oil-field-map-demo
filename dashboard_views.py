@@ -172,9 +172,9 @@ def render_ais_panel(state: DashboardViewState) -> None:
             column.metric(label, value)
     if visible:
         aggregated = vessel_charts.aggregate(visible, first, last, aggregation, flags, destinations)
-        fields = ("date", "period_start", "period_end", *AIS.REGIONS)
+        fields = vessel_charts.CHART_FIELDS
         images = vessel_charts.chart_images(tuple(tuple(row[f] for f in fields) for row in aggregated), aggregation)
-        regions = list(AIS.REGIONS)
+        regions = list(vessel_charts.CHART_LABELS)
         for start in range(0, len(regions), 3):
             for column, region, image in zip(st.columns(3), regions[start:start+3], images[start:start+3]):
                 with column:
@@ -185,7 +185,7 @@ def render_ais_panel(state: DashboardViewState) -> None:
                                                "期间结束": r["period_end"], "观测船舶数": r[region]}
                                               for r in aggregated],
                                              ["日期", "期间开始", "期间结束", "观测船舶数"]),
-                        file_name=f"{region}观测船舶数.csv", mime="text/csv",
+                        file_name=f"{vessel_charts.CHART_LABELS[region].replace('/', '_')}.csv", mime="text/csv",
                         key=f"vessel_chart_download_{region}", type="primary")
     else:
         st.info("所选时间范围暂无船位观测。")
