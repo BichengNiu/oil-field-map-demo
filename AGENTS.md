@@ -26,5 +26,6 @@
 
 # Deployment compatibility
 
+- **Mandatory production verification after every change:** open and inspect the actual deployed app at https://oil-field-map-demo-mpsslyxypuc6vwdxnmap3o.streamlit.app/ after pushing `main`. Check the affected tab, changed text, metrics, filters, charts and interactions; confirm there are no runtime errors and the deployment has picked up the change. Git push success, local tests, and HTTP 200 alone are not proof of production correctness. If the deployment is stale, investigate and resolve the deployment/update problem before reporting completion. If production verification is blocked by unavailable browser access, authentication or platform permissions, explicitly report that limitation and never claim the live UI was verified.
 - When changing Python dependency pins, check the Python version configured on Streamlit Cloud (3.14 as of 2026-10-16). Validate a clean requirements installation and app startup with that version, in addition to development-environment checks.
 - Do not rely on packages already installed in the development environment as proof that a new Cloud deployment can install requirements.
