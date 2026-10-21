@@ -37,7 +37,9 @@ remote_branches=$(git ls-remote --heads origin | awk '{print $2}')
     echo 'Unexpected remote branches; stopping for review.' >&2; exit 1;
 }
 GIT_LFS_SKIP_SMUDGE=1 git pull --ff-only origin main
-git lfs install --local
+# Install filters without overwriting our LFS-aware main-only push guard.
+# A plain install rejects that custom hook on the second scheduled run.
+git lfs install --local --skip-repo
 [[ -z "$(git config --get core.hooksPath || true)" ]] || {
     echo 'Custom hooksPath requires review before installing publication guards.' >&2; exit 1;
 }
