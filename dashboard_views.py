@@ -137,30 +137,38 @@ def render_ais_panel(state: DashboardViewState) -> None:
     if state.ais_status.get("last_error"):
         st.error(f"最近连接错误：{state.ais_status['last_error']}")
     cards = st.empty()
-    columns = st.columns([1.1, 1, 1.6, 1.8])
+    columns = st.columns([1.1, 1, 1, 1.6, 1.8])
     with columns[0]:
         period = st.selectbox("时间范围", port_charts.TIME_RANGES, index=4, key="vessel_chart_period")
     with columns[1]:
         aggregation = st.selectbox("聚合方式", list(port_charts.AGGREGATIONS), key="vessel_chart_aggregation")
+    with columns[2]:
+        data_type = st.selectbox("数据类型", ["存量", "流量"], key="vessel_chart_data_type")
     last = state.snapshot_day or AIS.utc_now().date()
     path = data_store.database_path()
-    history = vessel_charts.history(last, (str(path), path.stat().st_mtime_ns))
-    earliest = min((AIS.parse_utc(r.get("observed_at")).date() for r in history), default=last)
+    identity = (str(path), path.stat().st_mtime_ns)
+    history = (vessel_charts.history(last, identity) if data_type == "存量"
+               else vessel_charts.entry_history(last, identity))
+    timestamp_field = "observed_at" if data_type == "存量" else "entered_at"
+    earliest = min((AIS.parse_utc(r[timestamp_field]).date() for r in history), default=last)
     first = port_charts.window_start(last, period, earliest)
-    visible = [r for r in history if (observed := AIS.parse_utc(r.get("observed_at"))) and observed.date() >= first]
-    flags = sorted({vessel_charts.flag_label(r) for r in visible})
+    visible = [r for r in history if (observed := AIS.parse_utc(r.get(timestamp_field))) and observed.date() >= first]
+    # The cards/list remain the current snapshot; absent flow evidence must
+    # not turn their values into false zeroes or remove their filter choices.
+    filter_rows = [*visible, *state.live_positions] if data_type == "流量" else visible
+    flags = sorted({vessel_charts.flag_label(r) for r in filter_rows})
     current_flags = st.session_state.get("vessel_chart_flags", [])
     if current_flags and ALL_SELECTION not in current_flags and not set(current_flags).intersection(flags):
         st.session_state["vessel_chart_flags"] = [ALL_SELECTION]
-    with columns[2]:
+    with columns[3]:
         selection = multiselect_with_all("船籍", flags, key="vessel_chart_flags", all_label="全部")
     flags = selected_values(selection, flags)
-    flag_rows = [r for r in visible if vessel_charts.flag_label(r) in flags]
+    flag_rows = [r for r in filter_rows if vessel_charts.flag_label(r) in flags]
     destinations = sorted({vessel_charts.destination_label(r) for r in flag_rows})
     current_destinations = st.session_state.get("vessel_chart_destinations", [])
     if current_destinations and ALL_SELECTION not in current_destinations and not set(current_destinations).intersection(destinations):
         st.session_state["vessel_chart_destinations"] = [ALL_SELECTION]
-    with columns[3]:
+    with columns[4]:
         selection = multiselect_with_all("目的地", destinations, key="vessel_chart_destinations", all_label="全部")
     destinations = selected_values(selection, destinations)
     vessels = [r for r in state.live_positions if vessel_charts.matches(r, flags, destinations)
@@ -170,10 +178,14 @@ def render_ais_panel(state: DashboardViewState) -> None:
     with cards.container():
         for column, (label, value) in zip(st.columns(6), vessel_charts.metrics(vessels, available)):
             column.metric(label, value)
-    if visible:
-        aggregated = vessel_charts.aggregate(visible, first, last, aggregation, flags, destinations)
+    if visible or data_type == "流量":
+        calculate = vessel_charts.stock_series if data_type == "存量" else vessel_charts.flow_series
+        aggregated = calculate(visible, first, last, aggregation, flags, destinations)
+        labels = vessel_charts.series_labels(data_type)
         fields = vessel_charts.CHART_FIELDS
-        images = vessel_charts.chart_images(tuple(tuple(row[f] for f in fields) for row in aggregated), aggregation)
+        images = vessel_charts.chart_images(tuple(tuple(row[f] for f in fields) for row in aggregated), aggregation, data_type)
+        if data_type == "流量" and not visible:
+            st.info("当前快照没有可用的边界进入事件，流量留空；不能用船位快照或每日去重数代替。")
         regions = list(vessel_charts.CHART_LABELS)
         for start in range(0, len(regions), 3):
             for column, region, image in zip(st.columns(3), regions[start:start+3], images[start:start+3]):
@@ -182,10 +194,11 @@ def render_ais_panel(state: DashboardViewState) -> None:
                     st.download_button(
                         "下载数据",
                         csv_export.csv_bytes([{"日期": r["date"], "期间开始": r["period_start"],
-                                               "期间结束": r["period_end"], "观测船舶数": r[region]}
+                                               "期间结束": r["period_end"], "数据类型": data_type,
+                                               "采样时刻 UTC": r.get("sample_at", ""), labels[region]: r[region]}
                                               for r in aggregated],
-                                             ["日期", "期间开始", "期间结束", "观测船舶数"]),
-                        file_name=f"{vessel_charts.CHART_LABELS[region].replace('/', '_')}.csv", mime="text/csv",
+                                             ["日期", "期间开始", "期间结束", "数据类型", "采样时刻 UTC", labels[region]]),
+                        file_name=f"{labels[region].replace('/', '_')}.csv", mime="text/csv",
                         key=f"vessel_chart_download_{region}", type="primary")
     else:
         st.info("所选时间范围暂无船位观测。")

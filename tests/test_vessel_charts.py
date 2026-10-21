@@ -1,10 +1,59 @@
 """Vessel charts count distinct ships in observed periods, with unknown gaps."""
 from datetime import date
 import unittest
+from unittest.mock import patch
 import vessel_charts
 
 
 class VesselChartsTest(unittest.TestCase):
+    def test_stock_uses_fresh_latest_positions_and_period_end_sample_not_daily_sum(self):
+        rows = [
+            {"mmsi": "1", "observed_at": "2026-10-15T01:00:00Z", "region": "波斯湾"},
+            {"mmsi": "2", "observed_at": "2026-10-15T08:00:00Z", "region": "波斯湾", "category": "cargo"},
+            {"mmsi": "2", "observed_at": "2026-10-15T09:00:00Z", "region": "阿曼湾", "category": "cargo"},
+            {"mmsi": "3", "observed_at": "2026-10-15T09:00:00Z", "region": "波斯湾", "category": "tanker"},
+            {"mmsi": "4", "observed_at": "2026-10-16T09:00:00Z", "region": "波斯湾", "category": "tanker"},
+        ]
+        args = (rows, date(2026,10,15), date(2026,10,16))
+        daily = vessel_charts.stock_series(*args, "日度", ["未知船籍"], ["未知目的地"])
+        self.assertEqual(daily[0]['波斯湾'], 1)  # Stale ship 1 excluded; ship 2 moved.
+        self.assertEqual(daily[0]['阿曼湾'], 1)
+        self.assertEqual(daily[0]['sample_at'], '2026-10-15T09:00:00+00:00')
+        weekly = vessel_charts.stock_series(*args, "周度", ["未知船籍"], ["未知目的地"])
+        self.assertEqual(weekly[0]['波斯湾'], 1)
+        self.assertEqual(weekly[0]['cargo'], 0)  # Last sample, not a union of days.
+
+    def test_flow_counts_reentries_but_not_duplicate_events_and_missing_is_unknown(self):
+        first = {"mmsi": "1", "entered_at": "2026-10-15T01:00:00Z", "region": "波斯湾", "category": "tanker"}
+        again = {**first, 'entered_at': '2026-10-15T09:00:00Z'}
+        records = vessel_charts.flow_series([first, first, again], date(2026,10,15), date(2026,10,16),
+                                            '日度', ['未知船籍'], ['未知目的地'])
+        self.assertEqual(records[0]['波斯湾'], 2)
+        self.assertEqual(records[0]['tanker'], 2)
+        self.assertIsNone(records[0]['霍尔木兹海峡'])
+        self.assertIsNone(records[1]['波斯湾'])
+        self.assertIsNone(records[1]['tanker'])
+
+    def test_daily_axis_shows_calendar_dates_without_hour_or_offset_labels(self):
+        from matplotlib.figure import Figure
+        save = Figure.savefig
+        checked = []
+        def inspect(figure, *args, **kwargs):
+            figure.canvas.draw()
+            ax = figure.axes[0]
+            labels = [t.get_text() for t in ax.get_xticklabels() if t.get_text()]
+            self.assertEqual(labels, ['2026-10-15', '2026-10-16', '2026-10-17'])
+            self.assertFalse(ax.xaxis.get_offset_text().get_visible())
+            self.assertEqual(ax.get_xlabel(), '日期（UTC）')
+            checked.append(True)
+            return save(figure, *args, **kwargs)
+        rows = tuple((date(2026,10,d), date(2026,10,d), date(2026,10,d), *([1]*6))
+                     for d in (15,16,17))
+        with patch.object(Figure, 'savefig', autospec=True, side_effect=inspect):
+            images = vessel_charts.chart_images.__wrapped__(rows, '日度')
+        self.assertEqual(len(images), 6)
+        self.assertEqual(len(checked), 6)
+
     def test_type_counts_deduplicate_across_waters_and_use_latest_classification(self):
         rows = [
             {"mmsi": "1", "observed_at": "2026-10-05T01:00:00Z", "region": "波斯湾", "category": "unknown"},

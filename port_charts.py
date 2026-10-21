@@ -79,7 +79,8 @@ def chart_images(rows: tuple, first_day, aggregation="日度") -> tuple[bytes, .
 
 
 def render_chart_images(aggregated: list[dict], labels: dict[str, str],
-                        aggregation="日度", ytitle="艘次", point_markers=False) -> tuple[bytes, ...]:
+                        aggregation="日度", ytitle="艘次", point_markers=False,
+                        date_only=False) -> tuple[bytes, ...]:
     """Shared figure layout for port activity and observed vessel counts."""
     if not aggregated:
         return ()
@@ -100,7 +101,7 @@ def render_chart_images(aggregated: list[dict], labels: dict[str, str],
     images = []
     span = (frame.index[-1] - frame.index[0]).days
     annual = aggregation == "年度"
-    year_ruler = not annual and 60 <= span <= 550
+    year_ruler = not annual and not date_only and 60 <= span <= 550
     if annual:
         frame.index = frame.index.strftime("%Y")
     # Matplotlib's font state is global; serialize rendering across sessions.
@@ -131,6 +132,28 @@ def render_chart_images(aggregated: list[dict], labels: dict[str, str],
                         line.set_markerfacecolor("white")
                 if annual:
                     ax.set_xlabel(f"{aggregated[0]['period_start']:%Y-%m-%d}—{aggregated[-1]['period_end']:%Y-%m-%d}")
+                elif date_only:
+                    # Sampled days can be sparse. Never let the auto locator
+                    # turn these UTC calendar dates into misleading hour ticks.
+                    observed_dates = frame.index[frame[label].notna()]
+                    tick_dates = observed_dates if len(observed_dates) else frame.index
+                    gap = max(1, (span+3)//4)
+                    ticks = [tick_dates[0]]
+                    for stamp in tick_dates[1:]:
+                        if (stamp-ticks[-1]).days >= gap:
+                            ticks.append(stamp)
+                    if ticks[-1] != tick_dates[-1]:
+                        if len(ticks) > 1 and (tick_dates[-1]-ticks[-1]).days < gap:
+                            ticks.pop()
+                        ticks.append(tick_dates[-1])
+                    ax.set_xticks(ticks)
+                    ax.xaxis.set_major_formatter(DateFormatter("%Y-%m-%d"))
+                    ax.xaxis.get_offset_text().set_visible(False)
+                    ax.tick_params(axis="x", rotation=25)
+                    ax.set_xlabel("日期（UTC）")
+                    if len(frame) == 1:
+                        point = frame.index[0]
+                        ax.set_xlim(point-pd.Timedelta(days=1), point+pd.Timedelta(days=1))
                 elif len(frame) == 1:
                     point = frame.index[0]
                     ax.set_xlim(point-pd.Timedelta(days=1), point+pd.Timedelta(days=1))
@@ -156,12 +179,19 @@ def render_chart_images(aggregated: list[dict], labels: dict[str, str],
                 for text in fig.findobj(Text):
                     text.set_fontfamily([chinese_font])
                     text.set_fontsize(16)
+                if date_only and not annual:
+                    ticks = ax.get_xticklabels()
+                    for tick in ticks:
+                        tick.set_fontsize(14)
+                    if len(ticks) > 1:
+                        ticks[0].set_ha("left")
+                        ticks[-1].set_ha("right")
                 ax.set_title(label,
                              fontsize=18, fontfamily=[chinese_font], pad=12)
                 # Ts lays out its template before this application font pass.
                 # Reserve room again for the readable type and the year ruler.
                 fig.subplots_adjust(left=0.21 if annual else 0.16, right=0.97, top=0.86,
-                                    bottom=0.30 if year_ruler else 0.17)
+                                    bottom=0.30 if year_ruler or date_only else 0.17)
                 if year_ruler:
                     # Measure the final fonts, including the year label's white
                     # background, before separating both rows. Move the ruler
