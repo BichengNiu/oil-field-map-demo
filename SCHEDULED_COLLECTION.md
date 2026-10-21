@@ -4,19 +4,21 @@
 
 唯一权威文件为 `main` 分支的 `runtime/monitoring.duckdb`，通过 Git LFS 管理；不重写过去的 Git 历史。Codex 是唯一发布端。Streamlit 使用真正的 DuckDB `read_only=True` 连接，页面、下载和原生 Print 不采集、不修改数据库，也不进行启动迁移。没有额外的报告准备按钮、刷新按钮或说明小字。
 
-每小时运行一次任务，采集最新120分钟内的船位。PortWatch 每个 UTC 自然日成功更新一次；失败不写成功标记，下次任务重试。源站发布有延迟，页面展示真实观测日期，不把任务时间替代数据日期。
+当前云端任务每天运行一次，采集最新120分钟内的船位。PortWatch 每个 UTC 自然日成功更新一次；失败不写成功标记，下次任务重试。每日采样不代表全天连续船位覆盖。源站发布有延迟，页面展示真实观测日期，不把任务时间替代数据日期。
 
 ## 定时任务执行内容
 
 运行环境需有 Python 3.11+、Git、Git LFS，以及仓库 main 和 LFS 的写入权限。不要将令牌写入代码或提交到仓库。每次任务执行：
 
 ```bash
-git switch main
-git pull --ff-only origin main
-git lfs pull --include=runtime/monitoring.duckdb
-python -m pip install -r requirements.txt
-python snapshot_update.py --publish
+bash deploy/update_snapshot.sh
 ```
+
+此唯一入口先锁定任务、检查干净工作区、同步远端并安全归一云端自动生成的分支标签，只保留 `main`，再初始化仓库本地 Git LFS、安装 main-only commit/push hooks、拉取完整数据库。依赖安装在被 Git 忽略的 `runtime/collector-venv`，每次按 requirements.txt 核对并执行 pip check，然后调用原有发布脚本。`COLLECTOR_VENV` 可指定环境已有的独立虚拟环境。不得使用系统 Python 中“刚好存在”的依赖作为任务就绪的依据。执行端必须允许网络工具访问；GitHub 连接器可访问不等于 shell 已具备网络权限。
+
+提交推送后，入口执行 `deploy/verify_snapshot.py`：核对远端 main 提交号，并从 GitHub 下载该精确提交的 LFS 数据库，逐字节累计大小与 SHA256，匹配已提交指针后才报告 verified。不能仅凭 git push 退出码或本地 LFS 缓存宣称远端对象可读取。
+
+2026-10-21 用户明确要求所有工作只在 `main` 上进行，禁止创建、使用或保留其它本地/远端分支。若平台重新生成 `work` 等标签，入口只在其 HEAD 与最新 origin/main 完全一致时安全切回/重命名为 main；存在独有提交或未提交修改则保留内容并明确失败，不 reset、不强推。远端有额外分支时不擅自删除未知工作。
 
 无 `--publish` 为真实上游试采集：校验临时库后丢弃，不替换、提交或推送权威库。`--force-ports` 可手动要求本次额外更新 PortWatch；这属于采集端命令，不在页面加按钮。
 

@@ -1,0 +1,16 @@
+#!/usr/bin/env bash
+set -euo pipefail
+if [[ "$(git branch --show-current)" != main ]]; then
+    echo 'Only main is permitted. Refusing push from another branch.' >&2
+    exit 1
+fi
+# Preserve LFS upload semantics, and inspect the same ref updates first.
+updates=$(cat)
+while read -r local_ref local_oid remote_ref remote_oid; do
+    [[ -z "${remote_ref:-}" ]] && continue
+    if [[ "$remote_ref" != refs/heads/main ]]; then
+        echo "Only refs/heads/main may be pushed: $remote_ref" >&2
+        exit 1
+    fi
+done <<< "$updates"
+git lfs pre-push "$@" <<< "$updates"

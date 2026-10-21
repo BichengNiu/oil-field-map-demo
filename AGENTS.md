@@ -1,5 +1,8 @@
 # Repository workflow
 
+- **Mandatory, user-confirmed rule (2026-10-21): `main` is the only permitted local and remote branch. All investigation, edits, tests, commits and publications must take place on `main`. Never create a task/work/feature branch, worktree branch, or pull request.**
+- Before any project work, fetch `origin/main`, inspect the current branch and working tree, and normalize any cloud-generated checkout label to `main`. A disposable branch may be removed only after verifying it has no commits outside `origin/main`; preserve and report unique commits or uncommitted changes rather than resetting or discarding them. Do not leave a non-main branch behind.
+- The cloud platform may provision a local `work` label before the agent starts. That is not authorization to use it: normalize it before doing project work. Use `bash deploy/update_snapshot.sh` for scheduled publication; it performs this check and installs main-only commit/push guards.
 - Make and commit repository changes directly on `main`.
 - Do not create, use, or leave non-main branches for future changes.
 - Do not open pull requests for repository changes; commit them directly to `main`.
