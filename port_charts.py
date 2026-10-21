@@ -74,6 +74,15 @@ def aggregate_rows(rows: tuple, first_day: date, aggregation="日度") -> list[d
 
 @st.cache_data(max_entries=12, show_spinner=False)
 def chart_images(rows: tuple, first_day, aggregation="日度") -> tuple[bytes, ...]:
+    return render_chart_images(aggregate_rows(rows, first_day, aggregation),
+                               series_labels(aggregation), aggregation)
+
+
+def render_chart_images(aggregated: list[dict], labels: dict[str, str],
+                        aggregation="日度", ytitle="艘次", point_markers=False) -> tuple[bytes, ...]:
+    """Shared figure layout for port activity and observed vessel counts."""
+    if not aggregated:
+        return ()
     # Lazy import: opening the map never imports matplotlib or scans its fonts.
     import matplotlib
     matplotlib.use("Agg")
@@ -85,8 +94,6 @@ def chart_images(rows: tuple, first_day, aggregation="日度") -> tuple[bytes, .
     from matplotlib.dates import AutoDateLocator, ConciseDateFormatter, DateFormatter
     from matplotlib.ticker import MaxNLocator
 
-    aggregated = aggregate_rows(rows, first_day, aggregation)
-    labels = series_labels(aggregation)
     frame = pd.DataFrame(aggregated).set_index("date")[list(labels)].astype(float)
     frame.index = pd.to_datetime(frame.index)
     frame = frame.rename(columns=labels)
@@ -108,10 +115,10 @@ def chart_images(rows: tuple, first_day, aggregation="日度") -> tuple[bytes, .
             try:
                 fig, ax = plot_series(
                     frame[[label]], facet=False, auto_dual_y=False,
-                    figsize=(6.2, 4.6), xtitle="", ytitle="艘次",
+                    figsize=(6.2, 4.6), xtitle="", ytitle=ytitle,
                     ytitle_position="side", ymin=0, grid=False,
                     year_ruler=year_ruler, monthly_ticks=span <= 100,
-                    linewidth=1.5, markersize=5 if aggregation in ("周度", "月度") else 4 if len(frame) == 1 and not annual else 0,
+                    linewidth=1.5, markersize=5 if aggregation in ("周度", "月度") else 4 if (point_markers or len(frame) == 1) and not annual else 0,
                     marker_edge_width=1,
                     bar_series=[label] if annual else None,
                     bar_face_color=style.GRAY if annual else None,

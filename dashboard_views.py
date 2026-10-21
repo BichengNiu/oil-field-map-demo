@@ -12,6 +12,7 @@ import csv_export
 import dashboard_rows
 import dashboard_data
 import port_charts
+import vessel_charts
 import map_renderer
 import pipeline_catalog
 import monitoring_cards
@@ -129,80 +130,66 @@ def render_map_panel(state: DashboardViewState, summary_cards: list, *, cards_pl
 
 
 def render_ais_panel(state: DashboardViewState) -> None:
-    st.subheader("船舶")
-    all_positions = state.live_positions
-    vessels = all_positions
-    rows = dashboard_rows.vessel_rows(vessels)
-    ais_status = state.ais_status
-    has_position_data = bool(all_positions)
-    region_counts = {
-        region: {
-            "open_waters": sum(
-                vessel.get("region") == region
-                and str(vessel.get("data_source") or "").startswith("Open Waters")
-                for vessel in all_positions
-            ),
-            "aisstream": sum(
-                vessel.get("region") == region
-                and vessel.get("data_source") == "AISStream"
-                for vessel in all_positions
-            ),
-        }
-        for region in AIS.REGIONS
-    }
     if state.archive_error:
         st.error(state.archive_error)
-    vessel_metric = len(vessels) if has_position_data else "—"
-    v1, v2, v3, v4, v5 = st.columns(5)
-    v1.metric("船位快照", vessel_metric)
-    v2.metric("航行中", sum(bool(v.get("moving")) for v in vessels) if has_position_data else "—")
-    v3.metric(
-        "油轮/液货船",
-        sum(v.get("category") == "tanker" for v in vessels) if has_position_data else "—",
-    )
-    v4.metric(
-        "货船", sum(v.get("category") == "cargo" for v in vessels) if has_position_data else "—"
-    )
-    v5.metric(
-        "船型待识别",
-        sum(v.get("category") == "unknown" for v in vessels) if has_position_data else "—",
-    )
     if state.open_state.get("error"):
         st.error(f"Open Waters 快照错误：{state.open_state['error']}")
-    if ais_status.get("last_error"):
-        st.error(f"最近连接错误：{ais_status['last_error']}")
-    st.markdown("**各监测水域船位快照**")
-    region_rows = []
-    for region, counts in region_counts.items():
-        if has_position_data:
-            open_waters_count = (
-                "不可用" if state.open_state.get("error") else counts["open_waters"]
-            )
-            aisstream_count = (
-                "已暂停"
-                if ais_status.get("status") == "已暂停（未启用AISStream）"
-                else counts["aisstream"]
-            )
-            total_count = counts["open_waters"] + counts["aisstream"]
-        else:
-            open_waters_count = "不可用" if state.open_state.get("error") else "—"
-            aisstream_count = (
-                "已暂停" if ais_status.get("status") == "已暂停（未启用AISStream）" else "—"
-            )
-            total_count = "—"
-        region_rows.append(
-            {
-                "水域": region,
-                "Open Waters": open_waters_count,
-                "AISStream": aisstream_count,
-                "合计": total_count,
-            }
-        )
-    st.dataframe(
-        region_rows,
-        width="stretch",
-        hide_index=True,
-    )
+    if state.ais_status.get("last_error"):
+        st.error(f"最近连接错误：{state.ais_status['last_error']}")
+    cards = st.empty()
+    columns = st.columns([1.1, 1, 1.6, 1.8])
+    with columns[0]:
+        period = st.selectbox("时间范围", port_charts.TIME_RANGES, index=4, key="vessel_chart_period")
+    with columns[1]:
+        aggregation = st.selectbox("聚合方式", list(port_charts.AGGREGATIONS), key="vessel_chart_aggregation")
+    last = state.snapshot_day or AIS.utc_now().date()
+    path = data_store.database_path()
+    history = vessel_charts.history(last, (str(path), path.stat().st_mtime_ns))
+    earliest = min((AIS.parse_utc(r.get("observed_at")).date() for r in history), default=last)
+    first = port_charts.window_start(last, period, earliest)
+    visible = [r for r in history if (observed := AIS.parse_utc(r.get("observed_at"))) and observed.date() >= first]
+    flags = sorted({vessel_charts.flag_label(r) for r in visible})
+    current_flags = st.session_state.get("vessel_chart_flags", [])
+    if current_flags and ALL_SELECTION not in current_flags and not set(current_flags).intersection(flags):
+        st.session_state["vessel_chart_flags"] = [ALL_SELECTION]
+    with columns[2]:
+        selection = multiselect_with_all("船籍", flags, key="vessel_chart_flags", all_label="全部")
+    flags = selected_values(selection, flags)
+    flag_rows = [r for r in visible if vessel_charts.flag_label(r) in flags]
+    destinations = sorted({vessel_charts.destination_label(r) for r in flag_rows})
+    current_destinations = st.session_state.get("vessel_chart_destinations", [])
+    if current_destinations and ALL_SELECTION not in current_destinations and not set(current_destinations).intersection(destinations):
+        st.session_state["vessel_chart_destinations"] = [ALL_SELECTION]
+    with columns[3]:
+        selection = multiselect_with_all("目的地", destinations, key="vessel_chart_destinations", all_label="全部")
+    destinations = selected_values(selection, destinations)
+    vessels = [r for r in state.live_positions if vessel_charts.matches(r, flags, destinations)
+               and (observed := AIS.parse_utc(r.get("observed_at"))) and first <= observed.date() <= last]
+    available = any((observed := AIS.parse_utc(r.get("observed_at"))) and first <= observed.date() <= last
+                    for r in state.live_positions)
+    with cards.container():
+        for column, (label, value) in zip(st.columns(6), vessel_charts.metrics(vessels, available)):
+            column.metric(label, value)
+    if visible:
+        aggregated = vessel_charts.aggregate(visible, first, last, aggregation, flags, destinations)
+        fields = ("date", "period_start", "period_end", *AIS.REGIONS)
+        images = vessel_charts.chart_images(tuple(tuple(row[f] for f in fields) for row in aggregated), aggregation)
+        regions = list(AIS.REGIONS)
+        for start in range(0, len(regions), 3):
+            for column, region, image in zip(st.columns(3), regions[start:start+3], images[start:start+3]):
+                with column:
+                    st.image(image, width="stretch")
+                    st.download_button(
+                        "下载数据",
+                        csv_export.csv_bytes([{"日期": r["date"], "期间开始": r["period_start"],
+                                               "期间结束": r["period_end"], "观测船舶数": r[region]}
+                                              for r in aggregated],
+                                             ["日期", "期间开始", "期间结束", "观测船舶数"]),
+                        file_name=f"{region}观测船舶数.csv", mime="text/csv",
+                        key=f"vessel_chart_download_{region}", type="primary")
+    else:
+        st.info("所选时间范围暂无船位观测。")
+    rows = dashboard_rows.vessel_rows(vessels)
     if rows:
         table_columns = {
             "船名": "船名", "船型": "船型", "船籍": "船籍",
