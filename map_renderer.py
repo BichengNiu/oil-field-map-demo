@@ -284,35 +284,18 @@ def build_map_html(
       }}[char]));
       const shown = (value, suffix = '') => value == null || value === ''
         ? '—' : `${{escapeHTML(value)}}${{suffix}}`;
-      const decimal = (value, suffix) => value == null
-        ? '—' : `${{Number(value).toFixed(1)}} ${{suffix}}`;
       const vesselPopup = (vessel) => {{
-        const [lat, lon, name, mmsi, region, categoryLabel, imo, sog, course,
-          navigationStatus, callSign, destination, observedAt, receivedAt,
-          dataSource, sourceUrl, attribution, category, flagCountry] = vessel;
-        const ageAt = observedAt || receivedAt;
-        const ageTimestamp = ageAt ? Date.parse(ageAt) : NaN;
-        const ageMinutes = Number.isFinite(ageTimestamp)
-          ? Math.max(0, (Date.now() - ageTimestamp) / 60000) : null;
-        const ageBasis = observedAt ? '源站观测时间'
-          : receivedAt ? '本机接收时间' : '源站未提供观测时间';
-        const safeUrl = /^https?:\\/\\//i.test(sourceUrl || '')
-          ? sourceUrl : {json.dumps(AIS.SOURCE)};
+        const name = vessel[2], region = vessel[4], navigationStatus = vessel[9],
+          destination = vessel[11], receivedAt = vessel[13], dataSource = vessel[14],
+          flagCountry = vessel[18];
         return `<div class="popup-card">
-          <div class="field-name">${{escapeHTML(name || `MMSI ${{mmsi}}`)}}</div>
-          <div class="country">船舶 · ${{shown(region || '监测水域')}}</div>
-          <div class="row"><span>船型</span><strong>${{shown(categoryLabel)}}</strong></div>
+          <div class="row"><span>船名</span><strong>${{shown(name)}}</strong></div>
+          <div class="row"><span>当前地点</span><strong>${{shown(region)}}</strong></div>
           <div class="row"><span>船籍</span><strong>${{shown(flagCountry)}}</strong></div>
-          <div class="row"><span>MMSI / IMO</span><strong>${{shown(mmsi)}} / ${{shown(imo)}}</strong></div>
-          <div class="row"><span>航速 / 航向</span><strong>${{decimal(sog, '节')}} / ${{decimal(course, '°')}}</strong></div>
           <div class="row"><span>航行状态</span><strong>${{shown(navigationStatus)}}</strong></div>
-          <div class="row"><span>呼号 / 目的地</span><strong>${{shown(callSign)}} / ${{shown(destination)}}</strong></div>
-          <div class="row"><span>AIS报告时间 UTC</span><strong>${{shown(observedAt)}}</strong></div>
-          <div class="row"><span>本机接收时间 UTC</span><strong>${{shown(receivedAt)}}</strong></div>
-          <div class="row"><span>数据年龄</span><strong>${{ageMinutes == null ? '—' : `${{Number(ageMinutes).toFixed(1)}} 分钟`}} · ${{shown(ageBasis)}}</strong></div>
+          <div class="row"><span>目的地</span><strong>${{shown(destination)}}</strong></div>
+          <div class="row"><span>接收时间</span><strong>${{shown(receivedAt)}}</strong></div>
           <div class="row"><span>数据源</span><strong>${{shown(dataSource)}}</strong></div>
-          <div class="basis">AIS船型为船载设备广播的基础分类；货船不能据此可靠细分为集装箱船或散货船。点位可能因岸基/卫星覆盖、设备关闭、延迟或错误广播而缺失。</div>
-          <a class="source" href="${{escapeHTML(safeUrl)}}" target="_blank" rel="noopener">${{shown(attribution || dataSource || 'AIS数据来源')}}</a>
         </div>`;
       }};
       const allPoints = ports.map((p) => [p.lat, p.lon])
