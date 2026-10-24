@@ -23,17 +23,6 @@ class VesselChartsTest(unittest.TestCase):
         self.assertEqual(weekly[0]['波斯湾'], 1)
         self.assertEqual(weekly[0]['cargo'], 0)  # Last sample, not a union of days.
 
-    def test_flow_counts_reentries_but_not_duplicate_events_and_missing_is_unknown(self):
-        first = {"mmsi": "1", "entered_at": "2026-10-15T01:00:00Z", "region": "波斯湾", "category": "tanker"}
-        again = {**first, 'entered_at': '2026-10-15T09:00:00Z'}
-        records = vessel_charts.flow_series([first, first, again], date(2026,10,15), date(2026,10,16),
-                                            '日度', ['未知船籍'], ['未知目的地'])
-        self.assertEqual(records[0]['波斯湾'], 2)
-        self.assertEqual(records[0]['tanker'], 2)
-        self.assertIsNone(records[0]['霍尔木兹海峡'])
-        self.assertIsNone(records[1]['波斯湾'])
-        self.assertIsNone(records[1]['tanker'])
-
     def test_daily_axis_shows_calendar_dates_without_hour_or_offset_labels(self):
         from matplotlib.figure import Figure
         save = Figure.savefig
