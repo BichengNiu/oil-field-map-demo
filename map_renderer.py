@@ -10,6 +10,7 @@ import ais as AIS
 import map_tools
 import pipeline_catalog
 from html_transport import compressed_document
+from vessel_display import destination_label, reception_time, source_label
 
 # Bundle the fixed map dependencies so drawing ships does not wait for a CDN.
 _VENDOR = Path(__file__).with_name("vendor") / "leaflet"
@@ -106,9 +107,9 @@ def build_map_html(
             vessel.get("category_label"), vessel.get("imo"),
             vessel.get("sog"), vessel.get("course"),
             vessel.get("navigation_status"), vessel.get("call_sign"),
-            vessel.get("destination"), vessel.get("observed_at"),
-            vessel.get("received_at"),
-            vessel.get("data_source"),
+            destination_label(vessel), vessel.get("observed_at"),
+            reception_time(vessel.get("received_at")),
+            source_label(vessel),
             vessel.get("source_url") or AIS.SOURCE,
             vessel.get("source_attribution") or vessel.get("data_source") or "AIS数据来源",
             vessel.get("category", "unknown"),

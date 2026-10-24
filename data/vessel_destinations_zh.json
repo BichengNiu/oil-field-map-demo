@@ -1,0 +1,3263 @@
+{
+  "迪拜": [
+    "DUBAI",
+    "DXB",
+    "AE DXB",
+    "AEDXB",
+    "UAE DUBAI"
+  ],
+  "迪拜海事城": [
+    "DMC",
+    "DMC DUBAI",
+    "DUBAI DMC",
+    "DMC PORT",
+    "AE DBP",
+    "AEDBP",
+    "AE DDW"
+  ],
+  "哈姆里亚": [
+    "HAMRIYAH",
+    "HAMRIYA",
+    "HAMRIAH",
+    "AL HAMRIYAH",
+    "AE HAM",
+    "AEHAM",
+    "HAMRYH",
+    "HAMARIYAH",
+    "HAM AE",
+    "HAMRIA",
+    "HAMRIYAH UAE",
+    "HAMARIYA"
+  ],
+  "沙迦": [
+    "SHARJAH",
+    "SHARJA",
+    "SHARJHA",
+    "SHJ",
+    "AE SHJ",
+    "AESHJ",
+    "AE SARJAH"
+  ],
+  "拉希德港": [
+    "PORT RASHID",
+    "PORT RASHED",
+    "RASHID PORT",
+    "RASHID",
+    "AE PRA",
+    "AEPRA",
+    "PORTRASHID",
+    "Mina Rashid"
+  ],
+  "哈利法港": [
+    "KHALIFA PORT",
+    "KHALIFAH PORT",
+    "PORT KHALIFA",
+    "PORT OF KHALIFA",
+    "KHALIFA",
+    "AE KLF",
+    "AEKLF",
+    "AE KHL",
+    "AEKHL"
+  ],
+  "杰贝阿里": [
+    "JEBEL ALI",
+    "AE JEA",
+    "AEJEA",
+    "AEJEB",
+    "JEA",
+    "JABEL ALI",
+    "JEBELALI",
+    "JABAL ALI",
+    "JEBELALI PORT"
+  ],
+  "阿治曼": [
+    "AJMAN",
+    "AJM",
+    "AE AJM"
+  ],
+  "富查伊拉": [
+    "FUJAIRAH",
+    "FUJAIRA",
+    "FUJAYRAH",
+    "AE FJR",
+    "AEFJR",
+    "AE FUJ",
+    "AEFUJ",
+    "FUJ"
+  ],
+  "阿布扎比": [
+    "ABU DHABI",
+    "ABUDHABI",
+    "ABUDABI",
+    "AUH",
+    "AEAUH"
+  ],
+  "扎耶德港": [
+    "MINA ZAYED",
+    "ZAYED PORT",
+    "ZAYEDPORT",
+    "AE MZD",
+    "AEMZD",
+    "ZAYED"
+  ],
+  "阿布扎比国家石油公司港": [
+    "ADNOC PORT",
+    "ADNOCPORT",
+    "ADNOC P0RT",
+    "ADNOC PORT MUSSAFAH"
+  ],
+  "穆萨法": [
+    "MUSAFFAH",
+    "MUSSAFAH",
+    "MUSSAFFAH",
+    "MUSAFAH",
+    "MUSAFA",
+    "MUSAFFA",
+    "MSFA",
+    "MSFAH",
+    "MSFH",
+    "AE MSA",
+    "AEMSA",
+    "MSF"
+  ],
+  "萨克尔港": [
+    "MINA SAQR",
+    "SAQR PORT",
+    "SAQR",
+    "AE SAQ"
+  ],
+  "拉斯海马": [
+    "RAS AL KHAIMAH",
+    "RAS AL KHAIMAH UAE",
+    "RAK"
+  ],
+  "乌姆盖万": [
+    "UMM AL QUWAIN",
+    "UMMUL QWAYIN",
+    "UM AL KUWAIN",
+    "UAQ",
+    "AE UAQ"
+  ],
+  "豪尔费坎": [
+    "KHOR FAKKAN",
+    "KHORFAKKAN",
+    "KFK",
+    "AE KFK",
+    "AEKFK",
+    "KHORFAKAN",
+    "KHOR FAKAN"
+  ],
+  "哈萨布": [
+    "KHASAB",
+    "OMAN KHASAB",
+    "OM KHS"
+  ],
+  "苏哈尔": [
+    "SOHAR",
+    "SOH",
+    "SOHAR OMAN",
+    "OM SOH",
+    "OMSOH"
+  ],
+  "希纳斯": [
+    "SHINAS",
+    "OM SHI",
+    "OMSHI",
+    "SHINAS OMAN",
+    "SHINASOMAN"
+  ],
+  "塞拉莱": [
+    "SALALAH",
+    "OM SLL"
+  ],
+  "拉斯拉凡": [
+    "RAS LAFFAN",
+    "RASLAFAN",
+    "RASLAFFAN",
+    "RAS LAFAN",
+    "RASLAFAAN",
+    "QA RLF",
+    "QARLF",
+    "RLF",
+    "RLIC",
+    "RLP"
+  ],
+  "梅赛义德": [
+    "MESAIEED",
+    "MESAID",
+    "QA UMS",
+    "QAUMS"
+  ],
+  "哈马德港": [
+    "HAMAD PORT",
+    "QA HMD",
+    "QAHMD",
+    "Hamad"
+  ],
+  "多哈": [
+    "DOHA",
+    "QATAR DOHA"
+  ],
+  "巴林": [
+    "BAHRAIN",
+    "BH"
+  ],
+  "锡特拉": [
+    "SITRA",
+    "BH SIT",
+    "BHSIT",
+    "SITRA BAHRAIN"
+  ],
+  "巴斯拉": [
+    "BASRAH",
+    "BASRA",
+    "BASARA",
+    "BASRA IRAQ",
+    "BASRAH IRAQ",
+    "IQ BSR"
+  ],
+  "巴斯拉石油码头": [
+    "ABOT",
+    "ABOT IRAQ",
+    "AL BASRAH OIL TERMIN",
+    "AL BASRAH TERMINAL",
+    "BASRA OIL TERMINAL",
+    "BASRAH OIL TERMINAL"
+  ],
+  "乌姆盖斯尔": [
+    "UMM QASR",
+    "UM QASER",
+    "UMMQASR",
+    "UMMQASRIRAQ",
+    "IQ UQR",
+    "IQUQR",
+    "UQR"
+  ],
+  "豪尔祖拜尔": [
+    "KHOR AL ZUBAIR",
+    "KHOR ZUBAIR",
+    "IQ KAZ",
+    "IQKAZ"
+  ],
+  "阿巴斯港": [
+    "BANDAR ABBAS",
+    "BANDARABBAS",
+    "B ABBAS",
+    "BABBAS",
+    "BND ABBAS",
+    "BDR ABBAS",
+    "IR BND",
+    "IRBND",
+    "BND"
+  ],
+  "布什尔": [
+    "BUSHEHR",
+    "BOUSHEHR"
+  ],
+  "阿萨卢耶": [
+    "ASALUYEH",
+    "ASALOUYEH",
+    "ASALOYEH",
+    "ASSALOUYEH",
+    "ASSALUYEH",
+    "ASAIUYEH"
+  ],
+  "朱拜勒": [
+    "JUBAIL",
+    "SA JUB",
+    "SAJUB"
+  ],
+  "达曼": [
+    "DAMMAM",
+    "AD DMMAM",
+    "SA DMM",
+    "SADMM"
+  ],
+  "拉斯坦努拉": [
+    "RAS TANURA",
+    "RAS TANURAH",
+    "RAS TANNURAH",
+    "RAS TANORAH",
+    "RASTANURA",
+    "RASTANURAH",
+    "RASTANNURA",
+    "SA RTA",
+    "SARTA"
+  ],
+  "塔纳吉布": [
+    "TANAJIB",
+    "TANAJB",
+    "TNJB",
+    "TNJIB"
+  ],
+  "舒艾拜": [
+    "SHUAIBA"
+  ],
+  "舒韦赫": [
+    "SHUWAIKH",
+    "AS SHUWAYKH"
+  ],
+  "扎库姆": [
+    "ZAKUM",
+    "ZAKKUM",
+    "ZAKVM",
+    "ZAKUW",
+    "ZAQQUM",
+    "ZAQUM",
+    "ZKUM"
+  ],
+  "南扎库姆": [
+    "SOUTH ZAKUM",
+    "SOTH ZAKUM",
+    "S ZAKUM"
+  ],
+  "上扎库姆": [
+    "UPPER ZAKUM",
+    "UZ"
+  ],
+  "乌姆沙伊夫": [
+    "UMM SHAIF",
+    "UMM SHEIF",
+    "UMM SHIF",
+    "UMM ALSHAIF",
+    "UMM ALSHEIF",
+    "UMMSHAIF",
+    "UMMSHAF",
+    "UMM ELSHAIF"
+  ],
+  "乌姆沙伊夫油田": [
+    "US FIELD",
+    "US FLD",
+    "US OF"
+  ],
+  "乌姆卢卢": [
+    "UMM LULU",
+    "UM AL LULU"
+  ],
+  "阿布布霍什": [
+    "ABU AL BUKHOOSH",
+    "ABK"
+  ],
+  "阿布萨法": [
+    "ABU SAFAH",
+    "ABU SAFA",
+    "ABUSAFAH"
+  ],
+  "阿尔沙欣": [
+    "AL SHAHEEN",
+    "ALSHAHEEN",
+    "ALSAHEEN",
+    "ALSHAHEN",
+    "AISHAHEEN"
+  ],
+  "马尔詹": [
+    "MARJAN",
+    "MRJN"
+  ],
+  "祖卢夫": [
+    "ZULUF",
+    "ZULF"
+  ],
+  "萨法尼亚": [
+    "SAFANIYA",
+    "SAFANIYAH",
+    "SFNY"
+  ],
+  "法塔赫": [
+    "FATEH"
+  ],
+  "加沙": [
+    "GHASHA",
+    "GASHA"
+  ],
+  "萨尔布": [
+    "SARB"
+  ],
+  "萨塔赫": [
+    "SATAH"
+  ],
+  "穆巴拉兹": [
+    "MUBARRAZ",
+    "MUBARAZ",
+    "MUBARRAZ FIELD",
+    "MUBHARAS"
+  ],
+  "纳斯尔": [
+    "NASR",
+    "NSR"
+  ],
+  "贝里": [
+    "BERRI",
+    "BERRY"
+  ],
+  "贝尔巴泽姆": [
+    "BELBAZEM"
+  ],
+  "南帕尔斯": [
+    "SOUTH PARS",
+    "S PARS"
+  ],
+  "北方气田": [
+    "NORTH FIELD",
+    "NORTH DOME"
+  ],
+  "阿尔赞纳": [
+    "ARZANAH",
+    "ARZANNAH"
+  ],
+  "达斯岛": [
+    "DAS ISLAND",
+    "DAS",
+    "AE DAS"
+  ],
+  "齐尔库岛": [
+    "ZIRKU ISLAND",
+    "ZIRKU"
+  ],
+  "拉万岛": [
+    "LAVAN ISLAND",
+    "LAVAN"
+  ],
+  "锡里岛": [
+    "SIRRI ISLAND",
+    "SIRRISLAND",
+    "SIRRI"
+  ],
+  "卢卢岛": [
+    "LULU ISLAND"
+  ],
+  "哈尔克岛": [
+    "KHARG ISLAND",
+    "KHARG",
+    "KHARK"
+  ],
+  "阿布扎比自由港": [
+    "ABU DHABI FREE PORT",
+    "AD FREE PORT"
+  ],
+  "自由港": [
+    "FREE PORT",
+    "FREEPORT",
+    "FPT"
+  ],
+  "新自由港": [
+    "NEW FREE PORT",
+    "NEW FREEPORT",
+    "NEWFREEPORT",
+    "NEWFREPORT"
+  ],
+  "蓝湾": [
+    "BLUE GULF",
+    "BLUEGULF",
+    "BLUE GULE"
+  ],
+  "国家海洋疏浚公司": [
+    "NMDC"
+  ],
+  "国家石油建设公司": [
+    "NPCC"
+  ],
+  "斯蒂文岩石公司": [
+    "STEVIN ROCK"
+  ],
+  "阿尔贾兹拉": [
+    "AL JAZEERA",
+    "ALJAZEERA",
+    "AL JAZERA",
+    "ALJAZERAH"
+  ],
+  "穆盖拉克": [
+    "MUGHARRAQ",
+    "MUGHARAQ",
+    "MUGHARAG"
+  ],
+  "阿联酋": [
+    "UAE",
+    "U A E",
+    "AE"
+  ],
+  "阿曼": [
+    "OMAN"
+  ],
+  "卡塔尔": [
+    "QATAR",
+    "QTR"
+  ],
+  "沙特阿拉伯": [
+    "KSA"
+  ],
+  "伊朗": [
+    "IRAN"
+  ],
+  "伊拉克": [
+    "IRAQ"
+  ],
+  "科威特": [
+    "KUWAIT"
+  ],
+  "印度": [
+    "INDIA"
+  ],
+  "巴基斯坦": [
+    "PAKISTAN"
+  ],
+  "新加坡": [
+    "SINGAPORE",
+    "SG SIN",
+    "SGP"
+  ],
+  "孟买": [
+    "MUMBAI"
+  ],
+  "蒙德拉": [
+    "MUNDRA"
+  ],
+  "卡拉奇": [
+    "KARACHI",
+    "PK KHI"
+  ],
+  "卡西姆港": [
+    "PORT QASIM"
+  ],
+  "巴生港": [
+    "PORT KLANG"
+  ],
+  "塞得港": [
+    "PORT SAID",
+    "Bur Sa'id"
+  ],
+  "苏伊士运河": [
+    "SUEZ CANAL"
+  ],
+  "苏伊士": [
+    "SUEZ"
+  ],
+  "宁波": [
+    "NINGBO"
+  ],
+  "上海": [
+    "SHANGHAI"
+  ],
+  "唐山": [
+    "TANGSHAN"
+  ],
+  "苏州": [
+    "SUZHOU"
+  ],
+  "波斯湾": [
+    "PERSIAN GULF",
+    "P G"
+  ],
+  "等待指令": [
+    "FOR ORDERS",
+    "FOR ORDER",
+    "TO ORDERS",
+    "TO ORDER",
+    "AWAITING ORDER",
+    "WAIT ORDER",
+    "WAITING FOR ORDERS",
+    "ORDER",
+    "ORDERS"
+  ],
+  "试航": [
+    "SEA TRIAL",
+    "SEA TRAIL",
+    "SEATRAIL"
+  ],
+  "海上": [
+    "AT SEA",
+    "OPENSEA"
+  ],
+  "海上作业区": [
+    "OFFSHORE"
+  ],
+  "油田": [
+    "FIELD",
+    "FLD",
+    "OILFIELD",
+    "OIL FIELD",
+    "O F",
+    "O FIELDS",
+    "OF"
+  ],
+  "气田": [
+    "GAS FIELD",
+    "GASFIELD"
+  ],
+  "港": [
+    "PORT",
+    "PRT"
+  ],
+  "码头": [
+    "JETTY",
+    "PIER",
+    "TERMINAL"
+  ],
+  "锚地": [
+    "ANCHORAGE",
+    "ANCHOR",
+    "ANCH",
+    "ANC",
+    "ANCHR",
+    "ANCHG",
+    "ANCRG",
+    "ANCHORGE",
+    "ANCR",
+    "ANCORACE"
+  ],
+  "港界外": [
+    "OPL",
+    "OUT LIMIT",
+    "OUTSIDE LIMIT"
+  ],
+  "基地": [
+    "BASE"
+  ],
+  "船厂": [
+    "SHIPYARD",
+    "SHIP YARD",
+    "YARD"
+  ],
+  "岛": [
+    "ISLAND",
+    "ISL",
+    "ISND"
+  ],
+  "北侧": [
+    "NORTH"
+  ],
+  "南侧": [
+    "SOUTH"
+  ],
+  "东侧": [
+    "EAST"
+  ],
+  "西侧": [
+    "WEST"
+  ],
+  "驶往": [
+    "TO",
+    "UNDERWAY TO"
+  ],
+  "工程": [
+    "PROJECT",
+    "PROJ"
+  ],
+  "加瓦尔": [
+    "Ghawar"
+  ],
+  "库赖斯": [
+    "Khurais"
+  ],
+  "谢拜": [
+    "Shaybah"
+  ],
+  "马尼法": [
+    "Manifa"
+  ],
+  "卡提夫": [
+    "Qatif"
+  ],
+  "阿布盖格": [
+    "Abqaiq"
+  ],
+  "胡尔萨尼亚": [
+    "Khursaniyah"
+  ],
+  "贾富拉": [
+    "Jafurah"
+  ],
+  "贾布": [
+    "Jabu"
+  ],
+  "萨亚希德": [
+    "Sayahid"
+  ],
+  "艾凡": [
+    "Ayfan"
+  ],
+  "努韦尔": [
+    "Nuwayr"
+  ],
+  "达姆达": [
+    "Damda"
+  ],
+  "古尔加斯": [
+    "Qurqas"
+  ],
+  "拉达姆": [
+    "Ladam"
+  ],
+  "法鲁克": [
+    "Faruq"
+  ],
+  "阿布吉凡": [
+    "Abu Jifan"
+  ],
+  "马扎利吉": [
+    "Mazalij"
+  ],
+  "吉尔迪": [
+    "Qirdi"
+  ],
+  "阿布哈德里亚": [
+    "Abu Hadriya"
+  ],
+  "法迪利": [
+    "Fadhili"
+  ],
+  "哈马利亚": [
+    "Harmaliyah"
+  ],
+  "豪塔": [
+    "Hawtah"
+  ],
+  "萨卡布": [
+    "Sakab"
+  ],
+  "祖穆尔": [
+    "Zumul"
+  ],
+  "巴布": [
+    "Bab"
+  ],
+  "布哈萨": [
+    "Bu Hasa"
+  ],
+  "胡韦拉": [
+    "Huwaila"
+  ],
+  "比达·盖姆赞": [
+    "Bida Al-Qemzan"
+  ],
+  "达比亚": [
+    "Al Dabb'iya"
+  ],
+  "鲁迈萨": [
+    "Rumaitha"
+  ],
+  "沙奈耶勒": [
+    "Shanayel"
+  ],
+  "阿萨布": [
+    "Asab"
+  ],
+  "萨希勒": [
+    "Sahil"
+  ],
+  "沙阿": [
+    "Shah"
+  ],
+  "古萨赫维拉": [
+    "Qusahwira"
+  ],
+  "门德尔": [
+    "Mender"
+  ],
+  "朱迈拉": [
+    "Jumaylah"
+  ],
+  "努夫": [
+    "Al Nouf"
+  ],
+  "下扎库姆": [
+    "Lower Zakum"
+  ],
+  "乌姆阿尔达尔赫": [
+    "Umm Al Dalkh"
+  ],
+  "萨塔赫·阿尔拉兹布特": [
+    "Satah Al Razboot (SARB)"
+  ],
+  "布哈塞尔": [
+    "Bu Haseer"
+  ],
+  "贝尔巴泽姆海上区块": [
+    "Belbazem Offshore Block"
+  ],
+  "乌姆阿尔萨尔萨勒": [
+    "Umm Al Salsal"
+  ],
+  "乌姆阿尔祖卢": [
+    "Umm Al Dholou"
+  ],
+  "纳海迪因": [
+    "Nahaidiin"
+  ],
+  "本哈迪": [
+    "Bin Hadi"
+  ],
+  "盖济拉": [
+    "Gezira"
+  ],
+  "穆海马特": [
+    "Muhaymat"
+  ],
+  "锡拉": [
+    "Sila"
+  ],
+  "达尔马": [
+    "Dalma"
+  ],
+  "舒韦哈特": [
+    "Shuweihat"
+  ],
+  "Ghasha特许区": [
+    "Ghasha Concession"
+  ],
+  "SARB 深层气项目": [
+    "SARB Deep Gas"
+  ],
+  "海尔（ADOC）": [
+    "Hail (ADOC)"
+  ],
+  "海尔（ADNOC Ghasha）": [
+    "Hail (ADNOC Ghasha)"
+  ],
+  "乌姆阿尔安巴尔": [
+    "Umm Al-Anbar"
+  ],
+  "尼瓦特阿尔加兰": [
+    "Neewat Al-Ghalan"
+  ],
+  "本杜克": [
+    "Bunduq"
+  ],
+  "哈利巴": [
+    "Haliba"
+  ],
+  "西南法泰赫": [
+    "South-West Fateh"
+  ],
+  "法拉赫": [
+    "Falah"
+  ],
+  "贾利拉": [
+    "Jalilah"
+  ],
+  "马尔格姆": [
+    "Margham"
+  ],
+  "巴布气顶项目": [
+    "Bab Gas Cap"
+  ],
+  "鲁韦斯迪亚布": [
+    "Ruwais Diyab"
+  ],
+  "萨贾": [
+    "Sajaa"
+  ],
+  "卡海夫": [
+    "Kahaif"
+  ],
+  "穆韦耶德": [
+    "Moveyeid"
+  ],
+  "马哈尼": [
+    "Mahani"
+  ],
+  "赫德巴": [
+    "Hedebah"
+  ],
+  "萨利赫": [
+    "Saleh"
+  ],
+  "鲁迈拉": [
+    "Rumaila"
+  ],
+  "西古尔纳一期": [
+    "West Qurna-1"
+  ],
+  "西古尔纳二期": [
+    "West Qurna-2"
+  ],
+  "祖拜尔": [
+    "Zubair"
+  ],
+  "马季努恩": [
+    "Majnoon"
+  ],
+  "哈法亚": [
+    "Halfaya"
+  ],
+  "加拉夫": [
+    "Gharraf"
+  ],
+  "巴德拉": [
+    "Badra"
+  ],
+  "阿赫达卜": [
+    "Ahdab"
+  ],
+  "东巴格达": [
+    "East Baghdad"
+  ],
+  "纳赫尔乌马尔": [
+    "Nahr Umar"
+  ],
+  "阿尔塔维": [
+    "Artawi"
+  ],
+  "纳西里耶": [
+    "Nassiriya"
+  ],
+  "基尔库克": [
+    "Kirkuk"
+  ],
+  "拜哈桑": [
+    "Bai Hassan"
+  ],
+  "詹布尔": [
+    "Jambur"
+  ],
+  "哈巴兹": [
+    "Khabbaz"
+  ],
+  "盖亚拉": [
+    "Qayyarah"
+  ],
+  "纳杰马": [
+    "Najma"
+  ],
+  "陶凯": [
+    "Tawke"
+  ],
+  "佩什卡比尔": [
+    "Peshkabir"
+  ],
+  "塔克塔克": [
+    "Taq Taq"
+  ],
+  "沙伊坎": [
+    "Shaikan"
+  ],
+  "阿特鲁什": [
+    "Atrush"
+  ],
+  "萨尔桑格": [
+    "Sarsang"
+  ],
+  "斯瓦拉蒂卡": [
+    "Swara Tika"
+  ],
+  "东斯瓦拉蒂卡": [
+    "East Swara Tika"
+  ],
+  "胡尔马拉": [
+    "Khurmala"
+  ],
+  "拜什卡": [
+    "Baeshiqa"
+  ],
+  "埃里杜／第十区块": [
+    "Eridu (Block 10)"
+  ],
+  "费哈": [
+    "Faihaa"
+  ],
+  "法卡（福基）": [
+    "Fakkah"
+  ],
+  "巴泽尔坎": [
+    "Bazerkan"
+  ],
+  "阿布加尔卜": [
+    "Abu Gharb"
+  ],
+  "卢海斯": [
+    "Luhais"
+  ],
+  "苏巴": [
+    "Subba"
+  ],
+  "图巴": [
+    "Tuba"
+  ],
+  "阿吉勒": [
+    "Ajil"
+  ],
+  "艾因扎拉": [
+    "Ain Zalah"
+  ],
+  "巴特马": [
+    "Batmah"
+  ],
+  "哈姆林": [
+    "Hamrin"
+  ],
+  "纳夫特哈纳": [
+    "Naft Khana"
+  ],
+  "阿马拉": [
+    "Amara"
+  ],
+  "努尔": [
+    "Noor",
+    "Al Noor",
+    "Nour"
+  ],
+  "萨菲亚": [
+    "Safiya"
+  ],
+  "阿瓦士": [
+    "Ahvaz"
+  ],
+  "马伦": [
+    "Marun"
+  ],
+  "阿加贾里": [
+    "Aghajari"
+  ],
+  "加奇萨兰": [
+    "Gachsaran"
+  ],
+  "雷格萨菲德": [
+    "Reg-e-Safid"
+  ],
+  "南阿扎德甘": [
+    "South Azadegan"
+  ],
+  "北阿扎德甘": [
+    "North Azadegan"
+  ],
+  "雅达瓦兰": [
+    "Yadavaran"
+  ],
+  "北亚兰": [
+    "North Yaran"
+  ],
+  "南亚兰": [
+    "South Yaran"
+  ],
+  "阿扎尔": [
+    "Azar"
+  ],
+  "达尔霍温": [
+    "Darkhovin"
+  ],
+  "亨迪詹": [
+    "Hendijan"
+  ],
+  "多鲁德": [
+    "Doroud"
+  ],
+  "福鲁赞": [
+    "Foroozan"
+  ],
+  "苏鲁什": [
+    "Soroush"
+  ],
+  "诺鲁兹": [
+    "Nowruz"
+  ],
+  "萨勒曼": [
+    "Salman"
+  ],
+  "比比哈基梅": [
+    "Bibi Hakimeh"
+  ],
+  "卡兰吉": [
+    "Karanj"
+  ],
+  "阿布扎尔": [
+    "Abuzar"
+  ],
+  "曼苏里": [
+    "Mansouri"
+  ],
+  "塞佩赫尔—朱费尔": [
+    "Sepehr-Jufair"
+  ],
+  "帕西": [
+    "Parsi"
+  ],
+  "巴赫雷甘萨尔": [
+    "Bahregansar"
+  ],
+  "锡里E": [
+    "Sirri E"
+  ],
+  "马斯杰德苏莱曼": [
+    "Masjed Soleyman"
+  ],
+  "帕扎南": [
+    "Pazanan"
+  ],
+  "库帕尔": [
+    "Kupal"
+  ],
+  "德赫洛兰": [
+    "Dehloran"
+  ],
+  "帕兰吉": [
+    "Paranj"
+  ],
+  "纳尔格西": [
+    "Nargesi"
+  ],
+  "亨加姆": [
+    "Hengam"
+  ],
+  "班德卡尔赫": [
+    "Band-e-Karkheh"
+  ],
+  "西帕伊达尔": [
+    "West Paydar"
+  ],
+  "切什梅霍什": [
+    "Chehsmeh-Khosh"
+  ],
+  "达南": [
+    "Danan"
+  ],
+  "帕伊达尔": [
+    "Paydar"
+  ],
+  "昌古莱": [
+    "Changuleh"
+  ],
+  "达尔帕里": [
+    "Dalpari"
+  ],
+  "布尔干": [
+    "Burgan"
+  ],
+  "马格瓦": [
+    "Magwa"
+  ],
+  "艾哈迈迪": [
+    "Ahmadi"
+  ],
+  "劳达泰因": [
+    "Raudhatain"
+  ],
+  "萨布里亚": [
+    "Sabriya"
+  ],
+  "巴赫拉": [
+    "Bahra"
+  ],
+  "拉特卡": [
+    "Ratqa",
+    "Ratka"
+  ],
+  "乌姆尼卡": [
+    "Umm Niqa"
+  ],
+  "南拉特卡": [
+    "South Ratqa"
+  ],
+  "米纳吉什": [
+    "Minagish"
+  ],
+  "乌姆古代尔": [
+    "Umm Gudair"
+  ],
+  "阿卜达利": [
+    "Abdali"
+  ],
+  "瓦夫拉": [
+    "Wafra"
+  ],
+  "哈夫吉": [
+    "Khafji"
+  ],
+  "诺赫萨": [
+    "Nokhetha"
+  ],
+  "朱莱亚": [
+    "Julaiah"
+  ],
+  "穆特里巴": [
+    "Mutriba"
+  ],
+  "沙哈姆": [
+    "Shaham"
+  ],
+  "克拉马鲁": [
+    "Kra-al-Maru"
+  ],
+  "杜汉": [
+    "Dukhan"
+  ],
+  "阿尔拉扬": [
+    "Al-Rayyan"
+  ],
+  "阿尔哈利杰": [
+    "Al-Khaleej"
+  ],
+  "伊德谢尔基": [
+    "Idd El-Sharqi"
+  ],
+  "卡尔卡拉": [
+    "Karkara"
+  ],
+  "迈丹马赫赞": [
+    "Maydan Mahzam"
+  ],
+  "布尔哈宁": [
+    "Bul Hanine"
+  ],
+  "阿尔穆尔詹": [
+    "Al-Murjan"
+  ],
+  "A构造（A北／A南）": [
+    "A-Structures (A-North / A-South)"
+  ],
+  "A北": [
+    "A-North"
+  ],
+  "A南": [
+    "A-South"
+  ],
+  "穆凯兹奈": [
+    "Mukhaizna"
+  ],
+  "伊巴尔": [
+    "Yibal"
+  ],
+  "纳蒂赫": [
+    "Natih"
+  ],
+  "法胡德": [
+    "Fahud"
+  ],
+  "卡恩阿拉姆": [
+    "Qarn Alam"
+  ],
+  "马尔穆勒": [
+    "Marmul"
+  ],
+  "尼姆尔": [
+    "Nimr"
+  ],
+  "莱赫韦尔": [
+    "Lekhwair"
+  ],
+  "巴赫贾": [
+    "Bahja"
+  ],
+  "哈维尔": [
+    "Harweel"
+  ],
+  "阿迈勒": [
+    "Amal"
+  ],
+  "扎尔扎拉": [
+    "Zalzala"
+  ],
+  "海马西": [
+    "Haima West"
+  ],
+  "尼姆尔A": [
+    "Nimr-A"
+  ],
+  "尼姆尔E": [
+    "Nimr-E"
+  ],
+  "布杜尔东北": [
+    "Budour Northeast"
+  ],
+  "50区块（马西拉）": [
+    "Block 50 (Masirah)"
+  ],
+  "尤姆纳": [
+    "Yumna"
+  ],
+  "比萨特": [
+    "Bisat"
+  ],
+  "5区块（Daleel）": [
+    "Block 5 (Daleel)"
+  ],
+  "达利勒": [
+    "Daleel"
+  ],
+  "沙迪": [
+    "Shadi"
+  ],
+  "布什拉": [
+    "Bushra"
+  ],
+  "马祖恩": [
+    "Mazoon"
+  ],
+  "富拉特": [
+    "Furat"
+  ],
+  "扎哈卜": [
+    "Thahab"
+  ],
+  "9区块（阿曼）": [
+    "Block 9 (Oman)"
+  ],
+  "27区块（阿曼）": [
+    "Block 27 (Oman)"
+  ],
+  "萨法": [
+    "Safah"
+  ],
+  "瓦迪拉萨姆": [
+    "Wadi Latham"
+  ],
+  "哈米拉": [
+    "Khamilah"
+  ],
+  "瓦迪阿斯瓦德北": [
+    "Wadi Aswad North"
+  ],
+  "萨法北B": [
+    "Safah North B"
+  ],
+  "8区块（阿曼）": [
+    "Block 8 (Oman)"
+  ],
+  "7区块（阿曼）": [
+    "Block 7 (Oman)"
+  ],
+  "60区块（阿曼）": [
+    "Block 60 (Oman)"
+  ],
+  "61区块（阿曼）": [
+    "Block 61 (Oman)"
+  ],
+  "西布哈": [
+    "West Bukha"
+  ],
+  "布哈": [
+    "Bukha"
+  ],
+  "萨赫马": [
+    "Sahma"
+  ],
+  "阿布布塔布尔": [
+    "Abu Butabul"
+  ],
+  "哈赞": [
+    "Khazzan"
+  ],
+  "加泽尔": [
+    "Ghazeer"
+  ],
+  "巴林／阿瓦利油田": [
+    "Bahrain Field (Awali)"
+  ],
+  "14区块（马西拉）": [
+    "Block 14 (Masila)"
+  ],
+  "10区块（东舍卜瓦）": [
+    "Block 10 (East Shabwa)"
+  ],
+  "32区块（哈瓦里姆）": [
+    "Block 32 (Hawareem)"
+  ],
+  "塔苏尔": [
+    "Tasour"
+  ],
+  "戈达": [
+    "Godah"
+  ],
+  "18区块（马里卜）": [
+    "Block 18 (Marib)"
+  ],
+  "阿利夫": [
+    "Alif"
+  ],
+  "5区块（詹纳）": [
+    "Block 5 (Jannah)"
+  ],
+  "S2区块（乌克拉）": [
+    "Block S2 (Uqlah)"
+  ],
+  "哈班": [
+    "Habban"
+  ],
+  "9区块（马利克）": [
+    "Block 9 (Malik)"
+  ],
+  "希斯瓦（Haswa）": [
+    "Hiswah (Haswa)"
+  ],
+  "阿尔罗伊达特": [
+    "Alroidhat (Al-Rowedhat)"
+  ],
+  "卡恩·基阿马": [
+    "Qarn Qeamah"
+  ],
+  "鲁迈兰第一作业区": [
+    "Rmeilan Sector One"
+  ],
+  "奥马尔": [
+    "Al-Omar"
+  ],
+  "塔纳克": [
+    "Al-Tanak"
+  ],
+  "贾夫拉": [
+    "Al-Jafra"
+  ],
+  "瓦尔德": [
+    "Al-Ward"
+  ],
+  "泰姆": [
+    "Al-Taym"
+  ],
+  "鲁迈兰": [
+    "Rmeilan"
+  ],
+  "苏韦迪耶": [
+    "Suwaydiya"
+  ],
+  "卡拉乔克": [
+    "Qarachok"
+  ],
+  "哈姆扎": [
+    "Hamza"
+  ],
+  "阿利扬": [
+    "Alyan"
+  ],
+  "萨扎贝": [
+    "Sazabeh"
+  ],
+  "奥德": [
+    "Ode"
+  ],
+  "底格里斯": [
+    "Tigris"
+  ],
+  "赫莱兹": [
+    "Heletz"
+  ],
+  "梅格德": [
+    "Meged"
+  ],
+  "利维坦": [
+    "Leviathan"
+  ],
+  "塔马尔": [
+    "Tamar"
+  ],
+  "卡里什": [
+    "Karish"
+  ],
+  "塔宁": [
+    "Tanin"
+  ],
+  "拉曼": [
+    "Raman"
+  ],
+  "西拉曼": [
+    "Batı Raman"
+  ],
+  "加尔赞": [
+    "Garzan"
+  ],
+  "谢尔莫": [
+    "Şelmo"
+  ],
+  "加巴尔": [
+    "Gabar"
+  ],
+  "贝莱伊姆": [
+    "Belayim"
+  ],
+  "舒凯尔海上（舒凯尔湾）": [
+    "Shukheir Offshore (Shukheir Bay)"
+  ],
+  "舒凯尔海上（伽马）": [
+    "Shukheir Offshore (Gamma)"
+  ],
+  "加兹瓦里纳": [
+    "Gazwarina"
+  ],
+  "拉斯埃尔乌什": [
+    "Ras El Ush"
+  ],
+  "宰特湾": [
+    "Zeit Bay"
+  ],
+  "拉斯布德兰": [
+    "Ras Budran"
+  ],
+  "东宰特（E. Zeit）": [
+    "East Zeit (E. Zeit)"
+  ],
+  "阿什拉菲": [
+    "Ashrafi"
+  ],
+  "瓦迪埃尔萨赫勒开发区": [
+    "Wadi El Sahl Development Area"
+  ],
+  "哈努卡": [
+    "Khanuqah"
+  ],
+  "哈沙卜": [
+    "Khashab"
+  ],
+  "贾万": [
+    "Jawan"
+  ],
+  "伊斯梅尔": [
+    "Ismail"
+  ],
+  "卡萨卜": [
+    "Qasab"
+  ],
+  "马赫穆尔": [
+    "Makhmur"
+  ],
+  "贾迪达": [
+    "Jadida"
+  ],
+  "卡拉乔格": [
+    "Qara Chogh"
+  ],
+  "普勒哈纳": [
+    "Pulkhana"
+  ],
+  "易卜拉欣": [
+    "Ibrahim"
+  ],
+  "阿兰／萨桑": [
+    "Alan / Sasan"
+  ],
+  "贾里亚皮卡": [
+    "Jaria Pika"
+  ],
+  "阿卡斯": [
+    "Akkas"
+  ],
+  "曼苏里亚": [
+    "Mansuriya"
+  ],
+  "纳赫拉万": [
+    "Nahrawan"
+  ],
+  "塔勒加扎勒": [
+    "Tal Ghazal"
+  ],
+  "纳奥多曼": [
+    "Nao Doman"
+  ],
+  "伊拉克马尔詹": [
+    "Marjan (Iraq)"
+  ],
+  "基夫勒": [
+    "Kifl"
+  ],
+  "西基夫勒": [
+    "West Kifl"
+  ],
+  "伊拉克8区块": [
+    "Block 8 (Iraq)"
+  ],
+  "因贾纳／哈什姆阿赫迈尔": [
+    "Injana / Khashm Al-Ahmar"
+  ],
+  "东巴格达（拉希迪亚）": [
+    "East Baghdad (Rashidiya)"
+  ],
+  "幼发拉底河中游": [
+    "Middle Euphrates"
+  ],
+  "哈利西亚": [
+    "Khalisiya"
+  ],
+  "祖尔巴提亚": [
+    "Zurbatiya"
+  ],
+  "伊拉克7区块": [
+    "Block 7 (Iraq)"
+  ],
+  "迪弗里亚": [
+    "Dhifriya"
+  ],
+  "卡尔奈因": [
+    "Qarnain"
+  ],
+  "米桑油田群": [
+    "Missan Fields"
+  ],
+  "库迈特": [
+    "Kumait"
+  ],
+  "杜贾伊拉": [
+    "Dujaila"
+  ],
+  "里法伊": [
+    "Rifai"
+  ],
+  "胡韦扎": [
+    "Huwaiza"
+  ],
+  "迪马": [
+    "Dima"
+  ],
+  "阿布阿穆德": [
+    "Abu Amood"
+  ],
+  "苏美尔": [
+    "Sumer"
+  ],
+  "阿丹": [
+    "Adan"
+  ],
+  "阿布海迈": [
+    "Abu Khaimah"
+  ],
+  "西巴": [
+    "Siba"
+  ],
+  "拉奇": [
+    "Rachi"
+  ],
+  "朱赖尚": [
+    "Jraishan"
+  ],
+  "萨马瓦": [
+    "Samawa"
+  ],
+  "伊拉克12区块": [
+    "Block 12 (Iraq)"
+  ],
+  "胡德尔迈": [
+    "Khudr Al-May"
+  ],
+  "法奥": [
+    "Fao"
+  ],
+  "贾巴勒萨纳姆": [
+    "Jabal Sanam"
+  ],
+  "辛巴达": [
+    "Sinbad"
+  ],
+  "巴巴穹隆": [
+    "Baba Dome"
+  ],
+  "阿瓦纳穹隆": [
+    "Avana Dome"
+  ],
+  "贝拉勒": [
+    "Belal"
+  ],
+  "法尔扎德A": [
+    "Farzad A"
+  ],
+  "法尔扎德B": [
+    "Farzad B"
+  ],
+  "基什": [
+    "Kish"
+  ],
+  "北帕尔斯": [
+    "North Pars"
+  ],
+  "哈尔唐": [
+    "Khartang"
+  ],
+  "加尔丹": [
+    "Gardan"
+  ],
+  "戴伊": [
+    "Day"
+  ],
+  "萨菲德扎胡尔": [
+    "Sefid Zakhur"
+  ],
+  "萨菲德巴贡": [
+    "Sefid Baghun"
+  ],
+  "哈勒甘": [
+    "Halegan"
+  ],
+  "埃拉姆": [
+    "Eram"
+  ],
+  "米兰": [
+    "Miran"
+  ],
+  "比纳巴维": [
+    "Bina Bawi"
+  ],
+  "卡拉达格": [
+    "Qara Dagh"
+  ],
+  "祖赫尔": [
+    "Zohr"
+  ],
+  "努鲁斯": [
+    "Nooros"
+  ],
+  "西南巴勒提姆": [
+    "Baltim South West"
+  ],
+  "梅莱哈": [
+    "Meleiha"
+  ],
+  "西丹妮丝": [
+    "Denise West"
+  ],
+  "金牛座": [
+    "Taurus"
+  ],
+  "天秤座": [
+    "Libra"
+  ],
+  "吉萨": [
+    "Giza"
+  ],
+  "法尤姆": [
+    "Fayoum"
+  ],
+  "渡鸦": [
+    "Raven"
+  ],
+  "卡塔尔天然气二期": [
+    "Qatargas 2"
+  ],
+  "海豚": [
+    "Dolphin"
+  ],
+  "摩根": [
+    "Morgan"
+  ],
+  "坎甘": [
+    "Kangan"
+  ],
+  "海湾天然气二期气相项目": [
+    "Al-Khaleej Gas Project 2 Gas Phase"
+  ],
+  "卡塔尔天然气四期": [
+    "Qatargas 4"
+  ],
+  "卡塔尔天然气三期": [
+    "Qatargas 3"
+  ],
+  "塔布纳克": [
+    "Tabnak"
+  ],
+  "罗塞塔": [
+    "Rosetta"
+  ],
+  "拉斯天然气阿尔法": [
+    "RasGas Alpha"
+  ],
+  "阿加尔": [
+    "Aghar"
+  ],
+  "胡夫": [
+    "Khuff"
+  ],
+  "斋月": [
+    "Ramadan"
+  ],
+  "卡斯尔": [
+    "Qasr"
+  ],
+  "汉吉兰": [
+    "Khangiran"
+  ],
+  "东北马布鲁克": [
+    "Mabrouk Northeast"
+  ],
+  "十月": [
+    "October"
+  ],
+  "霍马": [
+    "Homa",
+    "Homah"
+  ],
+  "拉姆希尔": [
+    "Ramshir"
+  ],
+  "沙德甘": [
+    "Shadegan"
+  ],
+  "海湾天然气一期气相项目": [
+    "Al-Khaleej Gas Project 1 Gas Phase"
+  ],
+  "伊德沙尔吉北穹隆": [
+    "Idd El Shargi North Dome (ISND)"
+  ],
+  "瓦拉维": [
+    "Varavi"
+  ],
+  "阿布加拉迪格": [
+    "Abu El Gharadig"
+  ],
+  "萨夫万": [
+    "Safwan"
+  ],
+  "阿托勒": [
+    "Atoll"
+  ],
+  "考瑟尔／法赫尔": [
+    "Kauther/Fakhr"
+  ],
+  "阿卜泰穆尔": [
+    "Abteymour"
+  ],
+  "南加瓦尔": [
+    "South Ghawar"
+  ],
+  "巴拉勒": [
+    "Balal"
+  ],
+  "拉布萨菲德": [
+    "Lab-E-Safid"
+  ],
+  "布鲁卢斯": [
+    "Burullus"
+  ],
+  "贝拉伊姆陆上": [
+    "Belayim Land"
+  ],
+  "拉特卡／下法尔斯": [
+    "Ratqa/Lower Fars"
+  ],
+  "谢希特埃斯玛切维克": [
+    "Sehit Esma Cevik"
+  ],
+  "坦格比贾尔": [
+    "Tang-E-Bijar"
+  ],
+  "北阿拉伯": [
+    "North Arabia"
+  ],
+  "锡里C": [
+    "Sirri C"
+  ],
+  "卡莱纳尔": [
+    "Qaleh Nar"
+  ],
+  "南法尔哈": [
+    "Farha South"
+  ],
+  "卡拉姆": [
+    "Al Karam"
+  ],
+  "卡拉马": [
+    "Karama"
+  ],
+  "东胡尔拜特": [
+    "Khurbet East"
+  ],
+  "阿布基尔": [
+    "Abu Qir"
+  ],
+  "雷沙达特": [
+    "Reshadat"
+  ],
+  "巴什鲁什": [
+    "Bashrush"
+  ],
+  "泽洛伊": [
+    "Zeloi"
+  ],
+  "奥拜耶德": [
+    "Obaiyed"
+  ],
+  "米迪扬": [
+    "Midyan"
+  ],
+  "诺斯拉特": [
+    "Nosrat"
+  ],
+  "雷萨拉特": [
+    "Resalat"
+  ],
+  "比纳克": [
+    "Binak"
+  ],
+  "萨尔韦斯坦": [
+    "Sarvestan"
+  ],
+  "古勒哈里": [
+    "Gulkhari"
+  ],
+  "萨阿达特阿巴德": [
+    "Saadat Abad"
+  ],
+  "巴德尔3": [
+    "Bed-3"
+  ],
+  "霍卡": [
+    "Hawqa"
+  ],
+  "泰姆萨赫": [
+    "Temsah"
+  ],
+  "扎里夫": [
+    "Dharif"
+  ],
+  "西姆里特": [
+    "Simrit"
+  ],
+  "哈皮": [
+    "Ha'py"
+  ],
+  "格贝贝": [
+    "Gbeibe"
+  ],
+  "拉斯法纳尔": [
+    "Ras Fanar"
+  ],
+  "西南梅莱哈": [
+    "South West Melehia"
+  ],
+  "萨尔洪": [
+    "Sarkhun"
+  ],
+  "泰西尔": [
+    "Tayseer"
+  ],
+  "谢希特艾比克亚尔钦": [
+    "Sehit Aybuke Yalcin"
+  ],
+  "赫什特": [
+    "Khesht"
+  ],
+  "奇林加尔": [
+    "Chillingar"
+  ],
+  "贝雷尼丝": [
+    "Berenice"
+  ],
+  "阿迈勒再开发A和B": [
+    "Amal Redevelop (A and B)"
+  ],
+  "伊德沙尔吉南穹隆": [
+    "Idd El Shargi South Dome (ISSD)"
+  ],
+  "扎阿法拉纳": [
+    "Zaafarana"
+  ],
+  "阿拉曼": [
+    "Alamein"
+  ],
+  "南乌姆古代尔": [
+    "South Umm-Gudair"
+  ],
+  "西梅莱哈深层": [
+    "Melehia West Deep"
+  ],
+  "西姆西姆": [
+    "Simsim"
+  ],
+  "曼苏拉巴德": [
+    "Mansurabad"
+  ],
+  "阿布鲁代斯—西德里": [
+    "Abu Rudies-Sidri"
+  ],
+  "萨尔卡拉": [
+    "Sarqala"
+  ],
+  "盖苏姆": [
+    "Geisum"
+  ],
+  "普塔赫": [
+    "Ptah"
+  ],
+  "西亚马坎": [
+    "Siah Makan"
+  ],
+  "瓦卡尔": [
+    "Wakar"
+  ],
+  "巴南": [
+    "Banan"
+  ],
+  "德米尔达格": [
+    "Demir Dagh"
+  ],
+  "朱拜萨": [
+    "Al Jubaissah"
+  ],
+  "拉明": [
+    "Ramin"
+  ],
+  "马尔加达": [
+    "Margada"
+  ],
+  "纳夫特沙赫尔": [
+    "Naft Shahr"
+  ],
+  "马勒库赫": [
+    "Maleh Kuh"
+  ],
+  "阿布马迪": [
+    "Abu Madi"
+  ],
+  "贾扎勒—海勒": [
+    "Jazal-Heil"
+  ],
+  "东巴勒提姆": [
+    "Baltim East"
+  ],
+  "提什林": [
+    "Tishreen"
+  ],
+  "索赫拉布": [
+    "Sohrab"
+  ],
+  "阿西勒": [
+    "Assil"
+  ],
+  "巴赫加": [
+    "Bahga"
+  ],
+  "北巴勒提姆": [
+    "Baltim North"
+  ],
+  "古纳": [
+    "Gouna"
+  ],
+  "佐拉": [
+    "Zora"
+  ],
+  "马格德": [
+    "Magd"
+  ],
+  "巴尔克": [
+    "Barq"
+  ],
+  "恰伊朱马": [
+    "Çaycuma"
+  ],
+  "塔亚尼": [
+    "Tayyani"
+  ],
+  "乌勒法": [
+    "Ulfa"
+  ],
+  "丹妮丝": [
+    "Denise"
+  ],
+  "代拉": [
+    "Deilla"
+  ],
+  "托桑": [
+    "Towsan"
+  ],
+  "托普哈纳": [
+    "Topkhana"
+  ],
+  "达利特": [
+    "Dalit"
+  ],
+  "达兰": [
+    "Dalan"
+  ],
+  "图特": [
+    "Tut"
+  ],
+  "杜拉": [
+    "Dorra"
+  ],
+  "海拉特": [
+    "Al Khairat"
+  ],
+  "阿迈勒C": [
+    "Amal C"
+  ],
+  "西阿迈勒": [
+    "Amal West"
+  ],
+  "XF-002项目": [
+    "XF-002"
+  ],
+  "阿卡什": [
+    "Akash"
+  ],
+  "阿明": [
+    "Amin"
+  ],
+  "雅典娜": [
+    "Athena"
+  ],
+  "阿兹拉克": [
+    "Azraq"
+  ],
+  "阿卡姆": [
+    "Aqam"
+  ],
+  "祖姆拉特迈哈尔": [
+    "Zumlat al-Maharr"
+  ],
+  "宙斯": [
+    "Zeus"
+  ],
+  "阿班": [
+    "Aban"
+  ],
+  "亚齐": [
+    "Yazzi"
+  ],
+  "阿卜杜利亚": [
+    "Abduliyah"
+  ],
+  "巴德里": [
+    "Badri"
+  ],
+  "巴克尔": [
+    "Bakr"
+  ],
+  "巴拉鲁德": [
+    "Balaroud"
+  ],
+  "瓦哈卜": [
+    "Wahab"
+  ],
+  "巴德尔2": [
+    "Bed-2"
+  ],
+  "贝拉伊姆海上": [
+    "Belayim Marine"
+  ],
+  "西尼罗河三角洲深水项目第11期气相": [
+    "WDDM Phase 11 Gas Phase"
+  ],
+  "拉斯萨德尔": [
+    "Ras Al Sadr"
+  ],
+  "西南马布鲁克": [
+    "Mabrouk Southwest"
+  ],
+  "东劳达坦": [
+    "Raudhatain East"
+  ],
+  "马达尔": [
+    "Madar"
+  ],
+  "拉斯天然气三期": [
+    "RasGas 3"
+  ],
+  "拉斯天然气二期": [
+    "RasGas 2"
+  ],
+  "马卡里姆": [
+    "Makarem"
+  ],
+  "马哈拉": [
+    "Maharah"
+  ],
+  "马布鲁克深层": [
+    "Mabrouk Deep"
+  ],
+  "露露": [
+    "Lulu"
+  ],
+  "皮通": [
+    "Python"
+  ],
+  "马拉特": [
+    "Marrat"
+  ],
+  "马里B": [
+    "Mari-B"
+  ],
+  "卡伦": [
+    "Qarun"
+  ],
+  "卡塔尔天然气一期": [
+    "Qatargas 1"
+  ],
+  "库萨维拉二期": [
+    "Qusahwira (Phase 2)"
+  ],
+  "库萨维拉一期": [
+    "Qusahwira (Phase 1)"
+  ],
+  "马拉迪胡赖马／富沙伊加": [
+    "Maradi Huraymah/Fushaigah"
+  ],
+  "藏红花": [
+    "Saffron"
+  ],
+  "北萨达德": [
+    "Sadad North"
+  ],
+  "鲁达克米拉通": [
+    "Rudak Milatun"
+  ],
+  "拉利": [
+    "Lali"
+  ],
+  "鲁尼卜": [
+    "Runib"
+  ],
+  "赛赫劳勒": [
+    "Saih Rawl"
+  ],
+  "萨希亚": [
+    "Sakhiya"
+  ],
+  "里马": [
+    "Rima"
+  ],
+  "努艾伊姆": [
+    "Nuayyim"
+  ],
+  "诺阿": [
+    "Noa"
+  ],
+  "东努鲁斯": [
+    "Nooros East"
+  ],
+  "北阿布基尔三期": [
+    "North Abu Qir PIII"
+  ],
+  "北萨法": [
+    "North Safa"
+  ],
+  "北萨卡里亚": [
+    "North Sakarya"
+  ],
+  "北瓦夫拉": [
+    "North Wafra"
+  ],
+  "西北尼多科": [
+    "Nidoco NW"
+  ],
+  "波勒多赫塔尔": [
+    "Pol Dokhtar"
+  ],
+  "西米纳": [
+    "Mina West"
+  ],
+  "穆巴拉克": [
+    "Mubarak"
+  ],
+  "纳尔": [
+    "Nar"
+  ],
+  "纳尔吉斯": [
+    "Narges"
+  ],
+  "纳夫特萨菲德": [
+    "Naft Safid"
+  ],
+  "纳马瓦兰": [
+    "Namavaran"
+  ],
+  "库尔达米尔": [
+    "Kurdamir"
+  ],
+  "哈巴里": [
+    "Habbari"
+  ],
+  "哈布善": [
+    "Habshan"
+  ],
+  "哈拉德": [
+    "Haradh"
+  ],
+  "北盖苏姆GNN": [
+    "GNN"
+  ],
+  "格克泰佩": [
+    "Goktepe"
+  ],
+  "戈勒尚": [
+    "Golshan"
+  ],
+  "希拉勒": [
+    "Hilal"
+  ],
+  "哈马丹": [
+    "Harmattan"
+  ],
+  "胡马": [
+    "Humma"
+  ],
+  "哈斯巴": [
+    "Hasbah"
+  ],
+  "南西德里": [
+    "South Sidri"
+  ],
+  "哈维耶": [
+    "Hawiyah"
+  ],
+  "赫尔墨斯": [
+    "Hermes"
+  ],
+  "南马格瓦": [
+    "South Magwa"
+  ],
+  "埃斯凡迪亚尔": [
+    "Esfandiar"
+  ],
+  "南法赫德": [
+    "Fahd South"
+  ],
+  "西南法赫德": [
+    "Fahd Southwest"
+  ],
+  "金格": [
+    "El King"
+  ],
+  "西南塔马尔": [
+    "Tamar Southwest"
+  ],
+  "卡尔": [
+    "El Qar"
+  ],
+  "北加巴": [
+    "Ghaba North"
+  ],
+  "加菲尔": [
+    "Ghafeer"
+  ],
+  "哈勒达": [
+    "Khalda"
+  ],
+  "巴林海湾": [
+    "Khaleej Al-Bahrain"
+  ],
+  "圣甲虫": [
+    "Scarab"
+  ],
+  "哈什曼": [
+    "Khashman"
+  ],
+  "北卡里什": [
+    "Karish North"
+  ],
+  "卡特兰": [
+    "Katlan"
+  ],
+  "库赫蒙德": [
+    "Kuh-e-Mond"
+  ],
+  "萨尔汉": [
+    "Sarkhan"
+  ],
+  "基卢尔卡里姆": [
+    "Kilur Karim"
+  ],
+  "萨卡拉": [
+    "Saqqara"
+  ],
+  "蓝宝石": [
+    "Sapphire"
+  ],
+  "卡兰": [
+    "Karan"
+  ],
+  "西米安": [
+    "Simian"
+  ],
+  "西詹": [
+    "Sijan"
+  ],
+  "贾拉米德": [
+    "Jalamid"
+  ],
+  "东北阿布加拉迪格JG": [
+    "JG-NEAG"
+  ],
+  "锡里D": [
+    "Sirri D"
+  ],
+  "锡里A": [
+    "Sirri A"
+  ],
+  "沙希尼": [
+    "Shahini"
+  ],
+  "沙姆斯": [
+    "Shams"
+  ],
+  "舒阿卜阿里": [
+    "Shoab Ali"
+  ],
+  "七月": [
+    "July"
+  ],
+  "希姆松": [
+    "Shimson"
+  ],
+  "沙努勒": [
+    "Shanul"
+  ],
+  "霍尔莫尔": [
+    "Khor Mor"
+  ],
+  "切姆切马勒": [
+    "Chemchemal"
+  ],
+  "萨卡里亚": [
+    "Sakarya"
+  ],
+  "乌姆沙伊夫气顶": [
+    "Umm Shaif Gas Cap"
+  ],
+  "东贝尼苏韦夫": [
+    "East Beni Suef"
+  ],
+  "西卡拉布沙": [
+    "West Kalabsha"
+  ],
+  "赫鲁内费尔": [
+    "Herunefer"
+  ],
+  "锡瓦": [
+    "Siwa"
+  ],
+  "东巴哈里亚": [
+    "East Bahariya"
+  ],
+  "西萨提斯": [
+    "Satis West"
+  ],
+  "苏拉贝达尔": [
+    "Sulabedar"
+  ],
+  "图斯": [
+    "Toos"
+  ],
+  "海亚姆": [
+    "Khayyam"
+  ],
+  "阿赫迈尔": [
+    "Ahmer"
+  ],
+  "马勒": [
+    "Maleh"
+  ],
+  "法德": [
+    "Fadeh"
+  ],
+  "罗伊": [
+    "Royee"
+  ],
+  "法赫德": [
+    "Fahd"
+  ],
+  "贾扎": [
+    "Jazza"
+  ],
+  "菲尔多西": [
+    "Ferdowsi"
+  ],
+  "卡纳耶斯": [
+    "Kanayes"
+  ],
+  "祖姆拉": [
+    "Zumlah"
+  ],
+  "努贾伊曼": [
+    "Nujayman"
+  ],
+  "焦夫": [
+    "Jaouf"
+  ],
+  "鲁姆坦": [
+    "Rumthan"
+  ],
+  "纳亚欣": [
+    "Nayashin"
+  ],
+  "贾里德": [
+    "Jareed"
+  ],
+  "阿拉比亚": [
+    "Arabiya"
+  ],
+  "拉比卜": [
+    "Rabib"
+  ],
+  "萨阿达维": [
+    "Al-Saadawi"
+  ],
+  "纳卡": [
+    "Al-Naqa"
+  ],
+  "阿布阿里": [
+    "Abu Ali"
+  ],
+  "法拉斯": [
+    "Faras"
+  ],
+  "阿姆贾德": [
+    "Amjad"
+  ],
+  "巴迪": [
+    "Al-Badi"
+  ],
+  "法里斯": [
+    "Faris"
+  ],
+  "卡德卡德": [
+    "Al-Qadqad"
+  ],
+  "法斯卡尔": [
+    "Faskar"
+  ],
+  "贾纳卜": [
+    "Janab"
+  ],
+  "马卡姆": [
+    "Maqam"
+  ],
+  "埃德米": [
+    "Edmee"
+  ],
+  "穆鲁杰": [
+    "Murooj"
+  ],
+  "阿卜拉克图卢勒": [
+    "Abraq at-Tulul"
+  ],
+  "里什": [
+    "Al-Reesh"
+  ],
+  "哈达巴特哈贾拉": [
+    "Hadabat al-Hajara"
+  ],
+  "沙杜恩": [
+    "Shadoon"
+  ],
+  "希哈卜": [
+    "Shehab"
+  ],
+  "舒尔法": [
+    "Al-Shorfa"
+  ],
+  "乌姆汉萨尔": [
+    "Umm Khansar"
+  ],
+  "萨姆纳": [
+    "Samna"
+  ],
+  "奥塔德": [
+    "Awtad"
+  ],
+  "达赫纳": [
+    "Ad-Dahna"
+  ],
+  "希兰": [
+    "Al-Hiran"
+  ],
+  "马哈基克": [
+    "Al-Mahakik"
+  ],
+  "阿西克拉": [
+    "Asikra"
+  ],
+  "伍代希": [
+    "Al-Wudhaihi"
+  ],
+  "贾哈克": [
+    "Al-Jahaq"
+  ],
+  "卡图夫": [
+    "Al-Katuf"
+  ],
+  "吉兹兰": [
+    "Ghizlan"
+  ],
+  "阿拉姆": [
+    "Araam"
+  ],
+  "米赫瓦兹": [
+    "Mihwaz"
+  ],
+  "马尔祖克": [
+    "Marzuq"
+  ],
+  "东赛万": [
+    "Saiwan East"
+  ],
+  "沙赫德": [
+    "Shahd"
+  ],
+  "萨姆哈": [
+    "Samha"
+  ],
+  "埃尔凡": [
+    "Erfan"
+  ],
+  "西北法尔哈": [
+    "Farha North-West"
+  ],
+  "东法尔哈": [
+    "Farha East"
+  ],
+  "提卜扬": [
+    "Tibyan"
+  ],
+  "朱姆德": [
+    "Al Jumd"
+  ],
+  "门纳": [
+    "Menna"
+  ],
+  "萨尔哈": [
+    "Sarha"
+  ],
+  "3和4区块": [
+    "Blocks 3&4"
+  ],
+  "56区块": [
+    "Block 56"
+  ],
+  "南富瓦里斯": [
+    "South Fuwaris"
+  ],
+  "胡特油田": [
+    "Hout"
+  ],
+  "阿尔克": [
+    "Arq"
+  ],
+  "卡赫卢拉": [
+    "Kahlolah"
+  ],
+  "卡卜德": [
+    "Kabd"
+  ],
+  "卡沙尼亚": [
+    "Al-Qashaniya"
+  ],
+  "沙阿天然气项目": [
+    "Shah Gas Project"
+  ],
+  "哈布善天然气处理综合体": [
+    "Habshan Gas Processing Complex"
+  ],
+  "阿布弗卢斯港": [
+    "Abu Flous Port"
+  ],
+  "杰尔港": [
+    "Al Jeer Port"
+  ],
+  "阿里什港": [
+    "Al Arish"
+  ],
+  "阿斯塔拉港": [
+    "Astara Port"
+  ],
+  "巴林LNG进口码头": [
+    "Bahrain LNG Import Terminal"
+  ],
+  "伦格港": [
+    "Bandar Lengeh"
+  ],
+  "贝雷尼斯港": [
+    "Mina Baranis (Port Berenice)"
+  ],
+  "达梅尔乔格液体散货港": [
+    "Damerjog Liquid Bulk Port"
+  ],
+  "德尔马港": [
+    "Delma Port"
+  ],
+  "迪巴渡轮港": [
+    "Dibba Ferry Terminal"
+  ],
+  "迪巴港": [
+    "Dibba Port"
+  ],
+  "多哈老港": [
+    "Doha Port (Old Port)"
+  ],
+  "法拉桑客运港": [
+    "Farasan Ferry Terminal"
+  ],
+  "费雷敦凯纳尔港": [
+    "Fereydunkenar Port"
+  ],
+  "自由港（扎耶德港区）": [
+    "Free Port (Zayed)"
+  ],
+  "加尔古卜港": [
+    "Gargoub Port"
+  ],
+  "古贝特港": [
+    "Port of Ghoubet"
+  ],
+  "大法奥港": [
+    "Al Faw Grand Port"
+  ],
+  "哈姆里亚港（迪拜）": [
+    "Mina Al Hamriya (Dubai)"
+  ],
+  "哈姆里亚港": [
+    "Hamriyah Port"
+  ],
+  "吉赞基础及下游工业港": [
+    "Jazan City for Primary and Downstream Industries Port"
+  ],
+  "利马渡轮港": [
+    "Lima Ferry Terminal"
+  ],
+  "马西拉渡轮港（希尔夫）": [
+    "Masirah Ferry Terminal (Hilf)"
+  ],
+  "米尔法港": [
+    "Mirfa Port"
+  ],
+  "穆盖拉克港": [
+    "Mugharraq Port"
+  ],
+  "穆萨法港": [
+    "Musaffah Port"
+  ],
+  "哈伊马角港": [
+    "Ras Al Khaimah Port"
+  ],
+  "沙哈马港": [
+    "Shahama Port"
+  ],
+  "沙纳渡轮港": [
+    "Shannah Ferry Terminal"
+  ],
+  "锡拉港": [
+    "Sila Port"
+  ],
+  "索科特拉港（豪拉夫）": [
+    "Socotra Port (Hawlaf)"
+  ],
+  "苏瓦伊克港": [
+    "Suwaiq"
+  ],
+  "塔巴海港（塔巴高地码头）": [
+    "Taba Sea Port (Taba Heights Marina)"
+  ],
+  "塔朱拉港": [
+    "Port of Tadjourah"
+  ],
+  "沙尔马港": [
+    "Sharmah"
+  ],
+  "延布北原油码头": [
+    "Yanbu North Crude Terminal"
+  ],
+  "延布北成品油码头": [
+    "Yanbu North Refined Product Terminal"
+  ],
+  "延布南码头（Al Muajjiz）": [
+    "Yanbu South Terminal"
+  ],
+  "阿曼海上石油终端1（源库名称）": [
+    "Oman - Offshore Oil Terminal 1"
+  ],
+  "海上石油终端1": [
+    "Saudi Arabia - Offshore Oil Terminal 1"
+  ],
+  "帕尔斯港码头": [
+    "Bandar-E Pars Terminal"
+  ],
+  "沙希德拉贾伊港": [
+    "Bandar Shahid Rajaee",
+    "Bandar-E Shahid Rejaie"
+  ],
+  "卡尔哈特液化天然气码头": [
+    "Qalhat LNG Terminal"
+  ],
+  "霍梅尼港": [
+    "Bandar Khomeini",
+    "Bandar Khomeyni"
+  ],
+  "拉比格港": [
+    "Rabigh"
+  ],
+  "米沙卜港": [
+    "Ras Al Mishab"
+  ],
+  "拉斯海尔港": [
+    "Ras Al-Khair"
+  ],
+  "鲁韦斯港（卡塔尔）": [
+    "Al Ruwais"
+  ],
+  "西特拉港": [
+    "Sitrah"
+  ],
+  "乌姆盖万港": [
+    "Umm al Qaiwain",
+    "Umm Al Qaywayn"
+  ],
+  "多哈—乌姆赛义德港": [
+    "Doha-Umm Said",
+    "Umm Said"
+  ],
+  "延布商业港": [
+    "Yanbu (Yanbu city)",
+    "Yanbu"
+  ],
+  "荷台达港": [
+    "Hudaydah (Hodeidah)",
+    "Al Ahmadi"
+  ],
+  "萨法加港": [
+    "Safaga",
+    "Safaja"
+  ],
+  "巴士拉港": [
+    "Al Basrah"
+  ],
+  "哈利法·本·萨勒曼港": [
+    "Khalifa Bin Salman"
+  ],
+  "阿卜杜拉国王港": [
+    "King Abdullah Port"
+  ],
+  "德凯拉港": [
+    "El Dekheila"
+  ],
+  "萨勒曼港": [
+    "Mina Salman"
+  ],
+  "舒艾拜港": [
+    "Mina Ash Shuaybah"
+  ],
+  "吉赞港": [
+    "Jazan",
+    "Jizan"
+  ],
+  "穆哈港": [
+    "Mokha",
+    "Al Mukha"
+  ],
+  "西迪基里尔终端": [
+    "Sidi Kerir",
+    "Sidi Kerir (Kurayr)"
+  ],
+  "拉斯加里卜港": [
+    "Ras Gharib"
+  ],
+  "宰特湾终端": [
+    "Zeit Bay Terminal"
+  ],
+  "拉斯舒凯尔港": [
+    "Ras Shukheir",
+    "Ras Shukhier"
+  ],
+  "哈尔克岛石油码头": [
+    "Kharg Island Oil Terminal"
+  ],
+  "拉万岛石油码头": [
+    "Jazireh-Ye Lavan Oil Terminal"
+  ],
+  "哈姆里亚液化石油气码头": [
+    "Al Hamriyah LPG Terminal"
+  ],
+  "哈夫吉港": [
+    "Ras Al Khafji"
+  ],
+  "舒盖格港": [
+    "Shuqaiq"
+  ],
+  "萨利夫港": [
+    "Salif"
+  ],
+  "吉尔库岛港": [
+    "Zirkuh Oil Field",
+    "Zirkuh"
+  ],
+  "杰贝尔丹那港": [
+    "Jebel Dhanna"
+  ],
+  "达斯岛港": [
+    "Jazirat Das"
+  ],
+  "拉斯伊萨海洋码头": [
+    "Ras Isa Terminal",
+    "Ras Isa Marine Terminal"
+  ],
+  "恰巴哈尔港": [
+    "Chabahar",
+    "Chah Bahar"
+  ],
+  "希赫尔石油终端": [
+    "Ash Shihr",
+    "Ash Shihr Oil Terminal"
+  ],
+  "鲁杜姆终端": [
+    "Rudum Terminal"
+  ],
+  "亚历山大港": [
+    "Alexandria",
+    "Al Iskandariyh (Alexandria)"
+  ],
+  "也门液化天然气终端": [
+    "Yemen LNG Terminal",
+    "Balhaf"
+  ],
+  "朱拜勒港": [
+    "Al Jubayl"
+  ],
+  "阿巴丹港": [
+    "Abadan"
+  ],
+  "巴里根角港": [
+    "Bahregan",
+    "Barkan Oil-loading Terminal"
+  ],
+  "巴士拉石油码头": [
+    "Al-Basra Oil Terminal"
+  ],
+  "埃及液化天然气终端": [
+    "Egyptian LNG Terminal"
+  ],
+  "贾斯克港": [
+    "Jask"
+  ],
+  "祖尔港": [
+    "Mina Al Zour",
+    "Mina Az Zawr"
+  ],
+  "舒韦赫港": [
+    "Al Kuwayt"
+  ],
+  "穆卡拉港": [
+    "Mukalla",
+    "Al Mukalla"
+  ],
+  "达米埃塔港": [
+    "Damietta"
+  ],
+  "吉布提港": [
+    "Djibouti"
+  ],
+  "杜巴港（NEOM）": [
+    "Duba (Port of Neom)",
+    "Duba"
+  ],
+  "杜巴油轮码头": [
+    "Duba Bulk Plant Tanker Terminal"
+  ],
+  "迪拜港": [
+    "Dubayy"
+  ],
+  "阿达比亚港": [
+    "Al Adabiyah",
+    "El-Adabiya"
+  ],
+  "富查伊拉港": [
+    "Al Fujayrah"
+  ],
+  "阿米拉巴德港": [
+    "Amirabad Port"
+  ],
+  "阿布扎比港": [
+    "Abu Zaby"
+  ],
+  "杰贝勒宰纳／鲁韦斯港": [
+    "Jabal Az Zannah-Ruways"
+  ],
+  "吉达港": [
+    "Jeddah",
+    "Jiddah"
+  ],
+  "舒艾拜港（沙特）": [
+    "Shoaiba"
+  ],
+  "朱艾玛石油码头": [
+    "Juaymah",
+    "Ju Aymah Oil Terminal"
+  ],
+  "豪尔费坎港": [
+    "Khawr Fakkan"
+  ],
+  "霍拉姆沙赫尔港": [
+    "Khorramshahr"
+  ],
+  "延布法赫德国王工业港": [
+    "Yanbu (King Fahd Port)",
+    "King Fahd Port"
+  ],
+  "安扎利港": [
+    "Bandar-e Anzali"
+  ],
+  "苏伊士港": [
+    "As Suways"
+  ],
+  "沙迦港": [
+    "Ash Shariqah"
+  ],
+  "艾哈迈迪港": [
+    "Mina Al Ahmadi"
+  ],
+  "杰贝阿里港": [
+    "Mina Jabal Ali"
+  ],
+  "卡布斯港": [
+    "Port Sultan Qaboos",
+    "Mina Qabus"
+  ],
+  "塞拉莱港": [
+    "Mina Raysut"
+  ],
+  "苏赫纳港": [
+    "El Sokhna",
+    "North Ain Sukhna Port"
+  ],
+  "诺沙赫尔港": [
+    "Nowshahr Port"
+  ],
+  "亚丁港": [
+    "Aden"
+  ],
+  "杜库姆港": [
+    "Duqm"
+  ],
+  "苏哈尔港": [
+    "Port of Sohar"
+  ],
+  "马阿迪亚港": [
+    "El Maadiya"
+  ],
+  "哈姆拉石油终端": [
+    "El Hamra Oil Terminal"
+  ],
+  "马特鲁港": [
+    "Mersa Matruh"
+  ],
+  "多哈雷港": [
+    "Doraleh"
+  ],
+  "阿萨布港": [
+    "Assab"
+  ],
+  "努韦巴港": [
+    "Nuwaybi'"
+  ],
+  "库赛尔港": [
+    "Al Qusayr"
+  ],
+  "哈姆拉温港": [
+    "Hamrawein"
+  ],
+  "图尔港": [
+    "At Tur"
+  ],
+  "宰提亚锚地": [
+    "Marsa az Zaytiyah"
+  ],
+  "沙姆沙伊赫港": [
+    "Sharm El Sheikh"
+  ],
+  "宰特湾液化石油气终端": [
+    "Zeit Bay Lpg Terminal"
+  ],
+  "赫尔格达港": [
+    "El Ghardaqa"
+  ],
+  "拉斯巴德兰石油终端": [
+    "Ras Badran Oil Terminal"
+  ],
+  "苏赫纳港气体船码头": [
+    "Sokhna Port Gas Tanker Terminal"
+  ],
+  "伊斯梅利亚港": [
+    "El Ismailiya"
+  ],
+  "拉斯苏德尔港": [
+    "Ras Sudr"
+  ],
+  "艾因苏赫纳码头": [
+    "Ain Sukhna Terminal"
+  ],
+  "扎法拉纳终端": [
+    "Zafarana Terminal"
+  ],
+  "拉斯阿布宰尼马港": [
+    "Ras Abu Zanimah"
+  ],
+  "瓦迪费兰终端": [
+    "Wadi Feiran"
+  ],
+  "尼什通港": [
+    "Nishtun"
+  ],
+  "法赫勒港": [
+    "Mina Al Fahl"
+  ],
+  "哈萨卜港": [
+    "Khawr Khasab"
+  ],
+  "法特赫石油码头": [
+    "Fateh Oil Terminal"
+  ],
+  "穆巴拉兹石油码头": [
+    "Mubarraz Oil Terminal"
+  ],
+  "贾齐拉港": [
+    "Al Jazeera Port"
+  ],
+  "沙迦海上码头": [
+    "Sharjah Offshore Terminal"
+  ],
+  "乌姆纳尔港": [
+    "Umm An Nar"
+  ],
+  "哈莱拉石油码头": [
+    "Hulaylah Oil Terminal"
+  ],
+  "哈卢尔岛港": [
+    "Jazirat Halul"
+  ],
+  "阿尔沙欣码头": [
+    "Al Shaheen Terminal"
+  ],
+  "阿尔赖扬码头": [
+    "Al Rayyan Terminal"
+  ],
+  "麦纳麦港": [
+    "Al Manamah"
+  ],
+  "拉斯盖尔港": [
+    "Ras Al Ghar"
+  ],
+  "朱艾玛液化石油气码头": [
+    "Ju Aymah Lpg Terminal"
+  ],
+  "阿卜杜拉港": [
+    "Mina Abd Allah"
+  ],
+  "多哈港": [
+    "Doha Harbor"
+  ],
+  "阿迈耶港": [
+    "Khawr Al Amaya"
+  ],
+  "祖拜尔港": [
+    "Khawr Al Zubair"
+  ],
+  "祖拜尔液化石油气码头": [
+    "Khawr Al Zubair Lng Terminal"
+  ],
+  "霍斯罗阿巴德港": [
+    "Khosrowabad"
+  ],
+  "马赫沙赫尔港": [
+    "Bandar-E Mahshahr"
+  ],
+  "锡里斯石油码头": [
+    "Sirus Oil Terminal"
+  ],
+  "霍尔木兹岛港": [
+    "Jazireh-Ye Hormoz"
+  ],
+  "塔赫里海上码头": [
+    "Bandar Taheri Offshore Terminal"
+  ],
+  "锡里岛港": [
+    "Jazireh-Ye Sirri"
+  ],
+  "迪拜滨水区": [
+    "DUBAI WATERFRONT",
+    "DWF"
+  ],
+  "迪拜干船坞": [
+    "DUBAI DRYDOCK",
+    "DUBAI DRY DOCK",
+    "DMC DD DUBAI"
+  ],
+  "迪拜世界群岛": [
+    "WORLD ISLAND DUBAI"
+  ],
+  "哈立德港": [
+    "PORT KHALID",
+    "KHALID PORT",
+    "KHALID"
+  ],
+  "拉拉克岛": [
+    "LARAK"
+  ],
+  "卡基纳达": [
+    "KAKINADA"
+  ],
+  "阿尔努夫": [
+    "ALNOUF"
+  ],
+  "阿尔玛苏德": [
+    "AL MASAOOD",
+    "AL MASOOD",
+    "ALMASAOOD",
+    "ALMASOOD",
+    "ALMASAOD",
+    "AL MASOOAD"
+  ],
+  "阿里父子公司": [
+    "ALI AND SONS",
+    "ALI SONS",
+    "ALI SON"
+  ],
+  "阿尔法坦": [
+    "AL FATTAN",
+    "ALFATTAN",
+    "ALFATAN"
+  ],
+  "萨迪亚特": [
+    "SAADIYAT",
+    "SADIYAT",
+    "AL SAADIYAT"
+  ],
+  "阿尔奥迈拉岛": [
+    "AL OMAIRAH",
+    "AL OMAIRA",
+    "ALOMAIRAH"
+  ],
+  "阿尔卡提亚岛": [
+    "AL QATIA",
+    "ALQATIA"
+  ],
+  "古尔奈因岛": [
+    "QARNAYN",
+    "QURNAYN"
+  ],
+  "阿尔亚萨特": [
+    "AL YASAT",
+    "ALYASSAT"
+  ],
+  "塔维拉": [
+    "TAWEELAH",
+    "TAWELAH"
+  ],
+  "莫加港": [
+    "MOCHA"
+  ],
+  "泊位": [
+    "BERTH"
+  ],
+  "待命": [
+    "STANDBY",
+    "SFTY SBY"
+  ],
+  "领航": [
+    "PILOT"
+  ],
+  "海上测量": [
+    "SEISMIC SURVEY"
+  ],
+  "作业区": [
+    "WORKING AREA"
+  ],
+  "印度籍船员": [
+    "INDIANCREW",
+    "INDIAN CREW"
+  ],
+  "中国籍船员": [
+    "ALLCHINESECREW",
+    "CHINESE CREW",
+    "CN CREW"
+  ],
+  "中国船东": [
+    "CHINESE OWNER"
+  ],
+  "航道": [
+    "CHANNEL"
+  ],
+  "干船坞": [
+    "DRYDOCK",
+    "DRY DOCK"
+  ]
+}

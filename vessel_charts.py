@@ -8,6 +8,7 @@ import streamlit as st
 import ais
 import data_store
 import port_charts
+from vessel_display import destination_label
 
 CHART_REGIONS = ("霍尔木兹海峡", "阿曼湾", "波斯湾")
 CHART_TYPES = {"tanker": "油轮/液货船", "cargo": "货船", "other_unknown": "其他/未知船型"}
@@ -18,10 +19,6 @@ CHART_FIELDS = ("date", "period_start", "period_end", *CHART_LABELS)
 
 def flag_label(row):
     return row.get("flag_country") or row.get("flag") or "未知船籍"
-
-
-def destination_label(row):
-    return str(row.get("destination") or "").strip() or "未知目的地"
 
 
 def matches(row, flags, destinations):

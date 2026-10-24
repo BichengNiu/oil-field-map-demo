@@ -62,9 +62,9 @@ class VesselChartsTest(unittest.TestCase):
                  "region": "波斯湾", "flag_country": "中国", "destination": "DUBAI"}
                 for day, ship in [(5, "1"), (5, "1"), (6, "1"), (6, "2"), (8, "3")]]
         args = (date(2026, 10, 5), date(2026, 10, 8))
-        daily = vessel_charts.aggregate(rows, *args, "日度", ["中国"], ["DUBAI"])
+        daily = vessel_charts.aggregate(rows, *args, "日度", ["中国"], ["迪拜"])
         self.assertEqual([r["波斯湾"] for r in daily], [1, 2, None, 1])
-        weekly = vessel_charts.aggregate(rows, *args, "周度", ["中国"], ["DUBAI"])
+        weekly = vessel_charts.aggregate(rows, *args, "周度", ["中国"], ["迪拜"])
         self.assertEqual(weekly[0]["波斯湾"], 3)
         self.assertIsNone(weekly[0]["阿曼湾"])
         empty = vessel_charts.aggregate(rows, *args, "日度", [], [])

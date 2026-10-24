@@ -3,6 +3,7 @@
 from __future__ import annotations
 
 from entity_names import display_name
+from vessel_display import destination_label, reception_time, source_label
 
 import json
 from datetime import date, timedelta
@@ -156,19 +157,19 @@ def vessel_rows(vessels: list[dict]) -> list[dict]:
             "航行状态": vessel.get("navigation_status"),
             "航速 节": (round(vessel["sog"], 1) if vessel.get("sog") is not None else None),
             "航向 °": (round(vessel["course"], 1) if vessel.get("course") is not None else None),
-            "目的地": vessel.get("destination"),
+            "目的地": destination_label(vessel),
             "吃水 米": vessel.get("draught"),
             "AIS报告时间 UTC": vessel.get("observed_at"),
-            "本机接收时间 UTC": vessel.get("received_at"),
-            "上游接收时间 UTC": vessel.get("provider_received_at"),
+            "接收时间（迪拜）": reception_time(vessel.get("received_at")),
+            "上游接收时间（迪拜）": reception_time(vessel.get("provider_received_at")),
             "数据年龄 分钟": (
                 round(vessel["age_minutes"], 1) if vessel.get("age_minutes") is not None else None
             ),
             "数据年龄依据": vessel.get("age_basis"),
-            "来源署名": vessel.get("source_attribution"),
+            "来源署名": source_label(vessel),
             "纬度": vessel.get("lat"),
             "经度": vessel.get("lon"),
-            "数据源": vessel.get("data_source"),
+            "数据源": source_label(vessel),
             "来源": vessel.get("source_url") or AIS.SOURCE,
         }
         for vessel in vessels
