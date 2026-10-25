@@ -109,8 +109,11 @@ class AppStartupTest(unittest.TestCase):
                     assert not app.checkbox
                     assert not app.expander
                     assert len(app.dataframe) == 1
-                    assert list(app.dataframe[0].value.columns) == ['名称', '国家', '类型', '包含资产', '日产量', '商品', '备注', '数据时间', '数据来源']
-                    assert app.dataframe[0].value['日产量'].str.endswith('万桶/天').all()
+                    assert list(app.dataframe[0].value.columns) == ['名称', '国家', '类型', '包含资产', '日产量（万桶/日）', '商品', '备注', '数据时间', '数据来源']
+                    assert app.dataframe[0].value['日产量（万桶/日）'].dtype.kind in 'fi'
+                    assert not any(h.value == '油气产量统计单元' for h in app.subheader)
+                    assert [m.label for m in app.metric] == ['油田资产数量', '国家数量', '类型数量', '日均产量', '品种数量']
+                    assert int(app.metric[0].value) == len(app.dataframe[0].value)
                     assert set(app.dataframe[0].value['备注']) <= {'真实产量', '估算产量'}
                     assert app.dataframe[0].value['数据时间'].map(lambda x: x == '未明确' or (len(x) == 4 and x.isdigit())).all()
                     app.selectbox(key='production_product').set_value('天然气')
@@ -119,7 +122,13 @@ class AppStartupTest(unittest.TestCase):
                     assert not app.exception, [str(error.value) for error in app.exception]
                     assert not app.error, [str(error.value) for error in app.error]
                     assert len(app.dataframe) == 1
-                    assert app.dataframe[0].value['日产量'].str.contains('立方').all()
+                    assert any('立方' in column for column in app.dataframe[0].value.columns)
+                    app.selectbox(key='production_product').set_value('凝析油')
+                    app.session_state['main_tabs'] = '油气'
+                    app.run(timeout=30)
+                    assert not app.exception, [str(error.value) for error in app.exception]
+                    assert '日产量（万桶/日）' in app.dataframe[0].value.columns
+                    assert app.dataframe[0].value['日产量（万桶/日）'].dtype.kind in 'fi'
                     assert upstream.call_count == 0, upstream.call_args_list
                     import data_store
                     assert data_store.read_only()

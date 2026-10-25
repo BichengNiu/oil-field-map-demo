@@ -157,6 +157,25 @@ class ProductionUnitsTest(unittest.TestCase):
         chosen, _ = self.select([asset('a', metric_type='derived_daily_average')], prefer_actual=True)
         self.assertEqual(p.compact_rows(chosen)[0]['备注'], '估算产量')
 
+    def test_numeric_range_midpoint_and_numeric_column(self):
+        chosen, _ = self.select([asset('a', '70–80')])
+        rows, column, unit = p.numeric_rows(chosen)
+        self.assertEqual(column, '日产量（万桶/日）')
+        self.assertEqual(rows[0][column], 7.5)
+        self.assertIsInstance(rows[0][column], float)
+        self.assertEqual(rows[0]['备注'], '估算产量')
+
+    def test_numeric_bounds_missing_and_zero(self):
+        self.assertEqual(p.numeric_daily(asset('a', '>70')), (None, False))
+        self.assertEqual(p.numeric_daily(asset('a', 0)), (0.0, False))
+        self.assertEqual(p.numeric_daily(asset('a', '约10')), (1.0, False))
+        self.assertEqual(p.numeric_daily(asset('a', '80-70')), (None, False))
+
+    def test_metrics_match_full_table_and_average_valid_values(self):
+        chosen, _ = self.select([asset('a', '70-80'), asset('b', '0'), asset('c', '>70')])
+        rows, column, _ = p.numeric_rows(chosen)
+        self.assertEqual(p.numeric_metrics(chosen, rows, column), (3, 1, 1, 3.75, 1))
+
     def test_duplicate_reference_is_one_scope(self):
         ref = {"id": "syria-ward-ahmer-akash-ratka-2015", "scope": "four fields",
                "members": ["Al-Ward", "Ahmer", "Akash", "Ratka"],

@@ -371,3 +371,65 @@ def compact_rows(observations):
              "备注": "估算产量" if daily_is_estimated(o) else "真实产量",
              "数据时间": measurement_year(o["measurement"]) or "未明确",
              "数据来源": o["measurement"].get("source_url")} for o in observations]
+
+
+def numeric_daily(measurement):
+    """Numeric daily rate; closed ranges use midpoint, open bounds stay null."""
+    raw = str(measurement.get("value") if measurement.get("value") is not None else "").replace(",", "").strip()
+    qualifier = str(measurement.get("value_qualifier") or "")
+    if any(mark in raw + qualifier for mark in (">", "<", "以上", "以下", "超过", "至少", "不低于", "不超过")):
+        return None, False
+    raw = re.sub(r"^(?:约|大约|近|≈|~)\s*", "", raw)
+    match = re.fullmatch(r"(\d+(?:\.\d+)?)\s*(?:[–—−~至-]\s*(\d+(?:\.\d+)?))?", raw)
+    if not match:
+        return None, False
+    amount = Decimal(match[1])
+    midpoint = match[2] is not None
+    if midpoint:
+        high = Decimal(match[2])
+        if high < amount:
+            return None, False
+        amount = (amount + high) / 2
+    unit = measurement.get("unit")
+    if unit in {"千桶/日", "千桶油当量/日"}:
+        amount /= 10
+    elif unit == "桶/日":
+        amount /= 10000
+    elif unit not in {"百万立方米/日", "百万标准立方英尺/日"}:
+        return None, midpoint
+    return float(amount), midpoint
+
+
+def numeric_rows(observations, product=None):
+    rows = compact_rows(observations)
+    # Keep gas in its reported unit; incompatible volume bases remain null in
+    # the shared numeric column instead of becoming fictitious oil barrels.
+    units = {o["measurement"].get("unit") for o in observations}
+    product = product or (observations[0]["product"] if observations else "crude_oil")
+    if product == "natural_gas":
+        unit = next(iter(units)) if len(units) == 1 else "百万标准立方英尺/日"
+        column = f"日产量（{unit}）"
+    elif product == "boe":
+        unit = "万桶油当量/日"
+        column = f"日产量（{unit}）"
+    else:
+        unit = "万桶/日"
+        column = "日产量（万桶/日）"
+    for row, observation in zip(rows, observations):
+        number, midpoint = numeric_daily(observation["measurement"])
+        if product == "natural_gas" and observation["measurement"].get("unit") != unit:
+            number = None
+        row.pop("日产量")
+        row[column] = number
+        raw = str(observation["measurement"].get("value") or "")
+        if midpoint or observation["measurement"].get("value_qualifier") or re.match(r"^(?:约|大约|近|≈|~)", raw):
+            row["备注"] = "估算产量"
+    columns = ["名称", "国家", "类型", "包含资产", column, "商品", "备注", "数据时间", "数据来源"]
+    return [{k: row[k] for k in columns} for row in rows], column, unit
+
+
+def numeric_metrics(observations, rows, column):
+    values = [r[column] for r in rows if r[column] is not None]
+    return (len(rows), len({c for o in observations for c in o["countries"]}),
+            len({r["类型"] for r in rows}), sum(values) / len(values) if values else None,
+            len({r["商品"] for r in rows}))

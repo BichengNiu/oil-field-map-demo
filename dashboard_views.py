@@ -5,6 +5,7 @@ from __future__ import annotations
 from datetime import date
 
 import streamlit as st
+import pandas as pd
 
 import ais as AIS
 import data_store
@@ -319,28 +320,30 @@ def render_ports_panel(ports: list[dict], selected_day: date | None, port_error:
 def render_assets_panel(assets: list[dict]) -> None:
     import production_units as production
 
-    st.subheader("油气产量统计单元")
     observations = production.build_observations(assets)
     metrics_container = st.container()
     c1, c2 = st.columns(2)
     countries = c1.multiselect("国家", sorted({c for a in assets for c in (a.get("countries") or [a["country"]])}), key="production_countries")
     product_label = c2.selectbox("商品", list(production.PRODUCTS.values()), key="production_product")
     product = next(k for k, v in production.PRODUCTS.items() if v == product_label)
-    selected_assets = [a for a in assets if not countries or set(countries) & set(a.get("countries") or [a["country"]])]
     observations = [o for o in observations if not countries or set(countries) & set(o["countries"])]
     chosen, reviewed = production.select_units(observations, product=product, prefer_actual=True)
+    rows, daily_column, unit = production.numeric_rows(chosen, product=product)
+    asset_count, country_count, type_count, average, product_count = production.numeric_metrics(chosen, rows, daily_column)
     with metrics_container:
         a1, a2, a3, a4, a5 = st.columns(5)
-        a1.metric("目录资产", len(selected_assets))
-        a2.metric("选用统计单元", len(chosen))
-        a3.metric("范围／来源待核", sum("待核" in o["status"] or "未完整核实" in o["status"] for o in reviewed))
-        a4.metric("所选单元含估算", sum(production.daily_is_estimated(o) for o in chosen))
-        covered = set().union(*(o["coverage"] for o in chosen)) if chosen else set()
-        product_catalog = {o["scope_id"]: o for o in observations if not o["virtual"] and o["product"] == product}
-        a5.metric("本商品未覆盖目录项", sum(not o["coverage"] <= covered for o in product_catalog.values()))
+        a1.metric("油田资产数量", asset_count)
+        a2.metric("国家数量", country_count)
+        a3.metric("类型数量", type_count)
+        a4.metric("日均产量", f"{f'{average:,.4f}'.rstrip('0').rstrip('.')} {unit}" if average is not None else "—")
+        a5.metric("品种数量", product_count)
+    table = pd.DataFrame(rows, columns=["名称", "国家", "类型", "包含资产", daily_column,
+                                        "商品", "备注", "数据时间", "数据来源"])
+    table[daily_column] = pd.to_numeric(table[daily_column], errors="coerce")
     st.dataframe(
-        production.compact_rows(chosen), width="stretch", hide_index=True, height=620,
-        column_config={"数据来源": st.column_config.LinkColumn("数据来源")},
+        table, width="stretch", hide_index=True, height=620,
+        column_config={"数据来源": st.column_config.LinkColumn("数据来源"),
+                       daily_column: st.column_config.NumberColumn(daily_column)},
     )
 
 
