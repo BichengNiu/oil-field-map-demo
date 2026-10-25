@@ -102,12 +102,15 @@ class AppStartupTest(unittest.TestCase):
                     assert all(any('\u4e00' <= ch <= '\u9fff' for ch in value) for value in app.dataframe[0].value['国家'])
                     assert [tab.label for tab in app.tabs] == ['地图', '港口', '船舶', '油气']
                     app.session_state['main_tabs'] = '油气'
+                    app.session_state['production_countries'] = ['土耳其']
                     app.run(timeout=30)
                     assert not app.exception, [str(error.value) for error in app.exception]
                     assert [w.label for w in app.multiselect] == ['国家', '商品']
                     assert not app.selectbox
                     assert app.multiselect(key='production_products').value == ['原油', '天然气']
                     assert app.multiselect(key='production_products').options == ['原油', '天然气']
+                    assert '土耳其' not in app.multiselect(key='production_countries').options
+                    assert app.multiselect(key='production_countries').value == []
                     assert not app.checkbox
                     assert not app.expander
                     assert len(app.dataframe) == 1
@@ -119,6 +122,13 @@ class AppStartupTest(unittest.TestCase):
                     assert not any(h.value == '油气产量统计单元' for h in app.subheader)
                     assert [m.label for m in app.metric] == ['油田资产数量', '国家数量', '油田类型数量', '日均产量']
                     assert int(app.metric[0].value) == len(app.dataframe[0].value)
+                    assert not app.dataframe[0].value['国家'].str.contains('土耳其').any()
+                    assert len(app.metric[3].value.splitlines()) == 2
+                    assert app.metric[3].value.splitlines()[0].startswith('原油 ')
+                    assert app.metric[3].value.splitlines()[1].startswith('天然气 ')
+                    downloads = [b for b in app.get('download_button') if b.label == '下载数据']
+                    assert len(downloads) == 1
+                    assert downloads[0].proto.type == 'primary'
                     assert set(app.dataframe[0].value['商品']) == {'原油', '天然气'}
                     assert set(app.dataframe[0].value['备注']) <= {'真实产量', '估算产量'}
                     assert app.dataframe[0].value['数据时间'].map(lambda x: x == '未明确' or (len(x) == 4 and x.isdigit())).all()

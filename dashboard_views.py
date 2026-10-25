@@ -320,10 +320,14 @@ def render_ports_panel(ports: list[dict], selected_day: date | None, port_error:
 def render_assets_panel(assets: list[dict]) -> None:
     import production_units as production
 
+    assets = [asset for asset in assets if asset["country"] != "土耳其"]
     observations = production.build_observations(assets)
     metrics_container = st.container()
     c1, c2 = st.columns(2)
-    countries = c1.multiselect("国家", sorted({c for a in assets for c in (a.get("countries") or [a["country"]])}), key="production_countries")
+    country_options = sorted({c for a in assets for c in (a.get("countries") or [a["country"]]) if c != "土耳其"})
+    if "production_countries" in st.session_state:
+        st.session_state["production_countries"] = [c for c in st.session_state["production_countries"] if c in country_options]
+    countries = c1.multiselect("国家", country_options, key="production_countries")
     product_labels = c2.multiselect("商品", list(production.STATISTICAL_PRODUCTS.values()),
                                       default=list(production.STATISTICAL_PRODUCTS.values()), key="production_products")
     products = [key for key, label in production.STATISTICAL_PRODUCTS.items() if label in product_labels]
@@ -346,7 +350,7 @@ def render_assets_panel(assets: list[dict]) -> None:
             unit = "万桶/日" if product == "crude_oil" else "百万立方米/日"
             parts.append(f"{production.STATISTICAL_PRODUCTS[product]} {amount} {unit}")
         with a4.container(key="production_daily_metric"):
-            st.metric("日均产量", "\n".join(parts) or "—")
+            st.metric("日均产量", "  \n".join(parts) or "—")
     table = pd.DataFrame(rows, columns=["名称", "国家", "类型", "包含资产", daily_column,
                                         "商品", "备注", "数据时间", "数据来源"])
     table[daily_column] = pd.to_numeric(table[daily_column], errors="coerce")
@@ -354,6 +358,12 @@ def render_assets_panel(assets: list[dict]) -> None:
         table, width="stretch", hide_index=True, height=620,
         column_config={"数据来源": st.column_config.LinkColumn("数据来源"),
                        daily_column: st.column_config.NumberColumn(daily_column)},
+    )
+
+    st.download_button(
+        "下载数据", csv_export.csv_bytes(rows, list(table.columns)),
+        file_name="oil_gas_production.csv", mime="text/csv", type="primary",
+        key="production_download", on_click="ignore",
     )
 
 
