@@ -101,6 +101,29 @@ class AppStartupTest(unittest.TestCase):
                     assert '经营状态' not in app.dataframe[0].value.columns
                     assert all(any('\u4e00' <= ch <= '\u9fff' for ch in value) for value in app.dataframe[0].value['国家'])
                     assert [tab.label for tab in app.tabs] == ['地图', '港口', '船舶', '油气']
+                    app.session_state['main_tabs'] = '油气'
+                    app.run(timeout=30)
+                    assert not app.exception, [str(error.value) for error in app.exception]
+                    assert app.selectbox(key='production_mode').value == '最新披露'
+                    assert app.selectbox(key='production_product').value == '原油'
+                    assert not any(m.label.startswith('已覆盖单元产量') for m in app.metric)
+                    assert len(app.dataframe) == 3
+                    assert len(app.dataframe[2].value) == 692
+                    app.selectbox(key='production_mode').set_value('同期间汇总')
+                    app.session_state['main_tabs'] = '油气'
+                    app.run(timeout=30)
+                    app.selectbox(key='production_period').set_value('2020')
+                    app.session_state['main_tabs'] = '油气'
+                    app.run(timeout=30)
+                    assert not app.exception, [str(error.value) for error in app.exception]
+                    assert not app.error, [str(error.value) for error in app.error]
+                    assert len(app.dataframe[0].value) == 2
+                    assert all(app.dataframe[0].value['汇总状态'] == '计入所选期间合计')
+                    assert any(m.value == '6.350 万桶/日' for m in app.metric)
+                    app.selectbox(key='production_product').set_value('凝析油')
+                    app.session_state['main_tabs'] = '油气'
+                    app.run(timeout=30)
+                    assert not app.exception, [str(error.value) for error in app.exception]
                     assert upstream.call_count == 0, upstream.call_args_list
                     import data_store
                     assert data_store.read_only()

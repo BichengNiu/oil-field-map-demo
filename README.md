@@ -5,6 +5,8 @@
 项目配置开启 Streamlit WebSocket 压缩，减少地图与打印报告 HTML 的传输量；修改此服务端配置后须重启应用进程才能生效。
 地图文档也以 gzip 压缩包传输，浏览器使用随项目提供的解码器同步还原，避免大段 HTML 排队传输；点位、弹窗和原生打印内容保持一致。
 
+油气页默认展示最小可独立统计的产量单元，可切换最新披露和同期间汇总。父子范围、重复合计、权益量、商品及期间分开处理，完整目录与排除原因保留在展开明细。规则及限制见[产量统计单元](PRODUCTION_UNITS.md)。
+
 ## 统一DuckDB与数据自动更新
 
 运行数据统一存放于 `runtime/monitoring.duckdb`，由 Git LFS 托管。Codex 定时任务是唯一写入端：每小时采集一次 Open Waters 船位，每个 UTC 自然日更新一次 PortWatch，并校验临时库后提交 main。Streamlit 只读快照，页面载入、控件操作、下载及原生打印均不采集、不写库。执行命令、失败处理与 LFS 部署见 [定时采集与发布](SCHEDULED_COLLECTION.md)；表结构见 [统一存储说明](DUCKDB_STORAGE.md)。
