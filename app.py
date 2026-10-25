@@ -25,10 +25,8 @@ import data_store as _data_store_module
 import dashboard_data as _dashboard_data_module
 import dashboard_views as _dashboard_views_module
 import dashboard_state as _dashboard_state_module
-import download_panel as _download_panel_module
 import portwatch_downloads as _portwatch_downloads_module
 import report_data as _report_data_module
-import sea_history_panel as _sea_history_panel_module
 from dashboard_data import (
     collector_status,
     load_chokepoints,
@@ -43,12 +41,9 @@ from dashboard_views import (
     render_assets_panel,
     render_map_panel,
     prepare_monitoring_cards,
-    render_method_panel,
     render_ports_panel,
     render_print_report,
 )
-from download_panel import render_download_panel
-from sea_history_panel import render_sea_history_panel
 
 ASSETS = data_store.load_catalog("assets")
 APP_STYLE = Path(__file__).with_name("dashboard.css").read_text()
@@ -128,8 +123,6 @@ def _load_runtime_modules(source_fingerprint: str) -> dict[str, object]:
         _dashboard_data_module,
         _dashboard_state_module,
         _dashboard_views_module,
-        _download_panel_module,
-        _sea_history_panel_module,
     ):
         importlib.reload(module)
 
@@ -148,10 +141,8 @@ def _load_runtime_modules(source_fingerprint: str) -> dict[str, object]:
         "render_assets_panel": _dashboard_views_module.render_assets_panel,
         "render_map_panel": _dashboard_views_module.render_map_panel,
         "prepare_monitoring_cards": _dashboard_views_module.prepare_monitoring_cards,
-        "render_method_panel": _dashboard_views_module.render_method_panel,
         "render_ports_panel": _dashboard_views_module.render_ports_panel,
         "render_print_report": _dashboard_views_module.render_print_report,
-        "render_download_panel": _download_panel_module.render_download_panel,
     }
 
 
@@ -198,8 +189,8 @@ def _render_dashboard(refresh_revision: str) -> None:
     newest_day, port_latest_error = loaded["ports_day"]
     newest_chokepoint_day, chokepoint_latest_error = loaded["chokes_day"]
 
-    tab_map, tab_ports, tab_vessels, tab_assets, tab_download, tab_method = st.tabs(
-        ["地图", "港口", "船舶", "油气", "数据下载", "数据与方法"],
+    tab_map, tab_ports, tab_vessels, tab_assets = st.tabs(
+        ["地图", "港口", "船舶", "油气"],
         key="main_tabs",
         on_change="rerun",
     )
@@ -290,24 +281,12 @@ def _render_dashboard(refresh_revision: str) -> None:
                 selected_day,
                 port_error,
             )
-    if tab_download.open:
-        with tab_download:
-            render_sea_history_panel()
-            render_download_panel(
-                newest_day, newest_chokepoint_day,
-                data_revisions=display_revisions,
-                refresh_revision=refresh_revision,
-            )
     if tab_vessels.open:
         with tab_vessels:
             render_ais_panel(view_state)
     if tab_assets.open:
         with tab_assets:
             render_assets_panel(ASSETS)
-    if tab_method.open:
-        with tab_method:
-            render_method_panel()
-
     render_print_report(
         available_ports, available_chokepoints, view_state,
         data_revisions=display_revisions,

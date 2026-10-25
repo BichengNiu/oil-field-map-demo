@@ -100,15 +100,7 @@ class AppStartupTest(unittest.TestCase):
                     assert not any(b.label == '下载所列港口历史' for b in app.button)
                     assert '经营状态' not in app.dataframe[0].value.columns
                     assert all(any('\u4e00' <= ch <= '\u9fff' for ch in value) for value in app.dataframe[0].value['国家'])
-                    app.session_state['main_tabs'] = '数据下载'
-                    app.run(timeout=30)
-                    assert not app.exception, [str(error.value) for error in app.exception]
-                    assert any(element.label == '生成下载数据' for element in app.button)
-                    assert not any(element.label == '刷新 PortWatch 数据' for element in app.button)
-                    next(element for element in app.button if element.label == '生成下载数据').click()
-                    app.run(timeout=30)
-                    assert not app.exception, [str(error.value) for error in app.exception]
-                    assert not app.error, [str(error.value) for error in app.error]
+                    assert [tab.label for tab in app.tabs] == ['地图', '港口', '船舶', '油气']
                     assert upstream.call_count == 0, upstream.call_args_list
                     import data_store
                     assert data_store.read_only()
