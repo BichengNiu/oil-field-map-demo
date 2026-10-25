@@ -122,6 +122,41 @@ class ProductionUnitsTest(unittest.TestCase):
         self.assertEqual(len(chosen), 1)
         self.assertEqual(p.unit_rows(chosen)[0]["共享国家"], "测试国、邻国")
 
+    def test_actual_preferred_to_estimate_then_newest_actual(self):
+        base = asset("a", "10", period="2023年平均", additional_measurements=[
+            asset("a", "20", period="2024年平均", metric_type="estimated_output"),
+            asset("a", "9", period="2022年平均")])
+        chosen, _ = self.select([base], prefer_actual=True)
+        self.assertEqual(chosen[0]["measurement"]["value"], "10")
+        self.assertEqual(p.compact_rows(chosen)[0]["备注"], "真实产量")
+
+    def test_same_period_estimate_does_not_disqualify_actual(self):
+        chosen, _ = self.select([asset("a", "10", additional_measurements=[
+            asset("a", "20", metric_type="estimated_output")])], prefer_actual=True)
+        self.assertEqual(chosen[0]["measurement"]["value"], "10")
+
+    def test_estimated_children_do_not_replace_actual_parent(self):
+        chosen, _ = self.select([asset("Sarsang", "30", constituent_assets=["a", "b"]),
+                                asset("a", "10", "Sarsang", metric_type="estimated_output"),
+                                asset("b", "20", "Sarsang", metric_type="estimated_output")], prefer_actual=True)
+        self.assertEqual([o["name"] for o in chosen], ["Sarsang"])
+
+    def test_compact_time_uses_observation_not_publication_year(self):
+        self.assertEqual(p.measurement_year({'data_date': '2010年估计；IEEJ 2012-09报告'}), '2010')
+        self.assertIsNone(p.measurement_year({'data_date': '观测期未注明；2024-04-15报道'}))
+        self.assertIsNone(p.measurement_year({'data_date': '2014-02 JICA最终报告；底层观察期未明'}))
+
+    def test_compact_daily_units_ranges_and_zero(self):
+        self.assertEqual(p.daily_display(asset('a', '70–80')), '7–8万桶/天')
+        self.assertEqual(p.daily_display(asset('a', '>70')), '>7万桶/天')
+        self.assertEqual(p.daily_display(asset('a', 0)), '0万桶/天')
+        self.assertEqual(p.daily_display(asset('a', '10000', unit='桶/日')), '1万桶/天')
+        self.assertEqual(p.daily_display(asset('a', '10', unit='千桶油当量/日')), '1万桶油当量/天')
+
+    def test_annual_conversion_is_labeled_estimate_in_compact_view(self):
+        chosen, _ = self.select([asset('a', metric_type='derived_daily_average')], prefer_actual=True)
+        self.assertEqual(p.compact_rows(chosen)[0]['备注'], '估算产量')
+
     def test_duplicate_reference_is_one_scope(self):
         ref = {"id": "syria-ward-ahmer-akash-ratka-2015", "scope": "four fields",
                "members": ["Al-Ward", "Ahmer", "Akash", "Ratka"],

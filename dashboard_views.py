@@ -322,60 +322,26 @@ def render_assets_panel(assets: list[dict]) -> None:
     st.subheader("油气产量统计单元")
     observations = production.build_observations(assets)
     metrics_container = st.container()
-    c1, c2, c3 = st.columns(3)
-    mode = c1.selectbox("查看方式", ["最新披露", "同期间汇总"], key="production_mode")
+    c1, c2 = st.columns(2)
+    countries = c1.multiselect("国家", sorted({c for a in assets for c in (a.get("countries") or [a["country"]])}), key="production_countries")
     product_label = c2.selectbox("商品", list(production.PRODUCTS.values()), key="production_product")
     product = next(k for k, v in production.PRODUCTS.items() if v == product_label)
-    countries = c3.multiselect("国家", sorted({c for a in assets for c in (a.get("countries") or [a["country"]])}), key="production_countries")
-    estimates = st.checkbox("纳入估算产量", value=True, key="production_estimates")
     selected_assets = [a for a in assets if not countries or set(countries) & set(a.get("countries") or [a["country"]])]
     observations = [o for o in observations if not countries or set(countries) & set(o["countries"])]
-    period = None
-    if mode == "同期间汇总":
-        periods = sorted({o["period"] for o in observations if o["period"] and not o["reason"]
-                          and o["product"] == product and (estimates or not o["estimated"])}, reverse=True)
-        if periods:
-            period = st.selectbox("平均期间", periods, key="production_period")
-        else:
-            st.info("所选范围没有明确的年、半年、季度或月平均产量。")
-    chosen, reviewed = production.select_units(observations, period=period, product=product, estimates=estimates)
-    if mode == "同期间汇总" and period is None:
-        chosen = []
+    chosen, reviewed = production.select_units(observations, product=product, prefer_actual=True)
     with metrics_container:
         a1, a2, a3, a4, a5 = st.columns(5)
         a1.metric("目录资产", len(selected_assets))
         a2.metric("选用统计单元", len(chosen))
         a3.metric("范围／来源待核", sum("待核" in o["status"] or "未完整核实" in o["status"] for o in reviewed))
-        a4.metric("所选单元含估算", sum(o["estimated"] for o in chosen))
+        a4.metric("所选单元含估算", sum(production.daily_is_estimated(o) for o in chosen))
         covered = set().union(*(o["coverage"] for o in chosen)) if chosen else set()
         product_catalog = {o["scope_id"]: o for o in observations if not o["virtual"] and o["product"] == product}
         a5.metric("本商品未覆盖目录项", sum(not o["coverage"] <= covered for o in product_catalog.values()))
-    if mode == "同期间汇总" and period:
-        total, summed = production.total_units(chosen, period)
-        for o in chosen:
-            o["sum_status"] = "计入所选期间合计" if any(o is s for s in summed) else "口径／数值不满足合计条件"
-        unit = "万桶油当量/日" if product == "boe" else "万桶/日"
-        if product == "natural_gas":
-            unit = summed[0]["measurement"]["unit"] if summed else ""
-        label = "已覆盖单元产量（含估算）" if any(o["estimated"] for o in summed) else "已覆盖单元产量"
-        with metrics_container:
-            st.metric(label, f"{total:,.3f} {unit}" if total is not None else "—")
-            st.metric("合计单元／未合计单元", f"{len(summed)} / {len(chosen) - len(summed)}")
-        st.markdown("仅合计所选平均期间的全资产口径；范围缺报不补零，权益量、具名部分量及区间／上下限不进入合计。跨境全田量仅计一次、不按国家分配；合计不代表国家完整产量。")
-    else:
-        for o in chosen:
-            o["sum_status"] = "仅展示；不同期间不汇总"
-        st.markdown("各单元保留原统计日期；不同期间不合计。上级有合计且组成数据不完整时，组成田仅作明细。")
     st.dataframe(
-        production.unit_rows(chosen), width="stretch", hide_index=True, height=620,
-        column_config={"来源": st.column_config.LinkColumn("来源")},
+        production.compact_rows(chosen), width="stretch", hide_index=True, height=620,
+        column_config={"数据来源": st.column_config.LinkColumn("数据来源")},
     )
-    with st.expander("组成资产与去重审查"):
-        st.dataframe(production.unit_rows(reviewed), width="stretch", hide_index=True,
-                     column_config={"来源": st.column_config.LinkColumn("来源")})
-    with st.expander("完整资产目录"):
-        st.dataframe(dashboard_rows.asset_rows(selected_assets), width="stretch", hide_index=True,
-                     column_config={"来源链接": st.column_config.LinkColumn("目录来源")})
 
 
 def render_method_panel() -> None:

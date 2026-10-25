@@ -104,26 +104,22 @@ class AppStartupTest(unittest.TestCase):
                     app.session_state['main_tabs'] = '油气'
                     app.run(timeout=30)
                     assert not app.exception, [str(error.value) for error in app.exception]
-                    assert app.selectbox(key='production_mode').value == '最新披露'
-                    assert app.selectbox(key='production_product').value == '原油'
-                    assert not any(m.label.startswith('已覆盖单元产量') for m in app.metric)
-                    assert len(app.dataframe) == 3
-                    assert len(app.dataframe[2].value) == 692
-                    app.selectbox(key='production_mode').set_value('同期间汇总')
-                    app.session_state['main_tabs'] = '油气'
-                    app.run(timeout=30)
-                    app.selectbox(key='production_period').set_value('2020')
+                    assert [w.label for w in app.multiselect] == ['国家']
+                    assert [w.label for w in app.selectbox] == ['商品']
+                    assert not app.checkbox
+                    assert not app.expander
+                    assert len(app.dataframe) == 1
+                    assert list(app.dataframe[0].value.columns) == ['名称', '国家', '类型', '包含资产', '日产量', '商品', '备注', '数据时间', '数据来源']
+                    assert app.dataframe[0].value['日产量'].str.endswith('万桶/天').all()
+                    assert set(app.dataframe[0].value['备注']) <= {'真实产量', '估算产量'}
+                    assert app.dataframe[0].value['数据时间'].map(lambda x: x == '未明确' or (len(x) == 4 and x.isdigit())).all()
+                    app.selectbox(key='production_product').set_value('天然气')
                     app.session_state['main_tabs'] = '油气'
                     app.run(timeout=30)
                     assert not app.exception, [str(error.value) for error in app.exception]
                     assert not app.error, [str(error.value) for error in app.error]
-                    assert len(app.dataframe[0].value) == 2
-                    assert all(app.dataframe[0].value['汇总状态'] == '计入所选期间合计')
-                    assert any(m.value == '6.350 万桶/日' for m in app.metric)
-                    app.selectbox(key='production_product').set_value('凝析油')
-                    app.session_state['main_tabs'] = '油气'
-                    app.run(timeout=30)
-                    assert not app.exception, [str(error.value) for error in app.exception]
+                    assert len(app.dataframe) == 1
+                    assert app.dataframe[0].value['日产量'].str.contains('立方').all()
                     assert upstream.call_count == 0, upstream.call_args_list
                     import data_store
                     assert data_store.read_only()

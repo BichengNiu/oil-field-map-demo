@@ -215,7 +215,7 @@ def build_observations(assets):
     return observations
 
 
-def select_units(observations, *, period=None, product="crude_oil", estimates=True):
+def select_units(observations, *, period=None, product="crude_oil", estimates=True, prefer_actual=False):
     """Select a non-overlapping scope cover, separately by product and basis.
 
     A parent can split only into a complete, same-period, same-basis cover.
@@ -244,10 +244,16 @@ def select_units(observations, *, period=None, product="crude_oil", estimates=Tr
         groups.setdefault((o["scope_id"], o["basis"]), []).append(o)
     candidates = []
     for group in groups.values():
-        ordered = sorted(group, key=lambda o: (o["end"] or date.min, not o["estimated"]), reverse=True)
+        def rank(o):
+            year = measurement_year(o["measurement"])
+            when = o["end"] or (date(int(year), 12, 31) if year else date.min)
+            actual = not daily_is_estimated(o)
+            return (actual, when) if prefer_actual else (when, not o["estimated"])
+        ordered = sorted(group, key=rank, reverse=True)
         winner = ordered[0]
         # Distinct values for the same scope/period are unresolved, not summed.
         conflicts = [o for o in ordered[1:] if o["period"] and o["period"] == winner["period"]
+                     and (not prefer_actual or daily_is_estimated(o) == daily_is_estimated(winner))
                      and o["measurement"].get("value") != winner["measurement"].get("value")]
         if conflicts:
             for o in ordered:
@@ -274,7 +280,8 @@ def select_units(observations, *, period=None, product="crude_oil", estimates=Tr
             o["status"] = f'已包含在：{parent["label"]}'
             continue
         smaller = [s for s in available if s["basis"] == o["basis"] and s["coverage"] < o["coverage"]
-                   and s["period"] is not None and s["period"] == o["period"]]
+                   and s["period"] is not None and s["period"] == o["period"]
+                   and (not prefer_actual or daily_is_estimated(o) or not daily_is_estimated(s))]
         covered = set().union(*(s["coverage"] for s in smaller)) if smaller else set()
         if o["complete"] and covered == set(o["coverage"]):
             o["status"] = "已拆为同期间完整组成单元"
@@ -320,3 +327,47 @@ def unit_rows(observations):
              "汇总状态": o.get("sum_status", "未计入合计"),
              "说明": o["measurement"].get("note") or o["measurement"].get("basis") or "",
              "单元ID": o["scope_id"]} for o in observations]
+
+
+def daily_is_estimated(observation):
+    return observation["estimated"] or observation["measurement"].get("metric_type") == "derived_daily_average"
+
+
+def measurement_year(measurement):
+    """Observation basis only: never turn a publication/review year into data."""
+    text = str(measurement.get("data_date") or "")
+    if any(word in text for word in ("观测期未注明", "未注明观察期", "未注明供气数值基准日",
+                                     "底层观察期未明", "底层观察日未注明")):
+        return None
+    match = re.match(r"^(?:截至)?((?:19|20)\d{2})", text)
+    if match:
+        return match[1]
+    if text.startswith("伊朗历"):
+        match = re.search(r"（((?:19|20)\d{2})-\d{2}-\d{2}）", text)
+        return match[1] if match else None
+    return None
+
+
+def daily_display(measurement):
+    unit = str(measurement.get("unit") or "")
+    raw = str(measurement.get("value") if measurement.get("value") is not None else "未披露")
+    if unit in {"千桶/日", "桶/日", "千桶油当量/日"}:
+        divisor = Decimal(10000 if unit == "桶/日" else 10)
+        def convert(match):
+            value = Decimal(match[0].replace(",", "")) / divisor
+            return format(value, "f").rstrip("0").rstrip(".") if "." in format(value, "f") else format(value, "f")
+        value = re.sub(r"\d[\d,]*(?:\.\d+)?", convert, raw)
+        qualifier = str(measurement.get("value_qualifier") or "")
+        if qualifier and not value.startswith(qualifier):
+            value = qualifier + value
+        return value + ("万桶油当量/天" if "油当量" in unit else "万桶/天")
+    return display_value(measurement).replace("/日", "/天")
+
+
+def compact_rows(observations):
+    return [{"名称": o["label"], "国家": "、".join(o["countries"]), "类型": o["type"],
+             "包含资产": "、".join(o["member_labels"]) or o["label"],
+             "日产量": daily_display(o["measurement"]), "商品": PRODUCTS[o["product"]],
+             "备注": "估算产量" if daily_is_estimated(o) else "真实产量",
+             "数据时间": measurement_year(o["measurement"]) or "未明确",
+             "数据来源": o["measurement"].get("source_url")} for o in observations]
