@@ -17,6 +17,34 @@ def asset(name, value="10", parent=None, period="2024年平均", **extra):
 
 
 class ProductionUnitsTest(unittest.TestCase):
+    def test_operating_status_requires_independent_dated_evidence(self):
+        evidence = dict(operating_status="producing", operating_status_label="在产",
+                        operating_status_as_of="2026-08-05", operating_status_confidence="高",
+                        operating_status_evidence_url="https://example.org/status")
+        assets = [asset("active", additional_measurements=[asset("gas", commodity="natural_gas")], **evidence),
+                  asset("suspended", **{**evidence, "operating_status": "temporarily_suspended",
+                                         "operating_status_label": "暂停生产"}),
+                  asset("historic"), asset("unverified", **{**evidence, "operating_status_confidence": "低"})]
+        obs = p.build_observations(assets)
+        self.assertEqual(p.producing_count(obs), 1)
+        rows, _, _ = p.combined_rows(obs, ['crude_oil', 'natural_gas'])
+        self.assertIn('2026-08-05', rows[0]['状态'])
+        self.assertTrue(any(r['状态'].startswith('暂停生产') for r in rows))
+        self.assertEqual(sum(r['状态'] == '待确认' for r in rows), 2)
+
+    def test_virtual_status_never_inherits_attaching_asset_state(self):
+        evidence = dict(operating_status="producing", operating_status_label="在产",
+                        operating_status_as_of="2026-08", operating_status_confidence="高",
+                        operating_status_evidence_url="https://example.org/status")
+        ref = {**asset('ref'), 'id': 'kirkuk-two-domes-2021', 'scope': 'Baba and Avana'}
+        assets = [asset('Baba Dome', aggregate_references=[ref], **evidence), asset('Avana Dome')]
+        virtual = next(o for o in p.build_observations(assets) if o['virtual'])
+        self.assertEqual(p.producing_count([virtual]), 0)
+        self.assertEqual(virtual['operating_state']['state'], 'unknown')
+        assets[1].update(evidence)
+        virtual = next(o for o in p.build_observations(assets) if o['virtual'])
+        self.assertEqual(p.producing_count([virtual]), 1)
+
     def select(self, assets, **kwargs):
         return p.select_units(p.build_observations(assets), **kwargs)
 

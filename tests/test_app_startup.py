@@ -116,16 +116,18 @@ class AppStartupTest(unittest.TestCase):
                     assert len(app.dataframe) == 1
                     columns = list(app.dataframe[0].value.columns)
                     assert columns[:4] == ['名称', '国家', '类型', '包含资产']
-                    assert columns[5:] == ['商品', '备注', '数据时间', '数据来源']
+                    assert columns[5:] == ['商品', '状态', '备注', '数据时间', '数据来源']
                     assert '万桶/日' in columns[4] and '百万立方米/日' in columns[4]
                     assert app.dataframe[0].value[columns[4]].dtype.kind in 'fi'
                     assert not any(h.value == '油气产量统计单元' for h in app.subheader)
-                    assert [m.label for m in app.metric] == ['油田资产数量', '国家数量', '油田类型数量', '日均产量']
+                    assert [m.label for m in app.metric] == ['油田资产数量', '在产数量', '国家数量', '油田类型数量', '日均产量']
                     assert int(app.metric[0].value) == len(app.dataframe[0].value)
                     assert not app.dataframe[0].value['国家'].str.contains('土耳其').any()
-                    assert len(app.metric[3].value.splitlines()) == 2
-                    assert app.metric[3].value.splitlines()[0].startswith('原油 ')
-                    assert app.metric[3].value.splitlines()[1].startswith('天然气 ')
+                    producing = app.dataframe[0].value.loc[app.dataframe[0].value['状态'].str.startswith('在产（')]
+                    assert int(app.metric[1].value) == producing['名称'].nunique()
+                    assert len(app.metric[4].value.splitlines()) == 2
+                    assert app.metric[4].value.splitlines()[0].startswith('原油 ')
+                    assert app.metric[4].value.splitlines()[1].startswith('天然气 ')
                     downloads = [b for b in app.get('download_button') if b.label == '下载数据']
                     assert len(downloads) == 1
                     assert downloads[0].proto.type == 'primary'
@@ -151,7 +153,8 @@ class AppStartupTest(unittest.TestCase):
                     assert not app.exception, [str(error.value) for error in app.exception]
                     assert len(app.dataframe[0].value) == 0
                     assert app.metric[0].value == '0'
-                    assert app.metric[3].value == '—'
+                    assert app.metric[1].value == '0'
+                    assert app.metric[4].value == '—'
                     assert upstream.call_count == 0, upstream.call_args_list
                     import data_store
                     assert data_store.read_only()

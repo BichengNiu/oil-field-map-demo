@@ -123,6 +123,22 @@ def _basis(m):
     return "口径待核"
 
 
+def operating_state(asset):
+    """Latest sourced operating state, independent of production measurement."""
+    state = asset.get("operating_status", "unknown")
+    date = asset.get("operating_status_as_of")
+    if (not date or not asset.get("operating_status_evidence_url")
+            or asset.get("operating_status_confidence") not in {"高", "中"}):
+        return {"state": "unknown", "label": "待确认"}
+    label = asset.get("operating_status_label") or "待确认"
+    return {"state": state, "label": f"{label}（截至：{date}）"}
+
+
+def producing_count(observations):
+    return len({o["scope_id"] for o in observations
+                if o.get("operating_state", {}).get("state") == "producing"})
+
+
 def build_observations(assets):
     index = {(a["country"], a["name"]): a for a in assets}
     children = {}
@@ -193,6 +209,17 @@ def build_observations(assets):
             "estimated": metric in ESTIMATES, "reason": reason, "status": "待选择",
         })
         observation = observations[-1]
+        if virtual:
+            states = [operating_state(index.get((country, member), {})) for member in (members or [])]
+            if complete and states and len({s["state"] for s in states}) == 1 and states[0]["state"] != "unknown":
+                observation["operating_state"] = {
+                    "state": states[0]["state"],
+                    "label": "；".join(dict.fromkeys(s["label"] for s in states)),
+                }
+            else:
+                observation["operating_state"] = {"state": "unknown", "label": "待确认（合计成员状态未一致核实）"}
+        else:
+            observation["operating_state"] = operating_state(asset)
         basis_text = str(m.get("ownership_basis") or "")
         if not virtual and "许可证南区" in basis_text:
             observation["label"] += "南区"
@@ -203,6 +230,7 @@ def build_observations(assets):
         if name == "North Arabia" and product == "natural_gas":
             observation["label"] = "北阿拉伯非常规气项目（North Arabia unconventional gas project）"
             observation["type"] = "开发项目"
+            observation["operating_state"] = {"state": "unknown", "label": "待确认（项目与资产状态范围不同）"}
 
     for a in assets:
         scope_id = f'{a["country"]}/{a["name"]}'
@@ -513,10 +541,11 @@ def combined_rows(observations, products):
             elif observation["measurement"].get("unit") != "百万立方米/日":
                 value = None
         row.pop("日产量")
+        row["状态"] = observation.get("operating_state", {}).get("label", "待确认")
         row[column] = value
         if approximated_point(observation["measurement"], midpoint):
             row["备注"] = "估算产量"
-    columns = ["名称", "国家", "类型", "包含资产", column, "商品", "备注", "数据时间", "数据来源"]
+    columns = ["名称", "国家", "类型", "包含资产", column, "商品", "状态", "备注", "数据时间", "数据来源"]
     means = {}
     for product in products:
         values = [row[column] for row, observation in zip(rows, filtered)

@@ -339,8 +339,9 @@ def render_assets_panel(assets: list[dict]) -> None:
         chosen.extend(selected)
     rows, daily_column, means = production.combined_rows(chosen, products)
     with metrics_container:
-        a1, a2, a3, a4 = st.columns(4)
+        a1, active, a2, a3, a4 = st.columns(5)
         a1.metric("油田资产数量", len(rows))
+        active.metric("在产数量", production.producing_count(chosen))
         a2.metric("国家数量", len({c for o in chosen for c in o["countries"]}))
         a3.metric("油田类型数量", len({row["类型"] for row in rows}))
         parts = []
@@ -352,7 +353,7 @@ def render_assets_panel(assets: list[dict]) -> None:
         with a4.container(key="production_daily_metric"):
             st.metric("日均产量", "  \n".join(parts) or "—")
     table = pd.DataFrame(rows, columns=["名称", "国家", "类型", "包含资产", daily_column,
-                                        "商品", "备注", "数据时间", "数据来源"])
+                                        "商品", "状态", "备注", "数据时间", "数据来源"])
     table[daily_column] = pd.to_numeric(table[daily_column], errors="coerce")
     st.dataframe(
         table, width="stretch", hide_index=True, height=620,
