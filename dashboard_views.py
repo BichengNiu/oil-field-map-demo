@@ -321,6 +321,7 @@ def render_assets_panel(assets: list[dict]) -> None:
 
     st.subheader("油气产量统计单元")
     observations = production.build_observations(assets)
+    metrics_container = st.container()
     c1, c2, c3 = st.columns(3)
     mode = c1.selectbox("查看方式", ["最新披露", "同期间汇总"], key="production_mode")
     product_label = c2.selectbox("商品", list(production.PRODUCTS.values()), key="production_product")
@@ -340,14 +341,15 @@ def render_assets_panel(assets: list[dict]) -> None:
     chosen, reviewed = production.select_units(observations, period=period, product=product, estimates=estimates)
     if mode == "同期间汇总" and period is None:
         chosen = []
-    a1, a2, a3, a4, a5 = st.columns(5)
-    a1.metric("目录资产", len(selected_assets))
-    a2.metric("选用统计单元", len(chosen))
-    a3.metric("范围／来源待核", sum("待核" in o["status"] or "未完整核实" in o["status"] for o in reviewed))
-    a4.metric("所选单元含估算", sum(o["estimated"] for o in chosen))
-    covered = set().union(*(o["coverage"] for o in chosen)) if chosen else set()
-    product_catalog = {o["scope_id"]: o for o in observations if not o["virtual"] and o["product"] == product}
-    a5.metric("本商品未覆盖目录项", sum(not o["coverage"] <= covered for o in product_catalog.values()))
+    with metrics_container:
+        a1, a2, a3, a4, a5 = st.columns(5)
+        a1.metric("目录资产", len(selected_assets))
+        a2.metric("选用统计单元", len(chosen))
+        a3.metric("范围／来源待核", sum("待核" in o["status"] or "未完整核实" in o["status"] for o in reviewed))
+        a4.metric("所选单元含估算", sum(o["estimated"] for o in chosen))
+        covered = set().union(*(o["coverage"] for o in chosen)) if chosen else set()
+        product_catalog = {o["scope_id"]: o for o in observations if not o["virtual"] and o["product"] == product}
+        a5.metric("本商品未覆盖目录项", sum(not o["coverage"] <= covered for o in product_catalog.values()))
     if mode == "同期间汇总" and period:
         total, summed = production.total_units(chosen, period)
         for o in chosen:
@@ -356,8 +358,9 @@ def render_assets_panel(assets: list[dict]) -> None:
         if product == "natural_gas":
             unit = summed[0]["measurement"]["unit"] if summed else ""
         label = "已覆盖单元产量（含估算）" if any(o["estimated"] for o in summed) else "已覆盖单元产量"
-        st.metric(label, f"{total:,.3f} {unit}" if total is not None else "—")
-        st.metric("合计单元／未合计单元", f"{len(summed)} / {len(chosen) - len(summed)}")
+        with metrics_container:
+            st.metric(label, f"{total:,.3f} {unit}" if total is not None else "—")
+            st.metric("合计单元／未合计单元", f"{len(summed)} / {len(chosen) - len(summed)}")
         st.markdown("仅合计所选平均期间的全资产口径；范围缺报不补零，权益量、具名部分量及区间／上下限不进入合计。跨境全田量仅计一次、不按国家分配；合计不代表国家完整产量。")
     else:
         for o in chosen:
