@@ -104,31 +104,44 @@ class AppStartupTest(unittest.TestCase):
                     app.session_state['main_tabs'] = '油气'
                     app.run(timeout=30)
                     assert not app.exception, [str(error.value) for error in app.exception]
-                    assert [w.label for w in app.multiselect] == ['国家']
-                    assert [w.label for w in app.selectbox] == ['商品']
+                    assert [w.label for w in app.multiselect] == ['国家', '商品']
+                    assert not app.selectbox
+                    assert app.multiselect(key='production_products').value == ['原油', '天然气']
+                    assert app.multiselect(key='production_products').options == ['原油', '天然气']
                     assert not app.checkbox
                     assert not app.expander
                     assert len(app.dataframe) == 1
-                    assert list(app.dataframe[0].value.columns) == ['名称', '国家', '类型', '包含资产', '日产量（万桶/日）', '商品', '备注', '数据时间', '数据来源']
-                    assert app.dataframe[0].value['日产量（万桶/日）'].dtype.kind in 'fi'
+                    columns = list(app.dataframe[0].value.columns)
+                    assert columns[:4] == ['名称', '国家', '类型', '包含资产']
+                    assert columns[5:] == ['商品', '备注', '数据时间', '数据来源']
+                    assert '万桶/日' in columns[4] and '百万立方米/日' in columns[4]
+                    assert app.dataframe[0].value[columns[4]].dtype.kind in 'fi'
                     assert not any(h.value == '油气产量统计单元' for h in app.subheader)
-                    assert [m.label for m in app.metric] == ['油田资产数量', '国家数量', '类型数量', '日均产量', '品种数量']
+                    assert [m.label for m in app.metric] == ['油田资产数量', '国家数量', '油田类型数量', '日均产量']
                     assert int(app.metric[0].value) == len(app.dataframe[0].value)
+                    assert set(app.dataframe[0].value['商品']) == {'原油', '天然气'}
                     assert set(app.dataframe[0].value['备注']) <= {'真实产量', '估算产量'}
                     assert app.dataframe[0].value['数据时间'].map(lambda x: x == '未明确' or (len(x) == 4 and x.isdigit())).all()
-                    app.selectbox(key='production_product').set_value('天然气')
+                    app.multiselect(key='production_products').set_value(['天然气'])
                     app.session_state['main_tabs'] = '油气'
                     app.run(timeout=30)
                     assert not app.exception, [str(error.value) for error in app.exception]
                     assert not app.error, [str(error.value) for error in app.error]
                     assert len(app.dataframe) == 1
-                    assert any('立方' in column for column in app.dataframe[0].value.columns)
-                    app.selectbox(key='production_product').set_value('凝析油')
+                    assert '日产量（百万立方米/日）' in app.dataframe[0].value.columns
+                    assert set(app.dataframe[0].value['商品']) == {'天然气'}
+                    app.multiselect(key='production_products').set_value(['原油'])
                     app.session_state['main_tabs'] = '油气'
                     app.run(timeout=30)
                     assert not app.exception, [str(error.value) for error in app.exception]
                     assert '日产量（万桶/日）' in app.dataframe[0].value.columns
-                    assert app.dataframe[0].value['日产量（万桶/日）'].dtype.kind in 'fi'
+                    app.multiselect(key='production_products').set_value([])
+                    app.session_state['main_tabs'] = '油气'
+                    app.run(timeout=30)
+                    assert not app.exception, [str(error.value) for error in app.exception]
+                    assert len(app.dataframe[0].value) == 0
+                    assert app.metric[0].value == '0'
+                    assert app.metric[3].value == '—'
                     assert upstream.call_count == 0, upstream.call_args_list
                     import data_store
                     assert data_store.read_only()

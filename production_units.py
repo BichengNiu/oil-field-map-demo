@@ -18,6 +18,12 @@ PRODUCTION = {"actual_output", "estimated_output", "estimated_daily_average",
 ESTIMATES = {"estimated_output", "estimated_daily_average"}
 PRODUCTS = {"crude_oil": "原油", "natural_gas": "天然气", "condensate": "凝析油",
             "boe": "油当量", "liquids": "液体（组分未拆）", "unknown": "商品待核"}
+STATISTICAL_PRODUCTS = {"crude_oil": "原油", "natural_gas": "天然气"}
+MILLION_FT3_TO_MILLION_M3 = Decimal("0.028316846592")
+SOURCE_RECHECK_UPDATES = {
+    "https://genelenergy.com/wp-content/uploads/Genel-2024-Q1-trading-update.pdf":
+        "https://genelenergy.com/wp-content/uploads/2020/09/Genel-Trading-and-operations-update-FINAL-PR.pdf",
+}
 
 # Reviewed against the existing source notes. These are measurement products,
 # independent of whether the asset itself produces both oil and gas.
@@ -106,7 +112,7 @@ def _product(m, name):
 
 def _basis(m):
     text = str(m.get("ownership_basis") or m.get("basis") or "")
-    if "获分配" in text or "分配份额" in text:
+    if "获分配" in text or "分配份额" in text or "巴林份额" in text:
         return "分配份额"
     if any(word in text for word in ("65%工作权益", "Tethys权益", "30%工作权益")):
         return "企业权益"
@@ -136,6 +142,9 @@ def build_observations(assets):
 
     def add(asset, measurement, scope_id, members=None, complete=False, virtual=False, forced_reason=""):
         m = dict(measurement)
+        if m.get("source_url") in SOURCE_RECHECK_UPDATES:
+            m["original_source_url"] = m["source_url"]
+            m["source_url"] = SOURCE_RECHECK_UPDATES[m["source_url"]]
         if m.get("value_numeric") is not None:
             try:
                 m["value_numeric"] = Decimal(str(m["value_numeric"]))
@@ -183,6 +192,17 @@ def build_observations(assets):
             "end": end, "basis": _basis(m), "amount": _amount(m),
             "estimated": metric in ESTIMATES, "reason": reason, "status": "待选择",
         })
+        observation = observations[-1]
+        basis_text = str(m.get("ownership_basis") or "")
+        if not virtual and "许可证南区" in basis_text:
+            observation["label"] += "南区"
+            observation["type"] = "开发区"
+        elif not virtual and "伊朗侧" in basis_text:
+            observation["label"] += "（伊朗侧）"
+            observation["countries"] = [country]
+        if name == "North Arabia" and product == "natural_gas":
+            observation["label"] = "北阿拉伯非常规气项目（North Arabia unconventional gas project）"
+            observation["type"] = "开发项目"
 
     for a in assets:
         scope_id = f'{a["country"]}/{a["name"]}'
@@ -215,7 +235,8 @@ def build_observations(assets):
     return observations
 
 
-def select_units(observations, *, period=None, product="crude_oil", estimates=True, prefer_actual=False):
+def select_units(observations, *, period=None, product="crude_oil", estimates=True, prefer_actual=False,
+                 require_reliable=False):
     """Select a non-overlapping scope cover, separately by product and basis.
 
     A parent can split only into a complete, same-period, same-basis cover.
@@ -224,7 +245,7 @@ def select_units(observations, *, period=None, product="crude_oil", estimates=Tr
     rows = [dict(o) for o in observations]
     candidates = []
     for o in rows:
-        reason = o["reason"]
+        reason = o["reason"] or (quality_issue(o) if require_reliable else "")
         if reason:
             o["status"] = reason
         elif o["product"] != product:
@@ -238,21 +259,24 @@ def select_units(observations, *, period=None, product="crude_oil", estimates=Tr
         else:
             candidates.append(o)
 
-    # A scope/product/basis has at most one observation in the selected view.
+    # Same-scope alternate disclosures must not turn into competing map areas.
+    # Prefer an explicitly whole-asset scope to an unqualified older reference.
     groups = {}
     for o in candidates:
-        groups.setdefault((o["scope_id"], o["basis"]), []).append(o)
+        groups.setdefault(o["scope_id"], []).append(o)
     candidates = []
     for group in groups.values():
         def rank(o):
             year = measurement_year(o["measurement"])
             when = o["end"] or (date(int(year), 12, 31) if year else date.min)
             actual = not daily_is_estimated(o)
-            return (actual, when) if prefer_actual else (when, not o["estimated"])
+            basis = {"全资产": 2, "具名部分范围": 1}.get(o["basis"], 0)
+            return (basis, actual, when) if prefer_actual else (basis, when, not o["estimated"])
         ordered = sorted(group, key=rank, reverse=True)
         winner = ordered[0]
         # Distinct values for the same scope/period are unresolved, not summed.
         conflicts = [o for o in ordered[1:] if o["period"] and o["period"] == winner["period"]
+                     and o["basis"] == winner["basis"]
                      and (not prefer_actual or daily_is_estimated(o) == daily_is_estimated(winner))
                      and o["measurement"].get("value") != winner["measurement"].get("value")]
         if conflicts:
@@ -333,11 +357,40 @@ def daily_is_estimated(observation):
     return observation["estimated"] or observation["measurement"].get("metric_type") == "derived_daily_average"
 
 
+def quality_issue(observation):
+    """Evidence-backed exclusions from the 2026-10-25 source recheck.
+
+    Preserve excluded evidence in the catalog; absence from statistics is not
+    a claim of zero output. Source access failure alone is not a rejection.
+    """
+    m = observation["measurement"]
+    url = str(m.get("source_url") or "")
+    if m.get("metric_type") == "estimated_output":
+        if "303325221_Oil_in_Syria" in url or "2076-0760/5/2/20" in url:
+            return "战时访谈历史估计，缺可复算逐田量测；仅归档"
+        if measurement_year(m) is None:
+            return "估算依据时间未明确；仅归档"
+        if "alanba.com.kw/1177600" in url:
+            return "匿名消息估计，缺独立产量证据；仅归档"
+    if m.get("metric_type") == "derived_daily_average" and m.get("annual_barrels") is not None:
+        try:
+            barrels, days = Decimal(str(m["annual_barrels"])), Decimal(str(m.get("calendar_days")))
+            value = Decimal(str(m.get("value")))
+            if days not in {Decimal(365), Decimal(366)} or barrels < 0:
+                return "年度量换算参数异常；待核"
+            precision = Decimal(1).scaleb(value.as_tuple().exponent)
+            if abs(barrels / days / 1000 - value) > precision / 2:
+                return "年度量与日均值换算不一致；待核"
+        except (InvalidOperation, TypeError, ZeroDivisionError):
+            return "年度量换算参数缺失；待核"
+    return ""
+
+
 def measurement_year(measurement):
     """Observation basis only: never turn a publication/review year into data."""
     text = str(measurement.get("data_date") or "")
     if any(word in text for word in ("观测期未注明", "未注明观察期", "未注明供气数值基准日",
-                                     "底层观察期未明", "底层观察日未注明")):
+                                     "底层观察期未明", "底层观察日未注明", "具体统计期未注明")):
         return None
     match = re.match(r"^(?:截至)?((?:19|20)\d{2})", text)
     if match:
@@ -380,6 +433,7 @@ def numeric_daily(measurement):
     if any(mark in raw + qualifier for mark in (">", "<", "以上", "以下", "超过", "至少", "不低于", "不超过")):
         return None, False
     raw = re.sub(r"^(?:约|大约|近|≈|~)\s*", "", raw)
+    raw = re.sub(r"(?<![\d.])\.(?=\d)", "0.", raw)
     match = re.fullmatch(r"(\d+(?:\.\d+)?)\s*(?:[–—−~至-]\s*(\d+(?:\.\d+)?))?", raw)
     if not match:
         return None, False
@@ -398,6 +452,12 @@ def numeric_daily(measurement):
     elif unit not in {"百万立方米/日", "百万标准立方英尺/日"}:
         return None, midpoint
     return float(amount), midpoint
+
+
+def approximated_point(measurement, midpoint):
+    raw = str(measurement.get("value") or "")
+    qualifier = str(measurement.get("value_qualifier") or "")
+    return midpoint or qualifier in {"约", "≈", "~", "近", "about", "approx"} or bool(re.match(r"^(?:约|大约|近|≈|~)", raw))
 
 
 def numeric_rows(observations, product=None):
@@ -421,8 +481,7 @@ def numeric_rows(observations, product=None):
             number = None
         row.pop("日产量")
         row[column] = number
-        raw = str(observation["measurement"].get("value") or "")
-        if midpoint or observation["measurement"].get("value_qualifier") or re.match(r"^(?:约|大约|近|≈|~)", raw):
+        if approximated_point(observation["measurement"], midpoint):
             row["备注"] = "估算产量"
     columns = ["名称", "国家", "类型", "包含资产", column, "商品", "备注", "数据时间", "数据来源"]
     return [{k: row[k] for k in columns} for row in rows], column, unit
@@ -433,3 +492,34 @@ def numeric_metrics(observations, rows, column):
     return (len(rows), len({c for o in observations for c in o["countries"]}),
             len({r["类型"] for r in rows}), sum(values) / len(values) if values else None,
             len({r["商品"] for r in rows}))
+
+
+def combined_rows(observations, products):
+    """Two product dimensions, never an oil/gas-equivalent conversion."""
+    products = set(products) & set(STATISTICAL_PRODUCTS)
+    if products == {"crude_oil"}:
+        column = "日产量（万桶/日）"
+    elif products == {"natural_gas"}:
+        column = "日产量（百万立方米/日）"
+    else:
+        column = "日产量（原油：万桶/日；天然气：百万立方米/日）"
+    filtered = [o for o in observations if o["product"] in products]
+    rows = compact_rows(filtered)
+    for row, observation in zip(rows, filtered):
+        value, midpoint = numeric_daily(observation["measurement"])
+        if value is not None and observation["product"] == "natural_gas":
+            if observation["measurement"].get("unit") == "百万标准立方英尺/日":
+                value = float(Decimal(str(value)) * MILLION_FT3_TO_MILLION_M3)
+            elif observation["measurement"].get("unit") != "百万立方米/日":
+                value = None
+        row.pop("日产量")
+        row[column] = value
+        if approximated_point(observation["measurement"], midpoint):
+            row["备注"] = "估算产量"
+    columns = ["名称", "国家", "类型", "包含资产", column, "商品", "备注", "数据时间", "数据来源"]
+    means = {}
+    for product in products:
+        values = [row[column] for row, observation in zip(rows, filtered)
+                  if observation["product"] == product and row[column] is not None]
+        means[product] = sum(values) / len(values) if values else None
+    return [{key: row[key] for key in columns} for row in rows], column, means

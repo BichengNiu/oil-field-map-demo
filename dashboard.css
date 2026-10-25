@@ -43,3 +43,9 @@
 .monitoring-card-detail { display:block; font-size:1rem; line-height:1.5; overflow-wrap:anywhere; color:#334155; }
 @media(max-width:1000px) { .monitoring-cards { grid-template-columns:repeat(2,minmax(0,1fr)); } }
 @media(max-width:540px) { .monitoring-cards { grid-template-columns:1fr; } }
+
+/* Oil and gas means keep their own units in the same summary card. */
+.st-key-production_daily_metric [data-testid="stMetricValue"] {
+  white-space: pre-line;
+  font-size: 18px;
+}

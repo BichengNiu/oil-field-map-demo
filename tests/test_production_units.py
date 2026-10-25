@@ -176,6 +176,68 @@ class ProductionUnitsTest(unittest.TestCase):
         rows, column, _ = p.numeric_rows(chosen)
         self.assertEqual(p.numeric_metrics(chosen, rows, column), (3, 1, 1, 3.75, 1))
 
+    def test_combined_products_keep_units_and_means_separate(self):
+        obs = p.build_observations([asset('oil', '100'),
+            asset('gas', '100', unit='百万标准立方英尺/日', commodity='natural_gas'),
+            asset('excluded', '100', unit='千桶油当量/日')])
+        rows, column, means = p.combined_rows(obs, ['crude_oil', 'natural_gas', 'boe'])
+        self.assertEqual(len(rows), 2)
+        self.assertEqual(set(r['商品'] for r in rows), {'原油', '天然气'})
+        self.assertAlmostEqual(means['crude_oil'], 10)
+        self.assertAlmostEqual(means['natural_gas'], 2.8316846592)
+        self.assertIn('百万立方米/日', column)
+
+    def test_combined_empty_selection_keeps_empty(self):
+        rows, _, means = p.combined_rows(p.build_observations([asset('oil')]), [])
+        self.assertFalse(rows)
+        self.assertFalse(means)
+
+    def test_alternate_unqualified_disclosure_not_false_overlap(self):
+        chosen, _ = self.select([asset('a', '180', period='2025年平均', additional_measurements=[
+            {'value': '130', 'unit': '千桶/日', 'metric_type': 'actual_output',
+             'commodity': 'crude_oil', 'data_date': '截至2022-04-20的运营资料',
+             'basis': '历史运营资料', 'source_url': 'https://example.org/older'}])], prefer_actual=True)
+        self.assertEqual(len(chosen), 1)
+        self.assertEqual(chosen[0]['measurement']['value'], '180')
+
+    def test_allocated_bahrain_share_not_mistaken_for_gross(self):
+        chosen, _ = self.select([asset('a', ownership_basis='巴林份额，不是全田毛产量')], prefer_actual=True)
+        self.assertFalse(chosen)
+
+    def test_low_reliability_estimate_falls_back_to_documented_estimate(self):
+        chosen, rows = self.select([asset('a', '3.5', period='2015年夏季估计', metric_type='estimated_output',
+            source_url='https://www.researchgate.net/publication/303325221_Oil_in_Syria_between_Terrorism_and_Dictatorship',
+            additional_measurements=[asset('a', '3.6', period='2011年；EIA 2013叙利亚报告', metric_type='estimated_output')])],
+            prefer_actual=True, require_reliable=True)
+        self.assertEqual(len(chosen), 1)
+        self.assertEqual(chosen[0]['measurement']['value'], '3.6')
+        self.assertTrue(any('仅归档' in o['status'] for o in rows))
+
+    def test_estimate_without_observation_time_is_not_accepted(self):
+        chosen, _ = self.select([asset('a', metric_type='estimated_output', period='2020-08-01报道区间；具体统计期未注明')],
+                                require_reliable=True)
+        self.assertFalse(chosen)
+
+    def test_annual_formula_mismatch_is_not_accepted(self):
+        chosen, _ = self.select([asset('a', '50', metric_type='derived_daily_average',
+                                      annual_barrels=365000, calendar_days=365)], require_reliable=True)
+        self.assertFalse(chosen)
+
+    def test_leading_decimal_is_valid(self):
+        self.assertEqual(p.numeric_daily(asset('a', '.7')), (0.07, False))
+
+    def test_reported_lower_bound_not_mislabeled_as_estimate(self):
+        obs = p.build_observations([asset('a', '>70', value_qualifier='>')])
+        rows, column, means = p.combined_rows(obs, ['crude_oil'])
+        self.assertEqual(rows[0]['备注'], '真实产量')
+        self.assertIsNone(rows[0][column])
+        self.assertIsNone(means['crude_oil'])
+
+    def test_partial_scope_labels_do_not_claim_whole_field(self):
+        obs = p.build_observations([asset('a', ownership_basis='许可证南区报送范围，不是全田')])
+        self.assertTrue(obs[0]['label'].endswith('南区'))
+        self.assertEqual(obs[0]['type'], '开发区')
+
     def test_duplicate_reference_is_one_scope(self):
         ref = {"id": "syria-ward-ahmer-akash-ratka-2015", "scope": "four fields",
                "members": ["Al-Ward", "Ahmer", "Akash", "Ratka"],
@@ -224,6 +286,20 @@ class PublishedCatalogAudit(unittest.TestCase):
                         total, summed = p.total_units(chosen, period)
                         self.assertTrue(all(o["basis"] == "全资产" for o in summed))
                         self.assertTrue(all(o["period"] == period for o in summed))
+
+    def test_reliable_current_view_has_no_overlaps_and_uses_rechecked_sources(self):
+        for product in p.STATISTICAL_PRODUCTS:
+            chosen, _ = p.select_units(self.observations, product=product, prefer_actual=True, require_reliable=True)
+            self.assertTrue(all(not p.quality_issue(o) for o in chosen))
+            for i, a in enumerate(chosen):
+                for b in chosen[i + 1:]:
+                    self.assertFalse(a['coverage'] & b['coverage'])
+            if product == 'crude_oil':
+                names = {o['name']: o for o in chosen}
+                self.assertIn('Gharraf', names)
+                self.assertNotIn('Abu Safah', names)
+                self.assertIn('eia.gov', names['Al Jubaissah']['measurement']['source_url'])
+                self.assertIn('eia.gov', names['Gouna']['measurement']['source_url'])
 
     def test_kirkuk_reference_is_not_counted_with_domes(self):
         chosen, rows = p.select_units(self.observations, period="2021")

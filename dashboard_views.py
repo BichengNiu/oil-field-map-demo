@@ -324,19 +324,29 @@ def render_assets_panel(assets: list[dict]) -> None:
     metrics_container = st.container()
     c1, c2 = st.columns(2)
     countries = c1.multiselect("国家", sorted({c for a in assets for c in (a.get("countries") or [a["country"]])}), key="production_countries")
-    product_label = c2.selectbox("商品", list(production.PRODUCTS.values()), key="production_product")
-    product = next(k for k, v in production.PRODUCTS.items() if v == product_label)
+    product_labels = c2.multiselect("商品", list(production.STATISTICAL_PRODUCTS.values()),
+                                      default=list(production.STATISTICAL_PRODUCTS.values()), key="production_products")
+    products = [key for key, label in production.STATISTICAL_PRODUCTS.items() if label in product_labels]
     observations = [o for o in observations if not countries or set(countries) & set(o["countries"])]
-    chosen, reviewed = production.select_units(observations, product=product, prefer_actual=True)
-    rows, daily_column, unit = production.numeric_rows(chosen, product=product)
-    asset_count, country_count, type_count, average, product_count = production.numeric_metrics(chosen, rows, daily_column)
+    chosen = []
+    for product in products:
+        selected, _ = production.select_units(observations, product=product, prefer_actual=True,
+                                              require_reliable=True)
+        chosen.extend(selected)
+    rows, daily_column, means = production.combined_rows(chosen, products)
     with metrics_container:
-        a1, a2, a3, a4, a5 = st.columns(5)
-        a1.metric("油田资产数量", asset_count)
-        a2.metric("国家数量", country_count)
-        a3.metric("类型数量", type_count)
-        a4.metric("日均产量", f"{f'{average:,.4f}'.rstrip('0').rstrip('.')} {unit}" if average is not None else "—")
-        a5.metric("品种数量", product_count)
+        a1, a2, a3, a4 = st.columns(4)
+        a1.metric("油田资产数量", len(rows))
+        a2.metric("国家数量", len({c for o in chosen for c in o["countries"]}))
+        a3.metric("油田类型数量", len({row["类型"] for row in rows}))
+        parts = []
+        for product in products:
+            value = means.get(product)
+            amount = f"{value:,.4f}".rstrip("0").rstrip(".") if value is not None else "—"
+            unit = "万桶/日" if product == "crude_oil" else "百万立方米/日"
+            parts.append(f"{production.STATISTICAL_PRODUCTS[product]} {amount} {unit}")
+        with a4.container(key="production_daily_metric"):
+            st.metric("日均产量", "\n".join(parts) or "—")
     table = pd.DataFrame(rows, columns=["名称", "国家", "类型", "包含资产", daily_column,
                                         "商品", "备注", "数据时间", "数据来源"])
     table[daily_column] = pd.to_numeric(table[daily_column], errors="coerce")
