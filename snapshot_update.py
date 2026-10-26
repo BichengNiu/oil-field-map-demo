@@ -153,7 +153,38 @@ def collect_candidate(original: Path, candidate: Path, *, force_ports=False, now
                 os.environ[key] = value
 
 
-def run(*, publish=False, force_ports=False):
+def collect_catalog_candidate(original, candidate):
+    """Publish reviewed catalog rules through the existing single writer.
+
+    No network collection or observation timestamp advancement is implied.
+    All vessel/port history and source documents remain in the copied snapshot.
+    """
+    before = inspect(original)
+    shutil.copy2(original, candidate)
+    previous = {key: os.environ.get(key) for key in ("MONITORING_DB_PATH", "MONITORING_READ_ONLY")}
+    os.environ["MONITORING_DB_PATH"] = str(candidate)
+    os.environ["MONITORING_READ_ONLY"] = "false"
+    try:
+        import importlib
+        import field_catalog
+        importlib.reload(field_catalog)
+        from entity_names import validate_catalogs
+        validate_catalogs({"assets": data_store.load_catalog("assets")})
+        after = inspect(candidate)
+        if before != after:
+            raise ValueError("目录复核不得改变历史行数或船舶/港口观察日期")
+        return {"mode": "catalog_review", "before": before, "after": after}
+    finally:
+        for key, value in previous.items():
+            if value is None:
+                os.environ.pop(key, None)
+            else:
+                os.environ[key] = value
+
+
+def run(*, publish=False, force_ports=False, catalog_only=False):
+    if catalog_only and force_ports:
+        raise ValueError("目录复核与强制港口采集不可同时使用")
     with exclusive_update():
         base = None
         if publish:
@@ -168,14 +199,15 @@ def run(*, publish=False, force_ports=False):
         original = materialize(DATABASE)
         with tempfile.TemporaryDirectory(prefix="monitoring-update-", dir=DATABASE.parent) as temporary:
             candidate = Path(temporary) / "monitoring.duckdb"
-            seed = resumable_seed(original) if publish else None
+            seed = resumable_seed(original) if publish and not catalog_only else None
             try:
                 options = {"force_ports": force_ports}
                 if seed is not None:
                     options["seed"] = seed
-                summary = collect_candidate(original, candidate, **options)
+                summary = (collect_catalog_candidate(original, candidate) if catalog_only
+                           else collect_candidate(original, candidate, **options))
             except Exception:
-                if publish and candidate.exists():
+                if publish and not catalog_only and candidate.exists():
                     # Connections and worker threads are closed before copying.
                     inspect(candidate)
                     shutil.copy2(candidate, STAGING)
@@ -196,8 +228,9 @@ def run(*, publish=False, force_ports=False):
                 git("add", "-u", "--", "runtime/monitoring.duckdb")
                 git("commit", "-m", "Update validated monitoring snapshot")
                 git("push", "origin", "main")
-                STAGING.unlink(missing_ok=True)
-                STAGING_META.unlink(missing_ok=True)
+                if not catalog_only:
+                    STAGING.unlink(missing_ok=True)
+                    STAGING_META.unlink(missing_ok=True)
             # Dry runs validate source data without changing the published file.
         return summary
 
@@ -207,9 +240,10 @@ def main():
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("--publish", action="store_true")
     parser.add_argument("--force-ports", action="store_true")
+    parser.add_argument("--catalog-only", action="store_true", help="仅发布已审核目录规则，保留船舶/港口实测历史")
     args = parser.parse_args()
     try:
-        print(data_store.encode(run(publish=args.publish, force_ports=args.force_ports)))
+        print(data_store.encode(run(publish=args.publish, force_ports=args.force_ports, catalog_only=args.catalog_only)))
     except Exception as exc:
         print(json.dumps({"status": "error", "error": f"{type(exc).__name__}: {exc}"}, ensure_ascii=False))
         raise SystemExit(1) from None

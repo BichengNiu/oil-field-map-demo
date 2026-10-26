@@ -72,6 +72,14 @@ class SnapshotUpdateTest(unittest.TestCase):
                 snapshot_update.collect_candidate(self.original, self.candidate, now=self.now)
         self.assertEqual(hashlib.sha256(self.original.read_bytes()).hexdigest(), digest)
 
+    def test_catalog_review_preserves_history_without_network_collection(self):
+        digest = hashlib.sha256(self.original.read_bytes()).hexdigest()
+        with patch('urllib.request.urlopen', side_effect=AssertionError('no network in catalog review')):
+            result = snapshot_update.collect_catalog_candidate(self.original, self.candidate)
+        self.assertEqual(result['mode'], 'catalog_review')
+        self.assertEqual(result['before'], result['after'])
+        self.assertEqual(hashlib.sha256(self.original.read_bytes()).hexdigest(), digest)
+
     def test_new_gap_triggers_portwatch_again_even_after_success_on_same_day(self):
         with patch("ais.urlopen", side_effect=self.response), \
              patch("collector.collect_portwatch_run", side_effect=self.ports) as ports, \

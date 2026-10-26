@@ -1603,6 +1603,9 @@ def _numeric_value(value: Any) -> tuple[Decimal | None, str]:
     return amount, qualifier
 
 
+from asset_table_recheck import apply as apply_asset_table_recheck
+apply_asset_table_recheck(ASSETS)
+
 for asset in ASSETS:
     raw_value = asset.get("value")
     amount, qualifier = _numeric_value(raw_value)

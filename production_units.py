@@ -131,7 +131,10 @@ def operating_state(asset):
             or asset.get("operating_status_confidence") not in {"高", "中"}):
         return {"state": "unknown", "label": "待确认"}
     label = asset.get("operating_status_label") or "待确认"
-    return {"state": state, "label": f"{label}（截至：{date}）"}
+    return {"state": state, "label": f"{label}（截至：{date}）",
+            "evidence_url": asset.get("operating_status_evidence_url"),
+            "as_of": date, "basis": asset.get("operating_status_basis"),
+            "confidence": asset.get("operating_status_confidence")}
 
 
 def producing_count(observations):
@@ -150,7 +153,8 @@ def build_observations(assets):
         if key in seen:
             raise ValueError(f"资产归属循环：{key}")
         result = {key}
-        for child in children.get(key, ()):
+        declared = {(key[0], name) for name in index.get(key, {}).get('constituent_assets', [])}
+        for child in children.get(key, set()) | declared:
             result |= footprint(child, seen | {key})
         return result
 
@@ -192,7 +196,8 @@ def build_observations(assets):
             reason = "同年NOC与PCLD来源冲突待核"
         def member_label(member):
             return display_name(index.get((country, member),
-                {"name": member, "name_cn": "泽伊高拉" if member == "Zey Gawra" else "待核名称"}))
+                {"name": member, "name_cn": asset.get('constituent_asset_labels', {}).get(member,
+                    "泽伊高拉" if member == "Zey Gawra" else "待核名称")}))
 
         observations.append({
             "scope_id": scope_id, "country": country, "name": m.get("scope") if virtual else name,
@@ -230,7 +235,10 @@ def build_observations(assets):
         if name == "North Arabia" and product == "natural_gas":
             observation["label"] = "北阿拉伯非常规气项目（North Arabia unconventional gas project）"
             observation["type"] = "开发项目"
-            observation["operating_state"] = {"state": "unknown", "label": "待确认（项目与资产状态范围不同）"}
+            if asset.get('operating_status_scope') != 'development_project':
+                observation["operating_state"] = {"state": "unknown", "label": "待确认（项目与资产状态范围不同）"}
+        if name == "South Ghawar" and product == "natural_gas":
+            observation["label"] = "南加瓦尔非常规气项目（South Ghawar）"
 
     for a in assets:
         scope_id = f'{a["country"]}/{a["name"]}'
@@ -552,3 +560,41 @@ def combined_rows(observations, products):
                   if observation["product"] == product and row[column] is not None]
         means[product] = sum(values) / len(values) if values else None
     return [{key: row[key] for key in columns} for row in rows], column, means
+
+
+def statistical_view(assets, countries=(), products=None):
+    """Single population and row binding for the table, map and download."""
+    products = list(STATISTICAL_PRODUCTS) if products is None else products
+    observations = build_observations([a for a in assets if a['country'] != '土耳其'])
+    observations = [o for o in observations if not countries or set(countries) & set(o['countries'])]
+    chosen = []
+    for product in products:
+        if product in STATISTICAL_PRODUCTS:
+            chosen.extend(select_units(observations, product=product, prefer_actual=True,
+                                       require_reliable=True)[0])
+    rows, column, means = combined_rows(chosen, products)
+    return chosen, rows, column, means
+
+
+def map_units(assets, chosen, rows):
+    """One map identity per selected scope, with product rows in its popup.
+
+    Unknown/aggregate locations remain unmapped; never inherit the attaching
+    member's location or invent a centroid for a reference aggregate.
+    """
+    index = {(a['country'], a['name']): a for a in assets}
+    result = {}
+    for observation, row in zip(chosen, rows):
+        key = observation['scope_id']
+        if key not in result:
+            source = {} if observation['virtual'] else index.get((observation['country'], observation['name']), {})
+            drawable = bool(source.get('map_drawable') and not source.get('map_is_proxy')
+                            and source.get('map_lat') is not None and source.get('map_lon') is not None)
+            result[key] = {'name': observation['name'], 'country': observation['country'],
+                           'display_name': observation['label'], 'scope_id': key,
+                           'map_drawable': drawable, 'map_is_proxy': False,
+                           'map_lat': source.get('map_lat') if drawable else None,
+                           'map_lon': source.get('map_lon') if drawable else None,
+                           'production_rows': []}
+        result[key]['production_rows'].append(row)
+    return list(result.values())

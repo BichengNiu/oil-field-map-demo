@@ -92,7 +92,7 @@ class MonitoringCardsTest(unittest.TestCase):
               'datetime': datetime,
               'ZoneInfo': ZoneInfo, 'ASSETS': []}
         state = SimpleNamespace(selected_day=datetime(2026, 10, 6).date(),
-                                selected_chokepoint_day=datetime(2026, 10, 6).date(), live_positions=[])
+                                selected_chokepoint_day=datetime(2026, 10, 6).date(), live_positions=[], map_assets=[])
         prepare = view_function('prepare_monitoring_cards', ns)
         cards, errors = prepare([{'portid': 'p'}], [{'portid': 'c'}], state)
         self.assertEqual(len(cards), 4)
@@ -112,7 +112,7 @@ class MonitoringCardsTest(unittest.TestCase):
               'datetime': datetime, 'ZoneInfo': ZoneInfo, 'ASSETS': []}
         state = SimpleNamespace(selected_day=datetime(2026, 10, 6).date(),
                                 selected_chokepoint_day=datetime(2026, 10, 6).date(),
-                                live_positions=[])
+                                live_positions=[], map_assets=[])
 
         cards, errors = view_function('prepare_monitoring_cards', ns)(
             [{'portid': 'p'}], [{'portid': 'c'}], state)

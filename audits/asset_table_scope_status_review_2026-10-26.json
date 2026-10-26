@@ -1,0 +1,116 @@
+{
+  "reviewed_scope": "98 production rows, 90 distinct scopes; 692 inventory records used for relation crosschecks",
+  "status_updates_file": "status_updates.json",
+  "structural_findings": [
+    {
+      "country": "沙特阿拉伯",
+      "name": "South Ghawar",
+      "severity": "P1",
+      "issue": "独立非常规气项目错误挂为Ghawar常规油田组成区域",
+      "source_url": "https://www.aramco.com/en/what-we-do/operations/unconventional-resources",
+      "source_locator": "Our unconventional gas fields / South Ghawar",
+      "evidence": "位于Ghawar油田south and west的unconventional gas field，首产2023；不是Ghawar常规油田地质组成区。",
+      "remedy": {
+        "parent_asset": null,
+        "parent_level": null,
+        "asset_level": "development_project",
+        "asset_level_label": "开发项目",
+        "name_cn": "南加瓦尔非常规气项目",
+        "remove_from_parent_constituent_assets": "Ghawar"
+      },
+      "note": "本次selected表没有Ghawar实产，故未造成现有行重复；会导致未来上级气产量错误覆盖该独立项目，亦影响maprole。"
+    },
+    {
+      "country": "也门",
+      "name": "Block 9 (Malik)",
+      "severity": "P1",
+      "issue": "包含资产漏掉运营商逐名列出的RasNowmah、RasNowmahSouth、Auqban",
+      "source_url": "https://www.calvalleypetroleum.com/new-current-production/",
+      "source_locator": "Producing fields in Block 9 table",
+      "evidence": "运营商列Hiswah,RasNowmah,RasNowmahSouth,AlRoidhat,Auqban，当前只列Hiswah/Alroidhat/QarnQeamah",
+      "remedy": {
+        "additional_constituent_assets": [
+          {
+            "name": "Ras Nowmah",
+            "name_cn": "拉斯诺马"
+          },
+          {
+            "name": "Ras Nowmah South",
+            "name_cn": "南拉斯诺马"
+          },
+          {
+            "name": "Auqban",
+            "name_cn": "奥克班"
+          }
+        ]
+      },
+      "note": "保留原有QarnQeamah的目录归属；不要把该无日期网页逐田历史数值当新实产。新增成员没有逐田产量，区块合计仍保留一次。"
+    },
+    {
+      "country": "也门",
+      "name": "Block 5 (Jannah)",
+      "severity": "P1",
+      "issue": "区块包含资产为空，实际运营商逐名列有4田",
+      "source_url": "https://www.jhocyemen.com/our-operations/",
+      "source_locator": "paragraph immediately after OUR OPERATIONS",
+      "evidence": "three main producing fields AlNasr,Dhahab,Halewah；fourth field Jannah east ofHalewah",
+      "remedy": {
+        "constituent_assets": [
+          {
+            "name": "Al-Nasr",
+            "name_cn": "纳斯尔"
+          },
+          {
+            "name": "Dhahab",
+            "name_cn": "扎哈卜"
+          },
+          {
+            "name": "Halewah",
+            "name_cn": "哈莱瓦"
+          },
+          {
+            "name": "Jannah",
+            "name_cn": "詹纳"
+          }
+        ]
+      },
+      "note": "田级数值没有同期间逐田数据，不能拆分原50千桶区块值。"
+    },
+    {
+      "country": "伊朗",
+      "name": "Sepehr-Jufair",
+      "severity": "P1",
+      "issue": "两个油田合计项目的包含资产显示自己，漏列两个实际组成田",
+      "source_url": "https://www.eia.gov/international/content/analysis/countries_long/Iran/pdf/Iran%20CAB%202024.pdf",
+      "source_locator": "page3 Sepehr and Jufair",
+      "evidence": "50千桶/日为Sepehr和Jufair两田合计估算，项目不能冒充单田",
+      "remedy": {
+        "constituent_assets": [
+          {
+            "name": "Sepehr",
+            "name_cn": "塞佩赫尔"
+          },
+          {
+            "name": "Jufair",
+            "name_cn": "朱费尔"
+          }
+        ]
+      },
+      "note": "不新分摊两田值。"
+    }
+  ],
+  "verified_no_current_duplicate": [
+    "Bunduq is one crossborder field with UAE and Qatar countrytags, not two records",
+    "Hengam selected numeric Iran-side scope only; countrylabelIran consistent",
+    "IddElSharqi2024 parent selected once perproduct; 2020domesnotduplicate",
+    "Sarsanggrossquarterly parent selected; SwaraTika component referencesnotduplicated",
+    "BelayimLand/Marine lack independent output; 2013 parentchosenonce",
+    "RmeilanSectorOne covers8namedfields; their2011recordsnotcountedalongside2026group"
+  ],
+  "limitations": [
+    "Current operating status cannot be guaranteed from public delayed announcements; every status needs evidence point or explicitly undated operatorpage",
+    "Some current operatorpages(ADNOC)403blocked; querysnippet notcountedverified",
+    "No date-based arbitrary expiry threshold imposed",
+    "No claimed review of all692productionfacts, onlyselected98andrelatedsources/relations"
+  ]
+}

@@ -1,0 +1,680 @@
+[
+  {
+    "url": "http://documents1.worldbank.org/curated/en/838231468036565700/pdf/multi-page.pdf",
+    "key": "ef5234882fac7c5d",
+    "retrieved_at": "2026-10-26T19:45:20.864063+00:00",
+    "status": 200,
+    "final_url": "https://documents1.worldbank.org/curated/en/838231468036565700/pdf/multi-page.pdf",
+    "sha256": "e1757ac5d9175ea52b65d1a525096fa52bb242f1c5fba3a1316569666c2a6aa9",
+    "text_length": 168271
+  },
+  {
+    "url": "https://adnoc.ae/en/al-yasat-petroleum/about-us/what-we-do",
+    "key": "86515955c7b3a97f",
+    "retrieved_at": "2026-10-26T19:45:20.865127+00:00",
+    "error": "HTTP Error 403: Forbidden"
+  },
+  {
+    "url": "https://arabic.news.cn/20250519/d2bf19a8df1e4a149940c97f80a45ab9/c.html",
+    "key": "787ec4311c2dd14c",
+    "retrieved_at": "2026-10-26T19:45:20.865702+00:00",
+    "error": "HTTP Error 503: Service Unavailable"
+  },
+  {
+    "url": "https://daleelpetroleum.com/operational-excellence/production",
+    "key": "e4269f548c317d7a",
+    "retrieved_at": "2026-10-26T19:45:20.866630+00:00",
+    "status": 200,
+    "final_url": "https://daleelpetroleum.com/operational-excellence/production",
+    "sha256": "7d08819562ec89f5dd922051b647b3678c5e5b3d4e68b581072697cea073eac6",
+    "text_length": 3284
+  },
+  {
+    "url": "https://egyptoil-gas.com/news/zaafarana-is-back-to-the-old-field/",
+    "key": "06107a77381d497b",
+    "retrieved_at": "2026-10-26T19:45:20.867487+00:00",
+    "status": 200,
+    "final_url": "https://egyptoil-gas.com/news/zaafarana-is-back-to-the-old-field/",
+    "sha256": "202e0414c03b1d3aa794613a2123846ce232621166c764b9e94a8c5e80dedfc6",
+    "text_length": 4701
+  },
+  {
+    "url": "https://eiti.org/sites/default/files/2024-01/Iraq%202021%20EITI%20Report.pdf",
+    "key": "b246f602b87279ad",
+    "retrieved_at": "2026-10-26T19:45:20.868107+00:00",
+    "status": 200,
+    "final_url": "https://eiti.org/sites/default/files/2024-01/Iraq%202021%20EITI%20Report.pdf",
+    "sha256": "57f1268210a696b892a609865d323ae593e935cdd2699693720a3f8d62b6183e",
+    "text_length": 476876
+  },
+  {
+    "url": "https://eiti.org/sites/default/files/Iraq%202023%20EITI%20Report.docx",
+    "key": "6da375da44fe44f4",
+    "retrieved_at": "2026-10-26T19:45:20.869486+00:00",
+    "status": 200,
+    "final_url": "https://eiti.org/sites/default/files/Iraq%202023%20EITI%20Report.docx",
+    "sha256": "3324daa3157bc501da0862f94496b898a719dbd6198f1b280d9558ac571f6720",
+    "text_length": 3951409
+  },
+  {
+    "url": "https://eiti.org/sites/default/files/attachments/iraq_2016_eiti_report.pdf",
+    "key": "507f4400257ed614",
+    "retrieved_at": "2026-10-26T19:45:20.880447+00:00",
+    "status": 200,
+    "final_url": "https://eiti.org/sites/default/files/attachments/iraq_2016_eiti_report.pdf",
+    "sha256": "8d3009ebfd02e0e9c4d67d1b7821810c0ec42d4295b115d09b1bd230cd8bfc24",
+    "text_length": 422658
+  },
+  {
+    "url": "https://eneken.ieej.or.jp/data/4534.pdf",
+    "key": "8ae81e42d8f9780b",
+    "retrieved_at": "2026-10-26T19:45:21.683525+00:00",
+    "status": 200,
+    "final_url": "https://eneken.ieej.or.jp/data/4534.pdf",
+    "sha256": "7d0d82333acaacc1d962a34bc1ebffef30be685e9544abacf295a9b1a0d22fa8",
+    "text_length": 57933
+  },
+  {
+    "url": "https://genelenergy.com/wp-content/uploads/190326_Genel-AR_web-1.pdf",
+    "key": "3dabe92ed8dedec6",
+    "retrieved_at": "2026-10-26T19:45:22.421611+00:00",
+    "error": "HTTP Error 403: Forbidden"
+  },
+  {
+    "url": "https://genelenergy.com/wp-content/uploads/2020/09/Genel-Trading-and-operations-update-FINAL-PR.pdf",
+    "key": "623735ce67e964e8",
+    "retrieved_at": "2026-10-26T19:45:22.500552+00:00",
+    "error": "HTTP Error 403: Forbidden"
+  },
+  {
+    "url": "https://gulfnews.com/business/energy/yemens-oil-embarks-on-comeback-trail-1.2289049",
+    "key": "a34dcc4cb2702b0f",
+    "retrieved_at": "2026-10-26T19:45:22.962709+00:00",
+    "status": 200,
+    "final_url": "https://gulfnews.com/business/energy/yemens-oil-embarks-on-comeback-trail-1.2289049",
+    "sha256": "212166f2d0d14b10670de7b89edb3a0e324f24b22838c2be4d79786a601b8f01",
+    "text_length": 5343
+  },
+  {
+    "url": "https://openjicareport.jica.go.jp/pdf/1000014245_01.pdf",
+    "key": "1ef188c61139048d",
+    "retrieved_at": "2026-10-26T19:45:22.997791+00:00",
+    "status": 200,
+    "final_url": "https://openjicareport.jica.go.jp/pdf/1000014245_01.pdf",
+    "sha256": "da4396fb3e33855a08810f6434e616e44c6eb15ec35e5515be9d635324e7e089",
+    "text_length": 1129308
+  },
+  {
+    "url": "https://oq.com/en/news-and-media/newsroom/20230126-oq-celebrates-inauguration-of-bisat-oil-field",
+    "key": "bfcd5ef98ba48cb9",
+    "retrieved_at": "2026-10-26T19:45:23.045467+00:00",
+    "status": 200,
+    "final_url": "https://oq.com/en/news-and-media/newsroom/20230126-oq-celebrates-inauguration-of-bisat-oil-field",
+    "sha256": "d38c15bd62b056b5d3285eb8ea6b52b1df9833168f2d18b7d5998a1823ae87c9",
+    "text_length": 6596
+  },
+  {
+    "url": "https://oqep.om/UploadsAll/IRFiles/1781008603725OQEP_2025_Annual_Report.pdf",
+    "key": "561d5263d07e9742",
+    "retrieved_at": "2026-10-26T19:45:23.298526+00:00",
+    "status": 200,
+    "final_url": "https://oqep.om/UploadsAll/IRFiles/1781008603725OQEP_2025_Annual_Report.pdf",
+    "sha256": "30d349ce3703447845686c2dee07bb4149118026e44ba8989b5a73b7632e02a9",
+    "text_length": 368133
+  },
+  {
+    "url": "https://report.eni.com/factbook-2013/en/business-segments/exploration-production/activity-areas/north-africa.html",
+    "key": "c9d6ac9610322d1b",
+    "retrieved_at": "2026-10-26T19:45:25.003190+00:00",
+    "status": 200,
+    "final_url": "https://report.eni.com/factbook-2013/en/business-segments/exploration-production/activity-areas/north-africa.html",
+    "sha256": "5f5e4bbad77c6ccb6da140d7ef28e663a8b874261ecf139466f1bd13fed01a7a",
+    "text_length": 16170
+  },
+  {
+    "url": "https://reports.adnoc.ae/e/sustainability-report-2025-mobile",
+    "key": "1c77dd855bc29b44",
+    "retrieved_at": "2026-10-26T19:45:25.498601+00:00",
+    "status": 200,
+    "final_url": "https://reports.adnoc.ae/e/sustainability-report-2025-mobile",
+    "sha256": "d8399ffd60df939d0949995a764c3a17e9593b00748f5b53a3c4854abe1cdc8a",
+    "text_length": 3
+  },
+  {
+    "url": "https://rumaila.iq/english/about-us/history-2/",
+    "key": "8c9bf5e1ea99dd0d",
+    "retrieved_at": "2026-10-26T19:45:26.455795+00:00",
+    "status": 200,
+    "final_url": "https://rumaila.iq/english/about-us/history-2/",
+    "sha256": "3baba4cb1a7e39a2acdb7ce3cfa5342cb5c8f757d840471f2783acfa63ca4c52",
+    "text_length": 4507
+  },
+  {
+    "url": "https://sepocye.com/en/DefaultDET.aspx?SUB_ID=81",
+    "key": "f886e3342422434d",
+    "retrieved_at": "2026-10-26T19:45:26.520794+00:00",
+    "status": 200,
+    "final_url": "https://sepocye.com/en/DefaultDET.aspx?SUB_ID=81",
+    "sha256": "cc3cb747502cdb7421a53d5efc851a4d3b41d98eb73b9e2f586d61d672398a8b",
+    "text_length": 15951
+  },
+  {
+    "url": "https://shafaq.com/en/Economy/Iraq-expands-oil-production-starts-drilling-in-border-region",
+    "key": "0921189de774aa87",
+    "retrieved_at": "2026-10-26T19:45:27.468868+00:00",
+    "status": 200,
+    "final_url": "https://shafaq.com/en/Economy/Iraq-expands-oil-production-starts-drilling-in-border-region",
+    "sha256": "911ed9dbaf352adad0469c3af57506af62f240f124d67866c90c2a0d5f4a8092",
+    "text_length": 6204
+  },
+  {
+    "url": "https://shamaranpetroleum.com/news/shamaran-reports-second-quarter-2026-results-122891/",
+    "key": "a087b8e856346c66",
+    "retrieved_at": "2026-10-26T19:45:27.507507+00:00",
+    "status": 200,
+    "final_url": "https://shamaranpetroleum.com/news/shamaran-reports-second-quarter-2026-results-122891/",
+    "sha256": "2339c86d7c287b294ada105b8629a5a3f2c1b14677325ff8e61af7654953bfe7",
+    "text_length": 15267
+  },
+  {
+    "url": "https://totalenergies.com/newsroom/iraq-totalenergies-launches-construction-final-two-major-projects-ggip/?lang=eng",
+    "key": "75b22563e4bd8e9f",
+    "retrieved_at": "2026-10-26T19:45:27.639039+00:00",
+    "status": 200,
+    "final_url": "https://totalenergies.com/newsroom/iraq-totalenergies-launches-construction-final-two-major-projects-ggip/?lang=eng",
+    "sha256": "b56fbfebceab392f3a09ffc8c5a8dc7fced17c8aeeb46e82fcf11e71026f392f",
+    "text_length": 10595
+  },
+  {
+    "url": "https://unfccc.int/sites/default/files/resource/30112025_Bahrain%27s_BTR1_2024_to_the_UNFCCC_vSubmitted.pdf",
+    "key": "122604e9b922d43f",
+    "retrieved_at": "2026-10-26T19:45:28.586221+00:00",
+    "status": 200,
+    "final_url": "https://unfccc.int/sites/default/files/resource/30112025_Bahrain%27s_BTR1_2024_to_the_UNFCCC_vSubmitted.pdf",
+    "sha256": "b296da386897156821ebbcc6256ea40d70b7b68d1a4f47fabc4c6ecc71eea999",
+    "text_length": 231845
+  },
+  {
+    "url": "https://uomosul.edu.iq/petroleumengineering/%D8%B2%D9%8A%D8%A7%D8%B1%D8%A9-%D8%B9%D9%84%D9%85%D9%8A%D8%A9-5/",
+    "key": "01af8626087dfe03",
+    "retrieved_at": "2026-10-26T19:45:29.131763+00:00",
+    "status": 200,
+    "final_url": "https://uomosul.edu.iq/petroleumengineering/%D8%B2%D9%8A%D8%A7%D8%B1%D8%A9-%D8%B9%D9%84%D9%85%D9%8A%D8%A9-5/",
+    "sha256": "927b759b9bd90c5a04337c00a9b02d7a786613aedf4d441c74f987f59cf2e38c",
+    "text_length": 2950
+  },
+  {
+    "url": "https://wayback-api.archive.org/web/20240705205742/https://iranpress.com/iran-starts-production-from-sohrab-oil-field-shared-with-iraq",
+    "key": "b8b4c18d94879b05",
+    "retrieved_at": "2026-10-26T19:45:29.164947+00:00",
+    "status": 200,
+    "final_url": "https://web.archive.org/web/20240705205742/https://iranpress.com/iran-starts-production-from-sohrab-oil-field-shared-with-iraq",
+    "sha256": "ebdb30137ca694ff25a38111b9cfab57f392094e85c197047a415e7f69b098a4",
+    "text_length": 8364
+  },
+  {
+    "url": "https://web.archive.org/web/20210628002245/https://www.mrt.com/business/energy/article/Apache-has-pumped-almost-1-million-barrels-of-oil-7404487.php",
+    "key": "ab5af005e7c06104",
+    "retrieved_at": "2026-10-26T19:45:29.851480+00:00",
+    "status": 200,
+    "final_url": "https://web.archive.org/web/20210628002245/https://www.mrt.com/business/energy/article/Apache-has-pumped-almost-1-million-barrels-of-oil-7404487.php",
+    "sha256": "62f6440684d042b0c1d6625c6c813918aaf67f9c86e7693040b9da237cca5f12",
+    "text_length": 6970
+  },
+  {
+    "url": "https://wintershalldea.de/en/newsroom/gas-production-west-nile-deltas-raven-field",
+    "key": "23ea8e2902dfee6f",
+    "retrieved_at": "2026-10-26T19:45:31.243301+00:00",
+    "status": 200,
+    "final_url": "https://wintershalldea.de/en/newsroom/gas-production-west-nile-deltas-raven-field",
+    "sha256": "cb667271831eeedec349edfbce7fa14d57ab4dd75dced3fa3f8846245f937da8",
+    "text_length": 6554
+  },
+  {
+    "url": "https://www.adnoc.ae/en/al-dhafra-petroleum/about-us/what-we-do",
+    "key": "ffd01d24f11bcf91",
+    "retrieved_at": "2026-10-26T19:45:31.332755+00:00",
+    "error": "HTTP Error 403: Forbidden"
+  },
+  {
+    "url": "https://www.aramco.com/en/what-we-do/operations/unconventional-resources",
+    "key": "2802e1f709a249f7",
+    "retrieved_at": "2026-10-26T19:45:32.089452+00:00",
+    "status": 200,
+    "final_url": "https://www.aramco.com/en/what-we-do/operations/unconventional-resources",
+    "sha256": "b0a9fed2bf7eef31b107dbf0a731589aa47ec6928f7d13e1124dd0c52617727c",
+    "text_length": 7064
+  },
+  {
+    "url": "https://www.bp.com.cn/zh_cn/china/home/news/press-releases/news-05-17-2017.html",
+    "key": "19e759a82a15103a",
+    "retrieved_at": "2026-10-26T19:45:32.659533+00:00",
+    "status": 200,
+    "final_url": "https://www.bp.com.cn/zh_cn/china/home/news/press-releases/news-05-17-2017.html",
+    "sha256": "e00a103ba3c1c8a077b93137c1f21556097ca5becd6e52dd5135d8794b609bf8",
+    "text_length": 5106
+  },
+  {
+    "url": "https://www.danagas.com/media/press-releases/?cat=2026",
+    "key": "43ddd4c3a16b3f0b",
+    "retrieved_at": "2026-10-26T19:45:33.001845+00:00",
+    "status": 200,
+    "final_url": "https://www.danagas.com/media/press-releases/?cat=2026",
+    "sha256": "d02032286070b4dd9d8fbd985a7bdca8af8edf52b89ff177db3bfcb2c8a9c43d",
+    "text_length": 18
+  },
+  {
+    "url": "https://www.danagas.com/wp-content/uploads/2026/02/20260204-Dana-Gas-FY-2025-Press-Release-En.pdf",
+    "key": "46d242ff717209ee",
+    "retrieved_at": "2026-10-26T19:45:33.714166+00:00",
+    "status": 200,
+    "final_url": "https://www.danagas.com/wp-content/uploads/2026/02/20260204-Dana-Gas-FY-2025-Press-Release-En.pdf",
+    "sha256": "62f28bff14bed5b2adc20af45a23d253d8c14e5a14c0145317c242f5298da4f9",
+    "text_length": 8285
+  },
+  {
+    "url": "https://www.eia.gov/international/content/analysis/countries_long/Iran/pdf/Iran%20CAB%202024.pdf",
+    "key": "45503cc39761ccba",
+    "retrieved_at": "2026-10-26T19:45:34.839880+00:00",
+    "status": 200,
+    "final_url": "https://www.eia.gov/international/content/analysis/countries_long/Iran/pdf/Iran%20CAB%202024.pdf",
+    "sha256": "e1d6573f9fd956870b4b4ec58d9f04e2babe6552de955c5f03aac620c00684a0",
+    "text_length": 49707
+  },
+  {
+    "url": "https://www.eia.gov/international/content/analysis/countries_long/Syria/archive/pdf/syria_2013.pdf",
+    "key": "3ba0d8911d929e32",
+    "retrieved_at": "2026-10-26T19:45:35.632057+00:00",
+    "status": 200,
+    "final_url": "https://www.eia.gov/international/content/analysis/countries_long/Syria/archive/pdf/syria_2013.pdf",
+    "sha256": "9094ff14b829069395cb83f1b95933b61ee28106672b5ba94e1ea2d3cfe0e87e",
+    "text_length": 28510
+  },
+  {
+    "url": "https://www.eni.com/en-IT/media/press-release/2019/08/eni-zohr-gas-production-reaches-27-bcfd.html",
+    "key": "de8afca4e5cfef7a",
+    "retrieved_at": "2026-10-26T19:45:36.929529+00:00",
+    "status": 200,
+    "final_url": "https://www.eni.com/en-IT/media/press-release/2019/08/eni-zohr-gas-production-reaches-27-bcfd.html",
+    "sha256": "5796482e9f6e383aa8c729c080a14e0bb76fee46e37d0fc7b23834cdff2f3d1c",
+    "text_length": 33669
+  },
+  {
+    "url": "https://www.eni.com/en-IT/media/press-release/2019/09/eni-starts-production-of-baltim-south-west-field-offshore-egypt.html",
+    "key": "e050e49afcb3e61d",
+    "retrieved_at": "2026-10-26T19:45:39.254432+00:00",
+    "status": 200,
+    "final_url": "https://www.eni.com/en-IT/media/press-release/2019/09/eni-starts-production-of-baltim-south-west-field-offshore-egypt.html",
+    "sha256": "2daec6674f800f6031a4109d6db9d19df80acc61c26127c3f544cd2883ef8bd0",
+    "text_length": 34023
+  },
+  {
+    "url": "https://www.euro-petrole.com/inpex-and-adnoc-agree-in-principle-on-extension-of-joint-development-of-satah-and-umm-al-dalkh-oil-fields-offshore-abu-dhabi-united-arab-emirates-n-i-14228",
+    "key": "63bb9b7d0fccf4f1",
+    "retrieved_at": "2026-10-26T19:45:41.217553+00:00",
+    "status": 200,
+    "final_url": "https://www.euro-petrole.com/inpex-and-adnoc-agree-in-principle-on-extension-of-joint-development-of-satah-and-umm-al-dalkh-oil-fields-offshore-abu-dhabi-united-arab-emirates-n-i-14228",
+    "sha256": "45ac0e3972b6ae7e016a186741d1055aef6752f7d9638cd93104c2594f377b0a",
+    "text_length": 23296
+  },
+  {
+    "url": "https://www.forzapetroleum.com/data/financial/2022_AIF_-final-.pdf",
+    "key": "5703bf8a4c2cf804",
+    "retrieved_at": "2026-10-26T19:45:42.111713+00:00",
+    "status": 200,
+    "final_url": "https://www.forzapetroleum.com/data/financial/2022_AIF_-final-.pdf",
+    "sha256": "8d5009c85e049d63881b95852078038f26d03416194a0c9d4abab53122468218",
+    "text_length": 278464
+  },
+  {
+    "url": "https://www.gem.wiki/Al_Jubaissah_Oil_Field_(Syria)",
+    "key": "c77957ed4cd405c7",
+    "retrieved_at": "2026-10-26T19:45:42.659388+00:00",
+    "status": 200,
+    "final_url": "https://www.gem.wiki/Al_Jubaissah_Oil_Field_(Syria)",
+    "sha256": "860e4d78b38afbbdf67c63b320b7dce3d1795a08928fb25d8e0b082e2b795d07",
+    "text_length": 4131
+  },
+  {
+    "url": "https://www.gem.wiki/Belayim_Marine_%26_Belayim_Land_Oil_Project_(Egypt)",
+    "key": "a241655b3d541ee2",
+    "retrieved_at": "2026-10-26T19:45:43.719986+00:00",
+    "status": 200,
+    "final_url": "https://www.gem.wiki/Belayim_Marine_%26_Belayim_Land_Oil_Project_(Egypt)",
+    "sha256": "a362136506a5644c36abd80c5f46d8879a32c686942599d69cc839742e7adda3",
+    "text_length": 5883
+  },
+  {
+    "url": "https://www.gem.wiki/Berenice_Oil_Field_(Egypt)",
+    "key": "c4dbbd0e9b0a97aa",
+    "retrieved_at": "2026-10-26T19:45:45.045896+00:00",
+    "status": 200,
+    "final_url": "https://www.gem.wiki/Berenice_Oil_Field_(Egypt)",
+    "sha256": "55bbee945da4fceaaeeb3d5ecfb35910ac4ce32489f3cdbd6f695e20be5e2ada",
+    "text_length": 5432
+  },
+  {
+    "url": "https://www.gem.wiki/Gbeibe_Oil_Field_(Syria)",
+    "key": "afc6457c167a8257",
+    "retrieved_at": "2026-10-26T19:45:46.286533+00:00",
+    "status": 200,
+    "final_url": "https://www.gem.wiki/Gbeibe_Oil_Field_(Syria)",
+    "sha256": "23994f1193710538101fa07d7a8b6cb25a0d90bcc6331273a2a96f35a7317ae1",
+    "text_length": 4249
+  },
+  {
+    "url": "https://www.gem.wiki/Gouna_Oil_Field_(Syria)",
+    "key": "3a5fc66c1084d25c",
+    "retrieved_at": "2026-10-26T19:45:46.489139+00:00",
+    "status": 200,
+    "final_url": "https://www.gem.wiki/Gouna_Oil_Field_(Syria)",
+    "sha256": "645e4bc5e1ddeed4507e8dbe444570592135dd07261cc0cf205d9d54917a7932",
+    "text_length": 3612
+  },
+  {
+    "url": "https://www.gem.wiki/Gulkhari_Oil_Field_(Iran)",
+    "key": "aa8d722232290112",
+    "retrieved_at": "2026-10-26T19:45:47.140517+00:00",
+    "status": 200,
+    "final_url": "https://www.gem.wiki/Gulkhari_Oil_Field_(Iran)",
+    "sha256": "65b4a258947cfedfe154e0c89cac8e301fb6c142536190986c47b3924e387816",
+    "text_length": 5084
+  },
+  {
+    "url": "https://www.gem.wiki/Hengam_Oil_and_Gas_Field_(Iran)",
+    "key": "2bf476f3fa4eb52d",
+    "retrieved_at": "2026-10-26T19:45:47.167880+00:00",
+    "status": 200,
+    "final_url": "https://www.gem.wiki/Hengam_Oil_and_Gas_Field_(Iran)",
+    "sha256": "dfc3b0b808c533638176dcc58b683977f1547683980d4a7ab1b4b9a4981acca2",
+    "text_length": 5773
+  },
+  {
+    "url": "https://www.gem.wiki/Ptah_Oil_Field_(Egypt)",
+    "key": "2c39a661dbe17c20",
+    "retrieved_at": "2026-10-26T19:45:47.970710+00:00",
+    "status": 200,
+    "final_url": "https://www.gem.wiki/Ptah_Oil_Field_(Egypt)",
+    "sha256": "34b94bd78ece8f942744ad369b3f42be75f57fa45516ac9233aa931c87f12ec2",
+    "text_length": 4883
+  },
+  {
+    "url": "https://www.gem.wiki/Ramadan_Oil_and_Gas_Field_(Egypt)",
+    "key": "5931fdd4399b1193",
+    "retrieved_at": "2026-10-26T19:45:48.035102+00:00",
+    "status": 200,
+    "final_url": "https://www.gem.wiki/Ramadan_Oil_and_Gas_Field_(Egypt)",
+    "sha256": "dff03c80dfe42393fa09f05bfdb792453bbae4c376cf1bd15660f22e4bbb33fa",
+    "text_length": 5489
+  },
+  {
+    "url": "https://www.gem.wiki/Reshadat_Oil_Field_(Iran)",
+    "key": "ee2a31084c662239",
+    "retrieved_at": "2026-10-26T19:45:48.849683+00:00",
+    "status": 200,
+    "final_url": "https://www.gem.wiki/Reshadat_Oil_Field_(Iran)",
+    "sha256": "61644bf5cf8f694806564ee3cd7d900a6fe2646afe02c5d0674f2afc2baec4e1",
+    "text_length": 5781
+  },
+  {
+    "url": "https://www.gem.wiki/Sarqala_Oil_Field_(Iraq)",
+    "key": "2af357aca49bce7a",
+    "retrieved_at": "2026-10-26T19:45:48.926855+00:00",
+    "status": 200,
+    "final_url": "https://www.gem.wiki/Sarqala_Oil_Field_(Iraq)",
+    "sha256": "b8fc1394707a5c659c426bc75ed0f5b72e87d589b38c7ead7d4d048dd5649ac2",
+    "text_length": 4673
+  },
+  {
+    "url": "https://www.gem.wiki/Siah_Makan_Oil_and_Gas_Field_(Iran)",
+    "key": "0ed4c4670d65d9f3",
+    "retrieved_at": "2026-10-26T19:45:49.675627+00:00",
+    "status": 200,
+    "final_url": "https://www.gem.wiki/Siah_Makan_Oil_and_Gas_Field_(Iran)",
+    "sha256": "854311c386cd6347d15325a77edcc66c4a3c37c76105ee5b4f34aabebc96b742",
+    "text_length": 5165
+  },
+  {
+    "url": "https://www.gem.wiki/Sohrab_Oil_Field_(Iran)",
+    "key": "ee795b5a39b98ff5",
+    "retrieved_at": "2026-10-26T19:45:50.124741+00:00",
+    "status": 200,
+    "final_url": "https://www.gem.wiki/Sohrab_Oil_Field_(Iran)",
+    "sha256": "1d4d8d4d21b8c4749f02077c806ce6b0c40b64bc1c1a6c5f17de6332c5a4e80a",
+    "text_length": 6163
+  },
+  {
+    "url": "https://www.gem.wiki/Zaafarana_Oil_Field_(Egypt)",
+    "key": "bd0f8ad62bc9877f",
+    "retrieved_at": "2026-10-26T19:45:50.448201+00:00",
+    "status": 200,
+    "final_url": "https://www.gem.wiki/Zaafarana_Oil_Field_(Egypt)",
+    "sha256": "e93375dd410dd15ca8b6db416cffa00793e2ca11aa533d7b4e42fd01cab3f97c",
+    "text_length": 3560
+  },
+  {
+    "url": "https://www.gem.wiki/Zeloi_Oil_and_Gas_Field_(Iran)",
+    "key": "8cb0b1a8e15eee8b",
+    "retrieved_at": "2026-10-26T19:45:50.884564+00:00",
+    "status": 200,
+    "final_url": "https://www.gem.wiki/Zeloi_Oil_and_Gas_Field_(Iran)",
+    "sha256": "02e325b94cf607a51f962b972128bc8e07072879cacffe919897414001617d0d",
+    "text_length": 5278
+  },
+  {
+    "url": "https://www.gulfkeystone.com/2026-half-year-results-announcement/",
+    "key": "9c99c8086439c78f",
+    "retrieved_at": "2026-10-26T19:45:51.265302+00:00",
+    "status": 200,
+    "final_url": "https://www.gulfkeystone.com/2026-half-year-results-announcement/",
+    "sha256": "0cc5ccb67b0c51b1629ee02b2b648ae94fccf4877087e1b04c5b1daaed73a0af",
+    "text_length": 12228
+  },
+  {
+    "url": "https://www.hydrocarbons-technology.com/projects/sarqala-oil-field-kurdistan-region/",
+    "key": "293752123b829317",
+    "retrieved_at": "2026-10-26T19:45:51.651405+00:00",
+    "status": 200,
+    "final_url": "https://www.offshore-technology.com/projects/sarqala-oil-field-kurdistan-region/",
+    "sha256": "e50540d77804a8b903e4a2d71a30474d5662bc22991c53339da5509e401e214a",
+    "text_length": 17341
+  },
+  {
+    "url": "https://www.iraq-businessnews.com/2025/07/08/dqoc-boosts-production-with-integrated-development-plan/",
+    "key": "c28a28fce5471a22",
+    "retrieved_at": "2026-10-26T19:45:51.657156+00:00",
+    "status": 200,
+    "final_url": "https://www.iraq-businessnews.com/2025/07/08/dqoc-boosts-production-with-integrated-development-plan/",
+    "sha256": "564a66660b733301e5adf72a2f509ac925ffce6f54536287638929a19e153f68",
+    "text_length": 3742
+  },
+  {
+    "url": "https://www.iraqinews.com/iraq/iraq-to-raise-west-qurna-1s-output-to-670000-bpd-in-2026/",
+    "key": "d50f09266cf59243",
+    "retrieved_at": "2026-10-26T19:45:52.485454+00:00",
+    "status": 200,
+    "final_url": "https://www.iraqinews.com/iraq/iraq-to-raise-west-qurna-1s-output-to-670000-bpd-in-2026/",
+    "sha256": "2fbc5a40f5f63717f72d3877e8cd79221afaf0360669faeab138ee0be2b6e9d8",
+    "text_length": 4064
+  },
+  {
+    "url": "https://www.jhocyemen.com/our-operations/",
+    "key": "bd71027dca760141",
+    "retrieved_at": "2026-10-26T19:45:52.638918+00:00",
+    "status": 200,
+    "final_url": "https://www.jhocyemen.com/our-operations/",
+    "sha256": "450f8142edfcb9ddf0d77a84dee7eafa094ccc347622aa21d96f8b59eff448df",
+    "text_length": 5233
+  },
+  {
+    "url": "https://www.lemonde.fr/en/economy/article/2026/02/22/the-syrian-oil-sector-s-year-zero_6750756_19.html",
+    "key": "a10e06e0153d3882",
+    "retrieved_at": "2026-10-26T19:45:53.677566+00:00",
+    "status": 200,
+    "final_url": "https://www.lemonde.fr/en/economy/article/2026/02/22/the-syrian-oil-sector-s-year-zero_6750756_19.html",
+    "sha256": "32ed63159c77e21ee19ca1b9aa3213ccf0218eb59539560b132a8e68ef0e18ea",
+    "text_length": 357
+  },
+  {
+    "url": "https://www.masirahoil.om/post/production-update-march-2026",
+    "key": "33ad6fa0aabfc224",
+    "retrieved_at": "2026-10-26T19:45:53.984927+00:00",
+    "status": 200,
+    "final_url": "https://www.masirahoil.om/post/production-update-march-2026",
+    "sha256": "e5e09ec6f3ca3bb6b9f7696375358ca584c4bd20a2c500bffdc30fdca705dcae",
+    "text_length": 1814
+  },
+  {
+    "url": "https://www.ogj.com/drilling-production/article/17243786/oil-production-starts-from-yemens-block-9",
+    "key": "d6f5232476275a04",
+    "retrieved_at": "2026-10-26T19:45:54.733813+00:00",
+    "status": 200,
+    "final_url": "https://www.ogj.com/drilling-production/article/17243786/oil-production-starts-from-yemens-block-9",
+    "sha256": "8320db0c31c0cd67823c3d1f0b30690269b334fd7229ad10a7d078d50430ebf1",
+    "text_length": 3898
+  },
+  {
+    "url": "https://www.ogj.com/pipelines-transportation/article/17213972/oman-to-step-up-lekhwair-field-production",
+    "key": "41b99f53b0509c1f",
+    "retrieved_at": "2026-10-26T19:45:54.946372+00:00",
+    "status": 200,
+    "final_url": "https://www.ogj.com/pipelines-transportation/article/17213972/oman-to-step-up-lekhwair-field-production",
+    "sha256": "7e4b06ebe4dd9d7298eaca61e6978732eb81be4d6c635b1e9303e1157db6cce6",
+    "text_length": 7139
+  },
+  {
+    "url": "https://www.osti.gov/biblio/7031753",
+    "key": "86ac093317f82ce8",
+    "retrieved_at": "2026-10-26T19:45:56.123439+00:00",
+    "status": 200,
+    "final_url": "https://www.osti.gov/biblio/7031753",
+    "sha256": "3a2a17659b0bd6ceeea1a1908b7b2af3a9be6e53b1c9efe4621c5624df79b166",
+    "text_length": 6364
+  },
+  {
+    "url": "https://www.oxy.com/siteassets/documents/investors/quarterly-earnings/oxy1q26transcript.pdf",
+    "key": "f00246fe5491b7a6",
+    "retrieved_at": "2026-10-26T19:45:56.695282+00:00",
+    "status": 200,
+    "final_url": "https://www.oxy.com/siteassets/documents/investors/quarterly-earnings/oxy1q26transcript.pdf",
+    "sha256": "5603a04f058c07c5d150207cbb33eed54f4c1dac16a21e45f385a22ce9f3c19b",
+    "text_length": 62415
+  },
+  {
+    "url": "https://www.pepaye.com/page/67",
+    "key": "72312749a482cc19",
+    "retrieved_at": "2026-10-26T19:45:57.148751+00:00",
+    "status": 200,
+    "final_url": "https://www.pepaye.com/page/67",
+    "sha256": "a6cc6be2cb1e71794df62a7fe8e27870d0ad0f4343059f07b9406dcb57d036f0",
+    "text_length": 2377
+  },
+  {
+    "url": "https://www.petsec.com.au/operations/yemen-leases/",
+    "key": "70d090b4a1524b8c",
+    "retrieved_at": "2026-10-26T19:45:58.192410+00:00",
+    "status": 200,
+    "final_url": "https://www.petsec.com.au/operations/yemen-leases/",
+    "sha256": "4c753fd1dd511fdecfa0ad65a81a1335ab4a88905543d2db9cd7c48c58efa705",
+    "text_length": 6630
+  },
+  {
+    "url": "https://www.qatarenergy.qa/en/MediaCenter/Publications/QatarEnergy_Investors_Presentation_November_2025.pdf",
+    "key": "681c7b565bd3a3fc",
+    "retrieved_at": "2026-10-26T19:45:58.493517+00:00",
+    "status": 200,
+    "final_url": "https://www.qatarenergy.qa/en/MediaCenter/Publications/QatarEnergy_Investors_Presentation_November_2025.pdf",
+    "sha256": "c548d703dc46dfb89e7453e8c02aa20d43b6601bee164afe2c5d97da0e983f8a",
+    "text_length": 19079
+  },
+  {
+    "url": "https://www.researchgate.net/publication/245394506_Iran_Review_of_Petroleum_Developments_and_Assessments_of_the_Oil_and_Gas_Fields",
+    "key": "400193c26e3e9ae8",
+    "retrieved_at": "2026-10-26T19:45:59.660840+00:00",
+    "status": 200,
+    "final_url": "https://www.researchgate.net/publication/245394506_Iran_Review_of_Petroleum_Developments_and_Assessments_of_the_Oil_and_Gas_Fields",
+    "sha256": "fc0d4a500ba1557a831648ca1e6775faa204dee34efe029c03a723ac229441a3",
+    "text_length": 216758
+  },
+  {
+    "url": "https://www.rns-pdf.londonstockexchange.com/rns/7260H_2-2025-5-7.pdf",
+    "key": "e31f2bae870b6f5a",
+    "retrieved_at": "2026-10-26T19:45:59.973063+00:00",
+    "status": 200,
+    "final_url": "https://www.rns-pdf.londonstockexchange.com/rns/7260H_2-2025-5-7.pdf",
+    "sha256": "ea188f6bd7c4de880c3c93ac622f7182b9cccb983922ec2107d2f3f1199dec8e",
+    "text_length": 983404
+  },
+  {
+    "url": "https://www.rudaw.net/english/categories/syria/933427",
+    "key": "40014762f97fcb01",
+    "retrieved_at": "2026-10-26T19:46:01.254420+00:00",
+    "status": 200,
+    "final_url": "https://www.rudaw.net/english/categories/syria/933427",
+    "sha256": "880b26aa98c55b421680312b14328e809eebb923922203d2b91cbcfaf69cdefc",
+    "text_length": 7952
+  },
+  {
+    "url": "https://www.shana.ir/news/156860/",
+    "key": "bcd2fdf0d88947b1",
+    "retrieved_at": "2026-10-26T19:46:01.779758+00:00",
+    "status": 200,
+    "final_url": "https://www.shana.ir/news/156860/%D8%B3%DA%A9%D9%88%DB%8C-%D9%86%D9%81%D8%AA%DB%8C-%D9%87%D9%86%DA%AF%D8%A7%D9%85-%D9%88-%D8%AA%D8%A3%D8%B3%DB%8C%D8%B3%D8%A7%D8%AA-%D9%86%D9%81%D8%AA%DB%8C-%D9%82%D8%B4%D9%85-%D8%A8%D9%87-%D8%A8%D9%87%D8%B1%D9%87-%D8%A8%D8%B1%D8%AF%D8%A7%D8%B1%DB%8C-%D8%B1%D8%B3%D9%85%DB%8C-%D8%B1%D8%B3%DB%8C%D8%AF",
+    "sha256": "3b657f395317f5c1595396c1def8e24e8373bdab4d59f9c8ff70d21841b79b1f",
+    "text_length": 7579
+  },
+  {
+    "url": "https://www.shana.ir/news/461057/%D8%A8%D8%B1%D8%AF%D8%A7%D8%B4%D8%AA-%D8%A7%D8%B2-%D9%85%DB%8C%D8%AF%D8%A7%D9%86-%D9%86%D8%B1%DA%AF%D8%B3%DB%8C-%DA%AF%DA%86%D8%B3%D8%A7%D8%B1%D8%A7%D9%86-%D8%B1%D9%88%D8%B2%D8%A7%D9%86%D9%87-%DB%B6-%D9%87%D8%B2%D8%A7%D8%B1-%D8%A8%D8%B4%DA%A9%D9%87-%D9%86%D9%81%D8%AA-%D8%A7%D9%81%D8%B2%D8%A7%DB%8C%D8%B4-%D9%85%DB%8C-%DB%8C%D8%A7%D8%A8%D8%AF",
+    "key": "8289951e492e24ef",
+    "retrieved_at": "2026-10-26T19:46:02.765621+00:00",
+    "status": 200,
+    "final_url": "https://www.shana.ir/news/461057/%D8%A8%D8%B1%D8%AF%D8%A7%D8%B4%D8%AA-%D8%A7%D8%B2-%D9%85%DB%8C%D8%AF%D8%A7%D9%86-%D9%86%D8%B1%DA%AF%D8%B3%DB%8C-%DA%AF%DA%86%D8%B3%D8%A7%D8%B1%D8%A7%D9%86-%D8%B1%D9%88%D8%B2%D8%A7%D9%86%D9%87-%DB%B6-%D9%87%D8%B2%D8%A7%D8%B1-%D8%A8%D8%B4%DA%A9%D9%87-%D9%86%D9%81%D8%AA-%D8%A7%D9%81%D8%B2%D8%A7%DB%8C%D8%B4-%D9%85%DB%8C-%DB%8C%D8%A7%D8%A8%D8%AF",
+    "sha256": "3fedaffa711c389941c1c89e3eec3582f3071a5f2edce172a89ee97ae6bf0fc6",
+    "text_length": 8371
+  },
+  {
+    "url": "https://www.trend.az/business/energy/3391612.html",
+    "key": "2da14d734014dcb2",
+    "retrieved_at": "2026-10-26T19:46:02.985063+00:00",
+    "status": 200,
+    "final_url": "https://www.trend.az/business/energy/3391612.html",
+    "sha256": "1d308a5c6b8ff8c0dbde03b9a92ce356fec6165fa3dd33ac3811daa668b0fdf5",
+    "text_length": 26191
+  },
+  {
+    "url": "https://www.trend.az/business/energy/3391883.html",
+    "key": "2ec96c4250e68ec4",
+    "retrieved_at": "2026-10-26T19:46:04.297994+00:00",
+    "status": 200,
+    "final_url": "https://www.trend.az/business/energy/3391883.html",
+    "sha256": "c9c5526bd6536bf516e2a297b03788680156a34d9b950ec3427fc400a2462100",
+    "text_length": 26551
+  },
+  {
+    "url": "https://www.trend.az/business/energy/3816404.html",
+    "key": "3078675c14b346d7",
+    "retrieved_at": "2026-10-26T19:46:04.484891+00:00",
+    "status": 200,
+    "final_url": "https://www.trend.az/business/energy/3816404.html",
+    "sha256": "18908248de6d0c751b571db678fdce6919868555f34ddb65f5469acdd9f10817",
+    "text_length": 26432
+  },
+  {
+    "url": "https://www.trend.az/iran/business/3153217.html",
+    "key": "31f2d8c6517ca219",
+    "retrieved_at": "2026-10-26T19:46:06.057633+00:00",
+    "status": 200,
+    "final_url": "https://www.trend.az/iran/business/3153217.html",
+    "sha256": "ea978ad17e9e0aceccd5a297c425542f8e87feecbaf30e2f14534c0cf9fe2b94",
+    "text_length": 27233
+  },
+  {
+    "url": "https://www.woodmac.com/reports/upstream-oil-and-gas-al-uqlah-block-s2-1303840",
+    "key": "97769aa591b1a824",
+    "retrieved_at": "2026-10-26T19:46:06.074071+00:00",
+    "status": 200,
+    "final_url": "https://www.woodmac.com/reports/upstream-oil-and-gas-al-uqlah-block-s2-1303840",
+    "sha256": "bc7cd96d354370ba8d935a0a6a3c4bb5314a411a04eb680d690056fab5dff8a3",
+    "text_length": 20428
+  }
+]

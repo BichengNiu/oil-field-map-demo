@@ -195,64 +195,19 @@ def _aggregate_production_panel(asset: dict) -> str:
 
 
 def asset_popup(asset: dict[str, object]) -> str:
-    """生成分层中文信息卡；逐层列示当前资产及其上级的日产量。"""
-
-    source_url = _esc(asset["source_url"])
-    status_source_url = _esc(asset["operating_status_evidence_url"])
-    coordinate_source_url = asset.get("coordinate_source_url")
-    coordinate_source_html = (
-        f'<a class="source" href="{_esc(coordinate_source_url)}" target="_blank" rel="noopener">'
-        f"坐标来源：{_esc(asset['coordinate_source'])}</a>"
-        if coordinate_source_url
-        else f'<div class="basis">坐标来源：{_esc(asset["coordinate_source"])}</div>'
-    )
-    parent = related_asset_name(asset, asset["parent_asset"]) if asset.get("parent_asset") else "无已登记上级"
-    constituents = "、".join(related_asset_name(asset, name) for name in (asset.get("constituent_assets") or [])) or "—"
-    return (
-        '<div class="popup-card">'
-        f'<div class="field-name">{_esc(display_name(asset))}</div>'
-        f'<div class="country">{_esc("、".join(asset["countries"]))} · {_esc(asset["asset_type"])}</div>'
-        '<div class="row"><span>资产层级</span>'
-        f"<strong>{_esc(asset['asset_level_label'])}</strong></div>"
-        '<div class="row"><span>地图角色</span>'
-        f"<strong>{_esc(asset['map_role_label'])}</strong></div>"
-        '<div class="row"><span>上级资产</span>'
-        f"<strong>{_esc(parent)}</strong></div>"
-        '<div class="row"><span>组成资产</span>'
-        f"<strong>{_esc(constituents)}</strong></div>"
-        '<div class="row"><span>汇总规则</span>'
-        f"<strong>{_esc(asset['rollup_policy'])}</strong></div>"
-        '<div class="row"><span>统计范围</span>'
-        f"<strong>{_esc(asset['aggregation_scope'])}</strong></div>"
-        '<div class="row"><span>商品</span>'
-        f"<strong>{_esc(asset['commodity_label'])}</strong></div>"
-        '<div class="row"><span>生产状态</span>'
-        f"<strong>{_esc(asset['operating_status_label'])}</strong></div>"
-        '<div class="row"><span>状态截至</span>'
-        f"<strong>{_esc(asset['operating_status_as_of'])}</strong></div>"
-        '<div class="row"><span>状态置信度</span>'
-        f"<strong>{_esc(asset['operating_status_confidence'])}</strong></div>"
-        f'<div class="hierarchy-title">分层日产量（当前资产 → 上级）</div>'
-        f"{_hierarchy_panel(asset)}"
-        '<div class="row"><span>坐标精度</span>'
-        f"<strong>{_esc(asset['map_coordinate_precision'])}</strong></div>"
-        '<div class="row"><span>定位属性</span>'
-        f"<strong>{'区域/设施代理点' if asset.get('map_is_proxy') else '资产点位'}</strong></div>"
-        f"{coordinate_source_html}"
-        f'<div class="status">原始状态说明：{_esc(asset["status"])}</div>'
-        f'<div class="basis">状态依据：{_esc(asset["operating_status_basis"])}</div>'
-        f'<div class="basis">权益口径：{_esc(asset["ownership_basis"])}</div>'
-        f'<div class="basis">其他商品指标：{_esc(extra_measurements(asset))}</div>'
-        f'<div class="basis">数据时效：{_esc(asset["freshness_note"])}</div>'
-        f'<div class="basis">数值复核：{_esc(asset["numeric_audit"])}</div>'
-        f'<div class="basis">产量检索结论：{_esc(asset.get("production_review", {}).get("conclusion") or "未登记")}</div>'
-        f"{_aggregate_production_panel(asset)}"
-        f"{_public_metadata_panel(asset)}"
-        f'<div class="basis">说明：{_esc(asset["note"] or "公开命名资产；本层级数值未公开。")}</div>'
-        f'<a class="source" href="{status_source_url}" target="_blank" rel="noopener">生产状态证据</a>'
-        f'<a class="source" href="{source_url}" target="_blank" rel="noopener">目录来源：{_esc(asset["source"])}</a>'
-        "</div>"
-    )
+    """Exactly the selected table fields; all values share the table binding."""
+    cards = []
+    for row in asset.get("production_rows", []):
+        fields = []
+        for field, value in row.items():
+            if field == "数据来源" and str(value or "").startswith(("https://", "http://")):
+                content = (f'<a href="{_esc(value)}" target="_blank" rel="noopener">'
+                           f'{_esc(value)}</a>')
+            else:
+                content = _esc("—" if value is None else value)
+            fields.append(f'<div class="row"><span>{_esc(field)}</span><strong>{content}</strong></div>')
+        cards.append('<div class="popup-card asset-table-popup">' + ''.join(fields) + '</div>')
+    return ''.join(cards)
 
 
 def port_popup(port: dict, day: str) -> str:

@@ -89,6 +89,13 @@ def build_cards(port_catalog, choke_catalog, port_history, choke_history,
     cards = [activity_card('港口监测', port_catalog, port_history, 'portcalls', '进港', port_day, True),
              activity_card('通道监测', choke_catalog, choke_history, 'n_total', '通过', choke_day)]
     cards.append(sea_observation_card or sea_activity_card(sea_passage_history, vessel_day or date.today()))
+    if any('production_rows' in asset for asset in assets):
+        scopes = {asset['scope_id'] for asset in assets}
+        mapped = sum(bool(asset.get('map_drawable')) for asset in assets)
+        cards.append(('油田监测', f'{len(scopes):,}个',
+                      f'可定位{mapped}个，待定位{len(scopes)-mapped}个',
+                      '与油气表采用相同统计单元和筛选'))
+        return cards
     oil_fields = {(asset.get('country'), asset.get('name')) for asset in assets
                   if asset.get('asset_level') == 'field'
                   and asset.get('commodity') in {'crude_oil', 'oil_and_gas'}}

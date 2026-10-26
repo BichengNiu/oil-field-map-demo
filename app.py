@@ -248,7 +248,11 @@ def _render_dashboard(refresh_revision: str) -> None:
     if tab_map.open and st.session_state.get("map_show_vessels", True):
         tracks = vessel_tracks(tuple((str(v["mmsi"]), v.get("observed_at"), v["lat"], v["lon"])
                                      for v in live_positions), display_revisions["ais"], str(data_store.database_path()))
-    map_assets = [asset for asset in ASSETS if asset.get("map_drawable")]
+    import production_units as production
+    saved_filters = st.session_state.get("production_saved_filters", {})
+    chosen_assets, asset_rows, _, _ = production.statistical_view(
+        ASSETS, saved_filters.get("countries", []), saved_filters.get("products"))
+    map_assets = production.map_units(ASSETS, chosen_assets, asset_rows)
     view_state = DashboardViewState(
         live_positions=live_positions,
         ais_status=ais_status,

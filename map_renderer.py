@@ -24,7 +24,8 @@ def search_objects(assets, ports, vessels, oil=None, gas=None):
     """Stable identities; names are labels, never lookup keys."""
     rows = []
     for asset in assets:
-        if asset.get("map_drawable") and not asset.get("map_is_proxy", False):
+        if ((asset.get("map_drawable") and not asset.get("map_is_proxy", False))
+                or asset.get("production_rows")):
             rows.append({"key": f'asset:{asset.get("country", "")}\x1f{asset["name"]}',
                          "label": "油气 · " + display_name(asset), "control": "map_show_assets"})
     for port in ports:
@@ -84,6 +85,12 @@ def build_map_html(
         if asset["map_drawable"] and not asset.get("map_is_proxy", False)
     ]
     marker_json = json.dumps(markers, ensure_ascii=False).replace("</", "<\\/")
+    unlocated_json = json.dumps([
+        {"lat": None, "lon": None,
+         "popupKey": f'asset:{asset.get("country", "")}\x1f{asset["name"]}',
+         "name": display_name(asset), "popup": asset_popup(asset)}
+        for asset in assets if not asset.get("map_drawable") and asset.get("production_rows")
+    ], ensure_ascii=False).replace("</", "<\\/")
     port_json = json.dumps([
         {"lat": port["lat"], "lon": port["lon"], "popupKey": f'port:{port["portid"]}',
          "name": display_name(port),
@@ -184,6 +191,9 @@ def build_map_html(
       .row strong {{ color: #0f172a; text-align: right; }}
       .map-detail .row span {{ flex: 0 0 96px; }}
       .map-detail .row strong {{ flex: 1; min-width: 0; overflow-wrap: anywhere; }}
+      .asset-table-popup {{ width: 100%; max-width: 100%; box-sizing: border-box; }}
+      .asset-table-popup .row {{ display: grid; grid-template-columns: 96px minmax(0, 1fr); }}
+      .asset-table-popup .row strong {{ text-align: left; min-width: 0; overflow-wrap: anywhere; white-space: normal; }}
       .hierarchy-title {{ margin-top: 10px; padding-top: 8px; border-top: 2px solid #cbd5e1; color: #334155; font-size: 14px; font-weight: 700; }}
       .level-metric {{ padding: 7px 8px; margin-top: 6px; background: #f8fafc; border: 1px solid #e2e8f0; border-radius: 7px; }}
       .level-head, .output-line {{ display: flex; justify-content: space-between; gap: 10px; font-size: 14px; }}
@@ -259,6 +269,7 @@ def build_map_html(
       }};
       dateControl.addTo(map);
       const assets = {marker_json};
+      const unlocatedAssets = {unlocated_json};
       const ports = {port_json};
       const chokepoints = {chokepoint_json};
       const vessels = {vessel_json};
@@ -478,7 +489,9 @@ def build_map_html(
           else marker.openPopup();
           return true;
         }}
-        const record = ports.find(row => row.popupKey === key && (row.lat == null || row.lon == null));
+        // No marker or coordinates are created for an unlocated record. The
+        // popup is moved into the fixed detail control, as for unlocated ports.
+        const record = [...ports, ...unlocatedAssets].find(row => row.popupKey === key && (row.lat == null || row.lon == null));
         if (record) {{
           L.popup({{popupKey: key, maxWidth: 410, autoPan: false}})
             .setLatLng(map.getCenter()).setContent(record.popup).openOn(map);

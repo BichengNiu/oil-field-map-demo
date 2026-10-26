@@ -125,6 +125,13 @@ def render_map_panel(state: DashboardViewState, summary_cards: list, *, cards_pl
         ),
         height=735,
     )
+    if show_assets:
+        unlocated = [row for asset in state.map_assets if not asset.get("map_drawable")
+                     for row in asset.get("production_rows", [])]
+        if unlocated:
+            st.warning(f"{len(unlocated)}条油气记录缺少可靠坐标，以下保留与油气表一致的信息，暂不上图。")
+            st.dataframe(pd.DataFrame(unlocated), hide_index=True, width="stretch",
+                         column_config={"数据来源": st.column_config.LinkColumn("数据来源")})
     with st.container(horizontal=True, key="map_refresh_actions"):
         st.button("保存图片", type="primary", width="content",
                   on_click=queue_map_screenshot)
@@ -321,25 +328,23 @@ def render_assets_panel(assets: list[dict]) -> None:
     import production_units as production
 
     assets = [asset for asset in assets if asset["country"] != "土耳其"]
-    observations = production.build_observations(assets)
     metrics_container = st.container()
     c1, c2 = st.columns(2)
     country_options = sorted({c for a in assets for c in (a.get("countries") or [a["country"]]) if c != "土耳其"})
     if "production_countries" in st.session_state:
         st.session_state["production_countries"] = [c for c in st.session_state["production_countries"] if c in country_options]
-    countries = c1.multiselect("国家", country_options, key="production_countries")
+    saved = st.session_state.get("production_saved_filters", {})
+    countries = c1.multiselect("国家", country_options,
+                               default=[c for c in saved.get("countries", []) if c in country_options],
+                               key="production_countries")
     product_labels = c2.multiselect("商品", list(production.STATISTICAL_PRODUCTS.values()),
-                                      default=list(production.STATISTICAL_PRODUCTS.values()), key="production_products")
+                                      default=[production.STATISTICAL_PRODUCTS[p] for p in saved.get("products", list(production.STATISTICAL_PRODUCTS))
+                                               if p in production.STATISTICAL_PRODUCTS], key="production_products")
     products = [key for key, label in production.STATISTICAL_PRODUCTS.items() if label in product_labels]
-    observations = [o for o in observations if not countries or set(countries) & set(o["countries"])]
-    chosen = []
-    for product in products:
-        selected, _ = production.select_units(observations, product=product, prefer_actual=True,
-                                              require_reliable=True)
-        chosen.extend(selected)
-    rows, daily_column, means = production.combined_rows(chosen, products)
+    st.session_state["production_saved_filters"] = {"countries": countries, "products": products}
+    chosen, rows, daily_column, means = production.statistical_view(assets, countries, products)
     with metrics_container:
-        a1, active, a2, a3, a4 = st.columns(5)
+        a1, active, a2, a3, a4 = st.columns([1, 1, 1, 1, 2])
         a1.metric("油田资产数量", len(rows))
         active.metric("在产数量", production.producing_count(chosen))
         a2.metric("国家数量", len({c for o in chosen for c in o["countries"]}))
@@ -565,7 +570,7 @@ def prepare_monitoring_cards(available_ports, available_chokepoints, state,
         available_ports, available_chokepoints,
         port_history + comparison_ports, choke_history + comparison_chokes,
         state.selected_day, state.selected_chokepoint_day,
-        vessel_day=sea_day or snapshot_day or datetime.now(ZoneInfo("Asia/Shanghai")).date(), assets=ASSETS,
+        vessel_day=sea_day or snapshot_day or datetime.now(ZoneInfo("Asia/Shanghai")).date(), assets=state.map_assets,
         sea_passage_history=sea_history,
         sea_observation_card=sea_observation_card,
     )

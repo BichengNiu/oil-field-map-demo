@@ -1,0 +1,3314 @@
+{
+  "scope": "98条已选中油气商品行，检查来源数值/商品/单位/依据年/毛额权益/实际估算；非整表所有字段通过证明",
+  "reviewed_at": "2026-10-26",
+  "limitations": [
+    "主要重读2026-10-25已保存正文，并非所有源重新下载",
+    "LeMonde正文不可获取",
+    "产量及来源可核不代表当日实时量测已核",
+    "不承诺穷尽互联网所有新披露"
+  ],
+  "rows": [
+    {
+      "row_index": 0,
+      "scope_id": "叙利亚/Rmeilan Sector One",
+      "name": "Rmeilan Sector One",
+      "product": "crude_oil",
+      "field_checks": {
+        "product": "pass",
+        "source_value": "pass",
+        "source_unit": "pass",
+        "observation_year": "pass",
+        "gross_vs_equity": "pass",
+        "actual_vs_estimate": "pass"
+      },
+      "evidence": {
+        "claimed_value": "70–80",
+        "claimed_unit": "千桶/日",
+        "claimed_date": "2026-02-11采访时点",
+        "source_url": "https://www.rudaw.net/english/categories/syria/933427",
+        "cached_evidence_sha256": "f8a6b4ce0375b9eb9ac0e6be07fe066ff99c5a2f2cc5dbb410de747f13c287de",
+        "cache_read_date": "2026-10-26",
+        "cache_fetch_date": "2026-10-25",
+        "basis": "逐项重读所引公开正文或官方原表，非链接存在性检查",
+        "source_quote": " the past 10 to 12 days to between 70,000 and 80,000 barrels per day due to "
+      },
+      "findings": [],
+      "not_checked_here": [
+        "国家和中文名",
+        "层级和包含资产",
+        "运营状态",
+        "交互和筛选"
+      ]
+    },
+    {
+      "row_index": 1,
+      "scope_id": "阿曼/Block 5 (Daleel)",
+      "name": "Block 5 (Daleel)",
+      "product": "crude_oil",
+      "field_checks": {
+        "product": "pass",
+        "source_value": "pass",
+        "source_unit": "pass",
+        "observation_year": "unknown",
+        "gross_vs_equity": "pass",
+        "actual_vs_estimate": "pass"
+      },
+      "evidence": {
+        "claimed_value": "50",
+        "claimed_unit": "千桶/日",
+        "claimed_date": "运营商网页未注明观察期（2026-09-28核对）",
+        "source_url": "https://daleelpetroleum.com/operational-excellence/production",
+        "cached_evidence_sha256": "935dd06143ffc366891326eb4dc29b3e6be80c5dd53f1d6cb99aaf938ab3bcd0",
+        "cache_read_date": "2026-10-26",
+        "cache_fetch_date": "2026-10-25",
+        "basis": "逐项重读所引公开正文或官方原表，非链接存在性检查",
+        "source_quote": "increased from around 5,000 bpd to 50,000 bpd, most of which was then export"
+      },
+      "findings": [],
+      "not_checked_here": [
+        "国家和中文名",
+        "层级和包含资产",
+        "运营状态",
+        "交互和筛选"
+      ]
+    },
+    {
+      "row_index": 2,
+      "scope_id": "也门/Block 9 (Malik)",
+      "name": "Block 9 (Malik)",
+      "product": "crude_oil",
+      "field_checks": {
+        "product": "pass",
+        "source_value": "pass",
+        "source_unit": "pass",
+        "observation_year": "pass",
+        "gross_vs_equity": "pass",
+        "actual_vs_estimate": "pass"
+      },
+      "evidence": {
+        "claimed_value": "2",
+        "claimed_unit": "千桶/日",
+        "claimed_date": "2005-12-10首次产油；2005-12-12报道",
+        "source_url": "https://www.ogj.com/drilling-production/article/17243786/oil-production-starts-from-yemens-block-9",
+        "cached_evidence_sha256": "2a646af6f30370eb8f1492658fe6ae7526d7c0f7538c95616eef942c9b7e891d",
+        "cache_read_date": "2026-10-26",
+        "cache_fetch_date": "2026-10-25",
+        "basis": "逐项重读所引公开正文或官方原表，非链接存在性检查",
+        "source_quote": "itial production is constrained to 2,000 b/d by the capacity of a terminal "
+      },
+      "findings": [],
+      "not_checked_here": [
+        "国家和中文名",
+        "层级和包含资产",
+        "运营状态",
+        "交互和筛选"
+      ]
+    },
+    {
+      "row_index": 3,
+      "scope_id": "reference:伊拉克/hawler-forza-2022",
+      "name": "Hawler许可证Banan、Demir Dagh、Zey Gawra三田100%毛合计",
+      "product": "crude_oil",
+      "field_checks": {
+        "product": "pass",
+        "source_value": "pass",
+        "source_unit": "pass",
+        "observation_year": "pass",
+        "gross_vs_equity": "pass",
+        "actual_vs_estimate": "pass",
+        "annual_calculation": "pass"
+      },
+      "evidence": {
+        "claimed_value": "14.508",
+        "claimed_unit": "千桶/日",
+        "claimed_date": "2022全年日均（365日）",
+        "source_url": "https://www.forzapetroleum.com/data/financial/2022_AIF_-final-.pdf",
+        "cached_evidence_sha256": "8d5009c85e049d63881b95852078038f26d03416194a0c9d4abab53122468218",
+        "cache_read_date": "2026-10-26",
+        "cache_fetch_date": "2026-10-25",
+        "basis": "逐项重读所引公开正文或官方原表，非链接存在性检查",
+        "independent_formula": "5295500 / 365 / 1000",
+        "independent_unrounded": "14.50821917808219178082191781",
+        "independent_rounded_match": true,
+        "source_quote": " in 2022, amounted to gross (100%) 5,295,500 barrels. The Corporation is curren"
+      },
+      "findings": [
+        "来源同报告另有直报2022毛年均14500bbl/d，可替代年量换算14508以遵循实际日量优先。"
+      ],
+      "not_checked_here": [
+        "国家和中文名",
+        "层级和包含资产",
+        "运营状态",
+        "交互和筛选"
+      ]
+    },
+    {
+      "row_index": 4,
+      "scope_id": "伊拉克/Missan Fields",
+      "name": "Missan Fields",
+      "product": "crude_oil",
+      "field_checks": {
+        "product": "pass",
+        "source_value": "pass",
+        "source_unit": "pass",
+        "observation_year": "pass",
+        "gross_vs_equity": "pass",
+        "actual_vs_estimate": "pass",
+        "annual_calculation": "pass"
+      },
+      "evidence": {
+        "claimed_value": "221.0",
+        "claimed_unit": "千桶/日",
+        "claimed_date": "2021年历史日均（全年365日）",
+        "source_url": "https://eiti.org/sites/default/files/2024-01/Iraq%202021%20EITI%20Report.pdf",
+        "cached_evidence_sha256": "57f1268210a696b892a609865d323ae593e935cdd2699693720a3f8d62b6183e",
+        "cache_read_date": "2026-10-26",
+        "cache_fetch_date": "2026-10-25",
+        "basis": "逐项重读所引公开正文或官方原表，非链接存在性检查",
+        "independent_formula": "80650634 / 365 / 1000",
+        "independent_unrounded": "220.9606410958904109589041096",
+        "independent_rounded_match": true,
+        "source_quote": "n 142,213,694 10.26% Missan Maysan 80,650,634 5.82% Majnoon Basra 64,240,000 4.6"
+      },
+      "findings": [],
+      "not_checked_here": [
+        "国家和中文名",
+        "层级和包含资产",
+        "运营状态",
+        "交互和筛选"
+      ]
+    },
+    {
+      "row_index": 5,
+      "scope_id": "也门/Block S2 (Uqlah)",
+      "name": "Block S2 (Uqlah)",
+      "product": "crude_oil",
+      "field_checks": {
+        "product": "pass",
+        "source_value": "pass",
+        "source_unit": "pass",
+        "observation_year": "pass",
+        "gross_vs_equity": "pass",
+        "actual_vs_estimate": "pass"
+      },
+      "evidence": {
+        "claimed_value": "约13",
+        "claimed_unit": "千桶/日",
+        "claimed_date": "2018-11-05报道时点",
+        "source_url": "https://gulfnews.com/business/energy/yemens-oil-embarks-on-comeback-trail-1.2289049",
+        "cached_evidence_sha256": "9e96b27e91d4c6b36e382649f6228b13751a10871a03ff6cb12016d0fc6c96bf",
+        "cache_read_date": "2026-10-26",
+        "cache_fetch_date": "2026-10-25",
+        "basis": "逐项重读所引公开正文或官方原表，非链接存在性检查",
+        "source_quote": "joint venture is producing about 13,000 barrels a day",
+        "quote_extraction": "原文排版/语言或表格不能用字面搜索匹配；核查依据请看原表和source_url"
+      },
+      "findings": [],
+      "not_checked_here": [
+        "国家和中文名",
+        "层级和包含资产",
+        "运营状态",
+        "交互和筛选"
+      ]
+    },
+    {
+      "row_index": 6,
+      "scope_id": "伊拉克/Sarsang",
+      "name": "Sarsang",
+      "product": "crude_oil",
+      "field_checks": {
+        "product": "pass",
+        "source_value": "pass",
+        "source_unit": "pass",
+        "observation_year": "pass",
+        "gross_vs_equity": "pass",
+        "actual_vs_estimate": "pass"
+      },
+      "evidence": {
+        "claimed_value": "0.7",
+        "claimed_unit": "千桶/日",
+        "claimed_date": "2026年第二季度平均",
+        "source_url": "https://shamaranpetroleum.com/news/shamaran-reports-second-quarter-2026-results-122891/",
+        "cached_evidence_sha256": "2339c86d7c287b294ada105b8629a5a3f2c1b14677325ff8e61af7654953bfe7",
+        "cache_read_date": "2026-10-26",
+        "cache_fetch_date": "2026-10-25",
+        "basis": "逐项重读所引公开正文或官方原表，非链接存在性检查",
+        "source_quote": ") – Atrush 1.2 35.1 20.6 – Sarsang 0.7 28.7 15.3 Total 1.9 63.8 35.9 Aver"
+      },
+      "findings": [],
+      "not_checked_here": [
+        "国家和中文名",
+        "层级和包含资产",
+        "运营状态",
+        "交互和筛选"
+      ]
+    },
+    {
+      "row_index": 7,
+      "scope_id": "卡塔尔/Idd El-Sharqi",
+      "name": "Idd El-Sharqi",
+      "product": "crude_oil",
+      "field_checks": {
+        "product": "pass",
+        "source_value": "pass",
+        "source_unit": "pass",
+        "observation_year": "pass",
+        "gross_vs_equity": "pass",
+        "actual_vs_estimate": "pass"
+      },
+      "evidence": {
+        "claimed_value": "54.4",
+        "claimed_unit": "千桶/日",
+        "claimed_date": "2024年平均",
+        "source_url": "https://www.qatarenergy.qa/en/MediaCenter/Publications/QatarEnergy_Investors_Presentation_November_2025.pdf",
+        "cached_evidence_sha256": "c548d703dc46dfb89e7453e8c02aa20d43b6601bee164afe2c5d97da0e983f8a",
+        "cache_read_date": "2026-10-26",
+        "cache_fetch_date": "2026-10-25",
+        "basis": "逐项重读所引公开正文或官方原表，非链接存在性检查",
+        "source_quote": "Hanine Idd El Shargi 35.1 38.6 39.954.4 Al Rayyan 0.33.6 Al Shaheen Al Kha"
+      },
+      "findings": [],
+      "not_checked_here": [
+        "国家和中文名",
+        "层级和包含资产",
+        "运营状态",
+        "交互和筛选"
+      ]
+    },
+    {
+      "row_index": 8,
+      "scope_id": "埃及/Belayim",
+      "name": "Belayim",
+      "product": "crude_oil",
+      "field_checks": {
+        "product": "pass",
+        "source_value": "pass",
+        "source_unit": "pass",
+        "observation_year": "pass",
+        "gross_vs_equity": "pass",
+        "actual_vs_estimate": "issue"
+      },
+      "evidence": {
+        "claimed_value": "105",
+        "claimed_unit": "千桶/日",
+        "claimed_date": "2013年",
+        "source_url": "https://report.eni.com/factbook-2013/en/business-segments/exploration-production/activity-areas/north-africa.html",
+        "cached_evidence_sha256": "5f5e4bbad77c6ccb6da140d7ef28e663a8b874261ecf139466f1bd13fed01a7a",
+        "cache_read_date": "2026-10-26",
+        "cache_fetch_date": "2026-10-25",
+        "basis": "逐项重读所引公开正文或官方原表，非链接存在性检查",
+        "source_quote": "gypt, which produced approximately 105 kbbl/d (56 net to Eni) in 2013. Developme"
+      },
+      "findings": [
+        "Eni原文approximately105，但value_qualifier空，页面备注误标真实产量；依既有近似值规则需标估算。"
+      ],
+      "not_checked_here": [
+        "国家和中文名",
+        "层级和包含资产",
+        "运营状态",
+        "交互和筛选"
+      ]
+    },
+    {
+      "row_index": 9,
+      "scope_id": "阿联酋/Bab",
+      "name": "Bab",
+      "product": "crude_oil",
+      "field_checks": {
+        "product": "pass",
+        "source_value": "pass",
+        "source_unit": "pass",
+        "observation_year": "pass",
+        "gross_vs_equity": "pass",
+        "actual_vs_estimate": "pass"
+      },
+      "evidence": {
+        "claimed_value": "336",
+        "claimed_unit": "千桶/日",
+        "claimed_date": "2010年估计；IEEJ 2012-09报告",
+        "source_url": "https://eneken.ieej.or.jp/data/4534.pdf",
+        "cached_evidence_sha256": "7d0d82333acaacc1d962a34bc1ebffef30be685e9544abacf295a9b1a0d22fa8",
+        "cache_read_date": "2026-10-26",
+        "cache_fetch_date": "2026-10-25",
+        "basis": "逐项重读所引公开正文或官方原表，非链接存在性检查",
+        "source_quote": "017 forecast Remarks Bab oil field Bab 336 435 Discovered 1960, Tamama layer "
+      },
+      "findings": [],
+      "not_checked_here": [
+        "国家和中文名",
+        "层级和包含资产",
+        "运营状态",
+        "交互和筛选"
+      ]
+    },
+    {
+      "row_index": 10,
+      "scope_id": "也门/Alif",
+      "name": "Alif",
+      "product": "crude_oil",
+      "field_checks": {
+        "product": "pass",
+        "source_value": "pass",
+        "source_unit": "pass",
+        "observation_year": "pass",
+        "gross_vs_equity": "pass",
+        "actual_vs_estimate": "pass"
+      },
+      "evidence": {
+        "claimed_value": "118.5",
+        "claimed_unit": "千桶/日",
+        "claimed_date": "1992全年平均；1994文章摘要",
+        "source_url": "https://www.osti.gov/biblio/7031753",
+        "cached_evidence_sha256": "a408527dc4f5675a83df470e4881fbe0cf9c38849da7f2d7e01d424ebb6ee86f",
+        "cache_read_date": "2026-10-26",
+        "cache_fetch_date": "2026-10-25",
+        "basis": "逐项重读所引公开正文或官方原表，非链接存在性检查",
+        "source_quote": "ber 1985. Alif production averaged 118,500 b/d in 1992. Physical and chemical"
+      },
+      "findings": [],
+      "not_checked_here": [
+        "国家和中文名",
+        "层级和包含资产",
+        "运营状态",
+        "交互和筛选"
+      ]
+    },
+    {
+      "row_index": 11,
+      "scope_id": "也门/Block 5 (Jannah)",
+      "name": "Block 5 (Jannah)",
+      "product": "crude_oil",
+      "field_checks": {
+        "product": "pass",
+        "source_value": "pass",
+        "source_unit": "pass",
+        "observation_year": "issue",
+        "gross_vs_equity": "pass",
+        "actual_vs_estimate": "pass"
+      },
+      "evidence": {
+        "claimed_value": "50",
+        "claimed_unit": "千桶/日",
+        "claimed_date": "截至2007-01的历史平均",
+        "source_url": "https://www.pepaye.com/page/67",
+        "cached_evidence_sha256": "e20f882737e291b83d4551488a80247e86996119e9f4e3c832f737f6076397c2",
+        "cache_read_date": "2026-10-26",
+        "cache_fetch_date": "2026-10-25",
+        "basis": "逐项重读所引公开正文或官方原表，非链接存在性检查",
+        "source_quote": "lds with an average production of (50,000) BOPD. The total number of wells w"
+      },
+      "findings": [
+        "PEPA网页Jan2007修饰井数80口，未明确50000桶日量的观察年份；2007不能确定为产量依据年。"
+      ],
+      "not_checked_here": [
+        "国家和中文名",
+        "层级和包含资产",
+        "运营状态",
+        "交互和筛选"
+      ]
+    },
+    {
+      "row_index": 12,
+      "scope_id": "伊拉克/Ahdab",
+      "name": "Ahdab",
+      "product": "crude_oil",
+      "field_checks": {
+        "product": "pass",
+        "source_value": "pass",
+        "source_unit": "pass",
+        "observation_year": "pass",
+        "gross_vs_equity": "pass",
+        "actual_vs_estimate": "pass",
+        "annual_calculation": "pass"
+      },
+      "evidence": {
+        "claimed_value": "49.2",
+        "claimed_unit": "千桶/日",
+        "claimed_date": "2021年历史日均（全年365日）",
+        "source_url": "https://eiti.org/sites/default/files/2024-01/Iraq%202021%20EITI%20Report.pdf",
+        "cached_evidence_sha256": "57f1268210a696b892a609865d323ae593e935cdd2699693720a3f8d62b6183e",
+        "cache_read_date": "2026-10-26",
+        "cache_fetch_date": "2026-10-25",
+        "basis": "逐项重读所引公开正文或官方原表，非链接存在性检查",
+        "independent_formula": "17956867 / 365 / 1000",
+        "independent_unrounded": "49.19689589041095890410958904",
+        "independent_rounded_match": true,
+        "source_quote": "i Qar 33,221,515 2.40% Ahdeb Wasit 17,956,867 1.30% Faihaa Basra 15,938,661 1.15"
+      },
+      "findings": [],
+      "not_checked_here": [
+        "国家和中文名",
+        "层级和包含资产",
+        "运营状态",
+        "交互和筛选"
+      ]
+    },
+    {
+      "row_index": 13,
+      "scope_id": "伊拉克/Ain Zalah",
+      "name": "Ain Zalah",
+      "product": "crude_oil",
+      "field_checks": {
+        "product": "pass",
+        "source_value": "pass",
+        "source_unit": "pass",
+        "observation_year": "pass",
+        "gross_vs_equity": "pass",
+        "actual_vs_estimate": "pass",
+        "annual_calculation": "pass"
+      },
+      "evidence": {
+        "claimed_value": "3.9",
+        "claimed_unit": "千桶/日",
+        "claimed_date": "2021年历史日均（全年365日）",
+        "source_url": "https://eiti.org/sites/default/files/2024-01/Iraq%202021%20EITI%20Report.pdf",
+        "cached_evidence_sha256": "57f1268210a696b892a609865d323ae593e935cdd2699693720a3f8d62b6183e",
+        "cache_read_date": "2026-10-26",
+        "cache_fetch_date": "2026-10-25",
+        "basis": "逐项重读所引公开正文或官方原表，非链接存在性检查",
+        "independent_formula": "1412999 / 365 / 1000",
+        "independent_unrounded": "3.871230136986301369863013699",
+        "independent_rounded_match": true,
+        "source_quote": "1,821,143 2% 675,236 170% AinZalah 1,412,999 1% 916,024 54% Batmah 247,597 0% 4"
+      },
+      "findings": [],
+      "not_checked_here": [
+        "国家和中文名",
+        "层级和包含资产",
+        "运营状态",
+        "交互和筛选"
+      ]
+    },
+    {
+      "row_index": 14,
+      "scope_id": "伊拉克/Ajil",
+      "name": "Ajil",
+      "product": "crude_oil",
+      "field_checks": {
+        "product": "pass",
+        "source_value": "pass",
+        "source_unit": "pass",
+        "observation_year": "pass",
+        "gross_vs_equity": "pass",
+        "actual_vs_estimate": "pass",
+        "annual_calculation": "pass"
+      },
+      "evidence": {
+        "claimed_value": "5.9",
+        "claimed_unit": "千桶/日",
+        "claimed_date": "2021年历史日均（全年365日）",
+        "source_url": "https://eiti.org/sites/default/files/2024-01/Iraq%202021%20EITI%20Report.pdf",
+        "cached_evidence_sha256": "57f1268210a696b892a609865d323ae593e935cdd2699693720a3f8d62b6183e",
+        "cache_read_date": "2026-10-26",
+        "cache_fetch_date": "2026-10-25",
+        "basis": "逐项重读所引公开正文或官方原表，非链接存在性检查",
+        "independent_formula": "2167278 / 365 / 1000",
+        "independent_unrounded": "5.937747945205479452054794521",
+        "independent_rounded_match": true,
+        "source_quote": "baz 9,139,429 8% 8,769,428 4% Ajil 2,167,278 2% 75,649 2765% Qayyarah 1,821,143"
+      },
+      "findings": [],
+      "not_checked_here": [
+        "国家和中文名",
+        "层级和包含资产",
+        "运营状态",
+        "交互和筛选"
+      ]
+    },
+    {
+      "row_index": 15,
+      "scope_id": "伊拉克/Artawi",
+      "name": "Artawi",
+      "product": "crude_oil",
+      "field_checks": {
+        "product": "pass",
+        "source_value": "pass",
+        "source_unit": "pass",
+        "observation_year": "pass",
+        "gross_vs_equity": "pass",
+        "actual_vs_estimate": "pass",
+        "annual_calculation": "pass"
+      },
+      "evidence": {
+        "claimed_value": "16.7",
+        "claimed_unit": "千桶/日",
+        "claimed_date": "2016年历史日均（全年366日）",
+        "source_url": "https://eiti.org/sites/default/files/attachments/iraq_2016_eiti_report.pdf",
+        "cached_evidence_sha256": "8d3009ebfd02e0e9c4d67d1b7821810c0ec42d4295b115d09b1bd230cd8bfc24",
+        "cache_read_date": "2026-10-26",
+        "cache_fetch_date": "2026-10-25",
+        "basis": "逐项重读所引公开正文或官方原表，非链接存在性检查",
+        "independent_formula": "6123726 / 366 / 1000",
+        "independent_unrounded": "16.73149180327868852459016393",
+        "independent_rounded_match": true,
+        "source_quote": "Majnoon 78,469,336 Tuba 13,262,897 Artawi 6,123,726 Al-Nasiriyah 26,023,131 Garraf 36,"
+      },
+      "findings": [],
+      "not_checked_here": [
+        "国家和中文名",
+        "层级和包含资产",
+        "运营状态",
+        "交互和筛选"
+      ]
+    },
+    {
+      "row_index": 16,
+      "scope_id": "伊拉克/Atrush",
+      "name": "Atrush",
+      "product": "crude_oil",
+      "field_checks": {
+        "product": "pass",
+        "source_value": "pass",
+        "source_unit": "pass",
+        "observation_year": "pass",
+        "gross_vs_equity": "pass",
+        "actual_vs_estimate": "pass"
+      },
+      "evidence": {
+        "claimed_value": "1.2",
+        "claimed_unit": "千桶/日",
+        "claimed_date": "2026年第二季度平均",
+        "source_url": "https://shamaranpetroleum.com/news/shamaran-reports-second-quarter-2026-results-122891/",
+        "cached_evidence_sha256": "2339c86d7c287b294ada105b8629a5a3f2c1b14677325ff8e61af7654953bfe7",
+        "cache_read_date": "2026-10-26",
+        "cache_fetch_date": "2026-10-25",
+        "basis": "逐项重读所引公开正文或官方原表，非链接存在性检查",
+        "source_quote": " gross 100% field (Mbopd) – Atrush 1.2 35.1 20.6 – Sarsang 0.7 28.7 15.3 "
+      },
+      "findings": [
+        "同文披露2026July初短时>40000bopd，但现选择Q2均1200；不能称最新时点量。"
+      ],
+      "not_checked_here": [
+        "国家和中文名",
+        "层级和包含资产",
+        "运营状态",
+        "交互和筛选"
+      ]
+    },
+    {
+      "row_index": 17,
+      "scope_id": "伊拉克/Avana Dome",
+      "name": "Avana Dome",
+      "product": "crude_oil",
+      "field_checks": {
+        "product": "pass",
+        "source_value": "pass",
+        "source_unit": "pass",
+        "observation_year": "pass",
+        "gross_vs_equity": "pass",
+        "actual_vs_estimate": "pass",
+        "annual_calculation": "pass"
+      },
+      "evidence": {
+        "claimed_value": "34.4",
+        "claimed_unit": "千桶/日",
+        "claimed_date": "2021年历史日均（全年365日）",
+        "source_url": "https://eiti.org/sites/default/files/2024-01/Iraq%202021%20EITI%20Report.pdf",
+        "cached_evidence_sha256": "57f1268210a696b892a609865d323ae593e935cdd2699693720a3f8d62b6183e",
+        "cache_read_date": "2026-10-26",
+        "cache_fetch_date": "2026-10-25",
+        "basis": "逐项重读所引公开正文或官方原表，非链接存在性检查",
+        "independent_formula": "12542338 / 365 / 1000",
+        "independent_unrounded": "34.3625698630136986301369863",
+        "independent_rounded_match": true,
+        "source_quote": "% 12,602,565 11% Kirkuk/Avana Dome 12,542,338 11% 12,749,794 -2% Khabbaz 9,139,4"
+      },
+      "findings": [],
+      "not_checked_here": [
+        "国家和中文名",
+        "层级和包含资产",
+        "运营状态",
+        "交互和筛选"
+      ]
+    },
+    {
+      "row_index": 18,
+      "scope_id": "伊拉克/Baba Dome",
+      "name": "Baba Dome",
+      "product": "crude_oil",
+      "field_checks": {
+        "product": "pass",
+        "source_value": "pass",
+        "source_unit": "pass",
+        "observation_year": "pass",
+        "gross_vs_equity": "pass",
+        "actual_vs_estimate": "pass",
+        "annual_calculation": "pass"
+      },
+      "evidence": {
+        "claimed_value": "73.5",
+        "claimed_unit": "千桶/日",
+        "claimed_date": "2021年历史日均（全年365日）",
+        "source_url": "https://eiti.org/sites/default/files/2024-01/Iraq%202021%20EITI%20Report.pdf",
+        "cached_evidence_sha256": "57f1268210a696b892a609865d323ae593e935cdd2699693720a3f8d62b6183e",
+        "cache_read_date": "2026-10-26",
+        "cache_fetch_date": "2026-10-25",
+        "basis": "逐项重读所引公开正文或官方原表，非链接存在性检查",
+        "independent_formula": "26822678 / 365 / 1000",
+        "independent_unrounded": "73.48678904109589041095890411",
+        "independent_rounded_match": true,
+        "source_quote": "2% 40,849,344 19% Kirkuk/Baba Dome 26,822,678 23% 31,235,860 -14% Jambour 14,008"
+      },
+      "findings": [],
+      "not_checked_here": [
+        "国家和中文名",
+        "层级和包含资产",
+        "运营状态",
+        "交互和筛选"
+      ]
+    },
+    {
+      "row_index": 19,
+      "scope_id": "伊拉克/Badra",
+      "name": "Badra",
+      "product": "crude_oil",
+      "field_checks": {
+        "product": "pass",
+        "source_value": "pass",
+        "source_unit": "pass",
+        "observation_year": "pass",
+        "gross_vs_equity": "pass",
+        "actual_vs_estimate": "pass",
+        "annual_calculation": "pass"
+      },
+      "evidence": {
+        "claimed_value": "35.2",
+        "claimed_unit": "千桶/日",
+        "claimed_date": "2021年历史日均（全年365日）",
+        "source_url": "https://eiti.org/sites/default/files/2024-01/Iraq%202021%20EITI%20Report.pdf",
+        "cached_evidence_sha256": "57f1268210a696b892a609865d323ae593e935cdd2699693720a3f8d62b6183e",
+        "cache_read_date": "2026-10-26",
+        "cache_fetch_date": "2026-10-25",
+        "basis": "逐项重读所引公开正文或官方原表，非链接存在性检查",
+        "independent_formula": "12857981 / 365 / 1000",
+        "independent_unrounded": "35.22734520547945205479452055",
+        "independent_rounded_match": true,
+        "source_quote": "Basra 15,938,661 1.15% Badra Wasit 12,857,981 0.93% Siba Basra 7,272,383 0.52% E"
+      },
+      "findings": [],
+      "not_checked_here": [
+        "国家和中文名",
+        "层级和包含资产",
+        "运营状态",
+        "交互和筛选"
+      ]
+    },
+    {
+      "row_index": 20,
+      "scope_id": "伊拉克/Bai Hassan",
+      "name": "Bai Hassan",
+      "product": "crude_oil",
+      "field_checks": {
+        "product": "pass",
+        "source_value": "pass",
+        "source_unit": "pass",
+        "observation_year": "pass",
+        "gross_vs_equity": "pass",
+        "actual_vs_estimate": "pass",
+        "annual_calculation": "pass"
+      },
+      "evidence": {
+        "claimed_value": "133.3",
+        "claimed_unit": "千桶/日",
+        "claimed_date": "2021年历史日均（全年365日）",
+        "source_url": "https://eiti.org/sites/default/files/2024-01/Iraq%202021%20EITI%20Report.pdf",
+        "cached_evidence_sha256": "57f1268210a696b892a609865d323ae593e935cdd2699693720a3f8d62b6183e",
+        "cache_read_date": "2026-10-26",
+        "cache_fetch_date": "2026-10-25",
+        "basis": "逐项重读所引公开正文或官方原表，非链接存在性检查",
+        "independent_formula": "48672087 / 365 / 1000",
+        "independent_unrounded": "133.3481835616438356164383562",
+        "independent_rounded_match": true,
+        "source_quote": "ion 2020 (bbl) Change % Bay Hassan 48,672,087 42% 40,849,344 19% Kirkuk/Baba Dom"
+      },
+      "findings": [],
+      "not_checked_here": [
+        "国家和中文名",
+        "层级和包含资产",
+        "运营状态",
+        "交互和筛选"
+      ]
+    },
+    {
+      "row_index": 21,
+      "scope_id": "伊拉克/Batmah",
+      "name": "Batmah",
+      "product": "crude_oil",
+      "field_checks": {
+        "product": "pass",
+        "source_value": "pass",
+        "source_unit": "pass",
+        "observation_year": "pass",
+        "gross_vs_equity": "pass",
+        "actual_vs_estimate": "pass",
+        "annual_calculation": "pass"
+      },
+      "evidence": {
+        "claimed_value": "0.7",
+        "claimed_unit": "千桶/日",
+        "claimed_date": "2021年历史日均（全年365日）",
+        "source_url": "https://eiti.org/sites/default/files/2024-01/Iraq%202021%20EITI%20Report.pdf",
+        "cached_evidence_sha256": "57f1268210a696b892a609865d323ae593e935cdd2699693720a3f8d62b6183e",
+        "cache_read_date": "2026-10-26",
+        "cache_fetch_date": "2026-10-25",
+        "basis": "逐项重读所引公开正文或官方原表，非链接存在性检查",
+        "independent_formula": "247597 / 365 / 1000",
+        "independent_unrounded": "0.6783479452054794520547945205",
+        "independent_rounded_match": true,
+        "source_quote": "ah 1,412,999 1% 916,024 54% Batmah 247,597 0% 49,267 403% Total 116,834,241 1"
+      },
+      "findings": [],
+      "not_checked_here": [
+        "国家和中文名",
+        "层级和包含资产",
+        "运营状态",
+        "交互和筛选"
+      ]
+    },
+    {
+      "row_index": 22,
+      "scope_id": "伊拉克/East Baghdad",
+      "name": "East Baghdad",
+      "product": "crude_oil",
+      "field_checks": {
+        "product": "pass",
+        "source_value": "pass",
+        "source_unit": "pass",
+        "observation_year": "pass",
+        "gross_vs_equity": "pass",
+        "actual_vs_estimate": "pass",
+        "annual_calculation": "pass"
+      },
+      "evidence": {
+        "claimed_value": "18.2",
+        "claimed_unit": "千桶/日",
+        "claimed_date": "2021年历史日均（全年365日）",
+        "source_url": "https://eiti.org/sites/default/files/2024-01/Iraq%202021%20EITI%20Report.pdf",
+        "cached_evidence_sha256": "57f1268210a696b892a609865d323ae593e935cdd2699693720a3f8d62b6183e",
+        "cache_read_date": "2026-10-26",
+        "cache_fetch_date": "2026-10-25",
+        "basis": "逐项重读所引公开正文或官方原表，非链接存在性检查",
+        "independent_formula": "6630000 / 365 / 1000",
+        "independent_unrounded": "18.16438356164383561643835616",
+        "independent_rounded_match": true,
+        "source_quote": " 7,272,383 0.52% E.Baghdad Baghdad 6,630,000 0.48% Qiyarah Nineveh 1,775,463 0."
+      },
+      "findings": [],
+      "not_checked_here": [
+        "国家和中文名",
+        "层级和包含资产",
+        "运营状态",
+        "交互和筛选"
+      ]
+    },
+    {
+      "row_index": 23,
+      "scope_id": "伊拉克/Faihaa",
+      "name": "Faihaa",
+      "product": "crude_oil",
+      "field_checks": {
+        "product": "pass",
+        "source_value": "pass",
+        "source_unit": "pass",
+        "observation_year": "pass",
+        "gross_vs_equity": "pass",
+        "actual_vs_estimate": "pass"
+      },
+      "evidence": {
+        "claimed_value": ">100",
+        "claimed_unit": "千桶/日",
+        "claimed_date": "2025-09-25（报告下限）",
+        "source_url": "https://shafaq.com/en/Economy/Iraq-expands-oil-production-starts-drilling-in-border-region",
+        "cached_evidence_sha256": "e8d9fedb68cf02d7ab8580b9ac531f5bef3c526f82637229eef9221150fe4f5b",
+        "cache_read_date": "2026-10-26",
+        "cache_fetch_date": "2026-10-25",
+        "basis": "逐项重读所引公开正文或官方原表，非链接存在性检查",
+        "source_quote": "haa field, which now produces over 100,000 barrels of crude oil per day and 1",
+        "gas_scope_conflict_sources": [
+          "https://ninanews.com/website/News/Details?key=1242715",
+          "https://www.iraq-businessnews.com/2025/07/28/iraq-opens-central-gas-processing-facility-at-block-9/"
+        ]
+      },
+      "findings": [
+        "同文130millioncubicfeet associated gas单位分母不独立明确；NINA2025-07-24及IBN2025-07-28把130MMSCFD明确列为处理能力，暂不补实产，保留待核。"
+      ],
+      "not_checked_here": [
+        "国家和中文名",
+        "层级和包含资产",
+        "运营状态",
+        "交互和筛选"
+      ]
+    },
+    {
+      "row_index": 24,
+      "scope_id": "伊拉克/Gharraf",
+      "name": "Gharraf",
+      "product": "crude_oil",
+      "field_checks": {
+        "product": "pass",
+        "source_value": "pass",
+        "source_unit": "pass",
+        "observation_year": "pass",
+        "gross_vs_equity": "pass",
+        "actual_vs_estimate": "pass"
+      },
+      "evidence": {
+        "claimed_value": "约180",
+        "claimed_unit": "千桶/日",
+        "claimed_date": "2025-07-08报道时点",
+        "source_url": "https://www.iraq-businessnews.com/2025/07/08/dqoc-boosts-production-with-integrated-development-plan/",
+        "cached_evidence_sha256": "fe95b62e7a3aea5d90970b39108a8def1d1ba82ce199cf86c1e6523fa147a73e",
+        "cache_read_date": "2026-10-26",
+        "cache_fetch_date": "2026-10-25",
+        "basis": "逐项重读所引公开正文或官方原表，非链接存在性检查",
+        "source_quote": "g round, has reached approximately 180,000 bpd. Regarding associated gas, Sha"
+      },
+      "findings": [],
+      "not_checked_here": [
+        "国家和中文名",
+        "层级和包含资产",
+        "运营状态",
+        "交互和筛选"
+      ]
+    },
+    {
+      "row_index": 25,
+      "scope_id": "伊拉克/Halfaya",
+      "name": "Halfaya",
+      "product": "crude_oil",
+      "field_checks": {
+        "product": "pass",
+        "source_value": "pass",
+        "source_unit": "pass",
+        "observation_year": "pass",
+        "gross_vs_equity": "pass",
+        "actual_vs_estimate": "pass",
+        "annual_calculation": "pass"
+      },
+      "evidence": {
+        "claimed_value": "389.6",
+        "claimed_unit": "千桶/日",
+        "claimed_date": "2021年历史日均（全年365日）",
+        "source_url": "https://eiti.org/sites/default/files/2024-01/Iraq%202021%20EITI%20Report.pdf",
+        "cached_evidence_sha256": "57f1268210a696b892a609865d323ae593e935cdd2699693720a3f8d62b6183e",
+        "cache_read_date": "2026-10-26",
+        "cache_fetch_date": "2026-10-25",
+        "basis": "逐项重读所引公开正文或官方原表，非链接存在性检查",
+        "independent_formula": "142213694 / 365 / 1000",
+        "independent_unrounded": "389.6265589041095890410958904",
+        "independent_rounded_match": true,
+        "source_quote": " 146,022,515 10.53% Halfaya Maysan 142,213,694 10.26% Missan Maysan 80,650,634 5."
+      },
+      "findings": [],
+      "not_checked_here": [
+        "国家和中文名",
+        "层级和包含资产",
+        "运营状态",
+        "交互和筛选"
+      ]
+    },
+    {
+      "row_index": 26,
+      "scope_id": "伊拉克/Jambur",
+      "name": "Jambur",
+      "product": "crude_oil",
+      "field_checks": {
+        "product": "pass",
+        "source_value": "pass",
+        "source_unit": "pass",
+        "observation_year": "pass",
+        "gross_vs_equity": "pass",
+        "actual_vs_estimate": "pass",
+        "annual_calculation": "pass"
+      },
+      "evidence": {
+        "claimed_value": "38.4",
+        "claimed_unit": "千桶/日",
+        "claimed_date": "2021年历史日均（全年365日）",
+        "source_url": "https://eiti.org/sites/default/files/2024-01/Iraq%202021%20EITI%20Report.pdf",
+        "cached_evidence_sha256": "57f1268210a696b892a609865d323ae593e935cdd2699693720a3f8d62b6183e",
+        "cache_read_date": "2026-10-26",
+        "cache_fetch_date": "2026-10-25",
+        "basis": "逐项重读所引公开正文或官方原表，非链接存在性检查",
+        "independent_formula": "14008692 / 365 / 1000",
+        "independent_unrounded": "38.37997808219178082191780822",
+        "independent_rounded_match": true,
+        "source_quote": "22,678 23% 31,235,860 -14% Jambour 14,008,692 12% 12,602,565 11% Kirkuk/Avana Do"
+      },
+      "findings": [],
+      "not_checked_here": [
+        "国家和中文名",
+        "层级和包含资产",
+        "运营状态",
+        "交互和筛选"
+      ]
+    },
+    {
+      "row_index": 27,
+      "scope_id": "伊拉克/Khabbaz",
+      "name": "Khabbaz",
+      "product": "crude_oil",
+      "field_checks": {
+        "product": "pass",
+        "source_value": "pass",
+        "source_unit": "pass",
+        "observation_year": "pass",
+        "gross_vs_equity": "pass",
+        "actual_vs_estimate": "pass",
+        "annual_calculation": "pass"
+      },
+      "evidence": {
+        "claimed_value": "25.0",
+        "claimed_unit": "千桶/日",
+        "claimed_date": "2021年历史日均（全年365日）",
+        "source_url": "https://eiti.org/sites/default/files/2024-01/Iraq%202021%20EITI%20Report.pdf",
+        "cached_evidence_sha256": "57f1268210a696b892a609865d323ae593e935cdd2699693720a3f8d62b6183e",
+        "cache_read_date": "2026-10-26",
+        "cache_fetch_date": "2026-10-25",
+        "basis": "逐项重读所引公开正文或官方原表，非链接存在性检查",
+        "independent_formula": "9139429 / 365 / 1000",
+        "independent_unrounded": "25.03953150684931506849315068",
+        "independent_rounded_match": true,
+        "source_quote": "542,338 11% 12,749,794 -2% Khabbaz 9,139,429 8% 8,769,428 4% Ajil 2,167,278 2% "
+      },
+      "findings": [],
+      "not_checked_here": [
+        "国家和中文名",
+        "层级和包含资产",
+        "运营状态",
+        "交互和筛选"
+      ]
+    },
+    {
+      "row_index": 28,
+      "scope_id": "伊拉克/Luhais",
+      "name": "Luhais",
+      "product": "crude_oil",
+      "field_checks": {
+        "product": "pass",
+        "source_value": "pass",
+        "source_unit": "pass",
+        "observation_year": "pass",
+        "gross_vs_equity": "pass",
+        "actual_vs_estimate": "pass",
+        "annual_calculation": "pass"
+      },
+      "evidence": {
+        "claimed_value": "89.2",
+        "claimed_unit": "千桶/日",
+        "claimed_date": "2016年历史日均（全年366日）",
+        "source_url": "https://eiti.org/sites/default/files/attachments/iraq_2016_eiti_report.pdf",
+        "cached_evidence_sha256": "8d3009ebfd02e0e9c4d67d1b7821810c0ec42d4295b115d09b1bd230cd8bfc24",
+        "cache_read_date": "2026-10-26",
+        "cache_fetch_date": "2026-10-25",
+        "basis": "逐项重读所引公开正文或官方原表，非链接存在性检查",
+        "independent_formula": "32631608 / 366 / 1000",
+        "independent_unrounded": "89.15739890710382513661202186",
+        "independent_rounded_match": true,
+        "source_quote": ",571 Bin Omar 12,407,883 Al-Luhais 32,631,608 West Qurna 1 162,835,918 West Qurn"
+      },
+      "findings": [],
+      "not_checked_here": [
+        "国家和中文名",
+        "层级和包含资产",
+        "运营状态",
+        "交互和筛选"
+      ]
+    },
+    {
+      "row_index": 29,
+      "scope_id": "伊拉克/Majnoon",
+      "name": "Majnoon",
+      "product": "crude_oil",
+      "field_checks": {
+        "product": "pass",
+        "source_value": "pass",
+        "source_unit": "pass",
+        "observation_year": "pass",
+        "gross_vs_equity": "pass",
+        "actual_vs_estimate": "pass",
+        "annual_calculation": "pass"
+      },
+      "evidence": {
+        "claimed_value": "176.0",
+        "claimed_unit": "千桶/日",
+        "claimed_date": "2021年历史日均（全年365日）",
+        "source_url": "https://eiti.org/sites/default/files/2024-01/Iraq%202021%20EITI%20Report.pdf",
+        "cached_evidence_sha256": "57f1268210a696b892a609865d323ae593e935cdd2699693720a3f8d62b6183e",
+        "cache_read_date": "2026-10-26",
+        "cache_fetch_date": "2026-10-25",
+        "basis": "逐项重读所引公开正文或官方原表，非链接存在性检查",
+        "independent_formula": "64240000 / 365 / 1000",
+        "independent_unrounded": "176",
+        "independent_rounded_match": true,
+        "source_quote": "san 80,650,634 5.82% Majnoon Basra 64,240,000 4.63% Garraf Thi Qar 33,221,515 2."
+      },
+      "findings": [],
+      "not_checked_here": [
+        "国家和中文名",
+        "层级和包含资产",
+        "运营状态",
+        "交互和筛选"
+      ]
+    },
+    {
+      "row_index": 30,
+      "scope_id": "伊拉克/Nassiriya",
+      "name": "Nassiriya",
+      "product": "crude_oil",
+      "field_checks": {
+        "product": "pass",
+        "source_value": "pass",
+        "source_unit": "pass",
+        "observation_year": "pass",
+        "gross_vs_equity": "pass",
+        "actual_vs_estimate": "pass"
+      },
+      "evidence": {
+        "claimed_value": "70",
+        "claimed_unit": "千桶/日",
+        "claimed_date": "2025-07-08报道时点",
+        "source_url": "https://www.iraq-businessnews.com/2025/07/08/dqoc-boosts-production-with-integrated-development-plan/",
+        "cached_evidence_sha256": "fe95b62e7a3aea5d90970b39108a8def1d1ba82ce199cf86c1e6523fa147a73e",
+        "cache_read_date": "2026-10-26",
+        "cache_fetch_date": "2026-10-25",
+        "basis": "逐项重读所引公开正文或官方原表，非链接存在性检查",
+        "source_quote": " raising production from 52,000 to 70,000 barrels per day (bpd). In the Subb"
+      },
+      "findings": [],
+      "not_checked_here": [
+        "国家和中文名",
+        "层级和包含资产",
+        "运营状态",
+        "交互和筛选"
+      ]
+    },
+    {
+      "row_index": 31,
+      "scope_id": "伊拉克/Rumaila",
+      "name": "Rumaila",
+      "product": "crude_oil",
+      "field_checks": {
+        "product": "pass",
+        "source_value": "pass",
+        "source_unit": "pass",
+        "observation_year": "pass",
+        "gross_vs_equity": "pass",
+        "actual_vs_estimate": "pass"
+      },
+      "evidence": {
+        "claimed_value": "1,370",
+        "claimed_unit": "千桶/日",
+        "claimed_date": "2025年平均",
+        "source_url": "https://rumaila.iq/english/about-us/history-2/",
+        "cached_evidence_sha256": "27a2256ae5a5797a56945fcbfe1acd59982d9c4e6e615c87c681922ee4b9f568",
+        "cache_read_date": "2026-10-26",
+        "cache_fetch_date": "2026-10-25",
+        "basis": "逐项重读所引公开正文或官方原表，非链接存在性检查",
+        "source_quote": "rage daily oil production totalled 1.37 million barrels per day (bpd), and once ag"
+      },
+      "findings": [],
+      "not_checked_here": [
+        "国家和中文名",
+        "层级和包含资产",
+        "运营状态",
+        "交互和筛选"
+      ]
+    },
+    {
+      "row_index": 32,
+      "scope_id": "伊拉克/Sarqala",
+      "name": "Sarqala",
+      "product": "crude_oil",
+      "field_checks": {
+        "product": "pass",
+        "source_value": "pass",
+        "source_unit": "pass",
+        "observation_year": "pass",
+        "gross_vs_equity": "pass",
+        "actual_vs_estimate": "pass"
+      },
+      "evidence": {
+        "claimed_value": "4.942",
+        "claimed_unit": "千桶/日",
+        "claimed_date": "2017第一季度平均",
+        "source_url": "https://www.hydrocarbons-technology.com/projects/sarqala-oil-field-kurdistan-region/",
+        "cached_evidence_sha256": "205b0d40492c387521b167fc40c893e52b544bcef0c1e885d947ea65ca93e253",
+        "cache_read_date": "2026-10-26",
+        "cache_fetch_date": "2026-10-25",
+        "basis": "逐项重读所引公开正文或官方原表，非链接存在性检查",
+        "source_quote": "ble: 13 million barrels Production 4,942 barrels a day Ownership WesternZag"
+      },
+      "findings": [],
+      "not_checked_here": [
+        "国家和中文名",
+        "层级和包含资产",
+        "运营状态",
+        "交互和筛选"
+      ]
+    },
+    {
+      "row_index": 33,
+      "scope_id": "伊拉克/Sarta",
+      "name": "Sarta",
+      "product": "crude_oil",
+      "field_checks": {
+        "product": "pass",
+        "source_value": "pass",
+        "source_unit": "pass",
+        "observation_year": "pass",
+        "gross_vs_equity": "pass",
+        "actual_vs_estimate": "pass"
+      },
+      "evidence": {
+        "claimed_value": "0.79",
+        "claimed_unit": "千桶/日",
+        "claimed_date": "2023年平均",
+        "source_url": "https://genelenergy.com/wp-content/uploads/2020/09/Genel-Trading-and-operations-update-FINAL-PR.pdf",
+        "cached_evidence_sha256": null,
+        "cache_read_date": "2026-10-26",
+        "cache_fetch_date": null,
+        "basis": "2026-10-26检索官方替代PDF的2023GrossProduction原表",
+        "source_quote": "Sarta 790"
+      },
+      "findings": [],
+      "not_checked_here": [
+        "国家和中文名",
+        "层级和包含资产",
+        "运营状态",
+        "交互和筛选"
+      ]
+    },
+    {
+      "row_index": 34,
+      "scope_id": "伊拉克/Shaikan",
+      "name": "Shaikan",
+      "product": "crude_oil",
+      "field_checks": {
+        "product": "pass",
+        "source_value": "pass",
+        "source_unit": "pass",
+        "observation_year": "pass",
+        "gross_vs_equity": "pass",
+        "actual_vs_estimate": "pass"
+      },
+      "evidence": {
+        "claimed_value": "14.6",
+        "claimed_unit": "千桶/日",
+        "claimed_date": "2026年上半年平均",
+        "source_url": "https://www.gulfkeystone.com/2026-half-year-results-announcement/",
+        "cached_evidence_sha256": "4bff7c54d1ec27df1480e0564b7bc13c053a86df0dabacac18896b1fa286a608",
+        "cache_read_date": "2026-10-26",
+        "cache_fetch_date": "2026-10-25",
+        "basis": "逐项重读所引公开正文或官方原表，非链接存在性检查",
+        "source_quote": "tional Gross average production of 14,600 bopd in H1 2026 (H1 2025: 44,100 b"
+      },
+      "findings": [
+        "同文复产后当期approaching40000bopd被H1均14600实际优先规则覆盖；表不能解释为最新时点量。"
+      ],
+      "not_checked_here": [
+        "国家和中文名",
+        "层级和包含资产",
+        "运营状态",
+        "交互和筛选"
+      ]
+    },
+    {
+      "row_index": 35,
+      "scope_id": "伊拉克/Subba",
+      "name": "Subba",
+      "product": "crude_oil",
+      "field_checks": {
+        "product": "pass",
+        "source_value": "pass",
+        "source_unit": "pass",
+        "observation_year": "pass",
+        "gross_vs_equity": "pass",
+        "actual_vs_estimate": "pass"
+      },
+      "evidence": {
+        "claimed_value": "30",
+        "claimed_unit": "千桶/日",
+        "claimed_date": "2025-07-08报道时点",
+        "source_url": "https://www.iraq-businessnews.com/2025/07/08/dqoc-boosts-production-with-integrated-development-plan/",
+        "cached_evidence_sha256": "fe95b62e7a3aea5d90970b39108a8def1d1ba82ce199cf86c1e6523fa147a73e",
+        "cache_read_date": "2026-10-26",
+        "cache_fetch_date": "2026-10-25",
+        "basis": "逐项重读所引公开正文或官方原表，非链接存在性检查",
+        "source_quote": "d, increasing output from 8,500 to 30,000 bpd. Meanwhile, production at the "
+      },
+      "findings": [],
+      "not_checked_here": [
+        "国家和中文名",
+        "层级和包含资产",
+        "运营状态",
+        "交互和筛选"
+      ]
+    },
+    {
+      "row_index": 36,
+      "scope_id": "伊拉克/Taq Taq",
+      "name": "Taq Taq",
+      "product": "crude_oil",
+      "field_checks": {
+        "product": "pass",
+        "source_value": "pass",
+        "source_unit": "pass",
+        "observation_year": "pass",
+        "gross_vs_equity": "pass",
+        "actual_vs_estimate": "pass"
+      },
+      "evidence": {
+        "claimed_value": "1.36",
+        "claimed_unit": "千桶/日",
+        "claimed_date": "2023年平均",
+        "source_url": "https://genelenergy.com/wp-content/uploads/2020/09/Genel-Trading-and-operations-update-FINAL-PR.pdf",
+        "cached_evidence_sha256": null,
+        "cache_read_date": "2026-10-26",
+        "cache_fetch_date": null,
+        "basis": "2026-10-26检索官方替代PDF的2023GrossProduction原表",
+        "source_quote": "Taq Taq 1,360"
+      },
+      "findings": [],
+      "not_checked_here": [
+        "国家和中文名",
+        "层级和包含资产",
+        "运营状态",
+        "交互和筛选"
+      ]
+    },
+    {
+      "row_index": 37,
+      "scope_id": "伊拉克/Tuba",
+      "name": "Tuba",
+      "product": "crude_oil",
+      "field_checks": {
+        "product": "pass",
+        "source_value": "pass",
+        "source_unit": "pass",
+        "observation_year": "pass",
+        "gross_vs_equity": "pass",
+        "actual_vs_estimate": "pass",
+        "annual_calculation": "pass"
+      },
+      "evidence": {
+        "claimed_value": "36.2",
+        "claimed_unit": "千桶/日",
+        "claimed_date": "2016年历史日均（全年366日）",
+        "source_url": "https://eiti.org/sites/default/files/attachments/iraq_2016_eiti_report.pdf",
+        "cached_evidence_sha256": "8d3009ebfd02e0e9c4d67d1b7821810c0ec42d4295b115d09b1bd230cd8bfc24",
+        "cache_read_date": "2026-10-26",
+        "cache_fetch_date": "2026-10-25",
+        "basis": "逐项重读所引公开正文或官方原表，非链接存在性检查",
+        "independent_formula": "13262897 / 366 / 1000",
+        "independent_unrounded": "36.23742349726775956284153005",
+        "independent_rounded_match": true,
+        "source_quote": "48,807,189 Majnoon 78,469,336 Tuba 13,262,897 Artawi 6,123,726 Al-Nasiriyah 26,0"
+      },
+      "findings": [],
+      "not_checked_here": [
+        "国家和中文名",
+        "层级和包含资产",
+        "运营状态",
+        "交互和筛选"
+      ]
+    },
+    {
+      "row_index": 38,
+      "scope_id": "伊拉克/West Qurna-1",
+      "name": "West Qurna-1",
+      "product": "crude_oil",
+      "field_checks": {
+        "product": "pass",
+        "source_value": "pass",
+        "source_unit": "pass",
+        "observation_year": "pass",
+        "gross_vs_equity": "pass",
+        "actual_vs_estimate": "pass"
+      },
+      "evidence": {
+        "claimed_value": "600",
+        "claimed_unit": "千桶/日",
+        "claimed_date": "2025-11-20",
+        "source_url": "https://www.iraqinews.com/iraq/iraq-to-raise-west-qurna-1s-output-to-670000-bpd-in-2026/",
+        "cached_evidence_sha256": "8ac1db541b1fce43ba8139660fa27d4fb865800632341451da91316f9be785a6",
+        "cache_read_date": "2026-10-26",
+        "cache_fetch_date": "2026-10-25",
+        "basis": "逐项重读所引公开正文或官方原表，非链接存在性检查",
+        "source_quote": " oilfield’s current output reached 600,000 barrels per day, with ambitious pl"
+      },
+      "findings": [],
+      "not_checked_here": [
+        "国家和中文名",
+        "层级和包含资产",
+        "运营状态",
+        "交互和筛选"
+      ]
+    },
+    {
+      "row_index": 39,
+      "scope_id": "伊拉克/West Qurna-2",
+      "name": "West Qurna-2",
+      "product": "crude_oil",
+      "field_checks": {
+        "product": "pass",
+        "source_value": "pass",
+        "source_unit": "pass",
+        "observation_year": "pass",
+        "gross_vs_equity": "pass",
+        "actual_vs_estimate": "pass",
+        "annual_calculation": "pass"
+      },
+      "evidence": {
+        "claimed_value": "400.1",
+        "claimed_unit": "千桶/日",
+        "claimed_date": "2021年历史日均（全年365日）",
+        "source_url": "https://eiti.org/sites/default/files/2024-01/Iraq%202021%20EITI%20Report.pdf",
+        "cached_evidence_sha256": "57f1268210a696b892a609865d323ae593e935cdd2699693720a3f8d62b6183e",
+        "cache_read_date": "2026-10-26",
+        "cache_fetch_date": "2026-10-25",
+        "basis": "逐项重读所引公开正文或官方原表，非链接存在性检查",
+        "independent_formula": "146022515 / 365 / 1000",
+        "independent_unrounded": "400.0616849315068493150684932",
+        "independent_rounded_match": true,
+        "source_quote": ",760,022 12.39% West Qurna 2 Basra 146,022,515 10.53% Halfaya Maysan 142,213,694 "
+      },
+      "findings": [],
+      "not_checked_here": [
+        "国家和中文名",
+        "层级和包含资产",
+        "运营状态",
+        "交互和筛选"
+      ]
+    },
+    {
+      "row_index": 40,
+      "scope_id": "伊拉克/Zubair",
+      "name": "Zubair",
+      "product": "crude_oil",
+      "field_checks": {
+        "product": "pass",
+        "source_value": "pass",
+        "source_unit": "pass",
+        "observation_year": "pass",
+        "gross_vs_equity": "pass",
+        "actual_vs_estimate": "pass",
+        "annual_calculation": "pass"
+      },
+      "evidence": {
+        "claimed_value": "470.6",
+        "claimed_unit": "千桶/日",
+        "claimed_date": "2021年历史日均（全年365日）",
+        "source_url": "https://eiti.org/sites/default/files/2024-01/Iraq%202021%20EITI%20Report.pdf",
+        "cached_evidence_sha256": "57f1268210a696b892a609865d323ae593e935cdd2699693720a3f8d62b6183e",
+        "cache_read_date": "2026-10-26",
+        "cache_fetch_date": "2026-10-25",
+        "basis": "逐项重读所引公开正文或官方原表，非链接存在性检查",
+        "independent_formula": "171760022 / 365 / 1000",
+        "independent_unrounded": "470.575402739726027397260274",
+        "independent_rounded_match": true,
+        "source_quote": "ra 182,404,555 13.16% Zubair Basra 171,760,022 12.39% West Qurna 2 Basra 146,022,"
+      },
+      "findings": [],
+      "not_checked_here": [
+        "国家和中文名",
+        "层级和包含资产",
+        "运营状态",
+        "交互和筛选"
+      ]
+    },
+    {
+      "row_index": 41,
+      "scope_id": "伊朗/Gulkhari",
+      "name": "Gulkhari",
+      "product": "crude_oil",
+      "field_checks": {
+        "product": "pass",
+        "source_value": "pass",
+        "source_unit": "pass",
+        "observation_year": "pass",
+        "gross_vs_equity": "pass",
+        "actual_vs_estimate": "pass"
+      },
+      "evidence": {
+        "claimed_value": "15",
+        "claimed_unit": "千桶/日",
+        "claimed_date": "2023-10-24报道时点",
+        "source_url": "https://www.trend.az/business/energy/3816404.html",
+        "cached_evidence_sha256": "855b244f1ea6dade52e9e7655c86cda94bc21f25c80c2151b19ae97f8179fe6f",
+        "cache_read_date": "2026-10-26",
+        "cache_fetch_date": "2026-10-25",
+        "basis": "逐项重读所引公开正文或官方原表，非链接存在性检查",
+        "source_quote": "und in 1978 and currently produces 15,000 barrels of crude oil per day. --- "
+      },
+      "findings": [],
+      "not_checked_here": [
+        "国家和中文名",
+        "层级和包含资产",
+        "运营状态",
+        "交互和筛选"
+      ]
+    },
+    {
+      "row_index": 42,
+      "scope_id": "伊朗/Hengam",
+      "name": "Hengam",
+      "product": "crude_oil",
+      "field_checks": {
+        "product": "pass",
+        "source_value": "pass",
+        "source_unit": "pass",
+        "observation_year": "pass",
+        "gross_vs_equity": "pass",
+        "actual_vs_estimate": "pass"
+      },
+      "evidence": {
+        "claimed_value": "7",
+        "claimed_unit": "千桶/日",
+        "claimed_date": "2010-08-24",
+        "source_url": "https://www.shana.ir/news/156860/",
+        "cached_evidence_sha256": "37cdf13cff0a5e41bc0a68c9eab34025b10ca58ed11a43357f792337ecd84007",
+        "cache_read_date": "2026-10-26",
+        "cache_fetch_date": "2026-10-25",
+        "basis": "逐项重读所引公开正文或官方原表，非链接存在性检查",
+        "source_quote": "در روز بود که هم اکنون تولید آن به هفت هزار بشکه در روز رسیده است؛ با بهره‌برد"
+      },
+      "findings": [],
+      "not_checked_here": [
+        "国家和中文名",
+        "层级和包含资产",
+        "运营状态",
+        "交互和筛选"
+      ]
+    },
+    {
+      "row_index": 43,
+      "scope_id": "伊朗/Nargesi",
+      "name": "Nargesi",
+      "product": "crude_oil",
+      "field_checks": {
+        "product": "pass",
+        "source_value": "pass",
+        "source_unit": "pass",
+        "observation_year": "pass",
+        "gross_vs_equity": "pass",
+        "actual_vs_estimate": "pass"
+      },
+      "evidence": {
+        "claimed_value": "20",
+        "claimed_unit": "千桶/日",
+        "claimed_date": "伊朗历1401-06-04（2022-08-26）开发前基准",
+        "source_url": "https://www.shana.ir/news/461057/%D8%A8%D8%B1%D8%AF%D8%A7%D8%B4%D8%AA-%D8%A7%D8%B2-%D9%85%DB%8C%D8%AF%D8%A7%D9%86-%D9%86%D8%B1%DA%AF%D8%B3%DB%8C-%DA%AF%DA%86%D8%B3%D8%A7%D8%B1%D8%A7%D9%86-%D8%B1%D9%88%D8%B2%D8%A7%D9%86%D9%87-%DB%B6-%D9%87%D8%B2%D8%A7%D8%B1-%D8%A8%D8%B4%DA%A9%D9%87-%D9%86%D9%81%D8%AA-%D8%A7%D9%81%D8%B2%D8%A7%DB%8C%D8%B4-%D9%85%DB%8C-%DB%8C%D8%A7%D8%A8%D8%AF",
+        "cached_evidence_sha256": "efda04de30dc7cdc3c4b75efdc7dd0958bc09a696ebd41dbf8be6d6c5c0b1ccd",
+        "cache_read_date": "2026-10-26",
+        "cache_fetch_date": "2026-10-25",
+        "basis": "逐项重读所引公开正文或官方原表，非链接存在性检查",
+        "source_quote": "مجموع تولید میدان نرگسی گچساران از ۲۰ هزار بشکه در روز به روزانه ۲۶ هزار بشکه"
+      },
+      "findings": [],
+      "not_checked_here": [
+        "国家和中文名",
+        "层级和包含资产",
+        "运营状态",
+        "交互和筛选"
+      ]
+    },
+    {
+      "row_index": 44,
+      "scope_id": "伊朗/North Azadegan",
+      "name": "North Azadegan",
+      "product": "crude_oil",
+      "field_checks": {
+        "product": "pass",
+        "source_value": "pass",
+        "source_unit": "pass",
+        "observation_year": "pass",
+        "gross_vs_equity": "pass",
+        "actual_vs_estimate": "pass"
+      },
+      "evidence": {
+        "claimed_value": "75",
+        "claimed_unit": "千桶/日",
+        "claimed_date": "2019-11-25",
+        "source_url": "https://www.trend.az/iran/business/3153217.html",
+        "cached_evidence_sha256": "b9bf99774f5d40dd938c1d271ea0b0f149f99591786eca30ed591e6de515fd64",
+        "cache_read_date": "2026-10-26",
+        "cache_fetch_date": "2026-10-25",
+        "basis": "逐项重读所引公开正文或官方原表，非链接存在性检查",
+        "source_quote": "e West Karoun region, is producing 75,000 barrels per day of oil steadily, s"
+      },
+      "findings": [],
+      "not_checked_here": [
+        "国家和中文名",
+        "层级和包含资产",
+        "运营状态",
+        "交互和筛选"
+      ]
+    },
+    {
+      "row_index": 45,
+      "scope_id": "伊朗/Nowruz",
+      "name": "Nowruz",
+      "product": "crude_oil",
+      "field_checks": {
+        "product": "pass",
+        "source_value": "pass",
+        "source_unit": "pass",
+        "observation_year": "pass",
+        "gross_vs_equity": "pass",
+        "actual_vs_estimate": "pass"
+      },
+      "evidence": {
+        "claimed_value": "5",
+        "claimed_unit": "千桶/日",
+        "claimed_date": "1995年恢复生产时点；2001综述",
+        "source_url": "https://www.researchgate.net/publication/245394506_Iran_Review_of_Petroleum_Developments_and_Assessments_of_the_Oil_and_Gas_Fields",
+        "cached_evidence_sha256": "687366dc0165c1d88c931295d1b5983626376d7016457d5984fab873dc7e7614",
+        "cache_read_date": "2026-10-26",
+        "cache_fetch_date": "2026-10-25",
+        "basis": "逐项重读所引公开正文或官方原表，非链接存在性检查",
+        "source_quote": "iman now has an output capacity of 5,000 b/d of 39.4º API, 1.3% sulphur oil com"
+      },
+      "findings": [],
+      "not_checked_here": [
+        "国家和中文名",
+        "层级和包含资产",
+        "运营状态",
+        "交互和筛选"
+      ]
+    },
+    {
+      "row_index": 46,
+      "scope_id": "伊朗/Reshadat",
+      "name": "Reshadat",
+      "product": "crude_oil",
+      "field_checks": {
+        "product": "pass",
+        "source_value": "pass",
+        "source_unit": "pass",
+        "observation_year": "unknown",
+        "gross_vs_equity": "pass",
+        "actual_vs_estimate": "pass"
+      },
+      "evidence": {
+        "claimed_value": "8",
+        "claimed_unit": "千桶/日",
+        "claimed_date": "2014-02 JICA最终报告；底层观察期未明",
+        "source_url": "https://openjicareport.jica.go.jp/pdf/1000014245_01.pdf",
+        "cached_evidence_sha256": "da4396fb3e33855a08810f6434e616e44c6eb15ec35e5515be9d635324e7e089",
+        "cache_read_date": "2026-10-26",
+        "cache_fetch_date": "2026-10-25",
+        "basis": "逐项重读所引公开正文或官方原表，非链接存在性检查",
+        "source_quote": " estroyed during the war; however, 8,000 BPD production is maintained PAGE 47 S"
+      },
+      "findings": [],
+      "not_checked_here": [
+        "国家和中文名",
+        "层级和包含资产",
+        "运营状态",
+        "交互和筛选"
+      ]
+    },
+    {
+      "row_index": 47,
+      "scope_id": "伊朗/Sepehr-Jufair",
+      "name": "Sepehr-Jufair",
+      "product": "crude_oil",
+      "field_checks": {
+        "product": "pass",
+        "source_value": "pass",
+        "source_unit": "pass",
+        "observation_year": "pass",
+        "gross_vs_equity": "pass",
+        "actual_vs_estimate": "pass"
+      },
+      "evidence": {
+        "claimed_value": "50",
+        "claimed_unit": "千桶/日",
+        "claimed_date": "2024-10 EIA报告时点（两个油田合计估算）",
+        "source_url": "https://www.eia.gov/international/content/analysis/countries_long/Iran/pdf/Iran%20CAB%202024.pdf",
+        "cached_evidence_sha256": "e1d6573f9fd956870b4b4ec58d9f04e2babe6552de955c5f03aac620c00684a0",
+        "cache_read_date": "2026-10-26",
+        "cache_fetch_date": "2026-10-25",
+        "basis": "逐项重读所引公开正文或官方原表，非链接存在性检查",
+        "source_quote": "ir and Sepehr. Iran estimates that current production from the fields is 50,000 b/d, and production capacity will "
+      },
+      "findings": [],
+      "not_checked_here": [
+        "国家和中文名",
+        "层级和包含资产",
+        "运营状态",
+        "交互和筛选"
+      ]
+    },
+    {
+      "row_index": 48,
+      "scope_id": "伊朗/Siah Makan",
+      "name": "Siah Makan",
+      "product": "crude_oil",
+      "field_checks": {
+        "product": "pass",
+        "source_value": "pass",
+        "source_unit": "pass",
+        "observation_year": "pass",
+        "gross_vs_equity": "pass",
+        "actual_vs_estimate": "pass"
+      },
+      "evidence": {
+        "claimed_value": "4",
+        "claimed_unit": "千桶/日",
+        "claimed_date": "2021-03-08报道时点",
+        "source_url": "https://www.trend.az/business/energy/3391883.html",
+        "cached_evidence_sha256": "17f8ae02ae9d3ab76d709961acf0e195f7cf1f687b3e6e1cb511dafad70e8e47",
+        "cache_read_date": "2026-10-26",
+        "cache_fetch_date": "2026-10-25",
+        "basis": "逐项重读所引公开正文或官方原表，非链接存在性检查",
+        "source_quote": " 10,000 barrels. At present, daily 4,000 barrels of crude oil were extracte"
+      },
+      "findings": [],
+      "not_checked_here": [
+        "国家和中文名",
+        "层级和包含资产",
+        "运营状态",
+        "交互和筛选"
+      ]
+    },
+    {
+      "row_index": 49,
+      "scope_id": "伊朗/Sohrab",
+      "name": "Sohrab",
+      "product": "crude_oil",
+      "field_checks": {
+        "product": "pass",
+        "source_value": "pass",
+        "source_unit": "pass",
+        "observation_year": "pass",
+        "gross_vs_equity": "pass",
+        "actual_vs_estimate": "pass"
+      },
+      "evidence": {
+        "claimed_value": "2",
+        "claimed_unit": "千桶/日",
+        "claimed_date": "2024-02-06启动初期",
+        "source_url": "https://wayback-api.archive.org/web/20240705205742/https://iranpress.com/iran-starts-production-from-sohrab-oil-field-shared-with-iraq",
+        "cached_evidence_sha256": "dca7e6c775f145440da514ef7278b5b3e2bf5557928e7a903eff382c6d64b0e2",
+        "cache_read_date": "2026-10-26",
+        "cache_fetch_date": "2026-10-25",
+        "basis": "逐项重读所引公开正文或官方原表，非链接存在性检查",
+        "source_quote": "e field’s initial output stands at 2,000 barrels per day (bpd) and its ulti"
+      },
+      "findings": [],
+      "not_checked_here": [
+        "国家和中文名",
+        "层级和包含资产",
+        "运营状态",
+        "交互和筛选"
+      ]
+    },
+    {
+      "row_index": 50,
+      "scope_id": "伊朗/Zeloi",
+      "name": "Zeloi",
+      "product": "crude_oil",
+      "field_checks": {
+        "product": "pass",
+        "source_value": "pass",
+        "source_unit": "pass",
+        "observation_year": "pass",
+        "gross_vs_equity": "pass",
+        "actual_vs_estimate": "pass"
+      },
+      "evidence": {
+        "claimed_value": "约19",
+        "claimed_unit": "千桶/日",
+        "claimed_date": "2021-03-08报道时点",
+        "source_url": "https://www.trend.az/business/energy/3391612.html",
+        "cached_evidence_sha256": "e9172d6f95bbf02a75de19177474967e63e400768a8ad10e1fcd4eef4e72d2f7",
+        "cache_read_date": "2026-10-26",
+        "cache_fetch_date": "2026-10-25",
+        "basis": "逐项重读所引公开正文或官方原表，非链接存在性检查",
+        "source_quote": "rovince (southwestern Iran). About 19,000 barrels of crude oil are currently"
+      },
+      "findings": [],
+      "not_checked_here": [
+        "国家和中文名",
+        "层级和包含资产",
+        "运营状态",
+        "交互和筛选"
+      ]
+    },
+    {
+      "row_index": 51,
+      "scope_id": "卡塔尔/Al Shaheen",
+      "name": "Al Shaheen",
+      "product": "crude_oil",
+      "field_checks": {
+        "product": "pass",
+        "source_value": "pass",
+        "source_unit": "pass",
+        "observation_year": "pass",
+        "gross_vs_equity": "pass",
+        "actual_vs_estimate": "pass"
+      },
+      "evidence": {
+        "claimed_value": "280.1",
+        "claimed_unit": "千桶/日",
+        "claimed_date": "2024年平均",
+        "source_url": "https://www.qatarenergy.qa/en/MediaCenter/Publications/QatarEnergy_Investors_Presentation_November_2025.pdf",
+        "cached_evidence_sha256": "c548d703dc46dfb89e7453e8c02aa20d43b6601bee164afe2c5d97da0e983f8a",
+        "cache_read_date": "2026-10-26",
+        "cache_fetch_date": "2026-10-25",
+        "basis": "逐项重读所引公开正文或官方原表，非链接存在性检查",
+        "source_quote": "Rayyan 0.33.6 Al Shaheen Al Khalij 280.1 198.7 4.423.4 Average oil producti"
+      },
+      "findings": [],
+      "not_checked_here": [
+        "国家和中文名",
+        "层级和包含资产",
+        "运营状态",
+        "交互和筛选"
+      ]
+    },
+    {
+      "row_index": 52,
+      "scope_id": "卡塔尔/Al-Khaleej",
+      "name": "Al-Khaleej",
+      "product": "crude_oil",
+      "field_checks": {
+        "product": "pass",
+        "source_value": "pass",
+        "source_unit": "pass",
+        "observation_year": "pass",
+        "gross_vs_equity": "pass",
+        "actual_vs_estimate": "pass"
+      },
+      "evidence": {
+        "claimed_value": "23.4",
+        "claimed_unit": "千桶/日",
+        "claimed_date": "2024年平均",
+        "source_url": "https://www.qatarenergy.qa/en/MediaCenter/Publications/QatarEnergy_Investors_Presentation_November_2025.pdf",
+        "cached_evidence_sha256": "c548d703dc46dfb89e7453e8c02aa20d43b6601bee164afe2c5d97da0e983f8a",
+        "cache_read_date": "2026-10-26",
+        "cache_fetch_date": "2026-10-25",
+        "basis": "逐项重读所引公开正文或官方原表，非链接存在性检查",
+        "source_quote": "l Shaheen Al Khalij 280.1 198.7 4.423.4 Average oil production in 2024 (KB"
+      },
+      "findings": [],
+      "not_checked_here": [
+        "国家和中文名",
+        "层级和包含资产",
+        "运营状态",
+        "交互和筛选"
+      ]
+    },
+    {
+      "row_index": 53,
+      "scope_id": "卡塔尔/Al-Rayyan",
+      "name": "Al-Rayyan",
+      "product": "crude_oil",
+      "field_checks": {
+        "product": "pass",
+        "source_value": "pass",
+        "source_unit": "pass",
+        "observation_year": "pass",
+        "gross_vs_equity": "pass",
+        "actual_vs_estimate": "pass"
+      },
+      "evidence": {
+        "claimed_value": "3.6",
+        "claimed_unit": "千桶/日",
+        "claimed_date": "2024年平均",
+        "source_url": "https://www.qatarenergy.qa/en/MediaCenter/Publications/QatarEnergy_Investors_Presentation_November_2025.pdf",
+        "cached_evidence_sha256": "c548d703dc46dfb89e7453e8c02aa20d43b6601bee164afe2c5d97da0e983f8a",
+        "cache_read_date": "2026-10-26",
+        "cache_fetch_date": "2026-10-25",
+        "basis": "逐项重读所引公开正文或官方原表，非链接存在性检查",
+        "source_quote": "gi 35.1 38.6 39.954.4 Al Rayyan 0.33.6 Al Shaheen Al Khalij 280.1 198.7 4"
+      },
+      "findings": [],
+      "not_checked_here": [
+        "国家和中文名",
+        "层级和包含资产",
+        "运营状态",
+        "交互和筛选"
+      ]
+    },
+    {
+      "row_index": 54,
+      "scope_id": "卡塔尔/Bul Hanine",
+      "name": "Bul Hanine",
+      "product": "crude_oil",
+      "field_checks": {
+        "product": "pass",
+        "source_value": "pass",
+        "source_unit": "pass",
+        "observation_year": "pass",
+        "gross_vs_equity": "pass",
+        "actual_vs_estimate": "pass"
+      },
+      "evidence": {
+        "claimed_value": "35.1",
+        "claimed_unit": "千桶/日",
+        "claimed_date": "2024年平均",
+        "source_url": "https://www.qatarenergy.qa/en/MediaCenter/Publications/QatarEnergy_Investors_Presentation_November_2025.pdf",
+        "cached_evidence_sha256": "c548d703dc46dfb89e7453e8c02aa20d43b6601bee164afe2c5d97da0e983f8a",
+        "cache_read_date": "2026-10-26",
+        "cache_fetch_date": "2026-10-25",
+        "basis": "逐项重读所引公开正文或官方原表，非链接存在性检查",
+        "source_quote": " (MMSCFD) Bul Hanine Idd El Shargi 35.1 38.6 39.954.4 Al Rayyan 0.33.6 Al "
+      },
+      "findings": [],
+      "not_checked_here": [
+        "国家和中文名",
+        "层级和包含资产",
+        "运营状态",
+        "交互和筛选"
+      ]
+    },
+    {
+      "row_index": 55,
+      "scope_id": "卡塔尔/Dukhan",
+      "name": "Dukhan",
+      "product": "crude_oil",
+      "field_checks": {
+        "product": "pass",
+        "source_value": "pass",
+        "source_unit": "pass",
+        "observation_year": "pass",
+        "gross_vs_equity": "pass",
+        "actual_vs_estimate": "pass"
+      },
+      "evidence": {
+        "claimed_value": "176.4",
+        "claimed_unit": "千桶/日",
+        "claimed_date": "2024年平均",
+        "source_url": "https://www.qatarenergy.qa/en/MediaCenter/Publications/QatarEnergy_Investors_Presentation_November_2025.pdf",
+        "cached_evidence_sha256": "c548d703dc46dfb89e7453e8c02aa20d43b6601bee164afe2c5d97da0e983f8a",
+        "cache_read_date": "2026-10-26",
+        "cache_fetch_date": "2026-10-25",
+        "basis": "逐项重读所引公开正文或官方原表，非链接存在性检查",
+        "source_quote": "ion Dukhan (onshore) Maydan Mahzam 176.4 229.0 28.616.2 Average oil product"
+      },
+      "findings": [],
+      "not_checked_here": [
+        "国家和中文名",
+        "层级和包含资产",
+        "运营状态",
+        "交互和筛选"
+      ]
+    },
+    {
+      "row_index": 56,
+      "scope_id": "卡塔尔/Maydan Mahzam",
+      "name": "Maydan Mahzam",
+      "product": "crude_oil",
+      "field_checks": {
+        "product": "pass",
+        "source_value": "pass",
+        "source_unit": "pass",
+        "observation_year": "pass",
+        "gross_vs_equity": "pass",
+        "actual_vs_estimate": "pass"
+      },
+      "evidence": {
+        "claimed_value": "16.2",
+        "claimed_unit": "千桶/日",
+        "claimed_date": "2024年平均",
+        "source_url": "https://www.qatarenergy.qa/en/MediaCenter/Publications/QatarEnergy_Investors_Presentation_November_2025.pdf",
+        "cached_evidence_sha256": "c548d703dc46dfb89e7453e8c02aa20d43b6601bee164afe2c5d97da0e983f8a",
+        "cache_read_date": "2026-10-26",
+        "cache_fetch_date": "2026-10-25",
+        "basis": "逐项重读所引公开正文或官方原表，非链接存在性检查",
+        "source_quote": "ore) Maydan Mahzam 176.4 229.0 28.616.2 Average oil production in 2024 (KB"
+      },
+      "findings": [],
+      "not_checked_here": [
+        "国家和中文名",
+        "层级和包含资产",
+        "运营状态",
+        "交互和筛选"
+      ]
+    },
+    {
+      "row_index": 57,
+      "scope_id": "叙利亚/Al Jubaissah",
+      "name": "Al Jubaissah",
+      "product": "crude_oil",
+      "field_checks": {
+        "product": "pass",
+        "source_value": "pass",
+        "source_unit": "pass",
+        "observation_year": "pass",
+        "gross_vs_equity": "pass",
+        "actual_vs_estimate": "pass"
+      },
+      "evidence": {
+        "claimed_value": "3.6",
+        "claimed_unit": "千桶/日",
+        "claimed_date": "2011年；EIA 2013叙利亚报告",
+        "source_url": "https://www.eia.gov/international/content/analysis/countries_long/Syria/archive/pdf/syria_2013.pdf",
+        "cached_evidence_sha256": "9094ff14b829069395cb83f1b95933b61ee28106672b5ba94e1ea2d3cfe0e87e",
+        "cache_read_date": "2026-10-26",
+        "cache_fetch_date": "2026-10-25",
+        "basis": "逐项重读所引公开正文或官方原表，非链接存在性检查",
+        "source_quote": " Obeid 5.5 Ghouna 4.8 Rumailan 4.2 Jubaissah 3.6 Hamzah 2.1 Source: IHS, EIA estima"
+      },
+      "findings": [],
+      "not_checked_here": [
+        "国家和中文名",
+        "层级和包含资产",
+        "运营状态",
+        "交互和筛选"
+      ]
+    },
+    {
+      "row_index": 58,
+      "scope_id": "叙利亚/Al-Omar",
+      "name": "Al-Omar",
+      "product": "crude_oil",
+      "field_checks": {
+        "product": "unknown",
+        "source_value": "unknown",
+        "source_unit": "unknown",
+        "observation_year": "unknown",
+        "gross_vs_equity": "unknown",
+        "actual_vs_estimate": "unknown"
+      },
+      "evidence": {
+        "claimed_value": "15",
+        "claimed_unit": "千桶/日",
+        "claimed_date": "2026-02-22",
+        "source_url": "https://www.lemonde.fr/en/economy/article/2026/02/22/the-syrian-oil-sector-s-year-zero_6750756_19.html",
+        "cached_evidence_sha256": "32ed63159c77e21ee19ca1b9aa3213ccf0218eb59539560b132a8e68ef0e18ea",
+        "cache_read_date": "2026-10-26",
+        "cache_fetch_date": "2026-10-25",
+        "basis": "未获得正文；仅继承上轮摘要级证据，不能标作全文验证",
+        "source_quote": null,
+        "quote_extraction": "原文排版/语言或表格不能用字面搜索匹配；核查依据请看原表和source_url"
+      },
+      "findings": [
+        "LeMonde前次仅检索摘要，此次无全文可核；数字15000和日期只能视为摘要级证据。"
+      ],
+      "not_checked_here": [
+        "国家和中文名",
+        "层级和包含资产",
+        "运营状态",
+        "交互和筛选"
+      ]
+    },
+    {
+      "row_index": 59,
+      "scope_id": "叙利亚/Gbeibe",
+      "name": "Gbeibe",
+      "product": "crude_oil",
+      "field_checks": {
+        "product": "pass",
+        "source_value": "pass",
+        "source_unit": "pass",
+        "observation_year": "pass",
+        "gross_vs_equity": "pass",
+        "actual_vs_estimate": "pass"
+      },
+      "evidence": {
+        "claimed_value": "12.1",
+        "claimed_unit": "千桶/日",
+        "claimed_date": "2011年；EIA 2013叙利亚报告",
+        "source_url": "https://www.eia.gov/international/content/analysis/countries_long/Syria/archive/pdf/syria_2013.pdf",
+        "cached_evidence_sha256": "9094ff14b829069395cb83f1b95933b61ee28106672b5ba94e1ea2d3cfe0e87e",
+        "cache_read_date": "2026-10-26",
+        "cache_fetch_date": "2026-10-25",
+        "basis": "逐项重读所引公开正文或官方原表，非链接存在性检查",
+        "source_quote": "d) Suwaidiyah 104.4 Karatchok 21.8 Gbeibe 12.1 PAGE 5 Syrian exploration blocks S"
+      },
+      "findings": [],
+      "not_checked_here": [
+        "国家和中文名",
+        "层级和包含资产",
+        "运营状态",
+        "交互和筛选"
+      ]
+    },
+    {
+      "row_index": 60,
+      "scope_id": "叙利亚/Gouna",
+      "name": "Gouna",
+      "product": "crude_oil",
+      "field_checks": {
+        "product": "pass",
+        "source_value": "pass",
+        "source_unit": "pass",
+        "observation_year": "pass",
+        "gross_vs_equity": "pass",
+        "actual_vs_estimate": "pass"
+      },
+      "evidence": {
+        "claimed_value": "4.8",
+        "claimed_unit": "千桶/日",
+        "claimed_date": "2011年；EIA 2013叙利亚报告",
+        "source_url": "https://www.eia.gov/international/content/analysis/countries_long/Syria/archive/pdf/syria_2013.pdf",
+        "cached_evidence_sha256": "9094ff14b829069395cb83f1b95933b61ee28106672b5ba94e1ea2d3cfe0e87e",
+        "cache_read_date": "2026-10-26",
+        "cache_fetch_date": "2026-10-25",
+        "basis": "逐项重读所引公开正文或官方原表，非链接存在性检查",
+        "source_quote": "urabeh-Babassi 10.4 Wadi Obeid 5.5 Ghouna 4.8 Rumailan 4.2 Jubaissah 3.6 Hamzah "
+      },
+      "findings": [],
+      "not_checked_here": [
+        "国家和中文名",
+        "层级和包含资产",
+        "运营状态",
+        "交互和筛选"
+      ]
+    },
+    {
+      "row_index": 61,
+      "scope_id": "埃及/Berenice",
+      "name": "Berenice",
+      "product": "crude_oil",
+      "field_checks": {
+        "product": "pass",
+        "source_value": "pass",
+        "source_unit": "pass",
+        "observation_year": "pass",
+        "gross_vs_equity": "pass",
+        "actual_vs_estimate": "pass"
+      },
+      "evidence": {
+        "claimed_value": ">9.5",
+        "claimed_unit": "千桶/日",
+        "claimed_date": "2015-04-09报道时点（2021-06-28存档）",
+        "source_url": "https://web.archive.org/web/20210628002245/https://www.mrt.com/business/energy/article/Apache-has-pumped-almost-1-million-barrels-of-oil-7404487.php",
+        "cached_evidence_sha256": "35f30ae42d8b31858213afe9b13d969b8d3d4f3fedec1ba01a6c3b85902a0e26",
+        "cache_read_date": "2026-10-26",
+        "cache_fetch_date": "2026-10-25",
+        "basis": "逐项重读所引公开正文或官方原表，非链接存在性检查",
+        "source_quote": "hree wells are producing more than 9,500 barrels daily from the Berenice fi"
+      },
+      "findings": [],
+      "not_checked_here": [
+        "国家和中文名",
+        "层级和包含资产",
+        "运营状态",
+        "交互和筛选"
+      ]
+    },
+    {
+      "row_index": 62,
+      "scope_id": "埃及/Ptah",
+      "name": "Ptah",
+      "product": "crude_oil",
+      "field_checks": {
+        "product": "pass",
+        "source_value": "pass",
+        "source_unit": "pass",
+        "observation_year": "pass",
+        "gross_vs_equity": "pass",
+        "actual_vs_estimate": "pass"
+      },
+      "evidence": {
+        "claimed_value": "约4.35",
+        "claimed_unit": "千桶/日",
+        "claimed_date": "2015-04-09报道时点（2021-06-28存档）",
+        "source_url": "https://web.archive.org/web/20210628002245/https://www.mrt.com/business/energy/article/Apache-has-pumped-almost-1-million-barrels-of-oil-7404487.php",
+        "cached_evidence_sha256": "35f30ae42d8b31858213afe9b13d969b8d3d4f3fedec1ba01a6c3b85902a0e26",
+        "cache_read_date": "2026-10-26",
+        "cache_fetch_date": "2026-10-25",
+        "basis": "逐项重读所引公开正文或官方原表，非链接存在性检查",
+        "source_quote": "field are together producing about 4,350 barrels per day. In 2013, Apache s"
+      },
+      "findings": [],
+      "not_checked_here": [
+        "国家和中文名",
+        "层级和包含资产",
+        "运营状态",
+        "交互和筛选"
+      ]
+    },
+    {
+      "row_index": 63,
+      "scope_id": "埃及/Ramadan",
+      "name": "Ramadan",
+      "product": "crude_oil",
+      "field_checks": {
+        "product": "pass",
+        "source_value": "pass",
+        "source_unit": "pass",
+        "observation_year": "pass",
+        "gross_vs_equity": "pass",
+        "actual_vs_estimate": "pass"
+      },
+      "evidence": {
+        "claimed_value": "125",
+        "claimed_unit": "千桶/日",
+        "claimed_date": "1978-09-01时点",
+        "source_url": "http://documents1.worldbank.org/curated/en/838231468036565700/pdf/multi-page.pdf",
+        "cached_evidence_sha256": "e1757ac5d9175ea52b65d1a525096fa52bb242f1c5fba3a1316569666c2a6aa9",
+        "cache_read_date": "2026-10-26",
+        "cache_fetch_date": "2026-10-25",
+        "basis": "逐项重读所引公开正文或官方原表，非链接存在性检查",
+        "source_quote": "field was producing at the rate of 125,000 BBLS of oil per day and 50 MMcf/d "
+      },
+      "findings": [
+        "同源1978-09-01明确50MMcf/d伴生气，当前仅原油，缺天然气行。"
+      ],
+      "not_checked_here": [
+        "国家和中文名",
+        "层级和包含资产",
+        "运营状态",
+        "交互和筛选"
+      ]
+    },
+    {
+      "row_index": 64,
+      "scope_id": "埃及/Zaafarana",
+      "name": "Zaafarana",
+      "product": "crude_oil",
+      "field_checks": {
+        "product": "pass",
+        "source_value": "pass",
+        "source_unit": "pass",
+        "observation_year": "unknown",
+        "gross_vs_equity": "pass",
+        "actual_vs_estimate": "pass"
+      },
+      "evidence": {
+        "claimed_value": "7.2",
+        "claimed_unit": "千桶/日",
+        "claimed_date": "2011报道时点（底层观察日未注明）",
+        "source_url": "https://egyptoil-gas.com/news/zaafarana-is-back-to-the-old-field/",
+        "cached_evidence_sha256": "51423ef551bdae73956c5ebce698948daf42e7d1083aa4348dc21a8a5fa954e4",
+        "cache_read_date": "2026-10-26",
+        "cache_fetch_date": "2026-10-25",
+        "basis": "逐项重读所引公开正文或官方原表，非链接存在性检查",
+        "source_quote": "on rate at Zaafarana field reached 7200 barrels of oil per day. Tags: ZAFC"
+      },
+      "findings": [],
+      "not_checked_here": [
+        "国家和中文名",
+        "层级和包含资产",
+        "运营状态",
+        "交互和筛选"
+      ]
+    },
+    {
+      "row_index": 65,
+      "scope_id": "巴林/Bahrain Field (Awali)",
+      "name": "Bahrain Field (Awali)",
+      "product": "crude_oil",
+      "field_checks": {
+        "product": "pass",
+        "source_value": "pass",
+        "source_unit": "pass",
+        "observation_year": "pass",
+        "gross_vs_equity": "pass",
+        "actual_vs_estimate": "pass"
+      },
+      "evidence": {
+        "claimed_value": "38.378",
+        "claimed_unit": "千桶/日",
+        "claimed_date": "2024全年平均",
+        "source_url": "https://www.rns-pdf.londonstockexchange.com/rns/7260H_2-2025-5-7.pdf",
+        "cached_evidence_sha256": "ea188f6bd7c4de880c3c93ac622f7182b9cccb983922ec2107d2f3f1199dec8e",
+        "cache_read_date": "2026-10-26",
+        "cache_fetch_date": "2026-10-25",
+        "basis": "逐项重读所引公开正文或官方原表，非链接存在性检查",
+        "source_quote": "pd in 2022, 38,929 bpd in 2023 and 38,378 bpd in 2024 from its only onshore "
+      },
+      "findings": [],
+      "not_checked_here": [
+        "国家和中文名",
+        "层级和包含资产",
+        "运营状态",
+        "交互和筛选"
+      ]
+    },
+    {
+      "row_index": 66,
+      "scope_id": "阿曼/Bisat",
+      "name": "Bisat",
+      "product": "crude_oil",
+      "field_checks": {
+        "product": "pass",
+        "source_value": "pass",
+        "source_unit": "pass",
+        "observation_year": "pass",
+        "gross_vs_equity": "pass",
+        "actual_vs_estimate": "pass"
+      },
+      "evidence": {
+        "claimed_value": "60",
+        "claimed_unit": "千桶/日",
+        "claimed_date": "2023-01-26公告时点",
+        "source_url": "https://oq.com/en/news-and-media/newsroom/20230126-oq-celebrates-inauguration-of-bisat-oil-field",
+        "cached_evidence_sha256": "454506b3f07bbc18cfeaa71614f3e9b47570c379e612b6fb9db4ef952a45e842",
+        "cache_read_date": "2026-10-26",
+        "cache_fetch_date": "2026-10-25",
+        "basis": "逐项重读所引公开正文或官方原表，非链接存在性检查",
+        "source_quote": "2022. As of today, it increased to 60 thousand barrels per day. OQ has used new i"
+      },
+      "findings": [],
+      "not_checked_here": [
+        "国家和中文名",
+        "层级和包含资产",
+        "运营状态",
+        "交互和筛选"
+      ]
+    },
+    {
+      "row_index": 67,
+      "scope_id": "阿曼/Lekhwair",
+      "name": "Lekhwair",
+      "product": "crude_oil",
+      "field_checks": {
+        "product": "pass",
+        "source_value": "pass",
+        "source_unit": "pass",
+        "observation_year": "pass",
+        "gross_vs_equity": "pass",
+        "actual_vs_estimate": "pass"
+      },
+      "evidence": {
+        "claimed_value": "24",
+        "claimed_unit": "千桶/日",
+        "claimed_date": "1990-05-14报道时点",
+        "source_url": "https://www.ogj.com/pipelines-transportation/article/17213972/oman-to-step-up-lekhwair-field-production",
+        "cached_evidence_sha256": "e2b095992c16df78a026b40c3314cce0a868df0c31910e638db8ab66db814fa5",
+        "cache_read_date": "2026-10-26",
+        "cache_fetch_date": "2026-10-25",
+        "basis": "逐项重读所引公开正文或官方原表，非链接存在性检查",
+        "source_quote": "0,000 b/d by 1994 from the current 24,000 b/d for the field in Northwest Oma"
+      },
+      "findings": [],
+      "not_checked_here": [
+        "国家和中文名",
+        "层级和包含资产",
+        "运营状态",
+        "交互和筛选"
+      ]
+    },
+    {
+      "row_index": 68,
+      "scope_id": "阿曼/Mukhaizna",
+      "name": "Mukhaizna",
+      "product": "crude_oil",
+      "field_checks": {
+        "product": "pass",
+        "source_value": "pass",
+        "source_unit": "pass",
+        "observation_year": "pass",
+        "gross_vs_equity": "pass",
+        "actual_vs_estimate": "pass"
+      },
+      "evidence": {
+        "claimed_value": "约80",
+        "claimed_unit": "千桶/日",
+        "claimed_date": "2023-05起约日均；2025-05-19报道回顾",
+        "source_url": "https://arabic.news.cn/20250519/d2bf19a8df1e4a149940c97f80a45ab9/c.html",
+        "cached_evidence_sha256": "c331f8ed06c0e094792e3ea0b642711464c6b67e4b0f460b519b63e8a0917e4c",
+        "cache_read_date": "2026-10-26",
+        "cache_fetch_date": "2026-10-25",
+        "basis": "逐项重读所引公开正文或官方原表，非链接存在性检查",
+        "source_quote": "ام 2023، مع متوسط إنتاج يومي يقارب 80 ألف برميل منذ مايو 2023، بحسب بيانات ا"
+      },
+      "findings": [],
+      "not_checked_here": [
+        "国家和中文名",
+        "层级和包含资产",
+        "运营状态",
+        "交互和筛选"
+      ]
+    },
+    {
+      "row_index": 69,
+      "scope_id": "阿曼/Yumna",
+      "name": "Yumna",
+      "product": "crude_oil",
+      "field_checks": {
+        "product": "pass",
+        "source_value": "pass",
+        "source_unit": "pass",
+        "observation_year": "pass",
+        "gross_vs_equity": "pass",
+        "actual_vs_estimate": "pass"
+      },
+      "evidence": {
+        "claimed_value": "742",
+        "claimed_unit": "桶/日",
+        "claimed_date": "2026年3月平均（31天生产期）",
+        "source_url": "https://www.masirahoil.om/post/production-update-march-2026",
+        "cached_evidence_sha256": "3f4ae87f8091e407661e39e1787e9127232271f843e2f947a6932667b85218f0",
+        "cache_read_date": "2026-10-26",
+        "cache_fetch_date": "2026-10-25",
+        "basis": "逐项重读所引公开正文或官方原表，非链接存在性检查",
+        "source_quote": "50 Oman, amounted to an average of 742 stock tank barrels per day (stb/d)"
+      },
+      "findings": [],
+      "not_checked_here": [
+        "国家和中文名",
+        "层级和包含资产",
+        "运营状态",
+        "交互和筛选"
+      ]
+    },
+    {
+      "row_index": 70,
+      "scope_id": "阿联酋/Al Dabb'iya",
+      "name": "Al Dabb'iya",
+      "product": "crude_oil",
+      "field_checks": {
+        "product": "pass",
+        "source_value": "pass",
+        "source_unit": "pass",
+        "observation_year": "pass",
+        "gross_vs_equity": "pass",
+        "actual_vs_estimate": "pass"
+      },
+      "evidence": {
+        "claimed_value": "82",
+        "claimed_unit": "千桶/日",
+        "claimed_date": "2010年估计；IEEJ 2012-09报告",
+        "source_url": "https://eneken.ieej.or.jp/data/4534.pdf",
+        "cached_evidence_sha256": "7d0d82333acaacc1d962a34bc1ebffef30be685e9544abacf295a9b1a0d22fa8",
+        "cache_read_date": "2026-10-26",
+        "cache_fetch_date": "2026-10-25",
+        "basis": "逐项重读所引公开正文或官方原表，非链接存在性检查",
+        "source_quote": "in 2017 North East Bab Al Dabbi’ya 82 130 Drilling commenced 1982 Rumait"
+      },
+      "findings": [],
+      "not_checked_here": [
+        "国家和中文名",
+        "层级和包含资产",
+        "运营状态",
+        "交互和筛选"
+      ]
+    },
+    {
+      "row_index": 71,
+      "scope_id": "阿联酋/Asab",
+      "name": "Asab",
+      "product": "crude_oil",
+      "field_checks": {
+        "product": "pass",
+        "source_value": "pass",
+        "source_unit": "pass",
+        "observation_year": "pass",
+        "gross_vs_equity": "pass",
+        "actual_vs_estimate": "pass"
+      },
+      "evidence": {
+        "claimed_value": "281",
+        "claimed_unit": "千桶/日",
+        "claimed_date": "2010年估计；IEEJ 2012-09报告",
+        "source_url": "https://eneken.ieej.or.jp/data/4534.pdf",
+        "cached_evidence_sha256": "7d0d82333acaacc1d962a34bc1ebffef30be685e9544abacf295a9b1a0d22fa8",
+        "cache_read_date": "2026-10-26",
+        "cache_fetch_date": "2026-10-25",
+        "basis": "逐项重读所引公开正文或官方原表，非链接存在性检查",
+        "source_quote": "ced 2012 Bab South East asset Asab 281 345 Discovered 1965, gas injection"
+      },
+      "findings": [],
+      "not_checked_here": [
+        "国家和中文名",
+        "层级和包含资产",
+        "运营状态",
+        "交互和筛选"
+      ]
+    },
+    {
+      "row_index": 72,
+      "scope_id": "阿联酋/Bu Hasa",
+      "name": "Bu Hasa",
+      "product": "crude_oil",
+      "field_checks": {
+        "product": "pass",
+        "source_value": "pass",
+        "source_unit": "pass",
+        "observation_year": "pass",
+        "gross_vs_equity": "pass",
+        "actual_vs_estimate": "pass"
+      },
+      "evidence": {
+        "claimed_value": "532",
+        "claimed_unit": "千桶/日",
+        "claimed_date": "2010年估计；IEEJ 2012-09报告",
+        "source_url": "https://eneken.ieej.or.jp/data/4534.pdf",
+        "cached_evidence_sha256": "7d0d82333acaacc1d962a34bc1ebffef30be685e9544abacf295a9b1a0d22fa8",
+        "cache_read_date": "2026-10-26",
+        "cache_fetch_date": "2026-10-25",
+        "basis": "逐项重读所引公开正文或官方原表，非链接存在性检查",
+        "source_quote": "ll Rights Reserved 5 asset Bu Hasa 532 530 Discovered 1962, water, gas in"
+      },
+      "findings": [],
+      "not_checked_here": [
+        "国家和中文名",
+        "层级和包含资产",
+        "运营状态",
+        "交互和筛选"
+      ]
+    },
+    {
+      "row_index": 73,
+      "scope_id": "阿联酋/Bu Haseer",
+      "name": "Bu Haseer",
+      "product": "crude_oil",
+      "field_checks": {
+        "product": "pass",
+        "source_value": "pass",
+        "source_unit": "pass",
+        "observation_year": "pass",
+        "gross_vs_equity": "pass",
+        "actual_vs_estimate": "pass"
+      },
+      "evidence": {
+        "claimed_value": "8",
+        "claimed_unit": "千桶/日",
+        "claimed_date": "2018年3月初期投产口径",
+        "source_url": "https://adnoc.ae/en/al-yasat-petroleum/about-us/what-we-do",
+        "cached_evidence_sha256": null,
+        "cache_read_date": "2026-10-26",
+        "cache_fetch_date": "2026-10-25",
+        "basis": "2026-10-26检索ADNOC官方WhatWeDo正文",
+        "source_quote": "March 2018 ... EPS of 8,000 barrels of oil per day"
+      },
+      "findings": [],
+      "not_checked_here": [
+        "国家和中文名",
+        "层级和包含资产",
+        "运营状态",
+        "交互和筛选"
+      ]
+    },
+    {
+      "row_index": 74,
+      "scope_id": "阿联酋/Bunduq",
+      "name": "Bunduq",
+      "product": "crude_oil",
+      "field_checks": {
+        "product": "pass",
+        "source_value": "pass",
+        "source_unit": "pass",
+        "observation_year": "pass",
+        "gross_vs_equity": "pass",
+        "actual_vs_estimate": "pass"
+      },
+      "evidence": {
+        "claimed_value": "9.2",
+        "claimed_unit": "千桶/日",
+        "claimed_date": "2024年平均",
+        "source_url": "https://www.qatarenergy.qa/en/MediaCenter/Publications/QatarEnergy_Investors_Presentation_November_2025.pdf",
+        "cached_evidence_sha256": "c548d703dc46dfb89e7453e8c02aa20d43b6601bee164afe2c5d97da0e983f8a",
+        "cache_read_date": "2026-10-26",
+        "cache_fetch_date": "2026-10-25",
+        "basis": "逐项重读所引公开正文或官方原表，非链接存在性检查",
+        "source_quote": "duction in 2024 (MMSCFD) El Bunduq 9.2 - QatarEnergy-operated fields Non-",
+        "gross_crosscheck": {
+          "qatar_annual_review_2024": "https://www.qatarenergy.qa/en/MediaCenter/Publications/%E2%80%8BQatarEnergy%20Annual%20Review%202024.pdf",
+          "bunduq_operator_2023": "https://www.bunduq.com/images/2023-report.pdf",
+          "finding": "官方年报写2024全田total3.37m桶；运营商2023约3m桶与Qatar同期total3.17m一致，不支持对9.2KBOPD乘2。"
+        }
+      },
+      "findings": [],
+      "not_checked_here": [
+        "国家和中文名",
+        "层级和包含资产",
+        "运营状态",
+        "交互和筛选"
+      ]
+    },
+    {
+      "row_index": 75,
+      "scope_id": "阿联酋/Haliba",
+      "name": "Haliba",
+      "product": "crude_oil",
+      "field_checks": {
+        "product": "pass",
+        "source_value": "pass",
+        "source_unit": "pass",
+        "observation_year": "pass",
+        "gross_vs_equity": "pass",
+        "actual_vs_estimate": "pass"
+      },
+      "evidence": {
+        "claimed_value": "10",
+        "claimed_unit": "千桶/日",
+        "claimed_date": "2019年6月初期投产口径",
+        "source_url": "https://www.adnoc.ae/en/al-dhafra-petroleum/about-us/what-we-do",
+        "cached_evidence_sha256": null,
+        "cache_read_date": "2026-10-26",
+        "cache_fetch_date": "2026-10-25",
+        "basis": "2026-10-26检索ADNOC官方WhatWeDo正文",
+        "source_quote": "June 2019 ... 10,000 barrels of crude oil per day"
+      },
+      "findings": [],
+      "not_checked_here": [
+        "国家和中文名",
+        "层级和包含资产",
+        "运营状态",
+        "交互和筛选"
+      ]
+    },
+    {
+      "row_index": 76,
+      "scope_id": "阿联酋/Huwaila",
+      "name": "Huwaila",
+      "product": "crude_oil",
+      "field_checks": {
+        "product": "pass",
+        "source_value": "pass",
+        "source_unit": "pass",
+        "observation_year": "pass",
+        "gross_vs_equity": "pass",
+        "actual_vs_estimate": "pass"
+      },
+      "evidence": {
+        "claimed_value": "28",
+        "claimed_unit": "千桶/日",
+        "claimed_date": "2010年估计；IEEJ 2012-09报告",
+        "source_url": "https://eneken.ieej.or.jp/data/4534.pdf",
+        "cached_evidence_sha256": "7d0d82333acaacc1d962a34bc1ebffef30be685e9544abacf295a9b1a0d22fa8",
+        "cache_read_date": "2026-10-26",
+        "cache_fetch_date": "2026-10-25",
+        "basis": "逐项重读所引公开正文或官方原表，非链接存在性检查",
+        "source_quote": "1962, water, gas injection Huwaila 28 30 Bida Al-Quemzan 0 54 Production"
+      },
+      "findings": [],
+      "not_checked_here": [
+        "国家和中文名",
+        "层级和包含资产",
+        "运营状态",
+        "交互和筛选"
+      ]
+    },
+    {
+      "row_index": 77,
+      "scope_id": "阿联酋/Rumaitha",
+      "name": "Rumaitha",
+      "product": "crude_oil",
+      "field_checks": {
+        "product": "pass",
+        "source_value": "pass",
+        "source_unit": "pass",
+        "observation_year": "pass",
+        "gross_vs_equity": "pass",
+        "actual_vs_estimate": "pass"
+      },
+      "evidence": {
+        "claimed_value": "19",
+        "claimed_unit": "千桶/日",
+        "claimed_date": "2010年估计；IEEJ 2012-09报告",
+        "source_url": "https://eneken.ieej.or.jp/data/4534.pdf",
+        "cached_evidence_sha256": "7d0d82333acaacc1d962a34bc1ebffef30be685e9544abacf295a9b1a0d22fa8",
+        "cache_read_date": "2026-10-26",
+        "cache_fetch_date": "2026-10-25",
+        "basis": "逐项重读所引公开正文或官方原表，非链接存在性检查",
+        "source_quote": "ations (ADCO – established October 1978), a company develop s onshore oi"
+      },
+      "findings": [],
+      "not_checked_here": [
+        "国家和中文名",
+        "层级和包含资产",
+        "运营状态",
+        "交互和筛选"
+      ]
+    },
+    {
+      "row_index": 78,
+      "scope_id": "阿联酋/Sahil",
+      "name": "Sahil",
+      "product": "crude_oil",
+      "field_checks": {
+        "product": "pass",
+        "source_value": "pass",
+        "source_unit": "pass",
+        "observation_year": "pass",
+        "gross_vs_equity": "pass",
+        "actual_vs_estimate": "pass"
+      },
+      "evidence": {
+        "claimed_value": "53",
+        "claimed_unit": "千桶/日",
+        "claimed_date": "2010年估计；IEEJ 2012-09报告",
+        "source_url": "https://eneken.ieej.or.jp/data/4534.pdf",
+        "cached_evidence_sha256": "7d0d82333acaacc1d962a34bc1ebffef30be685e9544abacf295a9b1a0d22fa8",
+        "cache_read_date": "2026-10-26",
+        "cache_fetch_date": "2026-10-25",
+        "basis": "逐项重读所引公开正文或官方原表，非链接存在性检查",
+        "source_quote": "ll Rights Reserved 5 asset Bu Hasa 532 530 Discovered 1962, water, gas i"
+      },
+      "findings": [],
+      "not_checked_here": [
+        "国家和中文名",
+        "层级和包含资产",
+        "运营状态",
+        "交互和筛选"
+      ]
+    },
+    {
+      "row_index": 79,
+      "scope_id": "阿联酋/Satah",
+      "name": "Satah",
+      "product": "crude_oil",
+      "field_checks": {
+        "product": "pass",
+        "source_value": "pass",
+        "source_unit": "pass",
+        "observation_year": "pass",
+        "gross_vs_equity": "pass",
+        "actual_vs_estimate": "pass"
+      },
+      "evidence": {
+        "claimed_value": "约20",
+        "claimed_unit": "千桶/日",
+        "claimed_date": "2017-01-16公告时点",
+        "source_url": "https://www.euro-petrole.com/inpex-and-adnoc-agree-in-principle-on-extension-of-joint-development-of-satah-and-umm-al-dalkh-oil-fields-offshore-abu-dhabi-united-arab-emirates-n-i-14228",
+        "cached_evidence_sha256": "7c1f5476b9826155e1405e2c7220d0d71487887ad53c719d6a350028d8008e14",
+        "cache_read_date": "2026-10-26",
+        "cache_fetch_date": "2026-10-25",
+        "basis": "逐项重读所引公开正文或官方原表，非链接存在性检查",
+        "source_quote": "ADCO), are producing approximately 20,000 barrels per day and 15,000 barrels"
+      },
+      "findings": [],
+      "not_checked_here": [
+        "国家和中文名",
+        "层级和包含资产",
+        "运营状态",
+        "交互和筛选"
+      ]
+    },
+    {
+      "row_index": 80,
+      "scope_id": "阿联酋/Shah",
+      "name": "Shah",
+      "product": "crude_oil",
+      "field_checks": {
+        "product": "pass",
+        "source_value": "pass",
+        "source_unit": "pass",
+        "observation_year": "pass",
+        "gross_vs_equity": "pass",
+        "actual_vs_estimate": "pass"
+      },
+      "evidence": {
+        "claimed_value": "49",
+        "claimed_unit": "千桶/日",
+        "claimed_date": "2010年估计；IEEJ 2012-09报告",
+        "source_url": "https://eneken.ieej.or.jp/data/4534.pdf",
+        "cached_evidence_sha256": "7d0d82333acaacc1d962a34bc1ebffef30be685e9544abacf295a9b1a0d22fa8",
+        "cache_read_date": "2026-10-26",
+        "cache_fetch_date": "2026-10-25",
+        "basis": "逐项重读所引公开正文或官方原表，非链接存在性检查",
+        "source_quote": "covered 1967, water injection Shah 49 60 Discovered 1966, production wel"
+      },
+      "findings": [],
+      "not_checked_here": [
+        "国家和中文名",
+        "层级和包含资产",
+        "运营状态",
+        "交互和筛选"
+      ]
+    },
+    {
+      "row_index": 81,
+      "scope_id": "阿联酋/Shanayel",
+      "name": "Shanayel",
+      "product": "crude_oil",
+      "field_checks": {
+        "product": "pass",
+        "source_value": "pass",
+        "source_unit": "pass",
+        "observation_year": "pass",
+        "gross_vs_equity": "pass",
+        "actual_vs_estimate": "pass"
+      },
+      "evidence": {
+        "claimed_value": "10",
+        "claimed_unit": "千桶/日",
+        "claimed_date": "2010年估计；IEEJ 2012-09报告",
+        "source_url": "https://eneken.ieej.or.jp/data/4534.pdf",
+        "cached_evidence_sha256": "7d0d82333acaacc1d962a34bc1ebffef30be685e9544abacf295a9b1a0d22fa8",
+        "cache_read_date": "2026-10-26",
+        "cache_fetch_date": "2026-10-25",
+        "basis": "逐项重读所引公开正文或官方原表，非链接存在性检查",
+        "source_quote": " years are up for renewal 2 from 2010 onward. Japan’s area of c oncern i"
+      },
+      "findings": [],
+      "not_checked_here": [
+        "国家和中文名",
+        "层级和包含资产",
+        "运营状态",
+        "交互和筛选"
+      ]
+    },
+    {
+      "row_index": 82,
+      "scope_id": "阿联酋/Umm Al Dalkh",
+      "name": "Umm Al Dalkh",
+      "product": "crude_oil",
+      "field_checks": {
+        "product": "pass",
+        "source_value": "pass",
+        "source_unit": "pass",
+        "observation_year": "pass",
+        "gross_vs_equity": "pass",
+        "actual_vs_estimate": "pass"
+      },
+      "evidence": {
+        "claimed_value": "约15",
+        "claimed_unit": "千桶/日",
+        "claimed_date": "2017-01-16公告时点",
+        "source_url": "https://www.euro-petrole.com/inpex-and-adnoc-agree-in-principle-on-extension-of-joint-development-of-satah-and-umm-al-dalkh-oil-fields-offshore-abu-dhabi-united-arab-emirates-n-i-14228",
+        "cached_evidence_sha256": "7c1f5476b9826155e1405e2c7220d0d71487887ad53c719d6a350028d8008e14",
+        "cache_read_date": "2026-10-26",
+        "cache_fetch_date": "2026-10-25",
+        "basis": "逐项重读所引公开正文或官方原表，非链接存在性检查",
+        "source_quote": "imately 20,000 barrels per day and 15,000 barrels per day, respectively. INP"
+      },
+      "findings": [],
+      "not_checked_here": [
+        "国家和中文名",
+        "层级和包含资产",
+        "运营状态",
+        "交互和筛选"
+      ]
+    },
+    {
+      "row_index": 83,
+      "scope_id": "reference:埃及/egypt-taurus-libra-2017",
+      "name": "West Nile Delta首期Taurus、Libra两气田合计",
+      "product": "natural_gas",
+      "field_checks": {
+        "product": "pass",
+        "source_value": "pass",
+        "source_unit": "pass",
+        "observation_year": "pass",
+        "gross_vs_equity": "pass",
+        "actual_vs_estimate": "pass"
+      },
+      "evidence": {
+        "claimed_value": ">700",
+        "claimed_unit": "百万标准立方英尺/日",
+        "claimed_date": "2017-05-17公告时点",
+        "source_url": "https://www.bp.com.cn/zh_cn/china/home/news/press-releases/news-05-17-2017.html",
+        "cached_evidence_sha256": "e00a103ba3c1c8a077b93137c1f21556097ca5becd6e52dd5135d8794b609bf8",
+        "cache_read_date": "2026-10-26",
+        "cache_fetch_date": "2026-10-25",
+        "basis": "逐项重读所引公开正文或官方原表，非链接存在性检查",
+        "source_quote": "立方英尺/日（mmscf/d）的天然气年均交付量。这些气田目前产出超过7亿标准立方英尺/日的天然气和1,000桶/日（bbls/d）的凝析油，比"
+      },
+      "findings": [],
+      "not_checked_here": [
+        "国家和中文名",
+        "层级和包含资产",
+        "运营状态",
+        "交互和筛选"
+      ]
+    },
+    {
+      "row_index": 84,
+      "scope_id": "卡塔尔/Idd El-Sharqi",
+      "name": "Idd El-Sharqi",
+      "product": "natural_gas",
+      "field_checks": {
+        "product": "pass",
+        "source_value": "pass",
+        "source_unit": "pass",
+        "observation_year": "pass",
+        "gross_vs_equity": "pass",
+        "actual_vs_estimate": "pass"
+      },
+      "evidence": {
+        "claimed_value": "39.9",
+        "claimed_unit": "百万标准立方英尺/日",
+        "claimed_date": "2024年平均",
+        "source_url": "https://www.qatarenergy.qa/en/MediaCenter/Publications/QatarEnergy_Investors_Presentation_November_2025.pdf",
+        "cached_evidence_sha256": "c548d703dc46dfb89e7453e8c02aa20d43b6601bee164afe2c5d97da0e983f8a",
+        "cache_read_date": "2026-10-26",
+        "cache_fetch_date": "2026-10-25",
+        "basis": "逐项重读所引公开正文或官方原表，非链接存在性检查",
+        "source_quote": "Bul Hanine Idd El Shargi 35.1 38.6 39.954.4 Al Rayyan 0.33.6 Al Shaheen Al"
+      },
+      "findings": [],
+      "not_checked_here": [
+        "国家和中文名",
+        "层级和包含资产",
+        "运营状态",
+        "交互和筛选"
+      ]
+    },
+    {
+      "row_index": 85,
+      "scope_id": "伊拉克/Khor Mor",
+      "name": "Khor Mor",
+      "product": "natural_gas",
+      "field_checks": {
+        "product": "pass",
+        "source_value": "pass",
+        "source_unit": "pass",
+        "observation_year": "pass",
+        "gross_vs_equity": "pass",
+        "actual_vs_estimate": "pass"
+      },
+      "evidence": {
+        "claimed_value": ">700",
+        "claimed_unit": "百万标准立方英尺/日",
+        "claimed_date": "2026年1月高需求时段产量水平（非月均）",
+        "source_url": "https://www.danagas.com/wp-content/uploads/2026/02/20260204-Dana-Gas-FY-2025-Press-Release-En.pdf",
+        "cached_evidence_sha256": "62f28bff14bed5b2adc20af45a23d253d8c14e5a14c0145317c242f5298da4f9",
+        "cache_read_date": "2026-10-26",
+        "cache_fetch_date": "2026-10-25",
+        "basis": "逐项重读所引公开正文或官方原表，非链接存在性检查",
+        "source_quote": "r gas production ramped up to over 700 MMscf/d in January 2026, post-period, more"
+      },
+      "findings": [],
+      "not_checked_here": [
+        "国家和中文名",
+        "层级和包含资产",
+        "运营状态",
+        "交互和筛选"
+      ]
+    },
+    {
+      "row_index": 86,
+      "scope_id": "卡塔尔/Al Shaheen",
+      "name": "Al Shaheen",
+      "product": "natural_gas",
+      "field_checks": {
+        "product": "pass",
+        "source_value": "pass",
+        "source_unit": "pass",
+        "observation_year": "pass",
+        "gross_vs_equity": "pass",
+        "actual_vs_estimate": "pass"
+      },
+      "evidence": {
+        "claimed_value": "198.7",
+        "claimed_unit": "百万标准立方英尺/日",
+        "claimed_date": "2024年平均",
+        "source_url": "https://www.qatarenergy.qa/en/MediaCenter/Publications/QatarEnergy_Investors_Presentation_November_2025.pdf",
+        "cached_evidence_sha256": "c548d703dc46dfb89e7453e8c02aa20d43b6601bee164afe2c5d97da0e983f8a",
+        "cache_read_date": "2026-10-26",
+        "cache_fetch_date": "2026-10-25",
+        "basis": "逐项重读所引公开正文或官方原表，非链接存在性检查",
+        "source_quote": " 0.33.6 Al Shaheen Al Khalij 280.1 198.7 4.423.4 Average oil production in "
+      },
+      "findings": [],
+      "not_checked_here": [
+        "国家和中文名",
+        "层级和包含资产",
+        "运营状态",
+        "交互和筛选"
+      ]
+    },
+    {
+      "row_index": 87,
+      "scope_id": "卡塔尔/Al-Khaleej",
+      "name": "Al-Khaleej",
+      "product": "natural_gas",
+      "field_checks": {
+        "product": "pass",
+        "source_value": "pass",
+        "source_unit": "pass",
+        "observation_year": "pass",
+        "gross_vs_equity": "pass",
+        "actual_vs_estimate": "pass"
+      },
+      "evidence": {
+        "claimed_value": "4.4",
+        "claimed_unit": "百万标准立方英尺/日",
+        "claimed_date": "2024年平均",
+        "source_url": "https://www.qatarenergy.qa/en/MediaCenter/Publications/QatarEnergy_Investors_Presentation_November_2025.pdf",
+        "cached_evidence_sha256": "c548d703dc46dfb89e7453e8c02aa20d43b6601bee164afe2c5d97da0e983f8a",
+        "cache_read_date": "2026-10-26",
+        "cache_fetch_date": "2026-10-25",
+        "basis": "逐项重读所引公开正文或官方原表，非链接存在性检查",
+        "source_quote": "anine Idd El Shargi 35.1 38.6 39.954.4 Al Rayyan 0.33.6 Al Shaheen Al Kha"
+      },
+      "findings": [],
+      "not_checked_here": [
+        "国家和中文名",
+        "层级和包含资产",
+        "运营状态",
+        "交互和筛选"
+      ]
+    },
+    {
+      "row_index": 88,
+      "scope_id": "卡塔尔/Al-Rayyan",
+      "name": "Al-Rayyan",
+      "product": "natural_gas",
+      "field_checks": {
+        "product": "pass",
+        "source_value": "pass",
+        "source_unit": "pass",
+        "observation_year": "pass",
+        "gross_vs_equity": "pass",
+        "actual_vs_estimate": "pass"
+      },
+      "evidence": {
+        "claimed_value": "0.3",
+        "claimed_unit": "百万标准立方英尺/日",
+        "claimed_date": "2024年平均",
+        "source_url": "https://www.qatarenergy.qa/en/MediaCenter/Publications/QatarEnergy_Investors_Presentation_November_2025.pdf",
+        "cached_evidence_sha256": "c548d703dc46dfb89e7453e8c02aa20d43b6601bee164afe2c5d97da0e983f8a",
+        "cache_read_date": "2026-10-26",
+        "cache_fetch_date": "2026-10-25",
+        "basis": "逐项重读所引公开正文或官方原表，非链接存在性检查",
+        "source_quote": "hargi 35.1 38.6 39.954.4 Al Rayyan 0.33.6 Al Shaheen Al Khalij 280.1 198."
+      },
+      "findings": [],
+      "not_checked_here": [
+        "国家和中文名",
+        "层级和包含资产",
+        "运营状态",
+        "交互和筛选"
+      ]
+    },
+    {
+      "row_index": 89,
+      "scope_id": "卡塔尔/Bul Hanine",
+      "name": "Bul Hanine",
+      "product": "natural_gas",
+      "field_checks": {
+        "product": "pass",
+        "source_value": "pass",
+        "source_unit": "pass",
+        "observation_year": "pass",
+        "gross_vs_equity": "pass",
+        "actual_vs_estimate": "pass"
+      },
+      "evidence": {
+        "claimed_value": "38.6",
+        "claimed_unit": "百万标准立方英尺/日",
+        "claimed_date": "2024年平均",
+        "source_url": "https://www.qatarenergy.qa/en/MediaCenter/Publications/QatarEnergy_Investors_Presentation_November_2025.pdf",
+        "cached_evidence_sha256": "c548d703dc46dfb89e7453e8c02aa20d43b6601bee164afe2c5d97da0e983f8a",
+        "cache_read_date": "2026-10-26",
+        "cache_fetch_date": "2026-10-25",
+        "basis": "逐项重读所引公开正文或官方原表，非链接存在性检查",
+        "source_quote": "CFD) Bul Hanine Idd El Shargi 35.1 38.6 39.954.4 Al Rayyan 0.33.6 Al Shahe"
+      },
+      "findings": [],
+      "not_checked_here": [
+        "国家和中文名",
+        "层级和包含资产",
+        "运营状态",
+        "交互和筛选"
+      ]
+    },
+    {
+      "row_index": 90,
+      "scope_id": "卡塔尔/Dukhan",
+      "name": "Dukhan",
+      "product": "natural_gas",
+      "field_checks": {
+        "product": "pass",
+        "source_value": "pass",
+        "source_unit": "pass",
+        "observation_year": "pass",
+        "gross_vs_equity": "pass",
+        "actual_vs_estimate": "pass"
+      },
+      "evidence": {
+        "claimed_value": "229.0",
+        "claimed_unit": "百万标准立方英尺/日",
+        "claimed_date": "2024年平均",
+        "source_url": "https://www.qatarenergy.qa/en/MediaCenter/Publications/QatarEnergy_Investors_Presentation_November_2025.pdf",
+        "cached_evidence_sha256": "c548d703dc46dfb89e7453e8c02aa20d43b6601bee164afe2c5d97da0e983f8a",
+        "cache_read_date": "2026-10-26",
+        "cache_fetch_date": "2026-10-25",
+        "basis": "逐项重读所引公开正文或官方原表，非链接存在性检查",
+        "source_quote": "khan (onshore) Maydan Mahzam 176.4 229.0 28.616.2 Average oil production in"
+      },
+      "findings": [],
+      "not_checked_here": [
+        "国家和中文名",
+        "层级和包含资产",
+        "运营状态",
+        "交互和筛选"
+      ]
+    },
+    {
+      "row_index": 91,
+      "scope_id": "卡塔尔/Maydan Mahzam",
+      "name": "Maydan Mahzam",
+      "product": "natural_gas",
+      "field_checks": {
+        "product": "pass",
+        "source_value": "pass",
+        "source_unit": "pass",
+        "observation_year": "pass",
+        "gross_vs_equity": "pass",
+        "actual_vs_estimate": "pass"
+      },
+      "evidence": {
+        "claimed_value": "28.6",
+        "claimed_unit": "百万标准立方英尺/日",
+        "claimed_date": "2024年平均",
+        "source_url": "https://www.qatarenergy.qa/en/MediaCenter/Publications/QatarEnergy_Investors_Presentation_November_2025.pdf",
+        "cached_evidence_sha256": "c548d703dc46dfb89e7453e8c02aa20d43b6601bee164afe2c5d97da0e983f8a",
+        "cache_read_date": "2026-10-26",
+        "cache_fetch_date": "2026-10-25",
+        "basis": "逐项重读所引公开正文或官方原表，非链接存在性检查",
+        "source_quote": "onshore) Maydan Mahzam 176.4 229.0 28.616.2 Average oil production in 2024"
+      },
+      "findings": [],
+      "not_checked_here": [
+        "国家和中文名",
+        "层级和包含资产",
+        "运营状态",
+        "交互和筛选"
+      ]
+    },
+    {
+      "row_index": 92,
+      "scope_id": "埃及/Baltim South West",
+      "name": "Baltim South West",
+      "product": "natural_gas",
+      "field_checks": {
+        "product": "pass",
+        "source_value": "pass",
+        "source_unit": "pass",
+        "observation_year": "pass",
+        "gross_vs_equity": "pass",
+        "actual_vs_estimate": "pass"
+      },
+      "evidence": {
+        "claimed_value": "100",
+        "claimed_unit": "百万标准立方英尺/日",
+        "claimed_date": "2019-09-17首井投产初期水平",
+        "source_url": "https://www.eni.com/en-IT/media/press-release/2019/09/eni-starts-production-of-baltim-south-west-field-offshore-egypt.html",
+        "cached_evidence_sha256": "1f9aa6f36abbb6b24f45fce448dab31e6e43b2a82b5d39d4e52e439d44a9096c",
+        "cache_read_date": "2026-10-26",
+        "cache_fetch_date": "2026-10-25",
+        "basis": "逐项重读所引公开正文或官方原表，非链接存在性检查",
+        "source_quote": " producing with an initial rate of 100 million standard cubic feet per day (scf/d"
+      },
+      "findings": [],
+      "not_checked_here": [
+        "国家和中文名",
+        "层级和包含资产",
+        "运营状态",
+        "交互和筛选"
+      ]
+    },
+    {
+      "row_index": 93,
+      "scope_id": "埃及/Raven",
+      "name": "Raven",
+      "product": "natural_gas",
+      "field_checks": {
+        "product": "pass",
+        "source_value": "pass",
+        "source_unit": "pass",
+        "observation_year": "pass",
+        "gross_vs_equity": "pass",
+        "actual_vs_estimate": "pass"
+      },
+      "evidence": {
+        "claimed_value": "约600",
+        "claimed_unit": "百万标准立方英尺/日",
+        "claimed_date": "2021-04-26初期毛产量水平",
+        "source_url": "https://wintershalldea.de/en/newsroom/gas-production-west-nile-deltas-raven-field",
+        "cached_evidence_sha256": "2771d79ca5c2f8c7fc23f654d6fdd56b911a5e7ef442ca6d80b1c17225309ea0",
+        "cache_read_date": "2026-10-26",
+        "cache_fetch_date": "2026-10-25",
+        "basis": "逐项重读所引公开正文或官方原表，非链接存在性检查",
+        "source_quote": " gross production is approximately 600 million standard cubic feet of gas per day"
+      },
+      "findings": [],
+      "not_checked_here": [
+        "国家和中文名",
+        "层级和包含资产",
+        "运营状态",
+        "交互和筛选"
+      ]
+    },
+    {
+      "row_index": 94,
+      "scope_id": "埃及/Zohr",
+      "name": "Zohr",
+      "product": "natural_gas",
+      "field_checks": {
+        "product": "pass",
+        "source_value": "pass",
+        "source_unit": "pass",
+        "observation_year": "pass",
+        "gross_vs_equity": "pass",
+        "actual_vs_estimate": "pass"
+      },
+      "evidence": {
+        "claimed_value": ">2,700",
+        "claimed_unit": "百万标准立方英尺/日",
+        "claimed_date": "2019-08-21公告时产量水平",
+        "source_url": "https://www.eni.com/en-IT/media/press-release/2019/08/eni-zohr-gas-production-reaches-27-bcfd.html",
+        "cached_evidence_sha256": "6b7ee12dbe9d4b434f0c4e5ce19ca8e6ea2f383a84bb86abb541387beadbfecf",
+        "cache_read_date": "2026-10-26",
+        "cache_fetch_date": "2026-10-25",
+        "basis": "逐项重读所引公开正文或官方原表，非链接存在性检查",
+        "source_quote": " Zohr field gas production reaches more than 2.7 bcfd about 5 months ahead of the P"
+      },
+      "findings": [],
+      "not_checked_here": [
+        "国家和中文名",
+        "层级和包含资产",
+        "运营状态",
+        "交互和筛选"
+      ]
+    },
+    {
+      "row_index": 95,
+      "scope_id": "巴林/Bahrain Field (Awali)",
+      "name": "Bahrain Field (Awali)",
+      "product": "natural_gas",
+      "field_checks": {
+        "product": "pass",
+        "source_value": "pass",
+        "source_unit": "pass",
+        "observation_year": "pass",
+        "gross_vs_equity": "pass",
+        "actual_vs_estimate": "pass"
+      },
+      "evidence": {
+        "claimed_value": "1,647",
+        "claimed_unit": "百万标准立方英尺/日",
+        "claimed_date": "2022年平均",
+        "source_url": "https://unfccc.int/sites/default/files/resource/30112025_Bahrain%27s_BTR1_2024_to_the_UNFCCC_vSubmitted.pdf",
+        "cached_evidence_sha256": "b296da386897156821ebbcc6256ea40d70b7b68d1a4f47fabc4c6ecc71eea999",
+        "cache_read_date": "2026-10-26",
+        "cache_fetch_date": "2026-10-25",
+        "basis": "逐项重读所引公开正文或官方原表，非链接存在性检查",
+        "source_quote": "natural gas production averaged at 1,647 million standard cubic feet per day. Furth"
+      },
+      "findings": [],
+      "not_checked_here": [
+        "国家和中文名",
+        "层级和包含资产",
+        "运营状态",
+        "交互和筛选"
+      ]
+    },
+    {
+      "row_index": 96,
+      "scope_id": "沙特阿拉伯/North Arabia",
+      "name": "North Arabia",
+      "product": "natural_gas",
+      "field_checks": {
+        "product": "pass",
+        "source_value": "pass",
+        "source_unit": "pass",
+        "observation_year": "unknown",
+        "gross_vs_equity": "pass",
+        "actual_vs_estimate": "pass"
+      },
+      "evidence": {
+        "claimed_value": ">200",
+        "claimed_unit": "百万标准立方英尺/日",
+        "claimed_date": "运营商网页未注明供气数值基准日（2018年投产）",
+        "source_url": "https://www.aramco.com/en/what-we-do/operations/unconventional-resources",
+        "cached_evidence_sha256": "0c8541fc892e6f93ed801c9fd1424b7d0281c39348ff9f14f4639e3b2e07ca23",
+        "cache_read_date": "2026-10-26",
+        "cache_fetch_date": "2026-10-25",
+        "basis": "逐项重读所引公开正文或官方原表，非链接存在性检查",
+        "source_quote": "ine in 2018. It supplies more than 200 million scfd of natural gas for lower-carb"
+      },
+      "findings": [],
+      "not_checked_here": [
+        "国家和中文名",
+        "层级和包含资产",
+        "运营状态",
+        "交互和筛选"
+      ]
+    },
+    {
+      "row_index": 97,
+      "scope_id": "沙特阿拉伯/South Ghawar",
+      "name": "South Ghawar",
+      "product": "natural_gas",
+      "field_checks": {
+        "product": "pass",
+        "source_value": "pass",
+        "source_unit": "pass",
+        "observation_year": "pass",
+        "gross_vs_equity": "pass",
+        "actual_vs_estimate": "pass"
+      },
+      "evidence": {
+        "claimed_value": "300",
+        "claimed_unit": "百万标准立方英尺/日",
+        "claimed_date": "2023年末初期投产",
+        "source_url": "https://www.aramco.com/en/what-we-do/operations/unconventional-resources",
+        "cached_evidence_sha256": "0c8541fc892e6f93ed801c9fd1424b7d0281c39348ff9f14f4639e3b2e07ca23",
+        "cache_read_date": "2026-10-26",
+        "cache_fetch_date": "2026-10-25",
+        "basis": "逐项重读所引公开正文或官方原表，非链接存在性检查",
+        "source_quote": "uth Ghawar commenced production of 300 million scfd of natural gas in late 2023. "
+      },
+      "findings": [],
+      "not_checked_here": [
+        "国家和中文名",
+        "层级和包含资产",
+        "运营状态",
+        "交互和筛选"
+      ]
+    }
+  ],
+  "additional_missing_records": [
+    {
+      "asset": "Ramadan",
+      "commodity": "natural_gas",
+      "value": 50,
+      "unit": "百万标准立方英尺/日",
+      "observation_date": "1978-09-01",
+      "source_url": "http://documents1.worldbank.org/curated/en/838231468036565700/pdf/multi-page.pdf",
+      "evidence_page": "PDF31 / 印刷27",
+      "confidence": "高"
+    },
+    {
+      "asset": "Balal",
+      "commodity": "crude_oil",
+      "value": 40,
+      "unit": "千桶/日",
+      "observation_date": "未明确",
+      "source_url": "https://openjicareport.jica.go.jp/pdf/1000014245_01.pdf",
+      "evidence_page": "PDF47 / 印刷2-8",
+      "confidence": "中；来源直称转输流量，底层观测期未知"
+    },
+    {
+      "asset": "Sirri E / Esfand",
+      "commodity": "crude_oil",
+      "value": "约60",
+      "unit": "千桶/日",
+      "observation_date": "未明确",
+      "source_url": "https://openjicareport.jica.go.jp/pdf/1000014245_01.pdf",
+      "evidence_page": "PDF47 / 印刷2-8",
+      "confidence": "Esfand=SirriE已由WoodMacIOOC字段报告+GEM复核；JICA底层观察期未明",
+      "alias_source": "https://www.woodmac.com/reports/upstream-oil-and-gas-iranian-offshore-oil-company-fields-7575458"
+    },
+    {
+      "asset": "Nahr Umar / Bin Omar",
+      "commodity": "crude_oil",
+      "annual_barrels": 12407883,
+      "calendar_days": 366,
+      "source_url": "https://eiti.org/sites/default/files/attachments/iraq_2016_eiti_report.pdf",
+      "evidence_page": "印刷75",
+      "confidence": "须沿用已确认BinOmar别名映射，历史2016年"
+    },
+    {
+      "asset": "Faihaa",
+      "value": 130,
+      "unit": "百万立方英尺，单句未重复/day",
+      "decision": "不可直接补实产；与官方处理能力同值存在口径冲突",
+      "source_url": "https://shafaq.com/en/Economy/Iraq-expands-oil-production-starts-drilling-in-border-region"
+    },
+    {
+      "asset": "Nahr Umar",
+      "commodity": "crude_oil",
+      "value": 45,
+      "unit": "千桶/日",
+      "observation_date": "2025-03-06报道时点",
+      "source_url": "https://www.iraqinews.com/iraq/iraq-in-negotiations-with-halliburton-to-develop-nahr-bin-umar-oilfield/",
+      "basis": "正文直接称currentlyproduces45000bpd；300000bpd为开发后目标，绝不采用目标",
+      "confidence": "中；行业报道，引用具名部长及公司管理层，量值段未单独列直接引语"
+    }
+  ]
+}
