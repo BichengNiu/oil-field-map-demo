@@ -61,3 +61,11 @@
 - [复算Notebook](asset_table_full_review_2026-10-26.ipynb)及[离线脚本](check_asset_table.py)
 
 执行：`python audits/check_asset_table.py --output /tmp/asset-table-review.json`。候选与发布均经既有单发布者完成；展示端仍只读DuckDB，不进行补写或上游抓取。
+
+## 发布与实际页面验证
+
+代码已推送main；经既有发布者发布的数据快照提交为`a8da457`，展示修正提交为`ad1353e`。发布后离线重跑的JSON与候选审计JSON完全一致。港口267,530行、船位32,262行及各自最新观察日期保持不变；没有把目录审核当作港口/船位更新。
+
+本地Chromium检查了桌面与390px窄屏、地图卡片、已定位Awali popup及待定位Taurus/Libra popup：地图82点、10个待定位记录；popup为表内字段，没有旧目录说明。真实点击下载得到UTF-8 BOM CSV，共101行、10列，包含状态，列顺序与表一致。相关应用启动、筛选、发布保护和地图回归通过。
+
+**线上验证未完成。** 已用浏览器访问实际Streamlit域名并请求唤醒，随后仍无法进入油气tab，最新访问显示空白页面。无法确认云端已载入本次代码与快照；不得将本地验证或git推送表述为线上验证通过。此部署访问限制与表内来源/坐标缺口分别保留。
