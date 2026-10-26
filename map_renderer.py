@@ -194,6 +194,7 @@ def build_map_html(
       .asset-table-popup {{ width: 100%; max-width: 100%; box-sizing: border-box; }}
       .asset-table-popup .row {{ display: grid; grid-template-columns: 96px minmax(0, 1fr); }}
       .asset-table-popup .row strong {{ text-align: left; min-width: 0; overflow-wrap: anywhere; white-space: normal; }}
+      .asset-table-popup a {{ display: block; max-width: 100%; word-break: break-all; }}
       .hierarchy-title {{ margin-top: 10px; padding-top: 8px; border-top: 2px solid #cbd5e1; color: #334155; font-size: 14px; font-weight: 700; }}
       .level-metric {{ padding: 7px 8px; margin-top: 6px; background: #f8fafc; border: 1px solid #e2e8f0; border-radius: 7px; }}
       .level-head, .output-line {{ display: flex; justify-content: space-between; gap: 10px; font-size: 14px; }}

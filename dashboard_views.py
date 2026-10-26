@@ -356,7 +356,7 @@ def render_assets_panel(assets: list[dict]) -> None:
             unit = "万桶/日" if product == "crude_oil" else "百万立方米/日"
             parts.append(f"{production.STATISTICAL_PRODUCTS[product]} {amount} {unit}")
         with a4.container(key="production_daily_metric"):
-            st.metric("日均产量", "  \n".join(parts) or "—")
+            st.metric("日均产量", "\n".join(parts) or "—")
     table = pd.DataFrame(rows, columns=["名称", "国家", "类型", "包含资产", daily_column,
                                         "商品", "状态", "备注", "数据时间", "数据来源"])
     table[daily_column] = pd.to_numeric(table[daily_column], errors="coerce")
