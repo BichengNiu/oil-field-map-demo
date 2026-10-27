@@ -1,6 +1,11 @@
 #!/usr/bin/env bash
 # One publisher, including setup on newly provisioned cloud workers.
 set -euo pipefail
+retry_only=false
+if [[ "$#" -gt 0 ]]; then
+    [[ "$#" -eq 1 && "$1" == --retry ]] || { echo 'Usage: update_snapshot.sh [--retry]' >&2; exit 2; }
+    retry_only=true
+fi
 cd "$(dirname "$0")/.."
 trap 'echo "Snapshot update failed at line $LINENO (exit $?)" >&2' ERR
 git_dir=$(git rev-parse --absolute-git-dir)
@@ -52,5 +57,14 @@ if [[ ! -x "$collector_venv/bin/python" ]]; then
 fi
 "$collector_venv/bin/python" -m pip install --disable-pip-version-check -q -r requirements.txt
 "$collector_venv/bin/python" -m pip check
+if [[ "$retry_only" == true ]]; then
+    retry_status=0
+    "$collector_venv/bin/python" deploy/snapshot_retry.py || retry_status=$?
+    case "$retry_status" in
+        0) ;; # No published full collection in this primary window: retry.
+        3) exit 0 ;; # Already succeeded. No upstream query or database write.
+        *) echo "Retry eligibility check failed (exit $retry_status)." >&2; exit "$retry_status" ;;
+    esac
+fi
 "$collector_venv/bin/python" snapshot_update.py --publish
 "$collector_venv/bin/python" deploy/verify_snapshot.py

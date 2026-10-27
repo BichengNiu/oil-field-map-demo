@@ -9,7 +9,7 @@
 
 ## 统一DuckDB与数据自动更新
 
-运行数据统一存放于 `runtime/monitoring.duckdb`，由 Git LFS 托管。Codex 定时任务是唯一写入端：每小时采集一次 Open Waters 船位，每个 UTC 自然日更新一次 PortWatch，并校验临时库后提交 main。Streamlit 只读快照，页面载入、控件操作、下载及原生打印均不采集、不写库。执行命令、失败处理与 LFS 部署见 [定时采集与发布](SCHEDULED_COLLECTION.md)；表结构见 [统一存储说明](DUCKDB_STORAGE.md)。
+运行数据统一存放于 `runtime/monitoring.duckdb`，由 Git LFS 托管。Codex 定时任务是唯一写入端：每天迪拜时间08:00采集 Open Waters 船位，13:00在本主时段尚未成功时补跑；每个 UTC 自然日成功更新一次 PortWatch，并校验临时库后提交 main。Streamlit 只读快照，页面载入、控件操作、下载及原生打印均不采集、不写库。执行命令、失败处理与 LFS 部署见 [定时采集与发布](SCHEDULED_COLLECTION.md)；表结构见 [统一存储说明](DUCKDB_STORAGE.md)。
 
 ## 港口覆盖与逐项复核
 
