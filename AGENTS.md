@@ -21,8 +21,8 @@
 # Data publication
 
 - Streamlit is a read-only consumer of the GitHub DuckDB snapshot. Do not add upstream collection, database initialization writes, import controls, or refresh buttons to the app.
-- Scheduled collection publishes through `python snapshot_update.py --publish` on `main`. Keep one publisher, validate a candidate before replacement, and never force-push or merge DuckDB binaries.
-- Do not enable another scheduled writer (including GitHub Actions) alongside the Codex task.
+- Scheduled collection publishes through `.github/workflows/monitoring-snapshot.yml`, using the existing `deploy/update_snapshot.sh` and `python snapshot_update.py --publish` on `main`. Keep one publisher, validate a candidate before replacement, and never force-push or merge DuckDB binaries.
+- GitHub Actions is the sole scheduled data writer. The former Codex collection task must remain disabled; do not enable it, another workflow, or a collector alongside the workflow. Manual diagnosis must use the same entry point and preserve the publication locks.
 
 # Deployment compatibility
 
