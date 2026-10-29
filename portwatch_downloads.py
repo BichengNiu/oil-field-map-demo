@@ -162,7 +162,8 @@ def fetch_window(kind: str, ids: tuple[str, ...], first: date, last: date,
         return rows, {"cache_hit": True, "cache_source": "published DuckDB snapshot",
                       "exported_query_rows": len(rows), "where": f"{first}/{last}",
                       "scope": "local observations only; missing dates remain missing"}
-    where = f"{_ids_where(ids, kind)} AND date >= DATE '{first}' AND date <= DATE '{last}'"
+    # The upstream field is DateOnly, not a timestamp; use ISO date strings.
+    where = f"{_ids_where(ids, kind)} AND date >= '{first}' AND date <= '{last}'"
     endpoint = pw.endpoint_for(kind)
     metrics = PORT_METRICS if kind == "ports" else CHOKE_METRICS
     source_fields = ["ObjectId", "date", "portid", "portname"] + (["country", "ISO3"] if kind == "ports" else []) + metrics
@@ -240,7 +241,7 @@ def fetch_window(kind: str, ids: tuple[str, ...], first: date, last: date,
     offset = 0
     while offset < expected:
         page = pw.query(endpoint, where=where, returnGeometry="false",
-                         outFields=",".join(source_fields), orderByFields="portid ASC,date ASC,ObjectId ASC",
+                         outFields=",".join(source_fields), orderByFields="ObjectId ASC",
                          resultOffset=offset, resultRecordCount=PAGE_SIZE)
         items = page.get("features", [])
         if not items:

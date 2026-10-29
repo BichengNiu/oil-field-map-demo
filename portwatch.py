@@ -137,9 +137,20 @@ def query(url: str, **params: object) -> dict:
         if not error:
             return result
         message = str(error.get("message", error))
-        if "too many requests" not in message.lower() or attempt == 2:
-            raise ValueError(f"PortWatch API: {message}")
-        _budget_sleep((5, 15)[attempt])
+        throttled = "too many requests" in message.lower()
+        # ArcGIS also emits this generic backend error for valid queries that
+        # subsequently succeed unchanged. Retry it within the same time budget;
+        # a persistent error still aborts publication, never becomes an empty set.
+        query_backend_error = error.get("code") == 400 and (
+            message == "Cannot perform query. Invalid query parameters."
+            or "Unable to perform query. Please check your parameters." in error.get("details", []))
+        if not (throttled or query_backend_error) or attempt == 2:
+            context = {key: params[key] for key in (
+                "where", "outFields", "outStatistics", "groupByFieldsForStatistics",
+                "returnCountOnly", "resultOffset", "resultRecordCount") if key in params}
+            raise ValueError(f"PortWatch API: {message}; details={error.get('details', [])}; "
+                             f"endpoint={url}; query={json.dumps(context, ensure_ascii=False)}")
+        _budget_sleep(((5, 15) if throttled else (2, 5))[attempt])
     raise ValueError("PortWatch请求未完成")
 
 
@@ -241,7 +252,9 @@ def _activity_rows(day: date, port_ids: tuple[str, ...], calendar_days: int,
         if not valid_port_ids(ids):
             raise ValueError("无效的 PortWatch 港口编号")
         quoted = ",".join(f"'{p}'" for p in ids)
-        where = (f"date >= DATE '{first_day.isoformat()}' AND date <= DATE '{day.isoformat()}' "
+        # ArcGIS esriFieldTypeDateOnly accepts ISO date strings. DATE literals
+        # can fail with code 400 even for otherwise valid node/date windows.
+        where = (f"date >= '{first_day.isoformat()}' AND date <= '{day.isoformat()}' "
                  f"AND portid IN ({quoted})")
         count_before = query(DAILY, where=where, returnGeometry="false",
                               returnCountOnly="true").get("count")
@@ -457,7 +470,7 @@ def chokepoint_activity(day: date, chokepoint_ids: tuple[str, ...],
             "chokepoints", chokepoint_ids, day, day)
         return {row["portid"]: row for row in cached_rows}
     quoted = ",".join(f"'{point_id}'" for point_id in chokepoint_ids)
-    where = f"date = DATE '{day.isoformat()}' AND portid IN ({quoted})"
+    where = f"date = '{day.isoformat()}' AND portid IN ({quoted})"
     page = query(
         CHOKEPOINT_DAILY, where=where, returnGeometry="false", resultRecordCount=100,
         orderByFields="portid ASC,date ASC",

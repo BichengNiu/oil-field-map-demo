@@ -4,7 +4,7 @@
 
 唯一权威文件为 `main` 分支的 `runtime/monitoring.duckdb`，通过 Git LFS 管理；不重写过去的 Git 历史。GitHub Actions 是唯一计划发布端；原Codex采集任务已停用。Streamlit 使用真正的 DuckDB `read_only=True` 连接，页面、下载和原生 Print 不采集、不修改数据库，也不进行启动迁移。没有额外的报告准备按钮、刷新按钮或说明小字。
 
-当前`.github/workflows/monitoring-snapshot.yml`在迪拜时间每天08:00正常执行，13:00检查是否需要补跑（GitHub cron分别为UTC04:00、09:00，可能排队延迟）。正常采集读取最新120分钟内的船位。PortWatch 每个 UTC 自然日成功更新一次；失败不写成功标记，下次任务重试。每日采样不代表全天连续船位覆盖。源站发布有延迟，页面展示真实观测日期，不把任务时间替代数据日期。
+当前`.github/workflows/monitoring-snapshot.yml`计划在迪拜时间每天08:00、13:00触发，并在每小时第17分钟补检。所有自然定时触发统一执行`--retry`：本日08:00至次日08:00已有成功发布就跳过，否则补采。GitHub cron可能延迟或丢弃触发，不承诺准点或每小时内一定恢复；错峰补检增加漏触发后的恢复机会。正常采集读取最新120分钟内的船位。PortWatch 每个 UTC 自然日成功更新一次；失败不写成功标记，下次任务重试。每日采样不代表全天连续船位覆盖。源站发布有延迟，页面展示真实观测日期，不把任务时间替代数据日期。
 
 ## 定时任务执行内容
 
@@ -73,11 +73,11 @@ GitHub 上是一个权威数据库版本，采集运行器与 Streamlit 各自�
 
 ## 失败后的5小时兜底（2026-10-27）
 
-原Codex方案曾保留08:00（Asia/Dubai）主时段，增加13:00备用触发；2026-10-28已停用该任务，改由同一个GitHub Actions工作流提供这两个触发；不是新增发布者，也不是实际错误发生后精确计时5小时的失败事件订阅。正常时段仍执行`bash deploy/update_snapshot.sh`，备用时段执行`bash deploy/update_snapshot.sh --retry`。两者共用main检查、`scheduled-update.lock`和同一发布/校验链路。
+原Codex方案曾保留08:00（Asia/Dubai）主时段，增加13:00备用触发；2026-10-28已停用该任务，改由同一个GitHub Actions工作流提供这两个触发；不是新增发布者，也不是实际错误发生后精确计时5小时的失败事件订阅。2026-10-29进一步增加每小时第17分钟补检，所有定时触发都执行`bash deploy/update_snapshot.sh --retry`，共用main检查、`scheduled-update.lock`和同一发布/校验链路。这样迟到的主触发也不能重复采集已成功的时段。
 
 备用入口先同步GitHub main并物化LFS，再由`deploy/snapshot_retry.py`只读检查已发布数据库的`published_snapshot`。本主执行时段（迪拜08:00至次日08:00）已有完整采集成功标记就正常跳过，输出`skipped_already_published`；否则才调用原采集发布程序。只改油气目录、任务触发通知、源站数据日期或失败候选库都不能代替成功标记。检查异常会停止，不跳过校验；不重复采集已成功的主时段。
 
-主任务若因模型额度不足而根本没有启动，无法在任务自身安排重试；预设备用触发可以再次尝试启动，但仍受账户额度、周额度及平台状态限制，不能保证5小时后恢复。限额恢复时间应以账户Usage所示为准；不通过切换任务、重复触发或定时消息重置额度。
+旧Codex方案若因模型额度不足而根本没有启动，不能保证5小时后恢复。当前GitHub Actions直接执行Python，不消耗ChatGPT模型额度；其调度、运行配额和服务可用性仍由GitHub控制。不能把缺少运行记录认定为模型额度不足。
 
 回补范围不同：PortWatch可在源站已有历史日度数据时按既有历史校验回补；当前AIS入口是最近120分钟的快照，5小时后恢复采集不能凭空补齐此前漏采的全部船位。源站没有发布的日度记录不能伪造。
 
@@ -94,3 +94,11 @@ GitHub 上是一个权威数据库版本，采集运行器与 Streamlit 各自�
 验证记录：实际GitHub云端执行[40658077626](https://github.com/BichengNiu/oil-field-map-demo/actions/runs/40658077626)已于2026-10-28完成成功，事件类型为手动触发工作流（不是自然cron事件，也不是本地手工采集）。发布提交`5b49de0`，远端对象191,377,408字节，SHA256为`969fdb3dff14ac945d8cab57564909177d839b7b4199a898643878113d3ec515`。船位由32,349增至32,546，最新观测2026-10-28T08:37:48Z；港口最新2026-10-23，咽喉点最新2026-10-25。该记录证明新云端执行、来源、提交、LFS对象读取均通过，不冒充未来08:00/13:00自然定时已验证。
 
 备用门槛的云端复测[40658657085](https://github.com/BichengNiu/oil-field-map-demo/actions/runs/40658657085)也已成功：输出`skipped_already_published`，识别本时段成功快照后未重复采集或推送。2026-10-28浏览器访问实际部署时显示Streamlit休眠页；已请求唤醒，但随后仍显示“taking longer than normal”，未能进入地图/油气tab，故不宣称线上页面验收通过。采集发布不依赖Streamlit在线。
+
+## 2026-10-29 调度遗漏恢复
+
+09:24（迪拜时间）核查时，今天08:00的触发没有生成运行记录，不能归因为采集脚本报错或模型额度。工作流为active，GitHub状态页Actions为operational。昨日存在自然定时事件[40719142987](https://github.com/BichengNiu/oil-field-map-demo/actions/runs/40719142987)，但实际启动已是19:45；该事件没有推进数据库。其成功状态不能证明发生了采集，具体输出本次读取失败，不能仅据此声称已核验跳过原因。
+
+[GitHub官方调度说明](https://docs.github.com/en/actions/reference/workflows-and-actions/events-that-trigger-workflows#schedule)明确指出整点负载高，定时事件可能延迟、负载足够高时可能丢弃。现有证据定位到缺少调度执行记录；不声称已取得平台内部丢弃日志。保留08:00/13:00，并增加`17 * * * *`，统一走成功标记门槛，增加补采机会且避免迟到的主触发重复采集。该修改不能保证平台级准点执行。每次工作流另外保存采集输出artifact（14天）及执行结果摘要，便于区分发布、跳过与失败。
+
+随后云端手动补检[40823901969](https://github.com/BichengNiu/oil-field-map-demo/actions/runs/40823901969)确实启动，但PortWatch返回`Cannot perform query. Invalid query parameters.`，发布被阻止。该错误与早上未生成调度记录是两个独立问题，不回推为未启动任务的错误原因。上游字段仍存在、类型为DateOnly；对照查询有的成功、有的返回通用400，尚无证据把所有错误唯一归因为SQL语法。改用ISO日期字符串、分页按唯一ObjectId稳定排序，并对上游通用查询错误做最多3次有时限重试；持续失败仍拒绝发布，保留错误details和不含凭据的查询上下文，不能把错误解释为空数据。历史行数、分页前后记录数、日期范围和来源校验仍全部保留。

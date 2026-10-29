@@ -32,6 +32,7 @@ class PortWatchCacheTest(unittest.TestCase):
         source_rows = [{"portid": "port105", "date": first.isoformat(), "portcalls": 7}]
 
         def response(endpoint, **params):
+            self.assertNotIn("DATE '", params["where"])
             if params.get("returnCountOnly") == "true":
                 return {"count": len(source_rows)}
             return {"features": [{"attributes": dict(row)} for row in source_rows]}
@@ -163,6 +164,9 @@ class PortWatchCacheTest(unittest.TestCase):
         self.assertEqual(len(result), 4)
         self.assertFalse(metadata["cache_hit"])
         self.assertGreaterEqual(len(calls), 3)
+        for call in calls:
+            self.assertIn("date >= '2026-10-01' AND date <= '2026-10-02'", call["where"])
+            self.assertNotIn("DATE '", call["where"])
 
     def test_cache_only_history_miss_never_contacts_portwatch(self):
         first = date(2026, 10, 1)
