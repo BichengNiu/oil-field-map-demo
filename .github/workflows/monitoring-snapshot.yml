@@ -89,3 +89,36 @@ jobs:
           path: runtime/scheduled-run.log
           if-no-files-found: warn
           retention-days: 14
+
+  keep_awake:
+    if: github.ref == 'refs/heads/main'
+    runs-on: ubuntu-latest
+    timeout-minutes: 8
+    permissions:
+      contents: read
+    env:
+      GIT_LFS_SKIP_SMUDGE: '1'
+      PYTHONUNBUFFERED: '1'
+    steps:
+      - name: Check out the read-only browser check
+        uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4
+        with:
+          ref: main
+          lfs: false
+          persist-credentials: false
+      - name: Set up browser-check Python
+        uses: actions/setup-python@a26af69be951a213d495a4c3e4e4022e16d87065 # v5
+        with:
+          python-version: '3.12'
+      - name: Install browser client for the runner's existing Chrome
+        run: python -m pip install --disable-pip-version-check playwright==1.62.0
+      - name: Visit, wake and verify the real oil and gas table
+        run: python deploy/check_streamlit.py
+      - name: Preserve the browser result and screenshot
+        if: always()
+        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4
+        with:
+          name: app-check-${{ github.run_id }}-${{ github.run_attempt }}
+          path: runtime/keepalive/
+          if-no-files-found: warn
+          retention-days: 14
