@@ -5,6 +5,8 @@ name: Publish monitoring snapshot
     # GitHub cron is UTC: 08:00 and 13:00 in Asia/Dubai.
     - cron: '0 4 * * *'
     - cron: '0 9 * * *'
+    # Off the busy hour boundary; recover missed/failed daily runs.
+    - cron: '17 * * * *'
   workflow_dispatch:
     inputs:
       mode:
@@ -48,6 +50,7 @@ jobs:
           git config user.name 'github-actions[bot]'
           git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
       - name: Collect, validate, publish and verify through the existing entry point
+        id: publisher
         shell: bash
         env:
           EVENT_NAME: ${{ github.event_name }}
@@ -56,7 +59,7 @@ jobs:
         run: |
           set -euo pipefail
           mode=collect
-          if [[ "$EVENT_NAME" == schedule && "$SCHEDULE" == '0 9 * * *' ]]; then
+          if [[ "$EVENT_NAME" == schedule ]]; then
             mode=retry
           elif [[ "$EVENT_NAME" == workflow_dispatch ]]; then
             case "$REQUESTED_MODE" in
@@ -68,3 +71,21 @@ jobs:
           if [[ "$mode" == retry ]]; then args+=(--retry); fi
           mkdir -p runtime
           bash deploy/update_snapshot.sh "${args[@]}" 2>&1 | tee runtime/scheduled-run.log
+      - name: Record the actual outcome in the run summary
+        if: always()
+        env:
+          PUBLISH_OUTCOME: ${{ steps.publisher.outcome }}
+        run: |
+          {
+            echo "Publisher outcome: $PUBLISH_OUTCOME"
+            echo "Trigger: $GITHUB_EVENT_NAME; schedule: ${{ github.event.schedule }}"
+            echo 'A success may mean a verified publication or an already-published skip. See the log artifact for the explicit result.'
+          } >> "$GITHUB_STEP_SUMMARY"
+      - name: Preserve collection output for diagnosis
+        if: always()
+        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4
+        with:
+          name: snapshot-run-${{ github.run_id }}-${{ github.run_attempt }}
+          path: runtime/scheduled-run.log
+          if-no-files-found: warn
+          retention-days: 14
