@@ -23,6 +23,7 @@
 - Streamlit is a read-only consumer of the GitHub DuckDB snapshot. Do not add upstream collection, database initialization writes, import controls, or refresh buttons to the app.
 - Scheduled collection publishes through `.github/workflows/monitoring-snapshot.yml`, using the existing `deploy/update_snapshot.sh` and `python snapshot_update.py --publish` on `main`. Keep one publisher, validate a candidate before replacement, and never force-push or merge DuckDB binaries.
 - GitHub Actions is the sole scheduled data writer. The former Codex collection task must remain disabled; do not enable it, another workflow, or a collector alongside the workflow. Manual diagnosis must use the same entry point and preserve the publication locks.
+- The same workflow also has an independent `keep_awake` browser job with `contents: read`. It visits the deployed app, requests wake-up when a sleeping page is present, and verifies the oil/gas table. It must not collect data, write the snapshot, or push commits. Keep the former empty-commit automation disabled; a trigger, HTTP 200, or repository commit alone is not proof that the app is awake.
 
 # Deployment compatibility
 

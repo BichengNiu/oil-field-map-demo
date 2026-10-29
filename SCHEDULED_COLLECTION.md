@@ -106,3 +106,11 @@ GitHub 上是一个权威数据库版本，采集运行器与 Streamlit 各自�
 修复后的云端实跑[40824899061](https://github.com/BichengNiu/oil-field-map-demo/actions/runs/40824899061)于2026-10-29T05:44:28Z完成成功，发布提交`f72e66010ff5fa7e48a43595af3c2268bed9070e`。远端对象读取校验通过：185,610,240字节，SHA256 `3270e481eb00cf637f0a6b5199bc10535ffd34cd18f1f9d48b49ca572f4c93e5`。船位32,546→32,582，最新观测2026-10-29T05:42:38Z（迪拜09:42）；PortWatch记录268,090→268,153，来源最新日期仍为港口10月23日、咽喉点10月25日。港口已核实来源缺口98→35，未核实缺口为0，咽喉点历史完整。42项相关测试通过。该实跑是手动触发恢复，不冒充新的小时cron已验证。实际网页的交互验收被执行环境Chromium证书错误阻断，数据库发布与网页保活应分别核验。
 
 紧接着的云端复测[40825189969](https://github.com/BichengNiu/oil-field-map-demo/actions/runs/40825189969)成功，明确输出`skipped_already_published`及本时段09:42成功标记，未产生额外数据库提交，验证小时补检复用的去重路径。
+
+## Streamlit网页保活与数据更新分开验证（2026-10-29）
+
+旧空commit任务没有可核验的执行结果，也没有对应远端提交，已停用。根据[Streamlit官方说明](https://docs.streamlit.io/deploy/streamlit-community-cloud/manage-your-app#app-hibernation)，12小时没有访问的应用会休眠；应实际访问应用，休眠后点击“Yes, get this app back up!”请求唤醒，不能用数据库发布成功替代此验证。
+
+现有同一个工作流增加独立`keep_awake`任务，与数据发布并行，权限仅`contents: read`，不下载DuckDB、不修改数据库、不推送Git。每次既有定时触发都运行`deploy/check_streamlit.py`：使用真正的Chrome访问部署URL，遇到休眠按钮请求唤醒，最多等待3分钟进入油气tab并看到数据表；有应用异常、无法进入或超时则任务失败。结果JSON、页面截图保存为14天artifact；只有`status=ready`算本次页面验证成功，`wake_requested=true`本身不算成功。页面保活仍受GitHub定时延迟及Streamlit可用性影响，不承诺一直在线。
+
+实际Cloud页面把应用放在`/~/+/`的iframe中，顶层仅是托管外壳。首轮[40930163151](https://github.com/BichengNiu/oil-field-map-demo/actions/runs/40930163151)只检查顶层超时；修复后扫描顶层及所有iframe，分别定位休眠按钮、异常和数据tab。云端复测[40930875773](https://github.com/BichengNiu/oil-field-map-demo/actions/runs/40930875773)全部成功，2026-10-29T18:27:05Z（迪拜22:27）得到`status=ready`，实际进入油气表，读出101条资产、31个在产、10个国家、6种类型及原油/天然气日均产量，未见应用运行异常。本次`wake_requested=false`，证明当时应用已在线并完成实际访问，不声称本次点击过休眠按钮。数据任务同时正常跳过重复采集。未来自然定时浏览器保活仍需通过后续运行记录核验；访问成功不能承诺永不休眠。
