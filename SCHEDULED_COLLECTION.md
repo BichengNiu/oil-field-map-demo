@@ -102,3 +102,7 @@ GitHub 上是一个权威数据库版本，采集运行器与 Streamlit 各自�
 [GitHub官方调度说明](https://docs.github.com/en/actions/reference/workflows-and-actions/events-that-trigger-workflows#schedule)明确指出整点负载高，定时事件可能延迟、负载足够高时可能丢弃。现有证据定位到缺少调度执行记录；不声称已取得平台内部丢弃日志。保留08:00/13:00，并增加`17 * * * *`，统一走成功标记门槛，增加补采机会且避免迟到的主触发重复采集。该修改不能保证平台级准点执行。每次工作流另外保存采集输出artifact（14天）及执行结果摘要，便于区分发布、跳过与失败。
 
 随后云端手动补检[40823901969](https://github.com/BichengNiu/oil-field-map-demo/actions/runs/40823901969)确实启动，但PortWatch返回`Cannot perform query. Invalid query parameters.`，发布被阻止。该错误与早上未生成调度记录是两个独立问题，不回推为未启动任务的错误原因。上游字段仍存在、类型为DateOnly；对照查询有的成功、有的返回通用400，尚无证据把所有错误唯一归因为SQL语法。改用ISO日期字符串、分页按唯一ObjectId稳定排序，并对上游通用查询错误做最多3次有时限重试；持续失败仍拒绝发布，保留错误details和不含凭据的查询上下文，不能把错误解释为空数据。历史行数、分页前后记录数、日期范围和来源校验仍全部保留。
+
+修复后的云端实跑[40824899061](https://github.com/BichengNiu/oil-field-map-demo/actions/runs/40824899061)于2026-10-29T05:44:28Z完成成功，发布提交`f72e66010ff5fa7e48a43595af3c2268bed9070e`。远端对象读取校验通过：185,610,240字节，SHA256 `3270e481eb00cf637f0a6b5199bc10535ffd34cd18f1f9d48b49ca572f4c93e5`。船位32,546→32,582，最新观测2026-10-29T05:42:38Z（迪拜09:42）；PortWatch记录268,090→268,153，来源最新日期仍为港口10月23日、咽喉点10月25日。港口已核实来源缺口98→35，未核实缺口为0，咽喉点历史完整。42项相关测试通过。该实跑是手动触发恢复，不冒充新的小时cron已验证。实际网页的交互验收被执行环境Chromium证书错误阻断，数据库发布与网页保活应分别核验。
+
+紧接着的云端复测[40825189969](https://github.com/BichengNiu/oil-field-map-demo/actions/runs/40825189969)成功，明确输出`skipped_already_published`及本时段09:42成功标记，未产生额外数据库提交，验证小时补检复用的去重路径。
