@@ -31,29 +31,42 @@ def main():
             page.goto(URL, wait_until="domcontentloaded", timeout=60_000)
             deadline = time.monotonic() + 180
             while time.monotonic() < deadline:
-                error = page.locator('[data-testid="stException"]')
-                if error.count():
-                    result.update(status="app_error", error=error.all_inner_texts())
-                    break
-                tab = page.get_by_role("tab", name="油气", exact=True)
-                if tab.count() and tab.is_visible():
-                    tab.click()
-                    page.locator('[data-testid="stDataFrame"]').first.wait_for(
-                        state="visible", timeout=30_000)
-                    # Recheck after the data tab renders, not just the shell.
+                # Community Cloud may wrap both the sleeping page and the app
+                # in a cross-origin iframe; the top-level shell has no text.
+                for frame in page.frames:
+                    error = frame.locator('[data-testid="stException"]')
                     if error.count():
                         result.update(status="app_error", error=error.all_inner_texts())
-                    else:
-                        result.update(status="ready", tabs=page.get_by_role("tab").all_text_contents(),
-                                      metrics=page.locator('[data-testid="stMetric"]').all_inner_texts())
+                        break
+                    tab = frame.get_by_role("tab", name="油气", exact=True)
+                    if tab.count() and tab.is_visible():
+                        tab.click()
+                        frame.locator('[data-testid="stDataFrame"]').first.wait_for(
+                            state="visible", timeout=30_000)
+                        if error.count():
+                            result.update(status="app_error", error=error.all_inner_texts())
+                        else:
+                            result.update(status="ready", tabs=frame.get_by_role("tab").all_text_contents(),
+                                          metrics=frame.locator('[data-testid="stMetric"]').all_inner_texts())
+                        break
+                    wake = frame.get_by_role("button", name="Yes, get this app back up!", exact=True)
+                    if not result["wake_requested"] and wake.count() and wake.is_visible():
+                        wake.click()
+                        result["wake_requested"] = True
+                        print("Wake requested; waiting for the data tab.", flush=True)
+                if result["status"] != "unavailable":
                     break
-                wake = page.get_by_role("button", name="Yes, get this app back up!", exact=True)
-                if not result["wake_requested"] and wake.count() and wake.is_visible():
-                    wake.click()
-                    result["wake_requested"] = True
-                    print("Wake requested; waiting for the data tab.", flush=True)
                 page.wait_for_timeout(3000)
             result["page_text"] = page.locator("body").inner_text()[:4000]
+            result["frames"] = []
+            for frame in page.frames:
+                try:
+                    from urllib.parse import urlsplit
+                    parsed = urlsplit(frame.url)
+                    result["frames"].append({"url": f"{parsed.scheme}://{parsed.netloc}{parsed.path}",
+                                             "text": frame.locator("body").inner_text(timeout=2000)[:4000]})
+                except Exception:
+                    continue  # A frame can detach while the app wakes.
         except Exception as exc:
             result["error"] = str(exc)[:2000]
         finally:
