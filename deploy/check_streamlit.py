@@ -63,9 +63,8 @@ def main():
                                 raise RuntimeError(f"Unexpected map monitoring cards: {labels}")
                             result["map_cards"] = labels
                             result["map_card_details"] = cards.all_inner_texts()
-                            if any(text not in result['map_card_details'][2]
-                                   for text in ['原油', '天然气', '在产比例', '待确认比例']):
-                                raise RuntimeError('Latest production totals and status ratios have not deployed')
+                            if cards.locator('.monitoring-card-detail').count():
+                                raise RuntimeError('Monitoring cards still contain text below their main values')
                             if any(text in ''.join(result['map_card_details']) for text in
                                    ['已披露进港', '已披露通过', '独立统计', '日记录覆盖', '非同日', '产量数据：']):
                                 raise RuntimeError('Monitoring card explanation text is still present')

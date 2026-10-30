@@ -160,10 +160,8 @@ def build_cards(port_catalog, choke_catalog, port_history, choke_history,
 
 def cards_html(cards, css_class='monitoring-cards'):
     def visible_lines(label, lines):
-        if label in {'港口监测', '咽喉点监测'}:
+        if label in {'港口监测', '咽喉点监测', '油田监测'}:
             return []
-        if label == '油田监测':
-            return [line for line in lines if line.startswith(('原油 ', '天然气 ', '在产比例 ', '待确认比例 '))]
         return lines
     return f'<div class="{css_class}">' + ''.join(
         '<div class="monitoring-card">' + f'<span>{escape(label)}</span>'

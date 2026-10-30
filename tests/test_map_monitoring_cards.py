@@ -37,9 +37,10 @@ class MonitoringCardsTest(unittest.TestCase):
             ('油田监测', '92个', '各资产最新披露日产量合计（非同日）', '原油 771.2591 万桶/日',
              '天然气 91.6475 百万立方米/日', '产量数据：1978—2026年',
              '在产比例 33.7%（31/92）', '待确认比例 63.0%（58/92）')])
-        for text in ['580艘次', '514艘次', '92个', '原油 771.2591', '天然气 91.6475', '在产比例 33.7%', '待确认比例 63.0%']:
+        for text in ['港口监测', '咽喉点监测', '油田监测', '580艘次', '514艘次', '92个']:
             self.assertIn(text, html)
-        for text in ['已披露', '独立统计', '日记录覆盖', '非同日', '产量数据：', '2026-10-19']:
+        for text in ['monitoring-card-detail', '原油', '天然气', '在产比例', '待确认比例',
+                     '已披露', '独立统计', '日记录覆盖', '非同日', '产量数据：', '2026-10-19']:
             self.assertNotIn(text, html)
 
     def test_card_history_uses_selected_nodes_latest_week_without_future_rows(self):
