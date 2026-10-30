@@ -120,14 +120,14 @@ class AppStartupTest(unittest.TestCase):
                     assert '万桶/日' in columns[4] and '百万立方米/日' in columns[4]
                     assert app.dataframe[0].value[columns[4]].dtype.kind in 'fi'
                     assert not any(h.value == '油气产量统计单元' for h in app.subheader)
-                    assert [m.label for m in app.metric] == ['油田资产数量', '在产数量', '国家数量', '油田类型数量', '日均产量']
+                    assert [m.label for m in app.metric] == ['油田资产数量', '在产数量', '国家数量', '油田类型数量', '原油产量']
                     assert int(app.metric[0].value) == len(app.dataframe[0].value)
                     assert not app.dataframe[0].value['国家'].str.contains('土耳其').any()
                     producing = app.dataframe[0].value.loc[app.dataframe[0].value['状态'].str.startswith('在产（')]
                     assert int(app.metric[1].value) == producing['名称'].nunique()
-                    assert len(app.metric[4].value.splitlines()) == 2
-                    assert app.metric[4].value.splitlines()[0].startswith('原油 ')
-                    assert app.metric[4].value.splitlines()[1].startswith('天然气 ')
+                    oil = app.dataframe[0].value.loc[app.dataframe[0].value['商品'] == '原油', columns[4]].dropna()
+                    assert app.metric[4].value == f'{oil.sum():.1f}万桶/日'
+                    assert '天然气' not in app.metric[4].value
                     downloads = [b for b in app.get('download_button') if b.label == '下载数据']
                     assert len(downloads) == 1
                     assert downloads[0].proto.type == 'primary'
@@ -142,11 +142,14 @@ class AppStartupTest(unittest.TestCase):
                     assert len(app.dataframe) == 1
                     assert '日产量（百万立方米/日）' in app.dataframe[0].value.columns
                     assert set(app.dataframe[0].value['商品']) == {'天然气'}
+                    assert app.metric[4].value == '—'
                     app.multiselect(key='production_products').set_value(['原油'])
                     app.session_state['main_tabs'] = '油气'
                     app.run(timeout=30)
                     assert not app.exception, [str(error.value) for error in app.exception]
                     assert '日产量（万桶/日）' in app.dataframe[0].value.columns
+                    oil = app.dataframe[0].value['日产量（万桶/日）'].dropna()
+                    assert app.metric[4].value == f'{oil.sum():.1f}万桶/日'
                     app.multiselect(key='production_products').set_value([])
                     app.session_state['main_tabs'] = '油气'
                     app.run(timeout=30)

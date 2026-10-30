@@ -4,6 +4,7 @@ Read-only browser traffic: never collect data, write the snapshot, or push Git.
 """
 import json
 import os
+import re
 from pathlib import Path
 import shutil
 import time
@@ -48,6 +49,12 @@ def main():
                         else:
                             result.update(status="ready", tabs=frame.get_by_role("tab").all_text_contents(),
                                           metrics=frame.locator('[data-testid="stMetric"]').all_inner_texts())
+                            crude = frame.locator('.st-key-production_daily_metric')
+                            expect(crude).to_contain_text('原油产量', timeout=30_000)
+                            crude_value = crude.locator('[data-testid="stMetricValue"]').inner_text()
+                            if not re.fullmatch(r'\d+\.\d万桶/日', crude_value):
+                                raise RuntimeError(f'Unexpected crude oil total format: {crude_value}')
+                            result['crude_oil_total'] = crude_value
                             frame.get_by_role("tab", name="地图", exact=True).click()
                             cards = frame.locator('.monitoring-card')
                             expect(cards).to_have_count(3, timeout=30_000)

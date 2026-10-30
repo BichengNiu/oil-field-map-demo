@@ -342,21 +342,18 @@ def render_assets_panel(assets: list[dict]) -> None:
                                                if p in production.STATISTICAL_PRODUCTS], key="production_products")
     products = [key for key, label in production.STATISTICAL_PRODUCTS.items() if label in product_labels]
     st.session_state["production_saved_filters"] = {"countries": countries, "products": products}
-    chosen, rows, daily_column, means = production.statistical_view(assets, countries, products)
+    chosen, rows, daily_column, _ = production.statistical_view(assets, countries, products)
     with metrics_container:
         a1, active, a2, a3, a4 = st.columns([1, 1, 1, 1, 2])
         a1.metric("油田资产数量", len(rows))
         active.metric("在产数量", production.producing_count(chosen))
         a2.metric("国家数量", len({c for o in chosen for c in o["countries"]}))
         a3.metric("油田类型数量", len({row["类型"] for row in rows}))
-        parts = []
-        for product in products:
-            value = means.get(product)
-            amount = f"{value:,.4f}".rstrip("0").rstrip(".") if value is not None else "—"
-            unit = "万桶/日" if product == "crude_oil" else "百万立方米/日"
-            parts.append(f"{production.STATISTICAL_PRODUCTS[product]} {amount} {unit}")
+        crude_values = [row[daily_column] for row in rows
+                        if row["商品"] == "原油" and row[daily_column] is not None]
+        amount = f"{sum(crude_values):.1f}万桶/日" if crude_values else "—"
         with a4.container(key="production_daily_metric"):
-            st.metric("日均产量", "\n".join(parts) or "—")
+            st.metric("原油产量", amount)
     table = pd.DataFrame(rows, columns=["名称", "国家", "类型", "包含资产", daily_column,
                                         "商品", "状态", "备注", "数据时间", "数据来源"])
     table[daily_column] = pd.to_numeric(table[daily_column], errors="coerce")
