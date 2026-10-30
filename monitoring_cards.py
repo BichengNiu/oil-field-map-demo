@@ -88,7 +88,6 @@ def build_cards(port_catalog, choke_catalog, port_history, choke_history,
                 port_day, choke_day, vessel_day=None, assets=(), sea_passage_history=(), sea_observation_card=None):
     cards = [activity_card('港口监测', port_catalog, port_history, 'portcalls', '进港', port_day, True),
              activity_card('通道监测', choke_catalog, choke_history, 'n_total', '通过', choke_day)]
-    cards.append(sea_observation_card or sea_activity_card(sea_passage_history, vessel_day or date.today()))
     if any('production_rows' in asset for asset in assets):
         scopes = {asset['scope_id'] for asset in assets}
         mapped = sum(bool(asset.get('map_drawable')) for asset in assets)

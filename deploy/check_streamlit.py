@@ -8,7 +8,7 @@ from pathlib import Path
 import shutil
 import time
 
-from playwright.sync_api import sync_playwright
+from playwright.sync_api import expect, sync_playwright
 
 
 URL = "https://oil-field-map-demo-mpsslyxypuc6vwdxnmap3o.streamlit.app/"
@@ -48,6 +48,13 @@ def main():
                         else:
                             result.update(status="ready", tabs=frame.get_by_role("tab").all_text_contents(),
                                           metrics=frame.locator('[data-testid="stMetric"]').all_inner_texts())
+                            frame.get_by_role("tab", name="地图", exact=True).click()
+                            cards = frame.locator('.monitoring-card')
+                            expect(cards).to_have_count(3, timeout=30_000)
+                            labels = cards.locator(':scope > span').all_text_contents()
+                            if labels != ["港口监测", "通道监测", "油田监测"]:
+                                raise RuntimeError(f"Unexpected map monitoring cards: {labels}")
+                            result["map_cards"] = labels
                         break
                     wake = frame.get_by_role("button", name="Yes, get this app back up!", exact=True)
                     if not result["wake_requested"] and wake.count() and wake.is_visible():
@@ -68,7 +75,7 @@ def main():
                 except Exception:
                     continue  # A frame can detach while the app wakes.
         except Exception as exc:
-            result["error"] = str(exc)[:2000]
+            result.update(status="unavailable", error=str(exc)[:2000])
         finally:
             page.screenshot(path=str(output / "page.png"), full_page=True)
             browser.close()

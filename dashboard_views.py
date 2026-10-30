@@ -551,28 +551,11 @@ def prepare_monitoring_cards(available_ports, available_chokepoints, state,
     port_history, choke_history = histories
     comparison_ports = port_comparison or []
     comparison_chokes = choke_comparison or []
-    sea_history = []
-    sea_observation_card = None
-    snapshot_day = getattr(state, "snapshot_day", None)
-    sea_day = None
-    try:
-        sea_state = (report_data.card_sea_history(revisions.get("sea", 0), snapshot_day.isoformat())
-                     if snapshot_day else report_data.card_sea_history(revisions.get("sea", 0)))
-        sea_day = sea_state.get("selected_day")
-        sea_history = sea_state["rows"]
-        sea_observation_card = sea_state.get("card")
-        if sea_state.get("error"):
-            errors.append(sea_state["error"])
-    except Exception as exc:
-        errors.append(f"海域历史记录：{type(exc).__name__}: {exc}")
-
     cards = monitoring_cards.build_cards(
         available_ports, available_chokepoints,
         port_history + comparison_ports, choke_history + comparison_chokes,
         state.selected_day, state.selected_chokepoint_day,
-        vessel_day=sea_day or snapshot_day or datetime.now(ZoneInfo("Asia/Shanghai")).date(), assets=state.map_assets,
-        sea_passage_history=sea_history,
-        sea_observation_card=sea_observation_card,
+        assets=state.map_assets,
     )
     return cards, errors
 

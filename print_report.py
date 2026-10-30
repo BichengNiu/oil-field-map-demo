@@ -612,7 +612,7 @@ PRINT_CSS = """
 .print-report h2 { font-size: 15pt; border-bottom: 1px solid #9aa7b4; padding-bottom: 2mm; margin: 0 0 4mm; }
 .print-report h3 { font-size: 10.5pt; margin: 4mm 0 2mm; }
 .report-page { break-before: page; page-break-before: always; }
-.print-report .monitoring-cards { display:grid; grid-template-columns:repeat(4,1fr); gap:3mm; margin:4mm 0; }
+.print-report .monitoring-cards { display:grid; grid-template-columns:repeat(3,1fr); gap:3mm; margin:4mm 0; }
 .print-report .monitoring-card { border:1px solid #ccd5de; border-radius:2mm; padding:3mm; min-width:0; }
 .print-report .monitoring-card span, .print-report .monitoring-card-detail { display:block; color:#334155; font-size:10pt; overflow-wrap:anywhere; }
 .print-report .monitoring-card strong { display:block; font-size:14pt; margin:1.5mm 0; }

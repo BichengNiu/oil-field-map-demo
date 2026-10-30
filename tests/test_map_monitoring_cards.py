@@ -51,7 +51,7 @@ class MonitoringCardsTest(unittest.TestCase):
         self.assertIn("上周累计进港7艘次", cards[0][2])
         self.assertIn("本月累计进港7艘次", cards[0][3])
 
-    def test_normal_map_renders_four_cards_before_map(self):
+    def test_normal_map_renders_three_cards_before_map(self):
         calls = []
         buttons = []
         st = SimpleNamespace(session_state={}, html=lambda html: calls.append(('cards', html)),
@@ -76,13 +76,14 @@ class MonitoringCardsTest(unittest.TestCase):
         render(state, cards)
         self.assertEqual([call[0] for call in calls], [
             'cards', 'checkbox', 'checkbox', 'checkbox', 'checkbox', 'checkbox', 'map'])
-        self.assertEqual(calls[0][1].count('class="monitoring-card"'), 4)
+        self.assertEqual(calls[0][1].count('class="monitoring-card"'), 3)
+        self.assertNotIn('海域监测', calls[0][1])
         self.assertNotIn('刷新船舶数据', buttons)
         self.assertNotIn('刷新港口数据', buttons)
-        for label in ('港口监测', '通道监测', '海域监测', '油田监测'):
+        for label in ('港口监测', '通道监测', '油田监测'):
             self.assertIn(label, calls[0][1])
 
-    def test_source_failure_still_returns_four_cards(self):
+    def test_source_failure_still_returns_three_cards(self):
         def fail(*args, **kwargs):
             raise RuntimeError('source unavailable')
         ns = {'st': SimpleNamespace(session_state={}), 'uuid': uuid,
@@ -95,8 +96,8 @@ class MonitoringCardsTest(unittest.TestCase):
                                 selected_chokepoint_day=datetime(2026, 10, 6).date(), live_positions=[], map_assets=[])
         prepare = view_function('prepare_monitoring_cards', ns)
         cards, errors = prepare([{'portid': 'p'}], [{'portid': 'c'}], state)
-        self.assertEqual(len(cards), 4)
-        self.assertEqual(len(errors), 3)
+        self.assertEqual(len(cards), 3)
+        self.assertEqual(len(errors), 2)
 
     def test_expected_history_cache_miss_does_not_render_as_warning(self):
         revisions = []
@@ -117,7 +118,7 @@ class MonitoringCardsTest(unittest.TestCase):
         cards, errors = view_function('prepare_monitoring_cards', ns)(
             [{'portid': 'p'}], [{'portid': 'c'}], state)
 
-        self.assertEqual(len(cards), 4)
+        self.assertEqual(len(cards), 3)
         self.assertEqual(errors, [])
         self.assertEqual(revisions, [0, 0])
 

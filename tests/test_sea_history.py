@@ -98,8 +98,10 @@ class SeaHistoryTest(unittest.TestCase):
         rows = sea_history.read_history(self.path)["rows"]
         cards = monitoring_cards.build_cards([], [], [], [], None, None,
                                             vessel_day=anchor, sea_passage_history=rows)
-        self.assertIn("通过28艘次（环比 +0.0%）", cards[2][2])
-        self.assertIn("通过20艘次（环比 +0.0%，同比 +0.0%）", cards[2][3])
+        self.assertNotIn("海域监测", [card[0] for card in cards])
+        card = monitoring_cards.sea_activity_card(rows, anchor)
+        self.assertIn("通过28艘次（环比 +0.0%）", card[2])
+        self.assertIn("通过20艘次（环比 +0.0%，同比 +0.0%）", card[3])
         rows = [r for r in rows if not (r["sea"] == "红海" and r["date"] == "2020-10-03")]
         broken = monitoring_cards.sea_activity_card(rows, anchor)
         self.assertIn("通过—艘次", broken[2])
