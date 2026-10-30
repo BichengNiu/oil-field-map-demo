@@ -31,14 +31,18 @@ def history_window(kind: str, node_ids: tuple[str, ...], end_day: str,
 @st.cache_data(ttl=900, max_entries=24, show_spinner=False)
 def card_activity_history(kind: str, node_ids: tuple[str, ...], end_day: str,
                           data_revision: int = 0) -> list[dict]:
-    """Read only locally present rows for the card's five indicator windows."""
+    """Read the latest observed calendar week for the selected nodes and cutoff."""
     if not node_ids:
         return []
     selected = date.fromisoformat(end_day)
-    rows = data_store.cached_portwatch_periods(
-        kind, node_ids, windows(selected)
-    )
-    return rows
+    with data_store.connect() as conn:
+        latest = conn.execute(
+            "SELECT MAX(day) FROM portwatch_daily WHERE kind=? AND day<=? AND node_id IN ("
+            + ','.join('?' for _ in node_ids) + ')', [kind, selected, *node_ids]).fetchone()[0]
+    if latest is None:
+        return []
+    return data_store.cached_portwatch_periods(
+        kind, node_ids, [(latest - timedelta(days=latest.weekday()), latest)])
 
 
 def merge_latest_rows(catalog: list[dict], history: list[dict]) -> list[dict]:

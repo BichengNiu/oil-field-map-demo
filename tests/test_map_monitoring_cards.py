@@ -1,15 +1,20 @@
 """Exercise the map rendering path without remote data or Streamlit installed."""
 import ast
+import os
 from contextlib import nullcontext
 from datetime import datetime, timedelta
 from pathlib import Path
 from types import SimpleNamespace
 import unittest
+from unittest.mock import patch
+import tempfile
 import uuid
 from zoneinfo import ZoneInfo
 
 import monitoring_cards
 import portwatch_downloads
+import data_store
+import report_data
 
 ROOT = Path(__file__).resolve().parents[1]
 
@@ -25,7 +30,23 @@ def view_function(name, namespace):
 
 
 class MonitoringCardsTest(unittest.TestCase):
-    def test_missing_old_history_does_not_hide_complete_week_and_month(self):
+    def test_card_history_uses_selected_nodes_latest_week_without_future_rows(self):
+        with tempfile.TemporaryDirectory() as temporary, patch.dict(os.environ, {
+                'MONITORING_DB_PATH': str(Path(temporary) / 'monitoring.duckdb'),
+                'MONITORING_READ_ONLY': 'false'}):
+            data_store.save_portwatch('ports', [
+                {'portid': 'port105', 'date': '2026-10-09', 'portcalls': 2},
+                {'portid': 'port105', 'date': '2026-10-12', 'portcalls': 3},
+                {'portid': 'port105', 'date': '2026-10-13', 'portcalls': 4},
+                {'portid': 'port106', 'date': '2026-10-23', 'portcalls': 999},
+            ], 'test-source')
+            # port106's newer week must not move port105's statistics forward;
+            # the later port105 observation must not leak into a past cutoff.
+            rows = report_data.card_activity_history('ports', ('port105',), '2026-10-12', 987654)
+            self.assertEqual([(row['portid'], row['date']) for row in rows],
+                             [('port105', '2026-10-12')])
+
+    def test_latest_partial_data_week_is_used_instead_of_previous_week(self):
         anchor = datetime(2026, 10, 7).date()
         week_start = anchor - timedelta(days=anchor.weekday() + 7)
         rows = [
@@ -48,8 +69,49 @@ class MonitoringCardsTest(unittest.TestCase):
             vessel_day=anchor,
         )
 
-        self.assertIn("上周累计进港7艘次", cards[0][2])
-        self.assertIn("本月累计进港7艘次", cards[0][3])
+        self.assertEqual(cards[0][1], "3艘次")
+        self.assertIn("2026-10-05—2026-10-07（未满周）", cards[0][2])
+        self.assertIn("100.0%（3/3）", cards[0][4])
+
+    def test_missing_daily_records_are_disclosed_instead_of_counted_as_zero(self):
+        rows = [{"portid": "p1", "date": "2026-10-19", "n_total": 0},
+                {"portid": "p1", "date": "2026-10-20", "n_total": 5},
+                {"portid": "p2", "date": "2026-10-20", "n_total": None},
+                {"portid": "p1", "date": "2026-10-21", "n_total": 999}]
+        card = monitoring_cards.activity_card('咽喉点监测', [{'portid': 'p1'}, {'portid': 'p2'}],
+                                               rows, 'n_total', '通过', datetime(2026, 10, 20).date())
+        self.assertEqual(card[1], '5艘次')
+        self.assertIn('50.0%（2/4）', card[4])
+
+    def test_sunday_closes_the_data_week_and_conflicting_duplicates_are_rejected(self):
+        rows = [{"portid": "p", "date": f"2026-10-{day}", "n_total": 1} for day in range(19, 26)]
+        card = monitoring_cards.activity_card('咽喉点监测', [{'portid': 'p'}], rows,
+                                               'n_total', '通过', datetime(2026, 10, 25).date())
+        self.assertEqual(card[1], '7艘次')
+        self.assertNotIn('未满周', card[2])
+        with self.assertRaisesRegex(ValueError, '数据冲突'):
+            monitoring_cards.activity_card('咽喉点监测', [{'portid': 'p'}],
+                rows + [{"portid": "p", "date": "2026-10-19", "n_total": 9}],
+                'n_total', '通过', datetime(2026, 10, 25).date())
+
+    def test_asset_totals_keep_products_separate_and_status_denominator_deduplicated(self):
+        def row(product, value, year):
+            return {'商品': product, '日产量（混合单位）': value, '数据时间': year}
+        first = {'scope_id': 'a', 'operating_states': ['producing', 'producing'],
+                 'production_rows': [row('原油', 1, '2023'), row('天然气', 2, '2025')]}
+        assets = [first, first,
+                  {'scope_id': 'b', 'operating_states': ['historical_unverified'],
+                   'production_rows': [row('原油', None, '2024')]},
+                  {'scope_id': 'c', 'operating_states': ['temporarily_suspended'],
+                   'production_rows': [row('原油', 0, '2025')]}]
+        card = monitoring_cards.asset_card(assets)
+        self.assertEqual(card[1], '3个')
+        self.assertIn('原油 1 万桶/日', card)
+        self.assertIn('天然气 2 百万立方米/日', card)
+        self.assertIn('非同日', card[2])
+        self.assertIn('2023—2025年；可汇总3/4条', card[5])
+        self.assertEqual(card[6], '在产比例 33.3%（1/3）')
+        self.assertEqual(card[7], '待确认比例 33.3%（1/3）')
 
     def test_normal_map_renders_three_cards_before_map(self):
         calls = []
@@ -80,7 +142,7 @@ class MonitoringCardsTest(unittest.TestCase):
         self.assertNotIn('海域监测', calls[0][1])
         self.assertNotIn('刷新船舶数据', buttons)
         self.assertNotIn('刷新港口数据', buttons)
-        for label in ('港口监测', '通道监测', '油田监测'):
+        for label in ('港口监测', '咽喉点监测', '油田监测'):
             self.assertIn(label, calls[0][1])
 
     def test_source_failure_still_returns_three_cards(self):

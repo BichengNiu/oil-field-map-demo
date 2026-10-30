@@ -595,6 +595,7 @@ def map_units(assets, chosen, rows):
                            'map_drawable': drawable, 'map_is_proxy': False,
                            'map_lat': source.get('map_lat') if drawable else None,
                            'map_lon': source.get('map_lon') if drawable else None,
-                           'production_rows': []}
+                           'production_rows': [], 'operating_states': []}
         result[key]['production_rows'].append(row)
+        result[key]['operating_states'].append(observation.get('operating_state', {}).get('state', 'unknown'))
     return list(result.values())

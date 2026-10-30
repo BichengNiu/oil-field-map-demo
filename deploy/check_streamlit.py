@@ -52,9 +52,15 @@ def main():
                             cards = frame.locator('.monitoring-card')
                             expect(cards).to_have_count(3, timeout=30_000)
                             labels = cards.locator(':scope > span').all_text_contents()
-                            if labels != ["港口监测", "通道监测", "油田监测"]:
+                            if labels != ["港口监测", "咽喉点监测", "油田监测"]:
                                 raise RuntimeError(f"Unexpected map monitoring cards: {labels}")
                             result["map_cards"] = labels
+                            result["map_card_details"] = cards.all_inner_texts()
+                            if any('日记录覆盖' not in text for text in result['map_card_details'][:2]):
+                                raise RuntimeError('Latest data-week monitoring cards have not deployed')
+                            if any(text not in result['map_card_details'][2]
+                                   for text in ['非同日', '在产比例', '待确认比例']):
+                                raise RuntimeError('Latest production totals and status ratios have not deployed')
                         break
                     wake = frame.get_by_role("button", name="Yes, get this app back up!", exact=True)
                     if not result["wake_requested"] and wake.count() and wake.is_visible():
