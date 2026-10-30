@@ -6,6 +6,7 @@ from entity_names import display_name
 from vessel_display import destination_label, reception_time, source_label
 
 import json
+import math
 from datetime import date, timedelta
 
 import ais as AIS
@@ -54,9 +55,14 @@ def port_rows(ports: list[dict], selected_day: date | None) -> list[dict]:
 
 def port_metrics(ports: list[dict], selected_day: date | None = None) -> list[tuple[str, object]]:
     covered = [p for p in ports if PORTWATCH.has_independent_statistics(p)]
+    def valid(value):
+        return value is not None and math.isfinite(value) and value >= 0
+    week_fields = ['week_calls', *(f'week_calls_{kind}' for kind in SHIP_TYPE_LABELS)]
+    weekly = [p for p in covered if all(valid(p.get(field)) for field in week_fields)]
     def total(key, daily=False):
-        values = [p.get(key) if not daily or p.get("has_data") else None for p in covered]
-        return sum(values) if values and all(v is not None for v in values) else None
+        cohort = [p for p in covered if p.get('has_data') and valid(p.get(key))] if daily else weekly
+        values = [p[key] for p in cohort]
+        return sum(values) if values else None
     def count(value):
         return "—" if value is None else f"{value:,.0f}"
     def chinese_day(day):

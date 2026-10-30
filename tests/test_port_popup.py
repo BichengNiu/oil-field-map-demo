@@ -65,6 +65,19 @@ class PortPopupTest(unittest.TestCase):
         self.assertEqual(rows[0]['港口名'],'迪拜港（Dubai）')
 
 
+    def test_missing_port_does_not_blank_available_metrics_and_shares_use_one_cohort(self):
+        available = {'statistics_available': True, 'has_data': True, 'portcalls': 3,
+                     'week_calls': 10,
+                     **{f'week_calls_{kind}': 10 if kind == 'tanker' else 0 for kind in portwatch.SHIP_TYPES}}
+        missing = {'statistics_available': True, 'has_data': False}
+        partial = {**available, 'portcalls': 2, 'week_calls': 99, 'week_calls_tanker': None}
+        values = [value for _, value in dashboard_rows.port_metrics([available, missing, partial])]
+        self.assertEqual(values[:3], [3, '5', '10'])
+        self.assertEqual(values[-1], '10（100.0%）')
+        self.assertEqual(values[3], '0（0.0%）')
+        absent = [value for _, value in dashboard_rows.port_metrics([missing])]
+        self.assertEqual(absent[1:3], ['—', '—'])
+
     def test_metric_labels_use_actual_day_and_calendar_week(self):
         labels = [label for label, _ in dashboard_rows.port_metrics([], date(2026, 1, 1))]
         self.assertEqual(labels[1], "当日进港艘次\n（2026年01月01日）")

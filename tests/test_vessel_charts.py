@@ -33,7 +33,7 @@ class VesselChartsTest(unittest.TestCase):
             labels = [t.get_text() for t in ax.get_xticklabels() if t.get_text()]
             self.assertEqual(labels, ['2026-10-15', '2026-10-16', '2026-10-17'])
             self.assertFalse(ax.xaxis.get_offset_text().get_visible())
-            self.assertEqual(ax.get_xlabel(), '日期（UTC）')
+            self.assertEqual(ax.get_xlabel(), '')
             checked.append(True)
             return save(figure, *args, **kwargs)
         rows = tuple((date(2026,10,d), date(2026,10,d), date(2026,10,d), *([1]*6))

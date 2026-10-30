@@ -68,6 +68,19 @@ def main():
                             if any(text not in result['map_card_details'][2]
                                    for text in ['非同日', '在产比例', '待确认比例']):
                                 raise RuntimeError('Latest production totals and status ratios have not deployed')
+                            frame.get_by_role('tab', name='港口', exact=True).click()
+                            port_metrics = frame.locator('[data-testid="stMetric"]')
+                            expect(port_metrics).to_have_count(8, timeout=30_000)
+                            result['port_metrics'] = port_metrics.all_inner_texts()
+                            if any(value == '—' or value.startswith('—（') for value in
+                                   port_metrics.locator('[data-testid="stMetricValue"]').all_inner_texts()[1:]):
+                                raise RuntimeError('Available port activity metrics are still blank')
+                            frame.get_by_role('tab', name='船舶', exact=True).click()
+                            frame.locator('[data-testid="stImage"]').first.wait_for(
+                                state='visible', timeout=45_000)
+                            if error.count():
+                                raise RuntimeError(str(error.all_inner_texts()))
+                            result['vessel_chart_count'] = frame.locator('[data-testid="stImage"]').count()
                         break
                     wake = frame.get_by_role("button", name="Yes, get this app back up!", exact=True)
                     if not result["wake_requested"] and wake.count() and wake.is_visible():

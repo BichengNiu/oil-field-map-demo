@@ -131,7 +131,7 @@ def render_chart_images(aggregated: list[dict], labels: dict[str, str],
                     for line in ax.lines:
                         line.set_markerfacecolor("white")
                 if annual:
-                    ax.set_xlabel(f"{aggregated[0]['period_start']:%Y-%m-%d}—{aggregated[-1]['period_end']:%Y-%m-%d}")
+                    ax.set_xlabel("" if date_only else f"{aggregated[0]['period_start']:%Y-%m-%d}—{aggregated[-1]['period_end']:%Y-%m-%d}")
                 elif date_only:
                     # Sampled days can be sparse. Never let the auto locator
                     # turn these UTC calendar dates into misleading hour ticks.
@@ -150,7 +150,7 @@ def render_chart_images(aggregated: list[dict], labels: dict[str, str],
                     ax.xaxis.set_major_formatter(DateFormatter("%Y-%m-%d"))
                     ax.xaxis.get_offset_text().set_visible(False)
                     ax.tick_params(axis="x", rotation=25)
-                    ax.set_xlabel("日期（UTC）")
+                    ax.set_xlabel("")
                     if len(frame) == 1:
                         point = frame.index[0]
                         ax.set_xlim(point-pd.Timedelta(days=1), point+pd.Timedelta(days=1))
