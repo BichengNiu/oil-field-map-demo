@@ -66,5 +66,7 @@ if [[ "$retry_only" == true ]]; then
         *) echo "Retry eligibility check failed (exit $retry_status)." >&2; exit "$retry_status" ;;
     esac
 fi
-"$collector_venv/bin/python" snapshot_update.py --publish
+snapshot_args=(--publish)
+if [[ "$retry_only" == true ]]; then snapshot_args+=(--retry); fi
+"$collector_venv/bin/python" snapshot_update.py "${snapshot_args[@]}"
 "$collector_venv/bin/python" deploy/verify_snapshot.py

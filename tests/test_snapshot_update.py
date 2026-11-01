@@ -67,7 +67,8 @@ class SnapshotUpdateTest(unittest.TestCase):
 
     def test_failed_source_does_not_change_published_file(self):
         digest = hashlib.sha256(self.original.read_bytes()).hexdigest()
-        with patch("ais.urlopen", side_effect=TimeoutError("offline")):
+        with patch("ais.urlopen", side_effect=TimeoutError("offline")), \
+             patch('collector.collect_portwatch_run', side_effect=TimeoutError('ports offline')):
             with self.assertRaisesRegex(RuntimeError, "船位采集未完整成功"):
                 snapshot_update.collect_candidate(self.original, self.candidate, now=self.now)
         self.assertEqual(hashlib.sha256(self.original.read_bytes()).hexdigest(), digest)
@@ -90,14 +91,98 @@ class SnapshotUpdateTest(unittest.TestCase):
         self.assertEqual(ports.call_count, 2)
         self.assertTrue(result["portwatch_updated"])
 
-    def test_unverified_history_gap_rejects_candidate_and_preserves_original(self):
+    def test_unverified_portwatch_history_is_rolled_back_without_blocking_ais(self):
         digest = hashlib.sha256(self.original.read_bytes()).hexdigest()
         with patch("ais.urlopen", side_effect=self.response), \
              patch("collector.collect_portwatch_run", side_effect=self.ports), \
              patch("portwatch_history.validate_all", side_effect=ValueError("历史完整性校验失败")):
-            with self.assertRaisesRegex(ValueError, "历史完整性校验失败"):
-                snapshot_update.collect_candidate(self.original, self.candidate, now=self.now, force_ports=True)
+            result = snapshot_update.collect_candidate(self.original, self.candidate, now=self.now, force_ports=True)
+        self.assertEqual(result['status'], 'partial')
+        self.assertTrue(result['ais_updated'])
+        self.assertFalse(result['portwatch_updated'])
+        self.assertEqual(result['before']['counts']['portwatch_daily'], result['after']['counts']['portwatch_daily'])
+        self.assertEqual(result['before']['latest_days'], result['after']['latest_days'])
         self.assertEqual(hashlib.sha256(self.original.read_bytes()).hexdigest(), digest)
+
+    def test_portwatch_failure_restores_overwritten_rows_and_its_success_marker(self):
+        import duckdb
+        with duckdb.connect(str(self.original), read_only=True) as conn:
+            kind, pid, day, payload = conn.execute(
+                'SELECT kind,node_id,day,CAST(payload AS VARCHAR) FROM portwatch_daily ORDER BY kind,node_id,day LIMIT 1').fetchone()
+            marker = conn.execute("SELECT value FROM app_meta WHERE key='snapshot_portwatch_completed_at'").fetchone()
+        def broken_ports(**kwargs):
+            data_store.save_portwatch(kind, [{'portid': pid, 'date': day.isoformat(), 'portcalls': 999999}], 'bad-source')
+            data_store.set_meta('snapshot_portwatch_completed_at', self.now.isoformat())
+            raise RuntimeError('source failed after writes')
+        with patch('ais.urlopen', side_effect=self.response), \
+             patch('collector.collect_portwatch_run', side_effect=broken_ports):
+            result = snapshot_update.collect_candidate(self.original, self.candidate, now=self.now, force_ports=True)
+        self.assertEqual(result['status'], 'partial')
+        self.assertFalse(result['full_collection_complete'])
+        self.assertGreater(result['after']['counts']['ais_reports'], result['before']['counts']['ais_reports'])
+        with duckdb.connect(str(self.candidate), read_only=True) as conn:
+            self.assertEqual(conn.execute('SELECT CAST(payload AS VARCHAR) FROM portwatch_daily WHERE kind=? AND node_id=? AND day=?',
+                                          [kind, pid, day]).fetchone()[0], payload)
+            self.assertEqual(conn.execute("SELECT value FROM app_meta WHERE key='snapshot_portwatch_completed_at'").fetchone(), marker)
+
+    def test_partial_ais_writes_are_rolled_back_while_portwatch_succeeds(self):
+        collect = collector.collect_once
+        def partial_ais():
+            result = collect()
+            result['archive_error'] = 'partial source delivery'
+            return result
+        with patch('ais.urlopen', side_effect=self.response), \
+             patch('collector.collect_once', side_effect=partial_ais), \
+             patch('collector.collect_portwatch_run', side_effect=self.ports):
+            result = snapshot_update.collect_candidate(self.original, self.candidate, now=self.now, force_ports=True)
+        self.assertEqual(result['status'], 'partial')
+        self.assertFalse(result['ais_updated'])
+        self.assertTrue(result['portwatch_updated'])
+        self.assertEqual(result['after']['counts']['ais_reports'], result['before']['counts']['ais_reports'])
+        self.assertEqual(result['after']['latest_vessel'], result['before']['latest_vessel'])
+        self.assertGreater(result['after']['counts']['portwatch_daily'], result['before']['counts']['portwatch_daily'])
+
+    def test_retry_only_attempts_failed_portwatch_after_published_ais_success(self):
+        with patch('ais.urlopen', side_effect=self.response), \
+             patch('collector.collect_portwatch_run', side_effect=TimeoutError('offline')):
+            snapshot_update.collect_candidate(self.original, self.candidate, now=self.now, force_ports=True)
+        with patch('collector.collect_once', side_effect=AssertionError('AIS already succeeded')) as ais_call, \
+             patch('collector.collect_portwatch_run', side_effect=self.ports) as ports:
+            result = snapshot_update.collect_candidate(self.candidate, self.directory / 'retry.duckdb', now=self.now, retry_only=True)
+        ais_call.assert_not_called()
+        self.assertEqual(ports.call_count, 1)
+        self.assertEqual(result['source_results']['ais']['status'], 'skipped')
+        self.assertEqual(result['source_results']['ais']['last_successful_collection'], self.now.isoformat())
+        self.assertTrue(result['full_collection_complete'])
+
+    def test_stale_ais_is_not_accepted_just_because_portwatch_can_publish(self):
+        from datetime import timedelta
+        collect = collector.collect_once
+        def stale_ais():
+            result = collect()
+            for vessel in result['vessels']:
+                vessel['observed_at'] = (self.now - timedelta(hours=3)).isoformat()
+            return result
+        with patch('ais.urlopen', side_effect=self.response), \
+             patch('collector.collect_once', side_effect=stale_ais), \
+             patch('collector.collect_portwatch_run', side_effect=self.ports):
+            result = snapshot_update.collect_candidate(self.original, self.candidate, now=self.now, force_ports=True)
+        self.assertEqual(result['source_results']['ais']['status'], 'error')
+        self.assertIn('最近两小时', result['source_results']['ais']['error'])
+        self.assertEqual(result['before']['latest_vessel'], result['after']['latest_vessel'])
+        self.assertTrue(result['portwatch_updated'])
+
+    def test_retry_only_attempts_failed_ais_after_published_portwatch_success(self):
+        with patch('ais.urlopen', side_effect=TimeoutError('offline')), \
+             patch('collector.collect_portwatch_run', side_effect=self.ports):
+            snapshot_update.collect_candidate(self.original, self.candidate, now=self.now, force_ports=True)
+        with patch('ais.urlopen', side_effect=self.response), \
+             patch('collector.collect_portwatch_run', side_effect=AssertionError('PortWatch already succeeded')) as ports:
+            result = snapshot_update.collect_candidate(self.candidate, self.directory / 'retry.duckdb', now=self.now, retry_only=True)
+        ports.assert_not_called()
+        self.assertTrue(result['ais_updated'])
+        self.assertFalse(result['portwatch_updated'])
+        self.assertTrue(result['full_collection_complete'])
 
     def test_portwatch_error_is_reported_to_scheduler(self):
         with patch("collector.collect_portwatch", side_effect=TimeoutError("offline")), \
@@ -170,6 +255,7 @@ class HistoryStagingTest(unittest.TestCase):
             original.write_bytes(b"baseline")
             candidate.write_bytes(b"verified progress")
             metadata.write_text(json.dumps({
+                'validated_for_resume': True,
                 "base_sha256": snapshot_update.file_digest(original),
                 "candidate_sha256": snapshot_update.file_digest(candidate),
             }))
@@ -181,6 +267,18 @@ class HistoryStagingTest(unittest.TestCase):
                 candidate.write_bytes(b"corrupt progress")
                 with self.assertRaisesRegex(ValueError, "回补进度校验失败"):
                     snapshot_update.resumable_seed(original)
+
+    def test_old_unvalidated_failed_source_progress_is_not_used_as_seed(self):
+        with tempfile.TemporaryDirectory() as temporary:
+            original = Path(temporary) / 'base.duckdb'
+            staged = Path(temporary) / 'staging.duckdb'
+            metadata = Path(temporary) / 'staging.json'
+            original.write_bytes(b'baseline')
+            staged.write_bytes(b'partially written failed source')
+            metadata.write_text(json.dumps({'base_sha256': snapshot_update.file_digest(original),
+                                           'candidate_sha256': snapshot_update.file_digest(staged)}))
+            with patch('snapshot_update.STAGING', staged), patch('snapshot_update.STAGING_META', metadata):
+                self.assertIsNone(snapshot_update.resumable_seed(original))
 
 
 if __name__ == "__main__":

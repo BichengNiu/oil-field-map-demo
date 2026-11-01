@@ -37,6 +37,10 @@ def resumable_seed(original):
     if not STAGING.exists() or not STAGING_META.exists():
         return None
     metadata = json.loads(STAGING_META.read_text())
+    # An interrupted source may have written unvalidated facts. Never seed a
+    # new publication from the old all-or-nothing failure checkpoint.
+    if not metadata.get('validated_for_resume'):
+        return None
     if metadata.get("base_sha256") != file_digest(original):
         return None
     if metadata.get("candidate_sha256") != file_digest(STAGING):
@@ -75,7 +79,32 @@ def inspect(path):
     return {"counts": counts, "latest_days": latest, "latest_vessel": vessel}
 
 
-def collect_candidate(original: Path, candidate: Path, *, force_ports=False, now=None, seed=None):
+def validate_progress(before, after):
+    for table in ('portwatch_daily', 'sea_entries', 'ais_reports'):
+        if after['counts'][table] < before['counts'][table]:
+            raise RuntimeError('历史记录减少，拒绝发布：' + table)
+    for kind, day in before['latest_days'].items():
+        if after['latest_days'].get(kind, day) < day:
+            raise RuntimeError('来源数据日期倒退：' + kind)
+    if before['latest_vessel'] and (not after['latest_vessel'] or after['latest_vessel'] < before['latest_vessel']):
+        raise RuntimeError('船位日期倒退')
+
+
+@contextmanager
+def source_checkpoint(candidate):
+    """Roll back every write by a failed source, including its catalog/meta."""
+    with tempfile.TemporaryDirectory(prefix='source-checkpoint-', dir=candidate.parent) as temporary:
+        checkpoint = Path(temporary) / 'before.duckdb'
+        shutil.copy2(candidate, checkpoint)
+        try:
+            yield
+        except Exception:
+            Path(str(candidate) + '.wal').unlink(missing_ok=True)
+            shutil.copy2(checkpoint, candidate)
+            raise
+
+
+def collect_candidate(original: Path, candidate: Path, *, force_ports=False, now=None, seed=None, retry_only=False):
     now = now or datetime.now(timezone.utc)
     before = inspect(original)
     shutil.copy2(seed or original, candidate)
@@ -106,38 +135,71 @@ def collect_candidate(original: Path, candidate: Path, *, force_ports=False, now
                 catalog = extend_inventory(catalog)
             data_store.save_catalog(kind, catalog)
         validate_catalogs({kind: data_store.load_catalog(kind) for kind in ("assets", "ports", "chokepoints")})
-        snapshot = collector.collect_once()
-        if snapshot.get("error") or snapshot.get("archive_error") or not snapshot.get("vessels"):
-            raise RuntimeError("船位采集未完整成功：" + str(snapshot.get("archive_error") or snapshot.get("error")))
-        observed = [ais.parse_utc(row.get("observed_at")) for row in snapshot["vessels"]]
-        if not any(value and now - timedelta(hours=2) <= value <= now + timedelta(minutes=5) for value in observed):
-            raise RuntimeError("未取得最近两小时的有效船位")
-        last_ports = data_store.meta("snapshot_portwatch_completed_at", "")
-        history_due = portwatch_history.needs_repair(now)
-        due = force_ports or history_due or not last_ports or datetime.fromisoformat(last_ports).date() < now.date()
+        from deploy.snapshot_retry import decision, successful_sources
+        previous = data_store.meta('published_snapshot', {})
+        successes = successful_sources(previous, now)
+        pending = set(decision(previous, now)['pending_sources'])
+        source_results = {name: {'status': 'skipped', 'last_successful_collection':
+                          successes[name].isoformat() if name in successes else None}
+                          for name in ('ais', 'portwatch')}
+        if not retry_only or 'ais' in pending:
+            try:
+                with source_checkpoint(candidate):
+                    source_before = inspect(candidate)
+                    snapshot = collector.collect_once()
+                    if snapshot.get('error') or snapshot.get('archive_error') or not snapshot.get('vessels'):
+                        raise RuntimeError('船位采集未完整成功：' + str(snapshot.get('archive_error') or snapshot.get('error')))
+                    observed = [ais.parse_utc(row.get('observed_at')) for row in snapshot['vessels']]
+                    if not any(value and now - timedelta(hours=2) <= value <= now + timedelta(minutes=5) for value in observed):
+                        raise RuntimeError('未取得最近两小时的有效船位')
+                    validate_progress(source_before, inspect(candidate))
+                source_results['ais'].update(status='ok', last_successful_collection=now.isoformat())
+            except Exception as exc:
+                source_results['ais'].update(status='error', error=f'{type(exc).__name__}: {exc}')
+                logging.warning('船位更新失败，保留上次船位；继续港口更新：%s', exc)
         port_result = None
-        if due:
-            with portwatch.request_budget(3600 if history_due else 240):
-                port_result = collector.collect_portwatch_run(strict=True, force=True, include_history=True)
-            data_store.set_meta("snapshot_portwatch_completed_at", now.isoformat())
+        history_coverage = previous.get('history_coverage', {})
+        try:
+            with source_checkpoint(candidate):
+                last_ports = data_store.meta('snapshot_portwatch_completed_at', '')
+                history_due = portwatch_history.needs_repair(now)
+                due = (force_ports or history_due or ('portwatch' in pending if retry_only else
+                       not last_ports or datetime.fromisoformat(last_ports).date() < now.date()))
+                if due:
+                    source_before = inspect(candidate)
+                    with portwatch.request_budget(3600 if history_due else 240):
+                        port_result = collector.collect_portwatch_run(strict=True, force=True, include_history=True)
+                    if port_result.get('status') != 'ok':
+                        raise RuntimeError('PortWatch未返回成功状态')
+                    validate_catalogs({kind: data_store.load_catalog(kind) for kind in ('assets', 'ports', 'chokepoints')})
+                    history_coverage = portwatch_history.validate_all()
+                    validate_progress(source_before, inspect(candidate))
+                    data_store.set_meta('snapshot_portwatch_completed_at', now.isoformat())
+            if due:
+                source_results['portwatch'].update(status='ok', last_successful_collection=now.isoformat())
+        except Exception as exc:
+            source_results['portwatch'].update(status='error', error=f'{type(exc).__name__}: {exc}')
+            port_result = {'status': 'error', 'error': f'{type(exc).__name__}: {exc}'}
+            history_coverage = previous.get('history_coverage', {})
+            logging.warning('港口更新失败，保留上次港口；不阻止船位发布：%s', exc)
+        if not any(result['status'] == 'ok' for result in source_results.values()):
+            if any(result['status'] == 'error' for result in source_results.values()):
+                raise RuntimeError('本次没有数据源更新成功：' + json.dumps(source_results, ensure_ascii=False))
         validate_catalogs({kind: data_store.load_catalog(kind) for kind in ("assets", "ports", "chokepoints")})
-        history_coverage = portwatch_history.validate_all()
         # Only expendable raw responses/caches expire. Facts and events accumulate.
         with data_store.connect() as conn:
             conn.execute("DELETE FROM source_queries WHERE retrieved_at < ?", [now - timedelta(days=7)])
             conn.execute("DELETE FROM portwatch_cache WHERE saved < ?", [(now - timedelta(days=7)).timestamp()])
         after = inspect(candidate)
-        for table in ("portwatch_daily", "sea_entries", "ais_reports"):
-            if after["counts"][table] < before["counts"][table]:
-                raise RuntimeError("历史记录减少，拒绝发布：" + table)
-        for kind, day in before["latest_days"].items():
-            if after["latest_days"].get(kind, day) < day:
-                raise RuntimeError("来源数据日期倒退：" + kind)
-        if before["latest_vessel"] and (not after["latest_vessel"] or after["latest_vessel"] < before["latest_vessel"]):
-            raise RuntimeError("船位日期倒退")
+        validate_progress(before, after)
         if not after["counts"]["catalogs"] or not after["counts"]["documents"]:
             raise RuntimeError("数据库目录或来源材料为空")
-        summary = {"completed_at": now.isoformat(), "portwatch_updated": due,
+        summary = {"completed_at": now.isoformat(),
+                   "status": 'partial' if any(r['status'] == 'error' for r in source_results.values()) else 'ok',
+                   "source_results": source_results,
+                   "full_collection_complete": not decision({'source_results': source_results}, now)['pending_sources'],
+                   "ais_updated": source_results['ais']['status'] == 'ok',
+                   "portwatch_updated": source_results['portwatch']['status'] == 'ok',
                    "pipelines": {"segments": len(pipelines["features"]), "drawable_segments": sum(f["properties"].get("map_drawable", True) for f in pipelines["features"]), "gas_connection_records": len(gas_connections["features"]), "unmapped_projects": len(unmapped_projects), "source": pipelines["metadata"]},
                    "portwatch": port_result, "history_coverage": history_coverage,
                    "before": before, "after": after}
@@ -182,7 +244,7 @@ def collect_catalog_candidate(original, candidate):
                 os.environ[key] = value
 
 
-def run(*, publish=False, force_ports=False, catalog_only=False):
+def run(*, publish=False, force_ports=False, catalog_only=False, retry_only=False):
     if catalog_only and force_ports:
         raise ValueError("目录复核与强制港口采集不可同时使用")
     with exclusive_update():
@@ -202,6 +264,8 @@ def run(*, publish=False, force_ports=False, catalog_only=False):
             seed = resumable_seed(original) if publish and not catalog_only else None
             try:
                 options = {"force_ports": force_ports}
+                if retry_only:
+                    options['retry_only'] = True
                 if seed is not None:
                     options["seed"] = seed
                 summary = (collect_catalog_candidate(original, candidate) if catalog_only
@@ -212,6 +276,7 @@ def run(*, publish=False, force_ports=False, catalog_only=False):
                     inspect(candidate)
                     shutil.copy2(candidate, STAGING)
                     STAGING_META.write_text(json.dumps({
+                        'validated_for_resume': False,
                         "base_sha256": file_digest(original),
                         "candidate_sha256": file_digest(STAGING),
                     }))
@@ -240,10 +305,19 @@ def main():
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("--publish", action="store_true")
     parser.add_argument("--force-ports", action="store_true")
+    parser.add_argument('--retry', action='store_true', help='仅补采本主执行时段尚未成功的数据源')
     parser.add_argument("--catalog-only", action="store_true", help="仅发布已审核目录规则，保留船舶/港口实测历史")
     args = parser.parse_args()
     try:
-        print(data_store.encode(run(publish=args.publish, force_ports=args.force_ports, catalog_only=args.catalog_only)))
+        summary = run(publish=args.publish, force_ports=args.force_ports, catalog_only=args.catalog_only, retry_only=args.retry)
+        print(data_store.encode(summary))
+        if summary.get('source_results') and os.environ.get('GITHUB_STEP_SUMMARY'):
+            with open(os.environ['GITHUB_STEP_SUMMARY'], 'a') as stream:
+                stream.write('Data source publication results\n\n| Source | Result | Last successful collection |\n| --- | --- | --- |\n')
+                for source, result in summary['source_results'].items():
+                    stream.write(f"| {source} | {result['status']} | {result.get('last_successful_collection') or 'none'} |\n")
+        if summary.get('status') == 'partial' and os.environ.get('GITHUB_ACTIONS'):
+            print('::warning::Partial data update published. Failed source data was retained; see source_results for details.')
     except Exception as exc:
         print(json.dumps({"status": "error", "error": f"{type(exc).__name__}: {exc}"}, ensure_ascii=False))
         raise SystemExit(1) from None

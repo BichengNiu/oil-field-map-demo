@@ -42,3 +42,19 @@ class SnapshotRetryTest(unittest.TestCase):
         for when in ["2026-10-28T04:01:00+00:00", "2026-10-27T04:01:00"]:
             with self.assertRaises(ValueError):
                 decision(full_snapshot(when), self.now)
+
+    def test_partial_publication_cannot_hide_failed_source_behind_new_publication_time(self):
+        snapshot = {**full_snapshot('2026-10-27T08:00:00+00:00'), 'full_collection_complete': False,
+                    'source_results': {
+                        'ais': {'status': 'ok', 'last_successful_collection': '2026-10-27T08:00:00+00:00'},
+                        'portwatch': {'status': 'error', 'last_successful_collection': '2026-10-26T04:01:00+00:00'}}}
+        result = decision(snapshot, self.now)
+        self.assertEqual(result['status'], 'retry_due')
+        self.assertEqual(result['pending_sources'], ['portwatch'])
+        snapshot['source_results']['portwatch']['last_successful_collection'] = '2026-10-27T08:30:00+00:00'
+        self.assertEqual(decision(snapshot, self.now)['status'], 'skipped_already_published')
+
+    def test_portwatch_success_does_not_mark_old_ais_as_success(self):
+        result = decision({'completed_at': '2026-10-27T08:30:00+00:00',
+                           'source_results': {'portwatch': {'last_successful_collection': '2026-10-27T08:30:00+00:00'}}}, self.now)
+        self.assertEqual(result['pending_sources'], ['ais'])
