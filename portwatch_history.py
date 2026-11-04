@@ -88,9 +88,9 @@ def _report(state, verified):
             "status": "unverified_gaps" if unverified else "source_gaps" if missing else "complete"}
 
 
-def needs_repair(now=None):
+def needs_repair(now=None, kind=None):
     now = now or datetime.now(timezone.utc)
-    for kind in ("ports", "chokepoints"):
+    for kind in ((kind,) if kind is not None else ("ports", "chokepoints")):
         try:
             state = _state(kind)
         except ValueError:
@@ -171,13 +171,18 @@ def repair(kind, ids, end, now=None):
     return report
 
 
+def validate_kind(kind, now=None):
+    now = now or datetime.now(timezone.utc)
+    state = _state(kind)
+    report = _report(state, _verified_missing(state['audit'], now))
+    if not state['audit'] or report['unverified_missing_records']:
+        raise ValueError(f"{kind} 历史完整性校验失败：未校验缺口 {report['unverified_missing_records']} 条")
+    return report
+
+
 def validate_all(now=None):
     now = now or datetime.now(timezone.utc)
     reports = {}
     for kind in ("ports", "chokepoints"):
-        state = _state(kind)
-        report = _report(state, _verified_missing(state["audit"], now))
-        if not state["audit"] or report["unverified_missing_records"]:
-            raise ValueError(f"{kind} 历史完整性校验失败：未校验缺口 {report['unverified_missing_records']} 条")
-        reports[kind] = report
+        reports[kind] = validate_kind(kind, now)
     return reports

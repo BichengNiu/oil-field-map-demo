@@ -35,7 +35,7 @@ class SnapshotUpdateTest(unittest.TestCase):
         # These tests mock the entire PortWatch boundary. Real node/day audit
         # contracts are exercised against DuckDB in test_portwatch_history.py.
         for target, value in (("portwatch_history.needs_repair", False),
-                              ("portwatch_history.validate_all", {})):
+                              ("portwatch_history.validate_kind", {})):
             mocked = patch(target, return_value=value)
             mocked.start()
             self.addCleanup(mocked.stop)
@@ -53,6 +53,8 @@ class SnapshotUpdateTest(unittest.TestCase):
         self.assertTrue(kwargs["force"])
         self.assertTrue(kwargs["include_history"])
         for kind, pid in (("ports", "port105"), ("chokepoints", "chokepoint1")):
+            if kwargs.get('kind') is not None and kwargs['kind'] != kind:
+                continue
             data_store.save_portwatch(kind, [{"portid": pid, "date": self.now.date().isoformat()}], "test")
         return {"status": "ok"}
 
@@ -63,7 +65,7 @@ class SnapshotUpdateTest(unittest.TestCase):
             first = snapshot_update.collect_candidate(self.original, self.candidate, now=self.now, force_ports=True)
             second = self.directory / "second.duckdb"
             result = snapshot_update.collect_candidate(self.candidate, second, now=self.now)
-        self.assertEqual(ports.call_count, 1)
+        self.assertEqual(ports.call_count, 2)
         self.assertTrue(first["portwatch_updated"])
         self.assertFalse(result["portwatch_updated"])
         self.assertGreater(first["after"]["counts"]["ais_reports"], first["before"]["counts"]["ais_reports"])
@@ -89,18 +91,18 @@ class SnapshotUpdateTest(unittest.TestCase):
     def test_new_gap_triggers_portwatch_again_even_after_success_on_same_day(self):
         with patch("ais.urlopen", side_effect=self.response), \
              patch("collector.collect_portwatch_run", side_effect=self.ports) as ports, \
-             patch("portwatch_history.needs_repair", side_effect=[False, True]):
+             patch("portwatch_history.needs_repair", side_effect=[False, False, True, True]):
             snapshot_update.collect_candidate(self.original, self.candidate, now=self.now, force_ports=True)
             result = snapshot_update.collect_candidate(
                 self.candidate, self.directory / "second.duckdb", now=self.now)
-        self.assertEqual(ports.call_count, 2)
+        self.assertEqual(ports.call_count, 4)
         self.assertTrue(result["portwatch_updated"])
 
     def test_unverified_portwatch_history_is_rolled_back_without_blocking_ais(self):
         digest = hashlib.sha256(self.original.read_bytes()).hexdigest()
         with patch("ais.urlopen", side_effect=self.response), \
              patch("collector.collect_portwatch_run", side_effect=self.ports), \
-             patch("portwatch_history.validate_all", side_effect=ValueError("历史完整性校验失败")):
+             patch("portwatch_history.validate_kind", side_effect=ValueError("历史完整性校验失败")):
             result = snapshot_update.collect_candidate(self.original, self.candidate, now=self.now, force_ports=True)
         self.assertEqual(result['status'], 'partial')
         self.assertTrue(result['ais_updated'])
@@ -155,7 +157,7 @@ class SnapshotUpdateTest(unittest.TestCase):
              patch('collector.collect_portwatch_run', side_effect=self.ports) as ports:
             result = snapshot_update.collect_candidate(self.candidate, self.directory / 'retry.duckdb', now=self.now, retry_only=True)
         ais_call.assert_not_called()
-        self.assertEqual(ports.call_count, 1)
+        self.assertEqual(ports.call_count, 2)
         self.assertEqual(result['source_results']['ais']['status'], 'skipped')
         self.assertEqual(result['source_results']['ais']['last_successful_collection'], self.now.isoformat())
         self.assertTrue(result['full_collection_complete'])
@@ -188,6 +190,31 @@ class SnapshotUpdateTest(unittest.TestCase):
         self.assertTrue(result['ais_updated'])
         self.assertFalse(result['portwatch_updated'])
         self.assertTrue(result['full_collection_complete'])
+
+    def test_failed_chokepoints_do_not_roll_back_successful_ports_and_retry_only_chokepoints(self):
+        def collect(**kwargs):
+            if kwargs['kind'] == 'chokepoints':
+                data_store.save_portwatch('chokepoints', [{'portid': 'chokepoint1',
+                    'date': self.now.date().isoformat(), 'n_total': 999999}], 'failed-source')
+                raise RuntimeError('chokepoint source is unavailable')
+            return self.ports(**kwargs)
+        with patch('ais.urlopen', side_effect=self.response), patch('collector.collect_portwatch_run', side_effect=collect):
+            first = snapshot_update.collect_candidate(self.original, self.candidate, now=self.now, force_ports=True)
+        self.assertTrue(first['ports_updated'])
+        self.assertFalse(first['chokepoints_updated'])
+        self.assertEqual(first['after']['latest_days']['chokepoints'], first['before']['latest_days']['chokepoints'])
+        self.assertGreater(first['after']['counts']['portwatch_daily'], first['before']['counts']['portwatch_daily'])
+        from deploy.snapshot_retry import decision
+        self.assertEqual(decision(first, self.now)['pending_sources'], ['chokepoints'])
+        with patch('collector.collect_once', side_effect=AssertionError('AIS already current')) as ais_call, \
+             patch('collector.collect_portwatch_run', side_effect=self.ports) as ports:
+            second = snapshot_update.collect_candidate(self.candidate, self.directory / 'retry.duckdb', now=self.now, retry_only=True)
+        ais_call.assert_not_called()
+        self.assertEqual(ports.call_count, 1)
+        self.assertEqual(ports.call_args.kwargs['kind'], 'chokepoints')
+        self.assertFalse(second['ports_updated'])
+        self.assertTrue(second['chokepoints_updated'])
+        self.assertTrue(second['full_collection_complete'])
 
     def test_portwatch_error_is_reported_to_scheduler(self):
         with patch("collector.collect_portwatch", side_effect=TimeoutError("offline")), \

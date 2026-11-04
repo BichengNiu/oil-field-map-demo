@@ -50,7 +50,7 @@ class SnapshotRetryTest(unittest.TestCase):
                         'portwatch': {'status': 'error', 'last_successful_collection': '2026-10-26T04:01:00+00:00'}}}
         result = decision(snapshot, self.now)
         self.assertEqual(result['status'], 'retry_due')
-        self.assertEqual(result['pending_sources'], ['portwatch'])
+        self.assertEqual(result['pending_sources'], ['ports', 'chokepoints'])
         snapshot['source_results']['portwatch']['last_successful_collection'] = '2026-10-27T08:30:00+00:00'
         self.assertEqual(decision(snapshot, self.now)['status'], 'skipped_already_published')
 

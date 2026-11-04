@@ -16,6 +16,42 @@ import portwatch_downloads
 
 
 class PortWatchCacheTest(unittest.TestCase):
+    def test_failed_count_uses_source_id_list_and_verifies_every_fetched_id(self):
+        def query(endpoint, **params):
+            if params.get('returnCountOnly'):
+                raise portwatch.PortWatchQueryError('Invalid URL')
+            if params.get('returnIdsOnly'):
+                return {'objectIds': [10, 20]}
+            return {'features': [
+                {'attributes': {'ObjectId': 10, 'portid': 'port105', 'date': '2026-10-30', 'portcalls': 2}},
+                {'attributes': {'ObjectId': 20, 'portid': 'port106', 'date': '2026-10-30', 'portcalls': 3}}]}
+        with patch('portwatch.query', side_effect=query) as source:
+            rows, metadata = portwatch_downloads.fetch_window('ports', ('port105', 'port106'),
+                date(2026, 10, 30), date(2026, 10, 30), force=True)
+        self.assertEqual(len(rows), 2)
+        self.assertEqual(metadata['source_count'], 2)
+        self.assertTrue(metadata['count_verified'])
+        self.assertEqual(metadata['count_method'], 'object_ids')
+        self.assertEqual(sum(bool(c.kwargs.get('returnCountOnly')) for c in source.call_args_list), 1)
+        self.assertEqual(sum(bool(c.kwargs.get('returnIdsOnly')) for c in source.call_args_list), 2)
+
+    def test_id_list_change_cannot_pass_merely_because_count_stayed_the_same(self):
+        id_calls = []
+        def query(endpoint, **params):
+            if params.get('returnCountOnly'):
+                raise portwatch.PortWatchQueryError('Invalid URL')
+            if params.get('returnIdsOnly'):
+                id_calls.append(True)
+                return {'objectIds': [10] if len(id_calls) == 1 else [20]}
+            return {'features': [{'attributes': {'ObjectId': 10, 'portid': 'port105',
+                                                 'date': '2026-10-30', 'portcalls': 2}}]}
+        with patch('portwatch.query', side_effect=query), \
+             patch('data_store.save_portwatch') as save:
+            with self.assertRaisesRegex(portwatch_downloads.DownloadError, 'ID清单'):
+                portwatch_downloads.fetch_window('ports', ('port105',), date(2026, 10, 30),
+                                                 date(2026, 10, 30), force=True)
+        save.assert_not_called()
+
     def setUp(self):
         self.temp = tempfile.TemporaryDirectory()
         self.addCleanup(self.temp.cleanup)

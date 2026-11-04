@@ -135,13 +135,13 @@ def collect_candidate(original: Path, candidate: Path, *, force_ports=False, now
                 catalog = extend_inventory(catalog)
             data_store.save_catalog(kind, catalog)
         validate_catalogs({kind: data_store.load_catalog(kind) for kind in ("assets", "ports", "chokepoints")})
-        from deploy.snapshot_retry import decision, successful_sources
+        from deploy.snapshot_retry import decision, successful_sources, SOURCES
         previous = data_store.meta('published_snapshot', {})
         successes = successful_sources(previous, now)
         pending = set(decision(previous, now)['pending_sources'])
         source_results = {name: {'status': 'skipped', 'last_successful_collection':
                           successes[name].isoformat() if name in successes else None}
-                          for name in ('ais', 'portwatch')}
+                          for name in SOURCES}
         if not retry_only or 'ais' in pending:
             try:
                 with source_checkpoint(candidate):
@@ -157,31 +157,38 @@ def collect_candidate(original: Path, candidate: Path, *, force_ports=False, now
             except Exception as exc:
                 source_results['ais'].update(status='error', error=f'{type(exc).__name__}: {exc}')
                 logging.warning('船位更新失败，保留上次船位；继续港口更新：%s', exc)
-        port_result = None
-        history_coverage = previous.get('history_coverage', {})
-        try:
-            with source_checkpoint(candidate):
-                last_ports = data_store.meta('snapshot_portwatch_completed_at', '')
-                history_due = portwatch_history.needs_repair(now)
-                due = (force_ports or history_due or ('portwatch' in pending if retry_only else
-                       not last_ports or datetime.fromisoformat(last_ports).date() < now.date()))
+        port_result = {'sources': {}}
+        history_coverage = dict(previous.get('history_coverage', {}))
+        for kind in ('ports', 'chokepoints'):
+            try:
+                with source_checkpoint(candidate):
+                    last_source = data_store.meta(f'snapshot_portwatch_{kind}_completed_at',
+                                                  data_store.meta('snapshot_portwatch_completed_at', ''))
+                    history_due = portwatch_history.needs_repair(now, kind=kind)
+                    due = (force_ports or history_due or (kind in pending if retry_only else
+                           not last_source or datetime.fromisoformat(last_source).date() < now.date()))
+                    if due:
+                        source_before = inspect(candidate)
+                        with portwatch.request_budget(3600 if history_due else 900):
+                            result = collector.collect_portwatch_run(strict=True, force=True, include_history=True, kind=kind)
+                        if result.get('status') != 'ok':
+                            raise RuntimeError('PortWatch未返回成功状态')
+                        validate_catalogs({name: data_store.load_catalog(name) for name in ('assets', 'ports', 'chokepoints')})
+                        coverage = portwatch_history.validate_kind(kind)
+                        validate_progress(source_before, inspect(candidate))
+                        data_store.set_meta(f'snapshot_portwatch_{kind}_completed_at', now.isoformat())
                 if due:
-                    source_before = inspect(candidate)
-                    with portwatch.request_budget(3600 if history_due else 900):
-                        port_result = collector.collect_portwatch_run(strict=True, force=True, include_history=True)
-                    if port_result.get('status') != 'ok':
-                        raise RuntimeError('PortWatch未返回成功状态')
-                    validate_catalogs({kind: data_store.load_catalog(kind) for kind in ('assets', 'ports', 'chokepoints')})
-                    history_coverage = portwatch_history.validate_all()
-                    validate_progress(source_before, inspect(candidate))
-                    data_store.set_meta('snapshot_portwatch_completed_at', now.isoformat())
-            if due:
-                source_results['portwatch'].update(status='ok', last_successful_collection=now.isoformat())
-        except Exception as exc:
-            source_results['portwatch'].update(status='error', error=f'{type(exc).__name__}: {exc}')
-            port_result = {'status': 'error', 'error': f'{type(exc).__name__}: {exc}'}
-            history_coverage = previous.get('history_coverage', {})
-            logging.warning('港口更新失败，保留上次港口；不阻止船位发布：%s', exc)
+                    source_results[kind].update(status='ok', last_successful_collection=now.isoformat())
+                    history_coverage[kind] = coverage
+                    port_result['sources'][kind] = result.get('sources', {}).get(kind, {})
+            except Exception as exc:
+                source_results[kind].update(status='error', error=f'{type(exc).__name__}: {exc}')
+                port_result['sources'][kind] = {'status': 'error', 'error': f'{type(exc).__name__}: {exc}'}
+                logging.warning('%s更新失败，保留该类数据；不阻止其他数据发布：%s', kind, exc)
+        port_result['status'] = ('partial' if any(source_results[k]['status'] == 'error' for k in ('ports', 'chokepoints')) else 'ok')
+        if not (set(decision({'source_results': source_results}, now)['pending_sources']) & {'ports', 'chokepoints'}):
+            data_store.set_meta('snapshot_portwatch_completed_at', min(
+                source_results[k]['last_successful_collection'] for k in ('ports', 'chokepoints')))
         if not any(result['status'] == 'ok' for result in source_results.values()):
             if any(result['status'] == 'error' for result in source_results.values()):
                 raise RuntimeError('本次没有数据源更新成功：' + json.dumps(source_results, ensure_ascii=False))
@@ -199,7 +206,9 @@ def collect_candidate(original: Path, candidate: Path, *, force_ports=False, now
                    "source_results": source_results,
                    "full_collection_complete": not decision({'source_results': source_results}, now)['pending_sources'],
                    "ais_updated": source_results['ais']['status'] == 'ok',
-                   "portwatch_updated": source_results['portwatch']['status'] == 'ok',
+                   "portwatch_updated": any(source_results[k]['status'] == 'ok' for k in ('ports', 'chokepoints')),
+                   "ports_updated": source_results['ports']['status'] == 'ok',
+                   "chokepoints_updated": source_results['chokepoints']['status'] == 'ok',
                    "pipelines": {"segments": len(pipelines["features"]), "drawable_segments": sum(f["properties"].get("map_drawable", True) for f in pipelines["features"]), "gas_connection_records": len(gas_connections["features"]), "unmapped_projects": len(unmapped_projects), "source": pipelines["metadata"]},
                    "portwatch": port_result, "history_coverage": history_coverage,
                    "before": before, "after": after}

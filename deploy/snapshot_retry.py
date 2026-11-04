@@ -13,7 +13,7 @@ import duckdb
 
 ROOT = Path(__file__).resolve().parents[1]
 LOCAL_ZONE = ZoneInfo("Asia/Dubai")
-SOURCES = ('ais', 'portwatch')
+SOURCES = ('ais', 'ports', 'chokepoints')
 
 
 def successful_sources(snapshot, now):
@@ -25,7 +25,9 @@ def successful_sources(snapshot, now):
     results = snapshot.get('source_results')
     output = {}
     for source in SOURCES:
-        value = ((results.get(source) or {}).get('last_successful_collection')
+        checkpoint = ((results.get(source) or (results.get('portwatch') if source != 'ais' else None) or {})
+                      if isinstance(results, dict) else {})
+        value = (checkpoint.get('last_successful_collection')
                  if isinstance(results, dict) else legacy)
         if value:
             stamp = datetime.fromisoformat(value.replace('Z', '+00:00'))
@@ -51,7 +53,7 @@ def decision(snapshot, now=None):
     if not pending:
         result.update(status="skipped_already_published",
                       last_successful_collection=max(successes.values()).astimezone(LOCAL_ZONE).isoformat(),
-                      reason="该主执行时段两个数据源均已成功发布；不重复采集或推送")
+                      reason="该主执行时段各数据源均已成功发布；不重复采集或推送")
     return result
 
 

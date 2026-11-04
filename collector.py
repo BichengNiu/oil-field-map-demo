@@ -126,16 +126,21 @@ class CollectionService:
             self._thread.join(timeout=3)
 
 
-def collect_portwatch(*, force=False, include_history=False):
+def collect_portwatch(*, force=False, include_history=False, kind=None):
     """Archive latest validated daily facts, with source-dated backfill windows."""
     import portwatch
     import portwatch_downloads
     revision = uuid.uuid4().hex
     summaries = {}
+    if kind not in (None, 'ports', 'chokepoints'):
+        raise ValueError('未知的PortWatch数据类型')
+    selected_kind = kind
     for kind, catalog_reader, latest_reader in (
         ("ports", portwatch.port_catalog, portwatch.latest_date),
         ("chokepoints", portwatch.chokepoint_catalog, portwatch.latest_chokepoint_date),
     ):
+        if selected_kind is not None and kind != selected_kind:
+            continue
         catalog = catalog_reader(revision)
         ids = tuple(sorted(str(row["portid"]) for row in catalog
                            if kind == "chokepoints" or portwatch.has_independent_statistics(row)))
@@ -174,11 +179,11 @@ def collect_portwatch(*, force=False, include_history=False):
     return summaries
 
 
-def collect_portwatch_run(*, strict=False, force=False, include_history=False):
+def collect_portwatch_run(*, strict=False, force=False, include_history=False, kind=None):
     started = datetime.now(timezone.utc)
     status, details = "ok", {}
     try:
-        details["sources"] = collect_portwatch(force=force, include_history=include_history)
+        details["sources"] = collect_portwatch(force=force, include_history=include_history, kind=kind)
     except Exception as exc:
         status = "error"
         details["error"] = str(exc)

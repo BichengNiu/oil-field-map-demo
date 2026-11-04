@@ -230,14 +230,33 @@ def fetch_window(kind: str, ids: tuple[str, ...], first: date, last: date,
     if cache_only:
         raise CacheMiss("本地PortWatch历史缓存缺失或不完整")
 
+    expected_ids = None
     def count():
-        value = pw.query(endpoint, where=where, returnGeometry="false", returnCountOnly="true")
-        if "count" not in value:
-            raise DownloadError("源站未返回用于核对分页的总记录数")
-        return int(value["count"])
+        nonlocal expected_ids
+        if expected_ids is None:
+            try:
+                value = pw.query(endpoint, where=where, returnGeometry="false", returnCountOnly="true")
+                if "count" not in value:
+                    raise DownloadError("源站未返回用于核对分页的总记录数")
+                return int(value["count"])
+            except pw.PortWatchQueryError:
+                pass
+        # The count handler can be broken while the same table's object-ID
+        # operation works. IDs are unbounded by the feature page size in ArcGIS.
+        value = pw.query(endpoint, where=where, returnGeometry='false', returnIdsOnly='true')
+        ids_value = value.get('objectIds')
+        if (not isinstance(ids_value, list) or value.get('exceededTransferLimit')
+                or any(not isinstance(item, int) or isinstance(item, bool) or item < 0 for item in ids_value)
+                or len(set(ids_value)) != len(ids_value)):
+            raise DownloadError('源站记录ID清单缺失、重复或被截断')
+        current_ids = set(ids_value)
+        if expected_ids is not None and current_ids != expected_ids:
+            raise DownloadError('源站记录ID清单在分页期间变化')
+        expected_ids = current_ids
+        return len(expected_ids)
 
     expected = count()
-    rows, keys = [], set()
+    rows, keys, object_ids = [], set(), set()
     offset = 0
     while offset < expected:
         page = pw.query(endpoint, where=where, returnGeometry="false",
@@ -248,6 +267,10 @@ def fetch_window(kind: str, ids: tuple[str, ...], first: date, last: date,
             raise DownloadError(f"{KINDS[kind]} {first}—{last} 分页提前结束（{offset}/{expected}）")
         for item in items:
             row = dict(item["attributes"])
+            if row.get('ObjectId') is not None:
+                if row['ObjectId'] in object_ids:
+                    raise DownloadError('源站分页返回重复记录ID')
+                object_ids.add(row['ObjectId'])
             day = _day(row.get("date"))
             pid = row.get("portid")
             record_key = (pid, day)
@@ -267,10 +290,13 @@ def fetch_window(kind: str, ids: tuple[str, ...], first: date, last: date,
             progress(f"{KINDS[kind]} {first}—{last}：{offset:,}/{expected:,} 条")
     if len(rows) != expected or count() != expected:
         raise DownloadError(f"{KINDS[kind]} {first}—{last} 源记录数发生变化或分页不完整，请重新生成")
+    if expected_ids is not None and object_ids != expected_ids:
+        raise DownloadError('分页记录与源站ID清单不一致')
     data_store.save_portwatch(kind, rows, endpoint)
     query = {"endpoint": endpoint, "where": where, "out_fields": source_fields,
              "retrieved_at_utc": _now(), "cache_hit": False, "source_count": expected,
-             "exported_query_rows": len(rows), "count_verified": True}
+             "exported_query_rows": len(rows), "count_verified": True,
+             "count_method": 'object_ids' if expected_ids is not None else 'count'}
     _cache(key, {"rows": rows, "query": query})
     return rows, query
 
