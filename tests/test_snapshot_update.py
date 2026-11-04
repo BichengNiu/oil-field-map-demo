@@ -27,6 +27,11 @@ class SnapshotUpdateTest(unittest.TestCase):
         shutil.copy2(snapshot_update.DATABASE, self.original)
         self.candidate = self.directory / "candidate.duckdb"
         self.now = datetime.now(timezone.utc)
+        # Simulate a new collection window, regardless of how recently the
+        # repository snapshot was updated by the real scheduled publisher.
+        with patch.dict(os.environ, {'MONITORING_DB_PATH': str(self.original), 'MONITORING_READ_ONLY': 'false'}):
+            data_store.set_meta('published_snapshot', {})
+            data_store.set_meta('snapshot_portwatch_completed_at', '')
         # These tests mock the entire PortWatch boundary. Real node/day audit
         # contracts are exercised against DuckDB in test_portwatch_history.py.
         for target, value in (("portwatch_history.needs_repair", False),

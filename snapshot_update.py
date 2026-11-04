@@ -167,7 +167,7 @@ def collect_candidate(original: Path, candidate: Path, *, force_ports=False, now
                        not last_ports or datetime.fromisoformat(last_ports).date() < now.date()))
                 if due:
                     source_before = inspect(candidate)
-                    with portwatch.request_budget(3600 if history_due else 240):
+                    with portwatch.request_budget(3600 if history_due else 900):
                         port_result = collector.collect_portwatch_run(strict=True, force=True, include_history=True)
                     if port_result.get('status') != 'ok':
                         raise RuntimeError('PortWatch未返回成功状态')

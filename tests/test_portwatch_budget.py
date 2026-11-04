@@ -3,6 +3,8 @@ import io
 import json
 import time
 import unittest
+from urllib.parse import parse_qs, urlsplit
+from datetime import date
 from unittest.mock import patch
 
 import portwatch
@@ -17,6 +19,14 @@ class _Response(io.BytesIO):
 
 
 class PortWatchBudgetTest(unittest.TestCase):
+    def test_failed_date_statistics_falls_back_to_ordered_source_rows(self):
+        with patch('portwatch.query', side_effect=[portwatch.PortWatchQueryError('Invalid URL'),
+                {'features': [{'attributes': {'date': '2026-10-30'}}]}]) as query:
+            self.assertEqual(portwatch._latest_day('https://example.test/query', 'empty'), date(2026, 10, 30))
+        self.assertEqual(query.call_args.kwargs['orderByFields'], 'date DESC')
+        self.assertEqual(query.call_args.kwargs['resultRecordCount'], 1)
+        self.assertEqual(query.call_args.kwargs['outFields'], 'date')
+
     def test_request_timeout_is_capped_by_remaining_operation_budget(self):
         timeouts = []
 
@@ -74,7 +84,10 @@ class PortWatchBudgetTest(unittest.TestCase):
              patch("portwatch.urlopen", side_effect=respond), patch("portwatch._budget_sleep"):
             self.assertEqual(portwatch.query("https://example.test/query", where="portid='fso151'"),
                              {"count": 14})
-        self.assertEqual(requests[0], requests[1])
+        first = parse_qs(urlsplit(requests[0]).query)
+        second = parse_qs(urlsplit(requests[1]).query)
+        self.assertEqual(first['where'], second['where'])
+        self.assertEqual(second['sqlFormat'], ['standard'])
 
     def test_persistent_backend_error_never_becomes_a_successful_empty_response(self):
         error = {"error": {"code": 400, "message": "Cannot perform query. Invalid query parameters."}}
@@ -83,7 +96,24 @@ class PortWatchBudgetTest(unittest.TestCase):
              patch("portwatch._budget_sleep"):
             with self.assertRaisesRegex(ValueError, "Invalid query parameters"):
                 portwatch.query("https://example.test/query")
-        self.assertEqual(query.call_count, 3)
+        self.assertEqual(query.call_count, portwatch.QUERY_ATTEMPTS)
+
+    def test_invalid_url_uses_alternate_formats_and_post_with_unchanged_data_query(self):
+        calls = []
+        def respond(request, timeout):
+            params = parse_qs(request.data.decode() if request.data else urlsplit(request.full_url).query)
+            calls.append((request.get_method(), params))
+            data = ({'count': 434} if request.get_method() == 'POST' else
+                    {'error': {'code': 400, 'message': 'Invalid URL', 'details': ['Invalid URL']}})
+            return _Response(json.dumps(data).encode())
+        with patch.object(portwatch, '_LAST_REQUEST', time.monotonic() - 1), \
+             patch('portwatch.urlopen', side_effect=respond), patch('portwatch._budget_sleep'):
+            result = portwatch.query('https://example.test/query', where="portid IN ('port27')", returnCountOnly='true')
+        self.assertEqual(result, {'count': 434})
+        self.assertEqual([method for method, _ in calls], ['GET', 'GET', 'GET', 'POST'])
+        for _, params in calls:
+            self.assertEqual(params['where'], ["portid IN ('port27')"])
+            self.assertEqual(params['returnCountOnly'], ['true'])
 
 
 if __name__ == "__main__":

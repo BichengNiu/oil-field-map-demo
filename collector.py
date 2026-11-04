@@ -160,7 +160,10 @@ def collect_portwatch(*, force=False, include_history=False):
             summaries[kind]["history"] = portwatch_history.repair(kind, ids, end)
         if include_history and kind == "ports":
             try:
-                values = portwatch.port_risk_capacity(ids, revision)
+                # The secondary risk model must leave time for the remaining
+                # daily facts, even while transport fallbacks are retrying.
+                with portwatch.request_budget(20):
+                    values = portwatch.port_risk_capacity(ids, revision)
                 data_store.set_meta("port_risk_capacity_snapshot", {
                     "port_ids": ids, "values": values,
                     "updated_at": datetime.now(timezone.utc).isoformat(),

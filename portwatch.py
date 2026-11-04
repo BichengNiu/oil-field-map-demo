@@ -7,15 +7,17 @@ The catalog also includes source-backed supplementary ports with unknown activit
 from __future__ import annotations
 
 import json
+import logging
 import re
 import threading
 import time
+import uuid
 from contextlib import contextmanager
 from contextvars import ContextVar
 from datetime import date, timedelta
 from urllib.parse import urlencode
 from urllib.request import Request, urlopen
-from urllib.error import HTTPError
+from urllib.error import HTTPError, URLError
 
 import streamlit as st
 import port_inventory
@@ -34,6 +36,11 @@ MODULE_VERSION = 9
 _REQUEST_LOCK = threading.Lock()
 _LAST_REQUEST = 0.0
 _REQUEST_DEADLINE = ContextVar("portwatch_request_deadline", default=None)
+QUERY_ATTEMPTS = 6
+
+
+class PortWatchQueryError(ValueError):
+    """An upstream ArcGIS query failed; no empty observations are implied."""
 
 
 class RequestBudgetExceeded(TimeoutError):
@@ -112,10 +119,18 @@ def query(url: str, **params: object) -> dict:
     """Read one ArcGIS response and surface source-reported errors."""
     if data_store.read_only():
         raise RuntimeError("只读展示端不允许请求 PortWatch；请由采集任务更新快照")
-    request = Request(f"{url}?{urlencode({**params, 'f': 'json'})}",
-                      headers={"User-Agent": "oil-field-map-demo/1.0"})
     global _LAST_REQUEST
-    for attempt in range(3):
+    for attempt in range(QUERY_ATTEMPTS):
+        options = dict(params)
+        if attempt in (1, 2, 3):
+            options.update(sqlFormat='standard', timeReferenceUnknownClient='true')
+        options['f'] = 'pjson' if attempt in (2, 4) else 'json'
+        if attempt >= 4:
+            options['_retry'] = uuid.uuid4().hex
+        encoded = urlencode(options).encode()
+        headers = {'User-Agent': 'oil-field-map-demo/1.0', 'Cache-Control': 'no-cache'}
+        request = (Request(url, data=encoded, headers=headers) if attempt == 3 else
+                   Request(f'{url}?{encoded.decode()}', headers=headers))
         with _REQUEST_LOCK:
             remaining_budget = _remaining_budget()
             remaining = 0.5 - (time.monotonic() - _LAST_REQUEST)
@@ -130,27 +145,36 @@ def query(url: str, **params: object) -> dict:
             with urlopen(request, timeout=timeout) as response:
                 result = json.load(response)
         except HTTPError as exc:
-            if exc.code != 429 or attempt == 2:
+            if exc.code not in (429, 500, 502, 503, 504):
                 raise
-            result = {"error": {"message": "Too many requests", "code": 429}}
+            result = {'error': {'message': 'Too many requests' if exc.code == 429 else str(exc), 'code': exc.code}}
+        except (URLError, TimeoutError, json.JSONDecodeError) as exc:
+            result = {'error': {'message': str(exc), 'code': 503}}
         error = result.get("error")
         if not error:
+            if attempt:
+                logging.getLogger(__name__).info(
+                    'PortWatch query recovered: attempt=%s method=%s format=%s endpoint=%s',
+                    attempt + 1, request.get_method(), options['f'], url)
             return result
         message = str(error.get("message", error))
         throttled = "too many requests" in message.lower()
         # ArcGIS also emits this generic backend error for valid queries that
         # subsequently succeed unchanged. Retry it within the same time budget;
         # a persistent error still aborts publication, never becomes an empty set.
-        query_backend_error = error.get("code") == 400 and (
+        query_backend_error = error.get("code") in (400, 500, 502, 503, 504) and (
             message == "Cannot perform query. Invalid query parameters."
+            or message == 'Invalid URL'
+            or 'object reference not set' in message.lower()
+            or error.get('code') in (500, 502, 503, 504)
             or "Unable to perform query. Please check your parameters." in error.get("details", []))
-        if not (throttled or query_backend_error) or attempt == 2:
+        if not (throttled or query_backend_error) or attempt == QUERY_ATTEMPTS - 1:
             context = {key: params[key] for key in (
                 "where", "outFields", "outStatistics", "groupByFieldsForStatistics",
                 "returnCountOnly", "resultOffset", "resultRecordCount") if key in params}
-            raise ValueError(f"PortWatch API: {message}; details={error.get('details', [])}; "
+            raise PortWatchQueryError(f"PortWatch API: {message}; details={error.get('details', [])}; "
                              f"endpoint={url}; query={json.dumps(context, ensure_ascii=False)}")
-        _budget_sleep(((5, 15) if throttled else (2, 5))[attempt])
+        _budget_sleep((5, 15, 20, 25, 30)[attempt] if throttled else (1, 2, 3, 5, 8)[attempt])
     raise ValueError("PortWatch请求未完成")
 
 
@@ -217,13 +241,24 @@ def port_catalog(refresh_revision: str = "initial") -> list[dict]:
 
 
 def _latest_day(endpoint: str, missing_message: str) -> date:
-    data = query(endpoint, where="1=1", returnGeometry="false",
-                  outStatistics=json.dumps([{"statisticType": "max", "onStatisticField": "date",
-                                             "outStatisticFieldName": "latest_date"}]))
-    value = data["features"][0]["attributes"]["latest_date"]
+    try:
+        data = query(endpoint, where="1=1", returnGeometry="false",
+                     outStatistics=json.dumps([{"statisticType": "max", "onStatisticField": "date",
+                                                "outStatisticFieldName": "latest_date"}]))
+        field = 'latest_date'
+    except PortWatchQueryError:
+        # A DateOnly statistics handler can fail while ordinary table reads
+        # remain available. Descending order with a single row is the same max.
+        data = query(endpoint, where='1=1', returnGeometry='false', outFields='date',
+                     orderByFields='date DESC', resultRecordCount=1)
+        field = 'date'
+    value = data['features'][0]['attributes'][field] if data.get('features') else None
     if not value:
         raise ValueError(missing_message)
-    return date.fromisoformat(value)
+    day = date.fromisoformat(value)
+    if day > date.today():
+        raise ValueError('PortWatch返回未来数据日期')
+    return day
 
 
 @st.cache_data(ttl=3600, max_entries=12, show_spinner=False)
