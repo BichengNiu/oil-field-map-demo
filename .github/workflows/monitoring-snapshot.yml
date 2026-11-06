@@ -1,12 +1,7 @@
 name: Publish monitoring snapshot
 
 'on':
-  schedule:
-    # GitHub cron is UTC: 08:00 and 13:00 in Asia/Dubai.
-    - cron: '0 4 * * *'
-    - cron: '0 9 * * *'
-    # Off the busy hour boundary; recover missed/failed daily runs.
-    - cron: '17 * * * *'
+  # Scheduled collection has moved to BichengNiu/HTFA_v1.1.
   workflow_dispatch:
     inputs:
       mode:
@@ -27,7 +22,8 @@ concurrency:
 
 jobs:
   publish:
-    if: github.ref == 'refs/heads/main'
+    # HTFA is the sole publisher after the native integration.
+    if: ${{ false }}
     runs-on: ubuntu-latest
     timeout-minutes: 90
     env:
